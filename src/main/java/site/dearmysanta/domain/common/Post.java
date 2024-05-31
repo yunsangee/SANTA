@@ -5,6 +5,7 @@ import java.sql.Date;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ import lombok.AllArgsConstructor;
 @SuperBuilder // use Builder pattern
 @NoArgsConstructor
 @AllArgsConstructor
-
+@ToString
 public class Post {
 	
 	private int userNo; // unique user identifier
@@ -30,4 +31,4 @@ public class Post {
 	
 	private Date postDate; // post upload time
 	
-}// post super class (모든 게시글의 상위 클래스)
+}// post super class (紐⑤뱺 寃뚯떆湲��쓽 �긽�쐞 �겢�옒�뒪)
