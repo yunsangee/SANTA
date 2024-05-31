@@ -87,6 +87,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter-test</artifactId>
@@ -130,10 +131,10 @@
 		</dependency>
 		<!-- 보안 -->
 
-		<dependency>
+		<!--	<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-config</artifactId>
-		</dependency>
+		</dependency> -->
 		<!-- 소셜 로그인 -->
 
 		<dependency>
@@ -150,10 +151,13 @@
 		jsp 필요? -->
 
 
+		
+		<!--
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
-		</dependency> <!--파일업로드 ? -->
+		</dependency> -->
+		<!--파일업로드 ? -->
 
 		<dependency>
 			<groupId>com.servlets</groupId>

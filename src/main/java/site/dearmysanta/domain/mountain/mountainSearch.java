@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import site.dearmysanta.domain.common.Search;
 
@@ -15,6 +16,7 @@ import site.dearmysanta.domain.common.Search;
 @SuperBuilder // use Builder pattern
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class mountainSearch extends Search{
 	private List<String> searchRecord; // search record list
 	private List<String> popularSearchKeyword; // popular search keyword list 
