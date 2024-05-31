@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.Builder;
 
 //@Data // @Getter + @Setter + @ToString + @EqualsAndHashCode + @RequiredArgsContstructor
@@ -15,6 +16,7 @@ import lombok.Builder;
 @Builder // use Builder pattern
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Like {
 	private int userNo; // unique user identifier
 	private int postNo; // unique post identifier (�씤利� 寃뚯떆湲�, 紐⑥엫 寃뚯떆湲� )

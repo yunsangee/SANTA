@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 //@Data // @Getter + @Setter + @ToString + @EqualsAndHashCode + @RequiredArgsContstructor
@@ -15,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder // use Builder pattern
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Search {
 	private int userNo;
 	private int searchCondition;
