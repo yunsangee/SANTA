@@ -30,4 +30,4 @@ public class Post {
 	
 	private Date postDate; // post upload time
 	
-}// post super class (모든 게시글의 상위 클래스)
+}// post super class (紐⑤뱺 寃뚯떆湲��쓽 �긽�쐞 �겢�옒�뒪)
