@@ -23,5 +23,6 @@
    </resultMap>
    
    <!-- SQL : hikingRecord INSERT -->
-   <insert id="addHikingRecord"   parameterType="hikingGuide"
+   <insert id="addHikingRecord"   parameterType="hikingGuide">
+   </insert>
 </mapper>
