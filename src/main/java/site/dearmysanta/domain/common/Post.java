@@ -34,7 +34,6 @@ public class Post {
 	
 	private Date postDate; // post upload time
 	
-	//getter setter ì¶”ê°€ ì„¤ëª… 
+	//getter setter Ãß°¡ ¼³¸í 
 	
-}// post super class (ëª¨ë“  ê²Œì‹œê¸€ì˜ ìƒìœ„ í´ë˜ìŠ¤)
-
+}// post super class (¸ğµç °Ô½Ã±ÛÀÇ »óÀ§ Å¬·¡½º)

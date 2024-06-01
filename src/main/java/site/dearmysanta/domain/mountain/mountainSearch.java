@@ -27,4 +27,4 @@ public class mountainSearch extends Search{
 	private int difficultyNo; // mountain trail difficulty information
 	
 	
-}// mountain search class (Search 하위 클래스)
+}// mountain search class (Search �븯�쐞 �겢�옒�뒪)
