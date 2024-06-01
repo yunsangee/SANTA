@@ -17,6 +17,7 @@ import site.dearmysanta.domain.common.Post;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper=true)
+
 public class CorrectionPost extends Post {
 	private int mountainNo; // unique mountain identifier
 	private String mountainName; // mountain name
