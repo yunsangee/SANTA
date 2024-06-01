@@ -8,7 +8,7 @@ public class Main {
 	
 	@GetMapping("/")
 	public String mainController() {
-		return "redirect:/mountain/mapMountain.html";
+		return "redirect:/mountain/mapMountain.jsp";
 	}
 	
 }
