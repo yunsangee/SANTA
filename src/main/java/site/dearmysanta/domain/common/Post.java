@@ -34,6 +34,6 @@ public class Post {
 	
 	private Date postDate; // post upload time
 	
-	//getter setter 추가 설명 
+	//getter setter
 	
-}// post super class (모든 게시글의 상위 클래스)
+}// post super class 

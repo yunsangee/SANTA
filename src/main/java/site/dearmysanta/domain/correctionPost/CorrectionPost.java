@@ -23,4 +23,4 @@ public class CorrectionPost extends Post {
 	private String mountainName; // mountain name
 	private int status; // answer status
 
-}// correction post(Post 하위 클래스)
+}// correction post
