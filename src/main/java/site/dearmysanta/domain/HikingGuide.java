@@ -17,16 +17,16 @@ import lombok.Builder;
 @AllArgsConstructor
 @ToString
 public class HikingGuide {
-    private int userNo; // È¸¿ø ½Äº° ¹øÈ£
-    private int hikingRecordNo; // µî»ê ±â·Ï ¹øÈ£
-    private int mountainTrailNo; // µî»ê·Î ¹øÈ£
-    private int userDistance; // È¸¿ø ÀÌµ¿ °Å¸®
-    private int ascentTime; // È¸¿ø »óÇà ½Ã°£
-    private int descentTime; // È¸¿ø ÇÏÇà ½Ã°£
-    private int totalTime; // ÃÑ ¼Ò¿ä ½Ã°£
-    private Date hikingDate; // µî»ê ÀÏÀÚ
-    private List<String> userCoordinates; // È¸¿ø À§Ä¡ ÁÂÇ¥
-    private Mountain mountain; // »ê Á¤º¸ (mountain class)
-    private Weather weather; // ³¯¾¾ Á¤º¸ (weather class)
-    private Meeting meeting; // ¸ðÀÓ¿ø ½Äº° ¹øÈ£ (meeting class)
+    private int userNo; // È¸ï¿½ï¿½ ï¿½Äºï¿½ ï¿½ï¿½È£
+    private int hikingRecordNo; // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½È£
+    private int mountainTrailNo; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£
+    private int userDistance; // È¸ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½Å¸ï¿½
+    private int ascentTime; // È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
+    private int descentTime; // È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
+    private int totalTime; // ï¿½ï¿½ ï¿½Ò¿ï¿½ ï¿½Ã°ï¿½
+    private Date hikingDate; // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    private List<String> userCoordinates; // È¸ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½Ç¥
+    private Mountain mountain; // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (mountain class)
+    private Weather weather; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (weather class)
+    private Meeting meeting; // ï¿½ï¿½ï¿½Ó¿ï¿½ ï¿½Äºï¿½ ï¿½ï¿½È£ (meeting class)
 }
