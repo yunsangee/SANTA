@@ -23,4 +23,4 @@ public class Search {
 	private String searchKeyword;
 	private Date searchDate;
 
-}// search super class(모든 검색의 상위 클래스)
+}// search super class

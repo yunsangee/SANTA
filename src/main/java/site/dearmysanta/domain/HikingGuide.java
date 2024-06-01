@@ -17,16 +17,16 @@ import lombok.Builder;
 @AllArgsConstructor
 @ToString
 public class HikingGuide {
-    private int userNo; // ȸ�� �ĺ� ��ȣ
-    private int hikingRecordNo; // ��� ��� ��ȣ
-    private int mountainTrailNo; // ���� ��ȣ
-    private int userDistance; // ȸ�� �̵� �Ÿ�
-    private int ascentTime; // ȸ�� ���� �ð�
-    private int descentTime; // ȸ�� ���� �ð�
-    private int totalTime; // �� �ҿ� �ð�
-    private Date hikingDate; // ��� ����
-    private List<String> userCoordinates; // ȸ�� ��ġ ��ǥ
-    private Mountain mountain; // �� ���� (mountain class)
-    private Weather weather; // ���� ���� (weather class)
-    private Meeting meeting; // ���ӿ� �ĺ� ��ȣ (meeting class)
+    private int userNo; // 
+    private int hikingRecordNo; // 
+    private int mountainTrailNo; // 
+    private int userDistance; // 
+    private int ascentTime; // 
+    private int descentTime; // 
+    private int totalTime; // 
+    private Date hikingDate; // 
+    private List<String> userCoordinates; //
+    private Mountain mountain; // (mountain class)
+    private Weather weather; // (weather class)
+    private Meeting meeting; // (meeting class)
 }
