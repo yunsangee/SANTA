@@ -15,9 +15,12 @@ import lombok.AllArgsConstructor;
 
 @Getter
 @Setter
+
 @SuperBuilder // use Builder pattern
+
 @NoArgsConstructor
 @AllArgsConstructor
+
 @ToString
 public class Post {
 	
@@ -31,4 +34,6 @@ public class Post {
 	
 	private Date postDate; // post upload time
 	
-}// post super class (ï§â‘¤ë±º å¯ƒëš¯ë–†æ¹²ï¿½ï¿½ì“½ ï¿½ê¸½ï¿½ì ï¿½ê²¢ï¿½ì˜’ï¿½ë’ª)
+	//getter setter Ãß°¡ ¼³¸í 
+	
+}// post super class (¸ğµç °Ô½Ã±ÛÀÇ »óÀ§ Å¬·¡½º)
