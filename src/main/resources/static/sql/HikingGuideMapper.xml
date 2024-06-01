@@ -5,9 +5,5 @@
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="HikingGuideMapper">
-
-	<resultMap id=hikingGuideMap" type="hikingGuide">
-		<result property
-	</resultMap>
 </mapper>
 
