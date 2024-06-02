@@ -1,5 +1,11 @@
 package site.dearmysanta.service.alarm;
 
-public class AlarmMessageService {
-
+public interface AlarmMessageService {
+	
+	public void addAlarmMessage();
+	
+	public void deleteAlarmMessage();
+	
+	public void getAlarmMessageList();
+	
 }
