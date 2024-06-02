@@ -1,6 +1,6 @@
 package site.dearmysanta.service.hikingGuide;
 
-
+import java.util.Map;
 
 public interface HikingGuideService {
 
@@ -12,13 +12,13 @@ public interface HikingGuideService {
 //	
 //	public void addHikingRecord(int userNo) throws Exception;
 //
-//	public void getHikingListRecord() throws Exception;
+//	public Map<String, Object>  getHikingListRecord(HikingGuide hikinggjide) throws Exception;
 //	
-//	public void getAlertSetting() throws Exception;
+//	public void getAlertSetting(int userNo) throws Exception;
 //	
 //	public void getAlert() throws Exception;
 //	
-//	public void updateAlertSetting() throws Exception;
+//	public void updateAlertSetting(int userNo) throws Exception;
 //	
 //	public void getMeetingCoordination() throws Exception;
 //	
