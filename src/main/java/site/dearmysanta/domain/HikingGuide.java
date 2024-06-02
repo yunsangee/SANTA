@@ -17,6 +17,7 @@
 //@AllArgsConstructor
 //@ToString
 //public class HikingGuide {
+//    private int hrNo; //
 //    private int userNo; // 
 //    private int hikingRecordNo; // 
 //    private int mountainTrailNo; // 

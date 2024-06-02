@@ -1,1 +1,60 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="HikingAlertMapper">
+
+   <resultMap id="hikingAlertMap" type="hikingAlert">
+      <result property="userNo" column="user_no" jdbcType="INTEGER"/>
+      <result property="hikingAlertFlag" column="hg_setting" jdbcType="INTEGER"/>
+      <result property="meetingTimeAlert" column="time_alert_setting" jdbcType="INTEGER"/>
+      <result property="locationOverAlert" column="location_over_setting" jdbcType="INTEGER"/>
+      <result property="ascentTime" column="destination_setting" jdbcType="INTEGER"/>
+      <result property="sunsetAlert" column="sunset_setting" jdbcType="INTEGER"/>
+      <result property="meetingTime" column="time_setting" jdbcType="INTEGER"/>
+   </resultMap>
+   
+   
+   <!-- SQL : hikingAlertSetting Update -->
+   
+    <update id="updateAlertSetting" parameterType="map">
+    UPDATE hikingAlert
+    <set>
+        <if test="hikingAlertFlag != null">
+            hikingAlertFlag = #{hikingAlertFlag, jdbcType=INTEGER},
+        </if>
+        <if test="meetingTimeAlert != null">
+            meetingTimeAlert = #{meetingTimeAlert, jdbcType=INTEGER},
+        </if>
+        <if test="locationOverAlert != null">
+            locationOverAlert = #{locationOverAlert, jdbcType=INTEGER},
+        </if>
+        <if test="ascentTime != null">
+            ascentTime = #{ascentTime, jdbcType=INTEGER},
+        </if>
+        <if test="sunsetAlert != null">
+            sunsetAlert = #{sunsetAlert, jdbcType=INTEGER},
+        </if>
+        <if test="meetingTime != null">
+            meetingTime = #{meetingTime, jdbcType=INTEGER},
+        </if>
+    </set>
+    WHERE userNo = #{userNo, jdbcType=INTEGER}
+	</update>
+
+	<!-- SQL : hikingAlertSetting get -->
+	<select id="getAlertSetting" parameterType="int" resultMap="hikingAlertMap">
+    SELECT 
+        user_no AS userNo,
+        hg_setting AS hikingAlertFlag,
+        time_alert_setting AS meetingTimeAlert,
+        location_over_setting AS locationOverAlert,
+        destination_setting AS ascentTime,
+        sunset_setting AS sunsetAlert,
+        time_setting AS meetingTime
+    FROM hikingAlert
+    WHERE user_no = #{userNo, jdbcType=INTEGER}
+	</select>
+</mapper>
