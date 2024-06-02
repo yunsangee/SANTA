@@ -13,10 +13,16 @@ public class SantaLogger {
 	}
 	
 	public static void makeLog(String logType, String sentence) {
-		if(logType.equals("debug") | logType.equals("DEBUG")) {
-			logger.debug(sentence);
-		}else if(logType.equals("error") | logType.equals("ERROR")) {
-			logger.error(sentence);
+		switch (logType.toLowerCase()) {
+        case "info":
+            logger.info(sentence);
+            break;
+        case "error":
+            logger.error(sentence);
+            break;
+        default:
+            logger.info("Unknown logType: " + logType + ". Log: " + sentence);
+            break;
 		}
 	}
 	
