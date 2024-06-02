@@ -1,5 +1,11 @@
 package site.dearmysanta.service.correctionpost;
 
-public class CorrectionPostService {
+public interface CorrectionPostService {
+	
+	public void addCorrectionPost();
+	
+	public void getCorrectionPostList();
+	
+	public void deleteCorrectionPost();
 
 }
