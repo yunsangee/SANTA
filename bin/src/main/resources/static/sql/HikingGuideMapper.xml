@@ -6,7 +6,7 @@
 
 <mapper namespace="HikingGuideMapper">
 
-   <resultMap id="hikingGuideSelctMap" type="hikingGuide">
+   <!-- <resultMap id="hikingGuideSelctMap" type="hikingGuide">
       <result property="" column="hr_no" jdbcType="INTEGER"/>
       <result property="" column="user_no" jdbcType="INTEGER"/>
       <result property="" column="hr_time" jdbcType="VARCHAR"/>
@@ -22,7 +22,7 @@
       <result property="" column="hr_downdifficulty" jdbcType="INTEGER"/>
    </resultMap>
    
-   <!-- SQL : hikingRecord INSERT -->
+   SQL : hikingRecord INSERT
    <insert id="addHikingRecord"   parameterType="hikingGuide">
-   </insert>
+   </insert> -->
 </mapper>
