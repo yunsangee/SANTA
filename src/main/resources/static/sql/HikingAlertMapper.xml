@@ -27,52 +27,51 @@
             location_over_setting AS locationOverAlert,
             time_alert_setting AS meetingTimeAlert,
             time_setting AS meetingTime,
-            alert_content AS alertContent,
-            all_alert AS allAlert
         FROM users
         WHERE user_no = #{userNo, jdbcType=INTEGER}
     </select>
 	
    <!-- SQL : hikingAlertSetting Update -->
    
-    <update id="updateAlertSetting">
-        UPDATE users
-        <set>
-            <if test="hikingAlertFlag != null">
-                hg_setting = #{hikingAlertFlag, jdbcType=INTEGER},
-                time_alert_setting = CASE WHEN #{hikingAlertFlag} = 0 THEN 0 ELSE time_alert_setting END,
-                location_over_setting = CASE WHEN #{hikingAlertFlag} = 0 THEN 0 ELSE location_over_setting END,
-                destination_setting = CASE WHEN #{hikingAlertFlag} = 0 THEN 0 ELSE destination_setting END,
-                sunset_setting = CASE WHEN #{hikingAlertFlag} = 0 THEN 0 ELSE sunset_setting END,
-                time_setting = CASE WHEN #{hikingAlertFlag} = 0 THEN 0 ELSE time_setting END,
-                alert_content = CASE WHEN #{hikingAlertFlag} = 0 THEN '' ELSE alert_content END,
-                all_alert = CASE WHEN #{hikingAlertFlag} = 0 THEN '' ELSE all_alert END
-            </if>
-            <if test="destinationAlert != null and hikingAlertFlag != 0">
-                destination_setting = #{destinationAlert, jdbcType=VARCHAR},
-            </if>
-            <if test="sunsetAlert != null and hikingAlertFlag != 0">
-                sunset_setting = #{sunsetAlert, jdbcType=VARCHAR},
-            </if>
-            <if test="locationOverAlert != null and hikingAlertFlag != 0">
-                location_over_setting = #{locationOverAlert, jdbcType=VARCHAR},
-            </if>
-            <if test="meetingTimeAlert != null and hikingAlertFlag != 0">
-                time_alert_setting = #{meetingTimeAlert, jdbcType=VARCHAR},
-            </if>
-            <if test="meetingTime != null and hikingAlertFlag != 0">
-                time_setting = #{meetingTime, jdbcType=VARCHAR},
-            </if>
-            <if test="alertContent != null and hikingAlertFlag != 0">
-                alert_content = #{alertContent, jdbcType=VARCHAR},
-            </if>
-            <if test="allAlert != null and hikingAlertFlag != 0">
-                all_alert = #{allAlert, jdbcType=VARCHAR},
-       	    </if>
-    	</set>
-    			WHERE userNo = #{userNo, jdbcType=INTEGER}
+  <update id="updateAlertSetting">
+    UPDATE users
+    <set>
+        <if test="hikingAlertFlag != null">
+            hg_setting = #{hikingAlertFlag, jdbcType=INTEGER},
+            time_alert_setting = CASE WHEN #{hikingAlertFlag} = 0 THEN 0 ELSE time_alert_setting END,
+            location_over_setting = CASE WHEN #{hikingAlertFlag} = 0 THEN 0 ELSE location_over_setting END,
+            destination_setting = CASE WHEN #{hikingAlertFlag} = 0 THEN 0 ELSE destination_setting END,
+            sunset_setting = CASE WHEN #{hikingAlertFlag} = 0 THEN 0 ELSE sunset_setting END,
+            time_setting = CASE WHEN #{hikingAlertFlag} = 0 THEN 0 ELSE time_setting END,
+        </if>
+        <if test="destinationAlert != null and (hikingAlertFlag == null or hikingAlertFlag != 0)">
+            destination_setting = #{destinationAlert, jdbcType=VARCHAR},
+        </if>
+        <if test="sunsetAlert != null and (hikingAlertFlag == null or hikingAlertFlag != 0)">
+            sunset_setting = #{sunsetAlert, jdbcType=VARCHAR},
+        </if>
+        <if test="locationOverAlert != null and (hikingAlertFlag == null or hikingAlertFlag != 0)">
+            location_over_setting = #{locationOverAlert, jdbcType=VARCHAR},
+        </if>
+        <if test="meetingTimeAlert != null and (hikingAlertFlag == null or hikingAlertFlag != 0)">
+            time_alert_setting = #{meetingTimeAlert, jdbcType=VARCHAR},
+        </if>
+    </set>
+    WHERE user_no = #{userNo, jdbcType=INTEGER}
 	</update>
 
+  <!-- SQL : hikingAlertSetting meetingTime Update -->
+  
+	<update id="updateMeetingTime" parameterType="map">
+    UPDATE users
+    <set>
+        <if test="meetingTimeAlert == 1">
+            time_setting = #{meetingTime, jdbcType=INTEGER}
+        </if>
+    </set>
+    WHERE user_no = #{userNo, jdbcType=INTEGER}
+	</update>
+	
 
 	
 </mapper>
