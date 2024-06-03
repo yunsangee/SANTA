@@ -4,6 +4,109 @@
 		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="MeetingPostMapper">
+<mapper namespace="site.dearmysanta.service.meeting.MeetingDAO">
+
+	<resultMap id="userSelectMap" type="site.dearmysanta.domain.common.User">
+        <result property="userNo" 		column="user_no" 		jdbcType="NUMERIC"/>
+        <result property="nickName" 	column="nickname" 		jdbcType="VARCHAR"/>
+        <result property="profileImage" column="profile_image" 	jdbcType="VARCHAR"/>
+    </resultMap>
+
+	<resultMap id="meetingParticipationSelectMap" type="site.dearmysanta.domain.meeting.MeetingParticipation">
+        <result property="userNo" 					column="participation_no" 		jdbcType="NUMERIC"/>
+        <result property="profileImage" 			column="profile_image" 			jdbcType="VARCHAR"/>
+        <result property="nickname" 				column="nickname" 				jdbcType="VARCHAR"/>
+        <result property="participationStatus" 		column="participation_status" 	jdbcType="NUMERIC"/>
+        <result property="chattingRoomExitTime" 	column="chattingroom_exit_time" jdbcType="DATE"/>
+        <result property="participationRole" 		column="mp_role" 				jdbcType="NUMERIC"/>
+        <result property="withdrawFlag" 			column="withdraw_flag" 			jdbcType="NUMERIC"/>
+    </resultMap>
+    
+    <resultMap id="meetingPostCommentSelectMap" type="site.dearmysanta.domain.meeting.MeetingPostComment">
+        <result property="meetingPostNo" 					column="mp_no" 					jdbcType="NUMERIC"/>
+        <result property="meetingPostCommentNo" 			column="comment_no" 			jdbcType="NUMERIC"/>
+        <result property="meetingPostCommentContent" 		column="comment_content" 		jdbcType="VARCHAR"/>
+        <result property="meetingPostCommentCreationDate" 	column="comment_creation_date" 	jdbcType="DATE"/>
+        <result property="userNo" 							column="userNo" 				jdbcType="NUMERIC"/>
+        <result property="nickname" 						column="nickname" 				jdbcType="VARCHAR"/>
+        <result property="profileImage" 					column="profile_image" 			jdbcType="VARCHAR"/>
+    </resultMap>
+
+	<resultMap id="meetingPostSelectMap" type="site.dearmysanta.domain.meeting.MeetingPost">
+		<result property="userNo" 					column="user_no" 					jdbcType="NUMERIC"/>
+        <result property="nickName" 				column="nickname" 					jdbcType="VARCHAR"/>
+        <result property="profileImage" 			column="profile_image" 				jdbcType="VARCHAR"/>
+        <result property="postNo" 					column="mp_no" 						jdbcType="NUMERIC"/>
+        <result property="title" 					column="mp_title" 					jdbcType="VARCHAR"/>
+        <result property="contents" 				column="mp_contents" 				jdbcType="VARCHAR"/>
+        <result property="postDate" 				column="mp_creation_date" 			jdbcType="DATE"/>
+       	
+		<result property="meetingPostImage"			column="image"						jdbcType="VARCHAR"/>
+		<result property="meetingName"				column="meeting_name"				jdbcType="VARCHAR"/>
+		<result property="recruitmentDeadline"		column="recruitment_deadline"		jdbcType="DATE"/>
+		<result property="appointedDeparture"		column="appointed_departure"	    jdbcType="VARCHAR"/>
+		<result property="appointedHikingMountain"	column="appointed_hiking_mountain"	jdbcType="VARCHAR"/>
+		<result property="appointedHikingDate"		column="appointed_hiking_date"		jdbcType="DATE"/>
+		<result property="participationAge"			column="participation_age"			jdbcType="VARCHAR"/>
+		<result property="maximumPersonnel"			column="maximum_personnel"			jdbcType="NUMERIC"/>
+		<result property="participationGrade"		column="participation_grade"		jdbcType="NUMERIC"/>
+		<result property="participationGender"		column="participation_gender"		jdbcType="NUMERIC"/>
+		<result property="recruitmentStatus"		column="recruitment_status"			jdbcType="NUMERIC"/>
+		<result property="meetingPostDeletedFlag"	column="mp_deleted_flag"			jdbcType="NUMERIC"/>
+		<result property="meetingPostCertifiedFlag"	column="mp_certified_flag"			jdbcType="NUMERIC"/>
+		<association property="user" resultMap="userSelectMap"/>
+	</resultMap>
+	
+	<insert id="insertMeetingPost" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
+		INSERT
+		INTO meeting_post(mp_no, user_no, nickname, profile_image, mp_title, mp_content, meeting_name, recruitment_deadline,
+		 appointed_departure, appointed_hiking_mountain, appointed_hiking_date, maximum_personnel,
+		 participation_grade, participation_gender, participation_age)
+		VALUES (seq_mp_no.NEXTVAL, #{userNo}, #{nickName}, #{profileImage}, #{title}, #{contents}, #{meetingName}, #{recruitmentDeadline},
+		 #{appointedDeparture}, #{appointedHikingMountain}, #{appointedHikingDate}, #{maximumPersonnel},
+		 #{participationGrade}, #{participationGender}, #{participationAge}) 
+	</insert>
+	
+	<insert id="insertPostImage" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
+		INSERT
+		INTO post_image(image_no, post_no, image, post_flag)
+		VALUES (seq_image_no.NEXTVAL, #{mp_no}, #{image}, 1) 
+	</insert>
+	
+	<update id="updateMeetingPost" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
+		UPDATE meeting_post
+		SET mp_title = #{title},
+			mp_content = #{contents},
+			recruitment_deadline = #{recruitmentDeadline},
+			appointed_departure = #{appointedDeparture},
+			appointed_hiking_mountain = #{appointedHikingMountain},
+			appointed_hiking_date = #{appointedHikingDate},
+			maximum_personnel = #{maximumPersonnel},
+			participation_grade = #{participationGrade},
+			participation_gender = #{participationGender},
+			participation_age = #{participationAge}
+		WHERE mp_no = #{postNo}
+	</update>
+	
+	<update id="updatePostImage" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
+		UPDATE post_image
+		SET image = #{image}
+		Where image_no = #{image_no}
+	</update>
+
+	<select id="getMeetingPost" parameterType="int" resultMap="meetingPostSelectMap">
+		SELECT 
+            mp.mp_no, mp.user_no, u.nickname, u.profile_image, mp.mp_title, mp.mp_contents,
+             mp.mp_creation_date, mp.meeting_name, mp.recruitment_deadline, mp.appointed_departure,
+             mp.appointed_hiking_mountain, mp.appointed_hiking_date, mp.participation_age, mp.maximum_personnel,
+             mp.participation_grade, mp.participation_gender, mp.recruitment_status, mp.mp_deleted_flag,
+             mp.mp_certified_flag
+        FROM
+            meeting_post mp
+        LEFT JOIN
+            users u ON mp.user_no = u.user_no
+        WHERE 
+            mp.mp_no = #{postNo}
+    </select>
 
 </mapper>

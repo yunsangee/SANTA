@@ -18,12 +18,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class MeetingPostComment {
-	private int meetingPostNo;
-	private int meetingPostCommentNo;
-	private String meetingPostCommentContent;
-	private Date meetingPostCommentCreationDate;
-	private int userNo;
-	private String nickName;
-	private MultipartFile profileImage;
+	private int meetingPostNo; // unique meeting post identifier
+	private int meetingPostCommentNo; // unique meeting post comment identifier
+	private String meetingPostCommentContent; // Content of the comment on the meeting post
+	private Date meetingPostCommentCreationDate; // Date the comment was created
+	private int userNo; // unique user identifier
+	private String nickname; // user nickname
+	private MultipartFile profileImage; // user profile image
 
 }
