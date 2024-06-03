@@ -22,7 +22,64 @@
       <result property="mountain.downDifficulty" column="hr_downdifficulty" jdbcType="INTEGER"/>
    </resultMap>
    
-   <!--SQL : hikingRecord INSERT
-   <insert id="addHikingRecord"   parameterType="hikingGuide">
-   </insert> -->
+   <!--SQL : hikingRecord INSERT -->
+   
+    <insert id="addHikingRecord" parameterType="hikingGuide" useGeneratedKeys="true" keyProperty="hrNo">
+        INSERT INTO hikingrecord (
+            hr_no,
+            user_no,
+            hr_time,
+            hr_distance,
+            hr_ascent,
+            hr_descent,
+            hr_date,
+            hr_skycondition,
+            hr_mountain_name,
+            hr_uptrail_name,
+            hr_downtrail_name,
+            hr_updifficulty,
+            hr_downdifficulty
+        ) VALUES (
+            #{hrNo, jdbcType=INTEGER},
+            #{userNo, jdbcType=INTEGER},
+            #{totalTime, jdbcType=VARCHAR},
+            #{userDistance, jdbcType=INTEGER},
+            #{ascentTime, jdbcType=INTEGER},
+            #{descentTime, jdbcType=INTEGER},
+            #{hikingDate, jdbcType=DATE},
+            #{weather.skyCondition, jdbcType=INTEGER},
+            #{mountain.mountainName, jdbcType=VARCHAR},
+            #{mountain.upTrailName, jdbcType=VARCHAR},
+            #{mountain.downTrailName, jdbcType=VARCHAR},
+            #{mountain.upDifficulty, jdbcType=INTEGER},
+            #{mountain.downDifficulty, jdbcType=INTEGER}
+        )
+    </insert>
+    
+    <!--SQL : hikingRecord DELETE -->
+    <delete id="deleteHikingRecord" parameterType="int">
+        DELETE FROM hikingrecord
+        WHERE hr_no = #{hrNo, jdbcType=INTEGER}
+    </delete>
+    
+    <!--SQL : hikingRecord SELECT -->
+    <select id="getHikingListRecord" parameterType="int" resultMap="hikingGuideMap">
+        SELECT 
+            hr_no AS hrNo,
+            user_no AS userNo,
+            hr_time AS totalTime,
+            hr_distance AS userDistance,
+            hr_ascent AS ascentTime,
+            hr_descent AS descentTime,
+            hr_date AS hikingDate,
+            hr_skycondition AS weather.skyCondition,
+            hr_mountain_name AS mountain.mountainName,
+            hr_uptrail_name AS mountain.upTrailName,
+            hr_downtrail_name AS mountain.downTrailName,
+            hr_updifficulty AS mountain.upDifficulty,
+            hr_downdifficulty AS mountain.downDifficulty
+        FROM hikingrecord
+        WHERE user_no = #{userNo, jdbcType=INTEGER}
+    </select>
+
 </mapper>
