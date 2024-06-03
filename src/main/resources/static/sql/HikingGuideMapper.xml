@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE mapper
-		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="HikingGuideMapper">
 
-	<resultMap id=hikingGuideMap" type="hikingGuide">
-		<result property
-	</resultMap>
+   <resultMap id="hikingGuideMap" type="hikingGuide">
+      <result property="hrNo" column="hr_no" jdbcType="INTEGER"/>
+      <result property="userNo" column="user_no" jdbcType="INTEGER"/>
+      <result property="totalTime" column="hr_time" jdbcType="VARCHAR"/>
+      <result property="userDistance" column="hr_distance" jdbcType="INTEGER"/>
+      <result property="ascentTime" column="hr_ascent" jdbcType="INTEGER"/>
+      <result property="descentTime" column="hr_descent" jdbcType="INTEGER"/>
+      <result property="hikingDate" column="hr_date" jdbcType="DATE"/>
+      <result property="weather.skyCondition" column="hr_skycondition" jdbcType="INTEGER"/>
+      <result property="mountain.mountainName" column="hr_mountain_name" jdbcType="VARCHAR"/>
+      <result property="mountain.upTrailName" column="hr_uptrail_name" jdbcType="VARCHAR"/>
+      <result property="mountain.downTrailName" column="hr_downtrail_name" jdbcType="VARCHAR"/>
+      <result property="mountain.upDifficulty" column="hr_updifficulty" jdbcType="INTEGER"/>
+      <result property="mountain.downDifficulty" column="hr_downdifficulty" jdbcType="INTEGER"/>
+   </resultMap>
+   
+   <!--SQL : hikingRecord INSERT
+   <insert id="addHikingRecord"   parameterType="hikingGuide">
+   </insert> -->
 </mapper>
-

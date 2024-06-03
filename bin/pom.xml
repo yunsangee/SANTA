@@ -45,14 +45,15 @@
 			<optional>true</optional>
 		</dependency>
 
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-logging</artifactId>
 			<scope>provided</scope>
-		</dependency>
+		</dependency> 
 
 		<!-- Include Log4j2 dependencies -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
@@ -60,7 +61,7 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>com.oracle.database.jdbc</groupId>
@@ -87,12 +88,14 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter-test</artifactId>
 			<version>2.3.0</version>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>com.sun.mail</groupId>
 			<artifactId>javax.mail</artifactId>
@@ -124,16 +127,17 @@
 			<version>4.3.0</version>  <!--문자인증 -->
 		</dependency>
 
+<!--
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
+		</dependency> -->
 		<!-- 보안 -->
 
-		<dependency>
+		<!--	<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-config</artifactId>
-		</dependency>
+		</dependency> -->
 		<!-- 소셜 로그인 -->
 
 		<dependency>
@@ -150,10 +154,12 @@
 		jsp 필요? -->
 
 
+		<!--
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
-		</dependency> <!--파일업로드 ? -->
+		</dependency> -->
+		<!--파일업로드 ? -->
 
 		<dependency>
 			<groupId>com.servlets</groupId>

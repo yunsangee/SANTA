@@ -16,7 +16,7 @@ public class SantaApplicationTests {
 	@Test
 	public void contextLoads() {
 		
-//		System.out.println("==========================\n");
+		System.out.println("==========================\n");
 		
 		CorrectionPost correctionPost = CorrectionPost.builder()
 	            .userNo(1)
@@ -30,14 +30,16 @@ public class SantaApplicationTests {
 	            .status(1)
 	            .build();
 		
-//		System.out.println(correctionPost.toString());
-//		System.out.println("==========================\n");
+		System.out.println(correctionPost.toString());		
+		System.out.println("==========================\n");
 		
 		logger.info("=============================================\n");
 		logger.info("correctionPost:" + correctionPost.toString() + "\n"); // realization test
 		logger.info("=============================================\n"); //log4j2 test
-		logger.debug("debug");
+//		logger.debug("debug");
 		logger.error("error");
+		
+
 	}
 
 }
