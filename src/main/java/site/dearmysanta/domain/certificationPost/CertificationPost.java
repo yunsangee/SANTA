@@ -5,6 +5,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 
 import site.dearmysanta.domain.common.Post;
@@ -18,6 +23,16 @@ import site.dearmysanta.domain.correctionPost.CorrectionPost;
 @ToString(callSuper=true)
 public class CertificationPost extends Post {
 	
+	private  List<MultipartFile> certificationPostImage;
 	private String certificationPostMountainName;
+	private int certificationPostHikingDifficulty;
+    private String certificationPostHikingTrail;
+    private String certificationPostHikingDate;
+    private int certificationPostTransportation;
+    private List<String> certificationPostHashtag;
+    private String certificationPostTotalTime;
+    private String certificationPostDescentTime;
+    private String certificationPostAscentTime;
+    private int followerCount;
 
 }
