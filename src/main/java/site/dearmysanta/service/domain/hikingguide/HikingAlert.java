@@ -1,4 +1,4 @@
-package site.dearmysanta.domain;
+package site.dearmysanta.service.domain.hikingguide;
 
 import java.sql.Date;
 import java.util.List;
