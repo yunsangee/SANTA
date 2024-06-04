@@ -13,7 +13,9 @@ import org.springframework.web.client.RestTemplate;
 
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.common.Like;
+import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.mountain.Mountain;
+import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.mountain.MountainTrail;
 import site.dearmysanta.service.mountain.MountainDao;
 import site.dearmysanta.service.mountain.MountainService;
@@ -217,11 +219,11 @@ public class MountainServiceImpl implements MountainService {
          
          System.out.println(items);
 
-         // items 내부의 item 필드를 가져와서 배열인지 객체인지 확인
+         // check item in item isArray
          Object itemObject = items.get("item");
          JSONObject item ;
          if (itemObject instanceof JSONArray) {
-             // item이 JSONArray인 경우
+             // item- JSONArray
 //             item = ((JSONArray)itemObject).getJSONObject(1);
         	 JSONArray itemArray = (JSONArray) itemObject;
         	 
@@ -236,7 +238,7 @@ public class MountainServiceImpl implements MountainService {
              }
             
          } else {
-             // item이 JSONObject인 경우
+             // item- JSONObject
              item = (JSONObject) itemObject;
              SantaLogger.makeLog("info", "item:" + item);
              double lat =   Double.parseDouble(item.getString("lat"));
@@ -267,6 +269,10 @@ public class MountainServiceImpl implements MountainService {
 		return mountainDao.getMountainLikeList(like);
 	}
 	
+	
+	public void addSearchKeyword(MountainSearch mountainSearch) {
+		mountainDao.addSearchKeyword(mountainSearch);
+	}
 	
 	
 
