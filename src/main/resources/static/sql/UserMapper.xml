@@ -51,8 +51,8 @@
 							 cp_count, mp_count, creation_date)
 		VALUES	( #{userNo}, #{userId}, #{userName}, #{userPassword}, #{nickName}, #{address}, #{birthDate},
 
-							#{phoneNumber}, #{gender}, #{profileImage}, #{hikingPurpose}, #{hikingDifficulty}, 
-							#{hikingLevel}, #{role}, #{badgeImage}, 0, 0, #{creationDate})
+							#{phoneNumber}, #{gender}, #{hikingPurpose}, #{hikingDifficulty}, 
+							#{hikingLevel}, #{role},  0, 0, #{creationDate})
 	</insert>
 
 	<!--  SQL : SELECT ONE -->
@@ -68,7 +68,7 @@
 
 	<!--  SQL : UPDATE -->
 	
-	<update id = "updateUser"	parameterType = "site.dearmysanta.domain.user.User" > 
+	<update id = "updateUser" 	parameterType = "site.dearmysanta.domain.user.User" > 
 		UPDATE users
 		<set>
 			userPassword = #{userPassword},
@@ -85,7 +85,7 @@
 	
 	<!--  SQL : CHECK -->
 
-	<select id = "checkDuplicationId"	resultType ="userSelectMap">
+	<select id = "checkDuplicationId" parameterType="String"	resultMap ="userSelectMap">
 		SELECT 
 			user_id
 		FROM 
@@ -94,7 +94,7 @@
 			user_id = #{userId}
 	</select>
 	
-	<select id = "checkDuplicationNickName"	resultType ="userSelectMap">
+	<select id = "checkDuplicationNickName"	parameterType="String" resultMap ="userSelectMap">
 		SELECT 
 			nickname
 		FROM 
