@@ -32,5 +32,18 @@
 		FROM LIKES l, MOUNTAIN m
 		WHERE l.POST_LIKE_TYPE=2 AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO = m.MOUNTAIN_NO
 	</select>
+	
+	
+	
+	
+	<insert id="addMountainSearch" parameterType="site.dearmysanta.domain.mountain.MountainSearch">
+		NSERT INTO mountain_search (
+    mountain_search_no, user_no, mountain_search_condition, mountain_search_content, location_no, difficulty_no, altitude_no
+) VALUES (
+    seq_mountain_search_no.NEXTVAL, #{userNo}, #{searchCondition}, #{searchKeyword}, #{locationCategory}, #{altitudeNo}, #{difficultyNo}
+);
+
+	
+	</insert>
 
 </mapper>

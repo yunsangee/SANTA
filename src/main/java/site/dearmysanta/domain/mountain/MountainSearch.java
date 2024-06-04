@@ -22,7 +22,7 @@ public class MountainSearch extends Search{
 	private List<String> popularSearchKeyword; // popular search keyword list 
 	
 	// detail search condition
-	private String locationCategory; // location information. can chage to json
+	private int locationCategory; // location information. can chage to json
 	private int altitudeNo; // altitude range information
 	private int difficultyNo; // mountain trail difficulty information
 	
