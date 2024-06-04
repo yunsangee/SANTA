@@ -1,4 +1,4 @@
-package site.dearmysanta.service.domain.hikingguide;
+package site.dearmysanta.domain.hikingguide;
 
 import java.sql.Date;
 import java.util.List;
@@ -26,7 +26,7 @@ public class HikingGuide {
     private int userDistance; // user move distance
     private int ascentTime; // ascent time
     private int descentTime; // descent time
-    private int totalTime; // ascent time + descent time + other time
+    private String totalTime; // ascent time + descent time + other time
     private Date hikingDate; // sysdate
     private String alertContent;// alert contents
     private double userLatitude;// userlatitude

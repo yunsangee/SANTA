@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import site.dearmysanta.domain.hikingguide.HikingAlert;
+import site.dearmysanta.domain.hikingguide.HikingGuide;
+import site.dearmysanta.domain.meeting.MeetingPost;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.Weather;
-import site.dearmysanta.service.domain.hikingguide.HikingAlert;
-import site.dearmysanta.service.domain.hikingguide.HikingGuide;
 import site.dearmysanta.service.hikingGuide.HikingGuideDao;
 import site.dearmysanta.service.hikingGuide.HikingGuideService;
 
@@ -134,6 +135,12 @@ public class HikingGuideServiceImpl implements HikingGuideService {
         }
         return false;
     }
+
+	@Override
+	public MeetingPost getMeetingParticipationList() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
   
 
