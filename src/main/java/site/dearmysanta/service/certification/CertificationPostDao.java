@@ -1,13 +1,12 @@
 package site.dearmysanta.service.certification;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
-import org.apache.ibatis.annotations.Param;
 
 import site.dearmysanta.domain.certificationPost.CertificationPost;
+import site.dearmysanta.domain.common.Like;
 
 @Mapper
 @Component("CertificationPostDao")
@@ -22,12 +21,23 @@ public interface CertificationPostDao {
 	
 	//hashtag
 		
-	public void addCertificationPostHashtags(int certificationPostNo) throws Exception;
+//	public void addCertificationPostHashtags(int certificationPostNo) throws Exception;
 	
 	public	 void deleteCertificationPostHashtags(int certificationPostNo) throws Exception;
-
+	public void addCertificationPostHashtags(int postNo, String hashtag);
 	
 	//postImage
+	
+	//Like
+	public void addCertificationPostLike(Like like);
+	
+	public void deleteCertificationPostLike(Like like);
+	
+	public int getTotalCertificationPostLikeCount(Like like);
+	
+	public List<CertificationPost> getCertificationPostLikeList(Like like);
+
+
 }
 
 

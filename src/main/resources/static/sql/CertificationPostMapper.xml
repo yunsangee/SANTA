@@ -39,7 +39,7 @@
     ) VALUES (
         seq_cp_no.nextval,
         #{userNo}, 
-        #{type},
+      0, 
         #{title}, 
         #{contents}, 
         #{certificationPostMountainName}, 
@@ -57,7 +57,7 @@
 </insert>
 
 
-        <insert id="addCertificationPostHashtags" parameterType="map">
+        <insert id="addCertificationPostHashtags" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
         INSERT INTO hashtag (cp_no, hashtag_content)
         VALUES
         <foreach collection="certificationPostHashtag" item="hashtag" separator=",">
@@ -84,8 +84,8 @@
         FROM
             certification_post
         WHERE
-            user_no = #{userNo}
-            AND cp_no = #{certificationPostNo}
+            cp_no = #{postNo}
+        
     </select>
     
     
@@ -117,4 +117,26 @@
         DELETE FROM certification_post_hashtag
         WHERE cp_no = #{certificationPostNo}
     </delete>
+    
+    
+    
+    
+    
+    
+    <insert id="addCertificationPostLike"
+		parameterType="site.dearmysanta.domain.common.Like">
+		INSERT INTO LIKES (LIKE_NO, USER_NO, POST_LIKE_NO,
+		POST_LIKE_TYPE, LIKE_DATE)
+		VALUES (seq_like_no.NEXTVAL, #{userNo},
+		#{postNo}, 0 , SYSDATE)
+	</insert>
+    
+    
+    
+    
+    
+    
+    
+    
+    
 </mapper>

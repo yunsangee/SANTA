@@ -1,6 +1,9 @@
 package site.dearmysanta.service.certification;
 
+import java.util.List;
+
 import site.dearmysanta.domain.certificationPost.CertificationPost;
+import site.dearmysanta.domain.common.Like;
 
 public interface CertificationPostService {
 
@@ -19,10 +22,20 @@ public interface CertificationPostService {
 	
 	
 	//hashtag
-	public void addCertificationPostHashtags(int certificationPostNo) throws Exception;
+	//public void addCertificationPostHashtags(int certificationPostNo) throws Exception;
 	
 	public void deleteCertificationPostHashtags(int certificationPostNo) throws Exception;
 	
 	
+	public void addCertificationPostHashtags(int postNo, String hashtag);
+	//Like
+	
+	public void addCertificationPostLike(Like like);
+	
+	public void deleteCertificationPostLike(Like like);
+	
+	public int getTotalCertificationPostLikeCount(Like like);
+	
+	public List<CertificationPost> getCertificationPostLikeList(Like like);
 
 }
