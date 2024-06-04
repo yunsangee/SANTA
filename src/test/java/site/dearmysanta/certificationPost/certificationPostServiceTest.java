@@ -1,4 +1,4 @@
-package site.dearmysanta;
+package site.dearmysanta.certificationPost;
 
 import java.util.Arrays;
 
@@ -7,10 +7,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import site.dearmysanta.SantaApplication;
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.certificationPost.CertificationPost;
 import site.dearmysanta.service.certification.CertificationPostService;
-
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SantaApplication.class)
@@ -41,6 +42,6 @@ public class certificationPostServiceTest {
         certificationPostService.addCertificationPost(certificationPost);
 
         // SantaLogger를 사용하여 로그를 출력합니다.
-        SantaLogger.makeLog("INFO", certificationPost.toString());
+        SantaLogger.makeLog("info", certificationPost.toString());
     }
 }
