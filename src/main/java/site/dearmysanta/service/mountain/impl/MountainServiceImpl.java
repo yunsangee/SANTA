@@ -13,7 +13,9 @@ import org.springframework.web.client.RestTemplate;
 
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.common.Like;
+import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.mountain.Mountain;
+import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.mountain.MountainTrail;
 import site.dearmysanta.service.mountain.MountainDao;
 import site.dearmysanta.service.mountain.MountainService;
@@ -148,7 +150,7 @@ public class MountainServiceImpl implements MountainService {
 			String key = "C5151288-9B85-3B38-86F1-8CFD6D085112";
 			
 			url = url + "?service=data&request=GetFeature&data=LT_L_FRSTCLIMB&key=" + key + "&domain=http://dearmysanta.site"
-	              + "&attrFilter=mntn_nm:like:" +"관악산|emdCd:=:" + emdCd+"&page=1&size=100&format=json";
+	              + "&attrFilter=mntn_nm:like:" +"���ǻ�|emdCd:=:" + emdCd+"&page=1&size=100&format=json";
 			
 			RestTemplate restTemplate = new RestTemplate();
 	        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
@@ -186,7 +188,7 @@ public class MountainServiceImpl implements MountainService {
 
 		Mountain mountain = new Mountain();
 
-		String mountainName = "관악산";
+		String mountainName = "���ǻ�";
 		String url = "http://apis.data.go.kr/B553662/top100FamtListBasiInfoService/getTop100FamtListBasiInfoList?serviceKey="+API_KEY +"&numOfRows=100&pageNo=1&srchFrtrlNm="
 				+ mountainName;
 
@@ -217,11 +219,11 @@ public class MountainServiceImpl implements MountainService {
          
          System.out.println(items);
 
-         // items 내부의 item 필드를 가져와서 배열인지 객체인지 확인
+         // check item in item isArray
          Object itemObject = items.get("item");
          JSONObject item ;
          if (itemObject instanceof JSONArray) {
-             // item이 JSONArray인 경우
+             // item- JSONArray
 //             item = ((JSONArray)itemObject).getJSONObject(1);
         	 JSONArray itemArray = (JSONArray) itemObject;
         	 
@@ -236,7 +238,7 @@ public class MountainServiceImpl implements MountainService {
              }
             
          } else {
-             // item이 JSONObject인 경우
+             // item- JSONObject
              item = (JSONObject) itemObject;
              SantaLogger.makeLog("info", "item:" + item);
              double lat =   Double.parseDouble(item.getString("lat"));
@@ -267,6 +269,10 @@ public class MountainServiceImpl implements MountainService {
 		return mountainDao.getMountainLikeList(like);
 	}
 	
+	
+	public void addSearchKeyword(MountainSearch mountainSearch) {
+		mountainDao.addSearchKeyword(mountainSearch);
+	}
 	
 	
 
