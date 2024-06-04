@@ -1,5 +1,7 @@
 package site.dearmysanta.service.correctionpost.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +22,7 @@ public class CorrectionPostServiceImpl implements CorrectionPostService{
 	}
 	
 	public List<CorrectionPost> getCorrectionPostList(){
-		correctionPostDao.getCorrectionPostList();
+		return correctionPostDao.getCorrectionPostList();
 	}
 	
 	public void deleteCorrectionPost(int userNo, int postNo) {
