@@ -17,7 +17,7 @@ import site.dearmysanta.domain.common.Search;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper=true)
-public class mountainSearch extends Search{
+public class MountainSearch extends Search{
 	private List<String> searchRecord; // search record list
 	private List<String> popularSearchKeyword; // popular search keyword list 
 	
