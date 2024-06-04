@@ -19,7 +19,7 @@ import lombok.ToString;
 public class MeetingParticipation {
 	
 	private int userNo; // unique user identifier
-	private MultipartFile profileImage; // user profile Image
+	private String profileImage; // user profile Image
 	private String nickname; // user nickname
 	private int participationStatus; // indicates whether the user has applied or is registered
 	private Date chattingRoomExitTime; // user exited chatting room time 

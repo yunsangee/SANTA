@@ -6,15 +6,16 @@
 
 <mapper namespace="site.dearmysanta.service.meeting.MeetingDAO">
 
-	<resultMap id="userSelectMap" type="site.dearmysanta.domain.user.User">
-        <result property="userNo" 		column="user_no" 		jdbcType="NUMERIC"/>
-        <result property="nickName" 	column="nickname" 		jdbcType="VARCHAR"/>
-        <!--  <result property="profileImage" column="profile_image" 	jdbcType="VARCHAR"/>-->
+	<resultMap id="likeSelectMap" type="site.dearmysanta.domain.common.Like">
+        <result property="userNo"         column="user_no"          jdbcType="NUMERIC"/>
+        <result property="postNo"         column="post_like_no"     jdbcType="NUMERIC"/>
+        <result property="postLikeType"   column="post_like_type"   jdbcType="NUMERIC"/>
+        <result property="likeDate"       column="like_date"        jdbcType="DATE"/>
     </resultMap>
 
 	<resultMap id="meetingParticipationSelectMap" type="site.dearmysanta.domain.meeting.MeetingParticipation">
         <result property="userNo" 					column="participation_no" 		jdbcType="NUMERIC"/>
-<!--         <result property="profileImage" 			column="profile_image" 			jdbcType="VARCHAR"/> -->
+        <result property="profileImage" 			column="profile_image" 			jdbcType="VARCHAR"/>
         <result property="nickname" 				column="nickname" 				jdbcType="VARCHAR"/>
         <result property="participationStatus" 		column="participation_status" 	jdbcType="NUMERIC"/>
         <result property="chattingRoomExitTime" 	column="chattingroom_exit_time" jdbcType="DATE"/>
@@ -25,23 +26,23 @@
     <resultMap id="meetingPostCommentSelectMap" type="site.dearmysanta.domain.meeting.MeetingPostComment">
         <result property="meetingPostNo" 					column="mp_no" 					jdbcType="NUMERIC"/>
         <result property="meetingPostCommentNo" 			column="comment_no" 			jdbcType="NUMERIC"/>
-        <result property="meetingPostCommentContent" 		column="comment_content" 		jdbcType="VARCHAR"/>
+        <result property="meetingPostCommentContents" 		column="comment_contents" 		jdbcType="VARCHAR"/>
         <result property="meetingPostCommentCreationDate" 	column="comment_creation_date" 	jdbcType="DATE"/>
         <result property="userNo" 							column="userNo" 				jdbcType="NUMERIC"/>
         <result property="nickname" 						column="nickname" 				jdbcType="VARCHAR"/>
-      <!--   <result property="profileImage" 					column="profile_image" 			jdbcType="VARCHAR"/> -->
+        <result property="profileImage" 					column="profile_image" 			jdbcType="VARCHAR"/>
     </resultMap>
 
 	<resultMap id="meetingPostSelectMap" type="site.dearmysanta.domain.meeting.MeetingPost">
 		<result property="userNo" 					column="user_no" 					jdbcType="NUMERIC"/>
         <result property="nickName" 				column="nickname" 					jdbcType="VARCHAR"/>
-        <!-- <result property="profileImage" 			column="profile_image" 				jdbcType="VARCHAR"/> -->
+        <result property="profileImage" 			column="profile_image" 				jdbcType="VARCHAR"/>
         <result property="postNo" 					column="mp_no" 						jdbcType="NUMERIC"/>
         <result property="title" 					column="mp_title" 					jdbcType="VARCHAR"/>
         <result property="contents" 				column="mp_contents" 				jdbcType="VARCHAR"/>
         <result property="postDate" 				column="mp_creation_date" 			jdbcType="DATE"/>
        	
-		<!-- <result property="meetingPostImage"			column="image"						jdbcType="VARCHAR"/> -->
+		<result property="meetingPostImage"			column="image"						jdbcType="VARCHAR"/>
 		<result property="meetingName"				column="meeting_name"				jdbcType="VARCHAR"/>
 		<result property="recruitmentDeadline"		column="recruitment_deadline"		jdbcType="DATE"/>
 		<result property="appointedDeparture"		column="appointed_departure"	    jdbcType="VARCHAR"/>
@@ -54,17 +55,16 @@
 		<result property="recruitmentStatus"		column="recruitment_status"			jdbcType="NUMERIC"/>
 		<result property="meetingPostDeletedFlag"	column="mp_deleted_flag"			jdbcType="NUMERIC"/>
 		<result property="meetingPostCertifiedFlag"	column="mp_certified_flag"			jdbcType="NUMERIC"/>
-		<association property="user" resultMap="userSelectMap"/>
 	</resultMap>
 	
 	<insert id="insertMeetingPost" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
 		INSERT
-		INTO meeting_post(mp_no, user_no, nickname, profile_image, mp_title, mp_content, meeting_name, recruitment_deadline,
-		 appointed_departure, appointed_hiking_mountain, appointed_hiking_date, maximum_personnel,
-		 participation_grade, participation_gender, participation_age)
-		VALUES (seq_mp_no.NEXTVAL, #{userNo}, #{nickName}, #{profileImage}, #{title}, #{contents}, #{meetingName}, #{recruitmentDeadline},
+		INTO meeting_post(mp_no, user_no, mp_title, mp_contents, meeting_name, recruitment_deadline,
+		 appointed_departure, appointed_hiking_mountain, appointed_hiking_date, maximum_personnel, 
+		 participation_age, participation_grade, participation_gender)
+		VALUES (seq_mp_no.NEXTVAL, #{userNo}, #{title}, #{contents}, #{meetingName}, #{recruitmentDeadline},
 		 #{appointedDeparture}, #{appointedHikingMountain}, #{appointedHikingDate}, #{maximumPersonnel},
-		 #{participationGrade}, #{participationGender}, #{participationAge}) 
+		 #{participationAge}, #{participationGrade}, #{participationGender})
 	</insert>
 	
 	<insert id="insertPostImage" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
@@ -76,7 +76,7 @@
 	<update id="updateMeetingPost" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
 		UPDATE meeting_post
 		SET mp_title = #{title},
-			mp_content = #{contents},
+			mp_contents = #{contents},
 			recruitment_deadline = #{recruitmentDeadline},
 			appointed_departure = #{appointedDeparture},
 			appointed_hiking_mountain = #{appointedHikingMountain},
@@ -94,19 +94,41 @@
 		Where image_no = #{image_no}
 	</update>
 
-	<select id="getMeetingPost" parameterType="int" resultMap="meetingPostSelectMap">
-		SELECT 
-            mp.mp_no, mp.user_no, u.nickname, u.profile_image, mp.mp_title, mp.mp_contents,
-             mp.mp_creation_date, mp.meeting_name, mp.recruitment_deadline, mp.appointed_departure,
-             mp.appointed_hiking_mountain, mp.appointed_hiking_date, mp.participation_age, mp.maximum_personnel,
-             mp.participation_grade, mp.participation_gender, mp.recruitment_status, mp.mp_deleted_flag,
-             mp.mp_certified_flag
-        FROM
-            meeting_post mp
-        LEFT JOIN
-            users u ON mp.user_no = u.user_no
-        WHERE 
-            mp.mp_no = #{postNo}
-    </select>
+	<select id="findMeetingPost" parameterType="int" resultMap="meetingPostSelectMap">
+    	SELECT 
+        	u.user_no, u.nickname, u.profile_image, mp.mp_no, mp.mp_title, mp.mp_contents, mp.mp_creation_date,
+        	pi.image, mp.meeting_name, mp.recruitment_deadline, mp.appointed_departure, mp.appointed_hiking_mountain,
+        	mp.appointed_hiking_date, mp.participation_age, mp.maximum_personnel, mp.participation_grade,
+        	mp.participation_gender, mp.recruitment_status, mp.mp_deleted_flag, mp.mp_certified_flag
+    	FROM
+        	meeting_post mp
+    	JOIN
+        	users u ON mp.user_no = u.user_no
+    	LEFT JOIN
+        	post_image pi ON mp.mp_no = pi.post_no AND pi.post_flag = 1
+    	WHERE
+        	mp.mp_no = #{postNo}
+	</select>
+	
+	<insert id="insertMeetingPostLike" parameterType="site.dearmysanta.domain.common.Like">
+		INSERT
+		INTO likes(like_no, user_no, post_like_no, post_like_type, like_date)
+		VALUES(seq_like_no.NEXTVAL, #{userNo}, #{postNo}, #{postLikeType}, #{likeDate})
+	</insert>
+	
+	<delete id="deleteMeetingPostLike" parameterType="site.dearmysanta.domain.common.Like">
+		DELETE FROM likes
+        WHERE user_no = #{userNo} AND post_like_no = #{postNo} AND post_like_type = 1
+	</delete>
+	
+	<insert id="insertMeetingPostComment" parameterType="site.dearmysanta.domain.meeting.MeetingPostComment">
+        INSERT INTO comments(comment_no, user_no, post_no, comment_contents, post_type_no)
+        VALUES(seq_comment_no.NEXTVAL, #{userNo}, #{meetingPostNo}, #{meetingPostCommentContent}, 1)
+    </insert>
+    
+    <delete id="deleteMeetingPostComment" parameterType="site.dearmysanta.domain.meeting.MeetingPostComment">
+        DELETE FROM comments
+        WHERE comment_no = #{meetingPostCommentNo} AND post_no = #{meetingPostNo} AND post_type_no = 1
+    </delete>
 
 </mapper>

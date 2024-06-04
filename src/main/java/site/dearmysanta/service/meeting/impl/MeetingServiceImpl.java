@@ -5,7 +5,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import site.dearmysanta.service.meeting.MeetingService;
+import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.meeting.MeetingPost;
+import site.dearmysanta.domain.meeting.MeetingPostComment;
+import site.dearmysanta.domain.meeting.MeetingPostSearch;
 import site.dearmysanta.service.meeting.MeetingDAO;
 
 
@@ -38,6 +41,26 @@ public class MeetingServiceImpl implements MeetingService {
 	
 	public MeetingPost getMeetingPost(int postNo) throws Exception {
 		return meetingDAO.findMeetingPost(postNo);
+	}
+	
+	public void addMeetingPostLike(Like like) throws Exception {
+		meetingDAO.insertMeetingPostLike(like);
+	}
+	
+	public void deleteMeetingPostLike(Like like) throws Exception {
+		meetingDAO.deleteMeetingPostLike(like);
+	}
+	
+	public void addMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception {
+		meetingDAO.insertMeetingPostComment(meetingPostComment);
+	}
+	
+	public void deleteMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception {
+		meetingDAO.deleteMeetingPostComment(meetingPostComment);
+	}
+	
+	public int getMountainTotalCount(MeetingPostSearch meetingPostSearch) throws Exception {
+		return meetingDAO.findMountainTotalCount(meetingPostSearch);
 	}
 
 }
