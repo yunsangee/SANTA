@@ -32,4 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 
-/src/main/resources/static/config/naver.properties
+/src/main/resources/static/config/mountain/naver.properties
