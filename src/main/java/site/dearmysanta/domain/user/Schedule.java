@@ -1,6 +1,4 @@
-package site.dearmysanta.service.domain.user;
-
-import java.util.List;
+package site.dearmysanta.domain.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,10 +15,13 @@ import site.dearmysanta.domain.common.Post;
 @AllArgsConstructor
 @ToString(callSuper=true)
 
-public class QNA extends Post {
-	
-	private String adminAnswer;
-	private List<String> qnaPostCategory;
-	private String answerState;
+public class Schedule extends Post {
 
+	private String mountainName;
+	private String hikingDifficulty;
+	private String hikingTotalTime;
+	private String hikingDescentTime;
+	private String hikingAscentTime;
+	private String Transportaion;
+	
 }

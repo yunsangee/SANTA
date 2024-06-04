@@ -2,9 +2,9 @@ package site.dearmysanta.service.user;
 
 import java.util.List;
 
-import site.dearmysanta.service.domain.user.QNA;
-import site.dearmysanta.service.domain.user.Schedule;
-import site.dearmysanta.service.domain.user.User;
+import site.dearmysanta.domain.user.QNA;
+import site.dearmysanta.domain.user.Schedule;
+import site.dearmysanta.domain.user.User;
 
 public interface UserService {
 	

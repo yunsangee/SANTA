@@ -7,7 +7,7 @@
 <mapper namespace="site.dearmysanta.service.user.UserDao">
 
 
-	<resultMap id = "userSelectMap" type="site.dearmysanta.service.domain.user.User">
+	<resultMap id = "userSelectMap" type="site.dearmysanta.domain.user.User">
 		<result property = "userNo"	column = "user_no"	jdbcType = "NUMERIC"/>
 		<result property = "userId"	column = "user_id"	jdbcType = "VARCHAR"/>
 		<result property = "userName"	column = "name"	jdbcType = "VARCHAR"/>
@@ -44,7 +44,7 @@
 	
 	<!--  SQL : INSERT -->
 	
-	<insert id = "addUser"	parameterType = "site.dearmysanta.service.domain.user.User" >
+	<insert id = "addUser"	parameterType = "site.dearmysanta.domain.user.User" >
 		INSERT
 		INTO users(user_no, user_id, name, password, nickname, address, birth_date, phone_number, gender, 
 							profile_image, hiking_purpose, hiking_difficulty, hiking_level, role, 
@@ -76,7 +76,7 @@
 	
 	<!--  SQL : UPDATE -->
 	
-	<update id = "updateUser"	parameterType = "site.dearmysanta.service.domain.user.User" > 
+	<update id = "updateUser"	parameterType = "site.dearmysanta.domain.user.User" > 
 		UPDATE users
 		<set>
 			userPassword = #{userPassword},
@@ -91,5 +91,13 @@
 		</set>
 		WHERE user_no = #{userNo}
 	</update>
+	
+	<!--  SQL : CHECK -->
+	
+	<select id = "checkDuplicationId"	resultType ="userSelectMap">
+		SELECT count(*)
+		FROM users
+		WHERE user_id = #{userId}
+	</select> 
 	
 </mapper>

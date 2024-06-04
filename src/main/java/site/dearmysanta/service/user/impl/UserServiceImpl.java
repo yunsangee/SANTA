@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import site.dearmysanta.service.domain.user.QNA;
-import site.dearmysanta.service.domain.user.Schedule;
-import site.dearmysanta.service.domain.user.User;
+import site.dearmysanta.domain.user.QNA;
+import site.dearmysanta.domain.user.Schedule;
+import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.user.UserDao;
 import site.dearmysanta.service.user.UserService;
 

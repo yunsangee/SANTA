@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import site.dearmysanta.SantaApplication;
 import site.dearmysanta.common.SantaLogger;
-import site.dearmysanta.service.domain.user.User;
+import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.user.UserDao;
 import site.dearmysanta.service.user.UserService;
 import site.dearmysanta.service.user.impl.UserServiceImpl;
@@ -24,8 +24,9 @@ public class UserServiceTest {
 	//UserService userService = new UserServiceImpl();
 	
 	@Autowired
-	@Qualifier("userService")
-	private UserService userService;
+	//@Qualifier("userService")
+	//private UserService userService;
+	UserService userService;
 	
 	@Test
 	public void testAddUser() throws Exception {
