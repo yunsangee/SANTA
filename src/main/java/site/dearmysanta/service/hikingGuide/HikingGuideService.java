@@ -11,6 +11,7 @@ import site.dearmysanta.domain.mountain.Weather;
 import site.dearmysanta.service.domain.hikingguide.HikingAlert;
 import site.dearmysanta.service.domain.hikingguide.HikingGuide;
 
+
 public interface HikingGuideService {
 
 	public Mountain getMountain() throws Exception;
@@ -43,7 +44,7 @@ public interface HikingGuideService {
 	
 	public void getUserCoordination(int userNo, double latitude, double longitude) throws Exception;
 
-	
+//	public MeetingPost getMeetingParticipationList() throws Exception;
 	
 	
 	@Getter
@@ -53,5 +54,10 @@ public interface HikingGuideService {
 		private Mountain mountain;
 		private Weather weather;
 	}
+
+
+
+
+	
 
 }
