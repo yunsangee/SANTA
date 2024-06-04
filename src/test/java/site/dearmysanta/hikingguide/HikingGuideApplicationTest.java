@@ -1,16 +1,20 @@
 package site.dearmysanta.hikingguide;
 
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import site.dearmysanta.SantaApplication;
 import site.dearmysanta.domain.hikingguide.HikingGuide;
 import site.dearmysanta.service.hikingGuide.HikingGuideDao;
 import site.dearmysanta.service.hikingGuide.impl.HikingGuideServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = HikingGuideApplicationTest.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = SantaApplication.class)
 public class HikingGuideApplicationTest {
 
     @Autowired

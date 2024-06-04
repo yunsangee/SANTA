@@ -3,6 +3,7 @@ package site.dearmysanta.service.user;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import site.dearmysanta.domain.user.QNA;
@@ -40,7 +41,7 @@ import site.dearmysanta.domain.user.User;
 		
 		public User checkPassword(String userId, String userPassword) throws Exception;
 		
-		public User checkDuplicationId(String userId) throws Exception; 
+		public String checkDuplicationId(@Param("userId") String userId) throws Exception; 
 		
 		public User checkDuplicationNickname(String nickName) throws Exception;
 		

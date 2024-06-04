@@ -7,7 +7,7 @@ import site.dearmysanta.domain.certificationPost.CertificationPost;
 import site.dearmysanta.service.certification.CertificationPostDao;
 import site.dearmysanta.service.certification.CertificationPostService;
 
-@Service("CertificationService")
+@Service("CertificationServiceImpl")
 public class CertificationPostServiceImpl implements CertificationPostService {
 
     @Autowired
@@ -29,18 +29,13 @@ public class CertificationPostServiceImpl implements CertificationPostService {
         certificationPostDao.updateCertificationPost(certificationPost);
     }
 
-    
     @Override
-    public void addCertificationPostImage(CertificationPost certificationPost) throws Exception {
-        certificationPostDao.addCertificationPostImage(certificationPost);
+    public void deleteCertificationPost(int certificationPostNo) throws Exception {
+        certificationPostDao.deleteCertificationPost(certificationPostNo);
     }
 
     @Override
-    public void updateCertificationPostImage(CertificationPost certificationPost) throws Exception {
-        certificationPostDao.updateCertificationPostImage(certificationPost);
+    public void deleteCertificationPostHashtags(int certificationPostNo) throws Exception {
+        certificationPostDao.deleteHashtagsByPostNo(certificationPostNo);
     }
-	
-	
- 
-
 }
