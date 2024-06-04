@@ -38,9 +38,9 @@ public interface MountainService {
 	
 	public void addSearchKeyword(MountainSearch mountainSearch);
 //	
-//	public void deleteSearchKeyword();
+	public void deleteSearchKeyword(MountainSearch mountainSearch);
 //	
-//	public List<String> getSearchKeywordList();
+	public List<MountainSearch> getSearchKeywordList(int userNo);
 //	
 //	public void updateSearchSetting();
 	
