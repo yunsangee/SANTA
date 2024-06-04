@@ -6,7 +6,6 @@
 
 <mapper namespace="site.dearmysanta.service.certification.CertificationPostDao">
 
-
     <resultMap id="CertificationPostSelectMap" type="site.dearmysanta.domain.certificationPost.CertificationPost">
   	 
 	<result property="postNo" column="cp_no" jdbcType="NUMERIC"/>

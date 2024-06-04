@@ -50,8 +50,9 @@
 							hiking_purpose, hiking_difficulty, hiking_level, role, 
 							 cp_count, mp_count, creation_date)
 		VALUES	( #{userNo}, #{userId}, #{userName}, #{userPassword}, #{nickName}, #{address}, #{birthDate},
-							#{phoneNumber}, #{gender},  #{hikingPurpose}, #{hikingDifficulty}, 
-							#{hikingLevel}, #{role}, #{certificationCount}, #{meetingCount}, #{creationDate})
+
+							#{phoneNumber}, #{gender}, #{profileImage}, #{hikingPurpose}, #{hikingDifficulty}, 
+							#{hikingLevel}, #{role}, #{badgeImage}, 0, 0, #{creationDate})
 	</insert>
 
 	<!--  SQL : SELECT ONE -->
@@ -83,11 +84,24 @@
 	</update>
 	
 	<!--  SQL : CHECK -->
+
+	<select id = "checkDuplicationId"	resultType ="userSelectMap">
+		SELECT 
+			user_id
+		FROM 
+			users
+		WHERE 
+			user_id = #{userId}
+	</select>
 	
-	<select id = "checkDuplicationId" parameterType="String"	resultMap ="userSelectMap">
-		SELECT count(*)
-		FROM users
-		WHERE user_id = #{userId}
-	</select> 
+	<select id = "checkDuplicationNickName"	resultType ="userSelectMap">
+		SELECT 
+			nickname
+		FROM 
+			users
+		WHERE 
+			nickname = #{nickName}
+	</select>  
+
 	
 </mapper>
