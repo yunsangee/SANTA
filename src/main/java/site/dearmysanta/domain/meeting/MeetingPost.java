@@ -38,3 +38,5 @@ public class MeetingPost extends Post{
     private int meetingPostCommentCount; // total number of comments on the post
 
 }
+
+

@@ -34,17 +34,17 @@ public interface MeetingService {
 //	
 //	public Map<String, Object> getMeetingParticipationList(MeetingPostSearch meetingPostSearch);
 //	
-//	public void addMeetingPostLike(Like like) throws Exception;
+	public void addMeetingPostLike(Like like) throws Exception;
 //	
-//	public void deleteMeetingPostLike(Like like) throws Exception;
+	public void deleteMeetingPostLike(Like like) throws Exception;
 //	
 //	public Map<String, Object> getMeetingPostCommentList(MeetingPostComment meetingPostComment) throws Exception;
 //	
-//	public void addMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception;
+	public void addMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception;
 //	
-//	public void deleteMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception;
+	public void deleteMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception;
 //	
-//	public int getMountainTotalCount(MeetingPostSearch meetingPostSearch) throws Exception;
+	public int getMountainTotalCount(MeetingPostSearch meetingPostSearch) throws Exception;
 	
 	
 	
