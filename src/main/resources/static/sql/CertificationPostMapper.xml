@@ -4,9 +4,9 @@
 		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="site.dearmysanta.service.certification.CertificationDao">
+<mapper namespace="site.dearmysanta.service.certification.CertificationPostDao">
 
-	<resultMap id="userSelectMap" type="site.dearmysanta.domain.User">
+	<resultMap id="userSelectMap" type="site.dearmysanta.domain.user.User">
 	        <result property="userNo" 		column="user_no" 		jdbcType="NUMERIC"/>
 	        <result property="nickName" 	column="nickname" 		jdbcType="VARCHAR"/>
 	        <result property="profileImage" column="profile_image" 	jdbcType="VARCHAR"/>
@@ -41,14 +41,15 @@
 
     <insert id="addCertificationPost" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
         INSERT INTO certification_post (
-            cp_no, user_no, cp_title, cp_content, cp_mountain_name, 
+            cp_no, user_no, cp_title, cp_contents, cp_mountain_name, 
             cp_hiking_trail, cp_total_time, cp_ascent_time, cp_descent_time, 
-            cp_hiking_date, cp_creation_date, cp_transportation, cp_difficulty
+            cp_hiking_date, cp_creation_date, cp_transportation, cp_difficulty,
+            cp_deleted_flag, cp_like_count
         ) VALUES (
             seq_cp_no.nextval,
             #{userNo}, 
-            #{certificationPostTitle}, 
-            #{certificationPostContent}, 
+            #{title}, 
+            #{contents}, 
             #{certificationPostMountainName}, 
             #{certificationPostHikingTrail}, 
             #{certificationPostTotalTime}, 
@@ -57,9 +58,12 @@
             #{certificationPostHikingDate}, 
             SYSDATE, 
             #{certificationPostTransportation}, 
-            #{certificationPostHikingDifficulty}
+            #{certificationPostHikingDifficulty},
+            0,
+            0
         )
     </insert>
+
 
     <insert id="addCertificationPostHashtags" parameterType="map">
         INSERT INTO certification_post_hashtag (cp_no, hashtag)
