@@ -80,5 +80,11 @@
 		SELECT * FROM MOUNTAIN_SEARCH
 		WHERE USER_NO = #{value}
 	</select>
+	
+	<update id="updateSearchSetting" parameterType="map">
+		UPDATE USERS
+		SET SEARCH_RECORD_SETTING = #{settingValue}
+		WHERE USER_NO = #{userNo}
+	</update>
 
 </mapper>

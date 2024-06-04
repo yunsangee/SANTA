@@ -42,7 +42,7 @@ public interface MountainService {
 //	
 	public List<MountainSearch> getSearchKeywordList(int userNo);
 //	
-//	public void updateSearchSetting();
+	public void updateSearchSetting(int userNo, int settingValue);
 	
 	//statistics
 	
