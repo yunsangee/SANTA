@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import site.dearmysanta.domain.hikingguide.HikingAlert;
+import site.dearmysanta.domain.hikingguide.HikingGuide;
 import site.dearmysanta.service.hikingGuide.HikingGuideService;
 import site.dearmysanta.service.hikingGuide.HikingGuideService.MountainInfo;
-import site.dearmysanta.service.domain.hikingguide.HikingAlert;
-import site.dearmysanta.service.domain.hikingguide.HikingGuide;
 
 import java.util.List;
 

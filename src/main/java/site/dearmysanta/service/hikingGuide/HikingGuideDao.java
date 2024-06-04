@@ -7,8 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
-import site.dearmysanta.service.domain.hikingguide.HikingAlert;
-import site.dearmysanta.service.domain.hikingguide.HikingGuide;
+import site.dearmysanta.domain.hikingguide.HikingAlert;
+import site.dearmysanta.domain.hikingguide.HikingGuide;
 
 @Mapper
 @Component("HikingGuideDao")
