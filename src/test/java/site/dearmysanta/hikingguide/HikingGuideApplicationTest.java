@@ -20,7 +20,7 @@ public class HikingGuideApplicationTest {
     private HikingGuideDao hikingGuideDao;
 
     @Test
-    public void testAddHikingRecord() throws Exception {
+    public void addHikingRecord() throws Exception {
         // Create a HikingGuide object with sample data
         HikingGuide hikingGuide = new HikingGuide();
         hikingGuide.setHrNo(1);
