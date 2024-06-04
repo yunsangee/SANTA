@@ -4,9 +4,9 @@
       PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="HikingGuideMapper">
+<mapper namespace="site.dearmysanta.service.hikingGuide.HikingGuideDao">
 
-   <resultMap id="hikingGuideMap" type="hikingGuide">
+   <resultMap id="hikingGuideMap" type="site.dearmysanta.service.domain.hikingGuide.HikingGuide">
       <result property="hrNo" column="hr_no" jdbcType="INTEGER"/>
       <result property="userNo" column="user_no" jdbcType="INTEGER"/>
       <result property="totalTime" column="hr_time" jdbcType="VARCHAR"/>
@@ -24,8 +24,8 @@
    
    <!--SQL : hikingRecord INSERT -->
    
-    <insert id="addHikingRecord" parameterType="hikingGuide" useGeneratedKeys="true" keyProperty="hrNo">
-        INSERT INTO hikingrecord (
+    <insert id="addHikingRecord" parameterType="site.dearmysanta.service.domain.hikingGuide.HikingGuide" useGeneratedKeys="true" keyProperty="hrNo">
+        INSERT INTO hiking_record (
             hr_no,
             user_no,
             hr_time,
@@ -58,7 +58,7 @@
     
     <!--SQL : hikingRecord DELETE -->
     <delete id="deleteHikingRecord" parameterType="int">
-        DELETE FROM hikingrecord
+        DELETE FROM hiking_record
         WHERE hr_no = #{hrNo, jdbcType=INTEGER}
     </delete>
     
@@ -78,7 +78,7 @@
             hr_downtrail_name AS mountain.downTrailName,
             hr_updifficulty AS mountain.upDifficulty,
             hr_downdifficulty AS mountain.downDifficulty
-        FROM hikingrecord
+        FROM hiking_record
         WHERE user_no = #{userNo, jdbcType=INTEGER}
     </select>
 

@@ -72,7 +72,7 @@ public class HikingGuideServiceImpl implements HikingGuideService {
 	}
 
 //	@Override
-//	public MeetingPost getParticipationList() throws Exception {
+//	public MeetingPost getMeetingParticipationList() throws Exception {
 //		// TODO Auto-generated method stub
 //		return null;
 //	}
