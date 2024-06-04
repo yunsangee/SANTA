@@ -150,7 +150,7 @@ public class MountainServiceImpl implements MountainService {
 			String key = "C5151288-9B85-3B38-86F1-8CFD6D085112";
 			
 			url = url + "?service=data&request=GetFeature&data=LT_L_FRSTCLIMB&key=" + key + "&domain=http://dearmysanta.site"
-	              + "&attrFilter=mntn_nm:like:" +"ê´€ì•…ì‚°|emdCd:=:" + emdCd+"&page=1&size=100&format=json";
+	              + "&attrFilter=mntn_nm:like:" +"°ü¾Ç»ê|emdCd:=:" + emdCd+"&page=1&size=100&format=json";
 			
 			RestTemplate restTemplate = new RestTemplate();
 	        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
@@ -188,7 +188,7 @@ public class MountainServiceImpl implements MountainService {
 
 		Mountain mountain = new Mountain();
 
-		String mountainName = "ê´€ì•…ì‚°";
+		String mountainName = "°ü¾Ç»ê";
 		String url = "http://apis.data.go.kr/B553662/top100FamtListBasiInfoService/getTop100FamtListBasiInfoList?serviceKey="+API_KEY +"&numOfRows=100&pageNo=1&srchFrtrlNm="
 				+ mountainName;
 
