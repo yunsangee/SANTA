@@ -6,4 +6,47 @@
 
 <mapper namespace="CertificationPostMapper">
 
+
+   <resultMap id="CertificationPost" type="CertificationPost">
+      <result property="certificationPostNo" column="cp_no" jdbcType="INTEGER"/>
+      <result property="userNo" column="user_no" jdbcType="INTEGER"/>
+      <result property="certificationPostType" column="cp_type" jdbcType="INTEGER"/>
+      <result property="certificationPostTitle" column="cp_title " jdbcType="VARCHAR"/>
+      <result property="certificationPostContent" column="cp_content " jdbcType="VARCHAR"/>
+      <result property="certificationPostMountainName" column="cp_mountain_name " jdbcType="VARCHAR"/>
+      <result property="certificationPostHikingTrail" column="cp_hiking_trail " jdbcType="VARCHAR"/>
+      <result property="certificationPostTotalTime" column="cp_total_time " jdbcType="VARCHAR"/>
+      <result property="certificationPostAscentTime" column="cp_ascent_time " jdbcType="VARCHAR"/>
+      <result property="certificationPostDescentTime" column="cp_descent_time " jdbcType="VARCHAR"/>
+      <result property="certificationPostHikingDate" column="cp_hiking_date " jdbcType="DATE"/>
+      <result property="certificationPostCreationDate" column="cp_creation_date " jdbcType="DATE"/>
+      <result property="certificationPostTransprotain" column="cp_transportation " jdbcType="INTEGER"/>
+      <result property="certificationPostHikingDifficulty" column="cp_difficulty  " jdbcType="INTEGER"/>
+      <result property="certificationPostDeleteFlag" column="cp_delete_flag  " jdbcType="INTEGER"/>
+   </resultMap>
+
+<insert id="addCertificationPost" parameterType="CertificationPost">
+        INSERT INTO certification_post (
+            cp_no, user_no, cp_type, cp_title, cp_content, cp_mountain_name, 
+            cp_hiking_trail, cp_total_time, cp_ascent_time, cp_descent_time, 
+            cp_hiking_date, cp_creation_date, cp_transportation, cp_difficulty, 
+            cp_delete_flag
+        ) VALUES (
+        	seq_cp_no.nextval,
+           #{userNo:INTEGER}, 
+            #{certificationPostType:INTEGER},
+            #{certificationPostTitle:VARCHAR}, 
+            #{certificationPostContent:VARCHAR}, 
+            #{certificationPostMountainName:VARCHAR}, 
+            #{certificationPostHikingTrail:VARCHAR}, 
+            #{certificationPostTotalTime:VARCHAR}, 
+            #{certificationPostAscentTime:VARCHAR}, 
+            #{certificationPostDescentTime:VARCHAR}, 
+            SYSDATE, 
+            #{certificationPostTransportation:INTEGER}, 
+            #{certificationPostHikingDifficulty:INTEGER}, 
+            0
+        )
+    </insert>
 </mapper>
+

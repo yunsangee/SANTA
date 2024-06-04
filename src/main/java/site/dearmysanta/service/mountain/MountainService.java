@@ -4,6 +4,7 @@ import java.util.List;
 
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.mountain.Mountain;
+import site.dearmysanta.domain.mountain.MountainSearch;
 
 public interface MountainService {
 	
@@ -35,11 +36,11 @@ public interface MountainService {
 	//search
 	//
 	
-//	public void addSearchKeyword();
+	public void addSearchKeyword(MountainSearch mountainSearch);
 //	
-//	public void deleteSearchKeyword();
+	public void deleteSearchKeyword(MountainSearch mountainSearch);
 //	
-//	public List<String> getSearchKeywordList();
+	public List<MountainSearch> getSearchKeywordList(int userNo);
 //	
 //	public void updateSearchSetting();
 	

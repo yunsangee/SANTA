@@ -6,31 +6,79 @@
 
 <mapper namespace="site.dearmysanta.service.mountain.MountainDao">
 
-<resultMap id="MountainResultMap" type="site.dearmysanta.domain.mountain.Mountain">
-    <id property="mountainNo" column="mountain_no"/>
-    <result property="mountainName" column="mountain_name"/>
-</resultMap>
+	<resultMap id="MountainResultMap"
+		type="site.dearmysanta.domain.mountain.Mountain">
+		<id property="mountainNo" column="mountain_no" />
+		<result property="mountainName" column="mountain_name" />
+	</resultMap>
+	
+	<resultMap id="MountainSearchResultMap" type="site.dearmysanta.domain.mountain.MountainSearch">
+    <!-- Search class fields -->
+    	<result property="userNo" column="user_no"/>
+    	<result property="searchCondition" column="search_condition"/>
+    	<result property="searchKeyword" column="search_keyword"/>
+    	<result property="searchDate" column="search_date"/>
+    
+    	<result property="locationNo" column="location_no"/>
+    	<result property="altitudeNo" column="altitude_no"/>
+    	<result property="difficultyNo" column="difficulty_no"/>
+	</resultMap>
+	
 
 
-	<insert id="addMountainLike" parameterType="site.dearmysanta.domain.common.Like">
-		INSERT INTO LIKES (LIKE_NO, USER_NO, POST_LIKE_NO, POST_LIKE_TYPE, LIKE_DATE)
-		VALUES (seq_like_no.NEXTVAL, #{userNo}, #{postNo}, 2, SYSDATE)
+	<insert id="addMountainLike"
+		parameterType="site.dearmysanta.domain.common.Like">
+		INSERT INTO LIKES (LIKE_NO, USER_NO, POST_LIKE_NO,
+		POST_LIKE_TYPE, LIKE_DATE)
+		VALUES (seq_like_no.NEXTVAL, #{userNo},
+		#{postNo}, 2, SYSDATE)
 	</insert>
-	
-	<delete id="deleteMountainLike" parameterType="site.dearmysanta.domain.common.Like">
+
+	<delete id="deleteMountainLike"
+		parameterType="site.dearmysanta.domain.common.Like">
 		DELETE FROM LIKES
-		WHERE USER_NO = #{userNo} AND POST_LIKE_NO = #{postNo} AND POST_LIKE_TYPE=2
+		WHERE USER_NO = #{userNo} AND
+		POST_LIKE_NO = #{postNo} AND POST_LIKE_TYPE=2
 	</delete>
-	
-	<select id="getTotalMountainLikeCount" parameterType="site.dearmysanta.domain.common.Like" resultType="int">
-		SELECT COUNT(*) FROM LIKES
+
+	<select id="getTotalMountainLikeCount"
+		parameterType="site.dearmysanta.domain.common.Like" resultType="int">
+		SELECT
+		COUNT(*) FROM LIKES
 		WHERE POST_LIKE_NO = #{postNo}
 	</select>
-	
-	<select id="getMountainLikeList" parameterType="site.dearmysanta.domain.common.Like" resultMap="MountainResultMap">
+
+	<select id="getMountainLikeList"
+		parameterType="site.dearmysanta.domain.common.Like"
+		resultMap="MountainResultMap">
 		SELECT m.*
 		FROM LIKES l, MOUNTAIN m
-		WHERE l.POST_LIKE_TYPE=2 AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO = m.MOUNTAIN_NO
+		WHERE l.POST_LIKE_TYPE=2
+		AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO = m.MOUNTAIN_NO
+	</select>
+
+
+
+
+	<insert id="addSearchKeyword"
+		parameterType="site.dearmysanta.domain.mountain.MountainSearch">
+		INSERT INTO mountain_search (
+		mountain_search_no, user_no, mountain_search_condition, mountain_search_content,
+		location_no, difficulty_no, altitude_no, search_date
+		) VALUES (
+		seq_mountain_search_no.NEXTVAL, #{userNo}, #{searchCondition}, #{searchKeyword}, #{locationNo},
+		#{altitudeNo}, #{difficultyNo}, SYSDATE
+		)
+	</insert>
+	
+	<delete id="deleteSearchKeyword" parameterType="site.dearmysanta.domain.mountain.MountainSearch">
+		DELETE FROM MOUNTAIN_SEARCH
+		WHERE USER_NO = #{userNo} AND search_date = #{searchDate}
+	</delete>
+	
+	<select id="getSearchKeywordList" parameterType="int" resultMap="MountainSearchResultMap">
+		SELECT * FROM MOUNTAIN_SEARCH
+		WHERE USER_NO = #{value}
 	</select>
 
 </mapper>

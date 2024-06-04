@@ -3,11 +3,11 @@ package site.dearmysanta.service.mountain;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+
 
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.mountain.Mountain;
+import site.dearmysanta.domain.mountain.MountainSearch;
 
 @Mapper
 //@Component
@@ -21,5 +21,11 @@ public interface MountainDao {
 	public int getTotalMountainLikeCount(Like like);
 	
 	public List<Mountain> getMountainLikeList(Like like);
+	
+	public void addSearchKeyword(MountainSearch mountainSearch);
+	
+	public void deleteSearchKeyword(MountainSearch mountainSearch);
+	
+	public List<MountainSearch> getSearchKeywordList(int userNo);
 	
 }
