@@ -18,7 +18,7 @@ public interface MountainService {
 	
 //	public List<Mountain> getMountainList(); // include wish list
 	
-//	public void updateMountain();
+//	public void updateMountain();   //이거할 때, correction_post status update
 	
 	//
 	//Like
