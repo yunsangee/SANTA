@@ -1,4 +1,4 @@
-package site.dearmysanta.service.domain.user;
+package site.dearmysanta.domain.user;
 
 import java.sql.Date;
 import java.util.List;

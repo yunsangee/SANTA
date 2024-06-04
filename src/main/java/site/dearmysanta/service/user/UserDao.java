@@ -5,9 +5,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
-import site.dearmysanta.service.domain.user.QNA;
-import site.dearmysanta.service.domain.user.Schedule;
-import site.dearmysanta.service.domain.user.User;
+import site.dearmysanta.domain.user.QNA;
+import site.dearmysanta.domain.user.Schedule;
+import site.dearmysanta.domain.user.User;
 
 @Mapper
 @Component("userDao")

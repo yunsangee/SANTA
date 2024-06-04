@@ -2,7 +2,7 @@ package site.dearmysanta.service.domain.user.etc;
 
 import java.util.List;
 
-import site.dearmysanta.service.domain.user.User;
+import site.dearmysanta.domain.user.User;
 
 public interface EtcService {
 			
