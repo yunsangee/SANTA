@@ -22,11 +22,10 @@ import lombok.Builder;
 public class HikingGuide {
     private int hrNo; // hikingRecord Number
     private int userNo; // user Number
-    private int mountainTrailNo; // mountainTrail Number
-    private int userDistance; // user move distance
-    private int ascentTime; // ascent time
-    private int descentTime; // descent time
     private String totalTime; // ascent time + descent time + other time
+    private int userDistance; // user move distance
+    private String ascentTime; // ascent time
+    private String descentTime; // descent time
     private Date hikingDate; // sysdate
     private String alertContent;// alert contents
     private double userLatitude;// userlatitude
