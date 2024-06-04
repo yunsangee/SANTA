@@ -65,5 +65,11 @@ public class UserServiceTest {
 		
 		SantaLogger.makeLog("info", user.toString() + "\n");
 	}
+	
+	//@Test
+	public void testDuplicationId() throws Exception {
+		
+		//String
+	}
 
 }

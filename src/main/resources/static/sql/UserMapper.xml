@@ -51,7 +51,7 @@
 							badge_image, cp_count, mp_count, creation_date)
 		VALUES	( #{userNo}, #{userId}, #{userName}, #{userPassword}, #{nickName}, #{address}, #{birthDate},
 							#{phoneNumber}, #{gender}, #{profileImage}, #{hikingPurpose}, #{hikingDifficulty}, 
-							#{hikingLevel}, #{role}, #{badgeImage}, #{certificationCount}, #{meetingCount}, #{creationDate})
+							#{hikingLevel}, #{role}, #{badgeImage}, 0, 0, #{creationDate})
 	</insert>
 	
 	<!--  SQL : SELECT ONE -->
@@ -95,9 +95,21 @@
 	<!--  SQL : CHECK -->
 	
 	<select id = "checkDuplicationId"	resultType ="userSelectMap">
-		SELECT count(*)
-		FROM users
-		WHERE user_id = #{userId}
-	</select> 
+		SELECT 
+			user_id
+		FROM 
+			users
+		WHERE 
+			user_id = #{userId}
+	</select>
+	
+	<select id = "checkDuplicationNickName"	resultType ="userSelectMap">
+		SELECT 
+			nickname
+		FROM 
+			users
+		WHERE 
+			nickname = #{nickName}
+	</select>  
 	
 </mapper>
