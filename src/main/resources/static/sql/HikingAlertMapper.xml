@@ -6,7 +6,7 @@
 
 <mapper namespace="site.dearmysanta.service.hikingGuide.HikingGuideDao">
 
-   <resultMap id="hikingAlertMap" type="site.dearmysanta.service.domain.hikingGuide.HikingAlert">
+   <resultMap id="hikingAlertMap" type="site.dearmysanta.service.domain.hikingguide.HikingAlert">
       <result property="userNo" column="user_no" jdbcType="INTEGER"/>
       <result property="hikingAlertFlag" column="hg_setting" jdbcType="INTEGER"/>
       <result property="meetingTimeAlert" column="time_alert_setting" jdbcType="INTEGER"/>
