@@ -6,22 +6,37 @@
 
 <mapper namespace="site.dearmysanta.service.certification.CertificationDao">
 
-    <resultMap id="CertificationPost" type="site.dearmysanta.domain.certificationPost.CertificationPost">
-        <result property="certificationPostNo" column="cp_no" jdbcType="INTEGER"/>
-        <result property="userNo" column="user_no" jdbcType="INTEGER"/>
-        <result property="certificationPostTitle" column="cp_title" jdbcType="VARCHAR"/>
-        <result property="certificationPostContent" column="cp_content" jdbcType="VARCHAR"/>
+	<resultMap id="userSelectMap" type="site.dearmysanta.domain.User">
+	        <result property="userNo" 		column="user_no" 		jdbcType="NUMERIC"/>
+	        <result property="nickName" 	column="nickname" 		jdbcType="VARCHAR"/>
+	        <result property="profileImage" column="profile_image" 	jdbcType="VARCHAR"/>
+	    </resultMap>
+
+    <resultMap id="CertificationPostMap" type="site.dearmysanta.domain.certificationPost.CertificationPost">
+  	 
+	<result property="postNo" column="cp_no" jdbcType="NUMERIC"/>
+        <result property="userNo" column="user_no" jdbcType="NUMERIC"/>
+	<result property="nickName" column="nickname" jdbcType="VARCHAR"/>
+        <result property="profileImage" 	column="profile_image" jdbcType="VARCHAR"/>
+        <result property="title" column="cp_title" jdbcType="VARCHAR"/>
+        <result property="contents" column="cp_contents" jdbcType="VARCHAR"/>
+	 <result property="postDate" column="cp_creation_date" 	jdbcType="DATE"/>
+
         <result property="certificationPostMountainName" column="cp_mountain_name" jdbcType="VARCHAR"/>
         <result property="certificationPostHikingTrail" column="cp_hiking_trail" jdbcType="VARCHAR"/>
         <result property="certificationPostTotalTime" column="cp_total_time" jdbcType="VARCHAR"/>
         <result property="certificationPostAscentTime" column="cp_ascent_time" jdbcType="VARCHAR"/>
         <result property="certificationPostDescentTime" column="cp_descent_time" jdbcType="VARCHAR"/>
         <result property="certificationPostHikingDate" column="cp_hiking_date" jdbcType="DATE"/>
-        <result property="certificationPostCreationDate" column="cp_creation_date" jdbcType="DATE"/>
-        <result property="certificationPostTransportation" column="cp_transportation" jdbcType="INTEGER"/>
-        <result property="certificationPostHikingDifficulty" column="cp_difficulty" jdbcType="INTEGER"/>
+        <result property="certificationPostTransportation" column="cp_transportation" jdbcType="NUMERIC"/>
+        <result property="certificationPostHikingDifficulty" column="cp_difficulty" jdbcType="NUMERIC"/>
+        <result property="certificationPostDeletedFlag" column="cp_deleted_flag" jdbcType="NUMERIC"/>
+        <result property="certificationPostLikeCount" column="cp_like_count" jdbcType="NUMERIC"/>
         <collection property="certificationPostHashtag" ofType="java.lang.String" column="cp_no" select="getHashtagsByPostNo"/>
+
+
     </resultMap>
+
 
     <insert id="addCertificationPost" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
         INSERT INTO certification_post (
