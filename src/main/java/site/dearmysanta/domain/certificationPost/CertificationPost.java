@@ -22,10 +22,12 @@ import site.dearmysanta.domain.correctionPost.CorrectionPost;
 @AllArgsConstructor
 @ToString(callSuper=true)
 public class CertificationPost extends Post {
-	
-	private  List<MultipartFile> certificationPostImage;
-	private String certificationPostMountainName;
-	private int certificationPostHikingDifficulty;
+
+    
+    private int certificationPostNo;
+    private MultipartFile certificationPostImage;
+    private String certificationPostMountainName;
+    private int certificationPostHikingDifficulty;
     private String certificationPostHikingTrail;
     private String certificationPostHikingDate;
     private int certificationPostTransportation;
@@ -33,6 +35,5 @@ public class CertificationPost extends Post {
     private String certificationPostTotalTime;
     private String certificationPostDescentTime;
     private String certificationPostAscentTime;
-    private int followerCount;
 
 }
