@@ -4,9 +4,9 @@
       PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="HikingAlertMapper">
+<mapper namespace="site.dearmysanta.service.hikingGuide.HikingGuideDao">
 
-   <resultMap id="hikingAlertMap" type="hikingAlert">
+   <resultMap id="hikingAlertMap" type="site.dearmysanta.service.domain.hikingGuide.HikingAlert">
       <result property="userNo" column="user_no" jdbcType="INTEGER"/>
       <result property="hikingAlertFlag" column="hg_setting" jdbcType="INTEGER"/>
       <result property="meetingTimeAlert" column="time_alert_setting" jdbcType="INTEGER"/>

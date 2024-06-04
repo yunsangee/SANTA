@@ -11,7 +11,7 @@ import site.dearmysanta.service.domain.hikingguide.HikingAlert;
 import site.dearmysanta.service.domain.hikingguide.HikingGuide;
 
 @Mapper
-@Component("hikingGuideDao")
+@Component("HikingGuideDao")
 public interface HikingGuideDao {
     
     public void addHikingRecord(HikingGuide hikingGuide) throws Exception;
