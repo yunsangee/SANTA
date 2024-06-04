@@ -14,8 +14,6 @@ public interface UserService {
 	
 	public void addUser(User user) throws Exception;
 	
-	public void addSurvey(User user) throws Exception;
-	
 	public User getUser(int userNo) throws Exception; // plus login
 	
 	public List<User> getUserList() throws Exception;

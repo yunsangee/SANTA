@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import site.dearmysanta.service.domain.user.QNA;
 import site.dearmysanta.service.domain.user.Schedule;
@@ -17,8 +16,6 @@ import site.dearmysanta.service.domain.user.User;
 	
 		// INSERT
 		public void addUser(User user) throws Exception;
-		
-		public void addSurvey(User user) throws Exception;
 		
 		// SELECT ONE
 		public User getUser(int userNo) throws Exception;

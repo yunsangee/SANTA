@@ -19,20 +19,13 @@ import site.dearmysanta.service.user.UserService;
 	public class UserServiceImpl implements UserService {
 	
 	@Autowired
-	@Qualifier("UserDao")
+	@Qualifier("userDao")
 	private UserDao userDao;
 
 	@Override
 	public void addUser(User user) throws Exception {
 		// TODO Auto-generated method stub
 		userDao.addUser(user);
-		
-	}
-
-	//@Override
-	public void addSurvey(User user) throws Exception {
-		// TODO Auto-generated method stub
-		userDao.addSurvey(user);
 		
 	}
 
