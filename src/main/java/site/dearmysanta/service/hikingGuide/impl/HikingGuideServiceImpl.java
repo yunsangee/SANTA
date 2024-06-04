@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import site.dearmysanta.domain.mountain.Mountain;
+import site.dearmysanta.domain.mountain.Weather;
 import site.dearmysanta.service.domain.hikingguide.HikingAlert;
 import site.dearmysanta.service.domain.hikingguide.HikingGuide;
 import site.dearmysanta.service.hikingGuide.HikingGuideDao;
@@ -36,17 +38,15 @@ public class HikingGuideServiceImpl implements HikingGuideService {
     }
 
     @Override
-    public void updateAlertSetting(int userNo, Map<String, Object> settings) throws Exception {
-        Integer hikingAlertFlag = (Integer) settings.get("hikingAlertFlag");
-        String destinationAlert = (String) settings.get("destinationAlert");
-        String sunsetAlert = (String) settings.get("sunsetAlert");
-        String locationOverAlert = (String) settings.get("locationOverAlert");
-        String meetingTimeAlert = (String) settings.get("meetingTimeAlert");
-        String meetingTime = (String) settings.get("meetingTime");
-        String alertContent = (String) settings.get("alertContent");
-        String allAlert = (String) settings.get("allAlert");
-        
-        hikingGuideDao.updateAlertSetting(userNo, hikingAlertFlag, destinationAlert, sunsetAlert, locationOverAlert, meetingTimeAlert, meetingTime, alertContent, allAlert);
+    public void updateAlertSetting(int userNo, Integer hikingAlertFlag, String destinationAlert, String sunsetAlert,
+            String locationOverAlert, String meetingTimeAlert) throws Exception {
+    		
+    	hikingGuideDao.updateAlertSetting(userNo, hikingAlertFlag, destinationAlert, sunsetAlert, locationOverAlert, meetingTimeAlert);
+    }
+    
+    @Override
+    public void updateMeetingTime(int userNo, int meetingTimeAlert, int meetingTime) throws Exception {
+        hikingGuideDao.updateMeetingTime(userNo, meetingTimeAlert, meetingTime);
     }
 
     @Override
@@ -59,18 +59,18 @@ public class HikingGuideServiceImpl implements HikingGuideService {
         hikingGuideDao.deleteHikingRecord(hrNo);
     }
 
-//	@Override
-//	public Mountain getMountain() throws Exception {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public Weather getWeatherList() throws Exception {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
+	@Override
+	public Mountain getMountain() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Weather getWeatherList() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 //	@Override
 //	public MeetingPost getParticipationList() throws Exception {
 //		// TODO Auto-generated method stub
@@ -83,16 +83,59 @@ public class HikingGuideServiceImpl implements HikingGuideService {
 		
 	}
 
-	@Override
-	public void getMountainInfo() throws Exception {
-		// TODO Auto-generated method stub
-		
+	  @Override
+	    public MountainInfo getMountainInfo() throws Exception {
+	        Mountain mountain = getMountain();
+	        Weather weather = getWeatherList();
+	        return new MountainInfo(mountain, weather);
 	}
+	
 
 	@Override
-	public void getAlert() throws Exception {
+	public void getAlert(int userNo, String alertContent) {
+        
+        System.out.println("User " + userNo + ": " + alertContent);
+      
+    }
+
+	@Override
+	public void getUserCoordination() throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
+	
+
+    @Override
+    public void getUserCoordination(int userNo, double userLatitude, double userLongitude) throws Exception {
+        HikingAlert alertSetting = getAlertSetting(userNo);
+        if (alertSetting != null) {
+            if (alertSetting.getHikingAlerFlag() == 0) {
+                return;
+            }
+
+            if (checkAlertCondition(alertSetting)) {
+                getAlert(userNo, "arrive destination.");
+            }
+        }
+    }
+
+    private boolean checkAlertCondition(HikingAlert alertSetting) {
+        if (alertSetting.getDestinationAlert() != null && alertSetting.getDestinationAlert().equals("1")) {
+            return true; 
+        }
+        if (alertSetting.getSunsetAlert() != null && alertSetting.getSunsetAlert().equals("1")) {
+            return true; 
+            }
+        if (alertSetting.getLocationOverAlert() != null && alertSetting.getLocationOverAlert().equals("1")) {
+            return true; 
+        }
+        if (alertSetting.getMeetingTimeAlert() != null && alertSetting.getMeetingTimeAlert().equals("1")) {
+            return true; 
+        }
+        return false;
+    }
+
+  
+
 
 }

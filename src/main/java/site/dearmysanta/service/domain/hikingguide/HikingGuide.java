@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import site.dearmysanta.domain.meeting.MeetingPost;
+import site.dearmysanta.domain.mountain.Mountain;
+import site.dearmysanta.domain.mountain.Weather;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
@@ -17,19 +20,22 @@ import lombok.Builder;
 @AllArgsConstructor
 @ToString
 public class HikingGuide {
-    private int hrNo; //
-    private int userNo; // 
-    private int hikingRecordNo; // 
-    private int mountainTrailNo; // 
-    private int userDistance; // 
-    private int ascentTime; // 
-    private int descentTime; // 
-    private int totalTime; // 
-    private Date hikingDate; // 
-    private List<String> userCoordinates; //
-//    private Mountain mountain; // (mountain class)
-//    private Weather weather; // (weather class)
-//    private MeetingPost meetingpost; // (meeting class)
+    private int hrNo; // hikingRecord Number
+    private int userNo; // user Number
+    private int mountainTrailNo; // mountainTrail Number
+    private int userDistance; // user move distance
+    private int ascentTime; // ascent time
+    private int descentTime; // descent time
+    private int totalTime; // ascent time + descent time + other time
+    private Date hikingDate; // sysdate
+    private String alertContent;// alert contents
+    private double userLatitude;// userlatitude
+    private double userLongitude;// user longtitude
+    private Mountain mountain; // (mountain class)
+    private Weather weather; // (weather class)
+    private MeetingPost meetingpost; // (meeting class)
 }
+
+
 
 

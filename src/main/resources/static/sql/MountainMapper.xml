@@ -4,6 +4,33 @@
 		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="MountainMapper">
+<mapper namespace="site.dearmysanta.service.mountain.MountainDao">
+
+<resultMap id="MountainResultMap" type="site.dearmysanta.domain.mountain.Mountain">
+    <id property="mountainNo" column="mountain_no"/>
+    <result property="mountainName" column="mountain_name"/>
+</resultMap>
+
+
+	<insert id="addMountainLike" parameterType="site.dearmysanta.domain.common.Like">
+		INSERT INTO LIKES (LIKE_NO, USER_NO, POST_LIKE_NO, POST_LIKE_TYPE, LIKE_DATE)
+		VALUES (seq_like_no.NEXTVAL, #{userNo}, #{postNo}, 2, SYSDATE)
+	</insert>
+	
+	<delete id="deleteMountainLike" parameterType="site.dearmysanta.domain.common.Like">
+		DELETE FROM LIKES
+		WHERE USER_NO = #{userNo} AND POST_LIKE_NO = #{postNo} AND POST_LIKE_TYPE=2
+	</delete>
+	
+	<select id="getTotalMountainLikeCount" parameterType="site.dearmysanta.domain.common.Like" resultType="int">
+		SELECT COUNT(*) FROM LIKES
+		WHERE POST_LIKE_NO = #{postNo}
+	</select>
+	
+	<select id="getMountainLikeList" parameterType="site.dearmysanta.domain.common.Like" resultMap="MountainResultMap">
+		SELECT m.*
+		FROM LIKES l, MOUNTAIN m
+		WHERE l.POST_LIKE_TYPE=2 AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO = m.MOUNTAIN_NO
+	</select>
 
 </mapper>

@@ -17,7 +17,7 @@ public interface HikingGuideDao {
     public void addHikingRecord(HikingGuide hikingGuide) throws Exception;
 
     public List<HikingGuide> getHikingListRecord(@Param("userNo") int userNo) throws Exception;
-
+ 
     public HikingAlert getAlertSetting(@Param("userNo") int userNo) throws Exception;
 
     public void updateAlertSetting(@Param("userNo") int userNo, 
@@ -25,10 +25,10 @@ public interface HikingGuideDao {
                             @Param("destinationAlert") String destinationAlert, 
                             @Param("sunsetAlert") String sunsetAlert,
                             @Param("locationOverAlert") String locationOverAlert, 
-                            @Param("meetingTimeAlert") String meetingTimeAlert,
-                            @Param("meetingTime") String meetingTime, 
-                            @Param("alertContent") String alertContent,
-                            @Param("allAlert") String allAlert) throws Exception;
+                            @Param("meetingTimeAlert") String meetingTimeAler) throws Exception;
+    
+    public void updateMeetingTime(@Param("userNo") int userNo, @Param("meetingTimeAlert") int meetingTimeAlert, 
+    						 	  @Param("meetingTime") int meetingTime) throws Exception;
 
     public void deleteHikingRecord(@Param("hrNo") int hrNo) throws Exception;
 }
