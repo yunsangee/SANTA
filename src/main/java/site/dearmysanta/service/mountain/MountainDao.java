@@ -24,4 +24,8 @@ public interface MountainDao {
 	
 	public void addSearchKeyword(MountainSearch mountainSearch);
 	
+	public void deleteSearchKeyword(MountainSearch mountainSearch);
+	
+	public List<MountainSearch> getSearchKeywordList(int userNo);
+	
 }

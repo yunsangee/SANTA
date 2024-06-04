@@ -274,6 +274,12 @@ public class MountainServiceImpl implements MountainService {
 		mountainDao.addSearchKeyword(mountainSearch);
 	}
 	
+	public void deleteSearchKeyword(MountainSearch mountainSearch) {
+		mountainDao.deleteSearchKeyword(mountainSearch);
+	}
 	
+	public List<MountainSearch> getSearchKeywordList(int userNo){
+		return mountainDao.getSearchKeywordList(userNo);
+	}
 
 }
