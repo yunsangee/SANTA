@@ -6,15 +6,15 @@
 
 <mapper namespace="site.dearmysanta.service.meeting.MeetingDAO">
 
-	<resultMap id="userSelectMap" type="site.dearmysanta.domain.common.User">
+	<resultMap id="userSelectMap" type="site.dearmysanta.domain.user.User">
         <result property="userNo" 		column="user_no" 		jdbcType="NUMERIC"/>
         <result property="nickName" 	column="nickname" 		jdbcType="VARCHAR"/>
-        <result property="profileImage" column="profile_image" 	jdbcType="VARCHAR"/>
+        <!--  <result property="profileImage" column="profile_image" 	jdbcType="VARCHAR"/>-->
     </resultMap>
 
 	<resultMap id="meetingParticipationSelectMap" type="site.dearmysanta.domain.meeting.MeetingParticipation">
         <result property="userNo" 					column="participation_no" 		jdbcType="NUMERIC"/>
-        <result property="profileImage" 			column="profile_image" 			jdbcType="VARCHAR"/>
+<!--         <result property="profileImage" 			column="profile_image" 			jdbcType="VARCHAR"/> -->
         <result property="nickname" 				column="nickname" 				jdbcType="VARCHAR"/>
         <result property="participationStatus" 		column="participation_status" 	jdbcType="NUMERIC"/>
         <result property="chattingRoomExitTime" 	column="chattingroom_exit_time" jdbcType="DATE"/>
@@ -29,19 +29,19 @@
         <result property="meetingPostCommentCreationDate" 	column="comment_creation_date" 	jdbcType="DATE"/>
         <result property="userNo" 							column="userNo" 				jdbcType="NUMERIC"/>
         <result property="nickname" 						column="nickname" 				jdbcType="VARCHAR"/>
-        <result property="profileImage" 					column="profile_image" 			jdbcType="VARCHAR"/>
+      <!--   <result property="profileImage" 					column="profile_image" 			jdbcType="VARCHAR"/> -->
     </resultMap>
 
 	<resultMap id="meetingPostSelectMap" type="site.dearmysanta.domain.meeting.MeetingPost">
 		<result property="userNo" 					column="user_no" 					jdbcType="NUMERIC"/>
         <result property="nickName" 				column="nickname" 					jdbcType="VARCHAR"/>
-        <result property="profileImage" 			column="profile_image" 				jdbcType="VARCHAR"/>
+        <!-- <result property="profileImage" 			column="profile_image" 				jdbcType="VARCHAR"/> -->
         <result property="postNo" 					column="mp_no" 						jdbcType="NUMERIC"/>
         <result property="title" 					column="mp_title" 					jdbcType="VARCHAR"/>
         <result property="contents" 				column="mp_contents" 				jdbcType="VARCHAR"/>
         <result property="postDate" 				column="mp_creation_date" 			jdbcType="DATE"/>
        	
-		<result property="meetingPostImage"			column="image"						jdbcType="VARCHAR"/>
+		<!-- <result property="meetingPostImage"			column="image"						jdbcType="VARCHAR"/> -->
 		<result property="meetingName"				column="meeting_name"				jdbcType="VARCHAR"/>
 		<result property="recruitmentDeadline"		column="recruitment_deadline"		jdbcType="DATE"/>
 		<result property="appointedDeparture"		column="appointed_departure"	    jdbcType="VARCHAR"/>
