@@ -6,10 +6,11 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import site.dearmysanta.domain.hikingguide.HikingAlert;
+import site.dearmysanta.domain.hikingguide.HikingGuide;
+import site.dearmysanta.domain.meeting.MeetingPost;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.Weather;
-import site.dearmysanta.service.domain.hikingguide.HikingAlert;
-import site.dearmysanta.service.domain.hikingguide.HikingGuide;
 
 
 public interface HikingGuideService {
@@ -44,7 +45,7 @@ public interface HikingGuideService {
 	
 	public void getUserCoordination(int userNo, double latitude, double longitude) throws Exception;
 
-//	public MeetingPost getMeetingParticipationList() throws Exception;
+	public MeetingPost getMeetingParticipationList() throws Exception;
 	
 	
 	@Getter
