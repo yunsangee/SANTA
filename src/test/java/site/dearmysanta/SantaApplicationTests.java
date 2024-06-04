@@ -8,7 +8,6 @@ import site.dearmysanta.domain.correctionPost.CorrectionPost;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = SantaApplicationTests.class)
-//@SpringBootTest
 public class SantaApplicationTests {
 
 	private static final Logger logger = LogManager.getLogger(SantaApplicationTests.class);
