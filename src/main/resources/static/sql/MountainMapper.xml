@@ -19,7 +19,7 @@
     	<result property="searchKeyword" column="search_keyword"/>
     	<result property="searchDate" column="search_date"/>
     
-    	<result property="locationCategory" column="location_category"/>
+    	<result property="locationNo" column="location_no"/>
     	<result property="altitudeNo" column="altitude_no"/>
     	<result property="difficultyNo" column="difficulty_no"/>
 	</resultMap>
@@ -60,23 +60,23 @@
 
 
 
-	<insert id="addMountainSearch"
+	<insert id="addSearchKeyword"
 		parameterType="site.dearmysanta.domain.mountain.MountainSearch">
-		NSERT INTO mountain_search (
+		INSERT INTO mountain_search (
 		mountain_search_no, user_no, mountain_search_condition, mountain_search_content,
-		location_no, difficulty_no, altitude_no
+		location_no, difficulty_no, altitude_no, search_date
 		) VALUES (
-		seq_mountain_search_no.NEXTVAL, #{userNo}, #{searchCondition}, #{searchKeyword}, #{locationCategory},
-		#{altitudeNo}, #{difficultyNo}
-		);
+		seq_mountain_search_no.NEXTVAL, #{userNo}, #{searchCondition}, #{searchKeyword}, #{locationNo},
+		#{altitudeNo}, #{difficultyNo}, SYSDATE
+		)
 	</insert>
 	
-	<delete id="deleteMountainSearchKeyword" parameterType="site.dearmysanta.domain.mountain.MountainSearch">
+	<delete id="deleteSearchKeyword" parameterType="site.dearmysanta.domain.mountain.MountainSearch">
 		DELETE FROM MOUNTAIN_SEARCH
-		WHERE USER_NO = #{userNo} AND MOUNTAIN_SEARCH_CONTENT = #{searchKeyword}
+		WHERE USER_NO = #{userNo} AND search_date = #{searchDate}
 	</delete>
 	
-	<select id="getSearchKeywordList" parameterType="int" resultMap="mountainSearchResultMap">
+	<select id="getSearchKeywordList" parameterType="int" resultMap="MountainSearchResultMap">
 		SELECT * FROM MOUNTAIN_SEARCH
 		WHERE USER_NO = #{value}
 	</select>
