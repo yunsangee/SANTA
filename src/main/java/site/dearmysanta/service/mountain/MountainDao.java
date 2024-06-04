@@ -28,4 +28,5 @@ public interface MountainDao {
 	
 	public List<MountainSearch> getSearchKeywordList(int userNo);
 	
+	public void updateSearchSetting(int userNo, int settingValue);
 }

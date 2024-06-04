@@ -51,6 +51,9 @@ public class MountainApplicationTest {
 			SantaLogger.makeLog("info", list.get(i).toString());
 		}
 		
+		
+		
+		//update 테스트 해야함 ..
 	}
 	
 

@@ -21,6 +21,6 @@ import site.dearmysanta.domain.common.Post;
 public class CorrectionPost extends Post {
 	private int mountainNo; // unique mountain identifier
 	private String mountainName; // mountain name
-	private int status; // answer status
+	private int status; // answer status 0: before fix 1: after fix
 
 }// correction post

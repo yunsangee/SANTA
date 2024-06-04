@@ -16,17 +16,18 @@ public interface CertificationPostDao {
 	
 	public void addCertificationPost(CertificationPost certificationPost) throws Exception;
 
-	public void addCertificationPostHashtags(Map<String, Object> map) throws Exception;
-
 	public CertificationPost getCertificationPost(int certificationPostNo) throws Exception;
 
 	public void updateCertificationPost(CertificationPost certificationPost) throws Exception;
-
-	public List<String> getHashtagsByPostNo(int certificationPostNo) throws Exception;
-
-	public	 void deleteHashtagsByPostNo(int certificationPostNo) throws Exception;
 	
-	public void deleteCertificationPost(int certificationPostNo) throws Exception;
+	//hashtag
+		
+	public void addCertificationPostHashtags(int certificationPostNo) throws Exception;
+	
+	public	 void deleteCertificationPostHashtags(int certificationPostNo) throws Exception;
+
+	
+	//postImage
 }
 
 
