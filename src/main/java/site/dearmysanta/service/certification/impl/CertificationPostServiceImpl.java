@@ -29,12 +29,6 @@ public class CertificationPostServiceImpl implements CertificationPostService {
         certificationPostDao.updateCertificationPost(certificationPost);
     }
 
-    @Override
-    public void deleteCertificationPost(int certificationPostNo) throws Exception {
-        certificationPostDao.deleteCertificationPost(certificationPostNo);
-    }
-
-
     
     @Override
     public void addCertificationPostImage(CertificationPost certificationPost) throws Exception {

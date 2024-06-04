@@ -11,8 +11,6 @@ public interface CertificationPostService {
 	public CertificationPost getCertificationPost(int certificationPostNo) throws Exception;
 	
 	public void updateCertificationPost(CertificationPost certificationPost) throws Exception;
-	
-	 public  void deleteCertificationPost(int certificationPostNo) throws Exception;
 
 	 public void addCertificationPostImage(CertificationPost certificationPost) throws Exception;
 		
