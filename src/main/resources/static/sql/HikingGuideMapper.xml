@@ -11,8 +11,8 @@
       <result property="userNo" column="user_no" jdbcType="INTEGER"/>
       <result property="totalTime" column="hr_time" jdbcType="VARCHAR"/>
       <result property="userDistance" column="hr_distance" jdbcType="INTEGER"/>
-      <result property="ascentTime" column="hr_ascent" jdbcType="INTEGER"/>
-      <result property="descentTime" column="hr_descent" jdbcType="INTEGER"/>
+      <result property="ascentTime" column="hr_ascent" jdbcType="VARCHAR"/>
+      <result property="descentTime" column="hr_descent" jdbcType="VARCHAR"/>
       <result property="hikingDate" column="hr_date" jdbcType="DATE"/>
       <result property="weather.skyCondition" column="hr_skycondition" jdbcType="INTEGER"/>
       <result property="mountain.mountainName" column="hr_mountain_name" jdbcType="VARCHAR"/>
@@ -40,7 +40,7 @@
             hr_updifficulty,
             hr_downdifficulty
         ) VALUES (
-            #{hrNo, jdbcType=INTEGER},
+            seq_hr_no.NEXTVAL,
             #{userNo, jdbcType=INTEGER},
             #{totalTime, jdbcType=VARCHAR},
             #{userDistance, jdbcType=INTEGER},
@@ -72,12 +72,12 @@
             hr_ascent AS ascentTime,
             hr_descent AS descentTime,
             hr_date AS hikingDate,
-            hr_skycondition AS weather.skyCondition,
-            hr_mountain_name AS mountain.mountainName,
-            hr_uptrail_name AS mountain.upTrailName,
-            hr_downtrail_name AS mountain.downTrailName,
-            hr_updifficulty AS mountain.upDifficulty,
-            hr_downdifficulty AS mountain.downDifficulty
+            hr_skycondition AS skyCondition,
+            hr_mountain_name AS mountainName,
+            hr_uptrail_name AS upTrailName,
+            hr_downtrail_name AS downTrailName,
+            hr_updifficulty AS upDifficulty,
+            hr_downdifficulty AS downDifficulty
         FROM hiking_record
         WHERE user_no = #{userNo, jdbcType=INTEGER}
     </select>

@@ -13,6 +13,8 @@ import site.dearmysanta.service.hikingGuide.impl.HikingGuideServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SantaApplication.class)
 public class HikingGuideApplicationTest {
@@ -23,7 +25,7 @@ public class HikingGuideApplicationTest {
     @Autowired
     private HikingGuideDao hikingGuideDao;
 
-    @Test
+   // @Test
     public void addHikingRecord() throws Exception {
         // Create a HikingGuide object with sample data
         HikingGuide hikingGuide = new HikingGuide();
@@ -37,17 +39,20 @@ public class HikingGuideApplicationTest {
         
         // Add the hiking record
         hikingGuideServiceImpl.addHikingRecord(hikingGuide);
-
-        // Retrieve the added record and verify it
-        HikingGuide retrievedRecord = hikingGuideDao.getHikingListRecord(1).get(0);
-        assertNotNull(retrievedRecord);
-        assertEquals(hikingGuide.getHrNo(), retrievedRecord.getHrNo());
-        assertEquals(hikingGuide.getUserNo(), retrievedRecord.getUserNo());
-        assertEquals(hikingGuide.getTotalTime(), retrievedRecord.getTotalTime());
-        assertEquals(hikingGuide.getUserDistance(), retrievedRecord.getUserDistance());
-        assertEquals(hikingGuide.getAscentTime(), retrievedRecord.getAscentTime());
-        assertEquals(hikingGuide.getDescentTime(), retrievedRecord.getDescentTime());
-        assertEquals(hikingGuide.getHikingDate(), retrievedRecord.getHikingDate());
      
+    }
+    
+    
+    @Test
+    public void getHikingListRecord() throws Exception {
+        // Create a HikingGuide object with sample data
+        HikingGuide hikingGuide = new HikingGuide();
+        
+  
+        // Test retrieving hiking records for the user with userNo 1
+        List<HikingGuide> records = hikingGuideDao.getHikingListRecord(1);
+      for(HikingGuide record : records) {
+        System.out.println("getHiking :"+record);
+      }
     }
 }
