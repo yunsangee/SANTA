@@ -95,9 +95,12 @@
 	<!--  SQL : CHECK -->
 	
 	<select id = "checkDuplicationId"	resultType ="userSelectMap">
-		SELECT count(*)
-		FROM users
-		WHERE user_id = #{userId}
+		SELECT 
+			user_id
+		FROM 
+			users
+		WHERE 
+			user_id = #{userId}
 	</select> 
 	
 </mapper>
