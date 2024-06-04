@@ -17,7 +17,7 @@
 		<result property = "birthDate"	column = "birth_date"	jdbcType = "VARCHAR"/>
 		<result property = "phoneNumber"	column = "phone_number"	jdbcType = "VARCHAR"/>
 		<result property = "gender"	column = "gender"	jdbcType = "NUMERIC"/>
-		<result property = "profileImage"	column = "profile_image"	jdbcType = "VARCHAR"/>
+		<!-- <result property = "profileImage"	column = "profile_image"	jdbcType = "VARCHAR"/> -->
 		<result property = "creationDate"	column = "creation_date"	jdbcType = "DATE"/>
 		<result property = "hikingPurpose"	column = "hiking_purpose"	jdbcType = "NUMERIC"/>
 		<result property = "hikingDifficulty"	column = "hiking_difficulty"	jdbcType = "NUMERIC"/>
@@ -26,7 +26,7 @@
 		<result property = "withedrawReason"	column = "withdraw_reaseon"	jdbcType = "NUMERIC"/>
 		<result property = "withdrawContent"	column = "withdraw_content"	jdbcType = "VARCHAR"/>
 		<result property = "role"	column = "role"	jdbcType = "NUMERIC"/>
-		<result property = "badgeImage"	column = "badge_image"	jdbcType = "VARCHAR"/>
+	<!-- 	<result property = "badgeImage"	column = "badge_image"	jdbcType = "VARCHAR"/> -->
 		<result property = "certificationCount"	column = "cp_count"	jdbcType = "NUMERIC"/>
 		<result property = "meetingCount"	column = "mp_count"	jdbcType = "NUMERIC"/>
 		<result property = "introduceContent"	column = "introduce_content"	jdbcType = "VARCHAR"/>
@@ -43,37 +43,28 @@
 	</resultMap>
 	
 	<!--  SQL : INSERT -->
-	
+ 	
 	<insert id = "addUser"	parameterType = "site.dearmysanta.domain.user.User" >
 		INSERT
 		INTO users(user_no, user_id, name, password, nickname, address, birth_date, phone_number, gender, 
-							profile_image, hiking_purpose, hiking_difficulty, hiking_level, role, 
-							badge_image, cp_count, mp_count, creation_date)
+							hiking_purpose, hiking_difficulty, hiking_level, role, 
+							 cp_count, mp_count, creation_date)
 		VALUES	( #{userNo}, #{userId}, #{userName}, #{userPassword}, #{nickName}, #{address}, #{birthDate},
-							#{phoneNumber}, #{gender}, #{profileImage}, #{hikingPurpose}, #{hikingDifficulty}, 
-							#{hikingLevel}, #{role}, #{badgeImage}, #{certificationCount}, #{meetingCount}, #{creationDate})
+							#{phoneNumber}, #{gender},  #{hikingPurpose}, #{hikingDifficulty}, 
+							#{hikingLevel}, #{role}, #{certificationCount}, #{meetingCount}, #{creationDate})
 	</insert>
-	
+
 	<!--  SQL : SELECT ONE -->
 	
-	<select id="getUser" parameterType="String" resultType="userSelectMap">
+	<select id="getUser" parameterType="String" resultMap="userSelectMap">
         SELECT 
 		    user_no, user_id, name, password, nickname, address, birth_date, phone_number, gender, 
-		    profile_image, hiking_purpose, hiking_difficulty, hiking_level, 
-		CASE
-	        WHEN (cp_count + mp_count) BETWEEN 0 AND 2 THEN 'badge_image_1.jpg'
-	        WHEN (cp_count + mp_count) BETWEEN 2 AND 5 THEN 'badge_image_2.jpg'
-	        WHEN (cp_count + mp_count) BETWEEN 5 AND 10 THEN 'badge_image_3.jpg'
-	        WHEN (cp_count + mp_count) BETWEEN 10 AND 30 THEN 'badge_image_4.jpg'
-	        WHEN (cp_count + mp_count) BETWEEN 30 AND 50 THEN 'badge_image_5.jpg'
-	        WHEN (cp_count + mp_count) BETWEEN 50 AND 100 THEN 'badge_image_6.jpg'
-	    	ELSE 'badge_image_7.jpg'
-	    END AS badge_image,
-	    	cp_count, mp_count, creation_date, introduce_content
+		 hiking_purpose, hiking_difficulty, hiking_level
+
         FROM users
         WHERE user_no = #{userNo}
     </select>
-	
+
 	<!--  SQL : UPDATE -->
 	
 	<update id = "updateUser"	parameterType = "site.dearmysanta.domain.user.User" > 
@@ -83,7 +74,6 @@
 		    nickName = #{nickName},
 		    address = #{address},
 		    phoneNumber = #{phoneNumber},
-		    profileImage = #{profileImage},
 		    hikingPurpose = #{hikingPurpose},
 		    hikingDifficulty = #{hikingDifficulty},
 		    hikingLevel = #{hikingLevel},
@@ -94,7 +84,7 @@
 	
 	<!--  SQL : CHECK -->
 	
-	<select id = "checkDuplicationId"	resultType ="userSelectMap">
+	<select id = "checkDuplicationId" parameterType="String"	resultMap ="userSelectMap">
 		SELECT count(*)
 		FROM users
 		WHERE user_id = #{userId}

@@ -5,9 +5,9 @@
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper
-	namespace="site.dearmysanta.service.correctionPost.CorrectionPostDao">
+	namespace="site.dearmysanta.service.correctionpost.CorrectionPostDao">
 
-	<mapper namespace="site.dearmysanta.domain.correctionPost.CorrectionPost">
+	
 
 		<resultMap id="CorrectionPostResultMap" type="site.dearmysanta.domain.correctionPost.CorrectionPost">
 			<id property="postNo" column="crp_no" />
@@ -21,9 +21,9 @@
 			<result property="status" column="crp_status" />
 		</resultMap>
 
-	</mapper>
+
 	
-	<insert id="addCorrectionPost" parameterType="site.dearmysanta.domain.correctionPost">
+	<insert id="addCorrectionPost" parameterType="site.dearmysanta.domain.correctionPost.CorrectionPost">
 		INSERT INTO CORRECTION_POST (CRP_NO, CRP_CONTENT, CRP_DATE, CRP_STATUS, MOUNTAIN_NO, MOUNTAIN_NAME, USER_NO)
 		VALUES(seq_crp_no.NEXTVAL, #{contents}, SYSDATE, 0, #{mountainNo}, #{mountainName}, #{userNo})
 	

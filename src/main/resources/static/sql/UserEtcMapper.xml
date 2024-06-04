@@ -17,7 +17,7 @@
 		<result property = "birthDate"	column = "birth_date"	jdbcType = "VARCHAR"/>
 		<result property = "phoneNumber"	column = "phone_number"	jdbcType = "VARCHAR"/>
 		<result property = "gender"	column = "gender"	jdbcType = "NUMERIC"/>
-		<result property = "profileImage"	column = "profile_image"	jdbcType = "VARCHAR"/>
+		<!-- <result property = "profileImage"	column = "profile_image"	jdbcType = "VARCHAR"/> -->
 		<result property = "creationDate"	column = "creation_date"	jdbcType = "DATE"/>
 		<result property = "hikingPurpose"	column = "hiking_purpose"	jdbcType = "NUMERIC"/>
 		<result property = "hikingDifficulty"	column = "hiking_difficulty"	jdbcType = "NUMERIC"/>
@@ -26,7 +26,7 @@
 		<result property = "withedrawReason"	column = "withdraw_reaseon"	jdbcType = "NUMERIC"/>
 		<result property = "withdrawContent"	column = "withdraw_content"	jdbcType = "VARCHAR"/>
 		<result property = "role"	column = "role"	jdbcType = "NUMERIC"/>
-		<result property = "badgeImage"	column = "badge_image"	jdbcType = "VARCHAR"/>
+		<!-- <result property = "badgeImage"	column = "badge_image"	jdbcType = "VARCHAR"/> -->
 		<result property = "certificationCount"	column = "cp_count"	jdbcType = "NUMERIC"/>
 		<result property = "meetingCount"	column = "mp_count"	jdbcType = "NUMERIC"/>
 		<result property = "introduceContent"	column = "introduce_content"	jdbcType = "VARCHAR"/>

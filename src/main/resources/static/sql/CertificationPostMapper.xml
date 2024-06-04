@@ -12,12 +12,10 @@
 	<result property="postNo" column="cp_no" jdbcType="NUMERIC"/>
         <result property="userNo" column="user_no" jdbcType="NUMERIC"/>
 	<result property="nickName" column="nickname" jdbcType="VARCHAR"/>
-        <result property="profileImage" 	column="profile_image" jdbcType="VARCHAR"/>
         <result property="title" column="cp_title" jdbcType="VARCHAR"/>
         <result property="contents" column="cp_contents" jdbcType="VARCHAR"/>
 	 <result property="postDate" column="cp_creation_date" 	jdbcType="DATE"/>
 
- 		<result property="certificationPostImage" column="image" jdbcType="VARCHAR"/>
         <result property="certificationPostMountainName" column="cp_mountain_name" jdbcType="VARCHAR"/>
         <result property="certificationPostHikingTrail" column="cp_hiking_trail" jdbcType="VARCHAR"/>
         <result property="certificationPostTotalTime" column="cp_total_time" jdbcType="VARCHAR"/>
@@ -28,7 +26,6 @@
         <result property="certificationPostHikingDifficulty" column="cp_difficulty" jdbcType="NUMERIC"/>
         <result property="certificationPostDeletedFlag" column="cp_deleted_flag" jdbcType="NUMERIC"/>
         <result property="certificationPostLikeCount" column="cp_like_count" jdbcType="NUMERIC"/>
-        <collection property="certificationPostHashtag" ofType="java.lang.String" column="cp_no" select="getHashtagsByPostNo"/>
 
 
     </resultMap>
@@ -69,7 +66,7 @@
         </foreach>
     </insert>
     
-    <select id="getCertificationPost" parameterType="int" resultMap="CertificationPostMap">
+    <select id="getCertificationPost" parameterType="int" resultMap="CertificationPostSelectMap">
         SELECT
             cp_no,
             user_no,
