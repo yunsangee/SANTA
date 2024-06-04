@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="site.dearmysanta.service.user.etc.UserEtcDao">
+
+
+	<resultMap id = "userSelectMap" type="site.dearmysanta.domain.user.User">
+		<result property = "userNo"	column = "user_no"	jdbcType = "NUMERIC"/>
+		<result property = "userId"	column = "user_id"	jdbcType = "VARCHAR"/>
+		<result property = "userName"	column = "name"	jdbcType = "VARCHAR"/>
+		<result property = "userPassword"	column = "password"	jdbcType = "VARCHAR"/>
+		<result property = "nickName"	column = "nickname"	jdbcType = "VARCHAR"/>
+		<result property = "address"	column = "address"	jdbcType = "VARCHAR"/>
+		<result property = "birthDate"	column = "birth_date"	jdbcType = "VARCHAR"/>
+		<result property = "phoneNumber"	column = "phone_number"	jdbcType = "VARCHAR"/>
+		<result property = "gender"	column = "gender"	jdbcType = "NUMERIC"/>
+		<result property = "profileImage"	column = "profile_image"	jdbcType = "VARCHAR"/>
+		<result property = "creationDate"	column = "creation_date"	jdbcType = "DATE"/>
+		<result property = "hikingPurpose"	column = "hiking_purpose"	jdbcType = "NUMERIC"/>
+		<result property = "hikingDifficulty"	column = "hiking_difficulty"	jdbcType = "NUMERIC"/>
+		<result property = "hikingLevel"	column = "hiking_level"	jdbcType = "NUMERIC"/>
+		<result property = "withdrawDate"	column = "withdraw_date"	jdbcType = "DATE"/>
+		<result property = "withedrawReason"	column = "withdraw_reaseon"	jdbcType = "NUMERIC"/>
+		<result property = "withdrawContent"	column = "withdraw_content"	jdbcType = "VARCHAR"/>
+		<result property = "role"	column = "role"	jdbcType = "NUMERIC"/>
+		<result property = "badgeImage"	column = "badge_image"	jdbcType = "VARCHAR"/>
+		<result property = "certificationCount"	column = "cp_count"	jdbcType = "NUMERIC"/>
+		<result property = "meetingCount"	column = "mp_count"	jdbcType = "NUMERIC"/>
+		<result property = "introduceContent"	column = "introduce_content"	jdbcType = "VARCHAR"/>
+		<result property = "searchRecordFlag"	column = "search_record_setting"	jdbcType = "NUMERIC"/>
+		<result property = "allAlertSetting"	column = "all_alert_setting"	jdbcType = "NUMERIC"/>
+		<result property = "certificationPostAlertSetting"	column = "cp_setting"	jdbcType = "NUMERIC"/>
+		<result property = "meetingPostAlertSetting"	column = "mp_setting"	jdbcType = "NUMERIC"/>
+		<result property = "hikingGuideAlertSetting"	column = "hg_setting"	jdbcType = "NUMERIC"/>
+		<result property = "timeAlertSetting"	column = "time_alert_setting"	jdbcType = "NUMERIC"/>
+		<result property = "locationOverSetting"	column = "location_over_setting"	jdbcType = "NUMERIC"/>
+		<result property = "destinationOverSetting"	column = "destination_setting"	jdbcType = "NUMERIC"/>
+		<result property = "sunsetAlertSetting"	column = "sunset_setting"	jdbcType = "NUMERIC"/>
+		<result property = "timeSetting"	column = "time_setting"	jdbcType = "VARCHAR"/>
+	</resultMap>
+	
+	<select id="getCertificationCount" parameterType="int" resultType="int">
+		SELECT cp_count FROM USERS WHERE USER_NO = #{value}
+	</select>
+	
+	<select id="getMettingCount" parameterType="int" resultType="int">
+		SELECT mp_count FROM USERS WHERE USER_NO = #{value}
+	</select>
+	
+	<update id="updateCertificationCount" parameterType="int">
+		UPDATE USERS
+		SET
+		cp_count = cp_count+1
+		WHERE USER_NO = #{value}
+	</update>
+	
+	<update id="updateMeetingCount" parameterType="int">
+		UPDATE USERS
+		SET
+		mp_count = mp_count+1
+		WHERE USER_NO = #{value}
+	</update>
+	
+	
+	
+	
+</mapper>
