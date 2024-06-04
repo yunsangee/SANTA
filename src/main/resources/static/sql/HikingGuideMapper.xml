@@ -6,7 +6,7 @@
 
 <mapper namespace="site.dearmysanta.service.hikingGuide.HikingGuideDao">
 
-   <resultMap id="hikingGuideMap" type="site.dearmysanta.service.domain.hikingGuide.HikingGuide">
+   <resultMap id="hikingGuideMap" type="site.dearmysanta.domain.hikingguide.HikingGuide">
       <result property="hrNo" column="hr_no" jdbcType="INTEGER"/>
       <result property="userNo" column="user_no" jdbcType="INTEGER"/>
       <result property="totalTime" column="hr_time" jdbcType="VARCHAR"/>
@@ -24,7 +24,7 @@
    
    <!--SQL : hikingRecord INSERT -->
    
-    <insert id="addHikingRecord" parameterType="site.dearmysanta.service.domain.hikingGuide.HikingGuide" useGeneratedKeys="true" keyProperty="hrNo">
+    <insert id="addHikingRecord" parameterType="site.dearmysanta.domain.hikingguide.HikingGuide" useGeneratedKeys="true" keyProperty="hrNo">
         INSERT INTO hiking_record (
             hr_no,
             user_no,

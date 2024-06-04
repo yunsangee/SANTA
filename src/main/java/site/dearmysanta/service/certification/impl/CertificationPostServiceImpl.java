@@ -28,14 +28,19 @@ public class CertificationPostServiceImpl implements CertificationPostService {
     public void updateCertificationPost(CertificationPost certificationPost) throws Exception {
         certificationPostDao.updateCertificationPost(certificationPost);
     }
-
-    @Override
-    public void deleteCertificationPost(int certificationPostNo) throws Exception {
-        certificationPostDao.deleteCertificationPost(certificationPostNo);
-    }
-
+    
+    //hashtag
+	@Override
+	public void addCertificationPostHashtags(int certificationPostNo) throws Exception {
+		certificationPostDao.addCertificationPostHashtags(certificationPostNo);
+	}
+	
     @Override
     public void deleteCertificationPostHashtags(int certificationPostNo) throws Exception {
-        certificationPostDao.deleteHashtagsByPostNo(certificationPostNo);
+        certificationPostDao.deleteCertificationPostHashtags(certificationPostNo);
     }
+
+
+
+
 }

@@ -83,7 +83,7 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public User checkDuplicationId(String userId) throws Exception {
+	public String getDuplicationId(String userId) throws Exception {
 		// TODO Auto-generated method stub
 		return userDao.checkDuplicationId(userId);
 	}

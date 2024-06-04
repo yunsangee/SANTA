@@ -38,7 +38,7 @@ public interface UserService {
 	
 	public User checkPassword(String userId, String userPassword) throws Exception;
 	
-	public User checkDuplicationId(String userId) throws Exception; 
+	public String getDuplicationId(String userId) throws Exception; 
 	
 	public User checkDuplicationNickname(String nickName) throws Exception;
 	

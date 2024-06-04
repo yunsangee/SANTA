@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.AllArgsConstructor;
 
 import site.dearmysanta.domain.common.Post;
-import site.dearmysanta.domain.correctionPost.CorrectionPost;
 
 @Getter
 @Setter
@@ -25,7 +24,7 @@ public class CertificationPost extends Post {
 
     
     private int certificationPostNo;
-    private MultipartFile certificationPostImage;
+    private  List<MultipartFile> certificationPostImage;
     private String certificationPostMountainName;
     private int certificationPostHikingDifficulty;
     private String certificationPostHikingTrail;
@@ -36,4 +35,6 @@ public class CertificationPost extends Post {
     private String certificationPostDescentTime;
     private String certificationPostAscentTime;
 
+    private int certificationPostDeletedFlag;
+    private int certificationPostLikeCount;
 }
