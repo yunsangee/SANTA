@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="site.dearmysanta.service.correctionPost.CorrectionPostDao">
+
+	<mapper namespace="site.dearmysanta.domain.correctionPost.CorrectionPost">
+
+		<resultMap id="CorrectionPostResultMap" type="site.dearmysanta.domain.correctionPost.CorrectionPost">
+			<id property="postNo" column="crp_no" />
+			<result property="userNo" column="user_no" />
+			<result property="nickName" column="nickname" />
+			<result property="profileImage" column="profile_image" />
+			<result property="contents" column="crp_content" />
+			<result property="postDate" column="crp_date" />
+			<result property="mountainNo" column="mountain_no" />
+			<result property="mountainName" column="mountain_name" />
+			<result property="status" column="crp_status" />
+		</resultMap>
+
+	</mapper>
+	
+	<insert id="addCorrectionPost" parameterType="site.dearmysanta.domain.correctionPost">
+		INSERT INTO CORRECTION_POST (CRP_NO, CRP_CONTENT, CRP_DATE, CRP_STATUS, MOUNTAIN_NO, MOUNTAIN_NAME, USER_NO)
+		VALUES(seq_crp_no.NEXTVAL, #{contents}, SYSDATE, 0, #{mountainNo}, #{mountainName}, #{userNo})
+	
+	</insert>
+	
+	<delete id="deleteCorrectionPost" parameterType="map">
+		DELETE FROM CORRECTION_POST
+		WHERE USER_NO = #{userNo} AND CRP_NO = #{postNo}
+	</delete>
+	
+	<select id="getCorrectionPostList" resultMap="CorrectionPostResultMap">
+		SELECT crp.crp_no, crp.crp_content, crp.crp_date, crp.crp_status, m.MOUNTAIN_NO, m.MOUNTAIN_NAME, u.USER_NO
+		FROM USERS u, CORRECTION_POST crp, MOUNTAIN m
+		WHERE crp.USER_NO = u.USER_NO AND crp.MOUTAIN_NO = m.MOUNTAIN_NO
+	</select>
+
+
+
+</mapper>
