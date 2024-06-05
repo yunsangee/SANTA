@@ -4,82 +4,82 @@
       PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="HikingGuideMapper">
+<mapper namespace="site.dearmysanta.service.hikingGuide.HikingGuideDao">
 
-   <resultMap id="hikingGuideMap" type="hikingGuide">
-      <result property="hrNo" column="hr_no" jdbcType="INTEGER"/>
-      <result property="userNo" column="user_no" jdbcType="INTEGER"/>
+   <resultMap id="hikingGuideMap" type="site.dearmysanta.domain.hikingguide.HikingGuide">
+      <result property="hrNo" column="hr_no" jdbcType="NUMERIC"/>
+      <result property="userNo" column="user_no" jdbcType="NUMERIC"/>
       <result property="totalTime" column="hr_time" jdbcType="VARCHAR"/>
-      <result property="userDistance" column="hr_distance" jdbcType="INTEGER"/>
-      <result property="ascentTime" column="hr_ascent" jdbcType="INTEGER"/>
-      <result property="descentTime" column="hr_descent" jdbcType="INTEGER"/>
+      <result property="userDistance" column="hr_distance" jdbcType="NUMERIC"/>
+      <result property="ascentTime" column="hr_ascent" jdbcType="VARCHAR"/>
+      <result property="descentTime" column="hr_descent" jdbcType="VARCHAR"/>
       <result property="hikingDate" column="hr_date" jdbcType="DATE"/>
-      <result property="weather.skyCondition" column="hr_skycondition" jdbcType="INTEGER"/>
+      <result property="weather.skyCondition" column="hr_skycondition" jdbcType="NUMERIC"/>
       <result property="mountain.mountainName" column="hr_mountain_name" jdbcType="VARCHAR"/>
       <result property="mountain.upTrailName" column="hr_uptrail_name" jdbcType="VARCHAR"/>
       <result property="mountain.downTrailName" column="hr_downtrail_name" jdbcType="VARCHAR"/>
-      <result property="mountain.upDifficulty" column="hr_updifficulty" jdbcType="INTEGER"/>
-      <result property="mountain.downDifficulty" column="hr_downdifficulty" jdbcType="INTEGER"/>
+      <result property="mountain.upDifficulty" column="hr_updifficulty" jdbcType="NUMERIC"/>
+      <result property="mountain.downDifficulty" column="hr_downdifficulty" jdbcType="NUMERIC"/>
    </resultMap>
    
    <!--SQL : hikingRecord INSERT -->
    
-    <insert id="addHikingRecord" parameterType="hikingGuide" useGeneratedKeys="true" keyProperty="hrNo">
-        INSERT INTO hikingrecord (
+    <insert id="addHikingRecord" parameterType="site.dearmysanta.domain.hikingguide.HikingGuide">
+        INSERT INTO hiking_record_test (
             hr_no,
             user_no,
             hr_time,
             hr_distance,
             hr_ascent,
             hr_descent,
-            hr_date,
+            hr_date<!-- ,
             hr_skycondition,
             hr_mountain_name,
             hr_uptrail_name,
             hr_downtrail_name,
             hr_updifficulty,
-            hr_downdifficulty
+            hr_downdifficulty -->
         ) VALUES (
-            #{hrNo, jdbcType=INTEGER},
-            #{userNo, jdbcType=INTEGER},
+            seq_hr_no.NEXTVAL,
+            #{userNo, jdbcType=NUMERIC},
             #{totalTime, jdbcType=VARCHAR},
-            #{userDistance, jdbcType=INTEGER},
-            #{ascentTime, jdbcType=INTEGER},
-            #{descentTime, jdbcType=INTEGER},
-            #{hikingDate, jdbcType=DATE},
-            #{weather.skyCondition, jdbcType=INTEGER},
+            #{userDistance, jdbcType=NUMERIC},
+            #{ascentTime, jdbcType=NUMERIC},
+            #{descentTime, jdbcType=NUMERIC},
+            #{hikingDate, jdbcType=DATE}<!-- ,
+            #{weather.skyCondition, jdbcType=NUMERIC},
             #{mountain.mountainName, jdbcType=VARCHAR},
             #{mountain.upTrailName, jdbcType=VARCHAR},
             #{mountain.downTrailName, jdbcType=VARCHAR},
-            #{mountain.upDifficulty, jdbcType=INTEGER},
-            #{mountain.downDifficulty, jdbcType=INTEGER}
+            #{mountain.upDifficulty, jdbcType=NUMERIC},
+            #{mountain.downDifficulty, jdbcType=NUMERIC} -->
         )
     </insert>
     
     <!--SQL : hikingRecord DELETE -->
     <delete id="deleteHikingRecord" parameterType="int">
-        DELETE FROM hikingrecord
-        WHERE hr_no = #{hrNo, jdbcType=INTEGER}
+        DELETE FROM hiking_record
+        WHERE hr_no = #{hrNo, jdbcType=NUMERIC}
     </delete>
     
     <!--SQL : hikingRecord SELECT -->
     <select id="getHikingListRecord" parameterType="int" resultMap="hikingGuideMap">
         SELECT 
-            hr_no AS hrNo,
-            user_no AS userNo,
-            hr_time AS totalTime,
-            hr_distance AS userDistance,
-            hr_ascent AS ascentTime,
-            hr_descent AS descentTime,
-            hr_date AS hikingDate,
-            hr_skycondition AS weather.skyCondition,
-            hr_mountain_name AS mountain.mountainName,
-            hr_uptrail_name AS mountain.upTrailName,
-            hr_downtrail_name AS mountain.downTrailName,
-            hr_updifficulty AS mountain.upDifficulty,
-            hr_downdifficulty AS mountain.downDifficulty
-        FROM hikingrecord
-        WHERE user_no = #{userNo, jdbcType=INTEGER}
+            hr_no,
+            user_no,
+            hr_time,
+            hr_distance,
+            hr_ascent,
+            hr_descent,
+            hr_date<!-- ,
+            hr_skycondition,
+            hr_mountain_name,
+            hr_uptrail_name,
+            hr_downtrail_name,
+            hr_updifficulty,
+            hr_downdifficulty -->
+        FROM hiking_record
+        WHERE user_no = #{userNo, jdbcType=NUMERIC}
     </select>
 
 </mapper>
