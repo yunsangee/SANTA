@@ -39,8 +39,8 @@ public class HikingGuideServiceImpl implements HikingGuideService {
     }
 
     @Override
-    public void updateAlertSetting(int userNo, Integer hikingAlertFlag, String destinationAlert, String sunsetAlert,
-            String locationOverAlert, String meetingTimeAlert) throws Exception {
+    public void updateAlertSetting(int userNo, int hikingAlertFlag, int destinationAlert, int sunsetAlert,
+    		int locationOverAlert, int meetingTimeAlert) throws Exception {
     		
     	hikingGuideDao.updateAlertSetting(userNo, hikingAlertFlag, destinationAlert, sunsetAlert, locationOverAlert, meetingTimeAlert);
     }
@@ -52,6 +52,7 @@ public class HikingGuideServiceImpl implements HikingGuideService {
 
     @Override
     public List<HikingGuide> getHikingListRecord(int userNo) throws Exception {
+    	System.out.println("impl :"+userNo);
         return hikingGuideDao.getHikingListRecord(userNo);
     }
 
@@ -110,7 +111,7 @@ public class HikingGuideServiceImpl implements HikingGuideService {
     public void getUserCoordination(int userNo, double userLatitude, double userLongitude) throws Exception {
         HikingAlert alertSetting = getAlertSetting(userNo);
         if (alertSetting != null) {
-            if (alertSetting.getHikingAlerFlag() == 0) {
+            if (alertSetting.getHikingAlertFlag() == 0) {
                 return;
             }
 
@@ -121,16 +122,16 @@ public class HikingGuideServiceImpl implements HikingGuideService {
     }
 
     private boolean checkAlertCondition(HikingAlert alertSetting) {
-        if (alertSetting.getDestinationAlert() != null && alertSetting.getDestinationAlert().equals("1")) {
+        if (alertSetting.getDestinationAlert()==1) {
             return true; 
         }
-        if (alertSetting.getSunsetAlert() != null && alertSetting.getSunsetAlert().equals("1")) {
+        if (alertSetting.getSunsetAlert()==1) {
             return true; 
             }
-        if (alertSetting.getLocationOverAlert() != null && alertSetting.getLocationOverAlert().equals("1")) {
+        if (alertSetting.getLocationOverAlert()==1) {
             return true; 
         }
-        if (alertSetting.getMeetingTimeAlert() != null && alertSetting.getMeetingTimeAlert().equals("1")) {
+        if (alertSetting.getMeetingTimeAlert()==1) {
             return true; 
         }
         return false;

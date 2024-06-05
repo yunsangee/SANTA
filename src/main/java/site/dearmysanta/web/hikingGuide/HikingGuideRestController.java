@@ -41,11 +41,11 @@ public class HikingGuideRestController {
 
     @PostMapping(value = "react/updateAlertSetting/{userNo}")
     public void updateAlertSetting(@PathVariable int userNo,
-                                   @RequestParam(required = false) Integer hikingAlertFlag,
-                                   @RequestParam(required = false) String destinationAlert,
-                                   @RequestParam(required = false) String sunsetAlert,
-                                   @RequestParam(required = false) String locationOverAlert,
-                                   @RequestParam(required = false) String meetingTimeAlert) throws Exception {
+                                   @RequestParam(required = false) int hikingAlertFlag,
+                                   @RequestParam(required = false) int destinationAlert,
+                                   @RequestParam(required = false) int sunsetAlert,
+                                   @RequestParam(required = false) int locationOverAlert,
+                                   @RequestParam(required = false) int meetingTimeAlert) throws Exception {
         hikingGuideService.updateAlertSetting(userNo, hikingAlertFlag, destinationAlert, sunsetAlert, locationOverAlert, meetingTimeAlert);
     }
 

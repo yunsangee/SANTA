@@ -22,13 +22,13 @@ import lombok.experimental.SuperBuilder;
 public class HikingAlert {
 	
 	private int userNo; // user Number
-	private int hikingAlerFlag; // alert flag
-	private String destinationAlert; // destination alert flag
-	private String sunsetAlert; // sunset alert flag
-	private String locationOverAlert; // location over alert flag
-	private String meetingTimeAlert; // meeting time alert flag
+	private int hikingAlertFlag; // alert flag
+	private int destinationAlert; // destination alert flag
+	private int sunsetAlert; // sunset alert flag
+	private int locationOverAlert; // location over alert flag
+	private int meetingTimeAlert; // meeting time alert flag
 	private String meetingTime; // set meeting time
-	private String alertContent; // alert content 
-	private String allAlert; // all alert flag
+	private int alertContent; // alert content 
+	private int allAlert; // all alert flag
 	
 }
