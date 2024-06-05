@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
+import site.dearmysanta.domain.mountain.Statistics;
 
 @Mapper
 //@Component
@@ -29,4 +30,11 @@ public interface MountainDao {
 	public List<MountainSearch> getSearchKeywordList(int userNo);
 	
 	public void updateSearchSetting(int userNo, int settingValue);
+	
+	public void addMountainStatistics(String mountainName);
+	
+	public int checkMountainColumnExist(String mountainName);
+	
+	public void updateMountainStatistics(String mountainName, int which);
+	public List<Statistics> getStatisticsList();
 }

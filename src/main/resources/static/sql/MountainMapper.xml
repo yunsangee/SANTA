@@ -24,6 +24,12 @@
     	<result property="difficultyNo" column="difficulty_no"/>
 	</resultMap>
 	
+	<resultMap id="StatisticsResultMap" type="site.dearmysanta.domain.mountain.Statistics">
+    <id property="mountainName" column="MOUNTAIN_NAME"/>
+    <result property="searchCount" column="SEARCH_COUNT"/>
+    <result property="postCount" column="POST_COUNT"/>
+</resultMap>
+	
 
 
 	<insert id="addMountainLike"
@@ -86,5 +92,38 @@
 		SET SEARCH_RECORD_SETTING = #{settingValue}
 		WHERE USER_NO = #{userNo}
 	</update>
+	
+	
+	
+	<insert id="addMountainStatistics" parameterType="String">
+		INSERT INTO statistics(STATISTICS_NO, MOUNTAIN_NAME, SEARCH_COUNT,POST_COUNT)
+		VALUES (seq_statistics_no.NEXTVAL, #{value}, 0 ,0)
+	</insert>
+	
+	<update id="updateMountainStatistics" parameterType="map">
+	UPDATE STATISTICS
+	SET
+	<choose>
+		<when test="which == 0">
+			SEARCH_COUNT = SEARCH_COUNT + 1
+		</when>
+		<when test="which == 1">
+			POST_COUNT = POST_COUNT + 1
+		</when>
+	</choose>
+	WHERE MOUNTAIN_NAME = #{mountainName}
+</update>
+
+
+	<select id="checkMountainColumnExist" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM STATISTICS
+		WHERE MOUNTAIN_NAME = #{value}
+	</select>
+	
+	<select id="getStatisticsList" resultMap="StatisticsResultMap">
+		SELECT * FROM STATISTICS
+	</select>
+
 
 </mapper>

@@ -17,6 +17,7 @@ import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.mountain.MountainTrail;
+import site.dearmysanta.domain.mountain.Statistics;
 import site.dearmysanta.service.mountain.MountainDao;
 import site.dearmysanta.service.mountain.MountainService;
 
@@ -254,6 +255,10 @@ public class MountainServiceImpl implements MountainService {
 		
 	}
 	
+	//
+	//like
+	//
+	
 	public void addMountainLike(Like like) {
 		mountainDao.addMountainLike(like);
 	}
@@ -270,8 +275,18 @@ public class MountainServiceImpl implements MountainService {
 		return mountainDao.getMountainLikeList(like);
 	}
 	
+	//
+	// searchKeyword
+	//
+	
 	
 	public void addSearchKeyword(MountainSearch mountainSearch) {
+		
+		if(mountainSearch.getSearchCondition() == 0) {
+			System.out.println("add mountain statistics");
+			this.addMountainStatistics(mountainSearch.getSearchKeyword(),0);
+		}
+		
 		mountainDao.addSearchKeyword(mountainSearch);
 	}
 	
@@ -286,5 +301,47 @@ public class MountainServiceImpl implements MountainService {
 	public void updateSearchSetting(int userNo, int settingValue) {
 		mountainDao.updateSearchSetting(userNo, settingValue);
 	}
+	
+	//
+	// mountain
+	//
+	
+	public void addMountain(Mountain mountain) {
+		
+	}
+	
+	public void updateMountain(Mountain mountain) {
+		
+	}
+	
+	//
+	//statistics
+	//
+	
+	public void addMountainStatistics(String mountainName, int which) {
+		
+		//
+		// 0 : search
+		// 1 : post
+		//
+
+		if(mountainDao.checkMountainColumnExist(mountainName) == 0) {
+			mountainDao.addMountainStatistics(mountainName);
+			System.out.println("create mountain statistics column");
+		}
+			
+		mountainDao.updateMountainStatistics(mountainName, which);
+
+		
+	};  // need to call in search, addPost 
+	
+	public int checkMountainColumnExist(String mountainName) {
+		return mountainDao.checkMountainColumnExist(mountainName);
+	}
+	
+	public List<Statistics> getStatisticsList(){
+		return mountainDao.getStatisticsList();
+	}
+
 
 }

@@ -15,6 +15,7 @@ import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.correctionPost.CorrectionPost;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
+import site.dearmysanta.domain.mountain.Statistics;
 import site.dearmysanta.service.correctionpost.CorrectionPostService;
 import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.mountain.impl.MountainServiceImpl;
@@ -128,6 +129,28 @@ public class MountainApplicationTest {
 		for(CorrectionPost post : list) {
 			System.out.println(post);
 		}
+		
+	}
+	
+	
+	@Test
+	public void statisticsTest() {
+		String mountainName = "jirisan";
+		
+		List<Statistics> list = mountainService.getStatisticsList();
+		for(Statistics statistics : list) {
+			System.out.println(statistics);
+		}
+		
+		mountainService.addMountainStatistics(mountainName, 0);
+		mountainService.addMountainStatistics(mountainName, 0);
+		mountainService.addMountainStatistics(mountainName, 1);
+		
+		list = mountainService.getStatisticsList();
+		for(Statistics statistics : list) {
+			System.out.println(statistics);
+		}
+		
 		
 	}
 

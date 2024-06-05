@@ -5,6 +5,7 @@ import java.util.List;
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
+import site.dearmysanta.domain.mountain.Statistics;
 
 public interface MountainService {
 	
@@ -12,13 +13,13 @@ public interface MountainService {
 	// mountain
 	//
 	
-//	public Mountain addMountain();
+	public void addMountain(Mountain mountain);
 	
 	public Mountain getMountain(String mountainName) throws Exception;
 	
 //	public List<Mountain> getMountainList(); // include wish list
 	
-//	public void updateMountain();   //이거할 때, correction_post status update
+	public void updateMountain(Mountain mountain);   //이거할 때, correction_post status update
 	
 	//
 	//Like
@@ -45,6 +46,12 @@ public interface MountainService {
 	public void updateSearchSetting(int userNo, int settingValue);
 	
 	//statistics
+	
+	public void addMountainStatistics(String mountainName, int which);  // need to call in search, addPost 
+	
+	public int checkMountainColumnExist(String mountainName);
+	
+	public List<Statistics> getStatisticsList();
 	
 //	public void updateMountainSearchKeywordCount();
 //	
