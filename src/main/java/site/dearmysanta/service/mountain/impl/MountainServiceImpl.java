@@ -175,14 +175,14 @@ public class MountainServiceImpl implements MountainService {
             
 		}//get MountainTrail information using mountain Trail api
 	 
-//	public List<MountainTrail> doAllLogic(double lat, double lon,String mountainName) throws JsonMappingException, JsonProcessingException{
-	 public void doAllLogic(double lat, double lon,String mountainName) throws JsonMappingException, JsonProcessingException{
+	public List<MountainTrail> doAllLogic(double lat, double lon,String mountainName) throws JsonMappingException, JsonProcessingException{
+//	 public void doAllLogic(double lat, double lon,String mountainName) throws JsonMappingException, JsonProcessingException{
 		String location = getEmdCodeByCoordinates(lat, lon);
 		System.out.println("====================================");
 		String emdCd =  getRegionCode(location);
 		System.out.println("====================================");
 		
-		//return getMountainTrailListFromVWorld(mountainName, emdCd);
+		return getMountainTrailListFromVWorld(mountainName, emdCd);
 		
 	}
 	
@@ -256,6 +256,44 @@ public class MountainServiceImpl implements MountainService {
 	}
 	
 	//
+	// mountain
+	//
+	
+	//
+	// policy!!!
+	//
+	
+	//
+	// getMountain  List!!
+	//
+	
+	public void addMountain(Mountain mountain) {
+		mountainDao.addMountain(mountain);
+	}
+	
+	public List<Mountain> getMountainList(List<String> mountainNames) throws Exception{
+		List<Mountain> list = new ArrayList<>();
+		for(String mountainName : mountainNames) {
+			list.add(this.getMountain(mountainName));
+		}
+		
+		return list;
+	}
+	
+	public void updateMountain(Mountain mountain) {
+		mountainDao.updateMountain(mountain);
+	}
+	
+	public void updateMountainViewCount(int mountainNo) {
+		mountainDao.updateMountainViewCount(mountainNo);
+	}
+	
+	public int checkMountainExist(int mountainNo) {
+		return mountainDao.checkMountainExist(mountainNo);
+	}
+	
+	
+	//
 	//like
 	//
 	
@@ -302,17 +340,7 @@ public class MountainServiceImpl implements MountainService {
 		mountainDao.updateSearchSetting(userNo, settingValue);
 	}
 	
-	//
-	// mountain
-	//
 	
-	public void addMountain(Mountain mountain) {
-		
-	}
-	
-	public void updateMountain(Mountain mountain) {
-		
-	}
 	
 	//
 	//statistics
@@ -325,7 +353,7 @@ public class MountainServiceImpl implements MountainService {
 		// 1 : post
 		//
 
-		if(mountainDao.checkMountainColumnExist(mountainName) == 0) {
+		if(this.checkStatisticsMountainColumnExist(mountainName) == 0) {
 			mountainDao.addMountainStatistics(mountainName);
 			System.out.println("create mountain statistics column");
 		}
@@ -335,13 +363,13 @@ public class MountainServiceImpl implements MountainService {
 		
 	};  // need to call in search, addPost 
 	
-	public int checkMountainColumnExist(String mountainName) {
-		return mountainDao.checkMountainColumnExist(mountainName);
+	public int checkStatisticsMountainColumnExist(String mountainName) {
+		return mountainDao.checkStatisticsMountainColumnExist(mountainName);
 	}
 	
-	public List<Statistics> getStatisticsList(){
-		return mountainDao.getStatisticsList();
+	public List<Statistics> getStatisticsList(int which){  // 0: get normal list, 1: get popular searchKeyword list
+		return mountainDao.getStatisticsList(which); 
 	}
-
+	
 
 }

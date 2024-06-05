@@ -6,11 +6,17 @@
 
 <mapper namespace="site.dearmysanta.service.mountain.MountainDao">
 
-	<resultMap id="MountainResultMap"
-		type="site.dearmysanta.domain.mountain.Mountain">
-		<id property="mountainNo" column="mountain_no" />
-		<result property="mountainName" column="mountain_name" />
-	</resultMap>
+	<resultMap id="MountainResultMap" type="site.dearmysanta.domain.mountain.Mountain">
+        <id property="mountainNo" column="MOUNTAIN_NO"/>
+        <result property="mountainName" column="MOUNTAIN_NAME"/>
+        <result property="mountainLatitude" column="MOUNTAIN_LATITUDE"/>
+        <result property="mountainLongitude" column="MOUNTAIN_LONGTITUE"/>
+        <result property="mountainImage" column="MOUNTAIN_IMAGE"/>
+        <result property="mountainDescription" column="MOUNTAIN_DESCRIPTION"/>
+        <result property="mountainAltitude" column="MOUNTAIN_ALTITUDE"/>
+        <result property="mountainTrailCount" column="MOUNTAIN_TRAIL_COUNT"/>
+        <result property="mountainViewCount" column="MOUNTAIN_VIEW_COUNT"/>
+    </resultMap>
 	
 	<resultMap id="MountainSearchResultMap" type="site.dearmysanta.domain.mountain.MountainSearch">
     <!-- Search class fields -->
@@ -30,6 +36,41 @@
     <result property="postCount" column="POST_COUNT"/>
 </resultMap>
 	
+	
+	 <insert id="addMountain" parameterType="site.dearmysanta.domain.mountain.Mountain">
+        INSERT INTO MOUNTAIN (MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGTITUE, MOUNTAIN_IMAGE,
+                              MOUNTAIN_DESCRIPTION, MOUNTAIN_ALTITUDE, MOUNTAIN_TRAIL_COUNT, MOUNTAIN_VIEW_COUNT)
+        VALUES (#{mountainNo}, #{mountainName}, #{MOUNTAIN_LOCATION}, #{mountainLatitude}, #{mountainLongitude}, #{mountainImage},
+                #{mountainDescription}, #{mountainAltitude}, #{mountainTrailCount}, 1)
+    </insert>
+    
+     <update id="updateMountain" parameterType="site.dearmysanta.domain.mountain.Mountain">
+        UPDATE MOUNTAIN
+        SET MOUNTAIN_LOCATION = #{mountainLocation},
+            MOUNTAIN_DESCRIPTION = #{mountainDescription},
+            MOUNTAIN_ALTITUDE = #{mountainAltitude},
+            MOUNTAIN_TRAIL_COUNT = #{mountainTrailCount}
+        WHERE MOUNTAIN_NO = #{mountainNo}
+    </update>
+    
+    <update id="updateMountainViewCount" parameterType="int">
+    	UPDATE MOUNTAIN
+    	SET
+    		MOUNTAIN_VIEW_COUNT = MOUNTAIN_VIEW_COUNT + 1
+    	WHERE MOUNTAIN_NO = #{value}
+    </update>
+    
+    <select id="getMountain" parameterType="int" resultMap="MountainResultMap">
+        SELECT MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LATITUDE, MOUNTAIN_LONGTITUE, MOUNTAIN_IMAGE,
+               MOUNTAIN_DESCRIPTION, MOUNTAIN_ALTITUDE, MOUNTAIN_TRAIL_COUNT, MOUNTAIN_VIEW_COUNT
+        FROM MOUNTAIN
+        WHERE MOUNTAIN_NO = #{mountainNo}
+    </select>
+    
+    <select id="checkMountainExist" parameterType="int">
+    	SELECT COUNT(*) FROM MOUNTAIN
+    	WHERE MOUNTAIN_NO = #{mountainNo}
+    </select>
 
 
 	<insert id="addMountainLike"
@@ -115,15 +156,23 @@
 </update>
 
 
-	<select id="checkMountainColumnExist" parameterType="String" resultType="int">
+	<select id="checkStatisticsMountainColumnExist" parameterType="String" resultType="int">
 		SELECT COUNT(*)
 		FROM STATISTICS
 		WHERE MOUNTAIN_NAME = #{value}
 	</select>
 	
-	<select id="getStatisticsList" resultMap="StatisticsResultMap">
-		SELECT * FROM STATISTICS
+	<select id="getStatisticsList" parameterType="int" resultMap="StatisticsResultMap">
+		SELECT * FROM
+		(SELECT * FROM STATISTICS
+		<if test="which == 1">
+			ORDER BY SEARCH_COUNT DESC
+		</if>
+		) WHERE ROWNUM <![CDATA[<=]]> 10
 	</select>
+	
+	
+	
 
 
 </mapper>

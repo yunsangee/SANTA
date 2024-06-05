@@ -17,10 +17,15 @@ public interface MountainService {
 	
 	public Mountain getMountain(String mountainName) throws Exception;
 	
+	public List<Mountain> getMountainList(List<String> mountainNames) throws Exception;
+	
+	public int checkMountainExist(int mountainNo);
+	
 //	public List<Mountain> getMountainList(); // include wish list
 	
 	public void updateMountain(Mountain mountain);   //이거할 때, correction_post status update
 	
+	public void updateMountainViewCount(int mountainNo);
 	//
 	//Like
 	//
@@ -49,17 +54,17 @@ public interface MountainService {
 	
 	public void addMountainStatistics(String mountainName, int which);  // need to call in search, addPost 
 	
-	public int checkMountainColumnExist(String mountainName);
+	public int checkStatisticsMountainColumnExist(String mountainName);
 	
-	public List<Statistics> getStatisticsList();
+	public List<Statistics> getStatisticsList(int which);
 	
-//	public void updateMountainSearchKeywordCount();
+//	public void updateMountainSearchKeywordCount(); // in add
 //	
-//	public void updateMountainKeywordCount();
+//	public void updateMountainKeywordCount(); // in add
 //	
-//	public List<String> getPopularSearchKeywordList();
+//	public List<String> getPopularSearchKeywordList(); //getStatisticsList
 //	
-//	public List<Mountain> getPopularMountainList();
+//	public List<Mountain> getPopularMountainList(); 
 //	
 //	public List<Mountain> getCustomMountainList();
 //	public Statistics getMountainStatistics();
