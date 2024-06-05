@@ -6,6 +6,7 @@ import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.mountain.Statistics;
+import site.dearmysanta.domain.user.User;
 
 public interface MountainService {
 	
@@ -17,15 +18,21 @@ public interface MountainService {
 	
 	public Mountain getMountain(String mountainName) throws Exception;
 	
-	public List<Mountain> getMountainList(List<String> mountainNames) throws Exception;
+	public Mountain getMountain(int mountainNo);
 	
 	public int checkMountainExist(int mountainNo);
 	
-//	public List<Mountain> getMountainList(); // include wish list
+	public List<Mountain> getMountainListByAddress(String address); // include wish list
+	
+	public List<Mountain> getMountainListByName(String mountainName); 
 	
 	public void updateMountain(Mountain mountain);   //이거할 때, correction_post status update
 	
 	public void updateMountainViewCount(int mountainNo);
+	
+	public List<Mountain> getPopularMountainList(List<String> mountainNames) throws Exception;
+	
+	public List<Mountain> getCustomMountainList(User user);
 	//
 	//Like
 	//

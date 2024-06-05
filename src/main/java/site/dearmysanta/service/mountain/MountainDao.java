@@ -9,6 +9,7 @@ import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.mountain.Statistics;
+import site.dearmysanta.domain.user.User;
 
 @Mapper
 //@Component
@@ -21,12 +22,19 @@ public interface MountainDao {
 	
 	public void addMountain(Mountain mountain);
 	
-	public void getMountain(String mountainName);
+	public Mountain getMountain(int mountainNo);
+	
+	public List<Mountain> getMountainListByAddress(String address);
+	
+	public List<Mountain> getMountainListByName(String mountainName); 
+	
 	public void updateMountainViewCount(int mountainNo);
 	
 	public void updateMountain(Mountain mountain);
 	
 	public int checkMountainExist(int mountainNo);
+	
+	public List<Mountain> getCustomMountainList(User user);
 	
 	//
 	//

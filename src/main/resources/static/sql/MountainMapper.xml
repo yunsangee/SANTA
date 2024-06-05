@@ -61,16 +61,34 @@
     </update>
     
     <select id="getMountain" parameterType="int" resultMap="MountainResultMap">
-        SELECT MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LATITUDE, MOUNTAIN_LONGTITUE, MOUNTAIN_IMAGE,
+        SELECT MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGTITUE, MOUNTAIN_IMAGE,
                MOUNTAIN_DESCRIPTION, MOUNTAIN_ALTITUDE, MOUNTAIN_TRAIL_COUNT, MOUNTAIN_VIEW_COUNT
         FROM MOUNTAIN
         WHERE MOUNTAIN_NO = #{mountainNo}
     </select>
     
-    <select id="checkMountainExist" parameterType="int">
+    <select id="getMountainListByAddress" parameterType="String" resultMap="MountainResultMap">
+    	SELECT MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGTITUE, MOUNTAIN_IMAGE,
+               MOUNTAIN_DESCRIPTION, MOUNTAIN_ALTITUDE, MOUNTAIN_TRAIL_COUNT, MOUNTAIN_VIEW_COUNT
+        FROM MOUNTAIN
+        WHERE MOUNTAIN_LOCATION '%'||#{address}||'%'
+    </select>
+    
+    <select id="getMountainListByName" parameterType="String" resultMap="MountainResultMap">
+    	SELECT MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGTITUE, MOUNTAIN_IMAGE,
+               MOUNTAIN_DESCRIPTION, MOUNTAIN_ALTITUDE, MOUNTAIN_TRAIL_COUNT, MOUNTAIN_VIEW_COUNT
+        FROM MOUNTAIN
+        WHERE MOUNTAIN_NAME '%'||#{mountainName}||'%'
+    </select>
+    
+    
+    <select id="checkMountainExist" parameterType="int" resultType="int">
     	SELECT COUNT(*) FROM MOUNTAIN
     	WHERE MOUNTAIN_NO = #{mountainNo}
     </select>
+    
+    
+    
 
 
 	<insert id="addMountainLike"
