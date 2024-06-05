@@ -31,9 +31,8 @@ public interface MeetingDAO {
 	public int getMeetingPostLikeCount(int postNo) throws Exception;
 	
 	public int getMeetingPostCommentCount(int postNo) throws Exception;
-	//getTotalCount 할 때 insertMeetingPost Map 반환해야함.
-	
-	public int findMountainTotalCount(MeetingPostSearch meetingPostSearch) throws Exception;
+
+	public int getMountainTotalCount(String appointedHikingMountain) throws Exception;
 	
 
 }

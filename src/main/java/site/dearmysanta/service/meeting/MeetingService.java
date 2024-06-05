@@ -44,7 +44,7 @@ public interface MeetingService {
 //	
 	public void deleteMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception;
 //	
-	public int getMountainTotalCount(MeetingPostSearch meetingPostSearch) throws Exception;
+	public int getMountainTotalCount(String appointedHikingMountain) throws Exception;
 	
 	
 	

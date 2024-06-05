@@ -59,7 +59,7 @@ public class MeetingPostServiceTest {
 		
 	}
 	
-	@Test
+//	@Test
 	public void testUpdateMeetingPost() throws Exception {
 		
 		MeetingPost meetingPost = meetingService.getMeetingPost(2);

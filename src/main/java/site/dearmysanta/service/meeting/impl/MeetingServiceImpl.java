@@ -40,7 +40,16 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 	
 	public MeetingPost getMeetingPost(int postNo) throws Exception {
-		return meetingDAO.findMeetingPost(postNo);
+		
+		MeetingPost meetingPost = meetingDAO.findMeetingPost(postNo);
+		
+		int likeCount = meetingDAO.getMeetingPostLikeCount(postNo);
+		int commentCount = meetingDAO.getMeetingPostCommentCount(postNo);
+		
+		meetingPost.setMeetingPostLikeCount(likeCount);
+		meetingPost.setMeetingPostCommentCount(commentCount);
+		
+		return meetingPost;
 	}
 	
 	public void addMeetingPostLike(Like like) throws Exception {
@@ -59,8 +68,8 @@ public class MeetingServiceImpl implements MeetingService {
 		meetingDAO.deleteMeetingPostComment(meetingPostComment);
 	}
 	
-	public int getMountainTotalCount(MeetingPostSearch meetingPostSearch) throws Exception {
-		return meetingDAO.findMountainTotalCount(meetingPostSearch);
+	public int getMountainTotalCount(String appointedHikingMountain) throws Exception {
+		return meetingDAO.getMountainTotalCount(appointedHikingMountain);
 	}
 
 }

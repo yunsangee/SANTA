@@ -130,5 +130,23 @@
         DELETE FROM comments
         WHERE comment_no = #{meetingPostCommentNo} AND post_no = #{meetingPostNo} AND post_type_no = 1
     </delete>
+    
+    <select id="getMeetingPostLikeCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM likes
+        WHERE post_no = #{postNo} AND post_type = 1
+    </select>
+    
+    <select id="getMeetingPostCommentCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM comments
+        WHERE post_no = #{postNo} AND post_type = 1
+    </select>
+    
+    <select id="getMountainTotalCount" parameterType="string" resultType="int">
+        SELECT COUNT(*)
+        FROM meeting_post
+        WHERE appointed_hiking_mountain = #{appointedHikingMountain}
+    </select>
 
 </mapper>
