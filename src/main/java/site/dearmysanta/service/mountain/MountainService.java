@@ -14,7 +14,7 @@ public interface MountainService {
 	
 //	public Mountain addMountain();
 	
-	public Mountain getMountain() throws Exception;
+	public Mountain getMountain(String mountainName) throws Exception;
 	
 //	public List<Mountain> getMountainList(); // include wish list
 	
