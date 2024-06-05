@@ -37,8 +37,8 @@ public interface HikingGuideService {
 	
 	public void updateMeetingTime(int userNo, int meetingTimeAlert, int meetingTime) throws Exception;
 
-	public void updateAlertSetting(int userNo, Integer hikingAlertFlag, String destinationAlert, String sunsetAlert,
-									String locationOverAlert, String meetingTimeAlert
+	public void updateAlertSetting(int userNo, int hikingAlertFlag, int destinationAlert, int sunsetAlert,
+									int locationOverAlert, int meetingTimeAlert
 									) throws Exception;
 
 	public void deleteHikingRecord(int hrNo) throws Exception;
