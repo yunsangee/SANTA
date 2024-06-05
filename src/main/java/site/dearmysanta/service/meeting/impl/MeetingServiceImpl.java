@@ -5,7 +5,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import site.dearmysanta.service.meeting.MeetingService;
+import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.meeting.MeetingPost;
+import site.dearmysanta.domain.meeting.MeetingPostComment;
+import site.dearmysanta.domain.meeting.MeetingPostSearch;
 import site.dearmysanta.service.meeting.MeetingDAO;
 
 
@@ -37,7 +40,36 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 	
 	public MeetingPost getMeetingPost(int postNo) throws Exception {
-		return meetingDAO.findMeetingPost(postNo);
+		
+		MeetingPost meetingPost = meetingDAO.findMeetingPost(postNo);
+		
+		int likeCount = meetingDAO.getMeetingPostLikeCount(postNo);
+		int commentCount = meetingDAO.getMeetingPostCommentCount(postNo);
+		
+		meetingPost.setMeetingPostLikeCount(likeCount);
+		meetingPost.setMeetingPostCommentCount(commentCount);
+		
+		return meetingPost;
+	}
+	
+	public void addMeetingPostLike(Like like) throws Exception {
+		meetingDAO.insertMeetingPostLike(like);
+	}
+	
+	public void deleteMeetingPostLike(Like like) throws Exception {
+		meetingDAO.deleteMeetingPostLike(like);
+	}
+	
+	public void addMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception {
+		meetingDAO.insertMeetingPostComment(meetingPostComment);
+	}
+	
+	public void deleteMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception {
+		meetingDAO.deleteMeetingPostComment(meetingPostComment);
+	}
+	
+	public int getMountainTotalCount(String appointedHikingMountain) throws Exception {
+		return meetingDAO.getMountainTotalCount(appointedHikingMountain);
 	}
 
 }

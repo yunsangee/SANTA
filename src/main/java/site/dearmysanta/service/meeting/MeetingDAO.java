@@ -2,7 +2,10 @@ package site.dearmysanta.service.meeting;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.meeting.MeetingPost;
+import site.dearmysanta.domain.meeting.MeetingPostComment;
+import site.dearmysanta.domain.meeting.MeetingPostSearch;
 
 @Mapper
 public interface MeetingDAO {
@@ -16,6 +19,20 @@ public interface MeetingDAO {
 	public void updatePostImage(MeetingPost meetingPost) throws Exception;
 	
 	public MeetingPost findMeetingPost(int postNo) throws Exception;
+	
+	public void insertMeetingPostLike(Like like) throws Exception;
+	
+	public void deleteMeetingPostLike(Like like) throws Exception;
+	
+	public void insertMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception;
+	
+	public void deleteMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception;
+	
+	public int getMeetingPostLikeCount(int postNo) throws Exception;
+	
+	public int getMeetingPostCommentCount(int postNo) throws Exception;
+
+	public int getMountainTotalCount(String appointedHikingMountain) throws Exception;
 	
 
 }
