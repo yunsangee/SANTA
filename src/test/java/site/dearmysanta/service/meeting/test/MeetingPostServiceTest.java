@@ -3,6 +3,7 @@ package site.dearmysanta.service.meeting.test;
 import java.time.LocalDate;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +15,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import site.dearmysanta.SantaApplication;
 import site.dearmysanta.SantaApplicationTests;
 import site.dearmysanta.common.SantaLogger;
+import site.dearmysanta.domain.common.Like;
+import site.dearmysanta.domain.meeting.MeetingParticipation;
 import site.dearmysanta.domain.meeting.MeetingPost;
+import site.dearmysanta.domain.meeting.MeetingPostComment;
 import site.dearmysanta.service.meeting.MeetingDAO;
 import site.dearmysanta.service.meeting.MeetingService;
 
@@ -25,8 +29,12 @@ import site.dearmysanta.service.meeting.MeetingService;
 public class MeetingPostServiceTest {
 	
 	@Autowired
-	@Qualifier("MeetingService")
+	@Qualifier("meetingService")
 	private MeetingService meetingService;
+	
+	@Autowired
+	@Qualifier("meetingDAO")
+	private MeetingDAO meetingDAO;
 	
 //	@Test
 	public void testAddMeetingPost() throws Exception {
@@ -48,11 +56,9 @@ public class MeetingPostServiceTest {
                 .participationAge("20-30")
                 .build();
 		
-		meetingPost.setPostNo(2);
-		
 		meetingService.addMeetingPost(meetingPost);
 		
-		MeetingPost post1 = meetingService.getMeetingPost(meetingPost.getPostNo());
+		MeetingPost post1 = meetingService.getMeetingPost(6);
 		
 		SantaLogger.makeLog("info", post1.toString());
 		
@@ -72,5 +78,126 @@ public class MeetingPostServiceTest {
 		SantaLogger.makeLog("info", meetingPost.toString());		
 		
 	}
+	
+//	@Test
+	public void testAddMeetingPostLike() throws Exception {
+		
+		Like like = Like.builder()
+				.userNo(5)
+				.postNo(1)
+				.postLikeType(1)
+                .build();
+		
+		
+		
+		int likeCount1 = meetingDAO.getMeetingPostLikeCount(1);
+		SantaLogger.makeLog("info", String.valueOf(likeCount1));
+		
+		meetingService.addMeetingPostLike(like);
+		
+		int likeCount2 = meetingDAO.getMeetingPostLikeCount(1);
+		SantaLogger.makeLog("info", String.valueOf(likeCount1));
+		
+	}
+	
+//	@Test
+	public void testDeleteMeeingPostLike() throws Exception {
+		
+		Like like = Like.builder()
+				.userNo(5)
+				.postNo(1)
+				.postLikeType(1)
+                .build();
+		
+		int likeCount1 = meetingDAO.getMeetingPostLikeCount(1);
+		SantaLogger.makeLog("info", String.valueOf(likeCount1));
+		
+		meetingService.deleteMeetingPostLike(like);
+		
+		int likeCount2 = meetingDAO.getMeetingPostLikeCount(1);
+		SantaLogger.makeLog("info", String.valueOf(likeCount2));
+		
+	}
+	
+//	@Test
+	public void testAddMeetingPostComment() throws Exception {
+		
+		MeetingPostComment meetingPostComment = MeetingPostComment.builder()
+				.meetingPostNo(1)
+				.meetingPostCommentContents("차라리 등산을 하고싶다.")
+				.userNo(1)
+				.nickname("testUser")
+				.profileImage("profileImagePath.jpg")
+				.build();
+		
+		int commentCount1 = meetingDAO.getMeetingPostCommentCount(1);
+		SantaLogger.makeLog("info", String.valueOf(commentCount1));
+		
+		meetingService.addMeetingPostComment(meetingPostComment);
+		
+		int commentCount2 = meetingDAO.getMeetingPostCommentCount(1);
+		SantaLogger.makeLog("info", String.valueOf(commentCount2));
+				
+		
+	}
+	
+//	@Test
+	public void testDeleteMeetingPostComment() throws Exception {
+		
+		MeetingPostComment meetingPostComment = MeetingPostComment.builder()
+				.meetingPostNo(1)
+				.meetingPostCommentContents("차라리 등산을 하고싶다.")
+				.userNo(1)
+				.nickname("testUser")
+				.profileImage("profileImagePath.jpg")
+				.build();
+		
+		int commentCount1 = meetingDAO.getMeetingPostCommentCount(1);
+		SantaLogger.makeLog("info", String.valueOf(commentCount1));
+		
+		meetingService.deleteMeetingPostComment(meetingPostComment);
+		
+		int commentCount2 = meetingDAO.getMeetingPostCommentCount(1);
+		SantaLogger.makeLog("info", String.valueOf(commentCount2));
+		
+	}
+	
+	
+//	@Test
+	public void testGetMountainTotalCount() throws Exception {
+		
+		int mountainCount = meetingService.getMountainTotalCount("Mountain XYZ");
+		SantaLogger.makeLog("info", String.valueOf(mountainCount));
+		
+	}
+	
+	
+	// 로그 안찍힘.
+//	@Test
+	public void testGetMeetingParticipationList() throws Exception {
+		
+        List<MeetingParticipation> meetingParticipationList = meetingService.getMeetingParticipationList(1);
+        SantaLogger.makeLog("info", "meeting participation list size: " + meetingParticipationList.size());
+		
+		for(int i = 0; i < meetingParticipationList.size(); i ++) {
+			SantaLogger.makeLog("info", meetingParticipationList.get(i).toString());
+		}
+		
+	}
+	
+	// 로그 안찍힘.
+//	@Test
+	public void testGetMeetingPostCommentList() throws Exception {
+		
+		List<MeetingParticipation> meetingPostCommentList = meetingService.getMeetingParticipationList(1);
+		SantaLogger.makeLog("info", "meeting post comment list size: " + meetingPostCommentList.size());
+		
+		for(int i = 0; i < meetingPostCommentList.size(); i ++) {
+			SantaLogger.makeLog("info", meetingPostCommentList.get(i).toString());
+		}
+		
+	}
+	
+	
 	
 }

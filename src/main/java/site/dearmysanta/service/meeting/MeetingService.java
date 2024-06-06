@@ -6,6 +6,7 @@ import site.dearmysanta.domain.meeting.MeetingPostComment;
 import site.dearmysanta.domain.meeting.MeetingPostSearch;
 import site.dearmysanta.domain.common.Like;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -32,13 +33,13 @@ public interface MeetingService {
 //	
 //	public void updateMeetingPostStatus(MeetingPost meetingPost) throws Exception;
 //	
-//	public Map<String, Object> getMeetingParticipationList(MeetingPostSearch meetingPostSearch);
+	public List<MeetingParticipation> getMeetingParticipationList(int postNo) throws Exception; 
 //	
 	public void addMeetingPostLike(Like like) throws Exception;
 //	
 	public void deleteMeetingPostLike(Like like) throws Exception;
 //	
-//	public Map<String, Object> getMeetingPostCommentList(MeetingPostComment meetingPostComment) throws Exception;
+	public List<MeetingPostComment> getMeetingPostCommentList(int postNo) throws Exception;
 //	
 	public void addMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception;
 //	

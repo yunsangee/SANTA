@@ -22,7 +22,6 @@ public class MeetingParticipation {
 	private String profileImage; // user profile Image
 	private String nickname; // user nickname
 	private int participationStatus; // indicates whether the user has applied or is registered
-	private Date chattingRoomExitTime; // user exited chatting room time 
 	private int participationRole; // Indicates whether the user is a group leader or a regular member
 	private int withdrawFlag; // indicates whether the participant has withdrawn
 

@@ -18,8 +18,7 @@
         <result property="profileImage" 			column="profile_image" 			jdbcType="VARCHAR"/>
         <result property="nickname" 				column="nickname" 				jdbcType="VARCHAR"/>
         <result property="participationStatus" 		column="participation_status" 	jdbcType="NUMERIC"/>
-        <result property="chattingRoomExitTime" 	column="chattingroom_exit_time" jdbcType="DATE"/>
-        <result property="participationRole" 		column="mp_role" 				jdbcType="NUMERIC"/>
+        <result property="participationRole" 		column="participation_role" 	jdbcType="NUMERIC"/>
         <result property="withdrawFlag" 			column="withdraw_flag" 			jdbcType="NUMERIC"/>
     </resultMap>
     
@@ -42,7 +41,7 @@
         <result property="contents" 				column="mp_contents" 				jdbcType="VARCHAR"/>
         <result property="postDate" 				column="mp_creation_date" 			jdbcType="DATE"/>
        	
-		<result property="meetingPostImage"			column="image"						jdbcType="VARCHAR"/>
+<!--  		<result property="meetingPostImage"			column="image"						jdbcType="VARCHAR"/> -->
 		<result property="meetingName"				column="meeting_name"				jdbcType="VARCHAR"/>
 		<result property="recruitmentDeadline"		column="recruitment_deadline"		jdbcType="DATE"/>
 		<result property="appointedDeparture"		column="appointed_departure"	    jdbcType="VARCHAR"/>
@@ -112,23 +111,23 @@
 	
 	<insert id="insertMeetingPostLike" parameterType="site.dearmysanta.domain.common.Like">
 		INSERT
-		INTO likes(like_no, user_no, post_like_no, post_like_type, like_date)
-		VALUES(seq_like_no.NEXTVAL, #{userNo}, #{postNo}, #{postLikeType}, #{likeDate})
+		INTO likes(like_no, user_no, post_no, post_type)
+		VALUES(seq_like_no.NEXTVAL, #{userNo}, #{postNo}, 1)
 	</insert>
 	
 	<delete id="deleteMeetingPostLike" parameterType="site.dearmysanta.domain.common.Like">
 		DELETE FROM likes
-        WHERE user_no = #{userNo} AND post_like_no = #{postNo} AND post_like_type = 1
+        WHERE user_no = #{userNo} AND post_no = #{postNo} AND post_type = 1
 	</delete>
 	
 	<insert id="insertMeetingPostComment" parameterType="site.dearmysanta.domain.meeting.MeetingPostComment">
-        INSERT INTO comments(comment_no, user_no, post_no, comment_contents, post_type_no)
-        VALUES(seq_comment_no.NEXTVAL, #{userNo}, #{meetingPostNo}, #{meetingPostCommentContent}, 1)
+        INSERT INTO comments(comment_no, user_no, post_no, comment_contents, post_type)
+        VALUES(seq_comment_no.NEXTVAL, #{userNo}, #{meetingPostNo}, #{meetingPostCommentContents}, 1)
     </insert>
     
     <delete id="deleteMeetingPostComment" parameterType="site.dearmysanta.domain.meeting.MeetingPostComment">
         DELETE FROM comments
-        WHERE comment_no = #{meetingPostCommentNo} AND post_no = #{meetingPostNo} AND post_type_no = 1
+        WHERE user_no = #{userNo} AND post_no = #{meetingPostNo} AND post_type = 1
     </delete>
     
     <select id="getMeetingPostLikeCount" parameterType="int" resultType="int">
@@ -148,5 +147,41 @@
         FROM meeting_post
         WHERE appointed_hiking_mountain = #{appointedHikingMountain}
     </select>
+    
+    <select id="getMeetingParticipationList" parameterType="int" resultMap="meetingParticipationSelectMap">
+    	SELECT 
+        	mp.participation_no,
+        	u.profile_image,
+        	u.nickname,
+        	mp.participation_status,
+        	mp.participation_role,
+        	mp.withdraw_flag
+    	FROM 
+        	meeting_participation mp
+    	JOIN 
+        	users u ON mp.user_no = u.user_no
+    	WHERE 
+        	mp.mp_no = #{postNo}
+	</select>
+	
+	<select id="getMeetingPostCommentList" parameterType="int" resultMap="meetingPostCommentSelectMap">
+    	SELECT 
+        	c.post_no,
+        	c.comment_no,
+        	c.comment_contents,
+        	c.comment_creation_date,
+        	u.user_no,
+        	u.nickname,
+        	u.profile_image
+    	FROM 
+        	comments c
+    	JOIN 
+        	users u ON c.user_no = u.user_no
+    	WHERE 
+        	c.post_no = #{postNo} AND c.post_type = 1
+	</select>
+	
+    
+    
 
 </mapper>
