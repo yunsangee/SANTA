@@ -18,7 +18,7 @@ public interface UserService {
 	
 	public List<User> getUserList() throws Exception;
 	
-	public void updateUser(User user) throws Exception;
+	public void updateUser(int userNo) throws Exception;
 	
 	public void deleteUser(int userNo) throws Exception;
 	
@@ -26,9 +26,9 @@ public interface UserService {
 	// User id, password
 	// 
 	
-	public User findUserId(String userId) throws Exception;
+	public String findUserId(String userName, String phoneNumber) throws Exception;
 	
-	public User findUserPassword(String userId) throws Exception;
+	public String findUserPassword(String userId, String phoneNumber) throws Exception;
 	
 	public User setUserPassword(String userId, String userPassword) throws Exception;
 	
@@ -36,11 +36,11 @@ public interface UserService {
 	// User check and confirm
 	//
 	
-	public User checkPassword(String userId, String userPassword) throws Exception;
+	public int getPassword(String userId, String userPassword) throws Exception;
 	
 	public String getDuplicationId(String userId) throws Exception; 
 	
-	public User checkDuplicationNickname(String nickName) throws Exception;
+	public String getDuplicationNickName(String nickName) throws Exception;
 	
 	public User checkPhoneNumber(String phoneNumber) throws Exception;
 	

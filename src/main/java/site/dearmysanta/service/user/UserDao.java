@@ -23,27 +23,27 @@ import site.dearmysanta.domain.user.User;
 		
 		public List<User> getUserList() throws Exception;
 		
-		public void updateUser(User user) throws Exception;
+		public void updateUser(int userNo) throws Exception;
 		
 		public void deleteUser(int userNo) throws Exception;
 		
 		//
 		//
 		
-		public User findUserId(String userId) throws Exception;
+		public String findUserId(String userName, String phoneNumber) throws Exception;
 		
-		public User findUserPassword(String userId) throws Exception;
+		public String findUserPassword(String userId, String phoneNumber) throws Exception;
 		
 		public User setUserPassword(String userId, String userPassword) throws Exception;
 		
 		//
 		//
 		
-		public User checkPassword(String userId, String userPassword) throws Exception;
+		public int checkPassword(@Param("userId") String userId, @Param("userPassword") String userPassword) throws Exception;
 		
 		public String checkDuplicationId(@Param("userId") String userId) throws Exception; 
 		
-		public User checkDuplicationNickname(String nickName) throws Exception;
+		public String checkDuplicationNickName(@Param("nickName") String nickName) throws Exception;
 		
 		public User checkPhoneNumber(String phoneNumber) throws Exception;
 		

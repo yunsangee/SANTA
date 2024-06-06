@@ -17,7 +17,7 @@
 		<result property = "birthDate"	column = "birth_date"	jdbcType = "VARCHAR"/>
 		<result property = "phoneNumber"	column = "phone_number"	jdbcType = "VARCHAR"/>
 		<result property = "gender"	column = "gender"	jdbcType = "NUMERIC"/>
-		<!-- <result property = "profileImage"	column = "profile_image"	jdbcType = "VARCHAR"/> -->
+		<result property = "profileImage"	column = "profile_image"	jdbcType = "VARCHAR"/>
 		<result property = "creationDate"	column = "creation_date"	jdbcType = "DATE"/>
 		<result property = "hikingPurpose"	column = "hiking_purpose"	jdbcType = "NUMERIC"/>
 		<result property = "hikingDifficulty"	column = "hiking_difficulty"	jdbcType = "NUMERIC"/>
@@ -26,7 +26,7 @@
 		<result property = "withedrawReason"	column = "withdraw_reaseon"	jdbcType = "NUMERIC"/>
 		<result property = "withdrawContent"	column = "withdraw_content"	jdbcType = "VARCHAR"/>
 		<result property = "role"	column = "role"	jdbcType = "NUMERIC"/>
-	<!-- 	<result property = "badgeImage"	column = "badge_image"	jdbcType = "VARCHAR"/> -->
+	    <result property = "badgeImage"	column = "badge_image"	jdbcType = "VARCHAR"/>
 		<result property = "certificationCount"	column = "cp_count"	jdbcType = "NUMERIC"/>
 		<result property = "meetingCount"	column = "mp_count"	jdbcType = "NUMERIC"/>
 		<result property = "introduceContent"	column = "introduce_content"	jdbcType = "VARCHAR"/>
@@ -47,20 +47,19 @@
 	<insert id = "addUser"	parameterType = "site.dearmysanta.domain.user.User" >
 		INSERT
 		INTO users(user_no, user_id, name, password, nickname, address, birth_date, phone_number, gender, 
-							hiking_purpose, hiking_difficulty, hiking_level, role, 
-							 cp_count, mp_count, creation_date)
+							hiking_purpose, hiking_difficulty, hiking_level, role, cp_count, mp_count, creation_date,
+							profile_image)
 		VALUES	( #{userNo}, #{userId}, #{userName}, #{userPassword}, #{nickName}, #{address}, #{birthDate},
-
-							#{phoneNumber}, #{gender}, #{hikingPurpose}, #{hikingDifficulty}, 
-							#{hikingLevel}, #{role},  0, 0, #{creationDate})
+							#{phoneNumber, jdbcType=VARCHAR}, #{gender}, #{hikingPurpose}, #{hikingDifficulty}, 
+							#{hikingLevel}, #{role},  0, 0, SYSDATE, #{profileImage})
 	</insert>
 
 	<!--  SQL : SELECT ONE -->
 	
-	<select id="getUser" parameterType="String" resultMap="userSelectMap">
+	<select id="getUser" parameterType="int" resultMap="userSelectMap">
         SELECT 
 		    user_no, user_id, name, password, nickname, address, birth_date, phone_number, gender, 
-		 hiking_purpose, hiking_difficulty, hiking_level
+		 hiking_purpose, hiking_difficulty, hiking_level, cp_count, mp_count, badge_image
 
         FROM users
         WHERE user_no = #{userNo}
@@ -78,14 +77,14 @@
 		    hikingPurpose = #{hikingPurpose},
 		    hikingDifficulty = #{hikingDifficulty},
 		    hikingLevel = #{hikingLevel},
-		    introduceContent = #{introduceContent}
+		    introduceContent = #{introduceContent},
 		</set>
 		WHERE user_no = #{userNo}
 	</update>
 	
 	<!--  SQL : CHECK -->
 
-	<select id = "checkDuplicationId" parameterType="String"	resultMap ="userSelectMap">
+	<select id = "checkDuplicationId" parameterType="String"	resultType="String">
 		SELECT 
 			user_id
 		FROM 
@@ -94,14 +93,41 @@
 			user_id = #{userId}
 	</select>
 	
-	<select id = "checkDuplicationNickName"	parameterType="String" resultMap ="userSelectMap">
+	<select id = "checkDuplicationNickName"	parameterType="String" resultType="String">
 		SELECT 
 			nickname
 		FROM 
 			users
 		WHERE 
 			nickname = #{nickName}
-	</select>  
+	</select> 
+	
+	<select id = "checkPassword"	parameterType="Map" resultType="int">
+		SELECT 
+			count(*)
+		FROM 
+			users
+		WHERE 
+			user_id = #{userId} AND password = #{userPassword}
+	</select> 
+	
+	<select id = "findUserId"	parameterType="Map" resultType="String">
+		SELECT 
+			user_Id
+		FROM 
+			users
+		WHERE 
+			name = #{userName} AND phone_number = #{phoneNumber}
+	</select>   
+	
+		<select id = "findUserPassword"	parameterType="Map" resultType="String">
+		SELECT 
+			password
+		FROM 
+			users
+		WHERE 
+			user_id = #{userId} AND phone_number = #{phoneNumber}
+	</select>
 
 	
 </mapper>
