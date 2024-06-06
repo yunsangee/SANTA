@@ -2,8 +2,6 @@ package site.dearmysanta.domain.mountain;
 
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,18 +15,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MountainTrail {
-	
-	private int mountainTrailNo;
+public class Statistics {
 	private String mountainName;
-	private List mountainTrailCoordinates;
-	
-	private String mountainTrailDifficulty;
-	private double mountainTrailLength;
-	
-	private int expectedAscentTime;
-	private int descentTime;
-	
-	private String isClosed;
+	private int searchCount;
+	private int postCount;
 
 }
