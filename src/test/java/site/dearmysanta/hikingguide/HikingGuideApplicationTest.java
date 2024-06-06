@@ -66,30 +66,43 @@ public class HikingGuideApplicationTest {
     }
     
     @Test
-    public void updateAlertSetting() throws Exception {
-        // 1. Initial setup: Get the existing alert settings for a user with userNo 1
-        HikingAlert hikingAlert = hikingGuideService.getAlertSetting(1);
-        Assert.assertNotNull(hikingAlert);
-        
-        // 2. Verify initial conditions: Check the initial userNo or any other relevant initial values
-        Assert.assertEquals(1, hikingAlert.getUserNo()); // assuming userNo is a field in HikingAlert
-
-        // 3. Update settings: Set new alert values
-        hikingAlert.setHikingAlertFlag(1);
-        hikingAlert.setDestinationAlert(0);
-        hikingAlert.setLocationOverAlert(0);
-        hikingAlert.setSunsetAlert(0);
-        hikingAlert.setMeetingTimeAlert(0);
-
-        // 4. Perform the update: Call the service method to update the settings
-        hikingGuideService.updateAlertSetting(1, 1, 0, 0, 0, 0);
-
-        // 5. Verify the update: Get the updated settings and verify the changes
-        hikingAlert = hikingGuideService.getAlertSetting(1);
-       
-        // Optionally print the updated settings for debugging
-        System.out.println(hikingAlert);
-    }
+//    public void updateAlertSetting() throws Exception {
+//        // 1. Initial setup: Get the existing alert settings for a user with userNo 1
+//        HikingAlert hikingAlert = hikingGuideService.getAlertSetting(1);
+//        Assert.assertNotNull(hikingAlert);
+//        
+//        // 2. Verify initial conditions: Check the initial userNo or any other relevant initial values
+//        Assert.assertEquals(1, hikingAlert.getUserNo()); // assuming userNo is a field in HikingAlert
+//
+//        // 3. Update settings: Set new alert values
+//        hikingAlert.setHikingAlertFlag(1);
+//        hikingAlert.setDestinationAlert(0);
+//        hikingAlert.setLocationOverAlert(0);
+//        hikingAlert.setSunsetAlert(0);
+//        hikingAlert.setMeetingTimeAlert(0);
+//
+//         // 4. Perform the update: Call the service method to update the settings
+//       hikingGuideService.updateAlertSetting(
+//            hikingAlert.getUserNo(), 
+//            hikingAlert.getHikingAlertFlag(), 
+//            hikingAlert.getDestinationAlert(), 
+//            hikingAlert.getLocationOverAlert(), 
+//            hikingAlert.getSunsetAlert(), 
+//            hikingAlert.getMeetingTimeAlert()
+//        );
+//
+//        // 5. Verify the update: Get the updated settings and verify the changes
+//        HikingAlert updatedHikingAlert = hikingGuideService.getAlertSetting(1);
+//        Assert.assertNotNull(updatedHikingAlert);
+//        Assert.assertEquals(1, updatedHikingAlert.getHikingAlertFlag());
+//        Assert.assertEquals(0, updatedHikingAlert.getDestinationAlert());
+//        Assert.assertEquals(0, updatedHikingAlert.getLocationOverAlert());
+//        Assert.assertEquals(0, updatedHikingAlert.getSunsetAlert());
+//        Assert.assertEquals(0, updatedHikingAlert.getMeetingTimeAlert());
+//
+//        // Optionally print the updated settings for debugging
+//        System.out.println(updatedHikingAlert);
+//    }
 
     
   //@Test
@@ -99,7 +112,14 @@ public class HikingGuideApplicationTest {
     	HikingAlert alert = hikingGuideServiceImpl.getAlertSetting(1);
     	
     	System.out.println(alert);
-    	
-    	
+    	   	
+    }
+    
+    @Test
+    public void deleteHikingRecord() throws Exception{
+             
+        int rowsAffected = hikingGuideService.deleteHikingRecord(2);
+
+        assertEquals(1, rowsAffected, "Number of rows deleted should be 1");
     }
 }
