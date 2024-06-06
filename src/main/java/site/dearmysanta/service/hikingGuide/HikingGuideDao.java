@@ -21,15 +21,10 @@ public interface HikingGuideDao {
  
     public HikingAlert getAlertSetting(@Param("userNo") int userNo) throws Exception;
 
-    public void updateAlertSetting(@Param("userNo") int userNo, 
-    						@Param("hikingAlertFlag") int hikingAlertFlag,
-                            @Param("destinationAlert") int destinationAlert, 
-                            @Param("sunsetAlert") int sunsetAlert,
-                            @Param("locationOverAlert") int locationOverAlert, 
-                            @Param("meetingTimeAlert") int meetingTimeAlert) throws Exception;
+    public void updateAlertSetting(@Param("userNo") int userNo, @Param("settings") Map<String, Integer> settings) throws Exception;
     
     public void updateMeetingTime(@Param("userNo") int userNo, @Param("meetingTimeAlert") int meetingTimeAlert, 
-    						 	  @Param("meetingTime") int meetingTime) throws Exception;
+    						 	  @Param("meetingTime") String meetingTime) throws Exception;
 
-    public void deleteHikingRecord(@Param("hrNo") int hrNo) throws Exception;
+    public int deleteHikingRecord(@Param("hrNo") int hrNo) throws Exception;
 }

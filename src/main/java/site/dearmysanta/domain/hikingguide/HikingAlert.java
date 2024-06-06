@@ -28,7 +28,5 @@ public class HikingAlert {
 	private int locationOverAlert; // location over alert flag
 	private int meetingTimeAlert; // meeting time alert flag
 	private String meetingTime; // set meeting time
-	private int alertContent; // alert content 
-	private int allAlert; // all alert flag
 	
 }

@@ -34,10 +34,27 @@
 	
    <!-- SQL : hikingAlertSetting Update -->
    
-	<update id="updateAlertSetting">
- 
- 
+	<update id="updateAlertSetting" parameterType="map">
+    UPDATE users
+    <set>
+        <if test="settings.hikingAlertFlag == 1">
+            destination_setting = #{settings.destinationAlert},
+            sunset_setting = #{settings.sunsetAlert},
+            location_over_setting = #{settings.locationOverAlert},
+            time_alert_setting = #{settings.meetingTimeAlert}
+        </if>
+        <if test="settings.hikingAlertFlag == 0">
+            destination_setting = 0,
+            sunset_setting = 0,
+            location_over_setting = 0,
+            time_alert_setting = 0
+        </if>
+        hg_setting = #{settings.hikingAlertFlag}
+    </set>
+    WHERE 
+        user_no = #{settings.userNo}
 	</update>
+
 
 
 
@@ -47,7 +64,7 @@
     UPDATE users
     <set>
         <if test="meetingTimeAlert == 1">
-            time_setting = #{meetingTime, jdbcType=NUMERIC}
+            time_setting = #{meetingTime, jdbcType=VARCHAR}
         </if>
     </set>
     WHERE user_no = #{userNo, jdbcType=NUMERIC}

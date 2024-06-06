@@ -10,6 +10,7 @@ import site.dearmysanta.service.hikingGuide.HikingGuideService;
 import site.dearmysanta.service.hikingGuide.HikingGuideService.MountainInfo;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://192.168.0.51:3000")
 @RestController
@@ -24,53 +25,52 @@ public class HikingGuideRestController {
         System.out.println(this.getClass());
     }
 
-    @PostMapping(value = "react/addHikingRecord")
+    @PostMapping(value = "/react/addHikingRecord")
     public void addHikingRecord(@RequestBody HikingGuide hikingGuide) throws Exception {
+    	System.out.println("HikingGuide: " + hikingGuide);
         hikingGuideService.addHikingRecord(hikingGuide);
+    
     }
 
-    @GetMapping(value = "react/getHikingListRecord/{userNo}")
+    @PostMapping(value = "/react/getHikingListRecord/{userNo}")
     public List<HikingGuide> getHikingListRecord(@PathVariable int userNo) throws Exception {
         return hikingGuideService.getHikingListRecord(userNo);
     }
 
-    @GetMapping(value = "react/getAlertSetting/{userNo}")
+    @PostMapping(value = "/react/getAlertSetting/{userNo}")
     public HikingAlert getAlertSetting(@PathVariable int userNo) throws Exception {
         return hikingGuideService.getAlertSetting(userNo);
     }
 
-    @PostMapping(value = "react/updateAlertSetting/{userNo}")
+
+    @PostMapping(value = "/react/updateAlertSetting/{userNo}", consumes = "application/json")
     public void updateAlertSetting(@PathVariable int userNo,
-                                   @RequestParam(required = false) int hikingAlertFlag,
-                                   @RequestParam(required = false) int destinationAlert,
-                                   @RequestParam(required = false) int sunsetAlert,
-                                   @RequestParam(required = false) int locationOverAlert,
-                                   @RequestParam(required = false) int meetingTimeAlert) throws Exception {
-        hikingGuideService.updateAlertSetting(userNo, hikingAlertFlag, destinationAlert, sunsetAlert, locationOverAlert, meetingTimeAlert);
+                                   @RequestBody Map<String, Integer> payload) throws Exception {
+        System.out.println("Payload: " + payload);
+        hikingGuideService.updateAlertSetting(userNo, payload);
     }
 
 
-    @PostMapping(value = "react/updateMeetingTime/{userNo}")
+
+    @PostMapping(value = "/react/updateMeetingTime/{userNo}", consumes = "application/json")
     public void updateMeetingTime(@PathVariable int userNo,
-                                  @RequestParam int meetingTimeAlert,
-                                  @RequestParam int meetingTime) throws Exception {
+                                  @RequestBody Map<String, Object> payload) throws Exception {
+        int meetingTimeAlert = (int) payload.get("meetingTimeAlert");
+        String meetingTime = (String) payload.get("meetingTime");
         hikingGuideService.updateMeetingTime(userNo, meetingTimeAlert, meetingTime);
+        System.out.println(meetingTime);
     }
+
     
-    @DeleteMapping(value = "react/deleteHikingRecord/{hrNo}")
+    @DeleteMapping(value = "/react/deleteHikingRecord/{hrNo}")
     public void deleteHikingRecord(@PathVariable int hrNo) throws Exception {
         hikingGuideService.deleteHikingRecord(hrNo);
     }
     
 
-    @GetMapping(value = "react/getMountainInfo")
+    @GetMapping(value = "/react/getMountainInfo")
     public MountainInfo getMountainInfo() throws Exception {
         return hikingGuideService.getMountainInfo();
     }
-    
-    @PostMapping(value = "react/getUserCoordination")
-    public void getUserCoordination(@RequestParam double userLatitude, @RequestParam double userLongitude, @RequestParam int userNo) throws Exception {
-        hikingGuideService.getUserCoordination(userNo, userLatitude, userLongitude);
-    }
-    
+        
 }
