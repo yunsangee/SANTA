@@ -20,7 +20,7 @@ public class CertificationPostComment {
 
 	private int userNo;
 	private String nickName;
-	private MultipartFile profileImage;
+	private String profileImage;
 	
 	private int certificationPostNo;
 	private int certificationCommentNo;

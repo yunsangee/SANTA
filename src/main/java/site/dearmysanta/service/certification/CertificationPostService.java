@@ -22,12 +22,16 @@ public interface CertificationPostService {
 	
 	
 	//hashtag
-	//public void addCertificationPostHashtags(int certificationPostNo) throws Exception;
+
+	public void addCertificationPostHashtags(CertificationPost certificationPost) throws Exception ;
+
+	public int deleteCertificationPostHashtags(int HashtagNo) throws Exception;
 	
-	public void deleteCertificationPostHashtags(int certificationPostNo) throws Exception;
+	//hashtag
 	
 	
-	public void addCertificationPostHashtags(int postNo, String hashtag);
+	
+	
 	//Like
 	
 	public void addCertificationPostLike(Like like);
@@ -37,5 +41,7 @@ public interface CertificationPostService {
 	public int getTotalCertificationPostLikeCount(Like like);
 	
 	public List<CertificationPost> getCertificationPostLikeList(Like like);
+	
+	//Like
 
 }

@@ -19,17 +19,7 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 
     @Override
     public void addCertificationPost(CertificationPost certificationPost) throws Exception {
-        // CertificationPost를 먼저 저장합니다.
         certificationPostDao.addCertificationPost(certificationPost);
-        
-        // CertificationPost의 해시태그를 저장합니다.
-        List<String> hashtags = certificationPost.getCertificationPostHashtag();
-        if (hashtags != null && !hashtags.isEmpty()) {
-            for (String hashtag : hashtags) {
-                // 각 해시태그를 해시태그 테이블에 저장합니다.
-                certificationPostDao.addCertificationPostHashtag(certificationPost.getCpNo(), hashtag);
-            }
-        }
     }
 
     @Override
@@ -43,16 +33,32 @@ public class CertificationPostServiceImpl implements CertificationPostService {
     }
     
     //hashtag
+
 	@Override
-	public void addCertificationPostHashtags(int certificationPostNo) throws Exception {
-		certificationPostDao.addCertificationPostHashtags(certificationPostNo);
+	public void addCertificationPostHashtags(CertificationPost certificationPost) throws Exception {
+		 certificationPostDao.addCertificationPostHashtags(certificationPost);
+		
 	}
-	
+    
+    
     @Override
-    public void deleteCertificationPostHashtags(int certificationPostNo) throws Exception {
-        certificationPostDao.deleteCertificationPostHashtags(certificationPostNo);
+    public int deleteCertificationPostHashtags(int HashtagNo) throws Exception {
+        certificationPostDao.deleteCertificationPostHashtags(HashtagNo);
+		return HashtagNo;
+		
     }
 
+
+    
+  
+    
+    //hashtag 
+    
+    
+    
+    
+    
+    
     
     //Like
 	@Override
@@ -81,5 +87,12 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 
 
 
+	   //Like
+	
+	
 
-}
+	}
+
+
+
+
