@@ -1,18 +1,21 @@
 package site.dearmysanta.service.meeting.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import site.dearmysanta.service.meeting.MeetingService;
 import site.dearmysanta.domain.common.Like;
+import site.dearmysanta.domain.meeting.MeetingParticipation;
 import site.dearmysanta.domain.meeting.MeetingPost;
 import site.dearmysanta.domain.meeting.MeetingPostComment;
 import site.dearmysanta.domain.meeting.MeetingPostSearch;
 import site.dearmysanta.service.meeting.MeetingDAO;
 
 
-@Service("MeetingService")
+@Service("meetingService")
 public class MeetingServiceImpl implements MeetingService {
 	
 	@Autowired
@@ -70,6 +73,14 @@ public class MeetingServiceImpl implements MeetingService {
 	
 	public int getMountainTotalCount(String appointedHikingMountain) throws Exception {
 		return meetingDAO.getMountainTotalCount(appointedHikingMountain);
+	}
+	
+	public List<MeetingParticipation> getMeetingParticipationList(int postNo) throws Exception {
+		return meetingDAO.getMeetingParticipationList(postNo);
+	}
+	
+	public List<MeetingPostComment> getMeetingPostCommentList(int postNo) throws Exception {
+		return meetingDAO.getMeetingPostCommentList(postNo);
 	}
 
 }
