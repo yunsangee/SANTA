@@ -30,6 +30,5 @@ public class MountainTrail {
 	private int descentTime;
 	
 	private String isClosed;
-	
-	
+
 }

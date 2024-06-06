@@ -1,12 +1,15 @@
 package site.dearmysanta.mountain;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import site.dearmysanta.SantaApplication;
 import site.dearmysanta.SantaApplicationTests;
@@ -15,6 +18,7 @@ import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.correctionPost.CorrectionPost;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
+import site.dearmysanta.domain.mountain.Statistics;
 import site.dearmysanta.service.correctionpost.CorrectionPostService;
 import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.mountain.impl.MountainServiceImpl;
@@ -23,6 +27,7 @@ import site.dearmysanta.service.weather.impl.WeatherServiceImpl;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SantaApplication.class)
+@Transactional
 //@SpringBootTest(classes = MountainApplicationTest.class)
 public class MountainApplicationTest {
 	
@@ -79,8 +84,8 @@ public class MountainApplicationTest {
 	}
 	
 	//@Test
-	public void mountainTest() throws Exception {
-		mountainService.getMountain("관악산");
+	public void mountainApiTest() throws Exception {
+		mountainService.getMountain("북한산");
 	}
 	
 	//@Test
@@ -130,5 +135,136 @@ public class MountainApplicationTest {
 		}
 		
 	}
+	
+	
+//	@Test
+	public void statisticsTest() {
+		String mountainName = "jirisan";
+		
+		List<Statistics> list = mountainService.getStatisticsList(0);
+		for(Statistics statistics : list) {
+			System.out.println(statistics);
+		}
+		
+		mountainService.addMountainStatistics(mountainName, 0);
+		mountainService.addMountainStatistics(mountainName, 0);
+		mountainService.addMountainStatistics(mountainName, 1);
+		
+		list = mountainService.getStatisticsList(0);
+		for(Statistics statistics : list) {
+			System.out.println(statistics);
+		}
+		
+		
+	}
+	
+//	@Test
+	public void PopularNCustomMountainTest() {
+		List<String> MOUNTAIN_NAMES = Arrays.asList(
+		        "jirisan", "hallasan", "seoraksan", "bukhansan", "gayasan",
+		        "dobongsan", "charyeongsan", "songnisan", "taebaeksan", "odeasan"
+		    );
+		
+		Random random = new Random();
+		
+		List<Statistics> list = mountainService.getStatisticsList(1);
+		for(Statistics statistics : list) {
+			System.out.println(statistics.getMountainName());
+		}
+		System.out.println("==================================");
+		
+		for (String mountainName : MOUNTAIN_NAMES) {
+            for (int i = 0; i < 50; i++) { // Add statistics three times for each mountain
+                int which = random.nextInt(2); // Randomly choose 0 or 1
+                mountainService.addMountainStatistics(mountainName, which);
+            }
+        }
+		
+		list = mountainService.getStatisticsList(1);
+		for(Statistics statistics : list) {
+			System.out.println(statistics.getMountainName());
+		}
+		
+		System.out.println("==================================");
 
+	}
+	
+	
+	@Test
+	public void mountainTest() {
+		Mountain mountain = Mountain.builder()
+                .mountainNo(5)
+                .mountainName("jirisan")
+                .mountainLatitude(35.35)
+                .mountainLongitude(127.73)
+                .mountainLocation("경상남도, 전라북도")
+                .mountainImage("jirisan_image.png")
+                .mountainDescription("지리산은 한국의 명산 중 하나입니다.")
+                .mountainAltitude(1915.0)
+                .mountainTrailCount(5)
+                .likeCount(100)
+                .build();
+		
+		 Mountain mountain2 = Mountain.builder()
+	                .mountainNo(6)
+	                .mountainName("Geumjeongsan")
+	                .mountainLatitude(35.2839)
+	                .mountainLongitude(129.0563)
+	                .mountainLocation("경상남도, 부산광역시")
+	                .mountainImage("geumjeongsan_image.png")
+	                .mountainDescription("금정산은 경상남도와 부산광역시에 걸쳐 있는 산입니다.")
+	                .mountainAltitude(801.5)
+	                .mountainTrailCount(8)
+	                .likeCount(150)
+	                .build();
+		 
+		 Mountain mountain3 = Mountain.builder()
+	                .mountainNo(7)
+	                .mountainName("Geumjeongsan")
+	                .mountainLatitude(35.2839)
+	                .mountainLongitude(129.0563)
+	                .mountainLocation("전라북도, 전라남도")
+	                .mountainImage("geumjeongsan_image.png")
+	                .mountainDescription("금정산은 경상남도와 부산광역시에 걸쳐 있는 산입니다.")
+	                .mountainAltitude(801.5)
+	                .mountainTrailCount(8)
+	                .likeCount(100)
+	                .build();
+
+		
+		mountainService.addMountain(mountain);
+		mountainService.addMountain(mountain2);
+		mountainService.addMountain(mountain3);
+		System.out.println(mountainService.getMountain(mountain.getMountainNo()));
+		System.out.println("=====================");
+		
+		
+		List<Mountain> list = mountainService.getMountainListByAddress("경상남도");
+		for(Mountain mt : list) {
+			System.out.println(mt);
+		}
+		System.out.println("=====================");
+		
+		list = mountainService.getMountainListByName("Geumjeongsan");
+		for(Mountain mt : list) {
+			System.out.println(mt);
+		}
+		System.out.println("=====================");
+		
+		mountain.setMountainTrailCount(77);
+		mountainService.updateMountain(mountain);
+		System.out.println(mountainService.getMountain(mountain.getMountainNo()));
+		System.out.println("=====================");
+		
+		mountainService.updateMountainViewCount(mountain.getMountainNo());
+		System.out.println(mountainService.getMountain(mountain.getMountainNo()));
+		System.out.println("=====================");
+		
+		System.out.println(mountainService.checkMountainExist(mountain.getMountainNo()));
+		
+		
+		
+		
+	}
+	
 }
