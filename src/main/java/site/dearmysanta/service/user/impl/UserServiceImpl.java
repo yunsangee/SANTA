@@ -1,5 +1,6 @@
 package site.dearmysanta.service.user.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,16 +42,19 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public void updateUser(int userNo) throws Exception {
+	public void updateUser(User user) throws Exception {
 		// TODO Auto-generated method stub
-		 userDao.updateUser(userNo);
+		 userDao.updateUser(user);
 		
 	}
 
 	@Override
 	public void deleteUser(int userNo) throws Exception {
 		// TODO Auto-generated method stub
-		userDao.deleteUser(userNo);
+		
+        userDao.deleteUser(userNo);
+		
+        //userDao.deleteUser(userNo);
 		
 	}
 
@@ -75,15 +79,15 @@ import site.dearmysanta.service.user.UserService;
 	public String findUserPassword(String userId, String phoneNumber) throws Exception {
 		// TODO Auto-generated method stub
 		
-		String findUserPassword = userDao.findUserPassword(userId, phoneNumber);
+		String userPassword = userDao.findUserPassword(userId, phoneNumber);
 		
-		if (findUserPassword == null) {
+		if (userPassword == null) {
 			
 			throw new Exception("비밀번호를 찾을 수 없습니다.");
 		
 		} else {
 		
-		return findUserPassword;
+		return userPassword;
 		
 		}
 		
@@ -167,9 +171,8 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public void getQnA(int postNo) throws Exception {
-		// TODO Auto-generated method stub
-		userDao.getQnA(postNo);
+	public QNA getQnA(int postNo) throws Exception {
+		return userDao.getQnA(postNo);
 	}
 
 	@Override

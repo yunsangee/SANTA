@@ -1,5 +1,6 @@
 package site.dearmysanta.service.user;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -23,7 +24,7 @@ import site.dearmysanta.domain.user.User;
 		
 		public List<User> getUserList() throws Exception;
 		
-		public void updateUser(int userNo) throws Exception;
+		public void updateUser(User user) throws Exception;
 		
 		public void deleteUser(int userNo) throws Exception;
 		
@@ -56,7 +57,7 @@ import site.dearmysanta.domain.user.User;
 		
 		public void addQnA(QNA qna) throws Exception;
 		
-		public void getQnA(int postNo) throws Exception;
+		public QNA getQnA(int postNo) throws Exception;
 		
 		public List<User> getQnAList() throws Exception;
 		

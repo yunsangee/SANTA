@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -36,7 +37,7 @@ public class User {
 	private int hikingDifficulty;
 	private int hikingLevel;
 	private Date withdrawDate;
-	private List<String> withdrawReason;
+	private int withdrawReason;
 	private String withdrawContent;
 	private int role;
 	private String badgeImage;

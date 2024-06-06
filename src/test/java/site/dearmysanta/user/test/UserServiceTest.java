@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import site.dearmysanta.SantaApplication;
 import site.dearmysanta.common.SantaLogger;
+import site.dearmysanta.domain.user.QNA;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.user.UserDao;
 import site.dearmysanta.service.user.UserService;
@@ -28,6 +29,7 @@ import site.dearmysanta.service.user.impl.UserServiceImpl;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SantaApplication.class)
 //@SpringBootTest(classes = UserServiceTest.class)
+//@Transactional
 
 public class UserServiceTest {
 	
@@ -46,14 +48,14 @@ public class UserServiceTest {
 	public void testAddUser() throws Exception {
 		
 		User user = User.builder()
-				.userNo(5)
-				.userId("user05")
-				.userName("UserFive")
-				.userPassword("password5")
-				.nickName("Nick5")
-				.address("Address5")
-				.birthDate("1990/05/05")
-				.phoneNumber("555-5555-5555")
+				//.userNo(13)
+				.userId("user2")
+				.userName("User2")
+				.userPassword("password2")
+				.nickName("Nick2")
+				.address("Address2")
+				.birthDate("1990/2/2")
+				.phoneNumber("000-222-2222")
 				.gender(0)
 				.hikingPurpose(0)
 				.hikingDifficulty(1)
@@ -61,15 +63,14 @@ public class UserServiceTest {
 				.role(0)
 //				.certificationCount(0)
 //				.meetingCount(0)
-				.creationDate(java.sql.Date.valueOf(LocalDate.of(2024,06,30)))
-				.profileImage("profileImage4")
+				.profileImage("profileImage2")
 				.build();
 		
 		userService.addUser(user);
 		
-		//user = userService.getUser(4);
+		user = userService.getUser(2);
 		
-		SantaLogger.makeLog("info", user.toString() +"\n");
+		SantaLogger.makeLog("info", userService.getUser(2).toString() +"\n");
 	}
 	
 	//
@@ -79,7 +80,7 @@ public class UserServiceTest {
 	//@Test
 	public void testGetUser() throws Exception {
 		
-		User user = userService.getUser(5);
+		User user = userService.getUser(1);
 		
 		SantaLogger.makeLog("info", user.toString() + "\n");
 		
@@ -94,10 +95,12 @@ public class UserServiceTest {
 		
 		User user = userService.getUser(5);
 		
-		user.setAddress("Address5 변경");
-		user.setBadgeImage("BadgeImage5 변경");
+		user.setAddress("Address5 변경5");
+		user.setBadgeImage("BadgeImage5 변경5");
 		
-		SantaLogger.makeLog("info", user.toString() + "\n");
+		 userService.updateUser(user);
+						
+		SantaLogger.makeLog("info", userService.getUser(5).toString() + "\n");
 	}
 	
 	//
@@ -163,7 +166,7 @@ public class UserServiceTest {
 	    // test find UserId
 	    //
 	    
-	    @Test
+	    //@Test
 	    public void testFindUserId() throws Exception {
 	       
 	        String userName = "UserFive"; // test UserName
@@ -171,18 +174,78 @@ public class UserServiceTest {
 	        
 	        String expectedUserId = "user05"; // test input userId
 	        
-//	        // UserService 객체 생성
-	        UserService userService = new UserServiceImpl();
-	        
 	        String existUserId = userService.findUserId(userName, phoneNumber); // search UserId
 	        
-	        assertNotNull(existUserId); // 확인된 아이디가 null이 아닌지 검사합니다.
+	        assertNotNull(existUserId); // existUserId NULL test
 	        
-	        // 기대되는 아이디가 데이터베이스에서 가져온 아이디와 일치하는지 검사합니다.
-	        assertEquals(userName, userService.getUserName(existUserId));
-	        assertEquals(phoneNumber, userService.getPhoneNumber(existUserId));
+	        assertEquals(expectedUserId, existUserId); // compare expectedUserid, existUserId
+	        
+	        SantaLogger.makeLog("info", "expectedUserId: " + expectedUserId);
 	        SantaLogger.makeLog("info", "existUserId: " + existUserId);
 	    
 	    }
+	    
+	    //
+	    // test FindUserPassword
+	    //
+	    
+	    //@Test
+	    public void testFindUserPassword() throws Exception {
+	       
+	        String userId = "user05"; // test UserId
+	        String phoneNumber = "555-5555-5555"; // test User PhoneNumber
+	        
+	        String expectedUserPassword = "password5"; // test input userPassword
+	        
+	        String existUserPassword = userService.findUserPassword(userId, phoneNumber); // search UserPassword
+	        
+	        assertNotNull(existUserPassword); // existUserPassword NULL test
+	        
+	        assertEquals(expectedUserPassword, existUserPassword); // compare expectedUserPassword, existUserPassword
+	        
+	        SantaLogger.makeLog("info", "expectedUserPassword: " + expectedUserPassword);
+	        SantaLogger.makeLog("info", "existUserPassword: " + existUserPassword);
+	    
+	    }
 
+	    //
+	    // test delete User
+	    //
+	    
+	    //@Test
+	    public void testdeleteUser() throws Exception {
+	    	
+	            int userNo = 5;
+
+	            // delete User
+	            userService.deleteUser(userNo);
+	            
+	            User user = userService.getUser(5);
+	            
+	            //user.setWithdrawDate(withdrawDate);
+	            
+	            SantaLogger.makeLog("info", "deleteUser : " + userService.getUser(5).toString() + "\n");
+	           
+	        }
+	    
+	    //
+	    // test addQNA
+	    //
+	    
+		//@Test
+		public void testAddQnA() throws Exception {
+			
+			QNA qna = QNA.builder()
+					//.userNo(13)
+					.contents("user2")
+					.title("User2")
+					.userNo(1)
+					.build();
+			
+			userService.addQnA(qna);
+			
+			qna = userService.getQnA(1); 
+			
+			SantaLogger.makeLog("info", userService.getQnA(1).toString() +"\n");
+		}
 }

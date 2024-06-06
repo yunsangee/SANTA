@@ -18,7 +18,7 @@ public interface UserService {
 	
 	public List<User> getUserList() throws Exception;
 	
-	public void updateUser(int userNo) throws Exception;
+	public void updateUser(User user) throws Exception;
 	
 	public void deleteUser(int userNo) throws Exception;
 	
@@ -54,7 +54,7 @@ public interface UserService {
 	
 	public void addQnA(QNA qna) throws Exception;
 	
-	public void getQnA(int postNo) throws Exception;
+	public QNA getQnA(int postNo) throws Exception;
 	
 	public List<User> getQnAList() throws Exception;
 	
