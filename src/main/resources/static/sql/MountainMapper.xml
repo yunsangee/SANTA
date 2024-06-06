@@ -38,9 +38,9 @@
 	
 	
 	 <insert id="addMountain" parameterType="site.dearmysanta.domain.mountain.Mountain">
-        INSERT INTO MOUNTAIN (MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGTITUE, MOUNTAIN_IMAGE,
+        INSERT INTO MOUNTAIN (MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGITUDE, MOUNTAIN_IMAGE,
                               MOUNTAIN_DESCRIPTION, MOUNTAIN_ALTITUDE, MOUNTAIN_TRAIL_COUNT, MOUNTAIN_VIEW_COUNT)
-        VALUES (#{mountainNo}, #{mountainName}, #{MOUNTAIN_LOCATION}, #{mountainLatitude}, #{mountainLongitude}, #{mountainImage},
+        VALUES (#{mountainNo}, #{mountainName}, #{mountainLocation}, #{mountainLatitude}, #{mountainLongitude}, #{mountainImage},
                 #{mountainDescription}, #{mountainAltitude}, #{mountainTrailCount}, 1)
     </insert>
     
@@ -61,24 +61,24 @@
     </update>
     
     <select id="getMountain" parameterType="int" resultMap="MountainResultMap">
-        SELECT MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGTITUE, MOUNTAIN_IMAGE,
+        SELECT MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGITUDE, MOUNTAIN_IMAGE,
                MOUNTAIN_DESCRIPTION, MOUNTAIN_ALTITUDE, MOUNTAIN_TRAIL_COUNT, MOUNTAIN_VIEW_COUNT
         FROM MOUNTAIN
         WHERE MOUNTAIN_NO = #{mountainNo}
     </select>
     
     <select id="getMountainListByAddress" parameterType="String" resultMap="MountainResultMap">
-    	SELECT MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGTITUE, MOUNTAIN_IMAGE,
+    	SELECT MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGITUDE, MOUNTAIN_IMAGE,
                MOUNTAIN_DESCRIPTION, MOUNTAIN_ALTITUDE, MOUNTAIN_TRAIL_COUNT, MOUNTAIN_VIEW_COUNT
         FROM MOUNTAIN
-        WHERE MOUNTAIN_LOCATION '%'||#{address}||'%'
+        WHERE MOUNTAIN_LOCATION LIKE '%'||#{address}||'%'
     </select>
     
     <select id="getMountainListByName" parameterType="String" resultMap="MountainResultMap">
-    	SELECT MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGTITUE, MOUNTAIN_IMAGE,
+    	SELECT MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGITUDE, MOUNTAIN_IMAGE,
                MOUNTAIN_DESCRIPTION, MOUNTAIN_ALTITUDE, MOUNTAIN_TRAIL_COUNT, MOUNTAIN_VIEW_COUNT
         FROM MOUNTAIN
-        WHERE MOUNTAIN_NAME '%'||#{mountainName}||'%'
+        WHERE MOUNTAIN_NAME LIKE '%'||#{mountainName}||'%'
     </select>
     
     
