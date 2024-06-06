@@ -24,6 +24,7 @@ import site.dearmysanta.service.hikingGuide.HikingGuideService;
 @Transactional
 public class HikingGuideServiceImpl implements HikingGuideService {
 
+	
     @Autowired
     @Qualifier("HikingGuideDao")
     private HikingGuideDao hikingGuideDao;
@@ -37,16 +38,9 @@ public class HikingGuideServiceImpl implements HikingGuideService {
     public HikingAlert getAlertSetting(int userNo) throws Exception {
         return hikingGuideDao.getAlertSetting(userNo);
     }
-
-    @Override
-    public void updateAlertSetting(int userNo, int hikingAlertFlag, int destinationAlert, int sunsetAlert,
-    		int locationOverAlert, int meetingTimeAlert) throws Exception {
-    		
-    	hikingGuideDao.updateAlertSetting(userNo, hikingAlertFlag, destinationAlert, sunsetAlert, locationOverAlert, meetingTimeAlert);
-    }
     
     @Override
-    public void updateMeetingTime(int userNo, int meetingTimeAlert, int meetingTime) throws Exception {
+    public void updateMeetingTime(int userNo, int meetingTimeAlert, String meetingTime) throws Exception {
         hikingGuideDao.updateMeetingTime(userNo, meetingTimeAlert, meetingTime);
     }
 
@@ -57,8 +51,8 @@ public class HikingGuideServiceImpl implements HikingGuideService {
     }
 
     @Override
-    public void deleteHikingRecord(int hrNo) throws Exception {
-        hikingGuideDao.deleteHikingRecord(hrNo);
+    public int deleteHikingRecord(int hrNo) throws Exception {
+        return hikingGuideDao.deleteHikingRecord(hrNo);
     }
 
 	@Override
@@ -93,34 +87,6 @@ public class HikingGuideServiceImpl implements HikingGuideService {
 	}
 	
 
-	@Override
-	public void getAlert(int userNo, String alertContent) {
-        
-        System.out.println("User " + userNo + ": " + alertContent);
-      
-    }
-
-	@Override
-	public void getUserCoordination() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-	
-
-    @Override
-    public void getUserCoordination(int userNo, double userLatitude, double userLongitude) throws Exception {
-        HikingAlert alertSetting = getAlertSetting(userNo);
-        if (alertSetting != null) {
-            if (alertSetting.getHikingAlertFlag() == 0) {
-                return;
-            }
-
-            if (checkAlertCondition(alertSetting)) {
-                getAlert(userNo, "arrive destination.");
-            }
-        }
-    }
-
     private boolean checkAlertCondition(HikingAlert alertSetting) {
         if (alertSetting.getDestinationAlert()==1) {
             return true; 
@@ -141,6 +107,13 @@ public class HikingGuideServiceImpl implements HikingGuideService {
 	public MeetingPost getMeetingParticipationList() throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void updateAlertSetting(int userNo, Map<String, Integer> settings) throws Exception {
+		settings.put("userNo",userNo);
+		System.out.println("settings"+settings);
+		hikingGuideDao.updateAlertSetting(userNo, settings);
 	}
 
   

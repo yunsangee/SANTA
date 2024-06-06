@@ -16,6 +16,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString(callSuper=true)
 public class MeetingPostSearch extends Search{
-	private String meetingPostListSearchCondition; // Condition for searching the meeting post list by category
+	private int meetingPostListSearchCondition; // Condition for searching the meeting post list by category
 
 }

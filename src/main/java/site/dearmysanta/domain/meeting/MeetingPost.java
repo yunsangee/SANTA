@@ -21,7 +21,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString(callSuper=true)
 public class MeetingPost extends Post{
-	private List<MultipartFile> meetingPostImage; // the post images
+	private String meetingPostImage; // the post images
 	private String meetingName; // name of meeting
 	private Date recruitmentDeadline; // date for the recruitment deadline
     private String appointedDeparture; // expected departure location
@@ -34,7 +34,10 @@ public class MeetingPost extends Post{
     private int recruitmentStatus; // indicates whether the meeting is recruiting, recruitment is closed, or the meeting has ended
     private int meetingPostDeletedFlag; // Flag to check if the post is deleted
     private int meetingPostCertifiedFlag; // Flag to check if a certification post for the meeting is completed
+    
     private int meetingPostLikeCount; // total number of likes on the post
     private int meetingPostCommentCount; // total number of comments on the post
 
 }
+
+
