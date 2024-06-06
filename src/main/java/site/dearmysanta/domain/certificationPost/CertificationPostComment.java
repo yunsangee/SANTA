@@ -1,16 +1,16 @@
 package site.dearmysanta.domain.certificationPost;
 import java.util.Date;
+import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+@SuperBuilder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,11 +20,12 @@ public class CertificationPostComment {
 
 	private int userNo;
 	private String nickName;
-	private String profileImage;
+	private String profileImage; //??
 	
 	private int certificationPostNo;
-	private int certificationCommentNo;
-	private String certificationPostCommentContent;
+	private int certificationPostCommentNo;
+	private String certificationPostCommentContents;
 	private Date certificationPostCommentCreationDate;
+	//private int PostTypeNo;
 
 }

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
 <!DOCTYPE mapper
 		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -8,12 +7,12 @@
 
     <resultMap id="CertificationPostSelectMap" type="site.dearmysanta.domain.certificationPost.CertificationPost">
   	 
-	<result property="postNo" column="cp_no" jdbcType="NUMERIC"/>
+        <result property="postNo" column="cp_no" jdbcType="NUMERIC"/>
         <result property="userNo" column="user_no" jdbcType="NUMERIC"/>
-	<result property="nickName" column="nickname" jdbcType="VARCHAR"/>
+        <result property="nickName" column="nickname" jdbcType="VARCHAR"/>
         <result property="title" column="cp_title" jdbcType="VARCHAR"/>
         <result property="contents" column="cp_contents" jdbcType="VARCHAR"/>
-	 <result property="postDate" column="cp_creation_date" 	jdbcType="DATE"/>
+        <result property="postDate" column="cp_creation_date" jdbcType="DATE"/>
 
         <result property="certificationPostMountainName" column="cp_mountain_name" jdbcType="VARCHAR"/>
         <result property="certificationPostHikingTrail" column="cp_hiking_trail" jdbcType="VARCHAR"/>
@@ -24,62 +23,114 @@
         <result property="certificationPostTransportation" column="cp_transportation" jdbcType="NUMERIC"/>
         <result property="certificationPostHikingDifficulty" column="cp_difficulty" jdbcType="NUMERIC"/>
         <result property="certificationPostDeletedFlag" column="cp_deleted_flag" jdbcType="NUMERIC"/>
-          <result property="certificationPostHashtag" column="hashtag_content" jdbcType="VARCHAR"/>
+        <result property="certificationPostHashtagContents" column="hashtag_content" jdbcType="VARCHAR"/>
+        <result property="certificationPostLikeCount" column="cp_like_count" jdbcType="NUMERIC"/>
         
     </resultMap>
 
 
+ <resultMap id="certificationPostCommentSelectMap" type="site.dearmysanta.domain.certificationPost.CertificationPostComment">
+  	         <result property="userNo" 		column="userNo" 				jdbcType="NUMERIC"/>
+        <result property="nickname" 	column="nickname" 				jdbcType="VARCHAR"/>
+        <result property="profileImage" 	column="profile_image" 			jdbcType="VARCHAR"/>
+        
+
+        <result property="certificationPostNo" column="post_no" jdbcType="NUMERIC"/>
+        <result property="certificationPostCommentNo" column="comment_no" jdbcType="NUMERIC"/>
+        <result property="certificationPostCommentContents" column="comment_contents" jdbcType="VARCHAR"/>
+        <result property="certificationPostCommentCreationDate" column="comment_creation_date" jdbcType="DATE"/>
+
+    </resultMap>
+
+
+    
+    
     <insert id="addCertificationPost" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
-    INSERT INTO certification_post (
-        cp_no, user_no, cp_type, cp_title, cp_contents, cp_mountain_name, 
-        cp_hiking_trail, cp_total_time, cp_ascent_time, cp_descent_time, 
-        cp_hiking_date, cp_creation_date, cp_transportation, cp_difficulty,
-        cp_delete_flag, cp_like_count
-    ) VALUES (
-        seq_cp_no.nextval,
-        #{userNo}, 
-      0, 
-        #{title}, 
-        #{contents}, 
-        #{certificationPostMountainName}, 
-        #{certificationPostHikingTrail}, 
-        #{certificationPostTotalTime}, 
-        #{certificationPostAscentTime}, 
-        #{certificationPostDescentTime}, 
-        #{certificationPostHikingDate}, 
-        SYSDATE, 
-        #{certificationPostTransportation}, 
-        #{certificationPostHikingDifficulty},
-        0,
-      	0
-    )
-</insert>
-
-<!--  hashtag -->
-<insert id="addCertificationPostHashtags" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
-    INSERT INTO hashtag (hashtag_no, cp_no, hashtag_content)
-    VALUES(
-  	 seq_hashtag_no.nextval,
-  	#{certificationPostNo},
-  	#{certificationPostHashtag}
-  	)
-</insert>
-
-<delete id="deleteCertificationPostHashtags" parameterType="int">
+        <selectKey keyProperty="certificationPostNo" resultType="int" order="BEFORE">
+            SELECT seq_cp_no.nextval FROM dual
+        </selectKey>
+        
+        INSERT INTO certification_post (
+            cp_no, user_no, cp_type, cp_title, cp_content, cp_mountain_name, 
+            cp_hiking_trail, cp_total_time, cp_ascent_time, cp_descent_time, 
+            cp_hiking_date, cp_creation_date, cp_transportation, cp_difficulty,
+            cp_delete_flag, cp_like_count
+        ) VALUES (
+            seq_cp_no.currval,
+            #{userNo}, 
+            0,
+            #{title}, 
+            #{contents}, 
+            #{certificationPostMountainName}, 
+            #{certificationPostHikingTrail}, 
+            #{certificationPostTotalTime}, 
+            #{certificationPostAscentTime}, 
+            #{certificationPostDescentTime}, 
+            #{certificationPostHikingDate}, 
+            SYSDATE, 
+            #{certificationPostTransportation}, 
+            #{certificationPostHikingDifficulty},
+            0,
+            0
+        )
+    </insert>
+    
+    <insert id="addHashTag" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
+		INSERT INTO HASHTAG (HASHTAG_NO, CP_NO, HASHTAG_CONTENT)
+		VALUES (seq_HASHTAG_NO.nextva, #{postNo}, #{certificationPostHashtagContents})
+	</insert>
+    
+    
+    
+    
+<!-- 
+    <insert id="addCertificationPost" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
+        INSERT INTO certification_post (
+            cp_no, user_no, cp_type, cp_title, cp_contents, cp_mountain_name, 
+            cp_hiking_trail, cp_total_time, cp_ascent_time, cp_descent_time, 
+            cp_hiking_date, cp_creation_date, cp_transportation, cp_difficulty,
+            cp_delete_flag
+        ) VALUES (
+            seq_cp_no.nextval,
+            #{userNo}, 
+            0, 
+            #{title}, 
+            #{contents}, 
+            #{certificationPostMountainName}, 
+            #{certificationPostHikingTrail}, 
+            #{certificationPostTotalTime}, 
+            #{certificationPostAscentTime}, 
+            #{certificationPostDescentTime}, 
+            #{certificationPostHikingDate}, 
+            SYSDATE, 
+            #{certificationPostTransportation}, 
+            #{certificationPostHikingDifficulty},
+            0
+            
+        )
+    </insert>
+ -->
+    <!-- Hashtag
+    <insert id="addCertificationPostHashtags" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
+        INSERT INTO hashtag (hashtag_no, cp_no, hashtag_content)
+        VALUES(
+  	        seq_hashtag_no.nextval,
+  	        #{postNo},
+  	        #{certificationPostHashtagContents}
+  	    )
+    </insert>
+ -->
+    <delete id="deleteCertificationPostHashtags" parameterType="int">
         DELETE FROM hashtag
-        WHERE hashtag_no = #{certificationPostHashtagContent}
+        WHERE hashtag_no = #{certificationPostHashtagContents}
     </delete>
     
-    <select id="selectHashtagsByCpNo" parameterType="int" resultType="site.dearmysanta.domain.certificationPost.Hashtag">
-    SELECT hashtag_no, cp_no, hashtag_content
-    FROM hashtag
-    WHERE cp_no = #{cpNo}
-</select>
-    
-    
-    
-    <!--  hashtag -->
-    
+    <!--  
+    <select id="getCertificationPostHashtags" parameterType="int" resultMap="CertificationPostSelectMap">
+        SELECT hashtag_no, cp_no, hashtag_content
+        FROM hashtag
+        WHERE cp_no = #{cpNo}
+    </select>-->
     
     <select id="getCertificationPost" parameterType="int" resultMap="CertificationPostSelectMap">
         SELECT
@@ -101,9 +152,7 @@
             certification_post
         WHERE
             cp_no = #{postNo}
-        
     </select>
-    
     
     <update id="updateCertificationPost" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
         UPDATE certification_post
@@ -122,26 +171,57 @@
                cp_no = #{postNo}
     </update>
     
+    <!-- Like start -->
+    <insert id="addCertificationPostLike" parameterType="site.dearmysanta.domain.common.Like">
+        INSERT INTO LIKES (LIKE_NO, USER_NO, POST_LIKE_NO, POST_LIKE_TYPE, LIKE_DATE)
+        VALUES (seq_like_no.NEXTVAL, #{userNo}, #{postNo}, 0 , SYSDATE)
+    </insert>
     
-    <insert id="addCertificationPostLike"
-		parameterType="site.dearmysanta.domain.common.Like">
-		INSERT INTO LIKES (LIKE_NO, USER_NO, POST_LIKE_NO,
-		POST_LIKE_TYPE, LIKE_DATE)
-		VALUES (seq_like_no.NEXTVAL, #{userNo},
-		#{postNo}, 0 , SYSDATE)
-	</insert>
+    <delete id="deleteCertificationPostLike" parameterType="site.dearmysanta.domain.common.Like">
+        DELETE FROM LIKES
+        WHERE USER_NO = #{userNo} AND POST_LIKE_NO = #{postNo} AND POST_LIKE_TYPE=0
+    </delete>
     
+    <select id="getCertificationPostLikeCount" parameterType="site.dearmysanta.domain.common.Like"  resultType="int">
+        SELECT COUNT(*)
+        FROM likes
+        WHERE post_like_no = #{postNo} AND post_like_type = 0
+    </select>
     
+	<select id="getCertificationPostLikeList"
+		parameterType="site.dearmysanta.domain.common.Like"
+		resultMap="CertificationPostSelectMap">
+		SELECT c.*
+		FROM LIKES l, certification_post c
+		WHERE l.POST_LIKE_TYPE=0
+		AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO = c.cp_no
+	</select>
+	
+	<!-- Like end -->
+	
+	<!-- Comment -->
+
+		<insert id="addCertificationPostComment" parameterType="site.dearmysanta.domain.certificationPost.CertificationPostComment">
+        INSERT INTO comments(comment_no, user_no, post_no, comment_contents,comment_creation_date, post_type_no)
+        VALUES(seq_comment_no.NEXTVAL, #{userNo}, #{certificationPostNo}, #{certificationPostCommentContents},sysdate, 0)
+    </insert>
     
-    	<delete id="deleteCertificationPostLike"
-		parameterType="site.dearmysanta.domain.common.Like">
-		DELETE FROM LIKES
-		WHERE USER_NO = #{userNo} AND
-		POST_LIKE_NO = #{postNo} AND POST_LIKE_TYPE=0
-	</delete>
+    <delete id="deleteCertificationPostComment" parameterType="site.dearmysanta.domain.certificationPost.CertificationPostComment">
+        DELETE FROM comments
+         WHERE USER_NO = #{userNo} AND POST_NO = #{certificationPostNo} AND POST_TYPE_NO=0
+    </delete>
     
-    
-    
-    
-    
+	<select id="getCertificationPostComment" parameterType="int" resultMap="certificationPostCommentSelectMap">
+    SELECT
+        comment_no,
+        user_no,
+        comment_contents,
+        comment_creation_date
+    FROM
+        comments
+    WHERE
+        post_no = #{postNo}
+</select>
+	
+
 </mapper>
