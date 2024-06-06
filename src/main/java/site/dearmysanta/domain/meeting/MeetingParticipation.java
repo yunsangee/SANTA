@@ -18,6 +18,8 @@ import lombok.ToString;
 @AllArgsConstructor
 public class MeetingParticipation {
 	
+	private int participationNo; // unique post identifier
+	private int postNo; // unique post identifier
 	private int userNo; // unique user identifier
 	private String profileImage; // user profile Image
 	private String nickname; // user nickname
