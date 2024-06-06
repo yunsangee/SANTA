@@ -21,13 +21,9 @@ public interface HikingGuideService {
 	
 //	public MeetingPost getParticipationList() throws Exception;
 	
-	public void getUserCoordination() throws Exception;
-		
 	public void getMeetingCoordination() throws Exception;
 	
 	public MountainInfo getMountainInfo() throws Exception;
-
-	public void getAlert(int userNo, String alertContent) throws Exception;		
 	
 	public void addHikingRecord(HikingGuide hikingGuide) throws Exception;
 
@@ -35,16 +31,12 @@ public interface HikingGuideService {
 
 	public HikingAlert getAlertSetting(int userNo) throws Exception;
 	
-	public void updateMeetingTime(int userNo, int meetingTimeAlert, int meetingTime) throws Exception;
+	public void updateMeetingTime(int userNo, int meetingTimeAlert, String meetingTime) throws Exception;
 
-	public void updateAlertSetting(int userNo, Integer hikingAlertFlag, String destinationAlert, String sunsetAlert,
-									String locationOverAlert, String meetingTimeAlert
-									) throws Exception;
+	public void updateAlertSetting(int userNo, Map<String, Integer> settings) throws Exception;
 
-	public void deleteHikingRecord(int hrNo) throws Exception;
+	public int deleteHikingRecord(int hrNo) throws Exception;
 	
-	public void getUserCoordination(int userNo, double latitude, double longitude) throws Exception;
-
 	public MeetingPost getMeetingParticipationList() throws Exception;
 	
 	
@@ -55,10 +47,4 @@ public interface HikingGuideService {
 		private Mountain mountain;
 		private Weather weather;
 	}
-
-
-
-
-	
-
 }

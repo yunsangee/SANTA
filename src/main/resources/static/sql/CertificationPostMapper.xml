@@ -118,4 +118,3 @@
         WHERE cp_no = #{certificationPostNo}
     </delete>
 </mapper>
-

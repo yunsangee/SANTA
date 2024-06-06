@@ -1,5 +1,6 @@
 package site.dearmysanta.service.hikingGuide;
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -20,15 +21,10 @@ public interface HikingGuideDao {
  
     public HikingAlert getAlertSetting(@Param("userNo") int userNo) throws Exception;
 
-    public void updateAlertSetting(@Param("userNo") int userNo, 
-    						@Param("hikingAlertFlag") Integer hikingAlertFlag,
-                            @Param("destinationAlert") String destinationAlert, 
-                            @Param("sunsetAlert") String sunsetAlert,
-                            @Param("locationOverAlert") String locationOverAlert, 
-                            @Param("meetingTimeAlert") String meetingTimeAler) throws Exception;
+    public void updateAlertSetting(@Param("userNo") int userNo, @Param("settings") Map<String, Integer> settings) throws Exception;
     
     public void updateMeetingTime(@Param("userNo") int userNo, @Param("meetingTimeAlert") int meetingTimeAlert, 
-    						 	  @Param("meetingTime") int meetingTime) throws Exception;
+    						 	  @Param("meetingTime") String meetingTime) throws Exception;
 
-    public void deleteHikingRecord(@Param("hrNo") int hrNo) throws Exception;
+    public int deleteHikingRecord(@Param("hrNo") int hrNo) throws Exception;
 }

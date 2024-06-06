@@ -145,12 +145,12 @@ public class MountainServiceImpl implements MountainService {
 	                .build();
 	    }//make mountain trail class
 	 
-	 public List<MountainTrail> getMountainTrailListFromVWorld(String emdCd) throws JsonMappingException, JsonProcessingException {
+	 public List<MountainTrail> getMountainTrailListFromVWorld(String mountainName, String emdCd) throws JsonMappingException, JsonProcessingException {
 			String url = "https://api.vworld.kr/req/data";
 			String key = "C5151288-9B85-3B38-86F1-8CFD6D085112";
 			
 			url = url + "?service=data&request=GetFeature&data=LT_L_FRSTCLIMB&key=" + key + "&domain=http://dearmysanta.site"
-	              + "&attrFilter=mntn_nm:like:" +"���ǻ�|emdCd:=:" + emdCd+"&page=1&size=100&format=json";
+	              + "&attrFilter=mntn_nm:like:" +mountainName+"|emdCd:=:" + emdCd+"&page=1&size=100&format=json";
 			
 			RestTemplate restTemplate = new RestTemplate();
 	        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
@@ -174,21 +174,22 @@ public class MountainServiceImpl implements MountainService {
             
 		}//get MountainTrail information using mountain Trail api
 	 
-	public List<MountainTrail> doAllLogic(double lat, double lon) throws JsonMappingException, JsonProcessingException{
+//	public List<MountainTrail> doAllLogic(double lat, double lon,String mountainName) throws JsonMappingException, JsonProcessingException{
+	 public void doAllLogic(double lat, double lon,String mountainName) throws JsonMappingException, JsonProcessingException{
 		String location = getEmdCodeByCoordinates(lat, lon);
 		System.out.println("====================================");
 		String emdCd =  getRegionCode(location);
 		System.out.println("====================================");
 		
-		return getMountainTrailListFromVWorld(emdCd);
+		//return getMountainTrailListFromVWorld(mountainName, emdCd);
 		
 	}
 	
-	public Mountain getMountain() throws Exception{
+	public Mountain getMountain(String mountainName) throws Exception{
 
 		Mountain mountain = new Mountain();
 
-		String mountainName = "���ǻ�";
+		
 		String url = "http://apis.data.go.kr/B553662/top100FamtListBasiInfoService/getTop100FamtListBasiInfoList?serviceKey="+API_KEY +"&numOfRows=100&pageNo=1&srchFrtrlNm="
 				+ mountainName;
 
@@ -234,7 +235,7 @@ public class MountainServiceImpl implements MountainService {
                  double lot = Double.parseDouble(item.getString("lot"));
                  
                  SantaLogger.makeLog("info","lat, lot:" + lat + " " + lot);
-                 doAllLogic(lat,lot);
+                 doAllLogic(lat,lot, mountainName);
              }
             
          } else {
@@ -245,7 +246,7 @@ public class MountainServiceImpl implements MountainService {
              double lot = Double.parseDouble(item.getString("lot"));
              
              SantaLogger.makeLog("info","lat, lot:" + lat + " " + lot);
-             doAllLogic(lat,lot);
+             doAllLogic(lat,lot,mountainName);
          }
 
 

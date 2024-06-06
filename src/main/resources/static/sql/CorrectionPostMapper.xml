@@ -37,7 +37,7 @@
 	<select id="getCorrectionPostList" resultMap="CorrectionPostResultMap">
 		SELECT crp.crp_no, crp.crp_content, crp.crp_date, crp.crp_status, m.MOUNTAIN_NO, m.MOUNTAIN_NAME, u.USER_NO
 		FROM USERS u, CORRECTION_POST crp, MOUNTAIN m
-		WHERE crp.USER_NO = u.USER_NO AND crp.MOUTAIN_NO = m.MOUNTAIN_NO
+		WHERE crp.USER_NO = u.USER_NO AND crp.MOUNTAIN_NO = m.MOUNTAIN_NO
 	</select>
 
 
