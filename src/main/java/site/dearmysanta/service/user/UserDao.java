@@ -1,5 +1,6 @@
 package site.dearmysanta.service.user;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -30,20 +31,20 @@ import site.dearmysanta.domain.user.User;
 		//
 		//
 		
-		public User findUserId(String userId) throws Exception;
+		public String findUserId(String userName, String phoneNumber) throws Exception;
 		
-		public User findUserPassword(String userId) throws Exception;
+		public String findUserPassword(String userId, String phoneNumber) throws Exception;
 		
 		public User setUserPassword(String userId, String userPassword) throws Exception;
 		
 		//
 		//
 		
-		public User checkPassword(String userId, String userPassword) throws Exception;
+		public int checkPassword(@Param("userId") String userId, @Param("userPassword") String userPassword) throws Exception;
 		
 		public String checkDuplicationId(@Param("userId") String userId) throws Exception; 
 		
-		public User checkDuplicationNickname(String nickName) throws Exception;
+		public String checkDuplicationNickName(@Param("nickName") String nickName) throws Exception;
 		
 		public User checkPhoneNumber(String phoneNumber) throws Exception;
 		
@@ -56,7 +57,7 @@ import site.dearmysanta.domain.user.User;
 		
 		public void addQnA(QNA qna) throws Exception;
 		
-		public void getQnA(int postNo) throws Exception;
+		public QNA getQnA(int postNo) throws Exception;
 		
 		public List<User> getQnAList() throws Exception;
 		

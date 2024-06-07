@@ -2,8 +2,6 @@ package site.dearmysanta.domain.meeting;
 
 import java.util.Date;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
