@@ -89,7 +89,7 @@ public class MountainApplicationTest {
 		mountainService.getMountain("관악산");
 	}
 	
-	@Test
+//	@Test
 	public void getmountainTest() throws Exception{
 		List<Mountain> mountain = mountainService.getMountainListByCoord( Double.valueOf(37.4979), Double.valueOf(127.0276));
 		
@@ -99,12 +99,12 @@ public class MountainApplicationTest {
 	}
 	
 	
-	//@Test
+	@Test
 	public void weatherTest() throws Exception {
 		WeatherService ws = new WeatherServiceImpl();
 		
-//		ws.getWeather(37.445044, 126.964223);
-		ws.getWeatherList();
+		ws.getWeather(37.445044, 126.964223);
+//		ws.getWeatherList();
 	}
 	
 	

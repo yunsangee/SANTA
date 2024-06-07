@@ -23,8 +23,9 @@
         <id property="mountainNo" column="MOUNTAIN_NO"/>
         <result property="mountainName" column="MOUNTAIN_NAME"/>
         <result property="mountainLatitude" column="MOUNTAIN_LATITUDE"/>
-        <result property="mountainLongitude" column="MOUNTAIN_LONGTITUE"/>
+        <result property="mountainLongitude" column="MOUNTAIN_LONGITUDE"/>
    <!--      <result property="mountainImage" column="MOUNTAIN_IMAGE"/> -->
+   		<result property="mountainLocation" column="MOUNTAIN_LOCATION"/>
         <result property="mountainDescription" column="MOUNTAIN_DESCRIPTION"/>
         <result property="mountainAltitude" column="MOUNTAIN_ALTITUDE"/>
         <result property="mountainTrailCount" column="MOUNTAIN_TRAIL_COUNT"/>

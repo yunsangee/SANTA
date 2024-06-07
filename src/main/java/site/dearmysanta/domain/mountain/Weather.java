@@ -23,8 +23,8 @@ public class Weather {
 	private String sunriseTime;
 	private String sunsetTime;
 	
-	private String latitude;
-	private String longitude;
+	private double latitude;
+	private double longitude;
 	
 	private String precipitation; //PCP
 	private int precipitationType; //PTY
