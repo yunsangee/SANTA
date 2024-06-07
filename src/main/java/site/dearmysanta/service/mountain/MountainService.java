@@ -1,10 +1,15 @@
 package site.dearmysanta.service.mountain;
 
+import java.io.IOException;
 import java.util.List;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
+import site.dearmysanta.domain.mountain.MountainTrail;
 import site.dearmysanta.domain.mountain.Statistics;
 import site.dearmysanta.domain.user.User;
 
@@ -22,7 +27,9 @@ public interface MountainService {
 	
 	public int checkMountainExist(int mountainNo);
 	
-	public List<Mountain> getMountainListByAddress(String address); // include wish list
+	public List<Mountain> getMountainListByCoord(double lat, double lon) throws IOException;
+	
+	public List<Mountain> getMountainListByAddress(String address) throws IOException;// include wish list
 	
 	public List<Mountain> getMountainListByName(String mountainName); 
 	
@@ -33,6 +40,10 @@ public interface MountainService {
 	public List<Mountain> getPopularMountainList(List<String> mountainNames) throws Exception;
 	
 	public List<Mountain> getCustomMountainList(User user);
+	
+	
+	
+	public void addMountainTrail(MountainTrail mountainTrail);
 	//
 	//Like
 	//
