@@ -51,8 +51,14 @@ public class MountainServiceImpl implements MountainService {
 	@Value("${naverMapSecretKey}")
 	private String clientSecret;
 	
+	
+	@Value("${bucketname}")
+	private String bucketname;
+	
 	@Autowired
 	ObjectStorageService objectStorageService;
+	
+	
 	
 
 	private String API_KEY = "O5Qg2/rYlZbWpeUQO4gLBZewc6BzDHr12/dzYa2yu1lPC1ivHOukhxs6DrSjz9Esti9V5GcOfiX7NQSjJFLvJA==";
@@ -130,7 +136,7 @@ public class MountainServiceImpl implements MountainService {
 	        JsonNode geometry = feature.get("geometry");
 	        JsonNode coordinatesArray = geometry.get("coordinates").get(0); // Access the MultiLineString
 
-	        List coordinateList = new ArrayList();
+	        List<List<Double>> coordinateList = new ArrayList<>();
 	        for (JsonNode coord : coordinatesArray) {
 	            double longitude = coord.get(0).asDouble();
 	            double latitude = coord.get(1).asDouble();
@@ -139,7 +145,7 @@ public class MountainServiceImpl implements MountainService {
 	            List<Double> coords = new ArrayList<>();
 	            coords.add(latitude);
 	            coords.add(longitude);
-	            coordinateList.add(coords); 
+	            coordinateList.add(coords);
 	        }
 
 	        return MountainTrail.builder()
@@ -152,7 +158,7 @@ public class MountainServiceImpl implements MountainService {
 	                .build();
 	    }//make mountain trail class
 	 
-	 public List<MountainTrail> getMountainTrailListFromVWorld(String mountainName, String emdCd) throws IOException {
+	 public List<MountainTrail> getMountainTrailListFromVWorld(int mountainNo, String mountainName, String emdCd) throws IOException {
 			String url = "https://api.vworld.kr/req/data";
 			String key = "C5151288-9B85-3B38-86F1-8CFD6D085112";
 			
@@ -170,9 +176,11 @@ public class MountainServiceImpl implements MountainService {
             List<MountainTrail> mountainTrails = new ArrayList<>();
 	        
             //features.size()
-            for (int i = 0; i < 1;i++) {
+            for (int i = 0; i < 5;i++) {
                 MountainTrail mountainTrail = mapJsonToMountainTrail(features.get(i));
                 mountainTrail.setCoordinatesUrl(mountainTrail.getMountainName()+""+i);
+                mountainTrail.setMountainNo(mountainNo);
+                mountainTrail.setMountainName(mountainName);
                 
                 
                 //
@@ -182,6 +190,7 @@ public class MountainServiceImpl implements MountainService {
                 
                 
                 mountainTrails.add(mountainTrail);
+                mountainDao.addMountainTrail(mountainTrail);
                 
             }
 //            
@@ -189,9 +198,9 @@ public class MountainServiceImpl implements MountainService {
 //            int normal = 0;
 //            int difficult = 0;
 //
-//            for (MountainTrail trail : mountainTrails) {
-//                System.out.println(trail);
-//                
+            for (MountainTrail trail : mountainTrails) {
+                System.out.println("trail:" + trail);
+                
 //                if(trail.getMountainTrailDifficulty().equals("하")) {
 //                	easy += 1;
 //                } else if(trail.getMountainTrailDifficulty().equals("중")) {
@@ -199,21 +208,21 @@ public class MountainServiceImpl implements MountainService {
 //                }if(trail.getMountainTrailDifficulty().equals("상")) {
 //                	difficult += 1;
 //                }
-//            }
+            }
 //            
 //            System.out.println("easy, normal, difficult:" + easy + " " + normal + " " + difficult);
 			return mountainTrails;
             
 		}//get MountainTrail information using mountain Trail api
 	 
-	 public List<MountainTrail> doAllLogic(double lat, double lon,String mountainName) throws IOException{
+	 public List<MountainTrail> doAllLogic(int mountainNo, double lat, double lon,String mountainName) throws IOException{
 	 //public void doAllLogic(double lat, double lon,String mountainName) throws JsonMappingException, JsonProcessingException{
 		String location = getEmdCodeByCoordinates(lat, lon);
 		System.out.println("====================================");
 		String emdCd =  getRegionCode(location);
 		System.out.println("====================================");
 		
-		return getMountainTrailListFromVWorld(mountainName, emdCd);
+		return getMountainTrailListFromVWorld(mountainNo,mountainName, emdCd);
 		
 	}
 	 
@@ -295,13 +304,13 @@ public class MountainServiceImpl implements MountainService {
            //
            //
            
-           System.out.println(mountain);
+           
            
            this.addMountain(mountain);
 
-           mountain.setMountainTrail(doAllLogic(mountain.getMountainLatitude(),mountain.getMountainLongitude(), mountainName));
+           mountain.setMountainTrail(doAllLogic(mountain.getMountainNo(), mountain.getMountainLatitude(),mountain.getMountainLongitude(), mountainName));
         	   
-           
+           System.out.println("mountain" + mountain);
          }
            
            
@@ -360,9 +369,48 @@ public class MountainServiceImpl implements MountainService {
 		return mountainDao.getMountain(mountainNo);
 	}
 	
+	public List<Mountain> getMountainListByCoord(double lat, double lon) throws IOException{ // by address 
+		String address = this.getEmdCodeByCoordinates(lat, lon).split(" ")[0];
+		
+		System.out.println("address:" + address);
+		
+		return getMountainListByAddress(address);
+		
+		//return mountainDao.getMountainListByAddress(address);
+		//
+		//
+		
+		//
+		//
+		//
+		
+	}
 	
-	public List<Mountain> getMountainListByAddress(String address){ // by address 
-		return mountainDao.getMountainListByAddress(address);
+	
+	public List<Mountain> getMountainListByAddress(String address) throws IOException{ // by address 
+		
+		
+		
+		
+		List<Mountain> list =  mountainDao.getMountainListByAddress(address);
+		
+		for(int i = 0; i < list.size();i++) {
+			List<MountainTrail> mountainTrail = list.get(i).getMountainTrail();
+			
+			for(int j = 0; j<mountainTrail.size();j++) {
+				mountainTrail.get(j).setMountainTrailCoordinates(objectStorageService.downloadListData(bucketname,list.get(i).getMountainTrail().get(j).getCoordinatesUrl()));
+			}
+			
+		
+		}
+		
+		
+		//
+		// need to get from db and get data from object storage
+		//
+		
+		
+		return list;
 		
 	}
 	
@@ -393,6 +441,11 @@ public class MountainServiceImpl implements MountainService {
 	
 	public List<Mountain> getCustomMountainList(User user){
 		return mountainDao.getCustomMountainList(user);
+	}
+	
+	
+	public void addMountainTrail(MountainTrail mountainTrail) {
+		mountainDao.addMountainTrail(mountainTrail);
 	}
 	
 	

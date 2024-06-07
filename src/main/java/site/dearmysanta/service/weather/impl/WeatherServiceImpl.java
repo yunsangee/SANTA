@@ -129,6 +129,10 @@ public class WeatherServiceImpl implements WeatherService{
         weather.setSunriseTime(item.getString("sunrise"));
 
         weather.setSunsetTime(item.getString("sunset"));;
+        
+        weather.setLatitude(lat);
+        weather.setLongitude(lot);
+        
 
         System.out.println(weather);
       
