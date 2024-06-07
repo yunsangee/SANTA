@@ -19,12 +19,12 @@
 		<java.version>1.8</java.version>
 	</properties>
 	
-	<repositories>
+	<!--<repositories>
     <repository>
         <id>osgeo</id>
         <url>https://repo.osgeo.org/repository/release/</url>
     </repository>
-</repositories>
+</repositories>-->
 
 	<dependencies>
 		<dependency>
@@ -95,6 +95,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>5.3.10</version> <!-- 최신 버전으로 변경 가능 -->
 		</dependency>
 
 		<dependency>
@@ -195,7 +200,7 @@
         <scope>test</scope>
         </dependency>
         
-        <dependency>
+       <!-- <dependency>
         <groupId>org.geotools</groupId>
         <artifactId>gt-main</artifactId>
         <version>24.1</version>
@@ -209,7 +214,13 @@
         <groupId>org.geotools</groupId>
         <artifactId>gt-geojson</artifactId>
         <version>24.1</version>
-    </dependency>
+    </dependency> -->
+    
+    <dependency>
+    <groupId>com.amazonaws</groupId>
+    <artifactId>aws-java-sdk-s3</artifactId>
+    <version>1.11.1000</version> <!-- 최신 버전으로 변경 -->
+</dependency>
     
 	</dependencies>
 
