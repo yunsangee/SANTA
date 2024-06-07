@@ -25,14 +25,14 @@ import java.io.FileOutputStream;
 
 @Service
 public class ObjectStorageService {
-
+	@Autowired
 	private final AmazonS3 amazonS3;
 	private final ObjectMapper objectMapper;
 	
 	@Value("${bucketName}")
 	private String bucketName;
 
-	@Autowired
+	
     public ObjectStorageService(AmazonS3 amazonS3, ObjectMapper objectMapper) {
         this.amazonS3 = amazonS3;
         this.objectMapper = objectMapper;
@@ -75,7 +75,7 @@ public class ObjectStorageService {
         return new MockMultipartFile(file.getName(), file.getName(), "application/octet-stream", fileInputStream);
     }
     
-    public void uploadListData(List<?> dataList, String bucketName, String fileName) throws IOException {
+    public void uploadListData(List<?> dataList, String fileName) throws IOException {
         String jsonString = objectMapper.writeValueAsString(dataList);
         byte[] byteArray = jsonString.getBytes();
 

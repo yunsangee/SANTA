@@ -21,6 +21,7 @@ public class MountainTrail {
 	
 	private int mountainTrailNo;
 	private String mountainName;
+	private String coordinatesUrl; // trail_coordinate_url
 	private List mountainTrailCoordinates;
 	
 	private String mountainTrailDifficulty;

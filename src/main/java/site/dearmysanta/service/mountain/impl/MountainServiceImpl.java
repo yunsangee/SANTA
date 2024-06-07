@@ -19,9 +19,11 @@ import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.mountain.MountainTrail;
 import site.dearmysanta.domain.mountain.Statistics;
 import site.dearmysanta.domain.user.User;
+import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.mountain.MountainDao;
 import site.dearmysanta.service.mountain.MountainService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +50,9 @@ public class MountainServiceImpl implements MountainService {
 	
 	@Value("${naverMapSecretKey}")
 	private String clientSecret;
+	
+	@Autowired
+	ObjectStorageService objectStorageService;
 	
 
 	private String API_KEY = "O5Qg2/rYlZbWpeUQO4gLBZewc6BzDHr12/dzYa2yu1lPC1ivHOukhxs6DrSjz9Esti9V5GcOfiX7NQSjJFLvJA==";
@@ -147,7 +152,7 @@ public class MountainServiceImpl implements MountainService {
 	                .build();
 	    }//make mountain trail class
 	 
-	 public List<MountainTrail> getMountainTrailListFromVWorld(String mountainName, String emdCd) throws JsonMappingException, JsonProcessingException {
+	 public List<MountainTrail> getMountainTrailListFromVWorld(String mountainName, String emdCd) throws IOException {
 			String url = "https://api.vworld.kr/req/data";
 			String key = "C5151288-9B85-3B38-86F1-8CFD6D085112";
 			
@@ -164,9 +169,20 @@ public class MountainServiceImpl implements MountainService {
 
             List<MountainTrail> mountainTrails = new ArrayList<>();
 	        
-            for (JsonNode feature : features) {
-                MountainTrail mountainTrail = mapJsonToMountainTrail(feature);
+            //features.size()
+            for (int i = 0; i < 1;i++) {
+                MountainTrail mountainTrail = mapJsonToMountainTrail(features.get(i));
+                mountainTrail.setCoordinatesUrl(mountainTrail.getMountainName()+""+i);
+                
+                
+                //
+                //upload on objectStorage
+                //
+                objectStorageService.uploadListData(mountainTrail.getMountainTrailCoordinates(), mountainTrail.getCoordinatesUrl());
+                
+                
                 mountainTrails.add(mountainTrail);
+                
             }
 //            
 //            int easy = 0;
@@ -190,7 +206,7 @@ public class MountainServiceImpl implements MountainService {
             
 		}//get MountainTrail information using mountain Trail api
 	 
-	 public List<MountainTrail> doAllLogic(double lat, double lon,String mountainName) throws JsonMappingException, JsonProcessingException{
+	 public List<MountainTrail> doAllLogic(double lat, double lon,String mountainName) throws IOException{
 	 //public void doAllLogic(double lat, double lon,String mountainName) throws JsonMappingException, JsonProcessingException{
 		String location = getEmdCodeByCoordinates(lat, lon);
 		System.out.println("====================================");
@@ -269,24 +285,26 @@ public class MountainServiceImpl implements MountainService {
            
            SantaLogger.makeLog("info","lat, lot:" + mountain.getMountainLatitude() + " " + mountain.getMountainLongitude());
            
-           if(mountainDao.checkMountainExist(mountain.getMountainNo()) == 0) {
-        	   mountain.setMountainTrail(doAllLogic(mountain.getMountainLatitude(),mountain.getMountainLongitude(), mountainName));
-        	   
-        	   //
-        	   //DB에 ADD
-        	   //
-           }else {
-        	   
-           }
-           
-           
-           
-           
-           
            //
-           // 일단 MountainClass에 Mapping & return list
+           // for test
            //
-       }
+           mountain.setMountainImage("testImage");
+           mountain.setMountainDescription("test");
+           mountain.setMountainTrailCount(0);
+           //
+           //
+           //
+           
+           System.out.println(mountain);
+           
+           this.addMountain(mountain);
+
+           mountain.setMountainTrail(doAllLogic(mountain.getMountainLatitude(),mountain.getMountainLongitude(), mountainName));
+        	   
+           
+         }
+           
+           
 //         if (itemObject instanceof JSONArray) {
 //             // item- JSONArray
 ////             item = ((JSONArray)itemObject).getJSONObject(1);

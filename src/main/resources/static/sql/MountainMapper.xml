@@ -11,7 +11,7 @@
         <result property="mountainName" column="MOUNTAIN_NAME"/>
         <result property="mountainLatitude" column="MOUNTAIN_LATITUDE"/>
         <result property="mountainLongitude" column="MOUNTAIN_LONGTITUE"/>
-        <result property="mountainImage" column="MOUNTAIN_IMAGE"/>
+   <!--      <result property="mountainImage" column="MOUNTAIN_IMAGE"/> -->
         <result property="mountainDescription" column="MOUNTAIN_DESCRIPTION"/>
         <result property="mountainAltitude" column="MOUNTAIN_ALTITUDE"/>
         <result property="mountainTrailCount" column="MOUNTAIN_TRAIL_COUNT"/>
@@ -37,12 +37,32 @@
 </resultMap>
 	
 	
-	 <insert id="addMountain" parameterType="site.dearmysanta.domain.mountain.Mountain">
-        INSERT INTO MOUNTAIN (MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGITUDE, MOUNTAIN_IMAGE,
-                              MOUNTAIN_DESCRIPTION, MOUNTAIN_ALTITUDE, MOUNTAIN_TRAIL_COUNT, MOUNTAIN_VIEW_COUNT)
-        VALUES (#{mountainNo}, #{mountainName}, #{mountainLocation}, #{mountainLatitude}, #{mountainLongitude}, #{mountainImage},
-                #{mountainDescription}, #{mountainAltitude}, #{mountainTrailCount}, 1)
-    </insert>
+	<insert id="addMountain" parameterType="site.dearmysanta.domain.mountain.Mountain">
+    INSERT INTO MOUNTAIN (
+        MOUNTAIN_NO, 
+        MOUNTAIN_NAME, 
+        MOUNTAIN_LOCATION, 
+        MOUNTAIN_LATITUDE, 
+        MOUNTAIN_LONGITUDE, 
+        MOUNTAIN_IMAGE,
+        MOUNTAIN_DESCRIPTION, 
+        MOUNTAIN_ALTITUDE, 
+        MOUNTAIN_TRAIL_COUNT, 
+        MOUNTAIN_VIEW_COUNT
+    )
+    VALUES (
+        #{mountainNo, jdbcType=INTEGER}, 
+        #{mountainName, jdbcType=VARCHAR}, 
+        #{mountainLocation, jdbcType=VARCHAR}, 
+        #{mountainLatitude, jdbcType=DOUBLE}, 
+        #{mountainLongitude, jdbcType=DOUBLE}, 
+        #{mountainImage, jdbcType=VARCHAR},
+        #{mountainDescription, jdbcType=VARCHAR}, 
+        #{mountainAltitude, jdbcType=DOUBLE}, 
+        #{mountainTrailCount, jdbcType=INTEGER}, 
+        1
+    )
+</insert>
     
      <update id="updateMountain" parameterType="site.dearmysanta.domain.mountain.Mountain">
         UPDATE MOUNTAIN

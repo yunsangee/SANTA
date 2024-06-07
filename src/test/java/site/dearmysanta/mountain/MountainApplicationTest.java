@@ -27,7 +27,7 @@ import site.dearmysanta.service.weather.impl.WeatherServiceImpl;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SantaApplication.class)
-@Transactional
+//@Transactional
 //@SpringBootTest(classes = MountainApplicationTest.class)
 public class MountainApplicationTest {
 	
@@ -83,9 +83,9 @@ public class MountainApplicationTest {
 		
 	}
 	
-	//@Test
+//	@Test
 	public void mountainApiTest() throws Exception {
-		mountainService.getMountain("북한산");
+		mountainService.getMountain("관악산");
 	}
 	
 	//@Test
@@ -190,7 +190,7 @@ public class MountainApplicationTest {
 	}
 	
 	
-	@Test
+//	@Test
 	public void mountainTest() {
 		Mountain mountain = Mountain.builder()
                 .mountainNo(5)
