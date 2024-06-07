@@ -21,13 +21,15 @@ public interface CertificationPostDao {
 
 	public void updateCertificationPost(CertificationPost certificationPost) throws Exception;
 	
+	public List<CertificationPost> getCertificationPostList() throws Exception;
+	
 	//hashtag
 		
 	//public void addCertificationPostHashtags(CertificationPost certificationPost) throws Exception;
 	
 	public	 void deleteCertificationPostHashtags(int HashtagNo) throws Exception;
 
-	public void addHashTag(int postNo, String certificationPostHashtagContents);
+	public void addHashTag(CertificationPost certificationPost);
 	
 	
 	
@@ -47,7 +49,9 @@ public interface CertificationPostDao {
 
 	public void deleteCertificationPostComment(CertificationPostComment certificationPostComment) throws Exception;
 	
-	public CertificationPostComment getCertificationPostComment(int postNo) throws Exception;
+	public List<CertificationPostComment> getCertificationPostCommentList(int postNo) throws Exception;
+
+	public void addHashTag(int postNo, String hashtagContent);
 
 }
 

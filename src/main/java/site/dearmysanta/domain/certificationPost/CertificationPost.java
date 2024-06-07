@@ -25,7 +25,6 @@ public class CertificationPost extends Post {
 
     private  int certificationPostImage;
       
-    //private int certificationPostNo;
   
     private String certificationPostMountainName;
     private int certificationPostHikingDifficulty;
@@ -33,9 +32,9 @@ public class CertificationPost extends Post {
     private String certificationPostHikingDate;
     private int certificationPostTransportation;
     
+
     private String certificationPostHashtagContents;
 
-    
     
     private String certificationPostTotalTime;
     private String certificationPostDescentTime;

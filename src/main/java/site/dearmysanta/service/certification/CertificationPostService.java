@@ -14,6 +14,9 @@ public interface CertificationPostService {
 	public CertificationPost getCertificationPost(int postNo) throws Exception;
 	public void updateCertificationPost(CertificationPost certificationPost) throws Exception;
 	
+	public List<CertificationPost> getCertificationPostList() throws Exception;
+	
+	
 //	 public  void deleteCertificationPost(int certificationPostNo) throws Exception;
 //	public void deleteCertificationPost();
 //	
@@ -26,7 +29,8 @@ public interface CertificationPostService {
 	//hashtag
 	//public void addCertificationPostHashtags(int postNo, String certificationPostHashtagContents);
 //public void addCertificationPostHashtags(CertificationPost certificationPost) throws Exception ;
-	//public void addHashTag(int postNo, String hashtags);
+	
+	public void addHashTag(CertificationPost certificationPost);
 	public int deleteCertificationPostHashtags(int HashtagNo) throws Exception;
 	
 
@@ -38,8 +42,8 @@ public interface CertificationPostService {
 
 	public void deleteCertificationPostComment(CertificationPostComment certificationPostComment) throws Exception;
 
-	public List<CertificationPostComment> getCertificationPostComment(CertificationPostComment certificationPostComment);
-	
+	public List<CertificationPostComment> getCertificationPostCommentList(int postNo) throws Exception;
+
 	
 	//Like
 	
@@ -50,7 +54,7 @@ public interface CertificationPostService {
 	//public int getTotalCertificationPostLikeCount(Like like);
 	
 	public List<CertificationPost> getCertificationPostLikeList(Like like);
-	
+
 
 
 }

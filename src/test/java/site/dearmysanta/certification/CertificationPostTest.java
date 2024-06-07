@@ -23,9 +23,55 @@ public class CertificationPostTest {
 	@Autowired
 	CertificationPostService certificationPostService;
 	
+	//@Test
+	public void testGetCertificationPostList() throws Exception {
+        List<CertificationPost> certificationPostList = certificationPostService.getCertificationPostList();
+        
+        
+        for (CertificationPost certificationPost : certificationPostList) {
+            SantaLogger.makeLog("info", certificationPost.toString());
+        }
+    }
 
 	
-	@Test
+	 @Test
+	 public void testAddCertificationPostWithTags() throws Exception {
+	     CertificationPost certificationPost = CertificationPost.builder()
+	         .userNo(1)
+	         .title("Test Title@@")
+	         .contents("Test Contents")
+	         .certificationPostMountainName("Mountain")
+	         .certificationPostHikingTrail("Trail")
+	         .certificationPostTotalTime("4:30")
+	         .certificationPostAscentTime("2:00")
+	         .certificationPostDescentTime("2:30")
+	         .certificationPostHikingDate("2024-06-01")
+	         .certificationPostTransportation(1)
+	         .certificationPostHikingDifficulty(1)
+	         .certificationPostHashtagContents("tag1, tag2")
+	         .build();
+
+	     certificationPostService.addCertificationPost(certificationPost);
+	     SantaLogger.makeLog("info", certificationPost.toString());
+
+
+	 }
+
+	 
+
+	// @Test
+	    public void testGetCertificationPostCommentList() throws Exception {
+	        int postNo = 1;
+	        
+	        List<CertificationPostComment> commentList = certificationPostService.getCertificationPostCommentList(postNo);
+	        
+	            for (CertificationPostComment comment : commentList) {
+	            SantaLogger.makeLog("info", comment.toString());
+	        }
+	        
+	    }
+	 
+	//@Test
 	 public void TestgetCertificationPost() throws Exception {
 
 		   CertificationPost certificationPost = new CertificationPost();
@@ -74,29 +120,29 @@ public class CertificationPostTest {
 	
 	
 	//@Test
-	public void testAddCertificationPost() throws Exception {
-	    // CertificationPost 객체를 생성합니다.
-	    CertificationPost certificationPost = CertificationPost.builder()
-	        .userNo(2)
-	        .title("Certification Post")
-	        .contents("This is a certification post.")
-	        .certificationPostMountainName("1111")
-	        .certificationPostHikingTrail("Base Camp")
-	        .certificationPostTotalTime("4:30")
-	        .certificationPostAscentTime("2:00")
-	        .certificationPostDescentTime("2:30")
-	        .certificationPostHikingDate("2024-06-01")
-	        .certificationPostTransportation(1)
-	        .certificationPostHikingDifficulty(1)
-	        .certificationPostHashtagContents( "222")
-	        .build();
-
-	    // addCertificationPost 메서드 호출
-	    certificationPostService.addCertificationPost(certificationPost);
-
-	    // 로그 출력
-	    System.out.println(certificationPost.toString());
-	}
+//	public void testAddCertificationPost() throws Exception {
+//	    // CertificationPost 객체를 생성합니다.
+//	    CertificationPost certificationPost = CertificationPost.builder()
+//	        .userNo(2)
+//	        .title("Certification Post")
+//	        .contents("This is a certification post.")
+//	        .certificationPostMountainName("1111")
+//	        .certificationPostHikingTrail("Base Camp")
+//	        .certificationPostTotalTime("4:30")
+//	        .certificationPostAscentTime("2:00")
+//	        .certificationPostDescentTime("2:30")
+//	        .certificationPostHikingDate("2024-06-01")
+//	        .certificationPostTransportation(1)
+//	        .certificationPostHikingDifficulty(1)
+//	        .certificationPostHashtagContents( "222")
+//	        .build();
+//
+//	    // addCertificationPost 메서드 호출
+//	    certificationPostService.addCertificationPost(certificationPost);
+//
+//	    // 로그 출력
+//	    System.out.println(certificationPost.toString());
+//	}
 
 	
 	

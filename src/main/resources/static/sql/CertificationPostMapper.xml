@@ -42,16 +42,36 @@
 
     </resultMap>
 
+    <select id="getCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
+        SELECT
+            cp_no,
+            user_no,
+            cp_title,
+            cp_content,
+            cp_mountain_name,
+            cp_hiking_trail,
+            cp_total_time,
+            cp_ascent_time,
+            cp_descent_time,
+            cp_hiking_date,
+            cp_creation_date,
+            cp_transportation,
+            cp_difficulty,
+            cp_delete_flag,
+            cp_like_count
+        FROM 
+            CERTIFICATION_POST
+    </select>
+
 
     
-    
     <insert id="addCertificationPost" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
-        <selectKey keyProperty="certificationPostNo" resultType="int" order="BEFORE">
+        <selectKey keyProperty="postNo" resultType="int" order="BEFORE">
             SELECT seq_cp_no.nextval FROM dual
         </selectKey>
         
         INSERT INTO certification_post (
-            cp_no, user_no, cp_type, cp_title, cp_content, cp_mountain_name, 
+            cp_no, user_no, cp_type, cp_title, cp_contents, cp_mountain_name, 
             cp_hiking_trail, cp_total_time, cp_ascent_time, cp_descent_time, 
             cp_hiking_date, cp_creation_date, cp_transportation, cp_difficulty,
             cp_delete_flag, cp_like_count
@@ -77,7 +97,7 @@
     
     <insert id="addHashTag" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
 		INSERT INTO HASHTAG (HASHTAG_NO, CP_NO, HASHTAG_CONTENT)
-		VALUES (seq_HASHTAG_NO.nextva, #{postNo}, #{certificationPostHashtagContents})
+		VALUES (seq_HASHTAG_NO.nextval, #{postNo}, #{certificationPostHashtagContents})
 	</insert>
     
     
@@ -125,12 +145,12 @@
         WHERE hashtag_no = #{certificationPostHashtagContents}
     </delete>
     
-    <!--  
+  
     <select id="getCertificationPostHashtags" parameterType="int" resultMap="CertificationPostSelectMap">
-        SELECT hashtag_no, cp_no, hashtag_content
+        SELECT hashtag_contents
         FROM hashtag
-        WHERE cp_no = #{cpNo}
-    </select>-->
+        WHERE cp_no = #{postNo}
+    </select>
     
     <select id="getCertificationPost" parameterType="int" resultMap="CertificationPostSelectMap">
         SELECT
@@ -171,7 +191,7 @@
                cp_no = #{postNo}
     </update>
     
-    <!-- Like start -->
+    <!-- Like  -->
     <insert id="addCertificationPostLike" parameterType="site.dearmysanta.domain.common.Like">
         INSERT INTO LIKES (LIKE_NO, USER_NO, POST_LIKE_NO, POST_LIKE_TYPE, LIKE_DATE)
         VALUES (seq_like_no.NEXTVAL, #{userNo}, #{postNo}, 0 , SYSDATE)
@@ -197,7 +217,6 @@
 		AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO = c.cp_no
 	</select>
 	
-	<!-- Like end -->
 	
 	<!-- Comment -->
 
@@ -211,17 +230,32 @@
          WHERE USER_NO = #{userNo} AND POST_NO = #{certificationPostNo} AND POST_TYPE_NO=0
     </delete>
     
-	<select id="getCertificationPostComment" parameterType="int" resultMap="certificationPostCommentSelectMap">
+	<select id="getCertificationPostCommentList" parameterType="int" resultMap="certificationPostCommentSelectMap">
     SELECT
-        comment_no,
-        user_no,
-        comment_contents,
-        comment_creation_date
-    FROM
-        comments
-    WHERE
-        post_no = #{postNo}
-</select>
-	
+     	c.post_no,
+        	c.comment_no,
+        	c.comment_contents,
+        	c.comment_creation_date,
+        	u.user_no
+    	FROM 
+        	comments c
+    	JOIN 
+        	users u ON c.user_no = u.user_no
+    	WHERE 
+        	c.post_no = #{postNo} AND c.post_type_no = 0
+	</select>
+
+
+
+<!-- search -->
+
+
+
+
+
+
+
+
+
 
 </mapper>
