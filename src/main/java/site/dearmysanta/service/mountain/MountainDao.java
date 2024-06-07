@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
+import site.dearmysanta.domain.mountain.MountainTrail;
 import site.dearmysanta.domain.mountain.Statistics;
 import site.dearmysanta.domain.user.User;
 
@@ -35,6 +36,9 @@ public interface MountainDao {
 	public int checkMountainExist(int mountainNo);
 	
 	public List<Mountain> getCustomMountainList(User user);
+	
+	
+	public void addMountainTrail(MountainTrail mountainTrail);
 	
 	//
 	//
