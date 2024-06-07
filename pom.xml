@@ -19,12 +19,12 @@
 		<java.version>1.8</java.version>
 	</properties>
 	
-	<repositories>
+	<!--<repositories>
     <repository>
         <id>osgeo</id>
         <url>https://repo.osgeo.org/repository/release/</url>
     </repository>
-</repositories>
+</repositories>-->
 
 	<dependencies>
 		<dependency>
@@ -200,7 +200,7 @@
         <scope>test</scope>
         </dependency>
         
-        <dependency>
+       <!-- <dependency>
         <groupId>org.geotools</groupId>
         <artifactId>gt-main</artifactId>
         <version>24.1</version>
@@ -214,7 +214,7 @@
         <groupId>org.geotools</groupId>
         <artifactId>gt-geojson</artifactId>
         <version>24.1</version>
-    </dependency>
+    </dependency> -->
     
     <dependency>
     <groupId>com.amazonaws</groupId>
