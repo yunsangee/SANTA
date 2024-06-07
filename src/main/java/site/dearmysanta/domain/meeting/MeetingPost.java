@@ -21,7 +21,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString(callSuper=true)
 public class MeetingPost extends Post{
-	private String meetingPostImage; // the post images
+	private int meetingPostImage; // the post images
 	private String meetingName; // name of meeting
 	private Date recruitmentDeadline; // date for the recruitment deadline
     private String appointedDeparture; // expected departure location
