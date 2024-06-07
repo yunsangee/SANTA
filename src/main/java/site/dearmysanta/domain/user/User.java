@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -30,16 +31,16 @@ public class User {
 	private String birthDate;
 	private String phoneNumber;
 	private int gender;
-	private MultipartFile profileImage;
+	private String profileImage;
 	private Date creationDate;
-	private String hikingPurpose;
-	private String hikingDifficulty;
-	private String hikingLevel;
+	private int hikingPurpose;
+	private int hikingDifficulty;
+	private int hikingLevel;
 	private Date withdrawDate;
-	private List<String> withdrawReason;
+	private int withdrawReason;
 	private String withdrawContent;
 	private int role;
-	private MultipartFile badgeImage;
+	private String badgeImage;
 	private int certificationCount;
 	private int meetingCount;
 	private List<String> surveyContent;
