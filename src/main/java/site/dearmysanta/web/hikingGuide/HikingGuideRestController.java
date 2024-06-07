@@ -25,8 +25,11 @@ public class HikingGuideRestController {
     @Autowired
     private WeatherService weatherService;
 
+    private HikingGuide userLocation; // Store the user location
+
     public HikingGuideRestController() {
         System.out.println(this.getClass());
+        this.userLocation = new HikingGuide();  // Initialize the userLocation
     }
 
     @PostMapping(value = "/react/addHikingRecord")
@@ -66,22 +69,33 @@ public class HikingGuideRestController {
         hikingGuideService.deleteHikingRecord(hrNo);
     }
 
-    @GetMapping(value = "/react/getWeatherInfo")
-    public Weather getWeatherInfo(@RequestParam double latitude, @RequestParam double longitude) throws Exception {
-        System.out.println("User location: Latitude: " + latitude + " Longitude: " + longitude);
+    @PostMapping(value = "/react/getWeather")
+    public Weather getWeather() throws Exception {
+        if (userLocation.getUserLatitude() == 0 || userLocation.getUserLongitude() == 0) {
+            throw new IllegalStateException("User coordinates are not set.");
+        }
 
-        Weather weather = weatherService.getWeather(latitude, longitude);
+        System.out.println("User location: Latitude: " + userLocation.getUserLatitude() + " Longitude: " + userLocation.getUserLongitude());
+
+        Weather weather = weatherService.getWeather(userLocation.getUserLatitude(), userLocation.getUserLongitude());
         if (weather == null) {
             throw new IllegalStateException("Weather information could not be retrieved.");
         }
 
         return weather;
     }
+    
+//    @PostMapping(value = "/react/getMountain")
+//    public void getMountain() throws Exception{
+//    	
+//    }
 
     @PostMapping(value = "/react/getUserCoordination")
     public void getUserCoordination(@RequestBody HikingGuide userLocation) {
         System.out.println("Receive user location: " + userLocation.getUserNo() + 
             " Latitude: " + userLocation.getUserLatitude() + 
             " Longitude: " + userLocation.getUserLongitude());
+
+        this.userLocation = userLocation;
     }
 }
