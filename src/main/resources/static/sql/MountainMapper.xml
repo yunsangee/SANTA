@@ -198,14 +198,20 @@
 		COUNT(*) FROM LIKES
 		WHERE POST_LIKE_NO = #{postNo}
 	</select>
+	
+	<!-- parameterType="site.dearmysanta.domain.common.Like" -->
+	<!--  !!!!!! -->
 
 	<select id="getMountainLikeList"
-		parameterType="site.dearmysanta.domain.common.Like"
+		parameterType ="map"
 		resultMap="MountainResultMap">
-		SELECT m.*
-		FROM LIKES l, MOUNTAIN m
-		WHERE l.POST_LIKE_TYPE=2
-		AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO = m.MOUNTAIN_NO
+		
+		SELECT * FROM
+		(
+			SELECT m.*, ROWNUM as ROW_SEQ FROM LIKES l, MOUNTAIN m
+			WHERE l.POST_LIKE_TYPE=2 AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO = m.MOUNTAIN_NO AND ROWNUM <![CDATA[<=]]> #{page} * #{pageSize} 
+		)
+		WHERE ROW_SEQ ((#{page} - 1) * #{pageSize} + 1) AND #{page} * #{pageSize}
 	</select>
 
 
@@ -227,9 +233,18 @@
 		WHERE USER_NO = #{userNo} AND search_date = #{searchDate}
 	</delete>
 	
-	<select id="getSearchKeywordList" parameterType="int" resultMap="MountainSearchResultMap">
+	
+	<!--  !!!!!! -->
+	<select id="getSearchKeywordList" parameterType="map" resultMap="MountainSearchResultMap">
+		
+		SELECT * FROM(
+		
 		SELECT * FROM MOUNTAIN_SEARCH
-		WHERE USER_NO = #{value}
+		WHERE USER_NO = #{value} AND ROWNUM <![CDATA[<=]]> #{page} * #{pageSize} 
+		
+		)
+		
+		WHERE ROW_SEQ ((#{page} - 1) * #{pageSize} + 1) AND #{page} * #{pageSize}
 	</select>
 	
 	<update id="updateSearchSetting" parameterType="map">

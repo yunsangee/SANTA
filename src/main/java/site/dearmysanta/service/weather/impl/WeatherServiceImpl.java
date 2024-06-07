@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import site.dearmysanta.domain.mountain.CoordinateConverter;
 import site.dearmysanta.domain.mountain.Weather;
 import site.dearmysanta.service.weather.WeatherService;
 
@@ -73,8 +74,12 @@ public class WeatherServiceImpl implements WeatherService{
         System.out.println("현재 날짜: " + dateString);
         System.out.println("현재 시간: " + timeString);
         
+        int[] result = CoordinateConverter.convertLatLonToXY(lat, lot);
+        
+        System.out.printf("Latitude: %f, Longitude: %f ---> X: %d, Y: %d\n", lat, lot, result[0], result[1]);
+        
         String url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?ServiceKey="+key+"&pageNo=1&nomOfRows=1000&dataType=JSON"
-				+ "&base_date=" + dateString + "&base_time=" + timeString + "&nx=58" + "&ny=127";
+				+ "&base_date=" + dateString + "&base_time=" + timeString + "&nx="+result[0] + "&ny=" + result[1];
         
         HttpHeaders headers = new HttpHeaders();
 
@@ -83,7 +88,7 @@ public class WeatherServiceImpl implements WeatherService{
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 
-		System.out.println(response);
+		System.out.println("res:" + response);
 
 		JSONObject responseJson = new JSONObject(response.getBody());
 		System.out.println(responseJson);
