@@ -59,9 +59,11 @@ import site.dearmysanta.domain.user.User;
 		
 		public QNA getQnA(int postNo) throws Exception;
 		
-		public List<User> getQnAList() throws Exception;
+		public List<QNA> getQnAList() throws Exception;
 		
-		public void deleteQnA(int postNo) throws Exception;
+		public void addAdminAnswer(int postNo, String adminAnswer);
+		
+		public void deleteQnA(int postNo, int userNo) throws Exception;
 		
 		//
 		//

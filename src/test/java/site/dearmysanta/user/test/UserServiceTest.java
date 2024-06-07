@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -235,17 +236,65 @@ public class UserServiceTest {
 		//@Test
 		public void testAddQnA() throws Exception {
 			
+//			QNA qna = QNA.builder()
+//					//.userNo(13)
+//					.contents("qna add2 content")
+//					.title("qna add2 title")
+//					.qnaPostCategory(1)
+//					.userNo(1)
+//					.adminAnswer("관리자답변2")
+//					.build();
+			
+			//userService.addQnA(qna);
+			
+			QNA qna = userService.getQnA(42); 
+			
+			SantaLogger.makeLog("info", userService.getQnA(42).toString() +"\n");
+		}
+		
+		@Test
+		public void testQnA() throws Exception {
+			List<QNA> list = userService.getQnAList();
+			
+			
+			for(QNA q : list) {
+				System.out.println(q);
+			}
+			
+			System.out.println("==========");
+			///////////////////////////////////////////////////////////////
+			
 			QNA qna = QNA.builder()
-					//.userNo(13)
-					.contents("user2")
-					.title("User2")
-					.userNo(1)
-					.build();
+			//.userNo(13)
+			.contents("qna add22 content")
+			.title("qna add22 title")
+			.qnaPostCategory(1)
+			.userNo(1)
+			.adminAnswer("관리자답변22")
+			.build();
 			
 			userService.addQnA(qna);
 			
-			qna = userService.getQnA(1); 
+			userService.addAdminAnswer(45, "김남주바보");
 			
-			SantaLogger.makeLog("info", userService.getQnA(1).toString() +"\n");
+			list = userService.getQnAList();
+			
+			for(QNA q : list) {
+				System.out.println(q);
+			}
+			System.out.println("==========");
+			
+			////////////////////////////////////////////////////////////////
+			
+			userService.deleteQnA(45, 1);
+			
+			list = userService.getQnAList();
+			
+			
+			for(QNA q : list) {
+				System.out.println(q);
+			}
+			
+			
 		}
 }

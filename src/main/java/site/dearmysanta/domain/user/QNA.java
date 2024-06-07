@@ -20,7 +20,7 @@ import site.dearmysanta.domain.common.Post;
 public class QNA extends Post {
 	
 	private String adminAnswer;
-	private List<String> qnaPostCategory;
+	private int qnaPostCategory;
 	private String answerState;
 
 }

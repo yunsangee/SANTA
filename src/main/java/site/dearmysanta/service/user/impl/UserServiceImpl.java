@@ -176,15 +176,18 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public List<User> getQnAList() throws Exception {
+	public List<QNA> getQnAList() throws Exception {
 		// TODO Auto-generated method stub
 		return userDao.getQnAList();
 	}
 
+	public void addAdminAnswer(int postNo, String adminAnswer) {
+		userDao.addAdminAnswer(postNo, adminAnswer);
+	}
 	@Override
-	public void deleteQnA(int postNo) throws Exception {
+	public void deleteQnA(int postNo, int userNo) throws Exception {
 		// TODO Auto-generated method stub
-		userDao.deleteQnA(postNo);
+		userDao.deleteQnA(postNo, userNo);
 	}
 
 	@Override
