@@ -72,5 +72,14 @@ public class HikingGuideRestController {
     public MountainInfo getMountainInfo() throws Exception {
         return hikingGuideService.getMountainInfo();
     }
+    
+    @PostMapping(value = "/react/getUserCoordination")
+    public void getUserCoordination(@RequestBody HikingGuide userLocation) {
+        System.out.println("Receive user location: " + userLocation.getUserNo() + 
+            " Latitude: " + userLocation.getUserLatitude() + 
+            " Longitude: " + userLocation.getUserLongitude());
+      
+    }
         
+    
 }
