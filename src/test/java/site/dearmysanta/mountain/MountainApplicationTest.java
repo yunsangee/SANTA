@@ -1,5 +1,6 @@
 package site.dearmysanta.mountain;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -87,6 +88,16 @@ public class MountainApplicationTest {
 	public void mountainApiTest() throws Exception {
 		mountainService.getMountain("관악산");
 	}
+	
+	@Test
+	public void getmountainTest() throws Exception{
+		List<Mountain> mountain = mountainService.getMountainListByCoord( Double.valueOf(37.4979), Double.valueOf(127.0276));
+		
+		for(Mountain mt: mountain) {
+			System.out.println(mt);
+		}
+	}
+	
 	
 	//@Test
 	public void weatherTest() throws Exception {
@@ -191,7 +202,7 @@ public class MountainApplicationTest {
 	
 	
 //	@Test
-	public void mountainTest() {
+	public void mountainTest() throws IOException {
 		Mountain mountain = Mountain.builder()
                 .mountainNo(5)
                 .mountainName("jirisan")

@@ -20,9 +20,10 @@ import lombok.ToString;
 public class MountainTrail {
 	
 	private int mountainTrailNo;
+	private int mountainNo;
 	private String mountainName;
 	private String coordinatesUrl; // trail_coordinate_url
-	private List mountainTrailCoordinates;
+	private List<List<Double>> mountainTrailCoordinates;
 	
 	private String mountainTrailDifficulty;
 	private double mountainTrailLength;
