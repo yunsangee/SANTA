@@ -41,5 +41,19 @@ public interface MeetingDAO {
 	
 	public List<MeetingPostComment> getMeetingPostCommentList(int postNo) throws Exception;
 	
-
+	public void insertMeetingParticipation(MeetingParticipation meetingParticipation) throws Exception;
+	
+	public void deleteMeetingParticipation(int participationNo) throws Exception;
+	
+	public void updateMeetingParticipationStatus(int participationNo) throws Exception;
+	
+	public void updateMeetingParticipationWithdrawStatus(int participationNo) throws Exception;
+	
+	public void updateMeetingPostRecruitmentStatus(MeetingPost meetingPost) throws Exception;
+	
+	public void updateMeetingPostRecruitmentStatusToEnd(int postNo) throws Exception;
+	
+	public void updateMeetingPostDeletedStatus(int postNo) throws Exception;
+	
+	public void updateMeetingPostCertifiedStatus(int postNo) throws Exception;
 }

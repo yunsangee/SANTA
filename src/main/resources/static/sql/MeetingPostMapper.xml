@@ -14,6 +14,8 @@
     </resultMap>
 
 	<resultMap id="meetingParticipationSelectMap" type="site.dearmysanta.domain.meeting.MeetingParticipation">
+		<result property="participationNo"			column="participation_no"		jdbcType="NUMERIC"/>
+		<result property="postNo"					column="mp_no"					jdbcType="NUMERIC"/>
         <result property="userNo" 					column="participation_no" 		jdbcType="NUMERIC"/>
         <result property="profileImage" 			column="profile_image" 			jdbcType="VARCHAR"/>
         <result property="nickname" 				column="nickname" 				jdbcType="VARCHAR"/>
@@ -181,7 +183,60 @@
         	c.post_no = #{postNo} AND c.post_type = 1
 	</select>
 	
+	<insert id="insertMeetingParticipation" parameterType="site.dearmysanta.domain.meeting.MeetingParticipation">
+        INSERT INTO meeting_participation (
+            post_no,
+            user_no,
+            participation_status,
+            participation_role,
+        ) VALUES (
+            #{postNo},
+            #{userNo}, 
+            #{participationStatus},
+            #{participationRole},
+        )
+    </insert>
     
+    <delete id="deleteMeetingParticipation" parameterType="int">
+    	DELETE FROM meeting_participation
+    	WHERE participation_no = #{participationNo}
+	</delete>
     
-
+	<update id="updateMeetingParticipationStatus" parameterType="int">
+    	UPDATE meeting_participation
+    	SET participation_status = 1,
+        	participation_role = 1
+    	WHERE participation_no = #{participationNo}
+	</update>
+	
+	<update id="updateMeetingParticipationWithdrawStatus" parameterType="int">
+    	UPDATE meeting_participation
+    	SET withdraw_flag = 1
+    	WHERE participation_no = #{participationNo}
+	</update>
+	
+	<update id="updateMeetingPostRecruitmentStatus" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
+    	UPDATE meeting_post
+    	SET recruitment_status = #{recruitmentStatus}
+    	WHERE mp_no = #{postNo}
+	</update>
+	
+	<update id="updateMeetingPostRecruitmentStatusToEnd" parameterType="int">
+    	UPDATE meeting_post
+    	SET recruitment_status = 2
+    	WHERE mp_no = #{postNo}
+	</update>
+	
+	<update id="updateMeetingPostDeletedStatus" parameterType="int">
+    	UPDATE meeting_post
+    	SET mp_deleted_flag = 1
+    	WHERE mp_no = #{postNo}
+	</update>
+	
+	<update id="updateMeetingPostCertifiedStatus" parameterType="int">
+    	UPDATE meeting_post
+    	SET mp_certified_flag = 1
+    	WHERE mp_no = #{postNo}
+	</update>
+	
 </mapper>
