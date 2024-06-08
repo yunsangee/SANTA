@@ -41,38 +41,10 @@
         <result property="certificationPostCommentCreationDate" column="comment_creation_date" jdbcType="DATE"/>
 
     </resultMap>
-
-<!-- 사진만보여줘야하는데 일단 글제목보여주기 -->
-<select id="getMyCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
-
-      select cp_title from certification_post where user_no =#{userNo} AND cp_type = 0
- </select>
-
-
-
-    <select id="getCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
-        SELECT
-            cp_no,
-            user_no,
-            cp_title,
-            cp_contents,
-            cp_mountain_name,
-            cp_hiking_trail,
-            cp_total_time,
-            cp_ascent_time,
-            cp_descent_time,
-            cp_hiking_date,
-            cp_creation_date,
-            cp_transportation,
-            cp_difficulty,
-            cp_delete_flag,
-            cp_like_count
-        FROM 
-            CERTIFICATION_POST
-    </select>
-
-
     
+   <!-- post -->
+
+ 
     <insert id="addCertificationPost" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
         <selectKey keyProperty="postNo" resultType="int" order="BEFORE">
             SELECT seq_cp_no.nextval FROM dual
@@ -103,63 +75,6 @@
         )
     </insert>
     
-    <insert id="addHashTag" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
-		INSERT INTO HASHTAG (HASHTAG_NO, CP_NO, HASHTAG_CONTENT)
-		VALUES (seq_HASHTAG_NO.nextval, #{postNo}, #{certificationPostHashtagContents})
-	</insert>
-    
-    
-    
-    
-<!-- 
-    <insert id="addCertificationPost" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
-        INSERT INTO certification_post (
-            cp_no, user_no, cp_type, cp_title, cp_contents, cp_mountain_name, 
-            cp_hiking_trail, cp_total_time, cp_ascent_time, cp_descent_time, 
-            cp_hiking_date, cp_creation_date, cp_transportation, cp_difficulty,
-            cp_delete_flag
-        ) VALUES (
-            seq_cp_no.nextval,
-            #{userNo}, 
-            0, 
-            #{title}, 
-            #{contents}, 
-            #{certificationPostMountainName}, 
-            #{certificationPostHikingTrail}, 
-            #{certificationPostTotalTime}, 
-            #{certificationPostAscentTime}, 
-            #{certificationPostDescentTime}, 
-            #{certificationPostHikingDate}, 
-            SYSDATE, 
-            #{certificationPostTransportation}, 
-            #{certificationPostHikingDifficulty},
-            0
-            
-        )
-    </insert>
- -->
-    <!-- Hashtag
-    <insert id="addCertificationPostHashtags" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
-        INSERT INTO hashtag (hashtag_no, cp_no, hashtag_content)
-        VALUES(
-  	        seq_hashtag_no.nextval,
-  	        #{postNo},
-  	        #{certificationPostHashtagContents}
-  	    )
-    </insert>
- -->
-    <delete id="deleteCertificationPostHashtags" parameterType="int">
-        DELETE FROM hashtag
-        WHERE hashtag_content = #{certificationPostHashtagContents}
-    </delete>
-    
-  
-    <select id="getCertificationPostHashtags" parameterType="int" resultMap="CertificationPostSelectMap">
-        SELECT hashtag_contents
-        FROM hashtag
-        WHERE cp_no = #{postNo}
-    </select>
-    
     <select id="getCertificationPost" parameterType="int" resultMap="CertificationPostSelectMap">
         SELECT
             cp_no,
@@ -182,6 +97,34 @@
             cp_no = #{postNo}
     </select>
     
+    <!-- 사진만보여줘야하는데 일단 글제목보여주기 -->
+<select id="getMyCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
+
+      select cp_title from certification_post where user_no =#{userNo} AND cp_type = 0
+ </select>
+<!-- 
+    <select id="getCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
+        SELECT
+            cp_no,
+            user_no,
+            cp_title,
+            cp_contents,
+            cp_mountain_name,
+            cp_hiking_trail,
+            cp_total_time,
+            cp_ascent_time,
+            cp_descent_time,
+            cp_hiking_date,
+            cp_creation_date,
+            cp_transportation,
+            cp_difficulty,
+            cp_delete_flag,
+            cp_like_count
+        FROM 
+            CERTIFICATION_POST
+    </select>
+   -->
+    
     <update id="updateCertificationPost" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
         UPDATE certification_post
         SET
@@ -199,12 +142,47 @@
                cp_no = #{postNo}
     </update>
     
+    
+    
+    
+    
+    <!-- hashtag -->
+        <insert id="addHashtag" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
+		INSERT INTO HASHTAG (HASHTAG_NO, CP_NO, HASHTAG_CONTENT)
+		VALUES (seq_HASHTAG_NO.nextval, #{postNo}, #{certificationPostHashtagContents})
+	</insert>
+    
+    
+    <delete id="deleteHashtag" parameterType="int">
+        DELETE FROM hashtag
+        WHERE hashtag_content = #{certificationPostHashtagContents}
+    </delete>
+    
+  
+    <select id="getHashtag" parameterType="int" resultMap="CertificationPostSelectMap">
+        SELECT hashtag_content
+        FROM hashtag
+        WHERE cp_no = #{postNo}
+    </select>
+    
     <!-- Like  -->
     <insert id="addCertificationPostLike" parameterType="site.dearmysanta.domain.common.Like">
         INSERT INTO LIKES (LIKE_NO, USER_NO, POST_LIKE_NO, POST_LIKE_TYPE, LIKE_DATE)
         VALUES (seq_like_no.NEXTVAL, #{userNo}, #{postNo}, 0 , SYSDATE)
     </insert>
     
+
+   <update id="updateLikeCount" parameterType="map">
+        UPDATE certification_post
+        SET cp_like_count = (
+            SELECT COUNT(*)
+            FROM likes
+            WHERE post_like_no = #{postNo} AND post_like_type = 0
+        )
+        WHERE cp_no = #{postNo}
+    </update>
+
+
     <delete id="deleteCertificationPostLike" parameterType="site.dearmysanta.domain.common.Like">
         DELETE FROM LIKES
         WHERE USER_NO = #{userNo} AND POST_LIKE_NO = #{postNo} AND POST_LIKE_TYPE=0
@@ -226,6 +204,8 @@
 	</select>
 	
 	
+	
+	
 	<!-- Comment -->
 
 		<insert id="addCertificationPostComment" parameterType="site.dearmysanta.domain.certificationPost.CertificationPostComment">
@@ -238,29 +218,57 @@
          WHERE USER_NO = #{userNo} AND POST_NO = #{certificationPostNo} AND POST_TYPE_NO=0
     </delete>
     
-	<select id="getCertificationPostCommentList" parameterType="int" resultMap="certificationPostCommentSelectMap">
-    SELECT
-     	c.post_no,
+
+<select id="getCertificationPostCommentList" parameterType="int" resultMap="certificationPostCommentSelectMap">
+    	SELECT 
+        	c.post_no,
         	c.comment_no,
         	c.comment_contents,
         	c.comment_creation_date,
-        	u.user_no
+        	u.user_no,
+        	u.nickname,
+        	u.profile_image
     	FROM 
         	comments c
     	JOIN 
         	users u ON c.user_no = u.user_no
     	WHERE 
-        	c.post_no = #{postNo} AND c.post_type_no = 0
+        	c.post_no = #{postNo} AND c.post_type = 0
 	</select>
 
-
-
 <!-- search -->
-
-
-
-
-
+<!---->
+ <select id="getCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="map">
+       SELECT * FROM certification_post
+    <where>
+        <choose>
+            <when test="searchCondition == 0 and searchKeyword != ''">
+                cp_title LIKE '%' || #{searchKeyword} || '%'
+            </when>
+            <when test="searchCondition == 1 and searchKeyword != ''">
+                nickname LIKE '%' || #{searchKeyword} || '%'
+            </when>
+            <when test="searchCondition == 6 and searchKeyword != ''">
+                user_no = #{searchKeyword}
+            </when>
+            <!-- 다른 검색 조건 추가 가능 -->
+        </choose>
+    </where>
+    <choose>
+        <when test="searchCondition == 4">
+            ORDER BY cp_like_count DESC
+        </when>
+        <when test="searchCondition == 5">
+            ORDER BY cp_like_count ASC
+        </when>
+        <when test="searchCondition == 2">
+            ORDER BY cp_difficulty DESC
+        </when>
+        <when test="searchCondition == 3">
+            ORDER BY cp_difficulty ASC
+        </when>
+    </choose>
+</select>
 
 
 

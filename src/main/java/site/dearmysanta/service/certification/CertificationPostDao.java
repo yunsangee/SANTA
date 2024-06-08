@@ -5,9 +5,14 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
+
 import site.dearmysanta.domain.certificationPost.CertificationPost;
 import site.dearmysanta.domain.certificationPost.CertificationPostComment;
+
 import site.dearmysanta.domain.common.Like;
+import site.dearmysanta.domain.common.Search;
+
+
 
 
 @Mapper
@@ -21,16 +26,18 @@ public interface CertificationPostDao {
 
 	public void updateCertificationPost(CertificationPost certificationPost) throws Exception;
 	
-	public List<CertificationPost> getCertificationPostList() throws Exception;
+//	public List<CertificationPost> getCertificationPostList() throws Exception;
+	public List<CertificationPost> getCertificationPostList(Search search) throws Exception;
+	
 	public List<CertificationPost> getMyCertificationPostList(int usrNo) throws Exception;
 	
-	//hashtag
-		
-	//public void addCertificationPostHashtags(CertificationPost certificationPost) throws Exception;
 	
-	public	 void deleteCertificationPostHashtags(int HashtagNo) throws Exception;
-
-	public void addHashTag(CertificationPost certificationPost);
+	//hashtag
+	public void addHashtag(CertificationPost certificationPost);
+	
+	public	 void deleteHashtag(int HashtagNo) throws Exception;
+	
+	public CertificationPost getHashtag(int postNo) throws Exception;
 	
 	
 	
@@ -39,20 +46,24 @@ public interface CertificationPostDao {
 	
 	public void deleteCertificationPostLike(Like like);
 	
+	public void updateLikeCount(Like like);
+	
 	public int getCertificationPostLikeCount(int postNo);
 	
 	public List<CertificationPost> getCertificationPostLikeList(Like like);
 
 	
 	//Comment
-	
 	public void addCertificationPostComment(CertificationPostComment certificationPostComment) throws Exception;
 
 	public void deleteCertificationPostComment(CertificationPostComment certificationPostComment) throws Exception;
 	
-	//public List<CertificationPostComment> getCertificationPostCommentList(int postNo) throws Exception;
+	public List<CertificationPostComment> getCertificationPostCommentList(int postNo) throws Exception;
 
-//	public void addHashTag(int postNo, String hashtagContent);
+	
+	//Search
+	//public List<CertificationPostSearch> getCertificationPostSearch(int certificationPostListSearchCondition);
+	
 
 }
 
