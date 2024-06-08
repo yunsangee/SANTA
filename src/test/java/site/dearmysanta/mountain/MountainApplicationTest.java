@@ -1,5 +1,6 @@
 package site.dearmysanta.mountain;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -27,7 +28,7 @@ import site.dearmysanta.service.weather.impl.WeatherServiceImpl;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SantaApplication.class)
-@Transactional
+//@Transactional
 //@SpringBootTest(classes = MountainApplicationTest.class)
 public class MountainApplicationTest {
 	
@@ -83,17 +84,29 @@ public class MountainApplicationTest {
 		
 	}
 	
-	//@Test
+//	@Test
 	public void mountainApiTest() throws Exception {
-		mountainService.getMountain("북한산");
+		mountainService.getMountain("관악산");
 	}
 	
-	//@Test
+//	@Test
+	public void getmountainTest() throws Exception{
+		List<Mountain> mountain = mountainService.getMountainListByCoord( Double.valueOf(37.4979), Double.valueOf(127.0276));
+		
+		for(Mountain mt: mountain) {
+			System.out.println(mt);
+		}
+	}
+	
+	
+	@Test
 	public void weatherTest() throws Exception {
 		WeatherService ws = new WeatherServiceImpl();
 		
-//		ws.getWeather(37.445044, 126.964223);
-		ws.getWeatherList();
+		ws.getWeather(37.445044, 126.964223); //gangnam
+		
+//		ws.getWeather(35.192975, 129.093388888888);
+//		ws.getWeatherList();
 	}
 	
 	
@@ -190,8 +203,8 @@ public class MountainApplicationTest {
 	}
 	
 	
-	@Test
-	public void mountainTest() {
+//	@Test
+	public void mountainTest() throws IOException {
 		Mountain mountain = Mountain.builder()
                 .mountainNo(5)
                 .mountainName("jirisan")

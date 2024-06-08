@@ -6,16 +6,31 @@
 
 <mapper namespace="site.dearmysanta.service.mountain.MountainDao">
 
+<resultMap id="MountainTrailResultMap" type="site.dearmysanta.domain.mountain.MountainTrail">
+    <id property="mountainTrailNo" column="MOUNTAIN_TRAIL_NO"/>
+    <result property="mountainNo" column="MOUNTAIN_NO"/>
+    <result property="mountainName" column="MOUNTAIN_NAME"/>
+    <result property="coordinatesUrl" column="MOUNTAIN_COORDINATES"/>
+    <result property="mountainTrailDifficulty" column="MOUNTAIN_TRAIL_DIFFICULTY"/>
+    <result property="mountainTrailLength" column="MOUNTAIN_TRAIL_LENGTH"/>
+    <result property="expectedAscentTime" column="EXPECTED_ASCENT_TIME"/>
+    <result property="descentTime" column="EXPECTED_DESCENT_TIME"/>
+    <result property="isClosed" column="IS_CLOSED"/>
+</resultMap>
+
+
 	<resultMap id="MountainResultMap" type="site.dearmysanta.domain.mountain.Mountain">
         <id property="mountainNo" column="MOUNTAIN_NO"/>
         <result property="mountainName" column="MOUNTAIN_NAME"/>
         <result property="mountainLatitude" column="MOUNTAIN_LATITUDE"/>
-        <result property="mountainLongitude" column="MOUNTAIN_LONGTITUE"/>
-        <result property="mountainImage" column="MOUNTAIN_IMAGE"/>
+        <result property="mountainLongitude" column="MOUNTAIN_LONGITUDE"/>
+   <!--      <result property="mountainImage" column="MOUNTAIN_IMAGE"/> -->
+   		<result property="mountainLocation" column="MOUNTAIN_LOCATION"/>
         <result property="mountainDescription" column="MOUNTAIN_DESCRIPTION"/>
         <result property="mountainAltitude" column="MOUNTAIN_ALTITUDE"/>
         <result property="mountainTrailCount" column="MOUNTAIN_TRAIL_COUNT"/>
         <result property="mountainViewCount" column="MOUNTAIN_VIEW_COUNT"/>
+         <association property="mountainTrail" resultMap="MountainTrailResultMap"/>
     </resultMap>
 	
 	<resultMap id="MountainSearchResultMap" type="site.dearmysanta.domain.mountain.MountainSearch">
@@ -37,12 +52,32 @@
 </resultMap>
 	
 	
-	 <insert id="addMountain" parameterType="site.dearmysanta.domain.mountain.Mountain">
-        INSERT INTO MOUNTAIN (MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGITUDE, MOUNTAIN_IMAGE,
-                              MOUNTAIN_DESCRIPTION, MOUNTAIN_ALTITUDE, MOUNTAIN_TRAIL_COUNT, MOUNTAIN_VIEW_COUNT)
-        VALUES (#{mountainNo}, #{mountainName}, #{mountainLocation}, #{mountainLatitude}, #{mountainLongitude}, #{mountainImage},
-                #{mountainDescription}, #{mountainAltitude}, #{mountainTrailCount}, 1)
-    </insert>
+	<insert id="addMountain" parameterType="site.dearmysanta.domain.mountain.Mountain">
+    INSERT INTO MOUNTAIN (
+        MOUNTAIN_NO, 
+        MOUNTAIN_NAME, 
+        MOUNTAIN_LOCATION, 
+        MOUNTAIN_LATITUDE, 
+        MOUNTAIN_LONGITUDE, 
+        MOUNTAIN_IMAGE,
+        MOUNTAIN_DESCRIPTION, 
+        MOUNTAIN_ALTITUDE, 
+        MOUNTAIN_TRAIL_COUNT, 
+        MOUNTAIN_VIEW_COUNT
+    )
+    VALUES (
+        #{mountainNo, jdbcType=NUMERIC}, 
+        #{mountainName, jdbcType=VARCHAR}, 
+        #{mountainLocation, jdbcType=VARCHAR}, 
+        #{mountainLatitude, jdbcType=DOUBLE}, 
+        #{mountainLongitude, jdbcType=DOUBLE}, 
+        #{mountainImage, jdbcType=VARCHAR},
+        #{mountainDescription, jdbcType=VARCHAR}, 
+        #{mountainAltitude, jdbcType=DOUBLE}, 
+        #{mountainTrailCount, jdbcType=NUMERIC}, 
+        1
+    )
+</insert>
     
      <update id="updateMountain" parameterType="site.dearmysanta.domain.mountain.Mountain">
         UPDATE MOUNTAIN
@@ -67,12 +102,36 @@
         WHERE MOUNTAIN_NO = #{mountainNo}
     </select>
     
-    <select id="getMountainListByAddress" parameterType="String" resultMap="MountainResultMap">
+   <!--  <select id="getMountainListByAddress" parameterType="String" resultMap="MountainResultMap">
     	SELECT MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGITUDE, MOUNTAIN_IMAGE,
                MOUNTAIN_DESCRIPTION, MOUNTAIN_ALTITUDE, MOUNTAIN_TRAIL_COUNT, MOUNTAIN_VIEW_COUNT
         FROM MOUNTAIN
         WHERE MOUNTAIN_LOCATION LIKE '%'||#{address}||'%'
-    </select>
+    </select> -->
+    
+    <select id="getMountainListByAddress" parameterType="String" resultMap="MountainResultMap">
+    SELECT
+        m.MOUNTAIN_NO AS MOUNTAIN_NO,
+        m.MOUNTAIN_NAME AS MOUNTAIN_NAME,
+        m.MOUNTAIN_LATITUDE AS MOUNTAIN_LATITUDE,
+        m.MOUNTAIN_LONGITUDE AS MOUNTAIN_LONGITUDE,
+        m.MOUNTAIN_LOCATION AS MOUNTAIN_LOCATION,
+        m.MOUNTAIN_IMAGE AS MOUNTAIN_IMAGE,
+        m.MOUNTAIN_DESCRIPTION AS MOUNTAIN_DESCRIPTION,
+        m.MOUNTAIN_ALTITUDE AS MOUNTAIN_ALTITUDE,
+        m.MOUNTAIN_TRAIL_COUNT AS MOUNTAIN_TRAIL_COUNT,
+        m.MOUNTAIN_VIEW_COUNT AS MOUNTAIN_VIEW_COUNT,
+        t.MOUNTAIN_TRAIL_NO AS MOUNTAIN_TRAIL_NO,
+        t.MOUNTAIN_COORDINATES AS MOUNTAIN_COORDINATES,
+        t.MOUNTAIN_TRAIL_DIFFICULTY AS MOUNTAIN_TRAIL_DIFFICULTY,
+        t.MOUNTAIN_TRAIL_LENGTH AS MOUNTAIN_TRAIL_LENGTH,
+        t.EXPECTED_ASCENT_TIME AS EXPECTED_ASCENT_TIME,
+        t.EXPECTED_DESCENT_TIME AS EXPECTED_DESCENT_TIME,
+        t.IS_CLOSED AS IS_CLOSED
+    FROM MOUNTAIN m, MOUNTAIN_TRAIL t
+ WHERE m.MOUNTAIN_NO = t.MOUNTAIN_NO(+) AND m.MOUNTAIN_LOCATION LIKE '%'||#{address}||'%'
+</select>
+    
     
     <select id="getMountainListByName" parameterType="String" resultMap="MountainResultMap">
     	SELECT MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGITUDE, MOUNTAIN_IMAGE,
@@ -86,6 +145,33 @@
     	SELECT COUNT(*) FROM MOUNTAIN
     	WHERE MOUNTAIN_NO = #{mountainNo}
     </select>
+    
+    
+    <insert id="addMountainTrail" parameterType="site.dearmysanta.domain.mountain.MountainTrail">
+    INSERT INTO MOUNTAIN_TRAIL (
+        MOUNTAIN_TRAIL_NO,
+        MOUNTAIN_NO,
+        MOUNTAIN_TRAIL_NAME,
+        MOUNTAIN_COORDINATES,
+        MOUNTAIN_TRAIL_DIFFICULTY,
+        MOUNTAIN_TRAIL_LENGTH,
+        EXPECTED_ASCENT_TIME,
+        EXPECTED_DESCENT_TIME,
+        IS_CLOSED
+    )
+    VALUES (
+        seq_mountain_trail_no.NEXTVAL,
+        #{mountainNo, jdbcType=NUMERIC},
+        #{mountainName},
+        #{coordinatesUrl, jdbcType=VARCHAR},
+<!--         #{mountainTrailDifficulty, jdbcType=VARCHAR}, -->
+		0,
+        #{mountainTrailLength, jdbcType=DOUBLE},
+        #{expectedAscentTime, jdbcType=INTEGER},
+        #{descentTime, jdbcType=INTEGER},
+        0
+    )
+</insert>
     
     
     
@@ -112,14 +198,20 @@
 		COUNT(*) FROM LIKES
 		WHERE POST_LIKE_NO = #{postNo}
 	</select>
+	
+	<!-- parameterType="site.dearmysanta.domain.common.Like" -->
+	<!--  !!!!!! -->
 
 	<select id="getMountainLikeList"
-		parameterType="site.dearmysanta.domain.common.Like"
+		parameterType ="map"
 		resultMap="MountainResultMap">
-		SELECT m.*
-		FROM LIKES l, MOUNTAIN m
-		WHERE l.POST_LIKE_TYPE=2
-		AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO = m.MOUNTAIN_NO
+		
+		SELECT * FROM
+		(
+			SELECT m.*, ROWNUM as ROW_SEQ FROM LIKES l, MOUNTAIN m
+			WHERE l.POST_LIKE_TYPE=2 AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO = m.MOUNTAIN_NO AND ROWNUM <![CDATA[<=]]> #{page} * #{pageSize} 
+		)
+		WHERE ROW_SEQ ((#{page} - 1) * #{pageSize} + 1) AND #{page} * #{pageSize}
 	</select>
 
 
@@ -141,9 +233,18 @@
 		WHERE USER_NO = #{userNo} AND search_date = #{searchDate}
 	</delete>
 	
-	<select id="getSearchKeywordList" parameterType="int" resultMap="MountainSearchResultMap">
+	
+	<!--  !!!!!! -->
+	<select id="getSearchKeywordList" parameterType="map" resultMap="MountainSearchResultMap">
+		
+		SELECT * FROM(
+		
 		SELECT * FROM MOUNTAIN_SEARCH
-		WHERE USER_NO = #{value}
+		WHERE USER_NO = #{value} AND ROWNUM <![CDATA[<=]]> #{page} * #{pageSize} 
+		
+		)
+		
+		WHERE ROW_SEQ ((#{page} - 1) * #{pageSize} + 1) AND #{page} * #{pageSize}
 	</select>
 	
 	<update id="updateSearchSetting" parameterType="map">
