@@ -103,7 +103,9 @@ public class MountainApplicationTest {
 	public void weatherTest() throws Exception {
 		WeatherService ws = new WeatherServiceImpl();
 		
-		ws.getWeather(37.445044, 126.964223);
+		ws.getWeather(37.445044, 126.964223); //gangnam
+		
+//		ws.getWeather(35.192975, 129.093388888888);
 //		ws.getWeatherList();
 	}
 	

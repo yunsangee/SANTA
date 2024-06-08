@@ -19,7 +19,8 @@ import site.dearmysanta.domain.common.Search;
 @ToString
 public class Weather {
 	private String skyCondition; //SKY
-	private int temperature; // TMN(min) , TMX(max)
+	private int temperature; 
+	private List<Integer> minMaxTemperature;// TMN(min) , TMX(max)
 	private String sunriseTime;
 	private String sunsetTime;
 	
