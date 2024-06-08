@@ -30,21 +30,28 @@ public class CertificationPostTest {
 //	@Autowired
 //	CertificationPostDao certificationPostDao;
 
+//	@Test
+//    public void testGetCertificationPostList() throws Exception {
+//        Search search = new Search();
+//         search.setSearchCondition(4);
+//     //  search.setSearchKeyword("F");
+//
+//        Map<String, Object> result = certificationPostService.getCertificationPostList(search);
+//        List<CertificationPost> certificationPosts = (List<CertificationPost>) result.get("list");
+//
+//        for (CertificationPost post : certificationPosts) {
+//            SantaLogger.makeLog("info", result.toString());
+//
+//        }
+//    }
 	@Test
-    public void testGetCertificationPostList() throws Exception {
-        Search search = new Search();
-         search.setSearchCondition(4);
-     //  search.setSearchKeyword("F");
-
-        Map<String, Object> result = certificationPostService.getCertificationPostList(search);
-        List<CertificationPost> certificationPosts = (List<CertificationPost>) result.get("list");
-
-        for (CertificationPost post : certificationPosts) {
-            SantaLogger.makeLog("info", result.toString());
-
-        }
-    }
-	
+	public void testgetCertification() throws Exception {
+		
+		Map<String, Object> certificationPost = certificationPostService.getCertificationPost(1);
+		
+		SantaLogger.makeLog("info", certificationPost.toString());
+		
+	}
 	
 	 //@Test
 	    public void testMyCertificationPostList() throws Exception {
@@ -117,25 +124,25 @@ public class CertificationPostTest {
 //	        
 //	    }
 	 	//@Test
-	 public void TestgetCertificationPost() throws Exception {
-
-		   CertificationPost certificationPost = new CertificationPost();
-		   
-		   certificationPost = certificationPostService.getCertificationPost(2);
-				  
-	        SantaLogger.makeLog("info", certificationPost.toString());
-	 }
-	
-	//@Test
-	 public void Testhashtag() throws Exception {
-
-		   CertificationPost certificationPost = new CertificationPost();
-		   
-		   certificationPost = certificationPostService.getHashtag(2);
-				  
-	        SantaLogger.makeLog("info", certificationPost.toString());
-	 
-	}
+//	 public void TestgetCertificationPost() throws Exception {
+//
+//		   CertificationPost certificationPost = new CertificationPost();
+//		   
+//		   certificationPost = certificationPostService.getCertificationPost(2);
+//				  
+//	        SantaLogger.makeLog("info", certificationPost.toString());
+//	 }
+//	
+//	//@Test
+//	 public void Testhashtag() throws Exception {
+//
+//		   CertificationPost certificationPost = new CertificationPost();
+//		   
+//		   certificationPost = certificationPostService.getHashtag(2);
+//				  
+//	        SantaLogger.makeLog("info", certificationPost.toString());
+//	 
+//	}
 //	@Test
 //	public void testDeleteCertificationPostComment() throws Exception {
 //	    // 댓글을 삭제할 사용자 번호, 댓글 번호, 게시물 번호를 설정합니다.

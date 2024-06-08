@@ -16,11 +16,9 @@ public interface CertificationPostService {
 	//post
 	public void addCertificationPost(CertificationPost certificationPost) throws Exception;
 	
-	public CertificationPost getCertificationPost(int postNo) throws Exception;
+	public Map<String, Object> getCertificationPost(int postNo) throws Exception;
 	
 	public void updateCertificationPost(CertificationPost certificationPost) throws Exception;
-	
-	//public List<CertificationPost> getCertificationPostList() throws Exception;
 
 	public Map<String, Object> getCertificationPostList(Search search) throws Exception;
 	
@@ -31,7 +29,7 @@ public interface CertificationPostService {
 	
 	public void deleteHashtag(int HashtagNo) throws Exception;
 	
-	public CertificationPost getHashtag(int postNo) throws Exception;
+	//public CertificationPost getHashtag(int postNo) throws Exception;
 	
 	//Like
 	public void addCertificationPostLike(Like like);

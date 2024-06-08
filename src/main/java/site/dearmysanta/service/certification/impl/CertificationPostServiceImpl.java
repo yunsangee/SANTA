@@ -13,6 +13,7 @@ import site.dearmysanta.domain.certificationPost.CertificationPost;
 import site.dearmysanta.domain.certificationPost.CertificationPostComment;
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.common.Search;
+import site.dearmysanta.domain.meeting.MeetingPostComment;
 import site.dearmysanta.service.certification.CertificationPostDao;
 import site.dearmysanta.service.certification.CertificationPostService;
 
@@ -31,19 +32,24 @@ public class CertificationPostServiceImpl implements CertificationPostService {
         certificationPostDao.addHashtag(certificationPost);
     }
     
-    
+
     @Override
-    public CertificationPost getCertificationPost(int postNo) throws Exception {
+    public Map<String, Object> getCertificationPost(int postNo) throws Exception {
        
     	CertificationPost certificationPost = certificationPostDao.getCertificationPost(postNo);
     	
     	int likeCount = certificationPostDao.getCertificationPostLikeCount(postNo);
-    	
     	certificationPost.setCertificationPostLikeCount(likeCount);
-   
-    	return certificationPost;
+    	
+    	 List<String> hashtagList = certificationPostDao.getHashtag(postNo);
+    	List<CertificationPostComment> certificationPostCommentList = certificationPostDao.getCertificationPostCommentList(postNo);
+    	Map<String, Object> map = new HashMap<String, Object>();
+		map.put("certificationPost", certificationPost);
+		map.put("certificationPostCommentList", certificationPostCommentList);
+		map.put("hashtagList", hashtagList);
+    	return map;
     }
-
+  
 //    @Override
 //    public CertificationPost getCertificationPost(int postNo) throws Exception {
 //       
@@ -138,11 +144,11 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 
 
 
-	@Override
-	public CertificationPost getHashtag(int postNo) throws Exception {
-		// TODO Auto-generated method stub
-		return certificationPostDao.getHashtag(postNo);
-	}
+//	@Override
+//	public CertificationPost getHashtag(int postNo) throws Exception {
+//		// TODO Auto-generated method stub
+//		return certificationPostDao.getHashtag(postNo);
+//	}
 
 
 	@Override

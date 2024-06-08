@@ -1,6 +1,7 @@
 package site.dearmysanta.service.certification;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,7 @@ public interface CertificationPostDao {
 	
 	public	 void deleteHashtag(int HashtagNo) throws Exception;
 	
-	public CertificationPost getHashtag(int postNo) throws Exception;
+	public List<String> getHashtag(int postNo) throws Exception;
 	
 	
 	

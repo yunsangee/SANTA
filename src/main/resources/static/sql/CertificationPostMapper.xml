@@ -209,31 +209,26 @@
 	<!-- Comment -->
 
 		<insert id="addCertificationPostComment" parameterType="site.dearmysanta.domain.certificationPost.CertificationPostComment">
-        INSERT INTO comments(comment_no, user_no, post_no, comment_contents,comment_creation_date, post_type_no)
+        INSERT INTO comments(comment_no, user_no, post_no, comment_contents,comment_creation_date, post_type)
         VALUES(seq_comment_no.NEXTVAL, #{userNo}, #{certificationPostNo}, #{certificationPostCommentContents},sysdate, 0)
     </insert>
     
     <delete id="deleteCertificationPostComment" parameterType="site.dearmysanta.domain.certificationPost.CertificationPostComment">
         DELETE FROM comments
-         WHERE USER_NO = #{userNo} AND POST_NO = #{certificationPostNo} AND POST_TYPE_NO=0
+         WHERE USER_NO = #{userNo} AND POST_NO = #{certificationPostNo} AND POST_TYPE=0
     </delete>
     
 
 <select id="getCertificationPostCommentList" parameterType="int" resultMap="certificationPostCommentSelectMap">
     	SELECT 
-        	c.post_no,
-        	c.comment_no,
-        	c.comment_contents,
-        	c.comment_creation_date,
-        	u.user_no,
-        	u.nickname,
-        	u.profile_image
+        post_no,
+        	comment_no,
+        	comment_contents,
+        	comment_creation_date
     	FROM 
-        	comments c
-    	JOIN 
-        	users u ON c.user_no = u.user_no
+        	comments
     	WHERE 
-        	c.post_no = #{postNo} AND c.post_type = 0
+        	post_no = #{postNo} AND post_type = 0
 	</select>
 
 <!-- search -->
