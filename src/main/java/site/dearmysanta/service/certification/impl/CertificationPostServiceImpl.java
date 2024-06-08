@@ -1,6 +1,7 @@
 package site.dearmysanta.service.certification.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,19 +21,38 @@ public class CertificationPostServiceImpl implements CertificationPostService {
     @Autowired
     @Qualifier("CertificationPostDao")
     private CertificationPostDao certificationPostDao;
-//  
-    @Override
-    public void addCertificationPost(CertificationPost certificationPost) throws Exception {
-    certificationPostDao.addCertificationPost(certificationPost);
+    
+    
+//    @Override
+//    public void addCertificationPost(CertificationPost certificationPost) throws Exception {
+//        // 게시글 삽입
+//        certificationPostDao.addCertificationPost(certificationPost);
+//        
+//        // 삽입된 게시글의 postNo 가져오기
+//        int postNo = certificationPost.getPostNo();
+//        
+//        // 해시태그 삽입
+//        List<String> hashtags = certificationPost.getCertificationPostHashtagContents();
+//        for (String hashtagContent : hashtags) {
+//            certificationPostDao.addHashTag(postNo, hashtagContent);
+//        }
+//    }
 
+    
+  
+//    @Override
+//    public void addCertificationPost(CertificationPost certificationPost) throws Exception {
+//    certificationPostDao.addCertificationPost(certificationPost);
+//
+//    }
+    
+    
+    @Override
+    public void addCertificationPost(CertificationPost certificationPost) {
+        certificationPostDao.addCertificationPost(certificationPost);
+        certificationPostDao.addHashTag(certificationPost);
     }
     
-    //도와줘
-//    @Override
-//    public void addCertificationPost(CertificationPost certificationPost) {
-//        certificationPostDao.addCertificationPost(certificationPost);
-//        certificationPostDao.addHashTag(certificationPost.getPostNo(), certificationPost.getCertificationPostHashtagContents());
-//    }
 
     @Override
     public CertificationPost getCertificationPost(int postNo) throws Exception {
@@ -42,12 +62,10 @@ public class CertificationPostServiceImpl implements CertificationPostService {
     	int likeCount = certificationPostDao.getCertificationPostLikeCount(postNo);
     	
     	certificationPost.setCertificationPostLikeCount(likeCount);
-
-  
+    	
     	return certificationPost;
     }
-
-    
+  
   
     @Override
     public void updateCertificationPost(CertificationPost certificationPost) throws Exception {
@@ -55,10 +73,10 @@ public class CertificationPostServiceImpl implements CertificationPostService {
     }
     
     //hashtag
-
+//
 //	@Override
-//	public void addCertificationPostHashtags(CertificationPost certificationPost) throws Exception {
-//		 certificationPostDao.addCertificationPostHashtags(certificationPost);
+//	public void addHashTag(CertificationPost certificationPost)  {
+//		 certificationPostDao.addHashTag(certificationPost);
 //		
 //	}
 
@@ -68,10 +86,6 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 		return HashtagNo;
 		
     }
-
-
-   
-    
     
     //Like
 	@Override
@@ -107,11 +121,37 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 		
 	}
 
-	
+
+
+	@Override
+	public List<CertificationPost> getCertificationPostList() throws Exception {
+		
+		return certificationPostDao.getCertificationPostList();
+	}
+
+
+	@Override
+	public void addHashTag(CertificationPost certificationPost) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public List<CertificationPost> getMyCertificationPostList(int userNo) throws Exception {
+		// TODO Auto-generated method stub
+		return certificationPostDao.getMyCertificationPostList(userNo);
+	}
+
+
+//	@Override
+//	public List<String> getMyCertificationPostList(int userNo) throws Exception {
+//		// TODO Auto-generated method stub
+//		return certificationPostDao.getMyCertificationPostList(userNo);
+//	}
 
 
 
-	
 	
 
 	}

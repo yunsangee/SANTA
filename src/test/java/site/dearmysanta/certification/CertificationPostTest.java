@@ -14,6 +14,7 @@ import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.certificationPost.CertificationPost;
 import site.dearmysanta.domain.certificationPost.CertificationPostComment;
 import site.dearmysanta.domain.common.Like;
+import site.dearmysanta.service.certification.CertificationPostDao;
 import site.dearmysanta.service.certification.CertificationPostService;
 
 @RunWith(SpringRunner.class)
@@ -23,18 +24,47 @@ public class CertificationPostTest {
 	@Autowired
 	CertificationPostService certificationPostService;
 	
-	//@Test
-	public void testGetCertificationPostList() throws Exception {
-        List<CertificationPost> certificationPostList = certificationPostService.getCertificationPostList();
-        
-        
-        for (CertificationPost certificationPost : certificationPostList) {
-            SantaLogger.makeLog("info", certificationPost.toString());
-        }
-    }
+//	@Autowired
+//	CertificationPostDao certificationPostDao;
 
 	
-	 @Test
+	
+	
+	 //@Test
+	    public void testMyCertificationPostList() throws Exception {
+	
+	        int userNo = 3; // 테스트할 사용자 번호
+	      
+        List<CertificationPost> results = certificationPostService.getMyCertificationPostList(userNo);
+	 
+	        for (CertificationPost result : results) {
+	            SantaLogger.makeLog("info", result.toString());
+	        }
+	    }
+	
+//	@Test
+    public void testAddCertificationPostComment1() throws Exception {
+        // CertificationPostComment 객체를 생성합니다.
+        CertificationPostComment certificationPostComment = CertificationPostComment.builder()
+            .userNo(2)
+            .certificationPostNo(1)
+            .certificationPostCommentContents("댓글작성하기!!.")
+            .build();
+
+        // addCertificationPostComment 메서드 호출
+        certificationPostService.addCertificationPostComment(certificationPostComment);
+        
+        List<CertificationPost> list = certificationPostService.getCertificationPostList();
+        list = certificationPostService.getCertificationPostList();
+    	System.out.println("==================");
+    	for(CertificationPost post : list) {
+    		System.out.println(post);
+        // 로그 출력
+        SantaLogger.makeLog("info", certificationPostComment.toString());
+    }
+    }
+	
+	@Test
 	 public void testAddCertificationPostWithTags() throws Exception {
 	     CertificationPost certificationPost = CertificationPost.builder()
 	         .userNo(1)
@@ -48,7 +78,7 @@ public class CertificationPostTest {
 	         .certificationPostHikingDate("2024-06-01")
 	         .certificationPostTransportation(1)
 	         .certificationPostHikingDifficulty(1)
-	         .certificationPostHashtagContents("tag1, tag2")
+	         .certificationPostHashtagContents("1111")
 	         .build();
 
 	     certificationPostService.addCertificationPost(certificationPost);
@@ -60,16 +90,16 @@ public class CertificationPostTest {
 	 
 
 	// @Test
-	    public void testGetCertificationPostCommentList() throws Exception {
-	        int postNo = 1;
-	        
-	        List<CertificationPostComment> commentList = certificationPostService.getCertificationPostCommentList(postNo);
-	        
-	            for (CertificationPostComment comment : commentList) {
-	            SantaLogger.makeLog("info", comment.toString());
-	        }
-	        
-	    }
+//	    public void testGetCertificationPostCommentList() throws Exception {
+//	        int postNo = 1;
+//	        
+//	        List<CertificationPostComment> commentList = certificationPostService.getCertificationPostCommentList(postNo);
+//	        
+//	            for (CertificationPostComment comment : commentList) {
+//	            SantaLogger.makeLog("info", comment.toString());
+//	        }
+//	        
+//	    }
 	 
 	//@Test
 	 public void TestgetCertificationPost() throws Exception {
@@ -102,20 +132,20 @@ public class CertificationPostTest {
 	
 	
 	//@Test
-    public void testAddCertificationPostComment() throws Exception {
-        // CertificationPostComment 객체를 생성합니다.
-        CertificationPostComment certificationPostComment = CertificationPostComment.builder()
-            .userNo(2)
-            .certificationPostNo(1)
-            .certificationPostCommentContents("댓글작성하기이.")
-            .build();
-
-        // addCertificationPostComment 메서드 호출
-        certificationPostService.addCertificationPostComment(certificationPostComment);
-
-        // 로그 출력
-        SantaLogger.makeLog("info", certificationPostComment.toString());
-    }
+//    public void testAddCertificationPostComment() throws Exception {
+//        // CertificationPostComment 객체를 생성합니다.
+//        CertificationPostComment certificationPostComment = CertificationPostComment.builder()
+//            .userNo(2)
+//            .certificationPostNo(1)
+//            .certificationPostCommentContents("댓글작성하기이.")
+//            .build();
+//
+//        // addCertificationPostComment 메서드 호출
+//        certificationPostService.addCertificationPostComment(certificationPostComment);
+//
+//        // 로그 출력
+//        SantaLogger.makeLog("info", certificationPostComment.toString());
+//    }
 
 	
 	
@@ -247,19 +277,19 @@ public class CertificationPostTest {
 //}
 
 //@Test
-//public void testDeleteCertificationPostLike() {
-//    // 좋아요를 삭제할 사용자 번호와 게시물 번호를 설정합니다.
-//    int userNo = 2; // 사용자 번호
-//    int postNo = 18; // 게시물 번호
-//    
-//    // Like 객체를 생성하여 사용자 번호와 게시물 번호를 설정합니다.
-//    Like like = new Like();
-//    like.setUserNo(userNo);
-//    like.setPostNo(postNo);
-//    
-//    // 좋아요를 삭제하는 쿼리를 실행합니다.
-//    certificationPostService.deleteCertificationPostLike(like);
-//}
+public void testDeleteCertificationPostLike() {
+    // 좋아요를 삭제할 사용자 번호와 게시물 번호를 설정합니다.
+    int userNo = 2; // 사용자 번호
+    int postNo = 3; // 게시물 번호
+    
+    // Like 객체를 생성하여 사용자 번호와 게시물 번호를 설정합니다.
+    Like like = new Like();
+    like.setUserNo(userNo);
+    like.setPostNo(postNo);
+    
+    // 좋아요를 삭제하는 쿼리를 실행합니다.
+    certificationPostService.deleteCertificationPostLike(like);
+}
 
 //	@Test
 //	public void testGetCertificationPostLikeList() {

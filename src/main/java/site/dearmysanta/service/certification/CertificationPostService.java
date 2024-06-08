@@ -15,7 +15,8 @@ public interface CertificationPostService {
 	public void updateCertificationPost(CertificationPost certificationPost) throws Exception;
 	
 	public List<CertificationPost> getCertificationPostList() throws Exception;
-	
+	public	List<CertificationPost> getMyCertificationPostList(int userNo) throws Exception;
+
 	
 //	 public  void deleteCertificationPost(int certificationPostNo) throws Exception;
 //	public void deleteCertificationPost();
@@ -42,7 +43,7 @@ public interface CertificationPostService {
 
 	public void deleteCertificationPostComment(CertificationPostComment certificationPostComment) throws Exception;
 
-	public List<CertificationPostComment> getCertificationPostCommentList(int postNo) throws Exception;
+	//public List<CertificationPostComment> getCertificationPostCommentList(int postNo) throws Exception;
 
 	
 	//Like
@@ -54,6 +55,9 @@ public interface CertificationPostService {
 	//public int getTotalCertificationPostLikeCount(Like like);
 	
 	public List<CertificationPost> getCertificationPostLikeList(Like like);
+
+
+
 
 
 

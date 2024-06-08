@@ -42,12 +42,20 @@
 
     </resultMap>
 
+<!-- 사진만보여줘야하는데 일단 글제목보여주기 -->
+<select id="getMyCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
+
+      select cp_title from certification_post where user_no =#{userNo} AND cp_type = 0
+ </select>
+
+
+
     <select id="getCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
         SELECT
             cp_no,
             user_no,
             cp_title,
-            cp_content,
+            cp_contents,
             cp_mountain_name,
             cp_hiking_trail,
             cp_total_time,
@@ -142,7 +150,7 @@
  -->
     <delete id="deleteCertificationPostHashtags" parameterType="int">
         DELETE FROM hashtag
-        WHERE hashtag_no = #{certificationPostHashtagContents}
+        WHERE hashtag_content = #{certificationPostHashtagContents}
     </delete>
     
   
