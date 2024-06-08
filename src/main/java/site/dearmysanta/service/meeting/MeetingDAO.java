@@ -56,4 +56,7 @@ public interface MeetingDAO {
 	public void updateMeetingPostDeletedStatus(int postNo) throws Exception;
 	
 	public void updateMeetingPostCertifiedStatus(int postNo) throws Exception;
+	
+	public List<MeetingPost> getUnCertifiedMeetingPost(int userNo) throws Exception;
+	
 }

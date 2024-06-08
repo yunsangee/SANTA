@@ -1,12 +1,15 @@
 package site.dearmysanta.service.meeting.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import site.dearmysanta.service.meeting.MeetingService;
+import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.meeting.MeetingParticipation;
 import site.dearmysanta.domain.meeting.MeetingPost;
@@ -33,6 +36,13 @@ public class MeetingServiceImpl implements MeetingService {
 		meetingParticipation.setParticipationRole(0);
 		
 		meetingDAO.insertMeetingPost(meetingPost);
+		
+		int userNo = meetingPost.getUserNo();
+		meetingParticipation.setUserNo(userNo);
+		
+		int postNo = meetingPost.getPostNo();
+		meetingParticipation.setPostNo(postNo);
+		
 		meetingDAO.insertMeetingParticipation(meetingParticipation);
 	}
 	
@@ -51,7 +61,7 @@ public class MeetingServiceImpl implements MeetingService {
 		meetingDAO.updateMeetingPost(meetingPost);
 	}
 	
-	public MeetingPost getMeetingPost(int postNo) throws Exception {
+	public Map<String, Object> getMeetingPostAll(int postNo) throws Exception {
 		
 		MeetingPost meetingPost = meetingDAO.findMeetingPost(postNo);
 		
@@ -60,6 +70,21 @@ public class MeetingServiceImpl implements MeetingService {
 		
 		meetingPost.setMeetingPostLikeCount(likeCount);
 		meetingPost.setMeetingPostCommentCount(commentCount);
+		
+		List<MeetingParticipation> meetingParticipationList = meetingDAO.getMeetingParticipationList(postNo);
+		List<MeetingPostComment> meetingPostCommentList = meetingDAO.getMeetingPostCommentList(postNo);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("meetingPost", meetingPost);
+		map.put("meetingParticipationList", meetingParticipationList);
+		map.put("meetingPostCommentList", meetingPostCommentList);
+		
+		return map;
+	}
+	
+	public MeetingPost getMeetingPost(int postNo) throws Exception {
+		
+		MeetingPost meetingPost = meetingDAO.findMeetingPost(postNo);
 		
 		return meetingPost;
 	}
@@ -102,7 +127,8 @@ public class MeetingServiceImpl implements MeetingService {
 	public void addMeetingParticipation(MeetingParticipation meetingParticipation) throws Exception {
 		
 		meetingParticipation.setParticipationStatus(0);
-//		meetingParticipation.setParticipationRole(null);
+		meetingParticipation.setParticipationRole(1);
+		
 		meetingDAO.insertMeetingParticipation(meetingParticipation);
 	}
 	
@@ -140,11 +166,26 @@ public class MeetingServiceImpl implements MeetingService {
 	public void updateMeetingPostDeletedStatus(int postNo) throws Exception {
 		
 		meetingDAO.updateMeetingPostDeletedStatus(postNo);
+		
+		List<MeetingParticipation> meetingParticipationList = getMeetingParticipationList(postNo);
+		
+		for(int i = 0; i < meetingParticipationList.size(); i ++) {
+			
+			MeetingParticipation meetingParticipation = meetingParticipationList.get(i);
+			int participationNo = meetingParticipation.getParticipationNo();
+			
+			meetingDAO.updateMeetingParticipationWithdrawStatus(participationNo);
+			
+		}
 	}
 	
 	public void updateMeetingPostCertifiedStatus(int postNo) throws Exception {
 		
 		meetingDAO.updateMeetingPostCertifiedStatus(postNo);
+	}
+	
+	public List<MeetingPost> getUnCertifiedMeetingPost(int userNo) throws Exception {
+		return meetingDAO.getUnCertifiedMeetingPost(userNo);
 	}
 
 }
