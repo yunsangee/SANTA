@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 import site.dearmysanta.domain.hikingguide.HikingAlert;
 import site.dearmysanta.domain.hikingguide.HikingGuide;
+import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.Weather;
 import site.dearmysanta.service.hikingGuide.HikingGuideService;
+import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.weather.WeatherService;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -24,6 +26,9 @@ public class HikingGuideRestController {
 
     @Autowired
     private WeatherService weatherService;
+    
+    @Autowired
+    private MountainService mountainService;
 
     private HikingGuide userLocation; // Store the user location
 
@@ -85,10 +90,19 @@ public class HikingGuideRestController {
         return weather;
     }
     
-//    @PostMapping(value = "/react/getMountain")
-//    public void getMountain() throws Exception{
-//    	
-//    }
+    @GetMapping(value = "/react/getMountain")
+    public List<Mountain> getMountainsByUserCoordination() throws Exception {
+        if (userLocation == null) {
+            throw new IllegalStateException("User coordinates are not set.");
+        }
+
+        System.out.println("Fetching mountains for coordinates: Latitude: " + userLocation.getUserLatitude() 
+        				+ " Longitude: " + userLocation.getUserLongitude());
+
+        List<Mountain> mountains = mountainService.getMountainListByCoord(userLocation.getUserLatitude(),
+        																	userLocation.getUserLongitude());
+        return mountains;
+    }
 
     @PostMapping(value = "/react/getUserCoordination")
     public void getUserCoordination(@RequestBody HikingGuide userLocation) {
