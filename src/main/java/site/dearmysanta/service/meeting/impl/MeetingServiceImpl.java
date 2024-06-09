@@ -183,9 +183,10 @@ public class MeetingServiceImpl implements MeetingService {
 		
 		meetingDAO.updateMeetingPostCertifiedStatus(postNo);
 	}
-	
-	public List<MeetingPost> getUnCertifiedMeetingPost(int userNo) throws Exception {
-		return meetingDAO.getUnCertifiedMeetingPost(userNo);
-	}
+//	
+//	public List<MeetingPost> getUnCertifiedMeetingPost(int userNo) throws Exception {
+//		
+//		return meetingDAO.getUnCertifiedMeetingPost(userNo);
+//	}
 
 }
