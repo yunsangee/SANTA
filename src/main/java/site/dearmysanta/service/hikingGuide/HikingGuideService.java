@@ -23,8 +23,6 @@ public interface HikingGuideService {
 	
 	public void getMeetingCoordination() throws Exception;
 	
-	public MountainInfo getMountainInfo() throws Exception;
-	
 	public void addHikingRecord(HikingGuide hikingGuide) throws Exception;
 
 	public List<HikingGuide> getHikingListRecord(int userNo) throws Exception;
@@ -39,12 +37,4 @@ public interface HikingGuideService {
 	
 	public MeetingPost getMeetingParticipationList() throws Exception;
 	
-	
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	public class MountainInfo{
-		private Mountain mountain;
-		private Weather weather;
-	}
 }
