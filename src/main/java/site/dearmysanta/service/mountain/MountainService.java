@@ -40,7 +40,7 @@ public interface MountainService {
 	
 	public List<Mountain> getPopularMountainList(List<String> mountainNames) throws Exception;
 	
-	public List<Mountain> getCustomMountainList(User user);
+	public List<Mountain> getCustomMountainList(List<Statistics> statistics,User user);
 	
 	
 	

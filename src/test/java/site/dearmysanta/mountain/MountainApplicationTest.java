@@ -22,6 +22,7 @@ import site.dearmysanta.domain.correctionPost.CorrectionPost;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.mountain.Statistics;
+import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.correctionpost.CorrectionPostService;
 import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.mountain.impl.MountainServiceImpl;
@@ -152,23 +153,41 @@ public class MountainApplicationTest {
 	}
 	
 	
-//	@Test
+	@Test
 	public void statisticsTest() {
-		String mountainName = "jirisan";
+//		String mountainName = "jirisan";
 		
 		List<Statistics> list = mountainService.getStatisticsList(0);
 		for(Statistics statistics : list) {
 			SantaLogger.makeLog("info",statistics.toString());
 		}
 		
-		mountainService.addMountainStatistics(mountainName, 0);
-		mountainService.addMountainStatistics(mountainName, 0);
-		mountainService.addMountainStatistics(mountainName, 1);
+//		mountainService.addMountainStatistics(mountainName, 0);
+//		mountainService.addMountainStatistics(mountainName, 0);
+//		mountainService.addMountainStatistics(mountainName, 1);
 		
-		list = mountainService.getStatisticsList(0);
+		list = mountainService.getStatisticsList(1);
 		for(Statistics statistics : list) {
 			SantaLogger.makeLog("info",statistics.toString());
 		}
+//		
+//		list = mountainService.getStatisticsList(1);
+//		for(Statistics statistics : list) {
+//			SantaLogger.makeLog("info",statistics.toString());
+//		}
+//		
+		
+		SantaLogger.makeLog("info", "==========");
+		User user = User.builder().address("경상남도 울산시").hikingDifficulty(0).build();
+		
+		user.setAddress(user.getAddress().split(" ")[0]);
+		
+		List<Mountain> lm = mountainService.getCustomMountainList(list,user);
+		
+		for(Mountain mt : lm) {
+			SantaLogger.makeLog("info",mt.toString());
+		}
+		
 		
 		
 	}
@@ -283,7 +302,7 @@ public class MountainApplicationTest {
 	}
 	
 	
-	@Test
+//	@Test
 	public void listSearchTest() {
 		
 //		mountainService.addMountain(Mountain.builder()

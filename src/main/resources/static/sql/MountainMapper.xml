@@ -134,10 +134,26 @@
     
     
     <select id="getMountainListByName" parameterType="String" resultMap="MountainResultMap">
-    	SELECT MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGITUDE, MOUNTAIN_IMAGE,
-               MOUNTAIN_DESCRIPTION, MOUNTAIN_ALTITUDE, MOUNTAIN_TRAIL_COUNT, MOUNTAIN_VIEW_COUNT
-        FROM MOUNTAIN
-        WHERE MOUNTAIN_NAME LIKE '%'||#{mountainName}||'%'
+    	SELECT
+        m.MOUNTAIN_NO AS MOUNTAIN_NO,
+        m.MOUNTAIN_NAME AS MOUNTAIN_NAME,
+        m.MOUNTAIN_LATITUDE AS MOUNTAIN_LATITUDE,
+        m.MOUNTAIN_LONGITUDE AS MOUNTAIN_LONGITUDE,
+        m.MOUNTAIN_LOCATION AS MOUNTAIN_LOCATION,
+        m.MOUNTAIN_IMAGE AS MOUNTAIN_IMAGE,
+        m.MOUNTAIN_DESCRIPTION AS MOUNTAIN_DESCRIPTION,
+        m.MOUNTAIN_ALTITUDE AS MOUNTAIN_ALTITUDE,
+        m.MOUNTAIN_TRAIL_COUNT AS MOUNTAIN_TRAIL_COUNT,
+        m.MOUNTAIN_VIEW_COUNT AS MOUNTAIN_VIEW_COUNT,
+        t.MOUNTAIN_TRAIL_NO AS MOUNTAIN_TRAIL_NO,
+        t.MOUNTAIN_COORDINATES AS MOUNTAIN_COORDINATES,
+        t.MOUNTAIN_TRAIL_DIFFICULTY AS MOUNTAIN_TRAIL_DIFFICULTY,
+        t.MOUNTAIN_TRAIL_LENGTH AS MOUNTAIN_TRAIL_LENGTH,
+        t.EXPECTED_ASCENT_TIME AS EXPECTED_ASCENT_TIME,
+        t.EXPECTED_DESCENT_TIME AS EXPECTED_DESCENT_TIME,
+        t.IS_CLOSED AS IS_CLOSED
+    FROM MOUNTAIN m, MOUNTAIN_TRAIL t
+        WHEREm.MOUNTAIN_NO = t.MOUNTAIN_NO(+) AND m.MOUNTAIN_NAME LIKE '%'||#{mountainName}||'%'
     </select>
     
     
@@ -284,42 +300,45 @@
 	<select id="getStatisticsList" parameterType="int" resultMap="StatisticsResultMap">
 		SELECT * FROM
 		(SELECT * FROM STATISTICS
-		<if test="which == 1">
-			ORDER BY SEARCH_COUNT DESC
-		</if>
-		) WHERE ROWNUM <![CDATA[<=]]> 10
+			<if test="which == 0">
+				ORDER BY POST_COUNT DESC
+			</if>
+		
+			<if test="which == 1">
+				ORDER BY SEARCH_COUNT DESC
+			</if>
+		) 
 	</select>
 	
 	
+	<select id="getCustomMountainList" parameterType="map" resultMap="MountainResultMap">
+		SELECT *
+    FROM MOUNTAIN
+    WHERE MOUNTAIN_LOCATION LIKE '%' || #{user.address} || '%'
+    <choose>
+        <when test="user.hikingDifficulty == 0">
+            AND MOUNTAIN_ALTITUDE <![CDATA[>=]]> 700
+        </when>
+        <when test="user.hikingDifficulty == 1">
+            AND MOUNTAIN_ALTITUDE BETWEEN 500 AND 700
+        </when>
+        <when test="user.hikingDifficulty == 2">
+            AND MOUNTAIN_ALTITUDE <![CDATA[<=]]> 500
+        </when>
+    </choose>
+    AND LOWER(MOUNTAIN_NAME) IN
+   <foreach item="item" index="index" collection="mountainNames" open="(" separator="," close=")">
+        #{item}
+    </foreach>
+    ORDER BY 
+    CASE 
+        <foreach item="item" index="index" collection="mountainNames">
+            WHEN LOWER(MOUNTAIN_NAME) = #{item} THEN ${index}
+        </foreach>
+    END
 	
-	<!--  <select id="getCertificationPostList" parameterType= "search 경로!">
-	
-		Select * from certification_post
-		
-		<where> where 절 
-			<choose>다음 구문 중 조건에 맞는 쿼리 선택 
-					<when test='searchCondition == 0  and searchKeyword != "" '>  제목 검색!
-						cp_title LIKE '%'||#{searchKeyword}||'%'
-					 </when>
-					 
-					 <when test='searchCondition == 1 and searchKeyword != "" '>  닉네임 검색!
-					      nickname LIKE '%'||#{searchKeyword}||'%'
-					 </when>
-					 
-					  이런 식으로 1,2,3 번 조건에 따른 검색 구현은 이렇게 가능  
-	
-			</choose>
-		</where>
-		
-		<when test='searchCondition == 4  '>  좋아요 순  검색!  이렇게 하면 제목으로 검색하면서 좋아요 순 정렬도 가능 4,5,6,7 조건은 이런식으로 가능 
-			ORDER BY LIKE_COUNT DESC
-		</when>
-		 -->
-		
-		
 	
 	</select>
-	
 	
 
 

@@ -36,7 +36,7 @@ public interface MountainDao {
 	
 	public int checkMountainExist(int mountainNo);
 	
-	public List<Mountain> getCustomMountainList(User user);
+	public List<Mountain> getCustomMountainList(List<String> mountainNames, User user);
 	
 	
 	public void addMountainTrail(MountainTrail mountainTrail);

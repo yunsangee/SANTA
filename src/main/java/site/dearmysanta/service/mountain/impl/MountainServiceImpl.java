@@ -26,6 +26,7 @@ import site.dearmysanta.service.mountain.MountainService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -441,15 +442,21 @@ public class MountainServiceImpl implements MountainService {
 	
 	public List<Mountain> getPopularMountainList(List<String> mountainNames) throws Exception{
 		List<Mountain> list = new ArrayList<>();
-		for(String mountainName : mountainNames) {
-			list.add(this.getMountain(mountainName));
+		for(int i = 0; i < 10 ; i ++) {
+			list.add(this.getMountain(mountainNames.get(i)));
 		}
 		
 		return list;
 	}//이거 산 이름으로 해야해 ?
 	
-	public List<Mountain> getCustomMountainList(User user){
-		return mountainDao.getCustomMountainList(user);
+	public List<Mountain> getCustomMountainList(List<Statistics> statistics, User user){
+		
+		 List<String> orderedMountainNames = statistics.stream()
+	                .map(Statistics::getMountainName)
+	                .collect(Collectors.toList());
+		 
+		SantaLogger.makeLog("info", "serviceImpl::" + orderedMountainNames.toString());
+		return mountainDao.getCustomMountainList(orderedMountainNames,user);
 	}
 	
 	
