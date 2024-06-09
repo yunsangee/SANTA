@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 import site.dearmysanta.domain.hikingguide.HikingAlert;
 import site.dearmysanta.domain.hikingguide.HikingGuide;
+import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.Weather;
 import site.dearmysanta.service.hikingGuide.HikingGuideService;
+import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.weather.WeatherService;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -24,9 +26,15 @@ public class HikingGuideRestController {
 
     @Autowired
     private WeatherService weatherService;
+    
+    @Autowired
+    private MountainService mountainService;
+
+    private HikingGuide userLocation; // Store the user location
 
     public HikingGuideRestController() {
         System.out.println(this.getClass());
+        this.userLocation = new HikingGuide();  // Initialize the userLocation
     }
 
     @PostMapping(value = "/react/addHikingRecord")
@@ -66,16 +74,34 @@ public class HikingGuideRestController {
         hikingGuideService.deleteHikingRecord(hrNo);
     }
 
-    @GetMapping(value = "/react/getWeatherInfo")
-    public Weather getWeatherInfo(@RequestParam double latitude, @RequestParam double longitude) throws Exception {
-        System.out.println("User location: Latitude: " + latitude + " Longitude: " + longitude);
+    @PostMapping(value = "/react/getWeather")
+    public Weather getWeather() throws Exception {
+        if (userLocation.getUserLatitude() == 0 || userLocation.getUserLongitude() == 0) {
+            throw new IllegalStateException("User coordinates are not set.");
+        }
 
-        Weather weather = weatherService.getWeather(latitude, longitude);
+        System.out.println("User location: Latitude: " + userLocation.getUserLatitude() + " Longitude: " + userLocation.getUserLongitude());
+
+        Weather weather = weatherService.getWeather(userLocation.getUserLatitude(), userLocation.getUserLongitude());
         if (weather == null) {
             throw new IllegalStateException("Weather information could not be retrieved.");
         }
 
         return weather;
+    }
+    
+    @GetMapping(value = "/react/getMountain")
+    public List<Mountain> getMountainsByUserCoordination() throws Exception {
+        if (userLocation == null) {
+            throw new IllegalStateException("User coordinates are not set.");
+        }
+
+        System.out.println("Fetching mountains for coordinates: Latitude: " + userLocation.getUserLatitude() 
+        				+ " Longitude: " + userLocation.getUserLongitude());
+
+        List<Mountain> mountains = mountainService.getMountainListByCoord(userLocation.getUserLatitude(),
+        																	userLocation.getUserLongitude());
+        return mountains;
     }
 
     @PostMapping(value = "/react/getUserCoordination")
@@ -83,5 +109,7 @@ public class HikingGuideRestController {
         System.out.println("Receive user location: " + userLocation.getUserNo() + 
             " Latitude: " + userLocation.getUserLatitude() + 
             " Longitude: " + userLocation.getUserLongitude());
+
+        this.userLocation = userLocation;
     }
 }

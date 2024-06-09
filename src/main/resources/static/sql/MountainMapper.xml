@@ -36,8 +36,8 @@
 	<resultMap id="MountainSearchResultMap" type="site.dearmysanta.domain.mountain.MountainSearch">
     <!-- Search class fields -->
     	<result property="userNo" column="user_no"/>
-    	<result property="searchCondition" column="search_condition"/>
-    	<result property="searchKeyword" column="search_keyword"/>
+    	<result property="searchCondition" column="mountain_search_condition"/>
+    	<result property="searchKeyword" column="mountain_search_content"/>
     	<result property="searchDate" column="search_date"/>
     
     	<result property="locationNo" column="location_no"/>
@@ -134,10 +134,26 @@
     
     
     <select id="getMountainListByName" parameterType="String" resultMap="MountainResultMap">
-    	SELECT MOUNTAIN_NO, MOUNTAIN_NAME, MOUNTAIN_LOCATION, MOUNTAIN_LATITUDE, MOUNTAIN_LONGITUDE, MOUNTAIN_IMAGE,
-               MOUNTAIN_DESCRIPTION, MOUNTAIN_ALTITUDE, MOUNTAIN_TRAIL_COUNT, MOUNTAIN_VIEW_COUNT
-        FROM MOUNTAIN
-        WHERE MOUNTAIN_NAME LIKE '%'||#{mountainName}||'%'
+    	SELECT
+        m.MOUNTAIN_NO AS MOUNTAIN_NO,
+        m.MOUNTAIN_NAME AS MOUNTAIN_NAME,
+        m.MOUNTAIN_LATITUDE AS MOUNTAIN_LATITUDE,
+        m.MOUNTAIN_LONGITUDE AS MOUNTAIN_LONGITUDE,
+        m.MOUNTAIN_LOCATION AS MOUNTAIN_LOCATION,
+        m.MOUNTAIN_IMAGE AS MOUNTAIN_IMAGE,
+        m.MOUNTAIN_DESCRIPTION AS MOUNTAIN_DESCRIPTION,
+        m.MOUNTAIN_ALTITUDE AS MOUNTAIN_ALTITUDE,
+        m.MOUNTAIN_TRAIL_COUNT AS MOUNTAIN_TRAIL_COUNT,
+        m.MOUNTAIN_VIEW_COUNT AS MOUNTAIN_VIEW_COUNT,
+        t.MOUNTAIN_TRAIL_NO AS MOUNTAIN_TRAIL_NO,
+        t.MOUNTAIN_COORDINATES AS MOUNTAIN_COORDINATES,
+        t.MOUNTAIN_TRAIL_DIFFICULTY AS MOUNTAIN_TRAIL_DIFFICULTY,
+        t.MOUNTAIN_TRAIL_LENGTH AS MOUNTAIN_TRAIL_LENGTH,
+        t.EXPECTED_ASCENT_TIME AS EXPECTED_ASCENT_TIME,
+        t.EXPECTED_DESCENT_TIME AS EXPECTED_DESCENT_TIME,
+        t.IS_CLOSED AS IS_CLOSED
+    FROM MOUNTAIN m, MOUNTAIN_TRAIL t
+        WHEREm.MOUNTAIN_NO = t.MOUNTAIN_NO(+) AND m.MOUNTAIN_NAME LIKE '%'||#{mountainName}||'%'
     </select>
     
     
@@ -209,9 +225,9 @@
 		SELECT * FROM
 		(
 			SELECT m.*, ROWNUM as ROW_SEQ FROM LIKES l, MOUNTAIN m
-			WHERE l.POST_LIKE_TYPE=2 AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO = m.MOUNTAIN_NO AND ROWNUM <![CDATA[<=]]> #{page} * #{pageSize} 
+			WHERE l.POST_LIKE_TYPE=2 AND l.USER_NO = #{like.userNo} AND l.POST_LIKE_NO = m.MOUNTAIN_NO AND ROWNUM <![CDATA[<=]]> #{search.currentPage} * #{search.pageSize} 
 		)
-		WHERE ROW_SEQ ((#{page} - 1) * #{pageSize} + 1) AND #{page} * #{pageSize}
+		WHERE ROW_SEQ BETWEEN ((#{search.currentPage} - 1) * #{search.pageSize} + 1) AND #{search.currentPage} * #{search.pageSize}
 	</select>
 
 
@@ -237,14 +253,14 @@
 	<!--  !!!!!! -->
 	<select id="getSearchKeywordList" parameterType="map" resultMap="MountainSearchResultMap">
 		
-		SELECT * FROM(
+		SELECT * FROM (
 		
-		SELECT * FROM MOUNTAIN_SEARCH
-		WHERE USER_NO = #{value} AND ROWNUM <![CDATA[<=]]> #{page} * #{pageSize} 
+		SELECT ms.* , ROWNUM as ROW_SEQ FROM MOUNTAIN_SEARCH ms
+		WHERE USER_NO = #{userNo} AND ROWNUM <![CDATA[<=]]> #{search.currentPage} * #{search.pageSize} 
 		
 		)
 		
-		WHERE ROW_SEQ ((#{page} - 1) * #{pageSize} + 1) AND #{page} * #{pageSize}
+		WHERE ROW_SEQ BETWEEN ((#{search.currentPage} - 1) * #{search.pageSize} + 1) AND #{search.currentPage} * #{search.pageSize}
 	</select>
 	
 	<update id="updateSearchSetting" parameterType="map">
@@ -284,13 +300,45 @@
 	<select id="getStatisticsList" parameterType="int" resultMap="StatisticsResultMap">
 		SELECT * FROM
 		(SELECT * FROM STATISTICS
-		<if test="which == 1">
-			ORDER BY SEARCH_COUNT DESC
-		</if>
-		) WHERE ROWNUM <![CDATA[<=]]> 10
+			<if test="which == 0">
+				ORDER BY POST_COUNT DESC
+			</if>
+		
+			<if test="which == 1">
+				ORDER BY SEARCH_COUNT DESC
+			</if>
+		) 
 	</select>
 	
 	
+	<select id="getCustomMountainList" parameterType="map" resultMap="MountainResultMap">
+		SELECT *
+    FROM MOUNTAIN
+    WHERE MOUNTAIN_LOCATION LIKE '%' || #{user.address} || '%'
+    <choose>
+        <when test="user.hikingDifficulty == 0">
+            AND MOUNTAIN_ALTITUDE <![CDATA[>=]]> 700
+        </when>
+        <when test="user.hikingDifficulty == 1">
+            AND MOUNTAIN_ALTITUDE BETWEEN 500 AND 700
+        </when>
+        <when test="user.hikingDifficulty == 2">
+            AND MOUNTAIN_ALTITUDE <![CDATA[<=]]> 500
+        </when>
+    </choose>
+    AND LOWER(MOUNTAIN_NAME) IN
+   <foreach item="item" index="index" collection="mountainNames" open="(" separator="," close=")">
+        #{item}
+    </foreach>
+    ORDER BY 
+    CASE 
+        <foreach item="item" index="index" collection="mountainNames">
+            WHEN LOWER(MOUNTAIN_NAME) = #{item} THEN ${index}
+        </foreach>
+    END
+	
+	
+	</select>
 	
 
 

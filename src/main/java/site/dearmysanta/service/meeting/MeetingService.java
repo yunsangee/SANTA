@@ -23,8 +23,6 @@ public interface MeetingService {
 	
 	public void updatePostImage(MeetingPost meetingPost) throws Exception;
 	
-	public Map<String, Object> getMeetingPostAll(int postNo) throws Exception;
-	
 	public MeetingPost getMeetingPost(int postNo) throws Exception;
 	
 //	public Map<String, Object> getMeetingPostList(MeetingPostSearch meetingPostSearch) throws Exception;
@@ -59,11 +57,15 @@ public interface MeetingService {
 	
 	public int getMountainTotalCount(String appointedHikingMountain) throws Exception;
 	
+
 //	public List<MeetingPost> getUnCertifiedMeetingPost(int userNo) throws Exception;
 	
 //	public void uploadMeetingPostImages(List<MultipartFile> images, String postNo) throws Exception;
 //	
 //    public MultipartFile downloadMeetingPostImage(String postNo, String fileName) throws Exception;
+
+	
+
 	
 	
 
