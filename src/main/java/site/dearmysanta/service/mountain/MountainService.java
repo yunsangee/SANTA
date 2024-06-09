@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import site.dearmysanta.domain.common.Like;
+import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.mountain.MountainTrail;
@@ -54,7 +55,7 @@ public interface MountainService {
 	
 	public int getTotalMountainLikeCount(Like like);
 	
-	public List<Mountain> getMountainLikeList(Like like);
+	public List<Mountain> getMountainLikeList(Like like, Search search);
 	
 	//
 	//search
@@ -64,7 +65,7 @@ public interface MountainService {
 //	
 	public void deleteSearchKeyword(MountainSearch mountainSearch);
 //	
-	public List<MountainSearch> getSearchKeywordList(int userNo);
+	public List<MountainSearch> getSearchKeywordList(int userNo,Search search);
 //	
 	public void updateSearchSetting(int userNo, int settingValue);
 	

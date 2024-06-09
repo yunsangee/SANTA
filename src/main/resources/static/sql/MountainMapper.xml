@@ -36,8 +36,8 @@
 	<resultMap id="MountainSearchResultMap" type="site.dearmysanta.domain.mountain.MountainSearch">
     <!-- Search class fields -->
     	<result property="userNo" column="user_no"/>
-    	<result property="searchCondition" column="search_condition"/>
-    	<result property="searchKeyword" column="search_keyword"/>
+    	<result property="searchCondition" column="mountain_search_condition"/>
+    	<result property="searchKeyword" column="mountain_search_content"/>
     	<result property="searchDate" column="search_date"/>
     
     	<result property="locationNo" column="location_no"/>
@@ -209,9 +209,9 @@
 		SELECT * FROM
 		(
 			SELECT m.*, ROWNUM as ROW_SEQ FROM LIKES l, MOUNTAIN m
-			WHERE l.POST_LIKE_TYPE=2 AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO = m.MOUNTAIN_NO AND ROWNUM <![CDATA[<=]]> #{page} * #{pageSize} 
+			WHERE l.POST_LIKE_TYPE=2 AND l.USER_NO = #{like.userNo} AND l.POST_LIKE_NO = m.MOUNTAIN_NO AND ROWNUM <![CDATA[<=]]> #{search.currentPage} * #{search.pageSize} 
 		)
-		WHERE ROW_SEQ ((#{page} - 1) * #{pageSize} + 1) AND #{page} * #{pageSize}
+		WHERE ROW_SEQ BETWEEN ((#{search.currentPage} - 1) * #{search.pageSize} + 1) AND #{search.currentPage} * #{search.pageSize}
 	</select>
 
 
@@ -237,14 +237,14 @@
 	<!--  !!!!!! -->
 	<select id="getSearchKeywordList" parameterType="map" resultMap="MountainSearchResultMap">
 		
-		SELECT * FROM(
+		SELECT * FROM (
 		
-		SELECT * FROM MOUNTAIN_SEARCH
-		WHERE USER_NO = #{value} AND ROWNUM <![CDATA[<=]]> #{page} * #{pageSize} 
+		SELECT ms.* , ROWNUM as ROW_SEQ FROM MOUNTAIN_SEARCH ms
+		WHERE USER_NO = #{userNo} AND ROWNUM <![CDATA[<=]]> #{search.currentPage} * #{search.pageSize} 
 		
 		)
 		
-		WHERE ROW_SEQ ((#{page} - 1) * #{pageSize} + 1) AND #{page} * #{pageSize}
+		WHERE ROW_SEQ BETWEEN ((#{search.currentPage} - 1) * #{search.pageSize} + 1) AND #{search.currentPage} * #{search.pageSize}
 	</select>
 	
 	<update id="updateSearchSetting" parameterType="map">
@@ -290,6 +290,35 @@
 		) WHERE ROWNUM <![CDATA[<=]]> 10
 	</select>
 	
+	
+	
+	<!--  <select id="getCertificationPostList" parameterType= "search 경로!">
+	
+		Select * from certification_post
+		
+		<where> where 절 
+			<choose>다음 구문 중 조건에 맞는 쿼리 선택 
+					<when test='searchCondition == 0  and searchKeyword != "" '>  제목 검색!
+						cp_title LIKE '%'||#{searchKeyword}||'%'
+					 </when>
+					 
+					 <when test='searchCondition == 1 and searchKeyword != "" '>  닉네임 검색!
+					      nickname LIKE '%'||#{searchKeyword}||'%'
+					 </when>
+					 
+					  이런 식으로 1,2,3 번 조건에 따른 검색 구현은 이렇게 가능  
+	
+			</choose>
+		</where>
+		
+		<when test='searchCondition == 4  '>  좋아요 순  검색!  이렇게 하면 제목으로 검색하면서 좋아요 순 정렬도 가능 4,5,6,7 조건은 이런식으로 가능 
+			ORDER BY LIKE_COUNT DESC
+		</when>
+		 -->
+		
+		
+	
+	</select>
 	
 	
 

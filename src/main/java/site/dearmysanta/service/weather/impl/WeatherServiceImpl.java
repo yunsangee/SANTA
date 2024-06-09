@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.mountain.CoordinateConverter;
 import site.dearmysanta.domain.mountain.Weather;
 import site.dearmysanta.service.weather.WeatherService;
@@ -49,7 +50,7 @@ public class WeatherServiceImpl implements WeatherService{
 
             // Combine the current date and parsed time into a LocalDateTime object
             LocalDateTime time = LocalDateTime.of(today, localTime);
-            System.out.println("time:" + time);
+            SantaLogger.makeLog("info","time:" + time);
             
             if(time.compareTo(now) == 1) {  // if givenTime is later than now
             	continue;
@@ -63,7 +64,7 @@ public class WeatherServiceImpl implements WeatherService{
             }
         }
         
-        System.out.println("closestTime:" + closestTime);
+        SantaLogger.makeLog("info","closestTime:" + closestTime);
 
 
         // 문자열 형식으로 변환
@@ -71,8 +72,8 @@ public class WeatherServiceImpl implements WeatherService{
         String timeString = closestTime.format(DateTimeFormatter.ofPattern("HHmm"));
 
         // 출력
-        System.out.println("현재 날짜: " + dateString);
-        System.out.println("현재 시간: " + timeString);
+        SantaLogger.makeLog("info","현재 날짜: " + dateString);
+        SantaLogger.makeLog("info","현재 시간: " + timeString);
         
         int[] result = CoordinateConverter.convertLatLonToXY(lat, lot);
         
@@ -88,10 +89,10 @@ public class WeatherServiceImpl implements WeatherService{
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 
-		System.out.println("res:" + response);
+		SantaLogger.makeLog("info","res:" + response);
 
 		JSONObject responseJson = new JSONObject(response.getBody());
-		System.out.println(responseJson);
+		SantaLogger.makeLog("info",responseJson.toString());
 		JSONArray items = responseJson.getJSONObject("response").getJSONObject("body").getJSONObject("items")
 				.getJSONArray("item");
 
@@ -117,14 +118,14 @@ public class WeatherServiceImpl implements WeatherService{
 			}
 		}
 		
-        System.out.println(weather);
+        SantaLogger.makeLog("info",weather.toString());
         
         
         String urlStr = "http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo" + "?ServiceKey=" + key + "&locdate=" + dateString + "&latitude=" + lat + "&longitude=" + lot + "&_type=json";
         
         response = restTemplate.exchange(urlStr, HttpMethod.GET, entity, String.class); 
         responseJson = new JSONObject(response.getBody());
-		System.out.println(responseJson);
+		SantaLogger.makeLog("info",responseJson.toString());
 		
 		
 		JSONObject item = responseJson.getJSONObject("response").getJSONObject("body").getJSONObject("items")
@@ -139,7 +140,7 @@ public class WeatherServiceImpl implements WeatherService{
         weather.setLongitude(lot);
         
 
-        System.out.println(weather);
+        SantaLogger.makeLog("info",weather.toString());
       
         
         return weather;
@@ -166,7 +167,7 @@ public class WeatherServiceImpl implements WeatherService{
             
             JSONObject responseJson = new JSONObject(response.getBody());
             
-            System.out.println(responseJson);
+            SantaLogger.makeLog("info",responseJson.toString());
             JSONArray items = responseJson.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item");
             
             Weather weather = new Weather();
@@ -196,12 +197,11 @@ public class WeatherServiceImpl implements WeatherService{
         
         // Print the forecasts for verification
         for (Weather forecast : forecasts) {
-            System.out.println("Temperature: " + forecast.getTemperature());
-            System.out.println("Sky Condition: " + forecast.getSkyCondition());
-            System.out.println("Precipitation: " + forecast.getPrecipitation());
-            System.out.println("Precipitation Type: " + forecast.getPrecipitationType());
-            System.out.println("Precipitation Probability: " + forecast.getPrecipitationProbability());
-            System.out.println();
+            SantaLogger.makeLog("info","Temperature: " + forecast.getTemperature());
+            SantaLogger.makeLog("info","Sky Condition: " + forecast.getSkyCondition());
+            SantaLogger.makeLog("info","Precipitation: " + forecast.getPrecipitation());
+            SantaLogger.makeLog("info","Precipitation Type: " + forecast.getPrecipitationType());
+            SantaLogger.makeLog("info","Precipitation Probability: " + forecast.getPrecipitationProbability());
         }
 		
         return forecasts;
