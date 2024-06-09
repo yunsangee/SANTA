@@ -57,8 +57,7 @@ public interface MeetingService {
 	
 	public int getMountainTotalCount(String appointedHikingMountain) throws Exception;
 	
-
-//	public List<MeetingPost> getUnCertifiedMeetingPost(int userNo) throws Exception;
+	public List<MeetingPost> getUnCertifiedMeetingPost(int userNo) throws Exception;
 	
 //	public void uploadMeetingPostImages(List<MultipartFile> images, String postNo) throws Exception;
 //	
