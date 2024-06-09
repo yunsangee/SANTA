@@ -22,6 +22,7 @@ import site.dearmysanta.domain.correctionPost.CorrectionPost;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.mountain.Statistics;
+import site.dearmysanta.domain.mountain.Weather;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.correctionpost.CorrectionPostService;
 import site.dearmysanta.service.mountain.MountainService;
@@ -40,6 +41,9 @@ public class MountainApplicationTest {
 	
 	@Autowired
 	CorrectionPostService correctionPostService;
+	
+	@Autowired
+	WeatherService weatherService;
 	
 	//@Test
 	public void apiTest() throws Exception {
@@ -102,11 +106,15 @@ public class MountainApplicationTest {
 	}
 	
 	
-	//@Test
+	@Test
 	public void weatherTest() throws Exception {
-		WeatherService ws = new WeatherServiceImpl();
+//		WeatherService ws = new WeatherServiceImpl();
 		
-		ws.getWeather(37.445044, 126.964223); //gangnam
+		List<Weather> list= weatherService.getWeatherList(37.445044, 126.964223); //gangnam
+		
+		for(Weather weather : list) {
+			SantaLogger.makeLog("info", weather.toString());
+		}
 		
 //		ws.getWeather(35.192975, 129.093388888888);
 //		ws.getWeatherList();
@@ -153,7 +161,7 @@ public class MountainApplicationTest {
 	}
 	
 	
-	@Test
+//	@Test
 	public void statisticsTest() {
 //		String mountainName = "jirisan";
 		

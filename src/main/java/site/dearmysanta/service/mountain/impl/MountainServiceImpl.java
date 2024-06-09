@@ -56,7 +56,7 @@ public class MountainServiceImpl implements MountainService {
 	@Value("${bucketname}")
 	private String bucketname;
 	
-	@Value("${mountainAPIkey}")
+	@Value("${mountainAPIKey}")
 	private String API_KEY;
 	
 	
