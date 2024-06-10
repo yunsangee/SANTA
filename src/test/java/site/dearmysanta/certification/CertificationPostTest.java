@@ -30,7 +30,7 @@ public class CertificationPostTest {
 //	@Autowired
 //	CertificationPostDao certificationPostDao;
 
-	@Test
+	//@Test
     public void testgetMountainTotalCount() throws Exception {
        
        int count = certificationPostService.getTotalMountainCount("Mountain");
@@ -44,7 +44,7 @@ public class CertificationPostTest {
 	
 	
 	
-	//@Test
+	@Test
     public void testGetCertificationPostList() throws Exception {
         Search search = new Search();
          search.setSearchCondition(4);
