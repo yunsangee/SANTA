@@ -26,28 +26,28 @@ import site.dearmysanta.service.user.etc.UserEtcService;
 	public int getCertificationCount(int userNo) throws Exception {
 		// TODO Auto-generated method stub
 		return userEtcDao.getCertificationCount(userNo);
-	}
+	}//directly use
 
 	@Override
 	public int getMeetingCount(int userNo) throws Exception {
 		// TODO Auto-generated method stub
 		return userEtcDao.getMeetingCount(userNo);
 		
-	}
+	}//directly use
 
 	@Override
 	public void updateCertificationCount(int userNo) throws Exception {
 		// TODO Auto-generated method stub
 		userEtcDao.updateCertificationCount(userNo);
 		
-	}
+	} //directly use
 
 	@Override
 	public void updateMeetingCount(int userNo) throws Exception {
 		// TODO Auto-generated method stub
 		userEtcDao.updateMeetingCount(userNo);
 		
-	}
+	} //directly use
 
 	
 	public void addFollow(int followerUserNo, int followingUserNo) {
@@ -70,11 +70,11 @@ import site.dearmysanta.service.user.etc.UserEtcService;
 	
 	public int getFollowerCount(int userNo) {
 		return userEtcDao.getFollowerCount( userNo);
-	}
+	} //directly use
 	
 	public int getFollowingCount(int userNo) {
 		return userEtcDao.getFollowingCount( userNo);
-	}
+	}//directly use
 	
 	
 	public void addAlarmMessage(AlarmMessage alarmMessage) throws Exception{
