@@ -91,9 +91,9 @@ public class MountainApplicationTest {
 		
 	}
 	
-//	@Test
+	@Test
 	public void mountainApiTest() throws Exception {
-		mountainService.getMountain("관악산");
+		mountainService.getMountain("북한산");
 	}
 	
 //	@Test
