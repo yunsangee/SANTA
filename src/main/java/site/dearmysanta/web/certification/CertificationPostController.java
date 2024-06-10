@@ -22,7 +22,7 @@ import site.dearmysanta.service.certification.CertificationPostService;
 public class CertificationPostController {
 
     @Autowired
-   // @Qualifier("CertificationPostServiceImpl")
+    @Qualifier("CertificationPostServiceImpl")
     private CertificationPostService certificationPostService;
 
     public CertificationPostController() {
@@ -41,11 +41,11 @@ public class CertificationPostController {
     public String getCertificationPostList(@ModelAttribute Search search, Model model) throws Exception {
         Map<String, Object> result = certificationPostService.getCertificationPostList(search);
         List<CertificationPost> certificationPost = (List<CertificationPost>) result.get("list");
-        model.addAttribute("certificationPost", search);
+        model.addAttribute("certificationPost", certificationPost);
 
         // 디버깅을 위해 데이터 출력
-        System.out.println("Certification Posts: " + search);
+        System.out.println("Certification Post: " + certificationPost);
 
-        return "forward:certificationPost/listCertificationPost.jsp";
+        return "forward:/certificationPost/listCertificationPost.jsp";
     }
 }
