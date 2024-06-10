@@ -106,7 +106,7 @@
 	<select id="findMeetingPost" parameterType="int" resultMap="meetingPostSelectMap">
     	SELECT 
         	u.user_no, u.nickname, u.profile_image, mp.mp_no, mp.mp_title, mp.mp_contents, mp.mp_creation_date,
-        	pi.image, mp.meeting_name, mp.recruitment_deadline, mp.appointed_departure, mp.appointed_hiking_mountain,
+        	mp.meeting_name, mp.recruitment_deadline, mp.appointed_departure, mp.appointed_hiking_mountain,
         	mp.appointed_hiking_date, mp.participation_age, mp.maximum_personnel, mp.participation_grade,
         	mp.participation_gender, mp.recruitment_status, mp.mp_deleted_flag, mp.mp_certified_flag
     	FROM

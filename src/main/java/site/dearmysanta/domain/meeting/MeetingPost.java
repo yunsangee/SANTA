@@ -27,6 +27,7 @@ public class MeetingPost extends Post{
 	private String meetingName; // name of meeting
 	private Date recruitmentDeadline; // date for the recruitment deadline
     private String appointedDeparture; // expected departure location
+    private String appointedDetailDeparture; // expected departure detail location
     private String appointedHikingMountain; // expected hiking mountain
     private Date appointedHikingDate; // expected hiking date
     private String participationAge; // Preferred age range of participants

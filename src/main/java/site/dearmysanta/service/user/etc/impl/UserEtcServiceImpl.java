@@ -36,16 +36,16 @@ import site.dearmysanta.service.user.etc.UserEtcService;
 	}//directly use
 
 	@Override
-	public void updateCertificationCount(int userNo) throws Exception {
+	public void updateCertificationCount(int userNo,int type) throws Exception {
 		// TODO Auto-generated method stub
-		userEtcDao.updateCertificationCount(userNo);
+		userEtcDao.updateCertificationCount(userNo,type);
 		
 	} //directly use
 
 	@Override
-	public void updateMeetingCount(int userNo) throws Exception {
+	public void updateMeetingCount(int userNo,int type) throws Exception {
 		// TODO Auto-generated method stub
-		userEtcDao.updateMeetingCount(userNo);
+		userEtcDao.updateMeetingCount(userNo,type);
 		
 	} //directly use
 

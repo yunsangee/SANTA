@@ -47,7 +47,7 @@ public class WeatherServiceImpl implements WeatherService{
 
             // Combine the current date and parsed time into a LocalDateTime object
             LocalDateTime time = LocalDateTime.of(today, localTime);
-            SantaLogger.makeLog("info","time:" + time);
+//            SantaLogger.makeLog("info","time:" + time);
             
             if(time.compareTo(now) == 1) {  // if givenTime is later than now
             	continue;
@@ -61,7 +61,7 @@ public class WeatherServiceImpl implements WeatherService{
             }
         }
         
-        SantaLogger.makeLog("info","closestTime:" + closestTime);
+//        SantaLogger.makeLog("info","closestTime:" + closestTime);
 
         if(type == 1) {
         	return closestTime.format(DateTimeFormatter.ofPattern("HH:mm"));
@@ -72,8 +72,8 @@ public class WeatherServiceImpl implements WeatherService{
         String timeString = closestTime.format(DateTimeFormatter.ofPattern("HHmm"));
 
         // 출력
-        SantaLogger.makeLog("info","현재 날짜: " + dateString);
-        SantaLogger.makeLog("info","현재 시간: " + timeString);
+//        SantaLogger.makeLog("info","현재 날짜: " + dateString);
+//        SantaLogger.makeLog("info","현재 시간: " + timeString);
         
         return timeString;
 	}
@@ -172,72 +172,16 @@ public class WeatherServiceImpl implements WeatherService{
 		
 	}
 	
-	public List<Weather> getWeatherList(){
-		
-		List<Weather> forecasts = new ArrayList<>();
-		for (int i = 0; i < 5; i++) {
-            LocalDate date = LocalDate.now().plusDays(i);
-            String dateString = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-            
-            String url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?ServiceKey=" + key +
-                         "&pageNo=1&numOfRows=1000&dataType=JSON" +
-                         "&base_date=" + dateString + "&base_time=" + "0200" + "&nx=58&ny=127";
-            
-            HttpHeaders headers = new HttpHeaders();
-            HttpEntity<String> entity = new HttpEntity<>(headers);
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-            
-            JSONObject responseJson = new JSONObject(response.getBody());
-            
-            SantaLogger.makeLog("info",responseJson.toString());
-            JSONArray items = responseJson.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item");
-            
-            Weather weather = new Weather();
-            for (int j = 0; j < items.length(); j++) {
-                JSONObject item = items.getJSONObject(j);
-                String category = item.getString("category");
-                switch (category) {
-                    case "TMP":
-                        weather.setTemperature(item.getInt("fcstValue"));
-                        break;
-                    case "SKY":
-                        weather.setSkyCondition(String.valueOf(item.getInt("fcstValue")));
-                        break;
-                    case "PCP":
-                        weather.setPrecipitation(item.getString("fcstValue"));
-                        break;
-                    case "PTY":
-                        weather.setPrecipitationType(item.getInt("fcstValue"));
-                        break;
-                    case "POP":
-                        weather.setPrecipitationProbability(item.getDouble("fcstValue"));
-                        break;
-                }
-            }
-            forecasts.add(weather);
-        }
-        
-        // Print the forecasts for verification
-        for (Weather forecast : forecasts) {
-            SantaLogger.makeLog("info","Temperature: " + forecast.getTemperature());
-            SantaLogger.makeLog("info","Sky Condition: " + forecast.getSkyCondition());
-            SantaLogger.makeLog("info","Precipitation: " + forecast.getPrecipitation());
-            SantaLogger.makeLog("info","Precipitation Type: " + forecast.getPrecipitationType());
-            SantaLogger.makeLog("info","Precipitation Probability: " + forecast.getPrecipitationProbability());
-        }
-		
-        return forecasts;
-	}
-	
 	public List<Weather> getWeatherList(double lat, double lon) {
 		
-		List<Weather> weatherList = new ArrayList<>();
+		//List<Weather> weatherList = new ArrayList<>();
 
-        String url = "https://api.openweathermap.org/data/2.5/forecast" + "?lat=" + lat + "&lon=" + lon + "&lang=kr&units=metric&appid=" +weatherKey;
+        //String url = "https://api.openweathermap.org/data/2.5/forecast" + "?lat=" + lat + "&lon=" + lon + "&lang=kr&units=metric&appid=" +weatherKey;
 
         
-        String[] givenTimes = {"00:00",
+//		SantaLogger.makeLog("info", weatherKey);       
+		
+		String[] givenTimes = {"00:00",
         		"03:00",
         		"06:00",
         		"09:00",
@@ -251,55 +195,65 @@ public class WeatherServiceImpl implements WeatherService{
        
         
         
+        List<Weather> weatherList = new ArrayList<>();
+
+        String url = "https://api.openweathermap.org/data/3.0/onecall" + "?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&lang=kr&units=metric&appid=" + weatherKey;
+
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 
-        SantaLogger.makeLog("info", response.toString());
         JSONObject jsonObject = new JSONObject(response.getBody());
-        JSONArray listArray = jsonObject.getJSONArray("list");
+        JSONArray dailyArray = jsonObject.getJSONArray("daily");
 
-        for (int i = 0; i < listArray.length(); i++) {
-            JSONObject weatherObject = listArray.getJSONObject(i);
+        for (int i = 0; i < dailyArray.length(); i++) {
+            JSONObject dailyObject = dailyArray.getJSONObject(i);
             Weather weather = new Weather();
             
-         // Check if dt_txt field contains the desired timeString value
-            if (!weatherObject.getString("dt_txt").contains(timeString)) {
-                continue;
-            }else {
-            	SantaLogger.makeLog("info", weatherObject.getString("dt_txt"));
-            }
+            long dateUnix = dailyObject.getLong("dt");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd");
+            LocalDateTime dateDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(dateUnix), ZoneId.systemDefault());
+            weather.setDate(dateDateTime.format(dateFormatter));
 
-            JSONObject main = weatherObject.getJSONObject("main");
-            weather.setTemperature(main.getInt("temp"));
+            // 온도 데이터 추출
+            JSONObject temp = dailyObject.getJSONObject("temp");
+            weather.setTemperature(temp.getInt("day"));
 
             List<Integer> minMaxTemp = new ArrayList<>();
-            minMaxTemp.add(main.getInt("temp_min"));
-            minMaxTemp.add(main.getInt("temp_max"));
-            minMaxTemp.add(main.getInt("feels_like"));
+            minMaxTemp.add(temp.getInt("min"));
+            minMaxTemp.add(temp.getInt("max"));
+            minMaxTemp.add(temp.getInt("morn"));
             weather.setMinMaxTemperature(minMaxTemp);
 
-            JSONArray weatherArray = weatherObject.getJSONArray("weather");
+            // 하늘 상태 추출
+            JSONArray weatherArray = dailyObject.getJSONArray("weather");
             if (weatherArray.length() > 0) {
                 weather.setSkyCondition(weatherArray.getJSONObject(0).getString("description"));
             }
 
-            JSONObject sys = jsonObject.getJSONObject("city");
-            weather.setSunriseTime(sys.getString("sunrise"));
-            weather.setSunsetTime(sys.getString("sunset"));
+            // 일출, 일몰 시간 설정
+            long sunriseUnix = dailyObject.getLong("sunrise");
+            long sunsetUnix = dailyObject.getLong("sunset");
 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalDateTime sunriseDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(sunriseUnix), ZoneId.systemDefault());
+            LocalDateTime sunsetDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(sunsetUnix), ZoneId.systemDefault());
+
+            weather.setSunriseTime(sunriseDateTime.format(formatter));
+            weather.setSunsetTime(sunsetDateTime.format(formatter));
+
+            // 위도와 경도 설정
             weather.setLatitude(lat);
             weather.setLongitude(lon);
 
-            if (weatherObject.has("rain")) {
-                JSONObject rain = weatherObject.getJSONObject("rain");
-                weather.setPrecipitation(rain.toString());
+            // 강수 데이터 추출
+            if (dailyObject.has("rain")) {
+                weather.setPrecipitation(dailyObject.getDouble("rain") + " mm");
             }
-
-            if (weatherObject.has("pop")) {
-                weather.setPrecipitationProbability(weatherObject.getDouble("pop"));
+            if (dailyObject.has("pop")) {
+                weather.setPrecipitationProbability(dailyObject.getDouble("pop") * 100); // 퍼센트로 변환
             }
 
             String description = weather.getSkyCondition().toLowerCase();

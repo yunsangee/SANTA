@@ -16,9 +16,9 @@ public interface UserEtcService {
 			
 		public int getMeetingCount(int userNo) throws Exception;
 		
-		public void updateCertificationCount(int userNo) throws Exception;
+		public void updateCertificationCount(int userNo,int type) throws Exception;
 		
-		public void updateMeetingCount(int userNo) throws Exception;
+		public void updateMeetingCount(int userNo,int type) throws Exception;
 		
 		//
 		// Badge
