@@ -62,18 +62,28 @@
 		SELECT mp_count FROM USERS WHERE USER_NO = #{value}
 	</select>
 	
-	<update id="updateCertificationCount" parameterType="int">
+	<update id="updateCertificationCount" parameterType="map">
 		UPDATE USERS
 		SET
-		cp_count = cp_count+1
-		WHERE USER_NO = #{value}
+		<if test='type==0'>
+			cp_count = cp_count+1
+		</if>
+		<if test='type==1'>
+			cp_count = cp_count-1
+		</if>
+		WHERE USER_NO = #{userNo}
 	</update>
 	
 	<update id="updateMeetingCount" parameterType="int">
 		UPDATE USERS
 		SET
-		mp_count = mp_count+1
-		WHERE USER_NO = #{value}
+		<if test='type==0'>
+			mp_count = mp_count+1
+		</if>
+		<if test='type==1'>
+			mp_count = mp_count-1
+		</if>
+		WHERE USER_NO = #{userNo}
 	</update>
 	
 	
