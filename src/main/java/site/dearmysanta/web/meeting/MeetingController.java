@@ -3,8 +3,12 @@ package site.dearmysanta.web.meeting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import site.dearmysanta.domain.meeting.MeetingPost;
 import site.dearmysanta.service.meeting.MeetingService;
 
 @Controller
@@ -12,16 +16,19 @@ import site.dearmysanta.service.meeting.MeetingService;
 public class MeetingController {
 	
 	@Autowired
-	@Qualifier("meetingServiceImpl")
+	@Qualifier("meetingService")
 	private MeetingService meetingService;
 	
 	public MeetingController() {
 		System.out.println(this.getClass());
 	}
 	
-//	@RequestMapping(value = "addMeetingPost", method=RequestMethod.GET)
-//	public String addMeetingPost() throws Exception {
-//		
+//	@PostMapping(value = "addMeetingPost")
+//	public String addMeetingPost(@ModelAttibute("meetingPost") MeetingPost meetingPost,
+//			) throws Exception {
+		
+		
+		
 //	}
 
 
