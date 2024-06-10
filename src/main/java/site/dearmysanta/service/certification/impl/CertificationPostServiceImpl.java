@@ -50,45 +50,29 @@ public class CertificationPostServiceImpl implements CertificationPostService {
     	return map;
     }
   
-//    @Override
-//    public CertificationPost getCertificationPost(int postNo) throws Exception {
-//       
-//    	CertificationPost certificationPost = certificationPostDao.getCertificationPost(postNo);
-//    	
-//    	int likeCount = certificationPostDao.getCertificationPostLikeCount(postNo);
-//    	
-//    	certificationPost.setCertificationPostLikeCount(likeCount);
-//    	
-//    	return certificationPost;
-//    }
   
     @Override
     public void updateCertificationPost(CertificationPost certificationPost) throws Exception {
         certificationPostDao.updateCertificationPost(certificationPost);
     }
     
-//	@Override
-//	public Map<String,Object> getCertificationPostList(Search search) throws Exception {		
-//		
-//		List<CertificationPost> list= certificationPostDao.getCertificationPostList(search);
-//			
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put("list", list );
-//		
-//		
-//		return map;
-//	}
-    
-//	@Override
-//	public List<CertificationPost> getCertificationPostList() throws Exception {		
-//		return certificationPostDao.getCertificationPostList();
-//	}
+	@Override
+	public Map<String, Object> getCertificationPostList(Search search) throws Exception {
+		List<CertificationPost> list= certificationPostDao.getCertificationPostList(search);
+		
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", list );
+	
+		return map;
+	}
 
 	@Override
 	public List<CertificationPost> getMyCertificationPostList(int userNo) throws Exception {
 		return certificationPostDao.getMyCertificationPostList(userNo);
 	}
     
+	
 	
     //hashtag
 
@@ -98,11 +82,6 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 		
     }
     
-//	@Override
-//	public void getHashtag(int postNo) throws Exception {
-//		return certificationPost;
-//	}
-	
 	
     //Like
 	@Override
@@ -141,16 +120,6 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 		
 	}
 
-
-
-
-//	@Override
-//	public CertificationPost getHashtag(int postNo) throws Exception {
-//		// TODO Auto-generated method stub
-//		return certificationPostDao.getHashtag(postNo);
-//	}
-
-
 	@Override
 	public List<CertificationPostComment> getCertificationPostCommentList(int postNo) throws Exception {
 		
@@ -158,22 +127,11 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 	}
 
 
+	//getTotalMountain
 	@Override
-	public Map<String, Object> getCertificationPostList(Search search) throws Exception {
-		List<CertificationPost> list= certificationPostDao.getCertificationPostList(search);
-		
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("list", list );
-	
-		return map;
+	public int getTotalMountainCount(String certificationPostMountainName) throws Exception {
+		return certificationPostDao.getTotalMountainCount(certificationPostMountainName);
 	}
-
-
-
-
-
-
 
 
 	}

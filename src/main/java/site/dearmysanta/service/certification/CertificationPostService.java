@@ -24,9 +24,7 @@ public interface CertificationPostService {
 	
 	public	List<CertificationPost> getMyCertificationPostList(int userNo) throws Exception;
 
-	//hashtag
-	//public void addHashTag(CertificationPost certificationPost);
-	
+	//hashtag	
 	public void deleteHashtag(int HashtagNo) throws Exception;
 	
 	//public CertificationPost getHashtag(int postNo) throws Exception;
@@ -48,13 +46,9 @@ public interface CertificationPostService {
 	public void deleteCertificationPostComment(CertificationPostComment certificationPostComment) throws Exception;
 
 	public List<CertificationPostComment> getCertificationPostCommentList(int postNo) throws Exception;
-
 	
-	//Search
-		//public List<CertificationPostSearch> getCertificationPostSearch(int certificationPostListSearchCondition);
-		
 
-
-
+	public int getTotalMountainCount(String certificationPostMountainName) throws Exception;
+	
 
 }

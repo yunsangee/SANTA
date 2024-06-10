@@ -30,21 +30,35 @@ public class CertificationPostTest {
 //	@Autowired
 //	CertificationPostDao certificationPostDao;
 
-//	@Test
-//    public void testGetCertificationPostList() throws Exception {
-//        Search search = new Search();
-//         search.setSearchCondition(4);
-//     //  search.setSearchKeyword("F");
-//
-//        Map<String, Object> result = certificationPostService.getCertificationPostList(search);
-//        List<CertificationPost> certificationPosts = (List<CertificationPost>) result.get("list");
-//
-//        for (CertificationPost post : certificationPosts) {
-//            SantaLogger.makeLog("info", result.toString());
-//
-//        }
-//    }
 	@Test
+    public void testgetMountainTotalCount() throws Exception {
+       
+       int count = certificationPostService.getTotalMountainCount("Mountain");
+       
+       //int count = scheduleMapper.getMountainTotalCount("°ü¾Ç»ê");
+       
+       SantaLogger.makeLog("info", count + "\n");
+       
+    }
+	
+	
+	
+	
+	//@Test
+    public void testGetCertificationPostList() throws Exception {
+        Search search = new Search();
+         search.setSearchCondition(4);
+     //  search.setSearchKeyword("F");
+
+        Map<String, Object> result = certificationPostService.getCertificationPostList(search);
+        List<CertificationPost> certificationPosts = (List<CertificationPost>) result.get("list");
+
+        for (CertificationPost post : certificationPosts) {
+            SantaLogger.makeLog("info", post.getTitle() + " " + post.getCertificationPostLikeCount());
+
+        }
+    }
+	//@Test
 	public void testgetCertification() throws Exception {
 		
 		Map<String, Object> certificationPost = certificationPostService.getCertificationPost(1);

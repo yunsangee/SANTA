@@ -102,28 +102,6 @@
 
       select cp_title from certification_post where user_no =#{userNo} AND cp_type = 0
  </select>
-<!-- 
-    <select id="getCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
-        SELECT
-            cp_no,
-            user_no,
-            cp_title,
-            cp_contents,
-            cp_mountain_name,
-            cp_hiking_trail,
-            cp_total_time,
-            cp_ascent_time,
-            cp_descent_time,
-            cp_hiking_date,
-            cp_creation_date,
-            cp_transportation,
-            cp_difficulty,
-            cp_delete_flag,
-            cp_like_count
-        FROM 
-            CERTIFICATION_POST
-    </select>
-   -->
     
     <update id="updateCertificationPost" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
         UPDATE certification_post
@@ -220,15 +198,21 @@
     
 
 <select id="getCertificationPostCommentList" parameterType="int" resultMap="certificationPostCommentSelectMap">
-    	SELECT 
-        post_no,
-        	comment_no,
-        	comment_contents,
-        	comment_creation_date
+    SELECT 
+   			 u.user_no,
+        	u.nickname,
+        	u.profile_image,
+        	c.post_no,
+        	c.comment_no,
+        	c.comment_contents,
+        	c.comment_creation_date
+        	
     	FROM 
-        	comments
+        	comments c
+    	JOIN 
+        	users u ON c.user_no = u.user_no
     	WHERE 
-        	post_no = #{postNo} AND post_type = 0
+        	c.post_no = #{postNo} AND c.post_type = 1
 	</select>
 
 <!-- search -->
@@ -251,10 +235,10 @@
     </where>
     <choose>
         <when test="searchCondition == 4">
-            ORDER BY cp_like_count DESC
+            ORDER BY NVL(cp_like_count,0) DESC
         </when>
         <when test="searchCondition == 5">
-            ORDER BY cp_like_count ASC
+            ORDER BY NVL(cp_like_count,0) ASC
         </when>
         <when test="searchCondition == 2">
             ORDER BY cp_difficulty DESC
@@ -265,7 +249,9 @@
     </choose>
 </select>
 
-
+<select id="getTotalMountainCount" parameterType="String" resultType="int">
+SELECT COUNT(*) FROM certification_post WHERE CP_MOUNTAIN_NAME = #{mountainName}
+</select>
 
 
 

@@ -27,7 +27,6 @@ public interface CertificationPostDao {
 
 	public void updateCertificationPost(CertificationPost certificationPost) throws Exception;
 	
-//	public List<CertificationPost> getCertificationPostList() throws Exception;
 	public List<CertificationPost> getCertificationPostList(Search search) throws Exception;
 	
 	public List<CertificationPost> getMyCertificationPostList(int usrNo) throws Exception;
@@ -61,10 +60,8 @@ public interface CertificationPostDao {
 	
 	public List<CertificationPostComment> getCertificationPostCommentList(int postNo) throws Exception;
 
-	
-	//Search
-	//public List<CertificationPostSearch> getCertificationPostSearch(int certificationPostListSearchCondition);
-	
+	public int getTotalMountainCount(String certificationPostMountainName);
+
 
 }
 
