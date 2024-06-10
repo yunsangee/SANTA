@@ -59,6 +59,6 @@ public interface MeetingDAO {
 	
 	public List<MeetingPost> getUnCertifiedMeetingPost(int userNo) throws Exception;
 	
-
+	public void insertImageCount(int postNo, int imageCount) throws Exception;
 
 }
