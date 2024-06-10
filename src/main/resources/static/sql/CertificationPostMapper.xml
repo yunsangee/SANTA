@@ -97,6 +97,12 @@
             cp_no = #{postNo}
     </select>
     
+        <insert id="addHashtag" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
+		INSERT INTO HASHTAG (HASHTAG_NO, CP_NO, HASHTAG_CONTENT)
+		VALUES (seq_HASHTAG_NO.nextval, #{postNo}, #{certificationPostHashtagContents})
+	</insert>
+    
+    
     <!-- 사진만보여줘야하는데 일단 글제목보여주기 -->
 <select id="getMyCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
 
@@ -125,11 +131,6 @@
     
     
     <!-- hashtag -->
-        <insert id="addHashtag" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
-		INSERT INTO HASHTAG (HASHTAG_NO, CP_NO, HASHTAG_CONTENT)
-		VALUES (seq_HASHTAG_NO.nextval, #{postNo}, #{certificationPostHashtagContents})
-	</insert>
-    
     
     <delete id="deleteHashtag" parameterType="int">
         DELETE FROM hashtag

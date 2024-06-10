@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.certificationPost.CertificationPost;
+import site.dearmysanta.domain.certificationPost.CertificationPostComment;
 import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.service.certification.CertificationPostService;
 
@@ -29,15 +30,35 @@ public class CertificationPostController {
     public CertificationPostController() {
         System.out.println(this.getClass());
     }
-//    @PostMapping(value = "addCertificationPost")
-//    public String addCertificationPost(@ModelAttribute CertificationPost certificationPost, Model model) throws Exception {
-//        certificationPostService.addCertificationPost(certificationPost);
-//        System.out.println("add : POST");
-//        model.addAttribute("certificationPost", certificationPost);
-//        return "forward:/certificationPost/addCertificationPost.jsp";
-//    }
     
-    //t
+    
+    
+        
+//   Submit해서 들어오는건 포스트매핑
+//    url타고들어오는건 겟
+    @GetMapping(value ="addCertificationPost")
+    public String addCertificationPost() throws Exception {
+    	
+    	  return "forward:/certificationPost/addCertificationPost.jsp";
+    }
+    
+    //user에 카운트하는거?어떻ㅎ게하는데
+
+    @PostMapping(value = "addCertificationPost")
+    public String addCertificationPost(@ModelAttribute CertificationPost certificationPost, Model model) throws Exception {
+        certificationPostService.addCertificationPost(certificationPost);
+     
+  
+        return "forward:/certificationPost/getCertificationPost.jsp";
+    }
+   
+    @PostMapping(value = "updateCertificationPost")
+    public String updateCertificationPost(@ModelAttribute CertificationPost certificationPost ) throws Exception {
+    	
+    	certificationPostService.updateCertificationPost(certificationPost);
+    	return "forward:/certificationPost/updateCertificationPost.jsp";
+    	
+    }
 
    // @PostMapping(value = "getCertificationPostList")
     @RequestMapping(value = "listCertificationPost")
@@ -53,4 +74,28 @@ public class CertificationPostController {
 
         return "forward:/certificationPost/listCertificationPost.jsp";
     }
+    
+    @RequestMapping(value="getCertificationPost")
+    public String getCertificationPost(@RequestParam int postNo, Model model) throws Exception {
+    	
+    	 Map<String, Object> certificationPost = certificationPostService.getCertificationPost(postNo);
+    	 List<CertificationPostComment> certificationPostComment = certificationPostService.getCertificationPostCommentList(postNo);
+    	 System.out.println("CertificationPost:"+certificationPost);
+
+
+    	 model.addAttribute("certificationPost", certificationPost.get("certificationPost"));
+    	 model.addAttribute("certificationPostComments", certificationPostComment);
+       model.addAttribute("hashtagList", certificationPost.get("hashtagList"));
+    	
+         System.out.println("이거맞지"+certificationPostComment);
+         
+         return "forward:/certificationPost/getCertificationPost.jsp";
+ 					  
+    	 
+    }
+
+
+
+
+
 }
