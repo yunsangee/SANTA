@@ -15,15 +15,13 @@ import site.dearmysanta.service.user.OAuthService;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/oauth")
-
+@RequestMapping("/oauth/*")
 public class OAuthController {
 
     /**
      * Ä«Ä«¿À callback
      * [GET] /oauth/kakao/callback
      */
-	
     @ResponseBody
     @GetMapping("/kakao")
     public void kakaoCallback(@RequestParam String code) {
