@@ -9,6 +9,7 @@
 </head>
 <h1>Certification Post List</h1>
     <c:forEach var="certificationPost" items="${certificationPost}">
+    <p>Mountain Name: ${certificationPost.title}</p>
         <p>Mountain Name: ${certificationPost.certificationPostMountainName}</p>
         <p>Hiking Trail: ${certificationPost.certificationPostHikingTrail}</p>
         <p>Total Time: ${certificationPost.certificationPostTotalTime}</p>

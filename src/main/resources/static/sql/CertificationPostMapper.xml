@@ -138,11 +138,10 @@
     
   
     <select id="getHashtag" parameterType="int" resultMap="CertificationPostSelectMap">
-        SELECT hashtag_content
-        FROM hashtag
-        WHERE cp_no = #{postNo}
-    </select>
-    
+    SELECT cp.*, h.hashtag_content
+    FROM certification_post cp
+    INNER JOIN hashtag h ON cp.cp_no = h.cp_no
+    WHERE cp.cp_no = #{postNo}  </select>
     <!-- Like  -->
     <insert id="addCertificationPostLike" parameterType="site.dearmysanta.domain.common.Like">
         INSERT INTO LIKES (LIKE_NO, USER_NO, POST_LIKE_NO, POST_LIKE_TYPE, LIKE_DATE)
@@ -217,11 +216,11 @@
 
 <!-- search -->
 <!---->
- <select id="getCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="map">
+ <select id="getCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="site.dearmysanta.domain.common.Search">
        SELECT * FROM certification_post
     <where>
         <choose>
-            <when test="searchCondition == 0 and searchKeyword != ''">
+            <when test='searchCondition == 0 and searchKeyword != "" '>
                 cp_title LIKE '%' || #{searchKeyword} || '%'
             </when>
             <when test="searchCondition == 1 and searchKeyword != ''">
