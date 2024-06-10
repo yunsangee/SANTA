@@ -2,6 +2,7 @@ package site.dearmysanta.service.user;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -25,7 +26,7 @@ import site.dearmysanta.domain.user.User;
 		
 		public String login(String userId, String password) throws Exception;
 		
-		public List<User> getUserList(Search search) throws Exception;
+		public Map<String, Object> getUserList(Search search) throws Exception;
 		
 		public List<User> withdrawUserList(Search search) throws Exception;
 		

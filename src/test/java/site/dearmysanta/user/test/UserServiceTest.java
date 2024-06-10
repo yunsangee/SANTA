@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -111,17 +112,17 @@ public class UserServiceTest {
 	//
 	
 	//@Test
-			public void testgetUserList(Search search) throws Exception {
-				List<User> list = userService.getUserList(search);
-				
-				
-				for(User u : list) {
-					System.out.println(u);
-				}
-				
-				System.out.println("==========");
-				///////////////////////////////////////////////////////////////
-			}
+//			public void testgetUserList(Search search) throws Exception {
+//				Map<String, Object> list = userService.getUserList(search);
+//				
+//				
+//				for(User u : list) {
+//					System.out.println(u);
+//				}
+//				
+//				System.out.println("==========");
+//				///////////////////////////////////////////////////////////////
+//			}
 			
 	//
 	// test Search getUserList 
@@ -145,13 +146,13 @@ public class UserServiceTest {
 			                .searchKeyword("User")
 			                .build();
 
-			        List<User> results = userService.getUserList(search);
+			        Map<String, Object> results = userService.getUserList(search);
 			        assertNotNull(results);
 			        
-			        System.out.println("search : " + search);
-			        for (User u : results) {
-			            System.out.println(u);
-			        }
+//			        System.out.println("search : " + search);
+//			        for (User u : results) {
+//			            System.out.println(u);
+//			        }
 			        
 			        System.out.println("==========");
 

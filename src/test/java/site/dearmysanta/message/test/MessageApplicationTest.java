@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import site.dearmysanta.domain.message.MessageInfo;
-import site.dearmysanta.web.user.UserRestController;
+import site.dearmysanta.web.user.UserRestController_message;
 
 import static org.hamcrest.CoreMatchers.any;
 import static org.junit.Assert.assertEquals;
@@ -60,7 +60,7 @@ public class MessageApplicationTest {
         int validationNumber = 123456;
         
         // 임의의 인증번호를 맵에 추가
-        UserRestController.map.put(phoneNumber, validationNumber);
+        UserRestController_message.map.put(phoneNumber, validationNumber);
 
         // 테스트용 MessageInfo 객체 생성
         MessageInfo messageInfo = new MessageInfo();
@@ -68,7 +68,7 @@ public class MessageApplicationTest {
         messageInfo.setValidationNumber(validationNumber);
 
         // GET 요청 보내기
-        int result = UserRestController.getValidationNumber(messageInfo);
+        int result = UserRestController_message.getValidationNumber(messageInfo);
 
         // 반환값이 예상된 값과 일치하는지 확인
         assertEquals(validationNumber, result);

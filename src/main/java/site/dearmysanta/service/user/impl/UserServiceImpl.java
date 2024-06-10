@@ -2,6 +2,7 @@ package site.dearmysanta.service.user.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,7 +38,7 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public List<User> getUserList(Search search) throws Exception {
+	public Map<String, Object> getUserList(Search search) throws Exception {
 		// TODO Auto-generated method stub
 		return userDao.getUserList(search);
 	}
