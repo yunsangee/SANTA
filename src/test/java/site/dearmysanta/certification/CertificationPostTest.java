@@ -48,13 +48,13 @@ public class CertificationPostTest {
     public void testGetCertificationPostList() throws Exception {
         Search search = new Search();
      //    search.setSearchCondition(4);
-       search.setSearchKeyword("T");
+       search.setSearchKeyword("");
 
         Map<String, Object> result = certificationPostService.getCertificationPostList(search);
         List<CertificationPost> certificationPosts = (List<CertificationPost>) result.get("list");
 
         for (CertificationPost post : certificationPosts) {
-            SantaLogger.makeLog("info",post.getPostNo()+ " "  +post.getCertificationPostHashtagContents() + " " + post.getCertificationPostLikeCount());
+            SantaLogger.makeLog("info",post.getTitle()+ ""+ post.getPostNo()+ " "  +post.getCertificationPostHashtagContents() + " " + post.getCertificationPostLikeCount());
 
         }
     }

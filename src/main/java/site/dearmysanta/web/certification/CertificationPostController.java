@@ -29,7 +29,6 @@ public class CertificationPostController {
     public CertificationPostController() {
         System.out.println(this.getClass());
     }
-
 //    @PostMapping(value = "addCertificationPost")
 //    public String addCertificationPost(@ModelAttribute CertificationPost certificationPost, Model model) throws Exception {
 //        certificationPostService.addCertificationPost(certificationPost);
