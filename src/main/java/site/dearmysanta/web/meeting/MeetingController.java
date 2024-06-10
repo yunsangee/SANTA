@@ -16,7 +16,7 @@ import site.dearmysanta.domain.meeting.MeetingPost;
 import site.dearmysanta.service.meeting.MeetingService;
 
 @Controller
-@RequestMapping("/meetingController/*")
+@RequestMapping("/meeting/*")
 public class MeetingController {
 	
 	@Autowired

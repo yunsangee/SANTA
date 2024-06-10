@@ -65,9 +65,4 @@ public interface MeetingService {
 	
     public MultipartFile downloadMeetingPostImage(String postNo, String fileName) throws Exception;
 
-	
-
-	
-	
-
 }

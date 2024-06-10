@@ -6,6 +6,10 @@
 <body>
     <h1>Add Meeting Post</h1>
     <form action="/meeting/addMeetingPost" method="post" enctype="multipart/form-data">
+    
+    	<label for="userNo">userNo:</label>
+        <input type="number" id="userNo" name="userNo"/><br/>
+    
         <label for="title">Title:</label>
         <input type="text" id="title" name="title"/><br/>
 

@@ -12,6 +12,7 @@
     <p>Meeting Name: ${meetingPost.meetingName}</p>
     <p>Recruitment Deadline: ${meetingPost.recruitmentDeadline}</p>
     <p>Appointed Departure: ${meetingPost.appointedDeparture}</p>
+    <p>Appointed Detail Departure: ${meetingPost.appointedDetailDeparture}</p>
     <p>Appointed Hiking Mountain: ${meetingPost.appointedHikingMountain}</p>
     <p>Appointed Hiking Date: ${meetingPost.appointedHikingDate}</p>
     <p>Participation Age: ${meetingPost.participationAge}</p>
