@@ -22,6 +22,9 @@
 
         <label for="appointedDeparture">Appointed Departure:</label>
         <input type="text" id="appointedDeparture" name="appointedDeparture" value="${meetingPost.appointedDeparture}"/><br/>
+        
+        <label for="appointedDetailDeparture">Appointed Detail Departure:</label>
+        <input type="text" id="appointedDetailDeparture" name="appointedDetailDeparture" value="${meetingPost.appointedDetailDeparture}"/><br/>
 
         <label for="appointedHikingMountain">Appointed Hiking Mountain:</label>
         <input type="text" id="appointedHikingMountain" name="appointedHikingMountain" value="${meetingPost.appointedHikingMountain}"/><br/>
