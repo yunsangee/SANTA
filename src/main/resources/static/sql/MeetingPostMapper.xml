@@ -16,7 +16,7 @@
 	<resultMap id="meetingParticipationSelectMap" type="site.dearmysanta.domain.meeting.MeetingParticipation">
 		<result property="participationNo"			column="participation_no"		jdbcType="NUMERIC"/>
 		<result property="postNo"					column="mp_no"					jdbcType="NUMERIC"/>
-        <result property="userNo" 					column="participation_no" 		jdbcType="NUMERIC"/>
+        <result property="userNo" 					column="user_no" 				jdbcType="NUMERIC"/>
         <result property="profileImage" 			column="profile_image" 			jdbcType="VARCHAR"/>
         <result property="nickname" 				column="nickname" 				jdbcType="VARCHAR"/>
         <result property="participationStatus" 		column="participation_status" 	jdbcType="NUMERIC"/>
@@ -43,7 +43,7 @@
         <result property="contents" 				column="mp_contents" 				jdbcType="VARCHAR"/>
         <result property="postDate" 				column="mp_creation_date" 			jdbcType="DATE"/>
        	
-<!--  		<result property="meetingPostImage"			column="image"						jdbcType="VARCHAR"/> -->
+		<result property="meetingPostImageCount"	column="mp_image_count"				jdbcType="NUMERIC"/>
 		<result property="meetingName"				column="meeting_name"				jdbcType="VARCHAR"/>
 		<result property="recruitmentDeadline"		column="recruitment_deadline"		jdbcType="DATE"/>
 		<result property="appointedDeparture"		column="appointed_departure"	    jdbcType="VARCHAR"/>
@@ -59,20 +59,26 @@
 	</resultMap>
 	
 	<insert id="insertMeetingPost" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
+		<selectKey keyProperty="postNo" resultType="int" order="BEFORE">
+            SELECT seq_mp_no.nextval FROM dual
+        </selectKey>
+		
 		INSERT
-		INTO meeting_post(mp_no, user_no, mp_title, mp_contents, meeting_name, recruitment_deadline,
+		INTO meeting_post(mp_no, user_no, mp_title, mp_contents, mp_image_count, meeting_name, recruitment_deadline,
 		 appointed_departure, appointed_hiking_mountain, appointed_hiking_date, maximum_personnel, 
 		 participation_age, participation_grade, participation_gender)
-		VALUES (seq_mp_no.NEXTVAL, #{userNo}, #{title}, #{contents}, #{meetingName}, #{recruitmentDeadline},
-		 #{appointedDeparture}, #{appointedHikingMountain}, #{appointedHikingDate}, #{maximumPersonnel},
-		 #{participationAge}, #{participationGrade}, #{participationGender})
+		VALUES (seq_mp_no.CURRVAL, #{userNo}, #{title}, #{contents}, #{meetingPostImageCount}, #{meetingName}, 
+		 #{recruitmentDeadline}, #{appointedDeparture}, #{appointedHikingMountain}, #{appointedHikingDate}, 
+		 #{maximumPersonnel}, #{participationAge}, #{participationGrade}, #{participationGender})
 	</insert>
 	
+	<!-- 
 	<insert id="insertPostImage" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
 		INSERT
 		INTO post_image(image_no, post_no, image, post_flag)
 		VALUES (seq_image_no.NEXTVAL, #{mp_no}, #{image}, 1) 
 	</insert>
+	 -->
 	
 	<update id="updateMeetingPost" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
 		UPDATE meeting_post
@@ -89,11 +95,13 @@
 		WHERE mp_no = #{postNo}
 	</update>
 	
+	<!-- 
 	<update id="updatePostImage" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
 		UPDATE post_image
 		SET image = #{image}
 		Where image_no = #{image_no}
 	</update>
+	 -->
 
 	<select id="findMeetingPost" parameterType="int" resultMap="meetingPostSelectMap">
     	SELECT 
@@ -105,8 +113,10 @@
         	meeting_post mp
     	JOIN
         	users u ON mp.user_no = u.user_no
+        <!-- 
     	LEFT JOIN
         	post_image pi ON mp.mp_no = pi.post_no AND pi.post_flag = 1
+         -->
     	WHERE
         	mp.mp_no = #{postNo}
 	</select>
@@ -185,15 +195,17 @@
 	
 	<insert id="insertMeetingParticipation" parameterType="site.dearmysanta.domain.meeting.MeetingParticipation">
         INSERT INTO meeting_participation (
-            post_no,
+        	participation_no,
+            mp_no,
             user_no,
             participation_status,
-            participation_role,
+            participation_role
         ) VALUES (
+        	seq_participation_no.NEXTVAL,
             #{postNo},
             #{userNo}, 
             #{participationStatus},
-            #{participationRole},
+            #{participationRole}
         )
     </insert>
     
@@ -205,7 +217,7 @@
 	<update id="updateMeetingParticipationStatus" parameterType="int">
     	UPDATE meeting_participation
     	SET participation_status = 1,
-        	participation_role = 1
+        	participation_role = 2
     	WHERE participation_no = #{participationNo}
 	</update>
 	
@@ -238,5 +250,14 @@
     	SET mp_certified_flag = 1
     	WHERE mp_no = #{postNo}
 	</update>
+	
+	<select id="getUnCertifiedMeetingPost" parameterType="int" resultMap="meetingPostSelectMap">
+		SELECT 
+        	mp_no, mp_title, mp_creation_date, meeting_name
+    	FROM
+        	meeting_post
+    	WHERE
+        	user_no = #{userNo} AND mp_certified_flag = 0 AND recruitment_status = 2
+	</select>
 	
 </mapper>

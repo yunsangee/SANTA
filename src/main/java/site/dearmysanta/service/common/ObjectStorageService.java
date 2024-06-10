@@ -2,6 +2,7 @@ package site.dearmysanta.service.common;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +17,9 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -75,7 +78,7 @@ public class ObjectStorageService {
         return new MockMultipartFile(file.getName(), file.getName(), "application/octet-stream", fileInputStream);
     }
     
-    public void uploadListData(List<?> dataList, String fileName) throws IOException {
+    public void uploadListData(List<List<Double>> dataList, String fileName) throws IOException {
         String jsonString = objectMapper.writeValueAsString(dataList);
         byte[] byteArray = jsonString.getBytes();
 
@@ -87,9 +90,18 @@ public class ObjectStorageService {
         amazonS3.putObject(bucketName, fileName, inputStream, metadata);
     }
 
-    public List<?> downloadListData(String bucketName, String fileName, Class<?> elementType) throws IOException {
+    public List<List<Double>> downloadListData(String bucketName, String fileName) throws IOException {
         S3Object s3Object = amazonS3.getObject(bucketName, fileName);
         InputStream inputStream = s3Object.getObjectContent();
-        return objectMapper.readValue(inputStream, objectMapper.getTypeFactory().constructCollectionType(List.class, elementType));
+        
+        // Read the input stream into a string for debugging
+        String json = new BufferedReader(new InputStreamReader(inputStream))
+                .lines().collect(Collectors.joining("\n"));
+        
+        // Log the JSON data
+        System.out.println("JSON data: " + json);
+        
+        // Parse the JSON data
+        return objectMapper.readValue(json, objectMapper.getTypeFactory().constructCollectionType(List.class, objectMapper.getTypeFactory().constructCollectionType(List.class, Double.class)));
     }
 }

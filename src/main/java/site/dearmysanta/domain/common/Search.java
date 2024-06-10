@@ -22,5 +22,9 @@ public class Search {
 	private int searchCondition;
 	private String searchKeyword;
 	private Date searchDate;
+	
+	private int currentPage;
+	private int pageUnit;
+	private int pageSize;
 
 }// search super class

@@ -26,6 +26,7 @@ import site.dearmysanta.service.mountain.MountainService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -51,12 +52,24 @@ public class MountainServiceImpl implements MountainService {
 	@Value("${naverMapSecretKey}")
 	private String clientSecret;
 	
+	
+	@Value("${bucketname}")
+	private String bucketname;
+	
+	@Value("${mountainAPIKey}")
+	private String API_KEY;
+	
+	
+	@Value("${vWorldAPIKey}")
+	private String vWorldAPIKey;
+	
 	@Autowired
 	ObjectStorageService objectStorageService;
 	
-
-	private String API_KEY = "O5Qg2/rYlZbWpeUQO4gLBZewc6BzDHr12/dzYa2yu1lPC1ivHOukhxs6DrSjz9Esti9V5GcOfiX7NQSjJFLvJA==";
 	
+	
+
+	 
 	//
 	// mountainName, fix mountainName in mountainTrail class
 	//
@@ -66,8 +79,7 @@ public class MountainServiceImpl implements MountainService {
 
 		SantaLogger.makeLog("info", "getEmdCodeByCoordinates");
 
-		String key = "C5151288-9B85-3B38-86F1-8CFD6D085112";
-		String reverseGeocodeUrl = "https://api.vworld.kr/req/address?service=address&request=getAddress&key=" + key
+		String reverseGeocodeUrl = "https://api.vworld.kr/req/address?service=address&request=getAddress&key=" + vWorldAPIKey
 				+ "&domain=http://dearmysanta.site" + "&point=" + lon + "," + lat + "&type=PARCEL";
 		
 		String location = "";
@@ -78,14 +90,14 @@ public class MountainServiceImpl implements MountainService {
 		JSONObject geocodeJson = new JSONObject(geocodeResponse.getBody());
 		if (geocodeJson.has("response") && geocodeJson.getJSONObject("response").has("result")) {
 			JSONArray results = geocodeJson.getJSONObject("response").getJSONArray("result");
-			System.out.println("results:" + results);
+			SantaLogger.makeLog("info","results:" + results);
 			if (results.length() > 0) {
 				JSONObject result = results.getJSONObject(0);
 				if (result.has("structure") && result.getJSONObject("structure").has("level4L")) {
 					
 					location = result.getJSONObject("structure").getString("level1") +" "+ result.getJSONObject("structure").getString("level2") + " " + result.getJSONObject("structure").getString("level4L");
 					
-					System.out.println("Level4L: " + location);
+					SantaLogger.makeLog("info","Level4L: " + location);
 					
 //					getRegionCode(location);
 				}
@@ -101,7 +113,7 @@ public class MountainServiceImpl implements MountainService {
 	
 	 public String getRegionCode(String regionName) throws JsonMappingException, JsonProcessingException {
 	        String url = "http://apis.data.go.kr/1741000/StanReginCd/getStanReginCdList"
-	                + "?serviceKey=" + "O5Qg2/rYlZbWpeUQO4gLBZewc6BzDHr12/dzYa2yu1lPC1ivHOukhxs6DrSjz9Esti9V5GcOfiX7NQSjJFLvJA=="
+	                + "?serviceKey=" + API_KEY
 	                + "&type=json"
 	                + "&size=100"
 	                + "&page=1"
@@ -119,7 +131,7 @@ public class MountainServiceImpl implements MountainService {
 	        JSONArray rows = responseJson.getJSONArray("StanReginCd").getJSONObject(1).getJSONArray("row");
 	        String locatjuminCd = rows.getJSONObject(0).getString("locatjumin_cd");
 	        String emdCd = locatjuminCd.substring(0, locatjuminCd.length()-2);
-	        System.out.println(locatjuminCd.substring(0, locatjuminCd.length()-2));
+	        SantaLogger.makeLog("info",locatjuminCd.substring(0, locatjuminCd.length()-2));
 	        
 //	        getMountainTrailListFromVWorld(emdCd);
 	        return emdCd;
@@ -130,16 +142,16 @@ public class MountainServiceImpl implements MountainService {
 	        JsonNode geometry = feature.get("geometry");
 	        JsonNode coordinatesArray = geometry.get("coordinates").get(0); // Access the MultiLineString
 
-	        List coordinateList = new ArrayList();
+	        List<List<Double>> coordinateList = new ArrayList<>();
 	        for (JsonNode coord : coordinatesArray) {
 	            double longitude = coord.get(0).asDouble();
 	            double latitude = coord.get(1).asDouble();
 	            
-//	            System.out.println("!!::" + latitude + " " + longitude);
+//	            SantaLogger.makeLog("info","!!::" + latitude + " " + longitude);
 	            List<Double> coords = new ArrayList<>();
 	            coords.add(latitude);
 	            coords.add(longitude);
-	            coordinateList.add(coords); 
+	            coordinateList.add(coords);
 	        }
 
 	        return MountainTrail.builder()
@@ -152,17 +164,16 @@ public class MountainServiceImpl implements MountainService {
 	                .build();
 	    }//make mountain trail class
 	 
-	 public List<MountainTrail> getMountainTrailListFromVWorld(String mountainName, String emdCd) throws IOException {
+	 public List<MountainTrail> getMountainTrailListFromVWorld(int mountainNo, String mountainName, String emdCd) throws IOException {
 			String url = "https://api.vworld.kr/req/data";
-			String key = "C5151288-9B85-3B38-86F1-8CFD6D085112";
 			
-			url = url + "?service=data&request=GetFeature&data=LT_L_FRSTCLIMB&key=" + key + "&domain=http://dearmysanta.site"
+			url = url + "?service=data&request=GetFeature&data=LT_L_FRSTCLIMB&key=" + vWorldAPIKey + "&domain=http://dearmysanta.site"
 	              + "&attrFilter=mntn_nm:like:" +mountainName+"|emdCd:=:" + emdCd+"&page=1&size=100&format=json";
 			
 			RestTemplate restTemplate = new RestTemplate();
 	        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 	        
-//	        System.out.println("trail!!:"+ response);
+//	        SantaLogger.makeLog("info","trail!!:"+ response);
 	        ObjectMapper objectMapper = new ObjectMapper();
 	        JsonNode rootNode = objectMapper.readTree(response.getBody());
             JsonNode features = rootNode.at("/response/result/featureCollection/features"); // need to use JSONOBJECT
@@ -170,9 +181,11 @@ public class MountainServiceImpl implements MountainService {
             List<MountainTrail> mountainTrails = new ArrayList<>();
 	        
             //features.size()
-            for (int i = 0; i < 1;i++) {
+            for (int i = 0; i < 5;i++) {
                 MountainTrail mountainTrail = mapJsonToMountainTrail(features.get(i));
                 mountainTrail.setCoordinatesUrl(mountainTrail.getMountainName()+""+i);
+                mountainTrail.setMountainNo(mountainNo);
+                mountainTrail.setMountainName(mountainName);
                 
                 
                 //
@@ -182,6 +195,7 @@ public class MountainServiceImpl implements MountainService {
                 
                 
                 mountainTrails.add(mountainTrail);
+                mountainDao.addMountainTrail(mountainTrail);
                 
             }
 //            
@@ -189,9 +203,9 @@ public class MountainServiceImpl implements MountainService {
 //            int normal = 0;
 //            int difficult = 0;
 //
-//            for (MountainTrail trail : mountainTrails) {
-//                System.out.println(trail);
-//                
+            for (MountainTrail trail : mountainTrails) {
+                SantaLogger.makeLog("info","trail:" + trail);
+                
 //                if(trail.getMountainTrailDifficulty().equals("하")) {
 //                	easy += 1;
 //                } else if(trail.getMountainTrailDifficulty().equals("중")) {
@@ -199,21 +213,21 @@ public class MountainServiceImpl implements MountainService {
 //                }if(trail.getMountainTrailDifficulty().equals("상")) {
 //                	difficult += 1;
 //                }
-//            }
+            }
 //            
-//            System.out.println("easy, normal, difficult:" + easy + " " + normal + " " + difficult);
+//            SantaLogger.makeLog("info","easy, normal, difficult:" + easy + " " + normal + " " + difficult);
 			return mountainTrails;
             
 		}//get MountainTrail information using mountain Trail api
 	 
-	 public List<MountainTrail> doAllLogic(double lat, double lon,String mountainName) throws IOException{
+	 public List<MountainTrail> doAllLogic(int mountainNo, double lat, double lon,String mountainName) throws IOException{
 	 //public void doAllLogic(double lat, double lon,String mountainName) throws JsonMappingException, JsonProcessingException{
 		String location = getEmdCodeByCoordinates(lat, lon);
-		System.out.println("====================================");
+		SantaLogger.makeLog("info","====================================");
 		String emdCd =  getRegionCode(location);
-		System.out.println("====================================");
+		SantaLogger.makeLog("info","====================================");
 		
-		return getMountainTrailListFromVWorld(mountainName, emdCd);
+		return getMountainTrailListFromVWorld(mountainNo,mountainName, emdCd);
 		
 	}
 	 
@@ -263,7 +277,7 @@ public class MountainServiceImpl implements MountainService {
          JSONObject body = jsonObject.getJSONObject("body");
          JSONObject items = body.getJSONObject("items");
          
-         System.out.println(items);
+         SantaLogger.makeLog("info",items.toString());
 
          // check item in item isArray
          Object itemObject = items.get("item");
@@ -295,13 +309,13 @@ public class MountainServiceImpl implements MountainService {
            //
            //
            
-           System.out.println(mountain);
+           
            
            this.addMountain(mountain);
 
-           mountain.setMountainTrail(doAllLogic(mountain.getMountainLatitude(),mountain.getMountainLongitude(), mountainName));
+           mountain.setMountainTrail(doAllLogic(mountain.getMountainNo(), mountain.getMountainLatitude(),mountain.getMountainLongitude(), mountainName));
         	   
-           
+           SantaLogger.makeLog("info","mountain" + mountain);
          }
            
            
@@ -360,9 +374,53 @@ public class MountainServiceImpl implements MountainService {
 		return mountainDao.getMountain(mountainNo);
 	}
 	
+	//
+	// only trail version
+	//
 	
-	public List<Mountain> getMountainListByAddress(String address){ // by address 
-		return mountainDao.getMountainListByAddress(address);
+	
+	public List<Mountain> getMountainListByCoord(double lat, double lon) throws IOException{ // by address 
+		String address = this.getEmdCodeByCoordinates(lat, lon).split(" ")[0];
+		
+		SantaLogger.makeLog("info","address:" + address);
+		
+		return getMountainListByAddress(address);
+		
+		//return mountainDao.getMountainListByAddress(address);
+		//
+		//
+		
+		//
+		//
+		//
+		
+	}
+	
+	
+	public List<Mountain> getMountainListByAddress(String address) throws IOException{ // by address 
+		
+		
+		
+		
+		List<Mountain> list =  mountainDao.getMountainListByAddress(address);
+		
+		for(int i = 0; i < list.size();i++) {
+			List<MountainTrail> mountainTrail = list.get(i).getMountainTrail();
+			
+			for(int j = 0; j<mountainTrail.size();j++) {
+				mountainTrail.get(j).setMountainTrailCoordinates(objectStorageService.downloadListData(bucketname,list.get(i).getMountainTrail().get(j).getCoordinatesUrl()));
+			}
+			
+		
+		}
+		
+		
+		//
+		// need to get from db and get data from object storage
+		//
+		
+		
+		return list;
 		
 	}
 	
@@ -384,15 +442,26 @@ public class MountainServiceImpl implements MountainService {
 	
 	public List<Mountain> getPopularMountainList(List<String> mountainNames) throws Exception{
 		List<Mountain> list = new ArrayList<>();
-		for(String mountainName : mountainNames) {
-			list.add(this.getMountain(mountainName));
+		for(int i = 0; i < 10 ; i ++) {
+			list.add(this.getMountain(mountainNames.get(i)));
 		}
 		
 		return list;
 	}//이거 산 이름으로 해야해 ?
 	
-	public List<Mountain> getCustomMountainList(User user){
-		return mountainDao.getCustomMountainList(user);
+	public List<Mountain> getCustomMountainList(List<Statistics> statistics, User user){
+		
+		 List<String> orderedMountainNames = statistics.stream()
+	                .map(Statistics::getMountainName)
+	                .collect(Collectors.toList());
+		 
+		SantaLogger.makeLog("info", "serviceImpl::" + orderedMountainNames.toString());
+		return mountainDao.getCustomMountainList(orderedMountainNames,user);
+	}
+	
+	
+	public void addMountainTrail(MountainTrail mountainTrail) {
+		mountainDao.addMountainTrail(mountainTrail);
 	}
 	
 	
@@ -412,8 +481,8 @@ public class MountainServiceImpl implements MountainService {
 		return mountainDao.getTotalMountainLikeCount(like);
 	}
 	
-	public List<Mountain> getMountainLikeList(Like like){
-		return mountainDao.getMountainLikeList(like);
+	public List<Mountain> getMountainLikeList(Like like,Search search){
+		return mountainDao.getMountainLikeList(like,search);
 	}
 	
 	//
@@ -424,7 +493,7 @@ public class MountainServiceImpl implements MountainService {
 	public void addSearchKeyword(MountainSearch mountainSearch) {
 		
 		if(mountainSearch.getSearchCondition() == 0) {
-			System.out.println("add mountain statistics");
+			SantaLogger.makeLog("info","add mountain statistics");
 			this.addMountainStatistics(mountainSearch.getSearchKeyword(),0);
 		}
 		
@@ -435,8 +504,8 @@ public class MountainServiceImpl implements MountainService {
 		mountainDao.deleteSearchKeyword(mountainSearch);
 	}
 	
-	public List<MountainSearch> getSearchKeywordList(int userNo){
-		return mountainDao.getSearchKeywordList(userNo);
+	public List<MountainSearch> getSearchKeywordList(int userNo,Search search){
+		return mountainDao.getSearchKeywordList(userNo,search);
 	}
 	
 	public void updateSearchSetting(int userNo, int settingValue) {
@@ -458,7 +527,7 @@ public class MountainServiceImpl implements MountainService {
 
 		if(this.checkStatisticsMountainColumnExist(mountainName) == 0) {
 			mountainDao.addMountainStatistics(mountainName);
-			System.out.println("create mountain statistics column");
+			SantaLogger.makeLog("info","create mountain statistics column");
 		}
 			
 		mountainDao.updateMountainStatistics(mountainName, which);

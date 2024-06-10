@@ -1,9 +1,12 @@
 package site.dearmysanta.service.meeting.test;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.time.LocalDate;
-
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
 
 import site.dearmysanta.SantaApplication;
 import site.dearmysanta.SantaApplicationTests;
@@ -39,6 +43,12 @@ public class MeetingPostServiceTest {
 //	@Test
 	public void testAddMeetingPost() throws Exception {
 		
+		File file1 = new File("src/test/resources/testImage1.jpg");
+        File file2 = new File("src/test/resources/testImage2.jpg");
+
+//        MultipartFile multipartFile1 = new MockMultipartFile("file1", file1.getName(), "image/jpeg", new FileInputStream(file1));
+//        MultipartFile multipartFile2 = new MockMultipartFile("file2", file2.getName(), "image/jpeg", new FileInputStream(file2));
+		
 		MeetingPost meetingPost = MeetingPost.builder()
 				.userNo(1)
                 .nickName("testUser")
@@ -54,14 +64,29 @@ public class MeetingPostServiceTest {
                 .participationGrade(1)
                 .participationGender(0)
                 .participationAge("20-30")
+//                .meetingPostImage(Arrays.asList(multipartFile1, multipartFile2))
                 .build();
 		
 		meetingService.addMeetingPost(meetingPost);
 		
-		MeetingPost post1 = meetingService.getMeetingPost(6);
-		
+		MeetingPost post1 = meetingService.getMeetingPost(1);
 		SantaLogger.makeLog("info", post1.toString());
+
+		List<MeetingParticipation> meetingParticipationList1 = meetingService.getMeetingParticipationList(1);
+		SantaLogger.makeLog("info", "meeting participation list size: " + meetingParticipationList1.size());
 		
+		for(int i = 0; i < meetingParticipationList1.size(); i ++) {
+			SantaLogger.makeLog("info", meetingParticipationList1.get(i).toString());
+		}
+		
+	}
+	
+//	@Test
+	public void testGetMeetingPostAll() throws Exception {
+		
+		Map<String, Object> meetingPostAll = meetingService.getMeetingPostAll(1);
+		
+		SantaLogger.makeLog("info", meetingPostAll.toString());
 		
 	}
 	
@@ -171,8 +196,7 @@ public class MeetingPostServiceTest {
 		
 	}
 	
-	
-	// ¸®½ºÆ® ·Î±× ¾ÈÂïÈû.
+
 //	@Test
 	public void testGetMeetingPostCommentList() throws Exception {
 		
@@ -185,17 +209,16 @@ public class MeetingPostServiceTest {
 		
 	}
 	
-	
-	// ¸®½ºÆ® ·Î±× ¾ÈÂïÈû.
-	@Test
+
+//	@Test
 	public void testAddMeetingParticipation() throws Exception {
 		
 		MeetingParticipation meetingParticipation = MeetingParticipation.builder()
-				.postNo(1)
-				.userNo(4)
+				.postNo(5)
+				.userNo(5)
 				.build();
 				
-        List<MeetingParticipation> meetingParticipationList1 = meetingService.getMeetingParticipationList(1);
+        List<MeetingParticipation> meetingParticipationList1 = meetingService.getMeetingParticipationList(5);
         SantaLogger.makeLog("info", "meeting participation list size: " + meetingParticipationList1.size());
 		
 		for(int i = 0; i < meetingParticipationList1.size(); i ++) {
@@ -204,7 +227,7 @@ public class MeetingPostServiceTest {
 		
 		meetingService.addMeetingParticipation(meetingParticipation);
 		
-		List<MeetingParticipation> meetingParticipationList2 = meetingService.getMeetingParticipationList(1);
+		List<MeetingParticipation> meetingParticipationList2 = meetingService.getMeetingParticipationList(5);
         SantaLogger.makeLog("info", "meeting participation list size: " + meetingParticipationList2.size());
         
         for(int i = 0; i < meetingParticipationList2.size(); i ++) {
@@ -216,7 +239,7 @@ public class MeetingPostServiceTest {
 //	@Test
 	public void testDeleteMeetingParticipation() throws Exception {
 	
-		List<MeetingParticipation> meetingParticipationList1 = meetingService.getMeetingParticipationList(5);
+		List<MeetingParticipation> meetingParticipationList1 = meetingService.getMeetingParticipationList(4);
 	    SantaLogger.makeLog("info", "meeting participation list size: " + meetingParticipationList1.size());
 		
 	    for(int i = 0; i < meetingParticipationList1.size(); i ++) {
@@ -225,7 +248,7 @@ public class MeetingPostServiceTest {
 	    
 	    meetingService.deleteMeetingParticipation(10);
 	    
-	    List<MeetingParticipation> meetingParticipationList2 = meetingService.getMeetingParticipationList(5);
+	    List<MeetingParticipation> meetingParticipationList2 = meetingService.getMeetingParticipationList(4);
 	    SantaLogger.makeLog("info", "meeting participation list size: " + meetingParticipationList2.size());
 	    
 	    for(int i = 0; i < meetingParticipationList2.size(); i ++) {
@@ -237,7 +260,7 @@ public class MeetingPostServiceTest {
 //	@Test
 	public void testUpdateMeetingParticipationStatus() throws Exception {
 	
-		List<MeetingParticipation> meetingParticipationList1 = meetingService.getMeetingParticipationList(5);
+		List<MeetingParticipation> meetingParticipationList1 = meetingService.getMeetingParticipationList(1);
 	    SantaLogger.makeLog("info", "meeting participation list size: " + meetingParticipationList1.size());
 		
 	    for(int i = 0; i < meetingParticipationList1.size(); i ++) {
@@ -246,7 +269,7 @@ public class MeetingPostServiceTest {
 	    
 	    meetingService.updateMeetingParticipationStatus(2);
 	    
-	    List<MeetingParticipation> meetingParticipationList2 = meetingService.getMeetingParticipationList(5);
+	    List<MeetingParticipation> meetingParticipationList2 = meetingService.getMeetingParticipationList(1);
 	    SantaLogger.makeLog("info", "meeting participation list size: " + meetingParticipationList2.size());
 	    
 	    for(int i = 0; i < meetingParticipationList2.size(); i ++) {
@@ -258,7 +281,7 @@ public class MeetingPostServiceTest {
 //	@Test
 	public void testUpdateMeetingParticipationWithdrawStatus() throws Exception {
 	
-		List<MeetingParticipation> meetingParticipationList1 = meetingService.getMeetingParticipationList(5);
+		List<MeetingParticipation> meetingParticipationList1 = meetingService.getMeetingParticipationList(1);
 	    SantaLogger.makeLog("info", "meeting participation list size: " + meetingParticipationList1.size());
 		
 	    for(int i = 0; i < meetingParticipationList1.size(); i ++) {
@@ -267,7 +290,7 @@ public class MeetingPostServiceTest {
 	    
 	    meetingService.updateMeetingParticipationWithdrawStatus(2);
 	    
-	    List<MeetingParticipation> meetingParticipationList2 = meetingService.getMeetingParticipationList(5);
+	    List<MeetingParticipation> meetingParticipationList2 = meetingService.getMeetingParticipationList(1);
 	    SantaLogger.makeLog("info", "meeting participation list size: " + meetingParticipationList2.size());
 	    
 	    for(int i = 0; i < meetingParticipationList2.size(); i ++) {
@@ -306,13 +329,19 @@ public class MeetingPostServiceTest {
 //	@Test
 	public void testUpdateMeetingPostDeletedStatus() throws Exception {
 	
-		MeetingPost meetingPost1 = meetingService.getMeetingPost(1);
+		MeetingPost meetingPost1 = meetingService.getMeetingPost(2);
 		SantaLogger.makeLog("info", String.valueOf(meetingPost1.getMeetingPostDeletedFlag()));
 		
-		meetingService.updateMeetingPostDeletedStatus(1);
+		meetingService.updateMeetingPostDeletedStatus(2);
 		
-		MeetingPost meetingPost2 = meetingService.getMeetingPost(1);
+		MeetingPost meetingPost2 = meetingService.getMeetingPost(2);
 		SantaLogger.makeLog("info", String.valueOf(meetingPost2.getMeetingPostDeletedFlag()));
+		
+		List<MeetingParticipation> meetingParticipationList1 = meetingService.getMeetingParticipationList(2);
+		
+		for(int i = 0; i < meetingParticipationList1.size(); i ++) {
+			SantaLogger.makeLog("info", meetingParticipationList1.get(i).toString());
+		}
 	
 	}
 	
@@ -328,5 +357,21 @@ public class MeetingPostServiceTest {
 		SantaLogger.makeLog("info", String.valueOf(meetingPost2.getMeetingPostCertifiedFlag()));
 	
 	}
+	
+//	@Test
+	public void testGetUnCertifiedMeetingPost() throws Exception {
+		
+		int userNo = 1;
+		
+		List<MeetingPost> meetingPostList1 = meetingService.getUnCertifiedMeetingPost(1);
+		SantaLogger.makeLog("info", "meeting post list size: " + meetingPostList1.size());
+	
+		for(int i = 0; i < meetingPostList1.size(); i ++) {
+			SantaLogger.makeLog("info", meetingPostList1.get(i).toString());
+		}
+	
+	}
+	
+	
 
 }
