@@ -542,11 +542,11 @@ public class MountainApplicationTest {
 //            mountainService.addSearchKeyword(mountainSearch);
 //        });
 		
-		Search search = Search.builder().currentPage(2).pageSize(5).pageUnit(3).build();
+		Search search = Search.builder().userNo(1).currentPage(2).pageSize(5).pageUnit(3).build();
 		
-		Like like =Like.builder().userNo(1).build();
+//		Like like =Like.builder().userNo(1).build();
 		
-		List<Mountain> list = mountainService.getMountainLikeList(like,search);
+		List<Mountain> list = mountainService.getMountainLikeList(search);
 		for(int i = 0; i < list.size(); i ++) {
 			SantaLogger.makeLog("info", list.get(i).toString());
 		}
