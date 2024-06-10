@@ -78,6 +78,8 @@ import site.dearmysanta.service.user.etc.UserEtcService;
 	
 	
 	public void addAlarmMessage(AlarmMessage alarmMessage) throws Exception{
+		
+		
 		userEtcDao.addAlarmMessage(alarmMessage);
 	}
 	
@@ -94,7 +96,7 @@ import site.dearmysanta.service.user.etc.UserEtcService;
 	}
 	
 	public void updateAlarmSetting(int userNo, int alarmSettingType) throws Exception{
-		userEtcDao.deleteAlarmMessage(alarmSettingType);
+		userEtcDao.updateAlarmSetting(userNo, alarmSettingType);
 	}
 	
 	public User getUserSettings(User user) {

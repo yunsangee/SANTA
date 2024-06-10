@@ -21,6 +21,10 @@ public class UserEtcContoller {
 	@Autowired
 	UserEtcService userEtcService;
 	
+	public UserEtcContoller(){
+		SantaLogger.makeLog("info", this.getClass().toString());
+	}
+	
 	@GetMapping(value="getAlarmMessageList")
 	public String getAlarmMessageList(@RequestParam int userNo, Model model) throws Exception {
 		
@@ -54,5 +58,5 @@ public class UserEtcContoller {
 		model.addAttribute("alarmMessageList", messages);
 		
 		return "forward:/userEtc/getAlarmMessageList.jsp";
-	}
+	}//test clear
 }
