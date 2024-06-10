@@ -1,4 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri= "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <html>
 <head>
     <title>Meeting Post Details</title>
@@ -27,7 +30,6 @@
 
     <h2>Meeting Participations</h2>
     <c:forEach var="participation" items="${meetingParticipations}">
-        <p>User No: ${participation.userNo}</p>
         <p>Nickname: ${participation.nickname}</p>
         <p>Participation Status: ${participation.participationStatus}</p>
         <p>Participation Role: ${participation.participationRole}</p>
@@ -49,5 +51,18 @@
         <img src="data:image/jpeg;base64,${image.bytes}" alt="Image" />
         <hr/>
     </c:forEach>
+    
+    <!-- Update Meeting Post Button -->
+    <form action="/meeting/updateMeetingPost" method="get">
+        <input type="hidden" name="postNo" value="${meetingPost.postNo}"/>
+        <button type="submit">Update Meeting Post</button>
+    </form>
+
+    <!-- Delete Meeting Post Button -->
+    <form action="/meeting/deleteMeetingPost" method="get" style="margin-top: 20px;">
+        <input type="hidden" name="postNo" value="${meetingPost.postNo}"/>
+        <button type="submit">Delete Meeting Post</button>
+    </form>
+    
 </body>
 </html>

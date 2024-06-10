@@ -41,7 +41,7 @@ public class MeetingPostServiceTest {
 	@Qualifier("meetingDAO")
 	private MeetingDAO meetingDAO;
 	
-	@Test
+//	@Test
 	public void testAddMeetingPost() throws Exception {
 		
 		File file1 = new File("C:\\Users\\jaeho\\Desktop\\dang.jpeg");
@@ -86,7 +86,12 @@ public class MeetingPostServiceTest {
 //	@Test
 	public void testGetMeetingPostAll() throws Exception {
 		
-		Map<String, Object> meetingPostAll = meetingService.getMeetingPostAll(1);
+		Map<String, Object> meetingPostAll = meetingService.getMeetingPostAll(3);
+		
+		System.out.println(meetingPostAll.get("meetingPost"));
+		System.out.println(meetingPostAll.get("meetingParticipations"));
+		System.out.println(meetingPostAll.get("meetingPostComments"));
+		System.out.println(meetingPostAll.get("meetingPostImages"));
 		
 		SantaLogger.makeLog("info", meetingPostAll.toString());
 		
