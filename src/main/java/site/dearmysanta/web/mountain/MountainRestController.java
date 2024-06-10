@@ -2,12 +2,16 @@ package site.dearmysanta.web.mountain;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +20,9 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.dearmysanta.common.SantaLogger;
+import site.dearmysanta.domain.common.Like;
+import site.dearmysanta.domain.mountain.Mountain;
+import site.dearmysanta.service.mountain.MountainService;
 
 @RestController
 @RequestMapping("/mountain/*")
@@ -26,6 +33,9 @@ public class MountainRestController {
 	
 	@Value("${naverMapSecretKey}")
 	private String clientSecret;
+	
+	@Autowired
+	MountainService mountainService;
 	
 	
 	public MountainRestController() {
@@ -62,6 +72,37 @@ public class MountainRestController {
         SantaLogger.makeLog("info", itemsArray.getJSONObject(0).getString("roadAddress"));
 		
 		return itemsArray.getJSONObject(0).getString("address");
-	}
+	}//나중에 서비스로 보내기
+	
+	
+	@PostMapping("rest/updateMountain")
+	public Mountain updateMountain(@RequestBody Mountain mountain) {
+		SantaLogger.makeLog("info", mountain.toString());
+		mountainService.updateMountain(mountain);
+		System.out.println(mountainService.getMountain(mountain.getMountainNo()));
+		return mountainService.getMountain(mountain.getMountainNo());
+	}//o
+	
+	
+	@PostMapping("rest/addMountainLike")
+	public int addMountainLike(@RequestBody Like like) {
+		SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like));
+		mountainService.addMountainLike(like);
+		SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like));
+		return mountainService.getTotalMountainLikeCount(like);
+	}//o
+	
+	@PostMapping("rest/deleteMountainLike")
+	public int deleteMountainLike(@RequestBody Like like) {
+		SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like));
+		mountainService.deleteMountainLike(like);
+		SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like));
+		return mountainService.getTotalMountainLikeCount(like);
+	}//o
+	
+	
+	
+	
+	//checkMountainLike logic 필요 
 
 }

@@ -24,7 +24,6 @@ public class Mountain {
     private String mountainName; // mountain name
     private double mountainLatitude; // mountain latitude
     private double mountainLongitude; // mountain longitude
-    private List<String> mountainLocationList;
     private String mountainLocation; // mountainLocationList.toString();
     private String mountainImage; // mountain image
     private String mountainDescription; // mountain description
@@ -35,6 +34,7 @@ public class Mountain {
     private int certifiedPostCount; // certified post count
     private int calandarRegisteredCount; // calendar registered count
     private int meetingPostCount; // meeting post count
+    private List<String> mountainLocationList;
     private List<MountainTrail> mountainTrail; // list of mountain trails
 
     
