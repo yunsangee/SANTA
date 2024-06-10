@@ -90,7 +90,7 @@ public class HikingGuideRestController {
         return weather;
     }
     
-    @GetMapping(value = "/react/getMountain")
+    @PostMapping(value = "/react/getMountain")
     public List<Mountain> getMountainsByUserCoordination() throws Exception {
         if (userLocation == null) {
             throw new IllegalStateException("User coordinates are not set.");
