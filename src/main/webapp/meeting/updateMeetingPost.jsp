@@ -7,7 +7,7 @@
     <h1>Update Meeting Post</h1>
     <form action="updateMeetingPost" method="post" enctype="multipart/form-data">
         <input type="hidden" id="postNo" name="postNo" value="${meetingPost.postNo}"/>
-
+		<p>
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" value="${meetingPost.title}"/><br/>
 
