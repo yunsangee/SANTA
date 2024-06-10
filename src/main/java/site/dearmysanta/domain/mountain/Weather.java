@@ -18,6 +18,7 @@ import site.dearmysanta.domain.common.Search;
 @AllArgsConstructor
 @ToString
 public class Weather {
+	private String date;
 	private String skyCondition; //SKY
 	private int temperature; 
 	private List<Integer> minMaxTemperature;// TMN(min) , TMX(max)
