@@ -8,6 +8,6 @@ public interface WeatherService {
 	
 	public Weather getWeather(double lat, double lot) throws Exception;
 	
-	public List<Weather> getWeatherList();
+	public List<Weather> getWeatherList(double lat, double lon);
 
 }

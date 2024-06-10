@@ -9,6 +9,8 @@ import site.dearmysanta.domain.common.Like;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
 
 
 public interface MeetingService {
@@ -59,7 +61,12 @@ public interface MeetingService {
 	
 	public List<MeetingPost> getUnCertifiedMeetingPost(int userNo) throws Exception;
 	
+	public void uploadMeetingPostImages(List<MultipartFile> images, String postNo) throws Exception;
 	
+    public MultipartFile downloadMeetingPostImage(String postNo, String fileName) throws Exception;
+
+	
+
 	
 	
 

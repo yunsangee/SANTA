@@ -79,13 +79,6 @@ public class HikingGuideServiceImpl implements HikingGuideService {
 		
 	}
 
-	  @Override
-	    public MountainInfo getMountainInfo() throws Exception {
-	        Mountain mountain = getMountain();
-	        Weather weather = getWeatherList();
-	        return new MountainInfo(mountain, weather);
-	}
-	
 
     private boolean checkAlertCondition(HikingAlert alertSetting) {
         if (alertSetting.getDestinationAlert()==1) {
@@ -115,8 +108,4 @@ public class HikingGuideServiceImpl implements HikingGuideService {
 		System.out.println("settings"+settings);
 		hikingGuideDao.updateAlertSetting(userNo, settings);
 	}
-
-  
-
-
 }

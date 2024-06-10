@@ -16,7 +16,6 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class MeetingParticipation {
 	
 	private int participationNo; // unique post identifier

@@ -1,7 +1,9 @@
 package site.dearmysanta.service.meeting.test;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.time.LocalDate;
-
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
 
 import site.dearmysanta.SantaApplication;
 import site.dearmysanta.SantaApplicationTests;
@@ -40,6 +43,12 @@ public class MeetingPostServiceTest {
 //	@Test
 	public void testAddMeetingPost() throws Exception {
 		
+		File file1 = new File("src/test/resources/testImage1.jpg");
+        File file2 = new File("src/test/resources/testImage2.jpg");
+
+//        MultipartFile multipartFile1 = new MockMultipartFile("file1", file1.getName(), "image/jpeg", new FileInputStream(file1));
+//        MultipartFile multipartFile2 = new MockMultipartFile("file2", file2.getName(), "image/jpeg", new FileInputStream(file2));
+		
 		MeetingPost meetingPost = MeetingPost.builder()
 				.userNo(1)
                 .nickName("testUser")
@@ -55,14 +64,15 @@ public class MeetingPostServiceTest {
                 .participationGrade(1)
                 .participationGender(0)
                 .participationAge("20-30")
+//                .meetingPostImage(Arrays.asList(multipartFile1, multipartFile2))
                 .build();
 		
 		meetingService.addMeetingPost(meetingPost);
 		
-		MeetingPost post1 = meetingService.getMeetingPost(12);
+		MeetingPost post1 = meetingService.getMeetingPost(1);
 		SantaLogger.makeLog("info", post1.toString());
 
-		List<MeetingParticipation> meetingParticipationList1 = meetingService.getMeetingParticipationList(12);
+		List<MeetingParticipation> meetingParticipationList1 = meetingService.getMeetingParticipationList(1);
 		SantaLogger.makeLog("info", "meeting participation list size: " + meetingParticipationList1.size());
 		
 		for(int i = 0; i < meetingParticipationList1.size(); i ++) {
