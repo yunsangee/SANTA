@@ -36,6 +36,8 @@ public class CertificationPostController {
 //        model.addAttribute("certificationPost", certificationPost);
 //        return "forward:/certificationPost/addCertificationPost.jsp";
 //    }
+    
+    //t
 
    // @PostMapping(value = "getCertificationPostList")
     @RequestMapping(value = "listCertificationPost")
