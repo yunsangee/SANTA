@@ -40,14 +40,14 @@ import site.dearmysanta.service.user.etc.UserEtcService;
 		// TODO Auto-generated method stub
 		userEtcDao.updateCertificationCount(userNo);
 		
-	}
+	} //directly use
 
 	@Override
 	public void updateMeetingCount(int userNo) throws Exception {
 		// TODO Auto-generated method stub
 		userEtcDao.updateMeetingCount(userNo);
 		
-	}
+	} //directly use
 
 	
 	public void addFollow(int followerUserNo, int followingUserNo) {
