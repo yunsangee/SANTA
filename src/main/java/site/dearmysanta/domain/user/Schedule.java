@@ -1,5 +1,7 @@
 package site.dearmysanta.domain.user;
 
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,10 +20,11 @@ import site.dearmysanta.domain.common.Post;
 public class Schedule extends Post {
 
 	private String mountainName;
-	private String hikingDifficulty;
+	private int hikingDifficulty;
 	private String hikingTotalTime;
 	private String hikingDescentTime;
 	private String hikingAscentTime;
-	private String Transportaion;
+	private int Transportaion;
+	private Date scheduleDate;
 	
 }

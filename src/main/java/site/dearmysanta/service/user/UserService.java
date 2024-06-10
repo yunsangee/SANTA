@@ -1,7 +1,9 @@
 package site.dearmysanta.service.user;
 
+import java.util.Date;
 import java.util.List;
 
+import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.user.QNA;
 import site.dearmysanta.domain.user.Schedule;
 import site.dearmysanta.domain.user.User;
@@ -14,9 +16,13 @@ public interface UserService {
 	
 	public void addUser(User user) throws Exception;
 	
-	public User getUser(int userNo) throws Exception; // plus login
+	public User getUser(int userNo) throws Exception; 
 	
-	public List<User> getUserList() throws Exception;
+	public String login(String userId, String password) throws Exception;
+	
+	public List<User> getUserList(Search search) throws Exception;
+	
+	public List<User> withdrawUserList(Search search) throws Exception;
 	
 	public void updateUser(User user) throws Exception;
 	
@@ -31,6 +37,8 @@ public interface UserService {
 	public String findUserPassword(String userId, String phoneNumber) throws Exception;
 	
 	public User setUserPassword(String userId, String userPassword) throws Exception;
+	
+	public String findUserPhoneNumber(String phoneNumber) throws Exception;
 	
 	//
 	// User check and confirm
@@ -56,9 +64,9 @@ public interface UserService {
 	
 	public QNA getQnA(int postNo) throws Exception;
 	
-	public List<QNA> getQnAList() throws Exception;
+	public List<QNA> getQnAList(Search search) throws Exception;
 	
-	public void addAdminAnswer(int postNo, String adminAnswer);
+	public void addAdminAnswer(QNA qna);
 	
 	public void deleteQnA(int postNo, int userNo) throws Exception;
 	
@@ -68,20 +76,20 @@ public interface UserService {
 	
 	public void addSchedule(Schedule schedule) throws Exception;
 	
-	public void getSchedule(int postNo) throws Exception;
+	public Schedule getSchedule(int postNo) throws Exception;
 	
-	public List<User> getScheduleList() throws Exception;
+	public List<Schedule> getScheduleList() throws Exception;
 	
 	public void updateSchedule(Schedule schedule) throws Exception;
 	
-	public void deleteSchedule(int postNo) throws Exception;
+	public void deleteSchedule(int postNo, int userNo) throws Exception;
 	
 	
 	//
 	// etc : inherit
 	//
 	
-	public void getMountainTotalCount() throws Exception;
+	public int getMountainTotalCount(String mountainName) throws Exception;
 	
 	
 }

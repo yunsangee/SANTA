@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.user.QNA;
 import site.dearmysanta.domain.user.Schedule;
 import site.dearmysanta.domain.user.User;
@@ -36,9 +37,13 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public List<User> getUserList() throws Exception {
+	public List<User> getUserList(Search search) throws Exception {
 		// TODO Auto-generated method stub
-		return userDao.getUserList();
+		return userDao.getUserList(search);
+	}
+	
+	public List<User> withdrawUserList(Search search) throws Exception {
+		return userDao.withdrawUserList(search);
 	}
 
 	@Override
@@ -176,13 +181,13 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public List<QNA> getQnAList() throws Exception {
+	public List<QNA> getQnAList(Search search) throws Exception {
 		// TODO Auto-generated method stub
-		return userDao.getQnAList();
+		return userDao.getQnAList(search);
 	}
 
-	public void addAdminAnswer(int postNo, String adminAnswer) {
-		userDao.addAdminAnswer(postNo, adminAnswer);
+	public void addAdminAnswer(QNA qna) {
+		userDao.addAdminAnswer(qna);
 	}
 	@Override
 	public void deleteQnA(int postNo, int userNo) throws Exception {
@@ -197,13 +202,13 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public void getSchedule(int postNo) throws Exception {
+	public Schedule getSchedule(int postNo) throws Exception {
 		// TODO Auto-generated method stub
-		userDao.getSchedule(postNo);
+		return userDao.getSchedule(postNo);
 	}
 
 	@Override
-	public List<User> getScheduleList() throws Exception {
+	public List<Schedule> getScheduleList() throws Exception {
 		// TODO Auto-generated method stub
 		return userDao.getScheduleList();
 	}
@@ -215,17 +220,47 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public void deleteSchedule(int postNo) throws Exception {
+	public void deleteSchedule(int postNo, int userNo) throws Exception {
 		// TODO Auto-generated method stub
-		userDao.deleteSchedule(postNo);
+		userDao.deleteSchedule(postNo, userNo);
 	}
 
 	@Override
-	public void getMountainTotalCount() throws Exception {
-		// TODO Auto-generated method stub
-		userDao.getMountainTotalCount();
+	public int getMountainTotalCount(String mountainName) throws Exception {
+		return userDao.getMountainTotalCount(mountainName);
 	}
 
+	@Override
+	public String login(String userId, String password) throws Exception {
+		// TODO Auto-generated method stub
+		String login = userDao.login(userId, password);
+		
+		if (userId == null) {
+		       
+		        throw new Exception("사용자를 찾을 수 없습니다."); //  not exist UserId
+		    
+		    } else {
+		   
+		    return userId;
+		    
+		    }
+	}
+
+	@Override
+	public String findUserPhoneNumber(String phoneNumber) throws Exception {
+		// TODO Auto-generated method stub
+		String phone = userDao.findUserPhoneNumber(phoneNumber); // confirm UserInfo
+	    
+	    if (phone == null) {
+	       
+	        throw new Exception("사용자를 찾을 수 없습니다."); //  not exist UserId
+	    
+	    } else {
+	   
+	    return phone;
+	    
+	    }
+	}
 	
 	
 }

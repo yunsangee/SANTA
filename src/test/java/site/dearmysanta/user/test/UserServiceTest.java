@@ -21,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import site.dearmysanta.SantaApplication;
 import site.dearmysanta.common.SantaLogger;
+import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.user.QNA;
+import site.dearmysanta.domain.user.Schedule;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.user.UserDao;
 import site.dearmysanta.service.user.UserService;
@@ -104,6 +106,113 @@ public class UserServiceTest {
 		SantaLogger.makeLog("info", userService.getUser(5).toString() + "\n");
 	}
 	
+	//
+	// test getUserList
+	//
+	
+	//@Test
+			public void testgetUserList(Search search) throws Exception {
+				List<User> list = userService.getUserList(search);
+				
+				
+				for(User u : list) {
+					System.out.println(u);
+				}
+				
+				System.out.println("==========");
+				///////////////////////////////////////////////////////////////
+			}
+			
+	//
+	// test Search getUserList 
+	//
+			
+			  //@Test
+			    public void testGetUserList() throws Exception {
+			        
+//			        Search search = Search.builder()
+//			                .searchCondition(0)
+//			                .searchKeyword("user")
+//			                .build();
+			        
+//			        Search search = Search.builder()
+//			                .searchCondition(1)
+//			                .searchKeyword("Nick1")
+//			                .build();
+				  
+				  Search search = Search.builder()
+			                .searchCondition(2)
+			                .searchKeyword("User")
+			                .build();
+
+			        List<User> results = userService.getUserList(search);
+			        assertNotNull(results);
+			        
+			        System.out.println("search : " + search);
+			        for (User u : results) {
+			            System.out.println(u);
+			        }
+			        
+			        System.out.println("==========");
+
+			        assertFalse(results.isEmpty());
+			        System.out.println("result : " + results);
+			        
+			    }
+    //
+    // test Search withdrawUserList
+    //
+			    
+	@Test
+			public void testwithdrawUserList() throws Exception {
+			        
+//			        Search search = Search.builder()
+//			                .searchCondition(0)
+//			                .searchKeyword("user")
+//			                .build();
+			        
+			        Search search = Search.builder()
+			                .searchCondition(1)
+			                .searchKeyword("Nick")
+			                .build();
+				  
+//				  Search search = Search.builder()
+//			                .searchCondition(2)
+//			                .searchKeyword("User")
+//			                .build();
+
+			        List<User> results = userService.withdrawUserList(search);
+			        assertNotNull(results);
+			        
+			        System.out.println("search : " + search);
+			        for (User u : results) {
+			            System.out.println(u);
+			        }
+			        
+			        System.out.println("==========");
+
+			        assertFalse(results.isEmpty());
+			        System.out.println("result : " + results);
+			        
+			    }
+			  
+	//
+	// test withdrawUserList
+	//
+			
+	//@Test
+	public void testwithdrawUserList(Search search) throws Exception {
+		List<User> list = userService.withdrawUserList(search);
+		
+		
+		for(User u : list) {
+			System.out.println(u);
+		}
+		
+		System.out.println("==========");
+		///////////////////////////////////////////////////////////////
+	}
+			
 	//
 	// test DuplicaionId
 	//
@@ -216,16 +325,16 @@ public class UserServiceTest {
 	    //@Test
 	    public void testdeleteUser() throws Exception {
 	    	
-	            int userNo = 5;
+	            int userNo = 43;
 
 	            // delete User
 	            userService.deleteUser(userNo);
 	            
-	            User user = userService.getUser(5);
+	            User user = userService.getUser(43);
 	            
 	            //user.setWithdrawDate(withdrawDate);
 	            
-	            SantaLogger.makeLog("info", "deleteUser : " + userService.getUser(5).toString() + "\n");
+	            SantaLogger.makeLog("info", "deleteUser : " + userService.getUser(43).toString() + "\n");
 	           
 	        }
 	    
@@ -252,9 +361,13 @@ public class UserServiceTest {
 			SantaLogger.makeLog("info", userService.getQnA(42).toString() +"\n");
 		}
 		
-		@Test
-		public void testQnA() throws Exception {
-			List<QNA> list = userService.getQnAList();
+		//
+		// test add, get, List, update, delete QNA
+		//
+		
+		//@Test
+		public void testQnA(Search search) throws Exception {
+			List<QNA> list = userService.getQnAList(search);
 			
 			
 			for(QNA q : list) {
@@ -275,9 +388,9 @@ public class UserServiceTest {
 			
 			userService.addQnA(qna);
 			
-			userService.addAdminAnswer(45, "김남주바보");
+			//userService.addAdminAnswer(45, "관리자답변test");
 			
-			list = userService.getQnAList();
+			list = userService.getQnAList(search);
 			
 			for(QNA q : list) {
 				System.out.println(q);
@@ -288,13 +401,185 @@ public class UserServiceTest {
 			
 			userService.deleteQnA(45, 1);
 			
-			list = userService.getQnAList();
+			list = userService.getQnAList(search);
 			
 			
 			for(QNA q : list) {
 				System.out.println(q);
 			}
 			
+		}
+		
+		//
+		// test adminAnswer
+		//
+		
+		//@Test
+		public void testaddAdminAnswer() throws Exception {
+			
+			QNA qna = userService.getQnA(46);
+			
+			qna.setAdminAnswer("관리자답변변경test");
+			
+			 userService.addAdminAnswer(qna);
+							
+			SantaLogger.makeLog("info", userService.getQnA(46).toString() + "\n");
+		}
+		
+		//
+		// test add, get, List, update, delete SCHEDULE
+		//
+		
+		//@Test
+		public void testSchedule() throws Exception {
+			List<Schedule> list = userService.getScheduleList();
+			
+			
+			for(Schedule s : list) {
+				System.out.println(s);
+			}
+			
+			System.out.println("==========");
+			///////////////////////////////////////////////////////////////
+			
+			Schedule schedule = Schedule.builder()
+			.contents("schedule add5 content")
+			.title("schedule add5 title")
+			.mountainName("치악산")
+			.userNo(42)
+			.hikingTotalTime("3:30")
+			.hikingDifficulty(1)
+			.hikingDescentTime("01:45")
+			.hikingAscentTime("01:45")
+			.Transportaion(0)
+			.build();
+			
+			userService.addSchedule(schedule);
+			
+			list = userService.getScheduleList();
+			
+			for(Schedule s : list) {
+				System.out.println(s);
+			}
+			System.out.println("==========");
+			
+			////////////////////////////////////////////////////////////////
+			
+			userService.deleteSchedule(71, 42);
+			
+			list = userService.getScheduleList();
+			
+			
+			for(Schedule s : list) {
+				System.out.println(s);
+			}
 			
 		}
+		
+		//
+		// test updateSchedule
+		//
+		
+		//@Test
+		public void testUpdateSchedule() throws Exception {
+			
+			Schedule schedule = userService.getSchedule(72);
+			
+			schedule.setMountainName("비트산1");
+			schedule.setContents("content 변경 test");
+			
+			 userService.updateSchedule(schedule);
+							
+			SantaLogger.makeLog("info", userService.getSchedule(72).toString() + "\n");
+		}
+		
+		//
+		// test login
+		//
+		
+		 //@Test
+		    public void testLogin() throws Exception {
+		        
+			 	String userId = "user02";
+		        String password = "password2";
+		        
+		        String result = userService.login(userId, password);
+		        
+		        assertNotNull(result);
+		        assertEquals(userId, result);
+		        
+		        SantaLogger.makeLog("info", "result: " + result);
+		        
+		    }
+		    
+		    //
+		    // test Search QNAList TITLE and Nickname
+		    //
+		    
+		    //@Test
+		    public void testGetQnAList() throws Exception {
+		        
+//		        Search search = Search.builder()
+//		                .searchCondition(0)
+//		                .searchKeyword("qna add1 title")
+//		                .build();
+		        
+		        Search search = Search.builder()
+		                .searchCondition(1)
+		                .searchKeyword("Nick")
+		                .build();
+
+		        List<QNA> results = userService.getQnAList(search);
+		        assertNotNull(results);
+		        
+		        System.out.println("search : " + search);
+		        for (QNA q : results) {
+		            System.out.println(q);
+		        }
+		        
+		        System.out.println("==========");
+
+		        assertFalse(results.isEmpty());
+		        System.out.println("result : " + results);
+		        
+		    }
+		    
+		    //
+		    // test GetMountain Total count
+		    //
+		  
+		    @Test
+			public void testgetMountainTotalCount() throws Exception {
+				
+				int count = userService.getMountainTotalCount("관악산");
+				
+				//int count = scheduleMapper.getMountainTotalCount("관악산");
+				
+				SantaLogger.makeLog("info", count + "\n");
+				
+			}
+		    
+//		    @Test
+//		    public void testFindUserPhoneNumber() throws Exception {
+//		    	
+//			    //String userName = "UserOne";
+//		        String phoneNumber = "456-7890-0123";
+//
+//		        // 데이터베이스에 해당 전화번호를 가진 사용자가 있다고 가정합니다.
+//		        //User user = userService.findUserPhoneNumber(userName, phoneNumber);
+//		        String user = userService.findUserPhoneNumber(phoneNumber);
+//		        
+//		        System.out.println(phoneNumber);
+//
+//		        assertNotNull(user);
+//		        //assertEquals(userName, phoneNumber, user.getPhoneNumber());
+//		        assertEquals(phoneNumber, userService.findUserPhoneNumber(phoneNumber));
+//		        
+//		        SantaLogger.makeLog("info", "phoneNumber: " + phoneNumber);
+//		        
+////		        System.out.println("User No: " + user.getUserNo());
+////		        System.out.println("User Name: " + user.getUserName());
+////		        System.out.println("User PhoneNumber: " + user.getPhoneNumber());
+//		        
+//		    }
 }

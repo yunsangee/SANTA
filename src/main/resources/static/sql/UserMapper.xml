@@ -56,19 +56,76 @@
 
 	<!--  SQL : SELECT ONE -->
 	
-<select id="getUser" parameterType="int" resultMap="userSelectMap">
-    SELECT 
-    	user_no, user_id, name, password, nickname, address, birth_date, phone_number, gender, profile_image, creation_date,
+	<select id="getUser" parameterType="int" resultMap="userSelectMap">
+	    SELECT 
+	    	user_no, user_id, name, password, nickname, address, birth_date, phone_number, gender, profile_image, creation_date,
+	    hiking_purpose, hiking_difficulty, hiking_level, withdraw_date, withdraw_reason, withdraw_content, role,
+	    badge_image, cp_count, mp_count, introduce_content, search_record_setting, all_alert_setting,
+	    cp_setting,mp_setting, hg_setting, time_alert_setting, location_over_setting, destination_setting,
+	    sunset_setting, time_setting
+	    FROM 
+	    	users
+	    WHERE 
+	    	user_no = #{userNo}
+	</select>
+
+<!-- 	<select id="getUserList" resultMap="userSelectMap">
+	   SELECT 
+	 user_no, user_id, name, password, nickname, address, birth_date, phone_number, gender, profile_image, creation_date,
     hiking_purpose, hiking_difficulty, hiking_level, withdraw_date, withdraw_reason, withdraw_content, role,
     badge_image, cp_count, mp_count, introduce_content, search_record_setting, all_alert_setting,
     cp_setting,mp_setting, hg_setting, time_alert_setting, location_over_setting, destination_setting,
     sunset_setting, time_setting
     FROM 
     	users
-    WHERE 
-    	user_no = #{userNo}
-</select>
-
+	</select> -->
+	
+	<select id="getUserList" parameterType="site.dearmysanta.domain.common.Search"	resultMap="userSelectMap">
+		SELECT * FROM users 
+	
+	<where>
+	    <choose>
+	        <when test="searchCondition == 0 and searchKeyword != null and searchKeyword != ''">
+	            AND user_id LIKE '%' || #{searchKeyword} || '%'
+	        </when>
+	        <when test="searchCondition == 1 and searchKeyword != null and searchKeyword != ''">
+	            AND nickname LIKE '%' || #{searchKeyword} || '%'
+	        </when>
+	        <when test="searchCondition == 2 and searchKeyword != null and searchKeyword != ''">
+	            AND name LIKE '%' || #{searchKeyword} || '%'
+	        </when>
+	    </choose>
+	</where>
+	</select>
+	
+	<select id="withdrawUserList" parameterType="site.dearmysanta.domain.common.Search"	resultMap="userSelectMap">
+		SELECT 
+			user_no, user_id, name, nickname, creation_date, withdraw_date
+    	FROM 
+    		users
+    	WHERE
+    		withdraw_date IS NOT NULL
+	    <choose>
+	        <when test="searchCondition == 0 and searchKeyword != null and searchKeyword != ''">
+	            AND user_id LIKE '%' || #{searchKeyword} || '%'
+	        </when>
+	        <when test="searchCondition == 1 and searchKeyword != null and searchKeyword != ''">
+	            AND nickname LIKE '%' || #{searchKeyword} || '%'
+	        </when>
+	        <when test="searchCondition == 2 and searchKeyword != null and searchKeyword != ''">
+	            AND name LIKE '%' || #{searchKeyword} || '%'
+	        </when>
+	    </choose>
+	</select>
+	
+	<!-- <select id="withdrawUserList" resultMap="userSelectMap">
+	   SELECT 
+	 user_no, user_id, name, nickname, creation_date, withdraw_date
+    FROM 
+    	users
+    WHERE
+    	withdraw_date IS NOT NULL
+	</select> -->
 
 	<!--  SQL : UPDATE -->
 	
@@ -116,6 +173,15 @@
 			user_id = #{userId} AND password = #{userPassword}
 	</select> 
 	
+	<select id="login" parameterType="map" resultType="String">
+    SELECT 
+    	user_id 
+    FROM 
+    	users 
+    WHERE 
+    	user_id = #{userId} AND password = #{password}
+	</select>
+	
 	<select id = "findUserId"	parameterType="Map" resultType="String">
 		SELECT 
 			user_Id
@@ -135,10 +201,25 @@
 	</select>
 	
 	<update id = "deleteUser" 	parameterType = "int" > 
-		UPDATE users
+		UPDATE 
+			users
 		<set>
 			withdraw_date = SYSDATE
 		</set>
 		WHERE user_no = #{userNo}
 	</update>
+	
+	
+	
+	
+	
+	<!-- <select id="findUserPhoneNumber" 	parameterType="String" 	resultType="site.dearmysanta.domain.user.User">
+    SELECT
+		phone_number    
+    FROM
+    	users 
+    WHERE 
+    	phone_number = #{phoneNumber}
+	</select> -->
+	
 </mapper>

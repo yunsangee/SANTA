@@ -20,6 +20,19 @@
 	<result property="qnaPostCategory" column="qna_category"/>    
 </resultMap>
 
+	<!-- 	<resultMap id="QnaSearchResultMap" type="site.dearmysanta.domain.common.Search">
+    Search class fields
+    	<result property="userNo" column="user_no"/>
+    	<result property="searchCondition" column="search_condition"/>
+    	<result property="searchKeyword" column="search_keyword"/>
+    	<result property="searchDate" column="search_date"/>
+    	<result property="adminAnswer" column="admin_answer"/>
+		<result property="answerState" column="answer_status"/>    
+		<result property="qnaPostCategory" column="qna_category"/>   
+		<result property="title" column="qna_title" />
+		<result property="nickName" column="nickname" /> 
+	</resultMap> -->
+
 	<!--  글제목, 글 내용, 카테고리 -->
 	<insert id="addQnA" parameterType="site.dearmysanta.domain.user.QNA">
     INSERT 
@@ -45,7 +58,7 @@
         q.qna_no = #{postNo} AND q.user_no = u.user_no
 </select>
 
-<select id="getQnAList" resultMap="QnaResultMap">
+<!-- <select id="getQnAList" resultMap="QnaResultMap">
 	 SELECT
         q.qna_no,
         q.user_no,
@@ -61,12 +74,13 @@
         QNA q, USERS u
     WHERE 
         q.user_no = u.user_no
-</select>
+</select> -->
 
-<update id="addAdminAnswer" parameterType="map">
+<update id="addAdminAnswer" parameterType="site.dearmysanta.domain.user.QNA">
 	UPDATE QNA
 	SET
-		admin_answer = #{adminAnswer}
+		admin_answer = #{adminAnswer},
+		answer_status = 1
 	WHERE
 		qna_no = #{postNo}
 </update>
@@ -77,6 +91,39 @@
 			QNA
 		WHERE USER_NO = #{userNo} AND QNA_NO = #{postNo}
 	</delete>
+
+
+	<!--  ////////////////////////////////////////////  -->
+<!-- 	<select id="getQnAList" parameterType="site.dearmysanta.domain.common.Search"	resultMap="QnaResultMap">
+    SELECT * FROM QNA
+    <where>
+        <choose>
+            <when test="searchCondition == 0 and searchKeyword != null and searchKeyword != ''">
+                AND qna_title LIKE '%' || #{searchKeyword} || '%'
+            </when>
+            <when test="searchCondition == 1 and searchKeyword != null and searchKeyword != ''">
+                AND nickname LIKE '%' || #{searchKeyword} || '%'
+            </when>
+        </choose>
+    </where>
+</select> -->
+	
+	<select id="getQnAList" parameterType="site.dearmysanta.domain.common.Search"	resultMap="QnaResultMap">
+	SELECT q.*, u.nickname 
+	FROM QNA q 
+	JOIN Users u ON q.user_no = u.user_no
+	<where>
+	    <choose>
+	        <when test="searchCondition == 0 and searchKeyword != null and searchKeyword != ''">
+	            AND qna_title LIKE '%' || #{searchKeyword} || '%'
+	        </when>
+	        <when test="searchCondition == 1 and searchKeyword != null and searchKeyword != ''">
+	            AND u.nickname LIKE '%' || #{searchKeyword} || '%'
+	        </when>
+	    </choose>
+	</where>
+	</select>
+
 
 
 </mapper>
