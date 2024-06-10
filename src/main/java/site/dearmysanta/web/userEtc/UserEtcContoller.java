@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.alarmMessage.AlarmMessage;
 import site.dearmysanta.service.user.etc.UserEtcService;
 
@@ -25,6 +26,8 @@ public class UserEtcContoller {
 		
 		
 		List<AlarmMessage> list = userEtcService.getAlarmMessageList(userNo);
+		SantaLogger.makeLog("info", "list:" + list.toString());
+
 		List<String> messages = new ArrayList<>();
 		
 		for(AlarmMessage message : list) {
@@ -44,6 +47,8 @@ public class UserEtcContoller {
 			
 			messages.add(sentence);
 		}
+		
+		SantaLogger.makeLog("info", "alarmMessageList:" + messages);
 		
 		
 		model.addAttribute("alarmMessageList", messages);

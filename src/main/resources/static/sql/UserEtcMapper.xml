@@ -121,7 +121,7 @@
 	<select id="getAlarmMessageList" parameterType="int" resultMap="alarmMessageSelectMap">
 		SELECT am.*, u.NAME
 		FROM ALARM_MESSAGE am, USERS u
-		WHERE CHECKED_FLAG = 0 AND u.USER_NO = am.USER_NO AND am.USER_NO = 1
+		WHERE CHECKED_FLAG = 0 AND u.USER_NO = am.USER_NO AND am.USER_NO = {userNo}
 	</select>
 	
 	

@@ -9,6 +9,8 @@
 </head>
 <body>
 
+<p>Hello getAlarmMessage.jsp</p>
+
 <c:forEach var="item" items="${alarmMessageList}" varStatus="status">
 	<p> Messages = ${status.index} : ${item}
 	<br/>
