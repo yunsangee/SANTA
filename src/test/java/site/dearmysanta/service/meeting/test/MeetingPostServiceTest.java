@@ -14,7 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.mock.web.MockMultipartFile;
 
 import site.dearmysanta.SantaApplication;
 import site.dearmysanta.SantaApplicationTests;
@@ -40,14 +41,14 @@ public class MeetingPostServiceTest {
 	@Qualifier("meetingDAO")
 	private MeetingDAO meetingDAO;
 	
-//	@Test
+	@Test
 	public void testAddMeetingPost() throws Exception {
 		
-		File file1 = new File("src/test/resources/testImage1.jpg");
-        File file2 = new File("src/test/resources/testImage2.jpg");
+		File file1 = new File("C:\\Users\\jaeho\\Desktop\\dang.jpeg");
+        File file2 = new File("C:\\Users\\jaeho\\Desktop\\dangdang.jpeg");
 
-//        MultipartFile multipartFile1 = new MockMultipartFile("file1", file1.getName(), "image/jpeg", new FileInputStream(file1));
-//        MultipartFile multipartFile2 = new MockMultipartFile("file2", file2.getName(), "image/jpeg", new FileInputStream(file2));
+        MultipartFile multipartFile1 = new MockMultipartFile("file1", file1.getName(), "image/jpeg", new FileInputStream(file1));
+        MultipartFile multipartFile2 = new MockMultipartFile("file2", file2.getName(), "image/jpeg", new FileInputStream(file2));
 		
 		MeetingPost meetingPost = MeetingPost.builder()
 				.userNo(1)
@@ -58,21 +59,22 @@ public class MeetingPostServiceTest {
                 .meetingName("Weekend Hike")
                 .recruitmentDeadline(java.sql.Date.valueOf(LocalDate.of(2024, 6, 30)))
                 .appointedDeparture("Central Park Entrance")
+                .appointedDetailDeparture("gogogogogoGoGOGO")
                 .appointedHikingMountain("Mountain XYZ")
                 .appointedHikingDate(java.sql.Date.valueOf(LocalDate.of(2024, 7, 5)))
                 .maximumPersonnel(10)
                 .participationGrade(1)
                 .participationGender(0)
                 .participationAge("20-30")
-//                .meetingPostImage(Arrays.asList(multipartFile1, multipartFile2))
+                .meetingPostImage(Arrays.asList(multipartFile1, multipartFile2))
                 .build();
 		
 		meetingService.addMeetingPost(meetingPost);
 		
-		MeetingPost post1 = meetingService.getMeetingPost(1);
+		MeetingPost post1 = meetingService.getMeetingPost(12);
 		SantaLogger.makeLog("info", post1.toString());
 
-		List<MeetingParticipation> meetingParticipationList1 = meetingService.getMeetingParticipationList(1);
+		List<MeetingParticipation> meetingParticipationList1 = meetingService.getMeetingParticipationList(12);
 		SantaLogger.makeLog("info", "meeting participation list size: " + meetingParticipationList1.size());
 		
 		for(int i = 0; i < meetingParticipationList1.size(); i ++) {
