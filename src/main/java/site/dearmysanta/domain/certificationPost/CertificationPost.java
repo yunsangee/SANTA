@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -22,19 +23,26 @@ import site.dearmysanta.domain.common.Post;
 @ToString(callSuper=true)
 public class CertificationPost extends Post {
 
-    
-    private int certificationPostNo;
-    private  List<MultipartFile> certificationPostImage;
+    private  int certificationPostImage;
+      
+    //private int certificationPostNo;
+  
     private String certificationPostMountainName;
     private int certificationPostHikingDifficulty;
     private String certificationPostHikingTrail;
     private String certificationPostHikingDate;
     private int certificationPostTransportation;
-    private List<String> certificationPostHashtag;
+    
+    private String certificationPostHashtagContents;
+
+    
+    
     private String certificationPostTotalTime;
     private String certificationPostDescentTime;
     private String certificationPostAscentTime;
 
     private int certificationPostDeletedFlag;
     private int certificationPostLikeCount;
+    private List<CertificationPostComment> commentList; 
+    
 }
