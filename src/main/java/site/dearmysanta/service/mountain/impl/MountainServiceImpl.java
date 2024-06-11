@@ -481,8 +481,8 @@ public class MountainServiceImpl implements MountainService {
 		return mountainDao.getTotalMountainLikeCount(like);
 	}
 	
-	public List<Mountain> getMountainLikeList(Like like,Search search){
-		return mountainDao.getMountainLikeList(like,search);
+	public List<Mountain> getMountainLikeList(Search search){
+		return mountainDao.getMountainLikeList(search);
 	}
 	
 	//

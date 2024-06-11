@@ -29,8 +29,7 @@ public class HikingGuide {
     private Date hikingDate; // sysdate
     private double userLatitude;// userlatitude
     private double userLongitude;// user longtitude
-    private int upDifficulty;
-    private int downDifficulty;
+    private int hikingDifficulty;
     private Mountain mountain; // (mountain class)
     private Weather weather; // (weather class)
     private MeetingPost meetingpost; // (meeting class)

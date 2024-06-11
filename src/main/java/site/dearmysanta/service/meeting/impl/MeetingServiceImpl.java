@@ -141,8 +141,6 @@ public class MeetingServiceImpl implements MeetingService {
 		
 		MeetingPost meetingPost = meetingDAO.findMeetingPost(postNo);
 		
-		System.out.println("departure======== : " +meetingPost.getAppointedDeparture());
-		
 		String[] AppointedDeparture = meetingPost.getAppointedDeparture().split("/", 2);
 		meetingPost.setAppointedDeparture(AppointedDeparture[0]);
 
@@ -157,6 +155,7 @@ public class MeetingServiceImpl implements MeetingService {
 		
 		meetingDAO.insertMeetingPostLike(like);
 	}
+	// 얘네 updateMeetingPostLikeStatus 하나로 되겠다..
 	
 	public void deleteMeetingPostLike(Like like) throws Exception {
 		

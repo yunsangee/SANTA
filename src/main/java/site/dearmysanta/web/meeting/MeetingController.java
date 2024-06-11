@@ -27,8 +27,8 @@ public class MeetingController {
 		System.out.println(this.getClass());
 	}
 	
-	@GetMapping(value = "getMeetingPostAll")
-	public String getMeetingPostAll(@RequestParam int postNo, Model model) throws Exception {
+	@GetMapping(value = "getMeetingPost")
+	public String getMeetingPost(@RequestParam int postNo, Model model) throws Exception {
 		
 		Map<String, Object> map = meetingService.getMeetingPostAll(postNo);
 		
@@ -49,9 +49,9 @@ public class MeetingController {
 	@PostMapping(value = "addMeetingPost")
 	public String addMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost) throws Exception {
 		
-		meetingService.addMeetingPost(meetingPost);	
+		meetingService.addMeetingPost(meetingPost);
 		
-		return "forward:/meeting/getMeetingPost.jsp";
+		return "redirect:/meeting/getMeetingPost?postNo=" + meetingPost.getPostNo();
 	}
 	
 	@GetMapping(value = "updateMeetingPost")
@@ -68,7 +68,7 @@ public class MeetingController {
 		
 		meetingService.updateMeetingPost(meetingPost);	
 		
-		return "forward:/meeting/getMeetingPost.jsp";
+		return "redirect:/meeting/getMeetingPost?postNo=" + meetingPost.getPostNo();
 	}
 	
 	@GetMapping(value = "deleteMeetingPost")
@@ -76,7 +76,7 @@ public class MeetingController {
 		
 		meetingService.updateMeetingPostDeletedStatus(postNo);
 		
-		return "forward:/meeting/listMeetingPost.jsp";
+		return "redirect:/meeting/getMeetingPostList.jsp";
 	}
 	
 //	@RequestMapping(value = "listMeetingPost")
