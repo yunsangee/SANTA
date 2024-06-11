@@ -19,6 +19,8 @@ public interface CertificationPostService {
 	public Map<String, Object> getCertificationPost(int postNo) throws Exception;
 	
 	public void updateCertificationPost(CertificationPost certificationPost) throws Exception;
+	
+	public void updateCertificationPostDeleteFlag(int postNo) throws Exception; //����
 
 	public Map<String, Object> getCertificationPostList(Search search) throws Exception;
 	
@@ -34,9 +36,9 @@ public interface CertificationPostService {
 	
 	public void deleteCertificationPostLike(Like like) ;
 	
-	//public int getTotalCertificationPostLikeCount(Like like); get¿¡ÇÕÃÄ¼­¾È½áµµµÇ³ª?
+	//public int getTotalCertificationPostLikeCount(Like like); 
 	
-	public List<CertificationPost> getCertificationPostLikeList(Like like);
+	public List<CertificationPost> getCertificationPostLikeList(int userNo);
 
 
 	//Comment 

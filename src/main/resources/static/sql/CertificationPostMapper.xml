@@ -54,7 +54,7 @@
             cp_no, user_no, cp_type, cp_title, cp_contents, cp_mountain_name, 
             cp_hiking_trail, cp_total_time, cp_ascent_time, cp_descent_time, 
             cp_hiking_date, cp_creation_date, cp_transportation, cp_difficulty,
-            cp_delete_flag, cp_like_count
+            cp_deleted_flag, cp_like_count
         ) VALUES (
             seq_cp_no.currval,
             #{userNo}, 
@@ -94,7 +94,7 @@
         FROM
             certification_post
         WHERE
-            cp_no = #{postNo}
+            cp_no = #{postNo} AND cp_deleted_flag = 0
     </select>
     
         <insert id="addHashtag" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
@@ -106,7 +106,7 @@
     <!-- 사진만보여줘야하는데 일단 글제목보여주기 -->
 <select id="getMyCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
 
-      select cp_title from certification_post where user_no =#{userNo} AND cp_type = 0
+      select * from certification_post where user_no =#{userNo} AND cp_type = 0 AND cp_deleted_flag = 0
  </select>
     
     <update id="updateCertificationPost" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
@@ -126,9 +126,12 @@
                cp_no = #{postNo}
     </update>
     
-    
-    
-    
+    	<update id="updateCertificationPostDeleteFlag" parameterType="int">
+    	UPDATE certification_post
+    	SET cp_deleted_flag = 1
+    	WHERE cp_no = #{postNo}
+	</update>
+	
     
     <!-- hashtag -->
     
@@ -178,7 +181,7 @@
 		SELECT c.*
 		FROM LIKES l, certification_post c
 		WHERE l.POST_LIKE_TYPE=0
-		AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO = c.cp_no
+		AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO = c.cp_no 
 	</select>
 	
 	
@@ -218,8 +221,9 @@
 <!-- search -->
 <!---->
  <select id="getCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="site.dearmysanta.domain.common.Search">
-       SELECT * FROM certification_post
+       SELECT * FROM certification_post 
     <where>
+    cp_deleted_flag = 0
         <choose>
             <when test='searchCondition == 0 and searchKeyword != "" '>
                 cp_title LIKE '%' || #{searchKeyword} || '%'

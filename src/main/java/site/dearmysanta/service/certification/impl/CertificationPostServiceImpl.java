@@ -73,6 +73,14 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 	}
     
 	
+	@Override
+	public void updateCertificationPostDeleteFlag(int postNo) throws Exception {
+		certificationPostDao.updateCertificationPostDeleteFlag(postNo);
+		
+	}
+	
+	
+	
 	
     //hashtag
 
@@ -100,8 +108,8 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 
 
 	@Override
-	public List<CertificationPost> getCertificationPostLikeList(Like like) {
-		return certificationPostDao.getCertificationPostLikeList(like);
+	public List<CertificationPost> getCertificationPostLikeList(int userNo) {
+		return certificationPostDao.getCertificationPostLikeList(userNo);
 	}
 
 	
@@ -132,6 +140,9 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 	public int getTotalMountainCount(String certificationPostMountainName) throws Exception {
 		return certificationPostDao.getTotalMountainCount(certificationPostMountainName);
 	}
+
+
+
 
 
 	}

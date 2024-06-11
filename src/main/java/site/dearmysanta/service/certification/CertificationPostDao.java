@@ -27,6 +27,8 @@ public interface CertificationPostDao {
 
 	public void updateCertificationPost(CertificationPost certificationPost) throws Exception;
 	
+	public void updateCertificationPostDeleteFlag(int postNo) throws Exception; //ªË¡¶
+	
 	public List<CertificationPost> getCertificationPostList(Search search) throws Exception;
 	
 	public List<CertificationPost> getMyCertificationPostList(int usrNo) throws Exception;
@@ -50,7 +52,7 @@ public interface CertificationPostDao {
 	
 	public int getCertificationPostLikeCount(int postNo);
 	
-	public List<CertificationPost> getCertificationPostLikeList(Like like);
+	public List<CertificationPost> getCertificationPostLikeList(int userNo);
 
 	
 	//Comment
