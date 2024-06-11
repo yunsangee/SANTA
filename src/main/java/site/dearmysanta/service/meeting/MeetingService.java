@@ -17,11 +17,11 @@ public interface MeetingService {
 	
 	public void addMeetingPost(MeetingPost meetingPost) throws Exception;
 	
-	public void addPostImage(MeetingPost meetingPost) throws Exception;
+//	public void addPostImage(MeetingPost meetingPost) throws Exception;
 	
 	public void updateMeetingPost(MeetingPost meetingPost) throws Exception;
 	
-	public void updatePostImage(MeetingPost meetingPost) throws Exception;
+//	public void updatePostImage(MeetingPost meetingPost) throws Exception;
 	
 	public Map<String, Object> getMeetingPostAll(int postNo) throws Exception;
 	
@@ -64,10 +64,5 @@ public interface MeetingService {
 	public void uploadMeetingPostImages(List<MultipartFile> images, String postNo) throws Exception;
 	
     public MultipartFile downloadMeetingPostImage(String postNo, String fileName) throws Exception;
-
-	
-
-	
-	
 
 }

@@ -17,7 +17,7 @@ import site.dearmysanta.domain.meeting.MeetingPostComment;
 import site.dearmysanta.service.certification.CertificationPostDao;
 import site.dearmysanta.service.certification.CertificationPostService;
 
-@Service("CertificationServiceImpl")
+@Service("CertificationPostServiceImpl")
 public class CertificationPostServiceImpl implements CertificationPostService {
 
     @Autowired
