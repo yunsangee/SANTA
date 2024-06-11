@@ -69,8 +69,7 @@ public class CertificationPostController {
         List<CertificationPost> certificationPost = (List<CertificationPost>) result.get("list");
         model.addAttribute("certificationPost", certificationPost);
 
-        // 디버깅을 위해 데이터 출력
-        System.out.println("Certification Post: " + certificationPost);
+         System.out.println("Certification Post: " + certificationPost);
 
         return "forward:/certificationPost/listCertificationPost.jsp";
     }
@@ -93,8 +92,6 @@ public class CertificationPostController {
  					  
     	 
     }
-
-
 
 
 
