@@ -23,7 +23,7 @@ public class HikingGuide {
     private int hrNo; // hikingRecord Number
     private int userNo; // user Number
     private String totalTime; // ascent time + descent time + other time
-    private int userDistance; // user move distance
+    private double userDistance; // user move distance
     private String ascentTime; // ascent time
     private String descentTime; // descent time
     private Date hikingDate; // sysdate
