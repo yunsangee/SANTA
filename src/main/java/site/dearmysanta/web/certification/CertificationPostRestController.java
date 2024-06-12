@@ -107,8 +107,8 @@ public class CertificationPostRestController {
 }
 
     
-    @GetMapping(value="rest/deleteCertificationPostComment")
-    public void deleteCertificationPostComment(@RequestParam int certificationPostCommentNo)throws Exception {
+    @PostMapping(value="rest/deleteCertificationPostComment/{certificationPostCommentNo}")
+    public void deleteCertificationPostComment(@PathVariable int certificationPostCommentNo)throws Exception {
     
     	certificationPostService.deleteCertificationPostComment(certificationPostCommentNo);
     	
