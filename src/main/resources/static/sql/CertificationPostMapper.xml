@@ -196,7 +196,7 @@
     
     <delete id="deleteCertificationPostComment" parameterType="site.dearmysanta.domain.certificationPost.CertificationPostComment">
         DELETE FROM comments
-         WHERE USER_NO = #{userNo} AND POST_NO = #{certificationPostNo} AND POST_TYPE=0
+         WHERE POST_TYPE=0 AND COMMENT_NO = #{certificationPostCommentNo}
     </delete>
     
 

@@ -123,8 +123,8 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 
 
 	@Override
-	public void deleteCertificationPostComment(CertificationPostComment certificationPostComment) throws Exception {
-		certificationPostDao.deleteCertificationPostComment(certificationPostComment);
+	public void deleteCertificationPostComment(int certificationPostCommentNo) throws Exception {
+		certificationPostDao.deleteCertificationPostComment(certificationPostCommentNo);
 		
 	}
 

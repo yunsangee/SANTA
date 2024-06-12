@@ -1,5 +1,6 @@
 package site.dearmysanta.web.certification;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,14 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import site.dearmysanta.domain.certificationPost.CertificationPost;
+import site.dearmysanta.domain.certificationPost.CertificationPostComment;
 import site.dearmysanta.domain.common.Search;
+import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.certification.CertificationPostService;
+import site.dearmysanta.service.user.UserService;
 import site.dearmysanta.service.user.etc.UserEtcService;
 
 @RestController
@@ -26,6 +32,9 @@ public class CertificationPostRestController {
     @Qualifier("CertificationPostServiceImpl")
     private CertificationPostService certificationPostService;
     
+    @Autowired
+    @Qualifier("userServiceImpl")
+    private UserService userService;
     
     @Autowired
     @Qualifier("userEtcServiceImpl")
@@ -67,7 +76,46 @@ public class CertificationPostRestController {
         System.out.println("¿ÀÀ×:" + myCertificationPost);
         return myCertificationPost;
     }
+    
+    @GetMapping(value="rest/getProfile")
+    public Map<String, Object> getProfile(@RequestParam int userNo) throws Exception {
+        Map<String, Object> result = new HashMap<>();
+
+        User user = userService.getUser(userNo);
+        System.out.println("User Info: " + user);
+        result.put("infouser", user);
+
+        int followerCount = userEtcService.getFollowerCount(userNo);
+        System.out.println("Follower Count: " + followerCount);
+        result.put("followerCount", followerCount);
+
+        List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
+        result.put("myCertificationPost", myCertificationPost);
+
+        List<CertificationPost> myLikeCertificationPost = certificationPostService.getCertificationPostLikeList(userNo);
+        System.out.println("myLikeCertificationPost: " + myLikeCertificationPost);
+        result.put("myLikeCertificationPost", myLikeCertificationPost);
+
+        return result;
     }
+    
+    @PostMapping(value="rest/addCertificationPostComment")
+    public void addCertificationPostComment(@RequestBody CertificationPostComment certificationPostComment)throws Exception {
+    
+    	certificationPostService.addCertificationPostComment(certificationPostComment);
+    
+}
+
+    
+    @GetMapping(value="rest/deleteCertificationPostComment")
+    public void deleteCertificationPostComment(@RequestParam int certificationPostCommentNo)throws Exception {
+    
+    	certificationPostService.deleteCertificationPostComment(certificationPostCommentNo);
+    	
+}
+
+    
+}
     
     
  

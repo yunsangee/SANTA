@@ -58,7 +58,7 @@ public interface CertificationPostDao {
 	//Comment
 	public void addCertificationPostComment(CertificationPostComment certificationPostComment) throws Exception;
 
-	public void deleteCertificationPostComment(CertificationPostComment certificationPostComment) throws Exception;
+	public void deleteCertificationPostComment(int certificationPostCommentNo) throws Exception;
 	
 	public List<CertificationPostComment> getCertificationPostCommentList(int postNo) throws Exception;
 
