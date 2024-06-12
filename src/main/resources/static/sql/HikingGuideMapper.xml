@@ -14,8 +14,7 @@
       <result property="ascentTime" column="hr_ascent" jdbcType="VARCHAR"/>
       <result property="descentTime" column="hr_descent" jdbcType="VARCHAR"/>
       <result property="hikingDate" column="hr_date" jdbcType="DATE"/>
-      <result property="upDifficulty" column="hr_updifficulty" jdbcType="NUMERIC"/>
-      <result property="downDifficulty" column="hr_downdifficulty" jdbcType="NUMERIC"/>
+      <result property="hikingDifficulty" column="hr_hikingdifficulty" jdbcType="NUMERIC"/>
       <result property="weather.skyCondition" column="hr_skycondition" jdbcType="NUMERIC"/>
       <result property="mountain.mountainName" column="hr_mountain_name" jdbcType="VARCHAR"/>
    </resultMap>
@@ -31,8 +30,7 @@
         hr_ascent,
         hr_descent,
         hr_date,
-        hr_updifficulty,
-        hr_downdifficulty,
+        hr_hikingdifficulty,
         hr_skycondition,
         hr_mountain_name
     ) VALUES (
@@ -42,20 +40,21 @@
         #{userDistance, jdbcType=NUMERIC},
         #{ascentTime, jdbcType=VARCHAR},
         #{descentTime, jdbcType=VARCHAR},
-        #{hikingDate, jdbcType=DATE},
-        #{upDifficulty, jdbcType=NUMERIC},
-        #{downDifficulty, jdbcType=NUMERIC},
+        sysdate,
+        #{hikingDifficulty, jdbcType=NUMERIC},
         #{weather.skyCondition, jdbcType=NUMERIC},
         #{mountain.mountainName, jdbcType=VARCHAR}
     )
     </insert>
     
     <!--SQL : hikingRecord DELETE -->
-    <delete id="deleteHikingRecord" parameterType="int">
-        DELETE FROM hiking_record
-        WHERE hr_no = #{hrNo, jdbcType=NUMERIC}
-    </delete>
-    
+   <delete id="deleteHikingRecord" parameterType="map">
+    DELETE FROM hiking_record WHERE hr_no IN
+    <foreach item="hrNo" collection="hrNo" open="(" separator="," close=")">
+        #{hrNo}
+    </foreach>
+	</delete>
+	
     <!--SQL : hikingRecord SELECT -->
     <select id="getHikingListRecord" parameterType="int" resultMap="hikingGuideMap">
         SELECT 
@@ -66,8 +65,7 @@
             hr_ascent,
             hr_descent,
             hr_date,
-            hr_updifficulty,
-            hr_downdifficulty,
+            hr_hikingdifficulty,
             hr_skycondition,
             hr_mountain_name
         FROM hiking_record
