@@ -48,11 +48,13 @@
     </insert>
     
     <!--SQL : hikingRecord DELETE -->
-    <delete id="deleteHikingRecord" parameterType="int">
-        DELETE FROM hiking_record
-        WHERE hr_no = #{hrNo, jdbcType=NUMERIC}
-    </delete>
-    
+   <delete id="deleteHikingRecord" parameterType="map">
+    DELETE FROM hiking_record WHERE hr_no IN
+    <foreach item="hrNo" collection="hrNo" open="(" separator="," close=")">
+        #{hrNo}
+    </foreach>
+	</delete>
+	
     <!--SQL : hikingRecord SELECT -->
     <select id="getHikingListRecord" parameterType="int" resultMap="hikingGuideMap">
         SELECT 
