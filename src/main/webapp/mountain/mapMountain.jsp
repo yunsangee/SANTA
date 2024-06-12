@@ -21,11 +21,38 @@
 	function initMap(){
 		
 		console.log("위도: " + latitude + ", 경도: " + longitude);
+		
+		let currentLocation =  new naver.maps.LatLng(latitude,longitude)
+		
+		
 		map = new naver.maps.Map('naverMap',{
 			//center: new naver.maps.LatLng(37.4458,126.9368),
-			center: new naver.maps.LatLng(latitude,longitude),
-			zoom:15
+			center: currentLocation,
+			zoom:5
 		});
+		
+		new naver.maps.Marker({
+            position: currentLocation,
+            map: map
+        });
+		
+		
+ 		let mountainList = ${mountainList}; 
+		
+ 		console.log(mountainList);
+		
+		$(mountainList).each(function(index,mountain) {
+			console.log(mountain);
+            let mountainLocation = new naver.maps.LatLng(mountain.mountainLatitude, mountain.mountainLongitude);
+            new naver.maps.Marker({
+                position: mountainLocation,
+                map: map
+            });
+        });
+		
+        
+		
+		
 		
 	}// call Naver Map
 	

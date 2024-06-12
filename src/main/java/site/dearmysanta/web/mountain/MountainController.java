@@ -1,5 +1,6 @@
 package site.dearmysanta.web.mountain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.common.Like;
@@ -99,8 +103,24 @@ public class MountainController {
 	}
 	
 	
-//	@GetMapping(value="mapMountain")
-//	public String
+	@GetMapping(value="mapMountain")
+	public String mapMountain(Search search, Model model) throws JsonProcessingException {
+		
+		
+		List<Mountain> list = mountainService.getMountainListByName(search.getSearchKeyword());
+		
+		List<String> jsonList = new ArrayList<>();
+		ObjectMapper objectMapper = new ObjectMapper();
+		for (Mountain mt: list) {
+			SantaLogger.makeLog("info", mt.toString());
+			
+		   jsonList.add(objectMapper.writeValueAsString(mt));
+		}
+		
+		model.addAttribute("mountainList", jsonList);
+		
+		return "forward:/mountain/mapMountain.jsp";
+	}
 	
 //	@GetMapping(value="main")
 //	
