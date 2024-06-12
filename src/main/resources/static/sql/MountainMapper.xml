@@ -292,7 +292,7 @@
 		parameterType="site.dearmysanta.domain.mountain.MountainSearch">
 		DELETE FROM MOUNTAIN_SEARCH
 		WHERE USER_NO = #{userNo} AND
-		search_date = #{searchDate}
+		mountain_search_content=#{searchKeyword}
 	</delete>
 
 
