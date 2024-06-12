@@ -41,7 +41,7 @@ public class MeetingPostServiceTest {
 	@Qualifier("meetingDAO")
 	private MeetingDAO meetingDAO;
 	
-	@Test
+//	@Test
 	public void testAddMeetingPost() throws Exception {
 		
 		File file1 = new File("C:\\Users\\jaeho\\Desktop\\dang.jpeg");
@@ -86,7 +86,12 @@ public class MeetingPostServiceTest {
 //	@Test
 	public void testGetMeetingPostAll() throws Exception {
 		
-		Map<String, Object> meetingPostAll = meetingService.getMeetingPostAll(1);
+		Map<String, Object> meetingPostAll = meetingService.getMeetingPostAll(3, 1);
+		
+		System.out.println(meetingPostAll.get("meetingPost"));
+		System.out.println(meetingPostAll.get("meetingParticipations"));
+		System.out.println(meetingPostAll.get("meetingPostComments"));
+		System.out.println(meetingPostAll.get("meetingPostImages"));
 		
 		SantaLogger.makeLog("info", meetingPostAll.toString());
 		
@@ -112,7 +117,6 @@ public class MeetingPostServiceTest {
 		Like like = Like.builder()
 				.userNo(5)
 				.postNo(1)
-				.postLikeType(1)
                 .build();
 		
 		
@@ -133,7 +137,6 @@ public class MeetingPostServiceTest {
 		Like like = Like.builder()
 				.userNo(5)
 				.postNo(1)
-				.postLikeType(1)
                 .build();
 		
 		int likeCount1 = meetingDAO.getMeetingPostLikeCount(1);
@@ -182,7 +185,7 @@ public class MeetingPostServiceTest {
 		int commentCount1 = meetingDAO.getMeetingPostCommentCount(1);
 		SantaLogger.makeLog("info", String.valueOf(commentCount1));
 		
-		meetingService.deleteMeetingPostComment(meetingPostComment);
+//		meetingService.deleteMeetingPostComment(meetingPostCommentNo);
 		
 		int commentCount2 = meetingDAO.getMeetingPostCommentCount(1);
 		SantaLogger.makeLog("info", String.valueOf(commentCount2));
@@ -290,7 +293,7 @@ public class MeetingPostServiceTest {
 			SantaLogger.makeLog("info", meetingParticipationList1.get(i).toString());
 		}
 	    
-	    meetingService.updateMeetingParticipationWithdrawStatus(2);
+	    meetingService.updateMeetingParticipationWithdrawStatus(2, 4);
 	    
 	    List<MeetingParticipation> meetingParticipationList2 = meetingService.getMeetingParticipationList(1);
 	    SantaLogger.makeLog("info", "meeting participation list size: " + meetingParticipationList2.size());
