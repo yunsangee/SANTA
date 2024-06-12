@@ -166,7 +166,7 @@
 	</select>
 
 
-	<select id="getMountainListByName" parameterType="String"
+	<select id="getMountainListByName" parameterType="map"
 		resultMap="MountainResultMap">
 		SELECT
 		m.MOUNTAIN_NO AS MOUNTAIN_NO,
@@ -189,6 +189,8 @@
 		FROM MOUNTAIN m, MOUNTAIN_TRAIL t
 		WHERE m.MOUNTAIN_NO = t.MOUNTAIN_NO(+) AND m.MOUNTAIN_NAME LIKE '%'||#{mountainName}||'%'
 	</select>
+	
+	
 
 
 	<select id="checkMountainExist" parameterType="int"
@@ -295,7 +297,7 @@
 
 
 	<!-- !!!!!! -->
-	<select id="getSearchKeywordList" parameterType="map"
+	<!-- <select id="getSearchKeywordList" parameterType="map"
 		resultMap="MountainSearchResultMap">
 
 		SELECT * FROM (
@@ -309,6 +311,11 @@
 
 		WHERE ROW_SEQ BETWEEN ((#{search.currentPage} - 1) * #{search.pageSize} +
 		1) AND #{search.currentPage} * #{search.pageSize}
+	</select> -->
+	<select id="getSearchKeywordList" parameterType="int"
+		resultMap="MountainSearchResultMap">
+
+		select ms.*, ROWNUM from mountain_search ms where user_no = #{userNo} AND ROWNUM <![CDATA[<=]]> 10 order by search_date desc
 	</select>
 
 	<update id="updateSearchSetting" parameterType="map">
@@ -363,10 +370,17 @@
 		)
 	</select>
 	
-	<select id="getStatisticsMountainNameList" parameterType="int"
+	<select id="getStatisticsMountainNameList" parameterType="map"
 		resultType="String">
 		SELECT mountain_name FROM
-		(SELECT * FROM STATISTICS
+		(SELECT s.*, ROWNUM FROM STATISTICS s
+		<if test="type == 0">
+			<where>
+				ROWNUM <![CDATA[<=]]> 10
+			</where>
+		</if>
+		
+		
 		<if test="which == 0">
 			ORDER BY POST_COUNT DESC
 		</if>
@@ -382,8 +396,8 @@
 		resultMap="MountainResultMap">
 		SELECT *
 		FROM MOUNTAIN
-		WHERE MOUNTAIN_LOCATION LIKE '%' || #{user.address} || '%'
-		<choose>
+		<!-- WHERE MOUNTAIN_LOCATION LIKE '%' || #{user.address} || '%' -->
+		<!-- <choose>
 			<when test="user.hikingDifficulty == 0">
 				AND MOUNTAIN_ALTITUDE <![CDATA[>=]]>
 				700
@@ -395,8 +409,9 @@
 				AND MOUNTAIN_ALTITUDE <![CDATA[<=]]>
 				500
 			</when>
-		</choose>
-		AND LOWER(MOUNTAIN_NAME) IN
+		</choose> -->
+<!-- 		AND LOWER(MOUNTAIN_NAME) IN -->
+		WHERE MOUNTAIN_NAME IN
 		<foreach item="item" index="index" collection="mountainNames"
 			open="(" separator="," close=")">
 			#{item}

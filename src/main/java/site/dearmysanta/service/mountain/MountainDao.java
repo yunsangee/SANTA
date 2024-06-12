@@ -63,7 +63,7 @@ public interface MountainDao {
 	
 	public void deleteSearchKeyword(MountainSearch mountainSearch);
 	
-	public List<MountainSearch> getSearchKeywordList(int userNo, Search search);
+	public List<MountainSearch> getSearchKeywordList(int userNo);
 	
 	public void updateSearchSetting(int userNo, int settingValue);
 	
@@ -77,7 +77,7 @@ public interface MountainDao {
 	
 	public void updateMountainStatistics(String mountainName, int which);
 	
-	public List<Statistics> getStatisticsList(int which);
+	public List<Statistics> getStatisticsList(int which,int type);
 	//
 	//
 	//

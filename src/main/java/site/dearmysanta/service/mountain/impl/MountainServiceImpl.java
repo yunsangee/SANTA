@@ -474,10 +474,14 @@ public class MountainServiceImpl implements MountainService {
 		return mountainDao.checkMountainExist(mountainNo);
 	}
 	
-	public List<Mountain> getPopularMountainList(List<String> mountainNames) throws Exception{
+	public List<Mountain> getPopularMountainList(List<String> mountainNames,Search search) throws Exception{
 		SantaLogger.makeLog("info", "serivceImpl getpopMountain:" + mountainNames.toString());
 		List<Mountain> list = new ArrayList<>();
-		for(int i = 0; i < 10 ; i ++) {
+		
+		//((#{search.currentPage} - 1) * #{search.pageSize} +
+		//1) AND #{search.currentPage} * #{search.pageSize}
+		for(int i = (search.getCurrentPage() - 1) * search.getPageSize() ; i < search.getCurrentPage() * search.getPageSize()  ; i ++) {
+//			SantaLogger.makeLog("info", "::" + this.getMountainListByName(mountainNames.get(i)).toString());
 			list.add(this.getMountainListByName(mountainNames.get(i)).get(0));
 		}
 		
@@ -539,8 +543,8 @@ public class MountainServiceImpl implements MountainService {
 		mountainDao.deleteSearchKeyword(mountainSearch);
 	}
 	
-	public List<MountainSearch> getSearchKeywordList(int userNo,Search search){
-		return mountainDao.getSearchKeywordList(userNo,search);
+	public List<MountainSearch> getSearchKeywordList(int userNo){
+		return mountainDao.getSearchKeywordList(userNo);
 	}
 	
 	public void updateSearchSetting(int userNo, int settingValue) {
@@ -574,8 +578,8 @@ public class MountainServiceImpl implements MountainService {
 		return mountainDao.checkStatisticsMountainColumnExist(mountainName);
 	}
 	
-	public List<Statistics> getStatisticsList(int which){  // 0: get normal list, 1: get popular searchKeyword list
-		return mountainDao.getStatisticsList(which); 
+	public List<Statistics> getStatisticsList(int which,int type){  // 0: get normal list, 1: get popular searchKeyword list
+		return mountainDao.getStatisticsList(which,type); 
 	}
 	
 	public List<String> getStatisticsMountainNameList(int which){

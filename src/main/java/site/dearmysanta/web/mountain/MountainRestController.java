@@ -22,7 +22,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.mountain.Mountain;
+import site.dearmysanta.domain.mountain.Weather;
 import site.dearmysanta.service.mountain.MountainService;
+import site.dearmysanta.service.weather.WeatherService;
 
 @RestController
 @RequestMapping("/mountain/*")
@@ -36,6 +38,11 @@ public class MountainRestController {
 	
 	@Autowired
 	MountainService mountainService;
+	
+	
+	@Autowired
+	WeatherService weatherService;
+	
 	
 	
 	public MountainRestController() {
@@ -99,6 +106,12 @@ public class MountainRestController {
 		SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like));
 		return mountainService.getTotalMountainLikeCount(like);
 	}//o
+	
+	
+	@GetMapping("rest/getWeather")
+	public Weather getWeather(@RequestParam double lat, double lon) throws Exception {
+		return weatherService.getWeather(lat, lon);
+	}
 	
 	
 	

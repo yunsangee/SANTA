@@ -18,8 +18,8 @@ import site.dearmysanta.domain.common.Search;
 @AllArgsConstructor
 @ToString(callSuper=true)
 public class MountainSearch extends Search{
-	private List<String> searchRecord; // search record list
-	private List<String> popularSearchKeyword; // popular search keyword list 
+//	private String searchRecord; // search record list
+//	private List<Statistics> popularSearchKeyword; // popular search keyword list 
 	
 	// detail search condition
 	private int locationNo; // location information. can chage to json
