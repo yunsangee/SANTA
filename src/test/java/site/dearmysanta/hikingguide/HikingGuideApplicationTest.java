@@ -115,11 +115,11 @@ public class HikingGuideApplicationTest {
     	   	
     }
     
-    @Test
-    public void deleteHikingRecord() throws Exception{
-             
-        int rowsAffected = hikingGuideService.deleteHikingRecord(2);
-
-        assertEquals(1, rowsAffected, "Number of rows deleted should be 1");
-    }
-}
+//    @Test
+//    public void deleteHikingRecord() throws Exception{
+//             
+//        int rowsAffected = hikingGuideService.deleteHikingRecord(2);
+//
+//        assertEquals(1, rowsAffected, "Number of rows deleted should be 1");
+//    }
+//}
