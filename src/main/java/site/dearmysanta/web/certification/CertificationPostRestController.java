@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import site.dearmysanta.domain.certificationPost.CertificationPost;
 import site.dearmysanta.domain.certificationPost.CertificationPostComment;
+import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.certification.CertificationPostService;
@@ -107,21 +110,38 @@ public class CertificationPostRestController {
 }
 
     
-    @PostMapping(value="rest/deleteCertificationPostComment/{certificationPostCommentNo}")
-    public void deleteCertificationPostComment(@PathVariable int certificationPostCommentNo)throws Exception {
+    @DeleteMapping(value="rest/deleteCertificationPostComment")
+    public void deleteCertificationPostComment(@RequestParam int certificationPostCommentNo , @RequestParam int userNo) throws Exception {
     
-    	certificationPostService.deleteCertificationPostComment(certificationPostCommentNo);
+    	certificationPostService.deleteCertificationPostComment(certificationPostCommentNo, userNo);
     	
 }
 
+	//like
+    @PostMapping(value="rest/addCertificationPostLike")
+    public void addCertificationPostLike(@RequestBody Like like) throws Exception {
+    	certificationPostService.addCertificationPostLike(like);
+    	
     
 }
     
+    @PostMapping(value="rest/deleteCertificationPostLike")
+    public void deleteCertificationPostLike(@RequestBody Like like) throws Exception {
+    	certificationPostService.deleteCertificationPostLike(like);
+    	
     
- 
+}
+    //hashtag
     
+    @PostMapping(value="rest/addHashtag")
+    public void addHashtag(@RequestBody CertificationPost certificationPost )throws Exception {
+    	certificationPostService.addHashtag(certificationPost);
+}
     
-    
-    
+    @DeleteMapping(value="rest/deleteHashtag/{hashtagNo}")
+    public void deleteHashtag(@PathVariable int hashtagNo) throws Exception {
+        certificationPostService.deleteHashtag(hashtagNo);
+    }
+}
     
     

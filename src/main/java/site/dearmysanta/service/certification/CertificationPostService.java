@@ -16,7 +16,7 @@ public interface CertificationPostService {
 	//post
 	public void addCertificationPost(CertificationPost certificationPost) throws Exception;
 	
-	public Map<String, Object> getCertificationPost(int postNo) throws Exception;
+	public Map<String, Object> getCertificationPost(int postNo, int userNo) throws Exception;
 	
 	public void updateCertificationPost(CertificationPost certificationPost) throws Exception;
 	
@@ -27,7 +27,9 @@ public interface CertificationPostService {
 	public	List<CertificationPost> getMyCertificationPostList(int userNo) throws Exception;
 
 	//hashtag	
-	public void deleteHashtag(int HashtagNo) throws Exception;
+	public void addHashtag(CertificationPost certificationPost);
+	
+	public void deleteHashtag(int hashtagNo) throws Exception;
 	
 	//public CertificationPost getHashtag(int postNo) throws Exception;
 	
@@ -45,7 +47,7 @@ public interface CertificationPostService {
 	
 	public void addCertificationPostComment(CertificationPostComment certificationPostComment) throws Exception;
 
-	public void deleteCertificationPostComment(int certificationPostCommentNo) throws Exception;
+	public void deleteCertificationPostComment(int certificationPostCommentNo, int userNo) throws Exception;
 
 	public List<CertificationPostComment> getCertificationPostCommentList(int postNo) throws Exception;
 	

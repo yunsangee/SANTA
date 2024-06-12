@@ -87,10 +87,10 @@ public class CertificationPostController {
     }
     
     // 게시글 상세조회..
-    @RequestMapping(value="getCertificationPost")
-    public String getCertificationPost(@RequestParam int postNo, Model model) throws Exception {
+    @GetMapping(value="getCertificationPost")
+    public String getCertificationPost(@RequestParam int postNo, Model model,@RequestParam int userNo) throws Exception {
     	
-    	 Map<String, Object> certificationPost = certificationPostService.getCertificationPost(postNo);
+    	 Map<String, Object> certificationPost = certificationPostService.getCertificationPost(postNo, userNo);
     	 List<CertificationPostComment> certificationPostComment = certificationPostService.getCertificationPostCommentList(postNo);
     	 System.out.println("CertificationPost:"+certificationPost);
 

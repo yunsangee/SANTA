@@ -34,10 +34,11 @@ public class CertificationPostServiceImpl implements CertificationPostService {
     
 
     @Override
-    public Map<String, Object> getCertificationPost(int postNo) throws Exception {
+    public Map<String, Object> getCertificationPost(int postNo,  int userNo) throws Exception {
        
     	CertificationPost certificationPost = certificationPostDao.getCertificationPost(postNo);
-    	
+    	int likeStatus = certificationPostDao.getCertificationPostLikeStatus(postNo, userNo);
+    	certificationPost.setCertificationPostLikeStatus(likeStatus);
     	int likeCount = certificationPostDao.getCertificationPostLikeCount(postNo);
     	certificationPost.setCertificationPostLikeCount(likeCount);
     	
@@ -83,6 +84,13 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 	
 	
     //hashtag
+	
+
+	@Override
+	public void addHashtag(CertificationPost certificationPost) {
+		certificationPostDao.addHashtag(certificationPost);
+		
+	}
 
     @Override
     public void deleteHashtag(int HashtagNo) throws Exception {
@@ -96,14 +104,13 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 	public void addCertificationPostLike(Like like) {
 		certificationPostDao.addCertificationPostLike(like);
 		certificationPostDao.updateLikeCount(like);
-		
-
-		
+	
 	}
 
 	@Override
 	public void deleteCertificationPostLike(Like like) {
 		certificationPostDao.deleteCertificationPostLike(like);
+		certificationPostDao.updateLikeCount(like);
 	}
 
 
@@ -123,8 +130,8 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 
 
 	@Override
-	public void deleteCertificationPostComment(int certificationPostCommentNo) throws Exception {
-		certificationPostDao.deleteCertificationPostComment(certificationPostCommentNo);
+	public void deleteCertificationPostComment(int certificationPostCommentNo, int userNo) throws Exception {
+		certificationPostDao.deleteCertificationPostComment(certificationPostCommentNo, userNo);
 		
 	}
 

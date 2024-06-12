@@ -32,17 +32,15 @@ public class CertificationPost extends Post {
     private String certificationPostHikingTrail;
     private String certificationPostHikingDate;
     private int certificationPostTransportation;
-    
+    private int hashtagNo;
     private String certificationPostHashtagContents;
-
-    
-    
     private String certificationPostTotalTime;
     private String certificationPostDescentTime;
     private String certificationPostAscentTime;
-
     private int certificationPostDeletedFlag;
     private int certificationPostLikeCount;
+    private int certificationPostLikeStatus;
     private List<CertificationPostComment> commentList; 
+    
     
 }

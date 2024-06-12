@@ -10,6 +10,16 @@
 <h1>Certification Post Detail Page</h1>
 <body>
 
+<h2>Like Status</h2>
+    <c:choose>
+        <c:when test="${certificationPost.certificationPostLikeStatus == 0}">
+           <p>좋아요를 누르지 않았습니다.</p> 
+        </c:when>
+        <c:otherwise>
+            <p>!!!좋아요를 눌렀습니다.!!!</p>
+        </c:otherwise>
+    </c:choose>
+    
  <p>Mountain Name: ${certificationPost.title}</p>
         <p>Mountain Name: ${certificationPost.certificationPostMountainName}</p>
         <p>Hiking Trail: ${certificationPost.certificationPostHikingTrail}</p>

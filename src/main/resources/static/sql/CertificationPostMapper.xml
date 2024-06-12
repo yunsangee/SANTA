@@ -30,7 +30,7 @@
 
 
  <resultMap id="certificationPostCommentSelectMap" type="site.dearmysanta.domain.certificationPost.CertificationPostComment">
-  	         <result property="userNo" 		column="userNo" 				jdbcType="NUMERIC"/>
+  	         <result property="userNo" 		column="user_no" 				jdbcType="NUMERIC"/>
         <result property="nickname" 	column="nickname" 				jdbcType="VARCHAR"/>
         <result property="profileImage" 	column="profile_image" 			jdbcType="VARCHAR"/>
         
@@ -137,7 +137,7 @@
     
     <delete id="deleteHashtag" parameterType="int">
         DELETE FROM hashtag
-        WHERE hashtag_content = #{certificationPostHashtagContents}
+        WHERE HASHTAG_NO = #{hashtagNo}
     </delete>
     
   
@@ -146,9 +146,11 @@
     FROM certification_post cp
     INNER JOIN hashtag h ON cp.cp_no = h.cp_no
     WHERE cp.cp_no = #{postNo}  </select>
+   
+   
     <!-- Like  -->
     <insert id="addCertificationPostLike" parameterType="site.dearmysanta.domain.common.Like">
-        INSERT INTO LIKES (LIKE_NO, USER_NO, POST_LIKE_NO, POST_LIKE_TYPE, LIKE_DATE)
+        INSERT INTO LIKES (LIKE_NO, USER_NO, POST_NO, POST_TYPE, LIKE_DATE)
         VALUES (seq_like_no.NEXTVAL, #{userNo}, #{postNo}, 0 , SYSDATE)
     </insert>
     
@@ -158,7 +160,7 @@
         SET cp_like_count = (
             SELECT COUNT(*)
             FROM likes
-            WHERE post_like_no = #{postNo} AND post_like_type = 0
+            WHERE post_no = #{postNo} AND post_type = 0
         )
         WHERE cp_no = #{postNo}
     </update>
@@ -166,13 +168,13 @@
 
     <delete id="deleteCertificationPostLike" parameterType="site.dearmysanta.domain.common.Like">
         DELETE FROM LIKES
-        WHERE USER_NO = #{userNo} AND POST_LIKE_NO = #{postNo} AND POST_LIKE_TYPE=0
+        WHERE USER_NO = #{userNo} AND POST_NO = #{postNo} AND POST_TYPE=0
     </delete>
     
     <select id="getCertificationPostLikeCount" parameterType="site.dearmysanta.domain.common.Like"  resultType="int">
         SELECT COUNT(*)
         FROM likes
-        WHERE post_like_no = #{postNo} AND post_like_type = 0
+        WHERE post_no = #{postNo} AND post_type = 0
     </select>
     
 	<select id="getCertificationPostLikeList"
@@ -180,11 +182,15 @@
 		resultMap="CertificationPostSelectMap">
 		SELECT c.*
 		FROM LIKES l, certification_post c
-		WHERE l.POST_LIKE_TYPE=0
-		AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO = c.cp_no 
+		WHERE l.POST_TYPE=0
+		AND l.USER_NO = #{userNo} AND l.POST_NO = c.cp_no 
 	</select>
 	
-	
+	<select id="getCertificationPostLikeStatus" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM likes
+        WHERE user_no = #{userNo} AND post_no = #{postNo} AND post_type = 0
+    </select>
 	
 	
 	<!-- Comment -->
@@ -196,7 +202,7 @@
     
     <delete id="deleteCertificationPostComment" parameterType="site.dearmysanta.domain.certificationPost.CertificationPostComment">
         DELETE FROM comments
-         WHERE POST_TYPE=0 AND COMMENT_NO = #{certificationPostCommentNo}
+         WHERE POST_TYPE=0 AND COMMENT_NO = #{certificationPostCommentNo} AND USER_NO = #{userNo}
     </delete>
     
 

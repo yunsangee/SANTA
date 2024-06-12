@@ -37,7 +37,7 @@ public interface CertificationPostDao {
 	//hashtag
 	public void addHashtag(CertificationPost certificationPost);
 	
-	public	 void deleteHashtag(int HashtagNo) throws Exception;
+	public	 void deleteHashtag(int hashtagNo) throws Exception;
 	
 	public List<String> getHashtag(int postNo) throws Exception;
 	
@@ -54,11 +54,14 @@ public interface CertificationPostDao {
 	
 	public List<CertificationPost> getCertificationPostLikeList(int userNo);
 
+	public int getCertificationPostLikeStatus(int postNo, int userNo) throws Exception;
+	
+	
 	
 	//Comment
 	public void addCertificationPostComment(CertificationPostComment certificationPostComment) throws Exception;
 
-	public void deleteCertificationPostComment(int certificationPostCommentNo) throws Exception;
+	public void deleteCertificationPostComment(int certificationPostCommentNo, int userNo) throws Exception;
 	
 	public List<CertificationPostComment> getCertificationPostCommentList(int postNo) throws Exception;
 
