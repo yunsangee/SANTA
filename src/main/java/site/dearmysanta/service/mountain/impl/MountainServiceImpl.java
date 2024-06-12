@@ -181,7 +181,7 @@ public class MountainServiceImpl implements MountainService {
 	 public List<MountainTrail> getMountainTrailListFromVWorld(int mountainNo, String mountainName, String emdCd) throws IOException {
 			String url = "https://api.vworld.kr/req/data";
 			
-			String urlMountainName = mountainName.split("산")[0] + "산";
+			String urlMountainName = mountainName.split("�궛")[0] + "�궛";
 			SantaLogger.makeLog("info", "Mn & emdcd :"+  urlMountainName + " " + emdCd);
 			url = url + "?service=data&request=GetFeature&data=LT_L_FRSTCLIMB&key=" + vWorldAPIKey + "&domain=http://dearmysanta.site"
 	              + "&attrFilter=mntn_nm:like:" +urlMountainName+"|emdCd:=:" + emdCd+"&page=1&size=100&format=json";
@@ -232,11 +232,11 @@ public class MountainServiceImpl implements MountainService {
             for (MountainTrail trail : mountainTrails) {
                 SantaLogger.makeLog("info","trail:" + trail);
                 
-//                if(trail.getMountainTrailDifficulty().equals("하")) {
+//                if(trail.getMountainTrailDifficulty().equals("�븯")) {
 //                	easy += 1;
-//                } else if(trail.getMountainTrailDifficulty().equals("중")) {
+//                } else if(trail.getMountainTrailDifficulty().equals("以�")) {
 //                	normal += 1;
-//                }if(trail.getMountainTrailDifficulty().equals("상")) {
+//                }if(trail.getMountainTrailDifficulty().equals("�긽")) {
 //                	difficult += 1;
 //                }
             }
@@ -261,7 +261,7 @@ public class MountainServiceImpl implements MountainService {
 		 
 		 	String mountainName = json.getString("frtrlNm");
 		 	
-//		 	mountainName = mountainName.split("산")[0]+"산";
+//		 	mountainName = mountainName.split("�궛")[0]+"�궛";
 		 	
 		    SantaLogger.makeLog("info", mountainName);        // Build the Mountain object
 	        return Mountain.builder()
@@ -330,8 +330,8 @@ public class MountainServiceImpl implements MountainService {
            
            SantaLogger.makeLog("info","lat, lot:" + mountain.getMountainLatitude() + " " + mountain.getMountainLongitude());
            
-           SantaLogger.makeLog("info", "url:"+objectStorageService.dounLoadImageURL(bucketname, mountain.getMountainName()+"사진"));
-           mountain.setMountainImage(objectStorageService.dounLoadImageURL(bucketname, mountain.getMountainName()+"사진"));
+           SantaLogger.makeLog("info", "url:"+objectStorageService.dounLoadImageURL(bucketname, mountain.getMountainName()+"�궗吏�"));
+           mountain.setMountainImage(objectStorageService.dounLoadImageURL(bucketname, mountain.getMountainName()+"�궗吏�"));
            //
            // for test
            //
@@ -380,7 +380,7 @@ public class MountainServiceImpl implements MountainService {
 //         }
          
          //
-         //여기서 확인하고, 있으면 등산로를 돌고, 없으면 돌지말자
+         //�뿬湲곗꽌 �솗�씤�븯怨�, �엳�쑝硫� �벑�궛濡쒕�� �룎怨�, �뾾�쑝硫� �룎吏�留먯옄
          //
 
 
@@ -486,7 +486,7 @@ public class MountainServiceImpl implements MountainService {
 		}
 		
 		return list;
-	}//이거 산 이름으로 해야해 ?
+	}//�씠嫄� �궛 �씠由꾩쑝濡� �빐�빞�빐 ?
 	
 	public List<Mountain> getCustomMountainList(List<Statistics> statistics, User user){
 		
