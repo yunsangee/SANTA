@@ -71,8 +71,8 @@ public class HikingGuideRestController {
         System.out.println(meetingTime);
     }
 
-    @DeleteMapping(value = "/react/deleteHikingRecord/{hrNo}")
-    public void deleteHikingRecord(@PathVariable int hrNo) throws Exception {
+    @PostMapping(value = "/react/deleteHikingRecord")
+    public void deleteHikingRecord(@RequestBody List<Integer> hrNo) throws Exception {
         hikingGuideService.deleteHikingRecord(hrNo);
     }
 

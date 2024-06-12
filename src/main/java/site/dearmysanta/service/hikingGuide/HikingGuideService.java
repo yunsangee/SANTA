@@ -33,7 +33,7 @@ public interface HikingGuideService {
 
 	public void updateAlertSetting(int userNo, Map<String, Integer> settings) throws Exception;
 
-	public int deleteHikingRecord(int hrNo) throws Exception;
+	public int deleteHikingRecord(List<Integer> hrNo) throws Exception;
 	
 	public MeetingPost getMeetingParticipationList() throws Exception;
 	

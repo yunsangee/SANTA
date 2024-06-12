@@ -46,12 +46,12 @@ public class HikingGuideServiceImpl implements HikingGuideService {
 
     @Override
     public List<HikingGuide> getHikingListRecord(int userNo) throws Exception {
-    	System.out.println("impl :"+userNo);
+    	System.out.println("getHikingListRecord : "+userNo);
         return hikingGuideDao.getHikingListRecord(userNo);
     }
 
     @Override
-    public int deleteHikingRecord(int hrNo) throws Exception {
+    public int deleteHikingRecord(List<Integer> hrNo) throws Exception {
         return hikingGuideDao.deleteHikingRecord(hrNo);
     }
 

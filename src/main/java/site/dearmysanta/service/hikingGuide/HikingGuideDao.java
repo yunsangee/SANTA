@@ -26,5 +26,5 @@ public interface HikingGuideDao {
     public void updateMeetingTime(@Param("userNo") int userNo, @Param("meetingTimeAlert") int meetingTimeAlert, 
     						 	  @Param("meetingTime") String meetingTime) throws Exception;
 
-    public int deleteHikingRecord(@Param("hrNo") int hrNo) throws Exception;
+    public int deleteHikingRecord(@Param("hrNo") List<Integer> hrNo) throws Exception;
 }
