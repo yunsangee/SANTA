@@ -1,5 +1,7 @@
 package site.dearmysanta.web.mountain;
 
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.mountain.Mountain;
+import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.mountain.Weather;
 import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.weather.WeatherService;
@@ -111,6 +114,16 @@ public class MountainRestController {
 	@GetMapping("rest/getWeather")
 	public Weather getWeather(@RequestParam double lat, double lon) throws Exception {
 		return weatherService.getWeather(lat, lon);
+	}
+	
+	
+	@GetMapping("rest/deleteSearchKeyword")
+	public List<MountainSearch> deleteSearchKeyword(@ModelAttribute MountainSearch mountainSearch ){
+		//세션에서 userId 받아오기 
+		//나중에 반환형도 지우기 
+		mountainService.deleteSearchKeyword(mountainSearch);
+		
+		return mountain
 	}
 	
 	

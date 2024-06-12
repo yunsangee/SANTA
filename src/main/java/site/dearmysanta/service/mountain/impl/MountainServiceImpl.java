@@ -203,7 +203,7 @@ public class MountainServiceImpl implements MountainService {
             SantaLogger.makeLog("info", "trail Exist?!?!?!"  + (features.get(0) == null  ? "No" : "yes"));
             
           
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < 100; i++) {
 				if (features.get(i) != null) {
 					
 					MountainTrail mountainTrail = mapJsonToMountainTrail(features.get(i));
@@ -279,9 +279,9 @@ public class MountainServiceImpl implements MountainService {
 		Mountain mountain = new Mountain();
 
 		
-		String url = "http://apis.data.go.kr/B553662/top100FamtListBasiInfoService/getTop100FamtListBasiInfoList?serviceKey="+API_KEY +"&numOfRows=100&pageNo=1";
-				//+ "&srchFrtrlNm="
-				//+ mountainName;//remove later
+		String url = "http://apis.data.go.kr/B553662/top100FamtListBasiInfoService/getTop100FamtListBasiInfoList?serviceKey="+API_KEY +"&numOfRows=100&pageNo=1"
+				+ "&srchFrtrlNm="
+				+ mountainName;//remove later
 
 		HttpHeaders headers = new HttpHeaders();
 
