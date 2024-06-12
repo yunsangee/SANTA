@@ -30,6 +30,12 @@ public class MeetingController {
 	@Value("${bucketName}")
 	private String bucketName;
 	
+	@Value("${pageSize}")
+	private int pageSize;
+	
+	@Value("${pageUnit}")
+	private int pageUnit;
+	
 	@Autowired
 	@Qualifier("objectStorageService")
 	private ObjectStorageService objectStorageService;
@@ -129,18 +135,28 @@ public class MeetingController {
 		return "redirect:/meeting/getMeetingPostList.jsp";
 	}
 	
-	@GetMapping(value = "getlistMeetingPostListByListSearchCondition")
-	public String getlistMeetingPostListByListSearchCondition(@ModelAttribute("meetingPostSearch") MeetingPostSearch meetingPostSearch, 
+	@GetMapping(value = "getMeetingPostList") // currentPage
+	public String getMeetingPostList(@ModelAttribute("meetingPostSearch") MeetingPostSearch meetingPostSearch, 
 			Model model) throws Exception {
 		
 		System.out.println("/meeting/getlistMeetingPostListByListSearchCondition : GET");
 		
-		meetingPostSearch.setCurrentPage(1);
+//		int userNo = ((User)session.getAttribute("user")).getUserNo();
+		int userNo = 1;
 		
-		Map<String, Object> map = meetingService.getMeetingPostListByListSearchCondition(meetingPostSearch);
+		if(meetingPostSearch.getCurrentPage() ==0 ){
+			meetingPostSearch.setCurrentPage(1);
+		}
+		
+		meetingPostSearch.setPageSize(pageSize);
+		
+		Map<String, Object> map = meetingService.getMeetingPostList(meetingPostSearch, userNo);
+		
+//		Page resultPage = new Page(meetingPostSearch.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		
 		model.addAttribute("meetingPosts", map.get("meetingPosts"));
 		model.addAttribute("meetingPostSearch", meetingPostSearch);
+//		model.addAttribute("resultPage", resultPage);
 		
 		return "forward:/meeting/getMeetingPostList.jsp";
 	}

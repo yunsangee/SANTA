@@ -27,7 +27,7 @@ public interface MeetingService {
 	
 	public MeetingPost getMeetingPost(int postNo) throws Exception;
 	
-	public Map<String, Object> getMeetingPostListByListSearchCondition(MeetingPostSearch meetingPostSearch) throws Exception;
+	public Map<String, Object> getMeetingPostList(MeetingPostSearch meetingPostSearch, int userNo) throws Exception;
 	
 	public MeetingParticipation getMeetingParticipation(int participationNo) throws Exception;
 	
