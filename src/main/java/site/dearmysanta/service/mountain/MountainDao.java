@@ -53,6 +53,8 @@ public interface MountainDao {
 	
 	public List<Mountain> getMountainLikeList(Search search);
 	
+	public List<String> getStatisticsMountainNameList(int which);
+	
 	//
 	//
 	//

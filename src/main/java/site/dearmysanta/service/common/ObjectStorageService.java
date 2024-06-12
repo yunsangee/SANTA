@@ -12,7 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -43,7 +45,9 @@ public class ObjectStorageService {
 
 	public void uploadFile(MultipartFile multipartFile, String fileName) throws IOException {
         File file = convertMultipartFileToFile(multipartFile);
-        amazonS3.putObject(bucketName, fileName, file);
+        amazonS3.putObject(new PutObjectRequest(bucketName, fileName, file)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+        Files.delete(file.toPath());  
         Files.delete(file.toPath());  // 업로드 후 임시 파일 삭제
     }
 
@@ -87,7 +91,8 @@ public class ObjectStorageService {
         metadata.setContentLength(byteArray.length);
         metadata.setContentType("application/json");
 
-        amazonS3.putObject(bucketName, fileName, inputStream, metadata);
+        amazonS3.putObject(new PutObjectRequest(bucketName, fileName, inputStream, metadata)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
     }
 
     public List<List<Double>> downloadListData(String bucketName, String fileName) throws IOException {
@@ -103,5 +108,24 @@ public class ObjectStorageService {
         
         // Parse the JSON data
         return objectMapper.readValue(json, objectMapper.getTypeFactory().constructCollectionType(List.class, objectMapper.getTypeFactory().constructCollectionType(List.class, Double.class)));
+    }
+    
+    
+    public String dounLoadImageURL(String bucketName, String fileName) throws IOException {
+    		S3Object s3Object = amazonS3.getObject(bucketName, fileName);
+    		InputStream inputStream = s3Object.getObjectContent();
+
+         // InputStream에서 문자열 읽기
+         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+         StringBuilder stringBuilder = new StringBuilder();
+         String line;
+         while ((line = reader.readLine()) != null) {
+             stringBuilder.append(line).append("\n");
+         }
+
+         // 파일 내용을 문자열로 저장
+         String fileContent = stringBuilder.toString();
+         
+         return fileContent;
     }
 }

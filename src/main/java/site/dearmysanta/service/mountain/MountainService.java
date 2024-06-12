@@ -77,6 +77,10 @@ public interface MountainService {
 	
 	public List<Statistics> getStatisticsList(int which);
 	
+	public List<String> getStatisticsMountainNameList(int which);
+	
+//	public void getMountainImageFromGoogle() throws IOException; //for test
+	
 //	public void updateMountainSearchKeywordCount(); // in add
 //	
 //	public void updateMountainKeywordCount(); // in add

@@ -32,6 +32,7 @@
 			column="MOUNTAIN_LONGITUDE" />
 		<!-- <result property="mountainImage" column="MOUNTAIN_IMAGE"/> -->
 		<result property="mountainLocation" column="MOUNTAIN_LOCATION" />
+		<result property="mountainImage" column="MOUNTAIN_IMAGE"/>
 		<result property="mountainDescription"
 			column="MOUNTAIN_DESCRIPTION" />
 		<result property="mountainAltitude" column="MOUNTAIN_ALTITUDE" />
@@ -81,7 +82,7 @@
 		MOUNTAIN_VIEW_COUNT
 		)
 		VALUES (
-		#{mountainNo, jdbcType=NUMERIC},
+		#{mountainNo},
 		#{mountainName, jdbcType=VARCHAR},
 		#{mountainLocation, jdbcType=VARCHAR},
 		#{mountainLatitude, jdbcType=DOUBLE},
@@ -186,7 +187,7 @@
 		t.EXPECTED_DESCENT_TIME AS EXPECTED_DESCENT_TIME,
 		t.IS_CLOSED AS IS_CLOSED
 		FROM MOUNTAIN m, MOUNTAIN_TRAIL t
-		WHEREm.MOUNTAIN_NO = t.MOUNTAIN_NO(+) AND m.MOUNTAIN_NAME LIKE '%'||#{mountainName}||'%'
+		WHERE m.MOUNTAIN_NO = t.MOUNTAIN_NO(+) AND m.MOUNTAIN_NAME LIKE '%'||#{mountainName}||'%'
 	</select>
 
 
@@ -361,6 +362,20 @@
 		</if>
 		)
 	</select>
+	
+	<select id="getStatisticsMountainNameList" parameterType="int"
+		resultType="String">
+		SELECT mountain_name FROM
+		(SELECT * FROM STATISTICS
+		<if test="which == 0">
+			ORDER BY POST_COUNT DESC
+		</if>
+
+		<if test="which == 1">
+			ORDER BY SEARCH_COUNT DESC
+		</if>
+		)
+	</select>
 
 
 	<select id="getCustomMountainList" parameterType="map"
@@ -395,7 +410,5 @@
 
 
 	</select>
-
-
-
 </mapper>
+	
