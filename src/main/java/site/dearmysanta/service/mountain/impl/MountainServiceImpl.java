@@ -181,7 +181,7 @@ public class MountainServiceImpl implements MountainService {
 	 public List<MountainTrail> getMountainTrailListFromVWorld(int mountainNo, String mountainName, String emdCd) throws IOException {
 			String url = "https://api.vworld.kr/req/data";
 			
-			String urlMountainName = mountainName.split("�궛")[0] + "�궛";
+			String urlMountainName = mountainName.split("산")[0] + "산";
 			SantaLogger.makeLog("info", "Mn & emdcd :"+  urlMountainName + " " + emdCd);
 			url = url + "?service=data&request=GetFeature&data=LT_L_FRSTCLIMB&key=" + vWorldAPIKey + "&domain=http://dearmysanta.site"
 	              + "&attrFilter=mntn_nm:like:" +urlMountainName+"|emdCd:=:" + emdCd+"&page=1&size=100&format=json";
@@ -203,7 +203,7 @@ public class MountainServiceImpl implements MountainService {
             SantaLogger.makeLog("info", "trail Exist?!?!?!"  + (features.get(0) == null  ? "No" : "yes"));
             
           
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < 5; i++) {
 				if (features.get(i) != null) {
 					
 					MountainTrail mountainTrail = mapJsonToMountainTrail(features.get(i));
@@ -232,11 +232,11 @@ public class MountainServiceImpl implements MountainService {
             for (MountainTrail trail : mountainTrails) {
                 SantaLogger.makeLog("info","trail:" + trail);
                 
-//                if(trail.getMountainTrailDifficulty().equals("�븯")) {
+//                if(trail.getMountainTrailDifficulty().equals("하")) {
 //                	easy += 1;
-//                } else if(trail.getMountainTrailDifficulty().equals("以�")) {
+//                } else if(trail.getMountainTrailDifficulty().equals("중")) {
 //                	normal += 1;
-//                }if(trail.getMountainTrailDifficulty().equals("�긽")) {
+//                }if(trail.getMountainTrailDifficulty().equals("상")) {
 //                	difficult += 1;
 //                }
             }
@@ -261,7 +261,7 @@ public class MountainServiceImpl implements MountainService {
 		 
 		 	String mountainName = json.getString("frtrlNm");
 		 	
-//		 	mountainName = mountainName.split("�궛")[0]+"�궛";
+//		 	mountainName = mountainName.split("산")[0]+"산";
 		 	
 		    SantaLogger.makeLog("info", mountainName);        // Build the Mountain object
 	        return Mountain.builder()
@@ -279,9 +279,9 @@ public class MountainServiceImpl implements MountainService {
 		Mountain mountain = new Mountain();
 
 		
-		String url = "http://apis.data.go.kr/B553662/top100FamtListBasiInfoService/getTop100FamtListBasiInfoList?serviceKey="+API_KEY +"&numOfRows=100&pageNo=1"
-				+ "&srchFrtrlNm="
-				+ mountainName;//remove later
+		String url = "http://apis.data.go.kr/B553662/top100FamtListBasiInfoService/getTop100FamtListBasiInfoList?serviceKey="+API_KEY +"&numOfRows=100&pageNo=1";
+				//+ "&srchFrtrlNm="
+				//+ mountainName;//remove later
 
 		HttpHeaders headers = new HttpHeaders();
 
@@ -330,8 +330,8 @@ public class MountainServiceImpl implements MountainService {
            
            SantaLogger.makeLog("info","lat, lot:" + mountain.getMountainLatitude() + " " + mountain.getMountainLongitude());
            
-           SantaLogger.makeLog("info", "url:"+objectStorageService.dounLoadImageURL(bucketname, mountain.getMountainName()+"�궗吏�"));
-           mountain.setMountainImage(objectStorageService.dounLoadImageURL(bucketname, mountain.getMountainName()+"�궗吏�"));
+           SantaLogger.makeLog("info", "url:"+objectStorageService.dounLoadImageURL(bucketname, mountain.getMountainName()+"사진"));
+           mountain.setMountainImage(objectStorageService.dounLoadImageURL(bucketname, mountain.getMountainName()+"사진"));
            //
            // for test
            //
@@ -380,7 +380,7 @@ public class MountainServiceImpl implements MountainService {
 //         }
          
          //
-         //�뿬湲곗꽌 �솗�씤�븯怨�, �엳�쑝硫� �벑�궛濡쒕�� �룎怨�, �뾾�쑝硫� �룎吏�留먯옄
+         //여기서 확인하고, 있으면 등산로를 돌고, 없으면 돌지말자
          //
 
 
@@ -486,7 +486,7 @@ public class MountainServiceImpl implements MountainService {
 		}
 		
 		return list;
-	}//�씠嫄� �궛 �씠由꾩쑝濡� �빐�빞�빐 ?
+	}//이거 산 이름으로 해야해 ?
 	
 	public List<Mountain> getCustomMountainList(List<Statistics> statistics, User user){
 		
