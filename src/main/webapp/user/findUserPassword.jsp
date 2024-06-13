@@ -4,14 +4,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>아이디 찾기</title>
+<title>비밀번호 찾기</title>
 </head>
 <body>
-    <h2>아이디 찾기</h2>
-    <form action="/user/findUserId" method="post">
+    <h2>비밀번호 찾기</h2>
+    <form action="findUserPassword" method="post">
         <div>
-            <label for="userName">이름:</label>
-            <input type="text" id="userName" name="userName" placeholder="이름" required>
+            <label for="userId">아아디 :</label>
+            <input type="text" id="userId" name="userId" placeholder="아이디" required>
         </div>
         <div>
             <label for="phoneNumber">휴대폰 번호:</label>
@@ -22,7 +22,7 @@
             <input type="text" id="verifyCode" name="verifyCode" placeholder="인증번호" >
         </div>
         <div>
-            <button type="submit">아이디 찾기</button>
+            <button type="submit">비밀번호 찾기</button>
         </div>
     </form>
 </body>

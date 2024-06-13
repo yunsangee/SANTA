@@ -1,96 +1,128 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
-<title>회원 정보</title>
+<meta charset="UTF-8">
+<title>User Details</title>
+<!-- <style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        text-align: center;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="password"] {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .readonly {
+        background-color: #f9f9f9;
+    }
+    .btn {
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .btn:hover {
+        background-color: #45a049;
+    }
+</style> -->
 </head>
 <body>
-    <h2>회원 정보</h2>
-    <form action="/user/updateUser" method="post">
-        <div>
-            <label for="userId">아이디:</label>
-            <input type="text" id="userId" name="userId" value="${user.userId}" readonly>
-        </div>
-        <div>
-            <label for="userName">이름:</label>
-            <input type="text" id="userName" name="userName" value="${user.userName}" required>
-        </div>
-        <div>
-            <label for="userPassword">비밀번호:</label>
-            <input type="password" id="userPassword" name="userPassword" value="${user.userPassword}" required>
-        </div>
-        <div>
-            <label for="checkPassword">비밀번호 확인:</label>
-            <input type="password" id="checkPassword" name="checkPassword" value="${user.checkPassword}" required>
-        </div>
-        <div>
-            <label for="nickName">닉네임:</label>
-            <input type="text" id="nickName" name="nickName" value="${user.nickName}" required>
-        </div>
-        <div>
-            <label for="address">주소:</label>
-            <input type="text" id="address" name="address" value="${user.address}" required>
-        </div>
-        <div>
-            <label for="detailaddress">상세주소:</label>
-            <input type="text" id="detailaddress" name="detailaddress" value="${user.detailaddress}" required>
-        </div>
-        <div>
-            <label for="birthDate">생년월일:</label>
-            <input type="text" id="birthDate" name="birthDate" value="${user.birthDate}" required>
-        </div>
-        <div>
-            <label for="phoneNumber">휴대폰번호:</label>
-            <input type="text" id="phoneNumber" name="phoneNumber" value="${user.phoneNumber}" pattern="01[0-9]{8,9}" required>
-        </div>
-        <div>
-            <label for="gender">성별:</label>
-            <input type="radio" id="genderMale" name="gender" value="1" <c:if test="${user.gender == 1}">checked</c:if>> 남자
-            <input type="radio" id="genderFemale" name="gender" value="2" <c:if test="${user.gender == 2}">checked</c:if>> 여자
-        </div>
-        <div>
-            <label for="profileImage">프로필 이미지:</label>
-            <img src="${user.profileImage}" alt="Profile Image">
-            <input type="file" id="profileImage" name="profileImage">
-        </div>
-        <div>
-            <label for="creationDate">가입일:</label>
-            <input type="text" id="creationDate" name="creationDate" value="${user.creationDate}" readonly>
-        </div>
-        <div>
-            <label for="hikingPurpose">하이킹 목적:</label>
-            <input type="text" id="hikingPurpose" name="hikingPurpose" value="${user.hikingPurpose}">
-        </div>
-        <div>
-            <label for="hikingDifficulty">하이킹 난이도:</label>
-            <input type="text" id="hikingDifficulty" name="hikingDifficulty" value="${user.hikingDifficulty}">
-        </div>
-        <div>
-            <label for="hikingLevel">하이킹 레벨:</label>
-            <input type="text" id="hikingLevel" name="hikingLevel" value="${user.hikingLevel}">
-        </div>
-        <div>
-            <label for="badgeImage">배지 이미지:</label>
-            <img src="${user.badgeImage}" alt="Badge Image">
-            <input type="file" id="badgeImage" name="badgeImage">
-        </div>
-        <div>
-            <label for="certificationCount">인증 횟수:</label>
-            <input type="number" id="certificationCount" name="certificationCount" value="${user.certificationCount}">
-        </div>
-        <div>
-            <label for="meetingCount">모임 횟수:</label>
-            <input type="number" id="meetingCount" name="meetingCount" value="${user.meetingCount}">
-        </div>
-        <div>
-            <label for="introduceContent">소개 내용:</label>
-            <textarea id="introduceContent" name="introduceContent">${user.introduceContent}</textarea>
-        </div>
-        <div>
-            <button type="submit">회원 정보 수정</button>
-        </div>
-    </form>
+    <div class="container">
+        <h2>User Details</h2>
+        <form action="/user/updateUser" method="post">
+       <!-- <div class="form-group">  -->
+    <p><strong>User ID:</strong> ${user.userId}</p>
+    <p><strong>User Name:</strong> ${user.userName}</p>
+   <%--  <p><strong>Password:</strong> ${user.userPassword}</p>
+    <p><strong>Check Password:</strong> ${user.checkPassword}</p> --%>
+    <%-- <p><strong>Nick Name:</strong> ${user.nickName}</p> --%>
+    <%-- <p><strong>Address:</strong> ${user.address}</p>
+    <p><strong>Detail Address:</strong> ${user.detailaddress}</p> --%>
+    <p><strong>Birth Date:</strong> ${user.birthDate}</p>
+    <%-- <p><strong>Phone Number:</strong> ${user.phoneNumber}</p> --%>
+    <p><strong>Gender:</strong> ${user.gender}</p>
+    <p><strong>Profile Image:</strong> ${user.profileImage}</p>
+    <p><strong>Creation Date:</strong> ${user.creationDate}</p>
+    <%-- <p><strong>Hiking Purpose:</strong> ${user.hikingPurpose}</p>
+    <p><strong>Hiking Difficulty:</strong> ${user.hikingDifficulty}</p>
+    <p><strong>Hiking Level:</strong> ${user.hikingLevel}</p> --%>
+    <p><strong>Badge Image:</strong> ${user.badgeImage}</p>
+    <p><strong>Certification Count:</strong> ${user.certificationCount}</p>
+    <p><strong>Meeting Count:</strong> ${user.meetingCount}</p>
+    <p><strong>Introduce Content:</strong> ${user.introduceContent}</p>
+            
+                
+            <div class="form-group">
+                <label for="nickName">Nick Name</label>
+                <input type="text" id="nickName" name="nickName" value="${user.nickName}" >
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" value="${user.address}">
+            </div>
+            <%-- <div class="form-group">
+                <label for="detailaddress">Detail Address</label>
+                <input type="text" id="detailaddress" name="detailaddress" value="${user.detailaddress}" readonly class="readonly">
+            </div> --%>
+          
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" value="${user.phoneNumber}">
+            </div>
+            
+            <div class="form-group">
+                <label for="profileImage">Profile Image</label>
+                <input type="text" id="profileImage" name="profileImage" value="${user.profileImage}" >
+            </div>
+            
+            <div class="form-group">
+                <label for="hikingPurpose">Hiking Purpose</label>
+                <input type="text" id="hikingPurpose" name="hikingPurpose" value="${user.hikingPurpose}">
+            </div>
+            <div class="form-group">
+                <label for="hikingDifficulty">Hiking Difficulty</label>
+                <input type="text" id="hikingDifficulty" name="hikingDifficulty" value="${user.hikingDifficulty}">
+            </div>
+            <div class="form-group">
+                <label for="hikingLevel">Hiking Level</label>
+                <input type="text" id="hikingLevel" name="hikingLevel" value="${user.hikingLevel}">
+            </div>
+            
+            <div class="form-group">
+                <label for="introduceContent">Introduce Content</label>
+                <input type="text" id="introduceContent" name="introduceContent" value="${user.introduceContent}" >
+            </div>
+            <button type="submit" class="btn">Update</button>
+        </form>
+    </div>
 </body>
 </html>

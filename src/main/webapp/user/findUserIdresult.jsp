@@ -1,25 +1,26 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
-<title>¾ÆÀÌµð Ã£±â °á°ú</title>
+<meta charset="UTF-8">
+<title>ì•„ì´ë”” ì°¾ê¸° ê²°ê³¼</title>
 </head>
 <body>
-    <h2>¾ÆÀÌµð Ã£±â °á°ú</h2>
-    <%
-        String userId = (String) request.getAttribute("userId");
-    %>
-    <div>
-        <% if (userId != null) { %>
-            <p>È¸¿ø´ÔÀÇ ¾ÆÀÌµð´Â: <strong><%= userId %></strong> ÀÔ´Ï´Ù.</p>
-        <% } else { %>
-            <p>ÀÔ·ÂÇÏ½Å Á¤º¸¿Í ÀÏÄ¡ÇÏ´Â ¾ÆÀÌµð°¡ ¾ø½À´Ï´Ù.</p>
-        <% } %>
-    </div>
-    <div>
-        <a href="/user/login.jsp">·Î±×ÀÎ ÆäÀÌÁö·Î ÀÌµ¿</a>
+    <div class="user-details">
+        <h2>ì•„ì´ë”” ì°¾ê¸° ê²°ê³¼</h2>
+        <c:choose>
+            <c:when test="${not empty userId}">
+                <p>íšŒì›ë‹˜ì˜ ì•„ì´ë””ëŠ”: <strong>${userId}</strong> ìž…ë‹ˆë‹¤.</p>
+            </c:when>
+            <c:otherwise>
+                <p>ìž…ë ¥í•˜ì‹  ì •ë³´ì™€ ì¼ì¹˜í•˜ëŠ” ì•„ì´ë””ê°€ ì—†ìŠµë‹ˆë‹¤.</p>
+            </c:otherwise>
+        </c:choose>
+        <div>
+            <a href="/user/login.jsp">ë¡œê·¸ì¸ íŽ˜ì´ì§€ë¡œ ì´ë™</a>
+        </div>
     </div>
 </body>
 </html>

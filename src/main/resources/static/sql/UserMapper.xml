@@ -132,14 +132,14 @@
 	<update id = "updateUser" 	parameterType = "site.dearmysanta.domain.user.User" > 
 		UPDATE users
 		<set>
-			password = #{userPassword},
 		    nickname = #{nickName},
 		    address = #{address},
 		    phone_Number = #{phoneNumber},
+		    profile_image = #{profileImage},
 		    hiking_purpose = #{hikingPurpose},
 		    hiking_difficulty = #{hikingDifficulty},
 		    hiking_level = #{hikingLevel},
-		    introduce_content = #{introduceContent, jdbcType = VARCHAR},
+		    introduce_content = #{introduceContent, jdbcType = VARCHAR}
 		</set>
 		WHERE user_no = #{userNo}
 	</update>
@@ -173,14 +173,32 @@
 			user_id = #{userId} AND password = #{userPassword}
 	</select> 
 	
-	<select id="login" parameterType="map" resultType="String">
+	 <select id="login" parameterType="map" resultType="String">
     SELECT 
-    	user_id 
+    	user_id, password
     FROM 
     	users 
     WHERE 
-    	user_id = #{userId} AND password = #{password}
-	</select>
+    	user_id = #{userId} AND password = #{userPassword} 
+</select> 
+
+	<select id="getUserByUserId" parameterType="string" resultMap="userSelectMap">
+        SELECT 
+        	* 
+        FROM 
+        	users 
+        WHERE 
+        	user_id = #{userId}
+    </select>
+
+<!-- <select id="login" parameterType="map" resultMap="userSelectMap">
+    SELECT 
+       user_id
+    FROM 
+       users 
+    WHERE 
+       user_id = #{userId} AND password = #{userPassword}
+</select> -->
 	
 	<select id = "findUserId"	parameterType="Map" resultType="String">
 		SELECT 
@@ -200,17 +218,26 @@
 			user_id = #{userId} AND phone_number = #{phoneNumber}
 	</select>
 	
-	<update id = "deleteUser" 	parameterType = "int" > 
+	<update id = "deleteUser" 	parameterType = "site.dearmysanta.domain.user.User"  > 
 		UPDATE 
 			users
 		<set>
+			withdraw_reason = #{withdrawReason},
 			withdraw_date = SYSDATE
 		</set>
 		WHERE user_no = #{userNo}
 	</update>
 	
-	
-	
+	<update id="setUserPassword" parameterType="Map" >
+        UPDATE 
+        	users
+        <set>
+        	password = #{userPassword}
+       </set>
+        WHERE 
+        	user_id = #{userId}
+    </update>
+
 	
 	
 	<!-- <select id="findUserPhoneNumber" 	parameterType="String" 	resultType="site.dearmysanta.domain.user.User">

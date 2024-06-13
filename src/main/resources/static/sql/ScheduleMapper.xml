@@ -17,7 +17,7 @@
 	    <result property="hikingTotalTime" column="schedule_total_time"	jdbcType = "VARCHAR"/>
 	    <result property="hikingDescentTime" column="schedule_descent_time"	jdbcType = "VARCHAR"/>
 	    <result property="hikingAscentTime" column="schedule_ascent_time"	jdbcType = "VARCHAR"/>
-	    <result property="Transportaion" column="schedule_transportation"	jdbcType = "NUMERIC"/>
+	    <result property="Transportation" column="schedule_transportation"	jdbcType = "NUMERIC"/>
 	</resultMap>
 
 	<insert id="addSchedule" parameterType="site.dearmysanta.domain.user.Schedule">
@@ -25,7 +25,7 @@
 	    INTO schedule (schedule_no, schedule_content, schedule_date, schedule_title, schedule_mountain_name, schedule_total_time, schedule_descent_time, schedule_ascent_time,
 	    							schedule_difficulty, schedule_transportation, user_no)
 	    VALUES (seq_qna_no.NEXTVAL, #{contents}, SYSDATE, #{title}, #{mountainName}, #{hikingTotalTime}, #{hikingDescentTime}, #{hikingAscentTime},
-	    				#{hikingDifficulty}, #{Transportaion}, #{userNo})
+	    				#{hikingDifficulty}, #{Transportation}, #{userNo})
 	</insert>
 	
 	<select id="getScheduleList" resultMap="ScheduleResultMap">
@@ -58,7 +58,7 @@
 	    	schedule_descent_time =  #{hikingDescentTime}, 
 	    	schedule_ascent_time = #{hikingAscentTime},
 	    	schedule_difficulty = #{hikingDifficulty}, 
-	    	schedule_transportation = #{Transportaion}
+	    	schedule_transportation = #{Transportation}
 	    WHERE
 	    	schedule_no = #{postNo}
 	</update>

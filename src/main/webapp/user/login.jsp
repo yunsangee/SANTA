@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
-<style>
+<!-- <style>
 input[type="text"], input[type="password"] {
     width: 300px; /* 원하는 크기로 조절합니다. */
     padding: 10px; /* 입력 필드 내부 여백(padding)을 추가합니다. */
@@ -20,7 +20,7 @@ button {
     padding: 10px 20px;
     font-size: 16px;
 }
-</style>
+</style> -->
 </head>
 <body>
     <h2>로그인</h2>

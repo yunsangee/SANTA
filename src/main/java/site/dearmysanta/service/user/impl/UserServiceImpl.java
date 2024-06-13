@@ -55,10 +55,9 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public void deleteUser(int userNo) throws Exception {
+	public void deleteUser(User user) throws Exception {
 		// TODO Auto-generated method stub
-		
-        userDao.deleteUser(userNo);
+        userDao.deleteUser(user);
 		
         //userDao.deleteUser(userNo);
 		
@@ -100,10 +99,10 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public User setUserPassword(String userId, String userPassword) throws Exception {
+	public void setUserPassword(String userId, String userPassword) throws Exception {
 		// TODO Auto-generated method stub
-		return userDao.setUserPassword(userId, userPassword);
-		
+		userDao.setUserPassword(userId, userPassword);
+
 	}
 
 	@Override
@@ -177,8 +176,8 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public QNA getQnA(int postNo) throws Exception {
-		return userDao.getQnA(postNo);
+	public QNA getQnA(int postNo, int userNo) throws Exception {
+		return userDao.getQnA(postNo, userNo);
 	}
 
 	@Override
@@ -187,7 +186,7 @@ import site.dearmysanta.service.user.UserService;
 		return userDao.getQnAList(search);
 	}
 
-	public void addAdminAnswer(QNA qna) {
+	public void addAdminAnswer(QNA qna) throws Exception {
 		userDao.addAdminAnswer(qna);
 	}
 	@Override
@@ -203,9 +202,9 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public Schedule getSchedule(int postNo) throws Exception {
+	public Schedule getSchedule(int postNo, int userNo) throws Exception {
 		// TODO Auto-generated method stub
-		return userDao.getSchedule(postNo);
+		return userDao.getSchedule(postNo, userNo);
 	}
 
 	@Override
@@ -232,20 +231,27 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public String login(String userId, String password) throws Exception {
-		// TODO Auto-generated method stub
-		String login = userDao.login(userId, password);
-		
-		if (userId == null) {
-		       
-		        throw new Exception("사용자를 찾을 수 없습니다."); //  not exist UserId
-		    
-		    } else {
-		   
-		    return userId;
-		    
-		    }
-	}
+//	public User login(String userId, String password) throws Exception {
+//		// TODO Auto-generated method stub
+//		String login = userDao.login(userId, password);
+//		
+//		if (userId == null) {
+//		       
+//		        throw new Exception("사용자를 찾을 수 없습니다."); //  not exist UserId
+//		    
+//		    } else {
+//		   
+//		    return;
+//		    
+//		    }
+//	}
+	public User login(String userId, String password) throws Exception {
+        // userId와 password를 사용하여 사용자를 조회
+        //User user = userDao.login(userId, password);
+        return userDao.login(userId, password);
+        // 사용자가 존재하면 사용자 정보 반환, 존재하지 않으면 null 반환
+        //return user;
+    }
 
 	@Override
 	public String findUserPhoneNumber(String phoneNumber) throws Exception {
@@ -262,6 +268,13 @@ import site.dearmysanta.service.user.UserService;
 	    
 	    }
 	}
+
+	@Override
+	public User getUserByUserId(String userId) throws Exception {
+		// TODO Auto-generated method stub
+		return userDao.getUserByUserId(userId);
+	}
+
 	
 	
 }

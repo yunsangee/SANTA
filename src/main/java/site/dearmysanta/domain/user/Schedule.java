@@ -24,7 +24,7 @@ public class Schedule extends Post {
 	private String hikingTotalTime;
 	private String hikingDescentTime;
 	private String hikingAscentTime;
-	private int Transportaion;
+	private int Transportation;
 	private Date scheduleDate;
 	
 }
