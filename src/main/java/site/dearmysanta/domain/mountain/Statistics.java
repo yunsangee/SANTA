@@ -1,5 +1,6 @@
 package site.dearmysanta.domain.mountain;
 
+import java.sql.Date;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -19,5 +20,6 @@ public class Statistics {
 	private String mountainName;
 	private int searchCount;
 	private int postCount;
+	Date searchDate;
 
 }

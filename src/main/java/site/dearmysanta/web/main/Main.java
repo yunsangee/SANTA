@@ -50,8 +50,8 @@ public class Main {
 		search.setSearchKeyword("");
 		
 		
-		model.addAttribute("popularMountains", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
-		model.addAttribute("customMountains", mountainService.getCustomMountainList(mountainService.getStatisticsList(1,0), userService.getUser(1)));
+		model.addAttribute("popularMountains", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(0),search));
+		model.addAttribute("customMountains", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(0), userService.getUser(1)));
 		model.addAttribute("meetingPost", meetingService.getMeetingPost(1));
 		
 		SantaLogger.makeLog("info","cp::" +  certificationPostService.getCertificationPostList(search));

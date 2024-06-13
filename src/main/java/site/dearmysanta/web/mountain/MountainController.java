@@ -1,5 +1,11 @@
 package site.dearmysanta.web.mountain;
 
+import java.sql.Date;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +25,7 @@ import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.mountain.Mountain;
+import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.service.certification.CertificationPostService;
 import site.dearmysanta.service.meeting.MeetingService;
 import site.dearmysanta.service.mountain.MountainService;
@@ -50,6 +57,8 @@ public class MountainController {
 	
 	@Value("${pageUnit}")
 	private int pageUnit;
+	
+	ObjectMapper objectMapper = new ObjectMapper();
 	
 	public MountainController() {
 		SantaLogger.makeLog("info", this.getClass().toString());
@@ -95,7 +104,7 @@ public class MountainController {
 		
 		model.addAttribute("mountainSearchKeywords", mountainService.getSearchKeywordList(1));
 		
-		model.addAttribute("popularSearchKeywords",mountainService.getStatisticsList(0,0));
+		model.addAttribute("popularSearchKeywords",mountainService.getStatisticsMountainNameList(1));//!!!!!!!name으로 호출  0,1로 파라미터 변경 
 		
 		
 		
@@ -104,13 +113,23 @@ public class MountainController {
 	
 	
 	@GetMapping(value="mapMountain")
-	public String mapMountain(Search search, Model model) throws JsonProcessingException {
+	public String mapMountain(MountainSearch mountainSearch, Model model) throws JsonProcessingException {
+		
+		//
+		//나중에 jsp쪽에 search Condition 추가하기    
+		//
+		
+		mountainSearch.setSearchCondition(0);
 		
 		
-		List<Mountain> list = mountainService.getMountainListByName(search.getSearchKeyword());
+		if(mountainSearch.getSearchCondition() == 0) { // if condition is mountain
+			mountainService.addSearchKeyword(mountainSearch);
+		}
+		
+		
+		List<Mountain> list = mountainService.getMountainListByName(mountainSearch.getSearchKeyword());
 		
 		List<String> jsonList = new ArrayList<>();
-		ObjectMapper objectMapper = new ObjectMapper();
 		for (Mountain mt: list) {
 			SantaLogger.makeLog("info", mt.toString());
 			
@@ -121,6 +140,26 @@ public class MountainController {
 		
 		return "forward:/mountain/mapMountain.jsp";
 	}
+	
+	@GetMapping(value="getStatistics")
+	public String getStatistics(Model model) throws JsonProcessingException {
+		
+		LocalDate today = LocalDate.now().minusDays(3);
+        
+        // 날짜를 "YYYY-MM-DD" 형식으로 포맷
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = today.format(formatter);
+		
+        SantaLogger.makeLog("info", mountainService.getStatisticsDaily(formattedDate).toString());
+        SantaLogger.makeLog("info", mountainService.getStatisticsWeekly().toString());
+		model.addAttribute("dailyStats", objectMapper.writeValueAsString(mountainService.getStatisticsDaily(formattedDate)));
+		model.addAttribute("weeklyStats", objectMapper.writeValueAsString(mountainService.getStatisticsWeekly()));
+		
+		return "forward:/mountain/getStatistics.jsp";
+	}
+	
+	
+	
 	
 //	@GetMapping(value="main")
 //	

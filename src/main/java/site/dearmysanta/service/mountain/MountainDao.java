@@ -36,6 +36,8 @@ public interface MountainDao {
 	
 	public int checkMountainExist(int mountainNo);
 	
+	public int isMountain(String mountainName);
+	
 	public List<Mountain> getCustomMountainList(List<String> mountainNames, User user);
 	
 	
@@ -77,7 +79,9 @@ public interface MountainDao {
 	
 	public void updateMountainStatistics(String mountainName, int which);
 	
-	public List<Statistics> getStatisticsList(int which,int type);
+	public List<Statistics> getStatisticsWeekly();
+	
+	public List<Statistics> getStatisticsDaily(String date);
 	//
 	//
 	//
