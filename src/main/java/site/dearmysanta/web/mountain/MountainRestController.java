@@ -130,7 +130,7 @@ public class MountainRestController {
 		//나중에 반환형도 지우기 
 		mountainService.deleteSearchKeyword(mountainSearch);
 		
-		return mountain
+		return mountainService.getSearchKeywordList(1);
 	}
 	
 	
