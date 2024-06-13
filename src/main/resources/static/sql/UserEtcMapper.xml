@@ -17,7 +17,7 @@
 		<result property = "birthDate"	column = "birth_date"	jdbcType = "VARCHAR"/>
 		<result property = "phoneNumber"	column = "phone_number"	jdbcType = "VARCHAR"/>
 		<result property = "gender"	column = "gender"	jdbcType = "NUMERIC"/>
-		<!-- <result property = "profileImage"	column = "profile_image"	jdbcType = "VARCHAR"/> -->
+		<result property = "profileImage"	column = "profile_image"	jdbcType = "VARCHAR"/> 
 		<result property = "creationDate"	column = "creation_date"	jdbcType = "DATE"/>
 		<result property = "hikingPurpose"	column = "hiking_purpose"	jdbcType = "NUMERIC"/>
 		<result property = "hikingDifficulty"	column = "hiking_difficulty"	jdbcType = "NUMERIC"/>
@@ -26,7 +26,7 @@
 		<result property = "withedrawReason"	column = "withdraw_reaseon"	jdbcType = "NUMERIC"/>
 		<result property = "withdrawContent"	column = "withdraw_content"	jdbcType = "VARCHAR"/>
 		<result property = "role"	column = "role"	jdbcType = "NUMERIC"/>
-		<!-- <result property = "badgeImage"	column = "badge_image"	jdbcType = "VARCHAR"/> -->
+		<result property = "badgeImage"	column = "badge_image"	jdbcType = "VARCHAR"/>
 		<result property = "certificationCount"	column = "cp_count"	jdbcType = "NUMERIC"/>
 		<result property = "meetingCount"	column = "mp_count"	jdbcType = "NUMERIC"/>
 		<result property = "introduceContent"	column = "introduce_content"	jdbcType = "VARCHAR"/>
@@ -62,18 +62,28 @@
 		SELECT mp_count FROM USERS WHERE USER_NO = #{value}
 	</select>
 	
-	<update id="updateCertificationCount" parameterType="int">
+	<update id="updateCertificationCount" parameterType="map">
 		UPDATE USERS
 		SET
-		cp_count = cp_count+1
-		WHERE USER_NO = #{value}
+		<if test='type==0'>
+			cp_count = cp_count+1
+		</if>
+		<if test='type==1'>
+			cp_count = cp_count-1
+		</if>
+		WHERE USER_NO = #{userNo}
 	</update>
 	
 	<update id="updateMeetingCount" parameterType="int">
 		UPDATE USERS
 		SET
-		mp_count = mp_count+1
-		WHERE USER_NO = #{value}
+		<if test='type==0'>
+			mp_count = mp_count+1
+		</if>
+		<if test='type==1'>
+			mp_count = mp_count-1
+		</if>
+		WHERE USER_NO = #{userNo}
 	</update>
 	
 	
@@ -88,13 +98,13 @@
 	</delete>
 	
 	<select id="getFollowerList" parameterType="int" resultMap="userSelectMap">
-		SELECT u.USER_NO, u.NAME
+		SELECT u.USER_NO, u.NAME, u.profile_image, u.badge_image
 		FROM USERS u, FOLLOW f
 		WHERE u.USER_NO = f.FOLLOWER_NO AND f.FOLLOWING_NO = #{userNo}
 	</select>
 	
 	<select id="getFollowingList" parameterType="int" resultMap="userSelectMap">
-		SELECT u.USER_NO, u.NAME
+		SELECT u.USER_NO, u.NAME,u.profile_image,u.badge_image
 		FROM USERS u, FOLLOW f
 		WHERE u.USER_NO = f.FOLLOWING_NO AND f.FOLLOWER_NO = #{userNo}
 	</select>
@@ -121,7 +131,7 @@
 	<select id="getAlarmMessageList" parameterType="int" resultMap="alarmMessageSelectMap">
 		SELECT am.*, u.NAME
 		FROM ALARM_MESSAGE am, USERS u
-		WHERE CHECKED_FLAG = 0 AND u.USER_NO = am.USER_NO AND am.USER_NO = 1
+		WHERE CHECKED_FLAG = 0 AND u.USER_NO = am.USER_NO AND am.USER_NO = #{userNo}
 	</select>
 	
 	
@@ -186,7 +196,7 @@
     </update>
     
 
-    <select id="getUserSettings" parameterType="int" resultType="site.dearmysanta.domain.user.User">
+    <select id="getUserSettings" parameterType="site.dearmysanta.domain.user.User" resultMap="userSelectMap">
         SELECT 
             ALL_ALERT_SETTING,
             CP_SETTING,

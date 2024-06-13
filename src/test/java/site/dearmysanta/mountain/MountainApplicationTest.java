@@ -91,10 +91,15 @@ public class MountainApplicationTest {
 		
 	}
 	
-//	@Test
+	@Test
 	public void mountainApiTest() throws Exception {
 		mountainService.getMountain("관악산");
 	}
+//	
+//	@Test
+//	public void mountainCrawlingTest() throws IOException {
+//		mountainService.getMountainImageFromGoogle();
+//	}
 	
 //	@Test
 	public void getmountainTest() throws Exception{
@@ -106,17 +111,18 @@ public class MountainApplicationTest {
 	}
 	
 	
-	@Test
+	//@Test
 	public void weatherTest() throws Exception {
 //		WeatherService ws = new WeatherServiceImpl();
 		
-		List<Weather> list= weatherService.getWeatherList(37.445044, 126.964223); //gangnam
+//		List<Weather> list= weatherService.getWeatherList(37.445044, 126.964223); //gangnam
+//		
+//		for(Weather weather : list) {
+//			SantaLogger.makeLog("info", weather.toString());
+//		}
 		
-		for(Weather weather : list) {
-			SantaLogger.makeLog("info", weather.toString());
-		}
+		SantaLogger.makeLog("info", weatherService.getWeather(35.192975, 129.093388888888).toString());
 		
-//		ws.getWeather(35.192975, 129.093388888888);
 //		ws.getWeatherList();
 	}
 	
@@ -165,19 +171,19 @@ public class MountainApplicationTest {
 	public void statisticsTest() {
 //		String mountainName = "jirisan";
 		
-		List<Statistics> list = mountainService.getStatisticsList(0);
-		for(Statistics statistics : list) {
-			SantaLogger.makeLog("info",statistics.toString());
-		}
-		
-//		mountainService.addMountainStatistics(mountainName, 0);
-//		mountainService.addMountainStatistics(mountainName, 0);
-//		mountainService.addMountainStatistics(mountainName, 1);
-		
-		list = mountainService.getStatisticsList(1);
-		for(Statistics statistics : list) {
-			SantaLogger.makeLog("info",statistics.toString());
-		}
+////		List<Statistics> list = mountainService.getStatisticsList(0);
+//		for(Statistics statistics : list) {
+//			SantaLogger.makeLog("info",statistics.toString());
+//		}
+//		
+////		mountainService.addMountainStatistics(mountainName, 0);
+////		mountainService.addMountainStatistics(mountainName, 0);
+////		mountainService.addMountainStatistics(mountainName, 1);
+//		
+////		list = mountainService.getStatisticsList(1);
+//		for(Statistics statistics : list) {
+//			SantaLogger.makeLog("info",statistics.toString());
+//		}
 //		
 //		list = mountainService.getStatisticsList(1);
 //		for(Statistics statistics : list) {
@@ -189,18 +195,18 @@ public class MountainApplicationTest {
 		User user = User.builder().address("경상남도 울산시").hikingDifficulty(0).build();
 		
 		user.setAddress(user.getAddress().split(" ")[0]);
-		
-		List<Mountain> lm = mountainService.getCustomMountainList(list,user);
-		
-		for(Mountain mt : lm) {
-			SantaLogger.makeLog("info",mt.toString());
-		}
-		
+//		
+//		List<Mountain> lm = mountainService.getCustomMountainList(list,user);
+//		
+//		for(Mountain mt : lm) {
+//			SantaLogger.makeLog("info",mt.toString());
+//		}
+//		
 		
 		
 	}
 	
-//	@Test
+	//@Test
 	public void PopularNCustomMountainTest() {
 		List<String> MOUNTAIN_NAMES = Arrays.asList(
 		        "jirisan", "hallasan", "seoraksan", "bukhansan", "gayasan",
@@ -208,26 +214,26 @@ public class MountainApplicationTest {
 		    );
 		
 		Random random = new Random();
+//		
+//		List<Statistics> list = mountainService.getStatisticsList(1);
+//		for(Statistics statistics : list) {
+//			SantaLogger.makeLog("info",statistics.getMountainName());
+//		}
+//		SantaLogger.makeLog("info","==================================");
 		
-		List<Statistics> list = mountainService.getStatisticsList(1);
-		for(Statistics statistics : list) {
-			SantaLogger.makeLog("info",statistics.getMountainName());
-		}
-		SantaLogger.makeLog("info","==================================");
-		
-		for (String mountainName : MOUNTAIN_NAMES) {
-            for (int i = 0; i < 50; i++) { // Add statistics three times for each mountain
-                int which = random.nextInt(2); // Randomly choose 0 or 1
-                mountainService.addMountainStatistics(mountainName, which);
-            }
-        }
-		
-		list = mountainService.getStatisticsList(1);
-		for(Statistics statistics : list) {
-			SantaLogger.makeLog("info",statistics.getMountainName());
-		}
-		
-		SantaLogger.makeLog("info","==================================");
+//		for (String mountainName : MOUNTAIN_NAMES) {
+//            for (int i = 0; i < 50; i++) { // Add statistics three times for each mountain
+//                int which = random.nextInt(2); // Randomly choose 0 or 1
+//                mountainService.addMountainStatistics(mountainName, which);
+//            }
+//        }
+//		
+//		list = mountainService.getStatisticsList(1);
+//		for(Statistics statistics : list) {
+//			SantaLogger.makeLog("info",statistics.getMountainName());
+//		}
+//		
+//		SantaLogger.makeLog("info","==================================");
 
 	}
 	
@@ -542,22 +548,22 @@ public class MountainApplicationTest {
 //            mountainService.addSearchKeyword(mountainSearch);
 //        });
 		
-		Search search = Search.builder().currentPage(2).pageSize(5).pageUnit(3).build();
+		Search search = Search.builder().userNo(1).currentPage(2).pageSize(5).pageUnit(3).build();
 		
-		Like like =Like.builder().userNo(1).build();
+//		Like like =Like.builder().userNo(1).build();
 		
-		List<Mountain> list = mountainService.getMountainLikeList(like,search);
+		List<Mountain> list = mountainService.getMountainLikeList(search);
 		for(int i = 0; i < list.size(); i ++) {
 			SantaLogger.makeLog("info", list.get(i).toString());
 		}
 		
 		SantaLogger.makeLog("info","=========");
 		
-		List<MountainSearch> list2 = mountainService.getSearchKeywordList(1,search);
-		
-		for(int i = 0; i < list.size(); i ++) {
-			SantaLogger.makeLog("info", list2.get(i).toString());
-		}
+//		List<MountainSearch> list2 = mountainService.getSearchKeywordList(1,search);
+//		
+//		for(int i = 0; i < list.size(); i ++) {
+//			SantaLogger.makeLog("info", list2.get(i).toString());
+//		}
 		
 	}
 	

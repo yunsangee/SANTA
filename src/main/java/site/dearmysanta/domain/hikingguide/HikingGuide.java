@@ -23,14 +23,13 @@ public class HikingGuide {
     private int hrNo; // hikingRecord Number
     private int userNo; // user Number
     private String totalTime; // ascent time + descent time + other time
-    private int userDistance; // user move distance
+    private double userDistance; // user move distance
     private String ascentTime; // ascent time
     private String descentTime; // descent time
     private Date hikingDate; // sysdate
     private double userLatitude;// userlatitude
     private double userLongitude;// user longtitude
-    private int upDifficulty;
-    private int downDifficulty;
+    private int hikingDifficulty;
     private Mountain mountain; // (mountain class)
     private Weather weather; // (weather class)
     private MeetingPost meetingpost; // (meeting class)

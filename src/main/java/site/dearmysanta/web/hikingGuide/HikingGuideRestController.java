@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import site.dearmysanta.domain.hikingguide.HikingAlert;
@@ -38,9 +39,10 @@ public class HikingGuideRestController {
     }
 
     @PostMapping(value = "/react/addHikingRecord")
-    public void addHikingRecord(@RequestBody HikingGuide hikingGuide) throws Exception {
+    public void addHikingRecord(@RequestBody HikingGuide hikingGuide, Model model) throws Exception {
         System.out.println("HikingGuide: " + hikingGuide);
         hikingGuideService.addHikingRecord(hikingGuide);
+        model.addAttribute("hikingGuide", hikingGuide);
     }
 
     @PostMapping(value = "/react/getHikingListRecord/{userNo}")
@@ -69,8 +71,8 @@ public class HikingGuideRestController {
         System.out.println(meetingTime);
     }
 
-    @DeleteMapping(value = "/react/deleteHikingRecord/{hrNo}")
-    public void deleteHikingRecord(@PathVariable int hrNo) throws Exception {
+    @PostMapping(value = "/react/deleteHikingRecord")
+    public void deleteHikingRecord(@RequestBody List<Integer> hrNo) throws Exception {
         hikingGuideService.deleteHikingRecord(hrNo);
     }
 

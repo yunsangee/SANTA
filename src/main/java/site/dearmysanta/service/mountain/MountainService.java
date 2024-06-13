@@ -38,7 +38,7 @@ public interface MountainService {
 	
 	public void updateMountainViewCount(int mountainNo);
 	
-	public List<Mountain> getPopularMountainList(List<String> mountainNames) throws Exception;
+	public List<Mountain> getPopularMountainList(List<String> mountainNames,Search search) throws Exception;
 	
 	public List<Mountain> getCustomMountainList(List<Statistics> statistics,User user);
 	
@@ -55,7 +55,7 @@ public interface MountainService {
 	
 	public int getTotalMountainLikeCount(Like like);
 	
-	public List<Mountain> getMountainLikeList(Like like, Search search);
+	public List<Mountain> getMountainLikeList(Search search);
 	
 	//
 	//search
@@ -65,7 +65,7 @@ public interface MountainService {
 //	
 	public void deleteSearchKeyword(MountainSearch mountainSearch);
 //	
-	public List<MountainSearch> getSearchKeywordList(int userNo,Search search);
+	public List<MountainSearch> getSearchKeywordList(int userNo);
 //	
 	public void updateSearchSetting(int userNo, int settingValue);
 	
@@ -75,7 +75,11 @@ public interface MountainService {
 	
 	public int checkStatisticsMountainColumnExist(String mountainName);
 	
-	public List<Statistics> getStatisticsList(int which);
+	public List<Statistics> getStatisticsList(int which,int type);
+	
+	public List<String> getStatisticsMountainNameList(int which);
+	
+//	public void getMountainImageFromGoogle() throws IOException; //for test
 	
 //	public void updateMountainSearchKeywordCount(); // in add
 //	

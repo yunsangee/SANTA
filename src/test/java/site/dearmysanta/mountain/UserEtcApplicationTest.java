@@ -31,14 +31,14 @@ public class UserEtcApplicationTest {
 	@Autowired
 	UserService userService;
 	
-	//@Test
+	@Test
 	public void userEtcTest() throws Exception {
 		
 		System.out.println(userEtcService.getCertificationCount(1));
 		System.out.println(userEtcService.getCertificationCount(1));
 		
-		userEtcService.updateCertificationCount(1);
-		userEtcService.updateMeetingCount(1);
+		userEtcService.updateCertificationCount(1,1);
+		userEtcService.updateMeetingCount(1,1);
 		
 		System.out.println(userEtcService.getCertificationCount(1));
 		System.out.println(userEtcService.getCertificationCount(1));
@@ -131,7 +131,7 @@ public class UserEtcApplicationTest {
 		
 	}
 	
-	@Test
+	//@Test
 	public void settingTest() throws Exception {
 		
 		User user = userService.getUser(1);
