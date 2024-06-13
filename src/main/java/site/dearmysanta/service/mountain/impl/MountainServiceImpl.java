@@ -214,8 +214,8 @@ public class MountainServiceImpl implements MountainService {
 					//
 					// upload on objectStorage
 					//
-					objectStorageService.uploadListData(mountainTrail.getMountainTrailCoordinates(),
-							mountainTrail.getCoordinatesUrl());
+//					objectStorageService.uploadListData(mountainTrail.getMountainTrailCoordinates(),
+//							mountainTrail.getCoordinatesUrl());
 
 					mountainTrails.add(mountainTrail);
 					SantaLogger.makeLog("info", "info:"+mountainNo + " "+mountainName);
@@ -474,11 +474,6 @@ public class MountainServiceImpl implements MountainService {
 		return mountainDao.checkMountainExist(mountainNo);
 	}
 	
-	
-	public int isMountain(String mountainName){
-		return mountainDao.isMountain(mountainName);
-	}
-	
 	public List<Mountain> getPopularMountainList(List<String> mountainNames,Search search) throws Exception{
 		SantaLogger.makeLog("info", "serivceImpl getpopMountain:" + mountainNames.toString());
 		List<Mountain> list = new ArrayList<>();
@@ -493,14 +488,14 @@ public class MountainServiceImpl implements MountainService {
 		return list;
 	}//이거 산 이름으로 해야해 ?
 	
-	public List<Mountain> getCustomMountainList(List<String> statistics, User user){
+	public List<Mountain> getCustomMountainList(List<Statistics> statistics, User user){
 		
-//		 List<String> orderedMountainNames = statistics.stream()
-//	                .map(Statistics::getMountainName)
-//	                .collect(Collectors.toList());
+		 List<String> orderedMountainNames = statistics.stream()
+	                .map(Statistics::getMountainName)
+	                .collect(Collectors.toList());
 		 
-		SantaLogger.makeLog("info", "serviceImpl::" + statistics.toString());
-		return mountainDao.getCustomMountainList(statistics,user);
+		SantaLogger.makeLog("info", "serviceImpl::" + orderedMountainNames.toString());
+		return mountainDao.getCustomMountainList(orderedMountainNames,user);
 	}
 	
 	
@@ -536,12 +531,12 @@ public class MountainServiceImpl implements MountainService {
 	
 	public void addSearchKeyword(MountainSearch mountainSearch) {
 		
-		if(mountainSearch.getSearchCondition() == 0 & mountainDao.isMountain(mountainSearch.getSearchKeyword()) == 1) {
+		if(mountainSearch.getSearchCondition() == 0) {
 			SantaLogger.makeLog("info","add mountain statistics");
 			this.addMountainStatistics(mountainSearch.getSearchKeyword(),0);
 		}
 		
-		mountainDao.addSearchKeyword(mountainSearch); //나중에 update 하는 로직 추가 필요 
+		mountainDao.addSearchKeyword(mountainSearch);
 	}
 	
 	public void deleteSearchKeyword(MountainSearch mountainSearch) {
@@ -569,7 +564,7 @@ public class MountainServiceImpl implements MountainService {
 		// 1 : post
 		//
 
-		if(this.checkStatisticsMountainColumnExist(mountainName) == 0 & this.isMountain(mountainName) == 1 ) {
+		if(this.checkStatisticsMountainColumnExist(mountainName) == 0) {
 			mountainDao.addMountainStatistics(mountainName);
 			SantaLogger.makeLog("info","create mountain statistics column");
 		}
@@ -583,12 +578,8 @@ public class MountainServiceImpl implements MountainService {
 		return mountainDao.checkStatisticsMountainColumnExist(mountainName);
 	}
 	
-	public List<Statistics> getStatisticsWeekly(){  // 0: get normal list, 1: get popular searchKeyword list
-		return mountainDao.getStatisticsWeekly(); 
-	}
-	
-	public List<Statistics> getStatisticsDaily(String date){
-		return mountainDao.getStatisticsDaily(date);
+	public List<Statistics> getStatisticsList(int which,int type){  // 0: get normal list, 1: get popular searchKeyword list
+		return mountainDao.getStatisticsList(which,type); 
 	}
 	
 	public List<String> getStatisticsMountainNameList(int which){
