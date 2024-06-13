@@ -12,5 +12,7 @@ public interface CorrectionPostDao {
 	
 	public List<CorrectionPost> getCorrectionPostList();
 	
+	public void updateCorrectionPostStatus(int crpNo);
+	
 	public void deleteCorrectionPost(int userNo, int postNo);
 }
