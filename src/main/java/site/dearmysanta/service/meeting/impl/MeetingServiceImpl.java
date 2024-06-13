@@ -38,7 +38,7 @@ public class MeetingServiceImpl implements MeetingService {
 		System.out.println(this.getClass());
 	}
 	
-	public void addMeetingPost(MeetingPost meetingPost) throws Exception {
+	public int addMeetingPost(MeetingPost meetingPost) throws Exception {
 		
 		int userNo = meetingPost.getUserNo();
 		String appointedDetailDeparture = meetingPost.getAppointedDetailDeparture();		
@@ -55,31 +55,15 @@ public class MeetingServiceImpl implements MeetingService {
 		
 		int postNo = meetingPost.getPostNo();
 		
-		if (meetingPost.getMeetingPostImage() != null && !meetingPost.getMeetingPostImage().isEmpty()) {
-			
-            List<MultipartFile> images = meetingPost.getMeetingPostImage();
-            int imageCount = images.size();
-            
-            for (int i = 0; i < imageCount; i++) {
-            	
-                MultipartFile image = images.get(i);
-                String fileName = postNo+ "_" +i;
-                
-                System.out.println(fileName);
-                
-                objectStorageService.uploadFile(image, fileName);
-            }
-        }
-		
-		int participationPostNo = meetingPost.getPostNo(); 
-		
 		MeetingParticipation meetingParticipation = new MeetingParticipation();
 		meetingParticipation.setParticipationStatus(1);
 		meetingParticipation.setParticipationRole(0);
 		meetingParticipation.setUserNo(userNo);
-		meetingParticipation.setPostNo(participationPostNo);
+		meetingParticipation.setPostNo(postNo);
 		
 		meetingDAO.insertMeetingParticipation(meetingParticipation);
+		
+		return postNo;
 		
 	}
 	
@@ -98,9 +82,10 @@ public class MeetingServiceImpl implements MeetingService {
 //		meetingDAO.updateMeetingPost(meetingPost);
 //	}
 	
-	public Map<String, Object> getMeetingPostAll(int postNo) throws Exception {
+	public Map<String, Object> getMeetingPostAll(int postNo, int userNo) throws Exception {
 		
-		MeetingPost meetingPost = meetingDAO.findMeetingPost(postNo);
+		MeetingPost meetingPost = meetingDAO.getMeetingPost(postNo);
+		System.out.println(meetingPost);
 		
 		String[] AppointedDeparture = meetingPost.getAppointedDeparture().split("/", 2);
 		meetingPost.setAppointedDeparture(AppointedDeparture[0]);
@@ -109,37 +94,30 @@ public class MeetingServiceImpl implements MeetingService {
 			meetingPost.setAppointedDetailDeparture(AppointedDeparture[1]);
 		}
 		
+		int likeStatus = meetingDAO.getMeetingPostLikeStatus(postNo, userNo);
+		
 		int likeCount = meetingDAO.getMeetingPostLikeCount(postNo);
 		int commentCount = meetingDAO.getMeetingPostCommentCount(postNo);
 		
+		meetingPost.setMeetingPostLikeStatus(likeStatus);
 		meetingPost.setMeetingPostLikeCount(likeCount);
 		meetingPost.setMeetingPostCommentCount(commentCount);
 		
 		List<MeetingParticipation> meetingParticipations = meetingDAO.getMeetingParticipationList(postNo);
 		List<MeetingPostComment> meetingPostComments = meetingDAO.getMeetingPostCommentList(postNo);
 		
-		
-		List<MultipartFile> meetingPostImages = new ArrayList<>();
-        int imageCount = meetingPost.getMeetingPostImageCount();
-        
-        for (int i = 0; i < imageCount; i++) {
-            String fileName = postNo + "_" + i;
-            MultipartFile downloadedImage = downloadMeetingPostImage(String.valueOf(postNo), fileName);
-            meetingPostImages.add(downloadedImage);
-        }
-		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("meetingPost", meetingPost);
 		map.put("meetingParticipations", meetingParticipations);
 		map.put("meetingPostComments", meetingPostComments);
-		map.put("meetingPostImages", meetingPostImages);
+
 		
 		return map;
 	}
 	
 	public MeetingPost getMeetingPost(int postNo) throws Exception {
 		
-		MeetingPost meetingPost = meetingDAO.findMeetingPost(postNo);
+		MeetingPost meetingPost = meetingDAO.getMeetingPost(postNo);
 		
 		String[] AppointedDeparture = meetingPost.getAppointedDeparture().split("/", 2);
 		meetingPost.setAppointedDeparture(AppointedDeparture[0]);
@@ -151,25 +129,45 @@ public class MeetingServiceImpl implements MeetingService {
 		return meetingPost;
 	}
 	
+	public Map<String, Object> getMeetingPostList(MeetingPostSearch meetingPostSearch, int userNo) throws Exception {
+		
+		List<MeetingPost> meetingPosts = meetingDAO.getMeetingPostList(meetingPostSearch, userNo);
+		int meetingPostTotalCount = meetingDAO.getMeetingPostTotalCount(meetingPostSearch);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("meetingPosts", meetingPosts);
+		map.put("meetingPostTotalCount", meetingPostTotalCount);
+		
+		return map;
+	}
+
 	public void addMeetingPostLike(Like like) throws Exception {
 		
 		meetingDAO.insertMeetingPostLike(like);
 	}
-	// 얘네 updateMeetingPostLikeStatus 하나로 되겠다..
 	
 	public void deleteMeetingPostLike(Like like) throws Exception {
 		
 		meetingDAO.deleteMeetingPostLike(like);
 	}
 	
-	public void addMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception {
+	public MeetingPostComment getMeetingPostComment(int meetingPostCommentNo) throws Exception {
 		
-		meetingDAO.insertMeetingPostComment(meetingPostComment);
+		return meetingDAO.getMeetingPostComment(meetingPostCommentNo);
 	}
 	
-	public void deleteMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception {
+	public int addMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception {
 		
-		meetingDAO.deleteMeetingPostComment(meetingPostComment);
+		meetingDAO.insertMeetingPostComment(meetingPostComment);
+		int meetingPostCommentNo = meetingPostComment.getMeetingPostCommentNo();
+		System.out.println(meetingPostCommentNo);
+		
+		return meetingPostCommentNo;
+	}
+	
+	public void deleteMeetingPostComment(int meetingPostCommentNo) throws Exception {
+		
+		meetingDAO.deleteMeetingPostComment(meetingPostCommentNo);
 	}
 	
 	public int getMountainTotalCount(String appointedHikingMountain) throws Exception {
@@ -187,12 +185,21 @@ public class MeetingServiceImpl implements MeetingService {
 		return meetingDAO.getMeetingPostCommentList(postNo);
 	}
 	
-	public void addMeetingParticipation(MeetingParticipation meetingParticipation) throws Exception {
+	public MeetingParticipation getMeetingParticipation(int participationNo) throws Exception {
+		
+		return meetingDAO.getMeetingParticipation(participationNo);
+	}
+	
+	public int addMeetingParticipation(MeetingParticipation meetingParticipation) throws Exception {
 		
 		meetingParticipation.setParticipationStatus(0);
 		meetingParticipation.setParticipationRole(1);
 		
 		meetingDAO.insertMeetingParticipation(meetingParticipation);
+		
+		int participationNo = meetingParticipation.getParticipationNo();
+		
+		return participationNo;
 	}
 	
 	public void deleteMeetingParticipation(int participationNo) throws Exception {
@@ -205,9 +212,9 @@ public class MeetingServiceImpl implements MeetingService {
 		meetingDAO.updateMeetingParticipationStatus(participationNo);
 	}
 	
-	public void updateMeetingParticipationWithdrawStatus(int participationNo) throws Exception {
+	public void updateMeetingParticipationWithdrawStatus(int postNo, int userNo) throws Exception {
 		
-		meetingDAO.updateMeetingParticipationWithdrawStatus(participationNo);
+		meetingDAO.updateMeetingParticipationWithdrawStatus(postNo, userNo);
 	}
 	
 	public void updateMeetingPostRecruitmentStatus(MeetingPost meetingPost) throws Exception {
@@ -235,9 +242,9 @@ public class MeetingServiceImpl implements MeetingService {
 		for(int i = 0; i < meetingParticipations.size(); i ++) {
 			
 			MeetingParticipation meetingParticipation = meetingParticipations.get(i);
-			int participationNo = meetingParticipation.getParticipationNo();
+			int userNo = meetingParticipation.getUserNo();
 			
-			meetingDAO.updateMeetingParticipationWithdrawStatus(participationNo);
+			meetingDAO.updateMeetingParticipationWithdrawStatus(postNo, userNo);
 			
 		}
 	}
@@ -252,18 +259,4 @@ public class MeetingServiceImpl implements MeetingService {
 		return meetingDAO.getUnCertifiedMeetingPost(userNo);
 	}
 	
-	public void uploadMeetingPostImages(List<MultipartFile> images, String postNo) throws Exception {
-        for (MultipartFile image : images) {
-            String fileName = postNo + "_" + image.getOriginalFilename();
-            objectStorageService.uploadFile(image, fileName);
-        }
-    }
-
-	
-    public MultipartFile downloadMeetingPostImage(String postNo, String fileName) throws Exception {
-        String fullFileName = postNo + "_" + fileName;
-        return objectStorageService.downloadFile(bucketName, fullFileName);
-    }
-
-
 }

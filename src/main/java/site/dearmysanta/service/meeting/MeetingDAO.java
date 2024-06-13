@@ -1,6 +1,7 @@
 package site.dearmysanta.service.meeting;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -21,15 +22,25 @@ public interface MeetingDAO {
 	
 	public void updatePostImage(MeetingPost meetingPost) throws Exception;
 	
-	public MeetingPost findMeetingPost(int postNo) throws Exception;
+	public MeetingPost getMeetingPost(int postNo) throws Exception;
+	
+	public List<MeetingPost> getMeetingPostList(MeetingPostSearch meetingPostSearch, int userNo) throws Exception;
+	
+	public int getMeetingPostTotalCount(MeetingPostSearch meetingPostSearch) throws Exception;
+	
+	public MeetingParticipation getMeetingParticipation(int participationNo) throws Exception;
+	
+	public int getMeetingPostLikeStatus(int postNo, int userNo) throws Exception;
 	
 	public void insertMeetingPostLike(Like like) throws Exception;
 	
 	public void deleteMeetingPostLike(Like like) throws Exception;
 	
+	public MeetingPostComment getMeetingPostComment(int meetingPostCommentNo) throws Exception;
+	
 	public void insertMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception;
 	
-	public void deleteMeetingPostComment(MeetingPostComment meetingPostComment) throws Exception;
+	public void deleteMeetingPostComment(int meetingPostCommentNo) throws Exception;
 	
 	public int getMeetingPostLikeCount(int postNo) throws Exception;
 	
@@ -47,7 +58,7 @@ public interface MeetingDAO {
 	
 	public void updateMeetingParticipationStatus(int participationNo) throws Exception;
 	
-	public void updateMeetingParticipationWithdrawStatus(int participationNo) throws Exception;
+	public void updateMeetingParticipationWithdrawStatus(int postNo, int userNo) throws Exception;
 	
 	public void updateMeetingPostRecruitmentStatus(MeetingPost meetingPost) throws Exception;
 	

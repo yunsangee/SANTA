@@ -25,11 +25,13 @@
     <p>Recruitment Status: ${meetingPost.recruitmentStatus}</p>
     <p>Deleted Flag: ${meetingPost.meetingPostDeletedFlag}</p>
     <p>Certified Flag: ${meetingPost.meetingPostCertifiedFlag}</p>
-    <p>Like Count: ${meetingPost.meetingPostLikeCount}</p>
+    <p>Like Status: ${meetingPost.meetingPostLikeCount}</p>
+    <p>Like Count: ${meetingPost.meetingPostLikeStatus}</p>
     <p>Comment Count: ${meetingPost.meetingPostCommentCount}</p>
 
     <h2>Meeting Participations</h2>
     <c:forEach var="participation" items="${meetingParticipations}">
+    	<p>UserNo: ${participation.userNo}</p>
         <p>Nickname: ${participation.nickname}</p>
         <p>Participation Status: ${participation.participationStatus}</p>
         <p>Participation Role: ${participation.participationRole}</p>

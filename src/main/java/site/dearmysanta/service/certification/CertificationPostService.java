@@ -34,7 +34,7 @@ public interface CertificationPostService {
 	
 	public void deleteCertificationPostLike(Like like) ;
 	
-	//public int getTotalCertificationPostLikeCount(Like like); get�����ļ��Ƚᵵ�ǳ�?
+	//public int getTotalCertificationPostLikeCount(Like like); get¿¡ÇÕÃÄ¼­¾È½áµµµÇ³ª?
 	
 	public List<CertificationPost> getCertificationPostLikeList(Like like);
 

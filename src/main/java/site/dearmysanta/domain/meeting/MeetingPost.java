@@ -43,6 +43,7 @@ public class MeetingPost extends Post{
     
     private int meetingPostLikeCount; // total number of likes on the post
     private int meetingPostCommentCount; // total number of comments on the post
+    private int meetingPostLikeStatus; // Did the user like this post or not
 
 }
 
