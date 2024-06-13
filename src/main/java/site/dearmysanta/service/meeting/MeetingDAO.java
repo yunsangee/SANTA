@@ -24,9 +24,7 @@ public interface MeetingDAO {
 	
 	public MeetingPost getMeetingPost(int postNo) throws Exception;
 	
-	public List<MeetingPost> getMeetingPostList(MeetingPostSearch meetingPostSearch, int userNo) throws Exception;
-	
-	public int getMeetingPostTotalCount(MeetingPostSearch meetingPostSearch) throws Exception;
+	public List<MeetingPost> getMeetingPostListByListSearchCondition(MeetingPostSearch meetingPostSearch) throws Exception;
 	
 	public MeetingParticipation getMeetingParticipation(int participationNo) throws Exception;
 	

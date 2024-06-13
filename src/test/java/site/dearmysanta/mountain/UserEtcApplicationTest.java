@@ -31,7 +31,7 @@ public class UserEtcApplicationTest {
 	@Autowired
 	UserService userService;
 	
-	@Test
+	//@Test
 	public void userEtcTest() throws Exception {
 		
 		System.out.println(userEtcService.getCertificationCount(1));

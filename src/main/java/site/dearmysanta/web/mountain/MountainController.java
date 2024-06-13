@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,6 +22,7 @@ import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.service.certification.CertificationPostService;
+import site.dearmysanta.service.correctionpost.CorrectionPostService;
 import site.dearmysanta.service.meeting.MeetingService;
 import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.user.UserService;
@@ -36,13 +39,7 @@ public class MountainController {
 	private WeatherService weatherService;
 	
 	@Autowired
-	private MeetingService meetingService;
-	
-	@Autowired 
-	private CertificationPostService certificationPostService;
-	
-	@Autowired
-	private UserService userService;
+	private CorrectionPostService correctionPostService;
 	
 	
 	@Value("${pageSize}")
@@ -68,6 +65,19 @@ public class MountainController {
 		
 		return "forward:/mountain/getMountain.jsp";
 	}//o
+	
+	@GetMapping(value="updateMountain")
+	public String updateMountain(@RequestParam int mountainNo, Model model) {
+		
+		//
+		// need to get mountain info
+		//
+		SantaLogger.makeLog("info","updateMountainView");
+		
+		return "forward:/mountain/updateMountain.jsp";
+	}
+	
+	
 	
 	@GetMapping(value="getMountainLikeList")
 	public String getMountainLikeList(@ModelAttribute Search search, Model model) {
