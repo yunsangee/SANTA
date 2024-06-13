@@ -369,6 +369,7 @@
                 MOUNTAIN_NAME,
                 SEARCH_COUNT AS SC,
                 POST_COUNT AS PC
+                
             FROM 
                 STATISTICS
             WHERE
@@ -377,17 +378,29 @@
         GROUP BY 
             MOUNTAIN_NAME
         ORDER BY 
-			(SUM(SC) + SUM(SC))
+			(SUM(SC) + SUM(SC)) DESC, MOUNTAIN_NAME
 	</select>
 	
 	
 	
 	<select id="getStatisticsDaily" parameterType="String" resultMap = "StatisticsResultMap">
-		SELECT * FROM STATISTICS
+		SELECT 
+            MOUNTAIN_NAME,
+			SEARCH_COUNT,
+			POST_COUNT,
+			SUMVAL
+        FROM (
+		SELECT MOUNTAIN_NAME, SEARCH_COUNT, POST_COUNT, (SEARCH_COUNT + POST_COUNT) AS SUMVAL FROM STATISTICS
 		WHERE SEARCH_DATE = TO_DATE(#{value},'YYYY-MM-DD')
-		ORDER BY MOUNTAIN_NAME
+		)
+		
+		 
+        ORDER BY 
+			SUMVAL DESC, MOUNTAIN_NAME
 	</select>
 	
+<!-- 	ORDER BY SUM(SEARCH_COUNT + POST_COUNT) DESC, MOUNTAIN_NAME
+ -->	
 	<select id="getStatisticsMountainNameList" parameterType="map" resultType="String">
     SELECT mountain_name, ROWNUM
     FROM (
