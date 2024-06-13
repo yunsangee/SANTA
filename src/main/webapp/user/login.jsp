@@ -33,6 +33,9 @@ button {
             <label for="userPassword">비밀번호</label>
             <input type="password" id="userPassword" name="userPassword" placeholder="비밀번호" required>
         </div>
+        
+        <a href="/user/addUser.jsp">회원가입</a>  
+        <a href="/user/findUserPassword.jsp">비밀번호 찾기</a>
         <div>
             <button type="submit">로그인</button>
         </div>

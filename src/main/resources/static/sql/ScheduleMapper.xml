@@ -17,7 +17,7 @@
 	    <result property="hikingTotalTime" column="schedule_total_time"	jdbcType = "VARCHAR"/>
 	    <result property="hikingDescentTime" column="schedule_descent_time"	jdbcType = "VARCHAR"/>
 	    <result property="hikingAscentTime" column="schedule_ascent_time"	jdbcType = "VARCHAR"/>
-	    <result property="Transportation" column="schedule_transportation"	jdbcType = "NUMERIC"/>
+	    <result property="transportation" column="schedule_transportation"	jdbcType = "NUMERIC"/>
 	</resultMap>
 
 	<insert id="addSchedule" parameterType="site.dearmysanta.domain.user.Schedule">
@@ -30,7 +30,7 @@
 	
 	<select id="getScheduleList" resultMap="ScheduleResultMap">
 	 SELECT
-       s. schedule_no, s.user_no, s.schedule_title, s.schedule_content, s.schedule_date, s.schedule_mountain_name,
+       s.schedule_no, s.user_no, s.schedule_title, s.schedule_content, s.schedule_date, s.schedule_mountain_name,
         s.schedule_total_time, s.schedule_descent_time, s.schedule_ascent_time, s.schedule_difficulty, s.schedule_transportation
     FROM 
         schedule s, users u

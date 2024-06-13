@@ -36,9 +36,9 @@
               <td>등산 난이도</td>
               <br>
             <td>
-             <input type="radio" name="hikingDifficulty" value="0"> 쉬움
+             <input type="radio" name="hikingDifficulty" value="0"> 어려움
                 <input type="radio" name="hikingDifficulty" value="1"> 보통
-                <input type="radio" name="hikingDifficulty" value="2"> 어려움
+                <input type="radio" name="hikingDifficulty" value="2"> 쉬움
             </td>
             </tr>
             <br>
@@ -47,12 +47,12 @@
               <td>교통수단</td>
               <br>
             <td>
-             <input type="radio" name="Transportation" value="0"> Car
-                <input type="radio" name="Transportation" value="1"> Bus
-                <input type="radio" name="Transportation" value="2"> Subway
-                <input type="radio" name="Transportation" value="3"> Train
-                <input type="radio" name="Transportation" value="4"> Bicycle
-                <input type="radio" name="Transportation" value="5"> Walk
+             <input type="radio" name="Transportation" value="0"> 도보
+                <input type="radio" name="Transportation" value="1"> 자전거
+                <input type="radio" name="Transportation" value="2"> 버스
+                <input type="radio" name="Transportation" value="3"> 자동차
+                <input type="radio" name="Transportation" value="4"> 지하철
+                <input type="radio" name="Transportation" value="5"> 기차
             </td>
             </tr>
 
@@ -63,6 +63,7 @@
         </div>
             
             <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" onclick="history.back()">뒤로</button>
         </form>
     </div>
 </body>

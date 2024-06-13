@@ -27,7 +27,27 @@
 <body>
     <h2>QNA 답변 작성</h2>
     <form action="/user/addAdminAnswer" method="post">
-  
+  		<p><strong>카테고리 : </strong>
+         <c:choose>
+            <c:when test="${qna.qnaPostCategory == 0}">
+                계정
+            </c:when>
+            <c:when test="${qna.qnaPostCategory == 1}">
+                일정
+            </c:when>
+			 <c:when test="${qna.qnaPostCategory == 2}">
+                인증
+            </c:when>
+            <c:when test="${qna.qnaPostCategory == 3}">
+                모임
+            </c:when>
+            <c:when test="${qna.qnaPostCategory == 4}">
+                등산기록
+            </c:when>
+            <c:when test="${qna.qnaPostCategory == 5}">
+                산 검색
+            </c:when>
+        </c:choose></p>
         <p><strong>프로필 사진:</strong> <img src="${qna.profileImage}" alt="Profile Image" class="readonly"></p>
     	<p><strong>닉네임:</strong> ${qna.nickName}</p>
     	<p><strong>제목:</strong> ${qna.title}</p>
@@ -52,7 +72,7 @@
             </select>
         </div>-->
         <div class="form-group">
-            <button type="submit">작성</button>
+            <button type="submit">답변 작성하기</button>
         </div> 
         
     </form>

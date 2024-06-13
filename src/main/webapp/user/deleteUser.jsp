@@ -3,65 +3,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>회원 탈퇴</title>
-<!-- <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f2f2f2;
-        margin: 0;
-        padding: 0;
-    }
-    .container {
-        max-width: 400px;
-        margin: 50px auto;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    .form-group {
-        margin-bottom: 15px;
-    }
-    label {
-        display: block;
-        margin-bottom: 5px;
-    }
-    input[type="text"] {
-        width: 100%;
-        padding: 10px;
-        box-sizing: border-box;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-    .btn {
-        width: 100%;
-        padding: 10px;
-        background-color: #ff4d4d;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    .btn:hover {
-        background-color: #ff1a1a;
-    }
-</style> -->
+    <meta charset="UTF-8">
+    <title>탈퇴 사유 선택</title>
+    <script>
+        function toggleWithdrawContent() {
+            var withdrawReason = document.getElementById("withdrawReason");
+            var withdrawContentDiv = document.getElementById("withdrawContentDiv");
+            var withdrawContent = document.getElementById("withdrawContent");
+            if (withdrawReason.value == "4") {
+                withdrawContentDiv.style.display = "block";
+                withdrawContent.required = true;
+            } else {
+                withdrawContentDiv.style.display = "none";
+                withdrawContent.required = false;
+                withdrawContent.value = ""; // reset the value
+            }
+        }
+
+        function validateForm() {
+            var withdrawReason = document.getElementById("withdrawReason");
+            var withdrawContent = document.getElementById("withdrawContent");
+            if (withdrawReason.value == "4" && withdrawContent.value.trim() === "") {
+                alert("기타 사유를 적어주세요.");
+                withdrawContent.focus();
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
-    <div class="container">
+    <form action="/user/deleteUser" method="post" onsubmit="return validateForm()">
         <h2>회원 탈퇴</h2>
-        <form action="/user/deleteUser" method="post">
-            <div class="form-group">
-                <label for="withdrawReason">탈퇴 사유</label>
-                <input type="text" id="withdrawReason" name="withdrawReason" placeholder="탈퇴 사유를 입력하세요" required>
-            </div>
-            <button type="submit" class="btn">회원탈퇴하기</button>
-        </form>
-    </div>
+        <div>
+            <label for="withdrawReason">탈퇴사유</label>
+            <select id="withdrawReason" name="withdrawReason" onchange="toggleWithdrawContent()" required>
+                <option value="" disabled selected>탈퇴사유를 선택하세요</option>
+                <option value="0">서비스 만족도 낮음</option>
+                <option value="1">사용 빈도 감소</option>
+                <option value="2">고객 지원 불만</option>
+                <option value="3">유사한 다른 서비스 존재</option>
+                <option value="4">기타</option>
+            </select>
+        </div>
+        <div id="withdrawContentDiv" style="display:none;">
+            <label for="withdrawContent">기타 사유</label>
+            <textarea id="withdrawContent" name="withdrawContent" placeholder="기타 사유를 적어주세요"></textarea>
+        </div>
+        <div>
+            <button type="submit" class="btn">탈퇴하기</button>
+            <button type="button" onclick="history.back()">취소</button>
+        </div>
+    </form>
 </body>
 </html>

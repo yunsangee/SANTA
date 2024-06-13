@@ -33,11 +33,24 @@ public class UserController {
 	@Autowired
 	UserService userService;
 		
+		//
+		// addUser(Post)
+		//
+	
+//	 	@GetMapping(value = "addUser")
+//	    public String addUser(@ModelAttribute Model model) {
+//	        
+//	 		model.addAttribute("user", new User());
+//	        
+//	 		return "forward:/user/addUser.jsp";
+//	    }
+	
+	
 		@PostMapping(value="addUser" )
 		public String addUser(@ModelAttribute User user, Model model ) throws Exception {
 
 			System.out.println("addUser : POST");
-			//Business Logic
+			
 			userService.addUser(user);
 			
 			return "redirect:/user/login.jsp";
@@ -51,72 +64,18 @@ public class UserController {
 		public String login(@ModelAttribute String userId, String password, Model model, HttpSession session) throws Exception {
 		    System.out.println("login : GET");
 		    
-		    // 로그인 처리
+		    // login
 		    User user = userService.login(userId, password);
 		    System.out.println("login : " + user);
 		    
-		    // 로그인에 성공하면 세션에 userNo 저장
+		    // success login -> session : userNo
 		    if (user != null) {
 		        session.setAttribute("userNo", user.getUserNo());
 		    }
 		    
 		    return "redirect:/user/login.jsp";
-		}
-		
-//		@GetMapping(value = "login")
-//		public String login(@RequestParam String userId, String password, Model model, HttpSession session) {
-//		    try {
-//		        // 로그인 시도 
-//		        User user = userService.login(userId, password);
-//		        // 로그인 성공 시 
-//		        if (user != null) {
-//		            // 세션에 사용자 정보 저장 
-//		            session.setAttribute("user", user); 
-//		            // 로그인 성공 페이지로 리다이렉트
-//		            return "redirect:/user/main.jsp";
-//		        } else {
-//		            // 사용자가 존재하지 않는 경우
-//		            model.addAttribute("error", "사용자를 찾을 수 없습니다.");
-//		            // 로그인 페이지로 이동
-//		            System.out.println("login : " +user); 
-//		            return "redirect:/user/login.jsp";
-//		        }
-//		    } catch (Exception e) {
-//		        // 예외 처리
-//		        model.addAttribute("error", "로그인에 실패했습니다.");
-//		        // 로그인 페이지로 이동
-//		        System.out.println("login error : ");
-//		        return "redirect:/user/login.jsp";
-//		    }
-//		}
+		}	
 
-//		@PostMapping(value = "login")
-//		public String login(@ModelAttribute String userId, String userPassword, HttpSession session, Model model) throws Exception {
-//		    System.out.println("login : POST");
-//
-//		    // DB에서 사용자 정보 조회
-//		    User dbUser = userService.login(userId, userPassword);
-//
-//		    System.out.println("확인 : " +dbUser);
-//		    
-//		    // 사용자가 존재하는지 확인
-//		    if (dbUser == null) {
-//		        model.addAttribute("error", "사용자를 찾을 수 없습니다.");
-//		        return "redirect:/user/login.jsp";
-//		    }
-//
-//		    System.out.println("dbUser : " + dbUser);
-//
-//		    // 비밀번호 일치 여부 확인
-//		    if (userPassword.equals(dbUser.getUserPassword())) {
-//		        session.setAttribute("user", dbUser);
-//		        return "forward:/user/main.jsp";
-//		    } else {
-//		        model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
-//		        return "redirect:/user/login.jsp";
-//		    }
-//		}
-		
 		@PostMapping(value = "login")
 		public String login(@ModelAttribute User user, String userId, String userPassword, HttpSession session, Model model) throws Exception {
 		    System.out.println("/user/login : POST");
@@ -287,9 +246,12 @@ public class UserController {
 		    System.out.println("getUser : GET");
 
 		    User sessionUser = (User) session.getAttribute("user");
+		    
+		    System.out.println("user : " +sessionUser);
+		    
 		    User user = null;
 
-		    if (userNo != null) {
+		    if (userNo!=null) {
 		        // 요청 매개변수로 받은 userNo가 있는 경우
 		        user = userService.getUser(userNo);
 		        System.out.println("getUser: userNo from request parameter = " + userNo);
@@ -301,6 +263,12 @@ public class UserController {
 		        System.out.println("getUser: No userNo provided and no sessionUser");
 		        model.addAttribute("error", "사용자를 찾을 수 없습니다.");
 		        return "redirect:/user/login.jsp";
+		    }
+		    
+		    if (sessionUser.getRole()==1) {
+		    	
+		    	model.addAttribute("admin", 1);
+		    	
 		    }
 
 		    // 사용자 정보 모델에 추가
@@ -441,7 +409,7 @@ public class UserController {
 
 		    // 사용자 정보 업데이트
 		    dbUser.setWithdrawReason(user.getWithdrawReason());
-		    
+		    dbUser.setWithdrawContent(user.getWithdrawContent());    
 		    //userService.updateUser(dbUser);
 		    
 		    userService.deleteUser(dbUser);
@@ -457,6 +425,80 @@ public class UserController {
 
 		    // 탈퇴 성공 후 메인 페이지로 리다이렉트
 		    return "redirect:/user/main.jsp";
+		}
+		
+		//
+		// getUserList(GET)
+		//
+		
+		@GetMapping(value="getUserList")
+		public String getUserList(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
+			
+			System.out.println("getUserList : GET");
+			
+			if(search != null & search.getCurrentPage() == 0) {
+				search.setCurrentPage(1);
+			}
+
+//			search.setPageSize(pageSize);
+//			search.setPageUnit(pageUnit);
+		    
+			 // 세션에서 로그인한 관리자 정보 가져오기
+		    User admin = (User) session.getAttribute("user");
+		    
+		    System.out.println("admin login : " +admin);
+		    
+		    // 세션에 로그인한 관리자 정보가 있는지 확인
+		    if (admin.getRole() == 0) {
+		        // 관리자가 아닌 경우 에러 처리
+		        model.addAttribute("error", "관리자만 접근할 수 있습니다.");
+		        return "redirect:/user/login.jsp";
+		    }
+			
+			List<User> userList = userService.getUserList(search);
+			
+			System.out.println("userList : " + userList);		
+			
+			model.addAttribute("user", userList);
+			
+			return "forward:/user/getUserList.jsp";
+		}
+		
+		//
+		// withdrawUserList
+		//
+		
+		@GetMapping(value="withdrawUserList")
+		public String withdrawUserList(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
+			
+			System.out.println("withdrawUserList : GET");
+			
+			if(search != null & search.getCurrentPage() == 0) {
+				search.setCurrentPage(1);
+			}
+
+//			search.setPageSize(pageSize);
+//			search.setPageUnit(pageUnit);
+		    
+			 // 세션에서 로그인한 관리자 정보 가져오기
+		    User admin = (User) session.getAttribute("user");
+		    
+		    System.out.println("admin login : " +admin);
+		    
+		    // 세션에 로그인한 관리자 정보가 있는지 확인
+		    if (admin.getRole() == 0) {
+		        // 관리자가 아닌 경우 에러 처리
+		        model.addAttribute("error", "관리자만 접근할 수 있습니다.");
+		        return "redirect:/user/login.jsp";
+		    }
+			
+			List<User> userList = userService.withdrawUserList(search);
+			
+			System.out.println("userList : " + userList);		
+			
+			model.addAttribute("user", userList);
+			
+			return "forward:/user/getUserList.jsp";
 		}
 		
 		//
@@ -503,7 +545,7 @@ public class UserController {
 		    
 		    System.out.println("addQnA : " + qna);
 
-		    return "redirect:/user/getQnA.jsp";
+		    return "forward:/user/getQnA.jsp";
 		}
 
 		
@@ -511,23 +553,17 @@ public class UserController {
 		// getQnA
 		//
 		
-//		@GetMapping( value="getQnA")
-//		public String getQnA(@RequestParam int postNo ,Model model) throws Exception {
-//			
-//			System.out.println("getQnA : GET");
-//			
-//			userService.getQnA(postNo);
-//
-//			return "redirect:/user/getQnAList.jsp";
-//		}
-		
 		@GetMapping(value = "getQnA")
 		public String getQnA(@RequestParam(required = false) Integer postNo, @RequestParam(required = false) Integer userNo, HttpSession session, Model model) throws Exception {
 		    
 			System.out.println("getQnA : GET");
 
 		    // 세션에서 로그인한 사용자 정보 가져오기
-		    User user = (User) session.getAttribute("user");
+		    User sessionUser = (User) session.getAttribute("user");
+		    
+		    System.out.println("user : " +sessionUser);
+		    
+		    User user = null;
 
 		    QNA qna = userService.getQnA(postNo, userNo);
 
@@ -554,26 +590,28 @@ public class UserController {
 		    } else {
 		        // 잘못된 요청 처리
 		        model.addAttribute("error", "올바른 요청이 아닙니다.");
-		        return "redirect:/user/addQnA.jsp";
 		    }
-		}
+		    
+		    if (sessionUser.getRole()==1) {
+		    	
+		    	model.addAttribute("admin", 1);
+		    	
+		    }
+		    
+		    System.out.println("sessionUser : " +sessionUser);
+		    
+		    model.addAttribute("user", user);
 		
+			return "forward:/user/getQnA.jsp";
+		
+		}
+			
 		//
 		// addAdminAnswer
 		//
 		
-//		@PostMapping(value="addAdminAnswer" )
-//		public String addAdiminAnswer(@ModelAttribute QNA qna, Model model ) throws Exception {
-//
-//			System.out.println("addAdminAnswer : POST");
-//			
-//			userService.addAdminAnswer(qna);
-//			
-//			return "redirect:/user/getQnA.jsp";
-//		}
-		
 		@GetMapping(value="addAdminAnswer")
-		public String showAddAdminAnswerForm(@RequestParam int postNo, @RequestParam int userNo, Model model) throws Exception {
+		public String addAdminAnswer(@RequestParam int postNo, @RequestParam int userNo, Model model) throws Exception {
 		   
 			System.out.println("addAdminAnswer : GET");
 		    
@@ -619,6 +657,34 @@ public class UserController {
 		    System.out.println("addAdminAnswer : " + dbqna);
 
 		    return "forward:/user/getQnA.jsp";
+		}
+		
+		//
+		// getQnAList
+		//
+		
+		@GetMapping(value="getQnAList")
+		public String getQnAList(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
+			
+			System.out.println("getQnAList : GET");
+			
+			if(search != null & search.getCurrentPage() == 0) {
+				search.setCurrentPage(1);
+			}
+
+//			search.setPageSize(pageSize);
+//			search.setPageUnit(pageUnit);
+		    
+		    // 세션에서 로그인한 사용자 정보 가져오기
+		    User user = (User) session.getAttribute("user");
+			
+			List<QNA> qnaList = userService.getQnAList(search);
+			
+			System.out.println("qanList : " + qnaList);		
+			
+			model.addAttribute("qna", qnaList);
+			
+			return "forward:/user/getQnAList.jsp";
 		}
 
 		//
@@ -697,7 +763,94 @@ public class UserController {
 		        model.addAttribute("error", "올바른 요청이 아닙니다.");
 		        return "redirect:/user/addSchedule.jsp";
 		    }
+		    
 		}
 		
+		@GetMapping(value="updateSchedule")
+		public String updateSchedule(@RequestParam int postNo, @RequestParam int userNo, Model model) throws Exception {
+		   
+			System.out.println("updateSchedule : GET");
+		    
+			// Business Logic
+		    Schedule schedule = userService.getSchedule(postNo, userNo);
+		    
+		    // Model 과 View 연결
+		   model.addAttribute("schedule", schedule);
+		    
+		   return "forward:/user/updateSchedule.jsp";
+		}
+		
+		@PostMapping(value = "updateSchedule")
+		public String updateSchedule(@ModelAttribute Schedule schedule, Model model, HttpSession session) throws Exception {
+		   
+			System.out.println("updateSchedule : POST");
+		  
+		    System.out.println("postNo : " +schedule.getPostNo());
+		    System.out.println("userNo : " +schedule.getUserNo());	    
+		    
+		    // 세션에서 로그인한 관리자 정보 가져오기
+		    User sessionUser = (User) session.getAttribute("user");
+		    
+		    System.out.println("admin login : " +sessionUser);
+		    
+		    if (sessionUser == null) {
+		        // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
+		        model.addAttribute("error", "로그인이 필요합니다.");
+		        return "redirect:/user/login.jsp";
+		    }
+		    
+		    // Schedule 정보 조회
+		    Schedule dbschedule = userService.getSchedule(schedule.getPostNo(), schedule.getUserNo());
+		    
+		    // 업데이트
+		    dbschedule.setTitle(schedule.getTitle());
+		    dbschedule.setMountainName(schedule.getMountainName());
+		    dbschedule.setHikingTotalTime(schedule.getHikingTotalTime());
+		    dbschedule.setHikingAscentTime(schedule.getHikingAscentTime());
+		    dbschedule.setHikingDescentTime(schedule.getHikingDescentTime());
+		    dbschedule.setHikingDifficulty(schedule.getHikingDifficulty());
+		    dbschedule.setTransportation(schedule.getTransportation());
+
+		    // QNA 업데이트
+		    userService.updateSchedule(dbschedule);
+		    
+		    model.addAttribute("schedule", dbschedule);
+
+		    System.out.println("updateSchedule : " + dbschedule);
+
+		    //return "forward:/user/getSchedule.jsp";
+		    
+		    //"redirect:/user/getSchedule?userNo=" + dbUser.getUserNo();
+		    return "redirect:/user/getSchedule?postNo=" + dbschedule.getPostNo() + "&userNo=" + dbschedule.getUserNo();
+
+		}
+		
+		//
+		//
+		//
+		
+		@GetMapping(value="getScheduleList")
+		public String getSchedulList(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
+			
+			System.out.println("getScheduleList : GET");
+			
+			if(search != null & search.getCurrentPage() == 0) {
+				search.setCurrentPage(1);
+			}
+
+//			search.setPageSize(pageSize);
+//			search.setPageUnit(pageUnit);
+		    
+		    // 세션에서 로그인한 사용자 정보 가져오기
+		    User user = (User) session.getAttribute("user");
+			
+			List<Schedule> scheduleList = userService.getScheduleList(search);
+			
+			System.out.println("scheduleList : " + scheduleList);		
+			
+			model.addAttribute("schedule", scheduleList);
+			
+			return "forward:/user/getSchedulList.jsp";
+		}
 		
 }

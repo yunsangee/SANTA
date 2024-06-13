@@ -26,7 +26,7 @@ import site.dearmysanta.domain.user.User;
 		
 		public User login(String userId, String password) throws Exception;
 		
-		public Map<String, Object> getUserList(Search search) throws Exception;
+		public List<User> getUserList(Search search) throws Exception;
 		
 		public List<User> withdrawUserList(Search search) throws Exception;
 		
@@ -80,7 +80,7 @@ import site.dearmysanta.domain.user.User;
 		
 		public Schedule getSchedule(int postNo, int userNo) throws Exception;
 		
-		public List<Schedule> getScheduleList() throws Exception;
+		public List<Schedule> getScheduleList(Search search) throws Exception;
 		
 		public void updateSchedule(Schedule schedule) throws Exception;
 		

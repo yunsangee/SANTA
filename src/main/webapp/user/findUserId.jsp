@@ -24,6 +24,8 @@
         <div>
             <button type="submit">아이디 찾기</button>
         </div>
+          <a href="/user/findUserPassword.jsp">비밀번호 찾기</a>  
+         <a href="/user/login.jsp">로그인 페이지로 가기</a>  
     </form>
 </body>
 </html>

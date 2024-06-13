@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>QNA Details</title>
-    <style>
+<!--     <style>
         .qna-details {
             margin-bottom: 15px;
         }
@@ -22,19 +22,41 @@
             background-color: #f0f0f0;
             cursor: not-allowed;
         }
-    </style>
+    </style> -->
 </head>
 <body>
 
 <div class="qna-details">
     <h2>QNA Details</h2>
-    <p><strong>카테고리:</strong> ${qna.qnaPostCategory}</p>
+    <p><strong>카테고리 : </strong>
+         <c:choose>
+            <c:when test="${qna.qnaPostCategory == 0}">
+                계정
+            </c:when>
+            <c:when test="${qna.qnaPostCategory == 1}">
+                일정
+            </c:when>
+			 <c:when test="${qna.qnaPostCategory == 2}">
+                인증
+            </c:when>
+            <c:when test="${qna.qnaPostCategory == 3}">
+                모임
+            </c:when>
+            <c:when test="${qna.qnaPostCategory == 4}">
+                등산기록
+            </c:when>
+            <c:when test="${qna.qnaPostCategory == 5}">
+                산 검색
+            </c:when>
+        </c:choose></p>
+    
     <p><strong>프로필 사진:</strong> <img src="${qna.profileImage}" alt="Profile Image" class="readonly"></p>
     <p><strong>닉네임:</strong> ${qna.nickName}</p>
     <p><strong>제목:</strong> ${qna.title}</p>
     <p><strong>내용:</strong> ${qna.contents}</p>
     <p><strong>관리자 답변:</strong> ${qna.adminAnswer}</p>
 </div>
+	<button type="button" onclick="history.back()">뒤로</button>
 
 </body>
 </html>

@@ -69,7 +69,14 @@
     <p><strong>Detail Address:</strong> ${user.detailaddress}</p> --%>
     <p><strong>Birth Date:</strong> ${user.birthDate}</p>
     <%-- <p><strong>Phone Number:</strong> ${user.phoneNumber}</p> --%>
-    <p><strong>Gender:</strong> ${user.gender}</p>
+    <p>Gender : 
+         <c:choose>
+            <c:when test="${user.gender == 0}">
+                남자
+            </c:when>
+            <c:when test="${user.gender == 1}">
+                여자
+            </c:when></c:choose></p>
     <p><strong>Profile Image:</strong> ${user.profileImage}</p>
     <p><strong>Creation Date:</strong> ${user.creationDate}</p>
     <%-- <p><strong>Hiking Purpose:</strong> ${user.hikingPurpose}</p>
@@ -99,29 +106,57 @@
                 <input type="text" id="phoneNumber" name="phoneNumber" value="${user.phoneNumber}">
             </div>
             
-            <div class="form-group">
-                <label for="profileImage">Profile Image</label>
-                <input type="text" id="profileImage" name="profileImage" value="${user.profileImage}" >
-            </div>
+           <div>
+            <label for="profileImage">프로필 이미지</label>
+            <input type="text" id="profileImage" name="profileImage" value="${user.profileImage}">
+        </div> 
+        
+       <%--  <div>
+            <label for="profileImage">프로필 이미지</label>
+            <c:if test="${user.profileImage != null}">
+                <img src="${pageContext.request.contextPath}/images/${user.profileImage}" alt="Profile Image" style="width:100px;height:100px;">
+                <br>
+            </c:if>
+            <input type="file" id="profileImage" name="profileImage">
+        </div> --%>
             
-            <div class="form-group">
-                <label for="hikingPurpose">Hiking Purpose</label>
-                <input type="text" id="hikingPurpose" name="hikingPurpose" value="${user.hikingPurpose}">
-            </div>
-            <div class="form-group">
-                <label for="hikingDifficulty">Hiking Difficulty</label>
-                <input type="text" id="hikingDifficulty" name="hikingDifficulty" value="${user.hikingDifficulty}">
-            </div>
-            <div class="form-group">
-                <label for="hikingLevel">Hiking Level</label>
-                <input type="text" id="hikingLevel" name="hikingLevel" value="${user.hikingLevel}">
-            </div>
+            <div>
+    <label for="hikingPurpose">등산 목적</label>
+    <select id="hikingPurpose" name="hikingPurpose" >
+        <option value="" disabled selected>등산 목적을 선택하세요</option>
+        <option value=0>취미</option>
+        <option value=1>운동</option>
+        <option value=2>친목</option>
+    </select>
+</div>
+	<div>
+         <label for="hikingDifficulty">등산 목적</label>
+    <select id="hikingDifficulty" name="hikingDifficulty" >
+        <option value="" disabled selected>선호 난이도를 선택하세요</option>
+        <option value=0>어려움</option>
+        <option value=1>보통</option>
+        <option value=2>쉬움</option>
+    	</select>
+	</div>
+	<div>
+         <label for="hikingLevel">등산 목적</label>
+    <select id="hikingLevel" name="hikingLevel" >
+        <option value="" disabled selected>등산 경험도를 선택하세요</option>
+        <option value=0>경험없음</option>
+        <option value=1>1년에 1~2회 이상</option>
+        <option value=2>1년에 5회 이상</option>
+        <option value=3>한 달에 1~2회 이상</option>
+        <option value=4>한 달에 5회 이상</option>
+    	</select>
+	</div>
             
-            <div class="form-group">
-                <label for="introduceContent">Introduce Content</label>
-                <input type="text" id="introduceContent" name="introduceContent" value="${user.introduceContent}" >
-            </div>
+     <div class="form-group">
+    <label for="introduceContent">Introduce Content</label>
+    <textarea id="introduceContent" name="introduceContent" rows="10">${user.introduceContent}</textarea>
+	</div>
+    
             <button type="submit" class="btn">Update</button>
+             <button type="button" onclick="history.back()">취소</button>
         </form>
     </div>
 </body>

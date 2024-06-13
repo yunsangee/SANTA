@@ -33,8 +33,44 @@
     <p><strong>총 소요시간</strong> ${schedule.hikingTotalTime}</p>
     <p><strong>상행시간</strong> ${schedule.hikingAscentTime}</p>
     <p><strong>하행시간</strong> ${schedule.hikingDescentTime}</p>
-    <p><strong>등산 난이도</strong> ${schedule.hikingDifficulty}</p>
-    <p><strong>교통수단</strong> ${schedule.transportation}</p>
+    <p><strong>등산 난이도</strong>
+    <c:choose>
+            <c:when test="${schedule.hikingDifficulty == 0}">
+                어려움
+            </c:when>
+            <c:when test="${schedule.hikingDifficulty == 1}">
+                보통
+            </c:when>
+			 <c:when test="${schedule.hikingDifficulty == 2}">
+                쉬움
+            </c:when>
+    </c:choose></p>
+    
+    <p><strong>교통수단</strong>
+    <c:choose>
+            <c:when test="${schedule.transportation == 0}">
+                도보
+            </c:when>
+            <c:when test="${schedule.transportation == 1}">
+                자전거
+            </c:when>
+			 <c:when test="${schedule.transportation == 2}">
+                버스
+            </c:when>
+            <c:when test="${schedule.transportation == 3}">
+                자동차
+            </c:when>
+            <c:when test="${schedule.transportation == 4}">
+                지하철
+            </c:when>
+            <c:when test="${schedule.transportation == 5}">
+                기차
+            </c:when>
+    </c:choose></p>
+    
+    	 <a href="/user/updateSchedule.jsp">일정 수정하기</a>
+    	 <button type="button" onclick="history.back()">뒤로</button>
+    
 </div>
 
 </body>

@@ -16,7 +16,7 @@ $(function() {
     });
 });
 </script>
-<style>
+<!-- <style>
 input[type="text"], input[type="password"], input[type="date"], input[type="email"] {
     width: 300px; /* 원하는 크기로 조절합니다. */
     padding: 10px; /* 입력 필드 내부 여백(padding)을 추가합니다. */
@@ -27,7 +27,7 @@ button {
     padding: 10px 20px;
     font-size: 16px;
 }
-</style>
+</style> -->
 </head>
 <body>
     <h2>회원가입</h2>
@@ -70,27 +70,44 @@ button {
         </div>
         <div>
             <label>성별</label>
-            <label for="genderMale">남자</label>
+            <label for="genderMale">여자</label>
+            <input type="radio" id="genderFemale" name="gender" value="0" required>
+            <label for="genderFemale">남자</label>
             <input type="radio" id="genderMale" name="gender" value="1" required>
-            <label for="genderFemale">여자</label>
-            <input type="radio" id="genderFemale" name="gender" value="2" required>
         </div>
         <div>
             <label for="profileImage">프로필 이미지</label>
             <input type="file" id="profileImage" name="profileImage" accept="image/*">
         </div>
         <div>
-            <label for="hikingPurpose">등산 목적</label>
-            <input type="number" id="hikingPurpose" name="hikingPurpose" placeholder="등산 목적" required>
-        </div>
-        <div>
-            <label for="hikingDifficulty">등산 난이도</label>
-            <input type="number" id="hikingDifficulty" name="hikingDifficulty" placeholder="등산 난이도" required>
-        </div>
-        <div>
-            <label for="hikingLevel">등산 레벨</label>
-            <input type="number" id="hikingLevel" name="hikingLevel" placeholder="등산 레벨" required>
-        </div>
+    <label for="hikingPurpose">등산 목적</label>
+    <select id="hikingPurpose" name="hikingPurpose" required>
+        <option value="" disabled selected>등산 목적을 선택하세요</option>
+        <option value=0>취미</option>
+        <option value=1>운동</option>
+        <option value=2>친목</option>
+    </select>
+</div>
+	<div>
+         <label for="hikingDifficulty">등산 목적</label>
+    <select id="hikingDifficulty" name="hikingDifficulty" required>
+        <option value="" disabled selected>선호 난이도를 선택하세요</option>
+        <option value=0>어려움</option>
+        <option value=1>보통</option>
+        <option value=2>쉬움</option>
+    	</select>
+	</div>
+	<div>
+         <label for="hikingLevel">등산 목적</label>
+    <select id="hikingLevel" name="hikingLevel" required>
+        <option value="" disabled selected>등산 경험도를 선택하세요</option>
+        <option value=0>경험없음</option>
+        <option value=1>1년에 1~2회 이상</option>
+        <option value=2>1년에 5회 이상</option>
+        <option value=3>한 달에 1~2회 이상</option>
+        <option value=4>한 달에 5회 이상</option>
+    	</select>
+	</div>
         <div>
             <button type="submit">회원가입</button>
         </div>

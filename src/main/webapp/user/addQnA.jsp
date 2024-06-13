@@ -38,7 +38,18 @@
             <label for="contents">내용</label>
             <textarea id="contents" name="contents" rows="10" placeholder="내용을 입력하세요" required></textarea>
         </div>
-        
+        <div class="form-group">
+    <label for="qnaPostCategory"></label>
+    <select id="qnaPostCategory" name="qnaPostCategory" required>
+        <option value="" disabled selected>질문 카테고리를 선택하세요</option>
+        <option value=0>계정</option>
+        <option value=1>일정</option>
+        <option value=2>인증</option>
+        <option value=3>모임</option>
+        <option value=4>등산기록</option>
+        <option value=5>산 검색</option>
+    </select>
+		</div>
        <!--  <div class="form-group">
             <label for="qnaPostCategory">카테고리</label>
             <select id="qnaPostCategory" name="qnaPostCategory" required>
@@ -51,6 +62,7 @@
         </div>-->
         <div class="form-group">
             <button type="submit">작성</button>
+            <button type="button" onclick="history.back()">취소</button>
         </div> 
         
     </form>

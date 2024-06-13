@@ -37,7 +37,7 @@
 	<insert id="addQnA" parameterType="site.dearmysanta.domain.user.QNA">
     INSERT 
     INTO QNA (qna_no, qna_content, qna_date, qna_title, qna_category, user_no, admin_answer, answer_status)
-    VALUES (seq_qna_no.NEXTVAL, #{contents}, SYSDATE, #{title}, 0, #{userNo}, #{adminAnswer, jdbcType=VARCHAR},0)
+    VALUES (seq_qna_no.NEXTVAL, #{contents}, SYSDATE, #{title}, #{qnaPostCategory}, #{userNo}, #{adminAnswer, jdbcType=VARCHAR},0)
 	</insert>
 
 	

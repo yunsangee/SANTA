@@ -38,7 +38,7 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public Map<String, Object> getUserList(Search search) throws Exception {
+	public List<User> getUserList(Search search) throws Exception {
 		// TODO Auto-generated method stub
 		return userDao.getUserList(search);
 	}
@@ -208,9 +208,9 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public List<Schedule> getScheduleList() throws Exception {
+	public List<Schedule> getScheduleList(Search search) throws Exception {
 		// TODO Auto-generated method stub
-		return userDao.getScheduleList();
+		return userDao.getScheduleList(search);
 	}
 
 	@Override
