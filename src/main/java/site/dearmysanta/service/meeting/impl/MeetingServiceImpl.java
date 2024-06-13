@@ -259,4 +259,9 @@ public class MeetingServiceImpl implements MeetingService {
 		return meetingDAO.getUnCertifiedMeetingPost(userNo);
 	}
 	
+	public List<MeetingPost> getChattingRoomList(int userNo) throws Exception {
+		
+		return meetingDAO.getChattingRoomList(userNo);
+	}
+	
 }

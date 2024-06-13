@@ -71,5 +71,7 @@ public interface MeetingDAO {
 	public List<MeetingPost> getUnCertifiedMeetingPost(int userNo) throws Exception;
 	
 	public void insertImageCount(int postNo, int imageCount) throws Exception;
+	
+	public List<MeetingPost> getChattingRoomList(int userNo) throws Exception;
 
 }
