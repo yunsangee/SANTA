@@ -67,12 +67,13 @@ public class MountainController {
 	}//o
 	
 	@GetMapping(value="updateMountain")
-	public String updateMountain(@RequestParam int mountainNo, Model model) {
+	public String updateMountain(@RequestParam int crpNo, @RequestParam int mountainNo, Model model) {
 		
 		//
 		// need to get mountain info
 		//
 		SantaLogger.makeLog("info","updateMountainView");
+		model.addAttribute("crpNo", crpNo);
 		
 		return "forward:/mountain/updateMountain.jsp";
 	}
