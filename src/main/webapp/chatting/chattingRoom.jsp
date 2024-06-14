@@ -7,23 +7,23 @@
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
         var socket = io("http://localhost:3000");
-        var roomId = "${roomNo}";
+        var roomNo = "${roomNo}";
         var userNickname = "${sessionScope.userNickname}";
         var userId = "${sessionScope.userId}";
 
-        socket.emit('joinRoom', roomId);
+        socket.emit('joinRoom', roomNo);
 
         // 과거 채팅 기록을 로드하여 표시
         socket.on('loadMessages', function(messages) {
             var chatBox = document.getElementById("chatBox");
             messages.forEach(function(message) {
-                chatBox.innerHTML += "<div>" + message.userNickname + ": " + message.text + "</div>";
+                chatBox.innerHTML += "<div>" + message.userNickname + ": " + message.contents + "</div>";
             });
         });
 
         socket.on('message', function(message) {
             var chatBox = document.getElementById("chatBox");
-            chatBox.innerHTML += "<div>" + message.userNickname + ": " + message.text + "</div>";
+            chatBox.innerHTML += "<div>" + message.userNickname + ": " + message.contents + "</div>";
         });
 
         function sendMessage() {
@@ -31,9 +31,9 @@
             var message = {
                 userId: userId,
                 userNickname: userNickname,
-                text: input.value
+                contents: input.value
             };
-            socket.emit('chatMessage', { roomId: roomId, message: message });
+            socket.emit('chatMessage', { roomNo: roomNo, message: message });
             input.value = "";
         }
     </script>

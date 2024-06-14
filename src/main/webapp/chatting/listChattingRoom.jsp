@@ -9,7 +9,7 @@
     <h1>Chat Room List</h1>
     <ul>
         <c:forEach var="chattingRoom" items="${chattingRooms}">
-            <li><a href="/chatting/getChatRoom?roomId=${chattingRoom.postNo}">${chattingRoom.meetingName}</a></li>
+            <li><a href="/chatting/getChatRoom?roomNo=${chattingRoom.postNo}">${chattingRoom.meetingName}</a></li>
         </c:forEach>
     </ul>
 </body>
