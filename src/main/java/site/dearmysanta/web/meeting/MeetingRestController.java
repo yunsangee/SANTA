@@ -64,11 +64,8 @@ public class MeetingRestController {
 		meetingService.deleteMeetingPostComment(meetingPostCommentNo);
 	}
 	
-	
-	
+
 	// 아래 테스트 필요.
-	
-	
 	
 	// if success, change like image
 	@GetMapping(value = "rest/updateMeetingPostLikeStatus") // postNo, userNo

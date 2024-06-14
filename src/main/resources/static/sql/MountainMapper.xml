@@ -32,6 +32,7 @@
 			column="MOUNTAIN_LONGITUDE" />
 		<!-- <result property="mountainImage" column="MOUNTAIN_IMAGE"/> -->
 		<result property="mountainLocation" column="MOUNTAIN_LOCATION" />
+		<result property="mountainImage" column="MOUNTAIN_IMAGE"/>
 		<result property="mountainDescription"
 			column="MOUNTAIN_DESCRIPTION" />
 		<result property="mountainAltitude" column="MOUNTAIN_ALTITUDE" />
@@ -63,6 +64,7 @@
 		<id property="mountainName" column="MOUNTAIN_NAME" />
 		<result property="searchCount" column="SEARCH_COUNT" />
 		<result property="postCount" column="POST_COUNT" />
+		<result property="searchDate" column="search_date"/>
 	</resultMap>
 
 
@@ -81,7 +83,7 @@
 		MOUNTAIN_VIEW_COUNT
 		)
 		VALUES (
-		#{mountainNo, jdbcType=NUMERIC},
+		#{mountainNo},
 		#{mountainName, jdbcType=VARCHAR},
 		#{mountainLocation, jdbcType=VARCHAR},
 		#{mountainLatitude, jdbcType=DOUBLE},
@@ -165,7 +167,7 @@
 	</select>
 
 
-	<select id="getMountainListByName" parameterType="String"
+	<select id="getMountainListByName" parameterType="map"
 		resultMap="MountainResultMap">
 		SELECT
 		m.MOUNTAIN_NO AS MOUNTAIN_NO,
@@ -186,8 +188,10 @@
 		t.EXPECTED_DESCENT_TIME AS EXPECTED_DESCENT_TIME,
 		t.IS_CLOSED AS IS_CLOSED
 		FROM MOUNTAIN m, MOUNTAIN_TRAIL t
-		WHEREm.MOUNTAIN_NO = t.MOUNTAIN_NO(+) AND m.MOUNTAIN_NAME LIKE '%'||#{mountainName}||'%'
+		WHERE m.MOUNTAIN_NO = t.MOUNTAIN_NO(+) AND m.MOUNTAIN_NAME LIKE '%'||#{mountainName}||'%'
 	</select>
+	
+	
 
 
 	<select id="checkMountainExist" parameterType="int"
@@ -289,12 +293,12 @@
 		parameterType="site.dearmysanta.domain.mountain.MountainSearch">
 		DELETE FROM MOUNTAIN_SEARCH
 		WHERE USER_NO = #{userNo} AND
-		search_date = #{searchDate}
+		mountain_search_content=#{searchKeyword}
 	</delete>
 
 
 	<!-- !!!!!! -->
-	<select id="getSearchKeywordList" parameterType="map"
+	<!-- <select id="getSearchKeywordList" parameterType="map"
 		resultMap="MountainSearchResultMap">
 
 		SELECT * FROM (
@@ -308,7 +312,13 @@
 
 		WHERE ROW_SEQ BETWEEN ((#{search.currentPage} - 1) * #{search.pageSize} +
 		1) AND #{search.currentPage} * #{search.pageSize}
+	</select> -->
+	<select id="getSearchKeywordList" parameterType="int"
+		resultMap="MountainSearchResultMap">
+
+		select ms.*, ROWNUM from mountain_search ms where user_no = #{userNo} AND ROWNUM <![CDATA[<=]]> 10 order by search_date desc
 	</select>
+	
 
 	<update id="updateSearchSetting" parameterType="map">
 		UPDATE USERS
@@ -321,8 +331,8 @@
 
 	<insert id="addMountainStatistics" parameterType="String">
 		INSERT INTO
-		statistics(STATISTICS_NO, MOUNTAIN_NAME, SEARCH_COUNT,POST_COUNT)
-		VALUES (seq_statistics_no.NEXTVAL, #{value}, 0 ,0)
+		statistics(STATISTICS_NO, MOUNTAIN_NAME, SEARCH_COUNT,POST_COUNT, SEARCH_DATE)
+		VALUES (seq_statistics_no.NEXTVAL, #{value}, 0 ,0, TRUNC(SYSDATE))
 	</insert>
 
 	<update id="updateMountainStatistics" parameterType="map">
@@ -336,7 +346,7 @@
 				POST_COUNT = POST_COUNT + 1
 			</when>
 		</choose>
-		WHERE MOUNTAIN_NAME = #{mountainName}
+		WHERE MOUNTAIN_NAME = #{mountainName} AND search_date = TRUNC(SYSDATE)
 	</update>
 
 
@@ -345,30 +355,90 @@
 		SELECT COUNT(*)
 		FROM STATISTICS
 		WHERE
-		MOUNTAIN_NAME = #{value}
+		MOUNTAIN_NAME = #{value} AND search_date = TRUNC(SYSDATE)
 	</select>
 
-	<select id="getStatisticsList" parameterType="int"
+	<select id="getStatisticsWeekly" parameterType="map"
 		resultMap="StatisticsResultMap">
-		SELECT * FROM
-		(SELECT * FROM STATISTICS
-		<if test="which == 0">
-			ORDER BY POST_COUNT DESC
-		</if>
-
-		<if test="which == 1">
-			ORDER BY SEARCH_COUNT DESC
-		</if>
-		)
+		 SELECT 
+            MOUNTAIN_NAME,
+            SUM(SC) AS SEARCH_COUNT,
+            SUM(PC) AS POST_COUNT
+        FROM (
+            SELECT 
+                MOUNTAIN_NAME,
+                SEARCH_COUNT AS SC,
+                POST_COUNT AS PC
+                
+            FROM 
+                STATISTICS
+            WHERE
+                SEARCH_DATE BETWEEN SYSDATE - 6 AND SYSDATE
+        )
+        GROUP BY 
+            MOUNTAIN_NAME
+        ORDER BY 
+			(SUM(SC) + SUM(SC)) DESC, MOUNTAIN_NAME
 	</select>
+	
+	
+	
+	<select id="getStatisticsDaily" parameterType="String" resultMap = "StatisticsResultMap">
+		SELECT 
+            MOUNTAIN_NAME,
+			SEARCH_COUNT,
+			POST_COUNT,
+			SUMVAL
+        FROM (
+		SELECT MOUNTAIN_NAME, SEARCH_COUNT, POST_COUNT, (SEARCH_COUNT + POST_COUNT) AS SUMVAL FROM STATISTICS
+		WHERE SEARCH_DATE = TO_DATE(#{value},'YYYY-MM-DD')
+		)
+		
+		 
+        ORDER BY 
+			SUMVAL DESC, MOUNTAIN_NAME
+	</select>
+	
+<!-- 	ORDER BY SUM(SEARCH_COUNT + POST_COUNT) DESC, MOUNTAIN_NAME
+ -->	
+	<select id="getStatisticsMountainNameList" parameterType="map" resultType="String">
+    SELECT mountain_name, ROWNUM
+    FROM (
+        SELECT 
+            MOUNTAIN_NAME,
+            SUM(SEARCH_COUNT) AS TOTAL_SEARCH_COUNT,
+            SUM(POST_COUNT) AS TOTAL_POST_COUNT
+        FROM (
+            SELECT 
+                MOUNTAIN_NAME,
+                SEARCH_COUNT,
+                POST_COUNT
+            FROM 
+                STATISTICS
+            WHERE
+                SEARCH_DATE BETWEEN SYSDATE - 6 AND SYSDATE
+        )
+        GROUP BY 
+            MOUNTAIN_NAME
+        ORDER BY
+            <if test="which == 0">
+                TOTAL_POST_COUNT DESC
+            </if>
+            <if test="which == 1">
+                TOTAL_SEARCH_COUNT DESC
+            </if>
+    )
+    WHERE ROWNUM <![CDATA[<=]]> 10
+</select>
+
 
 
 	<select id="getCustomMountainList" parameterType="map"
 		resultMap="MountainResultMap">
 		SELECT *
 		FROM MOUNTAIN
-		WHERE MOUNTAIN_LOCATION LIKE '%' || #{user.address} || '%'
-		<choose>
+		<!-- WHERE MOUNTAIN_LOCATION LIKE '%' || #{user.address} || '%' -->
+		<!-- <choose>
 			<when test="user.hikingDifficulty == 0">
 				AND MOUNTAIN_ALTITUDE <![CDATA[>=]]>
 				700
@@ -380,8 +450,9 @@
 				AND MOUNTAIN_ALTITUDE <![CDATA[<=]]>
 				500
 			</when>
-		</choose>
-		AND LOWER(MOUNTAIN_NAME) IN
+		</choose> -->
+<!-- 		AND LOWER(MOUNTAIN_NAME) IN -->
+		WHERE MOUNTAIN_NAME IN
 		<foreach item="item" index="index" collection="mountainNames"
 			open="(" separator="," close=")">
 			#{item}
@@ -395,7 +466,11 @@
 
 
 	</select>
-
-
-
+	
+	
+	
+	<select id="isMountain" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM MOUNTAIN WHERE MOUNTAIN_NAME = #{value}
+	</select>
 </mapper>
+	

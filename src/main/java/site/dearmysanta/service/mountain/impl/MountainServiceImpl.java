@@ -37,8 +37,22 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 
-@Service("mountainServiceImpl")
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import java.util.concurrent.TimeUnit;
+
+
+@Service
 @Transactional
 public class MountainServiceImpl implements MountainService {
 	
@@ -66,9 +80,6 @@ public class MountainServiceImpl implements MountainService {
 	@Autowired
 	ObjectStorageService objectStorageService;
 	
-	
-	
-
 	 
 	//
 	// mountainName, fix mountainName in mountainTrail class
@@ -138,6 +149,9 @@ public class MountainServiceImpl implements MountainService {
 	 }// do/si/dong address to emdCd
 	
 	 public static MountainTrail mapJsonToMountainTrail(JsonNode feature) {
+		 	if(feature.get("properties") == null) {
+		 		return new MountainTrail();
+		 	}
 	        JsonNode properties = feature.get("properties");
 	        JsonNode geometry = feature.get("geometry");
 	        JsonNode coordinatesArray = geometry.get("coordinates").get(0); // Access the MultiLineString
@@ -167,37 +181,49 @@ public class MountainServiceImpl implements MountainService {
 	 public List<MountainTrail> getMountainTrailListFromVWorld(int mountainNo, String mountainName, String emdCd) throws IOException {
 			String url = "https://api.vworld.kr/req/data";
 			
+			String urlMountainName = mountainName.split("산")[0] + "산";
+			SantaLogger.makeLog("info", "Mn & emdcd :"+  urlMountainName + " " + emdCd);
 			url = url + "?service=data&request=GetFeature&data=LT_L_FRSTCLIMB&key=" + vWorldAPIKey + "&domain=http://dearmysanta.site"
-	              + "&attrFilter=mntn_nm:like:" +mountainName+"|emdCd:=:" + emdCd+"&page=1&size=100&format=json";
+	              + "&attrFilter=mntn_nm:like:" +urlMountainName+"|emdCd:=:" + emdCd+"&page=1&size=100&format=json";
 			
 			RestTemplate restTemplate = new RestTemplate();
 	        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 	        
-//	        SantaLogger.makeLog("info","trail!!:"+ response);
+	        SantaLogger.makeLog("info","trail!!:"+ response);
 	        ObjectMapper objectMapper = new ObjectMapper();
 	        JsonNode rootNode = objectMapper.readTree(response.getBody());
             JsonNode features = rootNode.at("/response/result/featureCollection/features"); // need to use JSONOBJECT
 
+            
             List<MountainTrail> mountainTrails = new ArrayList<>();
 	        
             //features.size()
-            for (int i = 0; i < 5;i++) {
-                MountainTrail mountainTrail = mapJsonToMountainTrail(features.get(i));
-                mountainTrail.setCoordinatesUrl(mountainTrail.getMountainName()+""+i);
-                mountainTrail.setMountainNo(mountainNo);
-                mountainTrail.setMountainName(mountainName);
-                
-                
-                //
-                //upload on objectStorage
-                //
-                objectStorageService.uploadListData(mountainTrail.getMountainTrailCoordinates(), mountainTrail.getCoordinatesUrl());
-                
-                
-                mountainTrails.add(mountainTrail);
-                mountainDao.addMountainTrail(mountainTrail);
-                
-            }
+            
+            
+            SantaLogger.makeLog("info", "trail Exist?!?!?!"  + (features.get(0) == null  ? "No" : "yes"));
+            
+          
+			for (int i = 0; i < features.size(); i++) {
+				if (features.get(i) != null) {
+					
+					MountainTrail mountainTrail = mapJsonToMountainTrail(features.get(i));
+					mountainTrail.setCoordinatesUrl(mountainTrail.getMountainName() + "" + i);
+					mountainTrail.setMountainNo(mountainNo);
+					mountainTrail.setMountainName(mountainName);
+
+					//
+					// upload on objectStorage
+					//
+//					objectStorageService.uploadListData(mountainTrail.getMountainTrailCoordinates(),
+//							mountainTrail.getCoordinatesUrl());
+
+					mountainTrails.add(mountainTrail);
+					SantaLogger.makeLog("info", "info:"+mountainNo + " "+mountainName);
+					SantaLogger.makeLog("info", "mountainTrail:" + mountainTrail);
+					mountainDao.addMountainTrail(mountainTrail);
+				}
+			}
+            
 //            
 //            int easy = 0;
 //            int normal = 0;
@@ -232,10 +258,15 @@ public class MountainServiceImpl implements MountainService {
 	}
 	 
 	 public Mountain mapJsonToMountain(JSONObject json) {
-	        // Build the Mountain object
+		 
+		 	String mountainName = json.getString("frtrlNm");
+		 	
+//		 	mountainName = mountainName.split("산")[0]+"산";
+		 	
+		    SantaLogger.makeLog("info", mountainName);        // Build the Mountain object
 	        return Mountain.builder()
-	                .mountainNo(json.getInt("mtnCd"))
-	                .mountainName(json.getString("frtrlNm"))
+	                .mountainNo(json.getInt("frtrlId") + 1000)
+	                .mountainName( json.getString("frtrlNm"))
 	                .mountainLatitude(json.getDouble("lat"))
 	                .mountainLongitude(json.getDouble("lot"))
 	                .mountainLocation(json.getString("addrNm"))
@@ -299,10 +330,12 @@ public class MountainServiceImpl implements MountainService {
            
            SantaLogger.makeLog("info","lat, lot:" + mountain.getMountainLatitude() + " " + mountain.getMountainLongitude());
            
+           SantaLogger.makeLog("info", "url:"+objectStorageService.dounLoadImageURL(bucketname, mountain.getMountainName()+"사진"));
+           mountain.setMountainImage(objectStorageService.dounLoadImageURL(bucketname, mountain.getMountainName()+"사진"));
            //
            // for test
            //
-           mountain.setMountainImage("testImage");
+           //mountain.setMountainImage("testImage");
            mountain.setMountainDescription("test");
            mountain.setMountainTrailCount(0);
            //
@@ -310,12 +343,13 @@ public class MountainServiceImpl implements MountainService {
            //
            
            
-           
-           this.addMountain(mountain);
-
-           mountain.setMountainTrail(doAllLogic(mountain.getMountainNo(), mountain.getMountainLatitude(),mountain.getMountainLongitude(), mountainName));
-        	   
            SantaLogger.makeLog("info","mountain" + mountain);
+           this.addMountain(mountain);
+           
+
+           mountain.setMountainTrail(doAllLogic(mountain.getMountainNo(), mountain.getMountainLatitude(),mountain.getMountainLongitude(), mountain.getMountainName()));
+        	   
+           
          }
            
            
@@ -440,10 +474,15 @@ public class MountainServiceImpl implements MountainService {
 		return mountainDao.checkMountainExist(mountainNo);
 	}
 	
-	public List<Mountain> getPopularMountainList(List<String> mountainNames) throws Exception{
+	public List<Mountain> getPopularMountainList(List<String> mountainNames,Search search) throws Exception{
+		SantaLogger.makeLog("info", "serivceImpl getpopMountain:" + mountainNames.toString());
 		List<Mountain> list = new ArrayList<>();
-		for(int i = 0; i < 10 ; i ++) {
-			list.add(this.getMountain(mountainNames.get(i)));
+		
+		//((#{search.currentPage} - 1) * #{search.pageSize} +
+		//1) AND #{search.currentPage} * #{search.pageSize}
+		for(int i = (search.getCurrentPage() - 1) * search.getPageSize() ; i < search.getCurrentPage() * search.getPageSize()  ; i ++) {
+//			SantaLogger.makeLog("info", "::" + this.getMountainListByName(mountainNames.get(i)).toString());
+			list.add(this.getMountainListByName(mountainNames.get(i)).get(0));
 		}
 		
 		return list;
@@ -504,8 +543,8 @@ public class MountainServiceImpl implements MountainService {
 		mountainDao.deleteSearchKeyword(mountainSearch);
 	}
 	
-	public List<MountainSearch> getSearchKeywordList(int userNo,Search search){
-		return mountainDao.getSearchKeywordList(userNo,search);
+	public List<MountainSearch> getSearchKeywordList(int userNo){
+		return mountainDao.getSearchKeywordList(userNo);
 	}
 	
 	public void updateSearchSetting(int userNo, int settingValue) {
@@ -539,9 +578,12 @@ public class MountainServiceImpl implements MountainService {
 		return mountainDao.checkStatisticsMountainColumnExist(mountainName);
 	}
 	
-	public List<Statistics> getStatisticsList(int which){  // 0: get normal list, 1: get popular searchKeyword list
-		return mountainDao.getStatisticsList(which); 
+	public List<Statistics> getStatisticsList(int which,int type){  // 0: get normal list, 1: get popular searchKeyword list
+		return mountainDao.getStatisticsList(which,type); 
 	}
+	
+	public List<String> getStatisticsMountainNameList(int which){
+		return mountainDao.getStatisticsMountainNameList(which);}
 	
 
 }

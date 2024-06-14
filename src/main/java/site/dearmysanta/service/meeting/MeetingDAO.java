@@ -24,7 +24,9 @@ public interface MeetingDAO {
 	
 	public MeetingPost getMeetingPost(int postNo) throws Exception;
 	
-	public List<MeetingPost> getMeetingPostListByListSearchCondition(MeetingPostSearch meetingPostSearch) throws Exception;
+	public List<MeetingPost> getMeetingPostList(MeetingPostSearch meetingPostSearch, int userNo) throws Exception;
+	
+	public int getMeetingPostTotalCount(MeetingPostSearch meetingPostSearch) throws Exception;
 	
 	public MeetingParticipation getMeetingParticipation(int participationNo) throws Exception;
 	
@@ -69,5 +71,7 @@ public interface MeetingDAO {
 	public List<MeetingPost> getUnCertifiedMeetingPost(int userNo) throws Exception;
 	
 	public void insertImageCount(int postNo, int imageCount) throws Exception;
+	
+	public List<MeetingPost> getChattingRoomList(int userNo) throws Exception;
 
 }

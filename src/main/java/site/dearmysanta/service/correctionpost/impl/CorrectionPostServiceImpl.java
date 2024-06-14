@@ -28,4 +28,8 @@ public class CorrectionPostServiceImpl implements CorrectionPostService{
 	public void deleteCorrectionPost(int userNo, int postNo) {
 		correctionPostDao.deleteCorrectionPost(userNo, postNo);
 	}
+	
+	public void updateCorrectionPostStatus(int crpNo) {
+		correctionPostDao.updateCorrectionPostStatus(crpNo);
+	}
 }
