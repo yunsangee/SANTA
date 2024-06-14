@@ -14,16 +14,24 @@
 <script>
 	$(function(){
 		$("button:contains('update')").on('click',function(){
-			/* $("form").attr("action","/mountain/updateMountain").attr("method","GET").submit(); */
-			console.log($( $(this).parent()).html());
-			console.log($( $(this).parent()).find("input:hidden[id='crpNo']").val() ); 
+			
+			console.log("#form"+ ($(this).parent()).find("input:hidden[id='crpNo']").val());
+			
+			/* let formId = "#form" + ($(this).parent()).find("input:hidden[id='crp']").val(); */
+			
+			var crpValue = $(this).parent().find("input:hidden[id='crpNo']").val();
+
+	        // 해당 값을 사용하여 폼의 id를 찾아서 속성 설정 후 제출
+	        $("#form" + crpValue).attr("action","/mountain/updateMountain").attr("method","GET").submit(); 
+			/* console.log($( $(this).parent()).html());
+			console.log($( $(this).parent()).find("input:hidden[id='crpNo']").val() );  */
 		});
 		
 		
-		/* $("#delete").on('click',function(){
+		$("#delete").on('click',function(){
 				const data  = {
-					crpNo : parseInt($("#crpNo").val()),
-					userNo : parseInt($("#userNo").val())
+					crpNo : parseInt(($(this).parent()).find("input:hidden[id='crpNo']").val()),
+					userNo : parseInt(($(this).parent()).find("input:hidden[id='userNo']").val())
 				}
 				
 				
@@ -46,7 +54,7 @@
 	                }
 						
 				});
-		}); */
+		});
 	});
 
 
@@ -57,7 +65,7 @@
 <body>
 
 	<c:forEach var="correctionPost" items="${correctionPostList}">
-		<%-- <form id="form"${correctionPost.postNo}> --%>
+		<form id="form${correctionPost.postNo}">
 		 <div class="correction-post${correctionPost.postNo}">
             <h2>${correctionPost.mountainName}</h2>
             <p><strong>Nickname:</strong> ${correctionPost.nickName}</p>
@@ -67,13 +75,13 @@
             
             <hr/>
         
-        	<input type="hidden" id="userNo" value="${correctionPost.userNo}"/>
-        	<input type="hidden" id="crpNo" value="${correctionPost.postNo}"/>
-        	<input type="hidden" id="mountainNo" value="${correctionPost.mountainNo}"/>
-        	<button id="update">update</button>
-        	<button id="delete">delete</button>
+        	<input type="hidden" id="userNo" name="userNo" value="${correctionPost.userNo}"/>
+        	<input type="hidden" id="crpNo" name="crpNo" value="${correctionPost.postNo}"/>
+        	<input type="hidden" id="mountainNo" name="mountainNo" value="${correctionPost.mountainNo}"/>
+        	<button id="update" type="button">update</button>
+        	<button id="delete" type="button">delete</button>
         </div>
-       <!--  </form> -->
+       </form>
 	
 	</c:forEach>
 	

@@ -24,7 +24,7 @@
 				console.log(data);
 
 	            $.ajax({
-	                url: "http://127.0.0.1:8001/mountain/rest/updateMountain",
+	                url: "http://127.0.0.1:8001/mountain/rest/updateMountain?crpNo=${crpNo}",
 	                method: "POST",
 	                contentType: "application/json",
 	                dataType: "json",
