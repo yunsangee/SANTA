@@ -42,9 +42,9 @@ public class ChattingServiceImpl implements ChattingService {
 
         ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
         if (response.getStatusCode().is2xxSuccessful()) {
-            System.out.println("Chat room created successfully.");
-        } else {
-            System.out.println("Failed to create chat room.");
+            if (response.getBody().contains("already exists")) {
+                System.out.println("Chatting room already exists.");
+            }
         }
 	}
 

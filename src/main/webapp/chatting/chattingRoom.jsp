@@ -8,8 +8,10 @@
     <script>
         var socket = io("http://localhost:3000");
         var roomNo = "${roomNo}";
-        var userNickname = "${sessionScope.userNickname}";
-        var userId = "${sessionScope.userId}";
+        //var userNickname = "${sessionScope.nickname}";
+        var userNickname = "${nickname}";
+        //var userNo = "${sessionScope.userNo}";
+        var userNo = "${userNo}";
 
         socket.emit('joinRoom', roomNo);
 
@@ -29,7 +31,7 @@
         function sendMessage() {
             var input = document.getElementById("messageInput");
             var message = {
-                userId: userId,
+                userNo: userNo,
                 userNickname: userNickname,
                 contents: input.value
             };

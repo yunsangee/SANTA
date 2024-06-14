@@ -75,10 +75,10 @@ public class MeetingController {
 		List<MultipartFile> meetingPostImages = new ArrayList<>();
 		int imageCount = meetingPost.getMeetingPostImageCount();
 		
-		for (int i = 1; i < imageCount; i++) {
-            String fileName = postNo + "_" + i;
+		for (int i = 0; i < imageCount; i++) {
+            String fileName = postNo+ "_" +(i+1);
             MultipartFile downloadedImage = objectStorageService.downloadFile(bucketName, fileName);
-            System.out.println(downloadedImage.getOriginalFilename());
+            System.out.println("파일진짜이름인데 1_1 이런식으로나와야하지? : "+downloadedImage.getOriginalFilename());
             meetingPostImages.add(downloadedImage);
         }
 		
@@ -102,7 +102,7 @@ public class MeetingController {
 		int postNo = meetingService.addMeetingPost(meetingPost);
 		String appointedHikingMountain = meetingPost.getAppointedHikingMountain();
 		
-		mountainService.addMountainStatistics(appointedHikingMountain, 1);
+		//mountainService.addMountainStatistics(appointedHikingMountain, 1);
 		
 		chattingService.createChattingRoom(postNo);
 		
@@ -110,13 +110,14 @@ public class MeetingController {
 			
             List<MultipartFile> images = meetingPost.getMeetingPostImage();
             int imageCount = images.size();
+            System.out.println("imageCount : "+imageCount);
             
-            for (int i = 1; i < imageCount; i++) {
+            for (int i = 0; i < imageCount; i++) {
             	
                 MultipartFile image = images.get(i);
-                String fileName = postNo+ "_" +i;
+                String fileName = postNo+ "_" +(i+1);
                 
-                System.out.println(fileName);
+                System.out.println("fileName : "+fileName);
                 
                 objectStorageService.uploadFile(image, fileName);
             }
