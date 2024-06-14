@@ -26,6 +26,7 @@ import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.mountain.Weather;
+import site.dearmysanta.service.correctionpost.CorrectionPostService;
 import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.weather.WeatherService;
 
@@ -45,6 +46,10 @@ public class MountainRestController {
 	
 	@Autowired
 	WeatherService weatherService;
+	
+	@Autowired
+	CorrectionPostService correctionPostService;
+	
 	
 	
 	
@@ -85,15 +90,6 @@ public class MountainRestController {
 	}//나중에 서비스로 보내기
 	
 	
-	@PostMapping("rest/updateMountain")
-	public Mountain updateMountain(@RequestBody Mountain mountain) {
-		SantaLogger.makeLog("info", mountain.toString());
-		mountainService.updateMountain(mountain);
-		System.out.println(mountainService.getMountain(mountain.getMountainNo()));
-		return mountainService.getMountain(mountain.getMountainNo());
-	}//o
-	
-	
 	@PostMapping("rest/addMountainLike")
 	public int addMountainLike(@RequestBody Like like) {
 		SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like));
@@ -110,6 +106,17 @@ public class MountainRestController {
 		return mountainService.getTotalMountainLikeCount(like);
 	}//o
 	
+	@PostMapping("rest/updateMountain")
+	public Mountain updateMountain(@RequestBody Mountain mountain, @RequestParam int crpNo) {
+		SantaLogger.makeLog("info", mountain.toString());
+		mountainService.updateMountain(mountain);
+		
+		correctionPostService.updateCorrectionPostStatus(crpNo);
+		
+		System.out.println(mountainService.getMountain(mountain.getMountainNo()));
+		return mountainService.getMountain(mountain.getMountainNo());
+	}//o
+	
 	
 	@GetMapping("rest/getWeather")
 	public Weather getWeather(@RequestParam double lat, double lon) throws Exception {
@@ -123,7 +130,7 @@ public class MountainRestController {
 		//나중에 반환형도 지우기 
 		mountainService.deleteSearchKeyword(mountainSearch);
 		
-		return mountain
+		return mountainService.getSearchKeywordList(1);
 	}
 	
 	
