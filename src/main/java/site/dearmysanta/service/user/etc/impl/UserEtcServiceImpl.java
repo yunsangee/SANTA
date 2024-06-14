@@ -13,7 +13,7 @@ import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.user.etc.UserEtcDao;
 import site.dearmysanta.service.user.etc.UserEtcService;
 
-@Service("userEtcServiceImpl")
+@Service
 @Transactional
 
 	public class UserEtcServiceImpl implements UserEtcService {

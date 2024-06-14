@@ -52,7 +52,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.util.concurrent.TimeUnit;
 
 
-@Service("mountainServiceImpl")
+@Service
 @Transactional
 public class MountainServiceImpl implements MountainService {
 	
