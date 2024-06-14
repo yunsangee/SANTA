@@ -23,9 +23,8 @@ import site.dearmysanta.domain.common.Post;
 @ToString(callSuper=true)
 public class CertificationPost extends Post {
 
-    private  int certificationPostImage;
-      
-    //private int certificationPostNo;
+    private List<MultipartFile> certificationPostImage;
+    private int certificationPostImageCount;
   
     private String certificationPostMountainName;
     private int certificationPostHikingDifficulty;

@@ -25,6 +25,7 @@
         <result property="certificationPostDeletedFlag" column="cp_deleted_flag" jdbcType="NUMERIC"/>
         <result property="certificationPostHashtagContents" column="hashtag_content" jdbcType="VARCHAR"/>
         <result property="certificationPostLikeCount" column="cp_like_count" jdbcType="NUMERIC"/>
+        <result property="certificationPostImageCount" column="cp_image_count" jdbcType="NUMERIC"/>
         
     </resultMap>
 
@@ -54,9 +55,9 @@
             cp_no, user_no, cp_type, cp_title, cp_contents, cp_mountain_name, 
             cp_hiking_trail, cp_total_time, cp_ascent_time, cp_descent_time, 
             cp_hiking_date, cp_creation_date, cp_transportation, cp_difficulty,
-            cp_deleted_flag, cp_like_count
+            cp_deleted_flag, cp_like_count , cp_image_count
         ) VALUES (
-            seq_cp_no.currval,
+            seq_cp_no.currval, 
             #{userNo}, 
             0,
             #{title}, 
@@ -71,7 +72,8 @@
             #{certificationPostTransportation}, 
             #{certificationPostHikingDifficulty},
             0,
-            0
+            0,
+            #{certificationPostImageCount}
         )
     </insert>
     
@@ -237,23 +239,23 @@
             <when test="searchCondition == 1 and searchKeyword != ''">
                 nickname LIKE '%' || #{searchKeyword} || '%'
             </when>
-            <when test="searchCondition == 6 and searchKeyword != ''">
-                user_no = #{searchKeyword}
+            <when test="searchCondition == 2 and searchKeyword != ''">
+                cp_mountain_name = #{searchKeyword}
             </when>
             <!-- 다른 검색 조건 추가 가능 -->
         </choose>
     </where>
     <choose>
-        <when test="searchCondition == 4">
+        <when test="searchCondition == 3">
             ORDER BY NVL(cp_like_count,0) DESC
         </when>
-        <when test="searchCondition == 5">
+        <when test="searchCondition == 4">
             ORDER BY NVL(cp_like_count,0) ASC
         </when>
-        <when test="searchCondition == 2">
+        <when test="searchCondition == 5">
             ORDER BY cp_difficulty DESC
         </when>
-        <when test="searchCondition == 3">
+        <when test="searchCondition == 6">
             ORDER BY cp_difficulty ASC
         </when>
     </choose>

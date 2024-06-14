@@ -13,9 +13,6 @@ import site.dearmysanta.domain.certificationPost.CertificationPostComment;
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.common.Search;
 
-
-
-
 @Mapper
 @Component("CertificationPostDao")
 public interface CertificationPostDao {
@@ -33,6 +30,10 @@ public interface CertificationPostDao {
 	
 	public List<CertificationPost> getMyCertificationPostList(int usrNo) throws Exception;
 	
+	//postImage
+	public void addCertificationPostImage(CertificationPost certificationPost) throws Exception;
+	public void addCertificationPostImageCount(int postNo, int imageCount) throws Exception;
+
 	
 	//hashtag
 	public void addHashtag(CertificationPost certificationPost);

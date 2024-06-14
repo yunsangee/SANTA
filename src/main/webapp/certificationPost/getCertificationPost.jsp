@@ -20,7 +20,8 @@
         </c:otherwise>
     </c:choose>
     
- <p>Mountain Name: ${certificationPost.title}</p>
+    
+ <p>Mountain title: ${certificationPost.title}</p>
         <p>Mountain Name: ${certificationPost.certificationPostMountainName}</p>
         <p>Hiking Trail: ${certificationPost.certificationPostHikingTrail}</p>
         <p>Total Time: ${certificationPost.certificationPostTotalTime}</p>
@@ -41,6 +42,27 @@
     <p>Creation Date: ${comment.certificationPostCommentCreationDate}</p>
     <hr/>
 </c:forEach>
+
+<hr>
+
+ <h2>Post Images</h2>
+    <c:forEach var="image" items="${certificationPostImages}">
+        <img src="data:image/jpeg;base64,${image.bytes}" alt="Image" />
+      ÀÌ°Å  
+    </c:forEach>
+    
+
+
+
+<hr/>
+
+
+
+
+ <form action="/certificationPost/updateCertificationPost" method="get">
+        <input type="hidden" name="postNo" value="${certificationPost.postNo}"/>
+        <button type="submit">Update</button>
+    </form>
 
 </body>
 </html>

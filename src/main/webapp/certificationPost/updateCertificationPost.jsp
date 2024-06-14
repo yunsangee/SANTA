@@ -14,7 +14,8 @@
  <form action="/certificationPost/updateCertificationPost" method="post" enctype="multipart/form-data">
     <table>
         <tr>
-             <input type="hidden" id="postNo" name="postNo" value="45"/>
+             
+        <input type="hidden" id="postNo" name="postNo" value="${certificationPost.postNo}"/>
          </tr>
         <tr>
             <td>Title:</td>

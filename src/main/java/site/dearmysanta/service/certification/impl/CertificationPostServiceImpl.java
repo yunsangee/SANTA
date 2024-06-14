@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
@@ -13,9 +14,10 @@ import site.dearmysanta.domain.certificationPost.CertificationPost;
 import site.dearmysanta.domain.certificationPost.CertificationPostComment;
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.common.Search;
-import site.dearmysanta.domain.meeting.MeetingPostComment;
+import site.dearmysanta.domain.meeting.MeetingPost;
 import site.dearmysanta.service.certification.CertificationPostDao;
 import site.dearmysanta.service.certification.CertificationPostService;
+import site.dearmysanta.service.common.ObjectStorageService;
 
 @Service("CertificationPostServiceImpl")
 public class CertificationPostServiceImpl implements CertificationPostService {
@@ -24,10 +26,26 @@ public class CertificationPostServiceImpl implements CertificationPostService {
     @Qualifier("CertificationPostDao")
     private CertificationPostDao certificationPostDao;
     
+    @Value("${bucketName}")
+	private String bucketName;
+	
+	@Autowired
+    private ObjectStorageService objectStorageService;
+	
+	public CertificationPostServiceImpl() {
+		System.out.println(this.getClass());
+	}
+	
     
     //post
     @Override
     public void addCertificationPost(CertificationPost certificationPost) {
+    	 if (certificationPost.getCertificationPostImage() == null || certificationPost.getCertificationPostImage().isEmpty()) {
+    	        throw new IllegalArgumentException("이미지는 최소 한 개 이상 포함되어야 합니다.");
+    	    } else {
+    	        // 이미지의 개수를 설정
+    	        certificationPost.setCertificationPostImageCount(certificationPost.getCertificationPostImage().size());
+    	    }
         certificationPostDao.addCertificationPost(certificationPost);
         certificationPostDao.addHashtag(certificationPost);
     }
@@ -146,6 +164,14 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 	@Override
 	public int getTotalMountainCount(String certificationPostMountainName) throws Exception {
 		return certificationPostDao.getTotalMountainCount(certificationPostMountainName);
+	}
+
+
+	@Override
+	public CertificationPost getCertificationPost(int postNo) throws Exception {
+		CertificationPost certificationPost = certificationPostDao.getCertificationPost(postNo);
+		
+		return certificationPost;
 	}
 
 

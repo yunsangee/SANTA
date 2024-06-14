@@ -10,6 +10,7 @@ import site.dearmysanta.domain.certificationPost.CertificationPostComment;
 
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.common.Search;
+import site.dearmysanta.domain.meeting.MeetingPost;
 
 public interface CertificationPostService {
 
@@ -17,6 +18,8 @@ public interface CertificationPostService {
 	public void addCertificationPost(CertificationPost certificationPost) throws Exception;
 	
 	public Map<String, Object> getCertificationPost(int postNo, int userNo) throws Exception;
+	
+	public CertificationPost getCertificationPost(int postNo) throws Exception;
 	
 	public void updateCertificationPost(CertificationPost certificationPost) throws Exception;
 	
