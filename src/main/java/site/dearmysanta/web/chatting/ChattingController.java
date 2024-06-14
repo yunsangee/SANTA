@@ -30,13 +30,13 @@ public class ChattingController {
     public String getChatRoomList(@RequestParam int userNo, Model model) throws Exception {
         List<MeetingPost> chattingRooms = meetingService.getChattingRoomList(userNo);
         model.addAttribute("chattingRooms", chattingRooms);
-        return "forward:/chatting/chattingRoom.jsp";
+        return "forward:/chatting/listChattingRoom.jsp";
     }
 	
 	@GetMapping(value = "getChattingRoom")
     public String getChatRoom(@RequestParam int roomNo, Model model) throws Exception {
         model.addAttribute("roomNo", roomNo);
-        return "forward:/chatting/chatting.jsp";
+        return "forward:/chatting/chattingRoom.jsp";
     }
 
 }

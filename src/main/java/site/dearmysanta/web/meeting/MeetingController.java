@@ -44,7 +44,7 @@ public class MeetingController {
 	private ObjectStorageService objectStorageService;
 	
 	@Autowired
-	@Qualifier("mountainService")
+	@Qualifier("mountainServiceImpl")
 	private MountainService mountainService;
 	
 	@Autowired
