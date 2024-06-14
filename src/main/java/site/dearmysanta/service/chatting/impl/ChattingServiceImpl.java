@@ -18,8 +18,8 @@ import site.dearmysanta.service.chatting.ChattingDAO;
 
 public class ChattingServiceImpl {
 	
-	@Value("${nodejsServerUrl}")
-	private String nodeJsServerUrl;
+//	@Value("${nodejsServerUrl}")
+//	private String nodeJsServerUrl;
 	
 	@Autowired
 	@Qualifier("chattingDAO")
@@ -31,7 +31,7 @@ public class ChattingServiceImpl {
 	
 	public void createChattingRoom(int roomNo) {
 		RestTemplate restTemplate = new RestTemplate();
-        String url = nodeJsServerUrl + "/createChatRoom";
+//        String url = nodeJsServerUrl + "/createChattingRoom";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -39,12 +39,12 @@ public class ChattingServiceImpl {
         String requestJson = "{\"roomNo\":\"" + roomNo + "\"}";
         HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
 
-        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
-        if (response.getStatusCode().is2xxSuccessful()) {
+//        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+//        if (response.getStatusCode().is2xxSuccessful()) {
             System.out.println("Chat room created successfully.");
-        } else {
+//        } else {
             System.out.println("Failed to create chat room.");
         }
-	}
+//	}
 
 }
