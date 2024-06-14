@@ -533,4 +533,16 @@
         	user_no = #{userNo} AND mp_certified_flag = 0 AND recruitment_status = 2
 	</select>
 	
+	<select id="getChattingRoomList" parameterType="int" resultMap="meetingPostSelectMap">
+    	SELECT
+    		mp.mp_no, mp.meeting_name
+		FROM
+			meeting_post mp
+		JOIN
+			meeting_participation mpp ON mp.mp_no = mpp.mp_no
+		WHERE
+			mpp.user_no = ${userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 and mp.mp_certified_flag = 0;
+	</select>
+	
+	
 </mapper>
