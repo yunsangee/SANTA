@@ -93,4 +93,6 @@ import site.dearmysanta.domain.user.User;
 
 		public User getUserByUserId(String userId) throws Exception;
 		
+		public String getUserPassword(String userPassword) throws Exception;
+		
 }

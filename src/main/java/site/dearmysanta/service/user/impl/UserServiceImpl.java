@@ -275,6 +275,12 @@ import site.dearmysanta.service.user.UserService;
 		return userDao.getUserByUserId(userId);
 	}
 
+	@Override
+	public String getUserPassword(String userPassword) throws Exception {
+		// TODO Auto-generated method stub
+		return userDao.getUserPassword(userPassword);
+	}
+
 	
 	
 }

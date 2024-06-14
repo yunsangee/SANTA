@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,6 +65,10 @@
             
             <button type="submit" class="btn btn-primary">Submit</button>
             <button type="button" onclick="history.back()">뒤로</button>
+            
+  <c:set var="clickedDate" value="${param.date}" />
+<input type="hidden" name="stringDate" value="${clickedDate}">
+
         </form>
     </div>
 </body>

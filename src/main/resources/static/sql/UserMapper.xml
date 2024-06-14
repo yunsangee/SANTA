@@ -190,6 +190,15 @@
         WHERE 
         	user_id = #{userId}
     </select>
+    
+    <select id="getUserPassword" parameterType="Map" resultType="String">
+        SELECT 
+        	password 
+        FROM 
+        	users 
+        WHERE 
+        	user_id = #{userId} 
+    </select>
 
 <!-- <select id="login" parameterType="map" resultMap="userSelectMap">
     SELECT 

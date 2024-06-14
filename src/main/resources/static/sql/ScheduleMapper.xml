@@ -24,7 +24,7 @@
 	    INSERT 
 	    INTO schedule (schedule_no, schedule_content, schedule_date, schedule_title, schedule_mountain_name, schedule_total_time, schedule_descent_time, schedule_ascent_time,
 	    							schedule_difficulty, schedule_transportation, user_no)
-	    VALUES (seq_qna_no.NEXTVAL, #{contents}, SYSDATE, #{title}, #{mountainName}, #{hikingTotalTime}, #{hikingDescentTime}, #{hikingAscentTime},
+	    VALUES (seq_qna_no.NEXTVAL, #{contents}, #{scheduleDate}, #{title}, #{mountainName}, #{hikingTotalTime}, #{hikingDescentTime}, #{hikingAscentTime},
 	    				#{hikingDifficulty}, #{Transportation}, #{userNo})
 	</insert>
 	

@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.alarmMessage.AlarmMessage;
 import site.dearmysanta.domain.common.Search;
@@ -424,7 +426,7 @@ public class UserController {
 		    System.out.println("deleteUser : " + dbUser2);
 
 		    // 탈퇴 성공 후 메인 페이지로 리다이렉트
-		    return "redirect:/user/main.jsp";
+		    return "forward:/user/main.jsp";
 		}
 		
 		//
@@ -709,7 +711,7 @@ public class UserController {
 		public String addSchedule(@ModelAttribute Schedule schedule, Model model, HttpSession session) throws Exception {
 		    
 			System.out.println("addSchedule : POST");
-
+			schedule.setScheduleDate(schedule.getStringDate());
 		    // 세션에서 현재 로그인한 사용자 정보 가져오기
 		    User sessionUser = (User) session.getAttribute("user");
 
@@ -724,12 +726,18 @@ public class UserController {
 
 		    // SCHEDULE 추가
 		    userService.addSchedule(schedule);
+		    Search search = new Search();
+		    List<Schedule> scheduleList = userService.getScheduleList(search);
+		    ObjectMapper objectMapper = new ObjectMapper();
+		    List<String> scheduleJson = new ArrayList<>();
+		    for(Schedule sd : scheduleList) {
+		    	  scheduleJson.add(objectMapper.writeValueAsString(sd));
+		    }
 		    
-		    session.setAttribute("schedule", schedule);
-		    
-		    System.out.println("addSchedule : " + schedule);
+		    // 모델에 스케줄 목록 추가
+		    model.addAttribute("scheduleList", scheduleJson);
 
-		    return "forward:/user/getSchedule.jsp";
+		    return "forward:/user/month-view.jsp";
 		}
 		
 		@GetMapping(value = "getSchedule")
@@ -802,6 +810,9 @@ public class UserController {
 		    // Schedule 정보 조회
 		    Schedule dbschedule = userService.getSchedule(schedule.getPostNo(), schedule.getUserNo());
 		    
+		 // SCHEDULE 객체에 사용자 정보 설정
+		    schedule.setUserNo(sessionUser.getUserNo());
+		    
 		    // 업데이트
 		    dbschedule.setTitle(schedule.getTitle());
 		    dbschedule.setMountainName(schedule.getMountainName());
@@ -811,7 +822,7 @@ public class UserController {
 		    dbschedule.setHikingDifficulty(schedule.getHikingDifficulty());
 		    dbschedule.setTransportation(schedule.getTransportation());
 
-		    // QNA 업데이트
+		    // Schedule 업데이트
 		    userService.updateSchedule(dbschedule);
 		    
 		    model.addAttribute("schedule", dbschedule);
@@ -829,28 +840,66 @@ public class UserController {
 		//
 		//
 		
+//		@GetMapping(value="getScheduleList")
+//		public String getSchedulList(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
+//			
+//			System.out.println("getScheduleList : GET");
+//			
+//			if(search != null & search.getCurrentPage() == 0) {
+//				search.setCurrentPage(1);
+//			}
+//
+////			search.setPageSize(pageSize);
+////			search.setPageUnit(pageUnit);
+//		    
+//		    // 세션에서 로그인한 사용자 정보 가져오기
+//		    User user = (User) session.getAttribute("user");
+//			
+//			List<Schedule> scheduleList = userService.getScheduleList(search);
+//			
+//			System.out.println("scheduleList : " + scheduleList);		
+//			
+//			model.addAttribute("schedule", scheduleList);
+//			
+//			return "forward:/user/month-view.jsp";
+//		}
+		
 		@GetMapping(value="getScheduleList")
-		public String getSchedulList(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
-			
-			System.out.println("getScheduleList : GET");
-			
-			if(search != null & search.getCurrentPage() == 0) {
-				search.setCurrentPage(1);
-			}
-
-//			search.setPageSize(pageSize);
-//			search.setPageUnit(pageUnit);
+		public String getScheduleList(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
 		    
+		    System.out.println("getScheduleList : GET");
+		    
+		    // search 초기화
+		    if (search != null && search.getCurrentPage() == 0) {
+		        search.setCurrentPage(1);
+		    }
+
 		    // 세션에서 로그인한 사용자 정보 가져오기
 		    User user = (User) session.getAttribute("user");
-			
-			List<Schedule> scheduleList = userService.getScheduleList(search);
-			
-			System.out.println("scheduleList : " + scheduleList);		
-			
-			model.addAttribute("schedule", scheduleList);
-			
-			return "forward:/user/getSchedulList.jsp";
+		    
+		    if (user == null) {
+		        model.addAttribute("error", "로그인이 필요합니다.");
+		        return "redirect:/user/login.jsp";
+		    }
+
+		    // userService를 통해 스케줄 목록 가져오기
+		    List<Schedule> scheduleList = userService.getScheduleList(search);
+		    
+		    System.out.println("scheduleList : " + scheduleList);
+		    
+		    // Schedule 객체를 JSON 형식으로 변환하여 모델에 추가
+		    ObjectMapper objectMapper = new ObjectMapper();
+		    List<String> scheduleJson = new ArrayList<>();
+		    for(Schedule schedule : scheduleList) {
+		    	  scheduleJson.add(objectMapper.writeValueAsString(schedule));
+		    }
+		    
+		    // 모델에 스케줄 목록 추가
+		    model.addAttribute("scheduleList", scheduleJson);
+		    
+		    return "forward:/user/month-view.jsp";
 		}
+
+
 		
 }
