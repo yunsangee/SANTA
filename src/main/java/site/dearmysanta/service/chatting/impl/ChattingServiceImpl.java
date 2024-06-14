@@ -13,13 +13,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import site.dearmysanta.service.chatting.ChattingDAO;
+import site.dearmysanta.service.chatting.ChattingService;
 
 @Service("chattingService")
-
-public class ChattingServiceImpl {
+public class ChattingServiceImpl implements ChattingService {
 	
-	@Value("${nodejsServerUrl}")
-	private String nodeJsServerUrl;
+//	@Value("${nodejsServerUrl}")
+//	private String nodeJsServerUrl;
+	private String nodeJsServerUrl = "http://localhost:3000";
 	
 	@Autowired
 	@Qualifier("chattingDAO")
@@ -31,7 +32,7 @@ public class ChattingServiceImpl {
 	
 	public void createChattingRoom(int roomNo) {
 		RestTemplate restTemplate = new RestTemplate();
-        String url = nodeJsServerUrl + "/createChatRoom";
+        String url = nodeJsServerUrl + "/createChattingRoom";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
