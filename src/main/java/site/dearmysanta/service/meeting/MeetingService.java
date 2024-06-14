@@ -27,7 +27,7 @@ public interface MeetingService {
 	
 	public MeetingPost getMeetingPost(int postNo) throws Exception;
 	
-	public Map<String, Object> getMeetingPostListByListSearchCondition(MeetingPostSearch meetingPostSearch) throws Exception;
+	public Map<String, Object> getMeetingPostList(MeetingPostSearch meetingPostSearch, int userNo) throws Exception;
 	
 	public MeetingParticipation getMeetingParticipation(int participationNo) throws Exception;
 	
@@ -64,5 +64,7 @@ public interface MeetingService {
 	public int getMountainTotalCount(String appointedHikingMountain) throws Exception;
 	
 	public List<MeetingPost> getUnCertifiedMeetingPost(int userNo) throws Exception;
+	
+	public List<MeetingPost> getChattingRoomList(int userNo) throws Exception;
 
 }
