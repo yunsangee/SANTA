@@ -23,6 +23,7 @@ public class CoordinateConverter {
             yo = 675 / grid; // 기준점 Y좌표
             first = false;
         }
+        
     }
 
     public static class LambertProjection {
