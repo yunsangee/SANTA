@@ -1,11 +1,11 @@
 package site.dearmysanta.common;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class SantaLogger {
-	private static final Logger logger = LoggerFactory.getLogger(SantaLogger.class);
+	private static final Logger logger = LogManager.getLogger(SantaLogger.class);
 	
 	
 	public SantaLogger() {
