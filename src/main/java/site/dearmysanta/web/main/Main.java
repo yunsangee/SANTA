@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +27,8 @@ public class Main {
 	@Autowired
 	private MountainService mountainService;
 	
-
+	@Autowired 
+	WeatherService weatherService;
 	
 	@Autowired
 	private MeetingService meetingService;
@@ -43,26 +45,39 @@ public class Main {
 	@Value("${pageUnit}")
 	private int pageUnit;
 	
+	
+	@GetMapping(value="getMountain")
+	public String getMountain(@RequestParam int mountainNo, double lat, double lon,Model model) { // 나중에 위도 경도는 현재 위치로 들어와야할듯? 
+		mountainService.updateMountainViewCount(mountainNo);
+		
+		SantaLogger.makeLog("info", mountainService.getMountain(mountainNo).getMountainImage());
+		model.addAttribute("mountain", mountainService.getMountain(mountainNo));
+		model.addAttribute("weatherList", weatherService.getWeatherList(lat, lon));
+		
+		
+		
+		return "forward:/mountain/getMountain.jsp";
+	}//o
 //	@GetMapping("/")
 //	public String mainTemp() {
 //		return "forward:/mountain/mainTemp.jsp";
 //	}
-	
-	@GetMapping("/")
-	public String getStatistics(Model model) throws JsonProcessingException {
-
-		LocalDate today = LocalDate.now().minusDays(6);
-
-        // 날짜를 "YYYY-MM-DD" 형식으로 포맷
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedDate = today.format(formatter);
-        ObjectMapper objectMapper = new ObjectMapper();
-        SantaLogger.makeLog("info", mountainService.getStatisticsDaily(formattedDate).toString());
-        SantaLogger.makeLog("info", mountainService.getStatisticsWeekly().toString());
-		model.addAttribute("dailyStats", objectMapper.writeValueAsString(mountainService.getStatisticsDaily(formattedDate)));
-		model.addAttribute("weeklyStats", objectMapper.writeValueAsString(mountainService.getStatisticsWeekly()));
-
-		return "forward:/mountain/getStatistics.jsp";
-	}
+//	
+//	@GetMapping("/")
+//	public String getStatistics(Model model) throws JsonProcessingException {
+//
+//		LocalDate today = LocalDate.now().minusDays(6);
+//
+//        // 날짜를 "YYYY-MM-DD" 형식으로 포맷
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//        String formattedDate = today.format(formatter);
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        SantaLogger.makeLog("info", mountainService.getStatisticsDaily(formattedDate).toString());
+//        SantaLogger.makeLog("info", mountainService.getStatisticsWeekly().toString());
+//		model.addAttribute("dailyStats", objectMapper.writeValueAsString(mountainService.getStatisticsDaily(formattedDate)));
+//		model.addAttribute("weeklyStats", objectMapper.writeValueAsString(mountainService.getStatisticsWeekly()));
+//
+//		return "forward:/mountain/getStatistics.jsp";
+//	}
 	
 }
