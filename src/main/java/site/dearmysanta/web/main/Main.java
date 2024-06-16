@@ -37,31 +37,32 @@ public class Main {
 	@Value("${pageUnit}")
 	private int pageUnit;
 	
-	@GetMapping("/")
-	public String mainTemp() {
-		return "forward:/mountain/mainTemp.jsp";
-	}
+//	@GetMapping("/")
+//	public String mainTemp() {
+//		return "forward:/mountain/mainTemp.jsp";
+//	}
 	
-//	public String mainController(Model model) throws Exception {
-//		
-//		Search search = new Search();// 나중에 이거 없게 바꿔야지 
-//		
-//		search.setCurrentPage(1);
-//		search.setPageSize(pageSize);
-//		search.setPageUnit(pageUnit);
-//		
-//		
-//		search.setSearchKeyword("");
-//		
-//		
-//		model.addAttribute("popularMountains", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
+	@GetMapping("/")
+	public String mainController(Model model) throws Exception {
+		
+		Search search = new Search();// 나중에 이거 없게 바꿔야지 
+		
+		search.setCurrentPage(1);
+		search.setPageSize(pageSize);
+		search.setPageUnit(pageUnit);
+		
+		
+		search.setSearchKeyword("");
+		
+		
+		model.addAttribute("popularMountains", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
 //		model.addAttribute("customMountains", mountainService.getCustomMountainList(mountainService.getStatisticsList(1,0), userService.getUser(1)));
 //		model.addAttribute("meetingPost", meetingService.getMeetingPost(1));
 //		
 //		SantaLogger.makeLog("info","cp::" +  certificationPostService.getCertificationPostList(search));
 //		model.addAttribute("certificationPosts", certificationPostService.getCertificationPostList(search).get("list"));
-//		return "forward:/mountain/main.jsp";
-////		return "redirect:/mountain/mapMountain.jsp";
-//	}
+		return "forward:/mountain/main.jsp";
+//		return "redirect:/mountain/mapMountain.jsp";
+	}
 	
 }
