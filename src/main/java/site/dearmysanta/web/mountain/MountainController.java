@@ -140,7 +140,7 @@ public class MountainController {
 		for (Mountain mt: list) {
 			SantaLogger.makeLog("info", mt.toString());
 			
-			jsonList.add(mt.toString());
+			jsonList.add(objectMapper.writeValueAsString(mt.toString()));
 		}
 
 		return "forward:/mountain/mapMountain.jsp";
