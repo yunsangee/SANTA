@@ -46,22 +46,22 @@ public class Main {
 	private int pageUnit;
 	
 	
-	@GetMapping(value="/")
-	public String getMountain(@RequestParam int mountainNo, double lat, double lon,Model model) { // 나중에 위도 경도는 현재 위치로 들어와야할듯? 
-		mountainService.updateMountainViewCount(mountainNo);
-		
-		SantaLogger.makeLog("info", mountainService.getMountain(mountainNo).getMountainImage());
-		model.addAttribute("mountain", mountainService.getMountain(mountainNo));
-		model.addAttribute("weatherList", weatherService.getWeatherList(lat, lon));
-		
-		
-		
-		return "forward:/mountain/getMountain.jsp";
-	}//o
-//	@GetMapping("/")
-//	public String mainTemp() {
-//		return "forward:/mountain/mainTemp.jsp";
-//	}
+//	@GetMapping(value="/")
+//	public String getMountain(@RequestParam int mountainNo, double lat, double lon,Model model) { // 나중에 위도 경도는 현재 위치로 들어와야할듯? 
+//		mountainService.updateMountainViewCount(mountainNo);
+//		
+//		SantaLogger.makeLog("info", mountainService.getMountain(mountainNo).getMountainImage());
+//		model.addAttribute("mountain", mountainService.getMountain(mountainNo));
+//		model.addAttribute("weatherList", weatherService.getWeatherList(lat, lon));
+//		
+//		
+//		
+//		return "forward:/mountain/getMountain.jsp";
+//	}//o
+	@GetMapping("/")
+	public String mainTemp() {
+		return "forward:/mountain/mainTemp.jsp";
+	}
 //	
 //	@GetMapping("/")
 //	public String getStatistics(Model model) throws JsonProcessingException {
