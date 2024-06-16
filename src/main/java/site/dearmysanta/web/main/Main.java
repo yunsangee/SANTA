@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.common.Search;
@@ -55,7 +56,7 @@ public class Main {
         // 날짜를 "YYYY-MM-DD" 형식으로 포맷
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = today.format(formatter);
-
+        ObjectMapper objectMapper = new ObjectMapper();
         SantaLogger.makeLog("info", mountainService.getStatisticsDaily(formattedDate).toString());
         SantaLogger.makeLog("info", mountainService.getStatisticsWeekly().toString());
 		model.addAttribute("dailyStats", objectMapper.writeValueAsString(mountainService.getStatisticsDaily(formattedDate)));

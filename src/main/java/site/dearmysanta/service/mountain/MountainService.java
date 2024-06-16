@@ -27,6 +27,7 @@ public interface MountainService {
 	public Mountain getMountain(int mountainNo);
 	
 	public int checkMountainExist(int mountainNo);
+	public int isMountain(String mountainName);
 	
 	public List<Mountain> getMountainListByCoord(double lat, double lon) throws IOException;
 	
@@ -40,7 +41,7 @@ public interface MountainService {
 	
 	public List<Mountain> getPopularMountainList(List<String> mountainNames,Search search) throws Exception;
 	
-	public List<Mountain> getCustomMountainList(List<Statistics> statistics,User user);
+	public List<Mountain> getCustomMountainList(List<String> statistics,User user);
 	
 	
 	
@@ -75,7 +76,9 @@ public interface MountainService {
 	
 	public int checkStatisticsMountainColumnExist(String mountainName);
 	
-	public List<Statistics> getStatisticsList(int which,int type);
+	public List<Statistics> getStatisticsWeekly();
+
+	public List<Statistics> getStatisticsDaily(String date);
 	
 	public List<String> getStatisticsMountainNameList(int which);
 	
