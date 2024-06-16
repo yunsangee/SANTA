@@ -46,7 +46,7 @@ public class Main {
 	private int pageUnit;
 	
 	
-	@GetMapping(value="getMountain")
+	@GetMapping(value="/")
 	public String getMountain(@RequestParam int mountainNo, double lat, double lon,Model model) { // 나중에 위도 경도는 현재 위치로 들어와야할듯? 
 		mountainService.updateMountainViewCount(mountainNo);
 		
