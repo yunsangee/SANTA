@@ -129,14 +129,22 @@ public class MeetingServiceImpl implements MeetingService {
 		return meetingPost;
 	}
 	
-	public Map<String, Object> getMeetingPostList(MeetingPostSearch meetingPostSearch, int userNo) throws Exception {
+	public Map<String, Object> getMeetingPostList(MeetingPostSearch meetingPostSearch) throws Exception {
 		
-		List<MeetingPost> meetingPosts = meetingDAO.getMeetingPostList(meetingPostSearch, userNo);
+		System.out.println("Inside meetingService.getMeetingPostList");
+	    System.out.println("meetingPostSearch: " + meetingPostSearch);
+		
+		List<MeetingPost> meetingPosts = meetingDAO.getMeetingPostList(meetingPostSearch);
 		int meetingPostTotalCount = meetingDAO.getMeetingPostTotalCount(meetingPostSearch);
+		
+		System.out.println("list: " + meetingPosts);
+	    System.out.println("totalCount: " + meetingPostTotalCount);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("meetingPosts", meetingPosts);
 		map.put("meetingPostTotalCount", meetingPostTotalCount);
+		
+		System.out.println("map: " + map);
 		
 		return map;
 	}

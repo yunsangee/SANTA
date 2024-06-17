@@ -106,11 +106,11 @@
 	 -->
 
 	<select id="getMeetingPost" parameterType="int" resultMap="meetingPostSelectMap">
-    	SELECT 
-        	u.user_no, u.nickname, u.profile_image, mp.mp_no, mp.mp_title, mp.mp_contents, mp.mp_creation_date,
-        	mp.meeting_name, mp.recruitment_deadline, mp.appointed_departure, mp.appointed_hiking_mountain,
-        	mp.appointed_hiking_date, mp.participation_age, mp.maximum_personnel, mp.participation_grade,
-        	mp.participation_gender, mp.recruitment_status, mp.mp_deleted_flag, mp.mp_certified_flag
+    	SELECT
+        	u.user_no, u.nickname, u.profile_image, mp.mp_no, mp.mp_title, mp.mp_contents, mp.mp_image_count, 
+        	mp.mp_creation_date,mp.meeting_name, mp.recruitment_deadline, mp.appointed_departure, 
+        	mp.appointed_hiking_mountain, mp.appointed_hiking_date, mp.participation_age, mp.maximum_personnel, 
+        	mp.participation_grade, mp.participation_gender, mp.recruitment_status, mp.mp_deleted_flag, mp.mp_certified_flag
     	FROM
         	meeting_post mp
     	JOIN
@@ -123,218 +123,237 @@
         	mp.mp_no = #{postNo}
 	</select>
 	
-	<select id="getMeetingPostList" parameterType="map" resultType="site.dearmysanta.domain.meeting.MeetingPost">
-        SELECT *
-        FROM (SELECT inner_table.*, ROWNUM AS row_seq 
-        		FROM (SELECT mp.mp_title, mp.recruitment_status, mp.mp_creation_date, u.nickname, u.profile_image
-						FROM meeting_post mp
-       					<choose>
-       						<when test="meetingPostListSearchCondition == 0">
-       							JOIN users u ON mp.user_no = u.user_no
-	       						<where>
-	       							<choose>
-	       								<when test="searchCondition == 0 and searchKeyword != '' ">
-	       									mp.mp_title LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 1 and searchKeyword != '' ">
-	       									mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 2 and searchKeyword != '' ">
-	       									u.nickname LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       							</choose>
-	       						</where>
-       						</when>
-       						<when test="meetingPostListSearchCondition == 1">
-	       						JOIN users u ON mp.user_no = u.user_no
-	       						<where>
-	       							<choose>
-	       								<when test="searchCondition == 0 and searchKeyword != '' ">
-	       									mp.user_no = #{userNo} AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 1 and searchKeyword != '' ">
-	       									mp.user_no = #{userNo} AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 2 and searchKeyword != '' ">
-	       									mp.user_no = #{userNo} AND u.nickname LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<otherwise>
-	       									mp.user_no = #{userNo}
-	       								</otherwise>
-	       							</choose>
-	       						</where>
-       						</when>
-       						<when test="meetingPostListSearchCondition == 2">
-	       						JOIN users u ON mp.user_no = u.user_no
-								JOIN meeting_participation mpp ON mp.mp_no = mpp.mp_no
-	       						<where>
-	       							<choose>
-	       								<when test="searchCondition == 0 and searchKeyword != '' ">
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 1 and searchKeyword != '' ">
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 2 and searchKeyword != '' ">
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND u.nickname LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<otherwise>
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0
-	       								</otherwise>
-	       							</choose>
-	       						</where>
-       						</when>
-       						<when test="meetingPostListSearchCondition == 3">
-	       						JOIN users u ON mp.user_no = u.user_no
-								JOIN meeting_participation mpp ON mp.mp_no = mpp.mp_no
-	       						<where>
-	       							<choose>
-	       								<when test="searchCondition == 0 and searchKeyword != '' ">
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 1 and searchKeyword != '' ">
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 2 and searchKeyword != '' ">
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<otherwise>
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2
-	       								</otherwise>
-	       							</choose>
-	       						</where>
-       						</when>
-       						<when test="meetingPostListSearchCondition == 4">
-	       						JOIN users u ON mp.user_no = u.user_no
-								JOIN likes l ON mp.mp_no = l.post_no
-	       						<where>
-	       							<choose>
-	       								<when test="searchCondition == 0 and searchKeyword != '' ">
-	       									l.user_no = #{userNo} AND l.post_type = 1 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 1 and searchKeyword != '' ">
-	       									l.user_no = #{userNo} AND l.post_type = 1 AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 2 and searchKeyword != '' ">
-	       									l.user_no = #{userNo} AND l.post_type = 1 AND u.nickname LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<otherwise>
-	       									l.user_no = #{userNo} AND l.post_type = 1
-	       								</otherwise>
-	       							</choose>
-	       						</where>
-       						</when>
-       					</choose>
-        				ORDER BY mp.mp_no) inner_table
-        		WHERE ROWNUM &lt;= #{endRowNum} )
-        WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 	
-    </select>
-	
-	
+	<select id="getMeetingPostList" parameterType="site.dearmysanta.domain.meeting.MeetingPostSearch" resultMap="meetingPostSelectMap">
+    SELECT *
+    FROM (
+        SELECT inner_table.*, ROWNUM AS row_seq 
+        FROM (
+            SELECT mp.mp_no, mp.mp_title, mp.recruitment_status, mp.mp_creation_date, u.nickname, u.profile_image
+            FROM meeting_post mp
+            JOIN users u ON mp.user_no = u.user_no
+            <if test="meetingPostListSearchCondition != null">
+                <choose>
+                    <when test="meetingPostListSearchCondition == 0">
+                        <if test="searchCondition != null">
+                            <where>
+                                <choose>
+                                    <when test="searchCondition == 0 and searchKeyword != '' and searchKeyword != null">
+                                        mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+                                    </when>
+                                    <when test="searchCondition == 1 and searchKeyword != '' and searchKeyword != null">
+                                        mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+                                    </when>
+                                    <when test="searchCondition == 2 and searchKeyword != '' and searchKeyword != null">
+                                        u.nickname LIKE '%'||#{searchKeyword}||'%'
+                                    </when>
+                                </choose>
+                            </where>
+                        </if>
+                    </when>
+                    <when test="meetingPostListSearchCondition == 1">
+                        <if test="searchCondition != null">
+                            <where>
+                                <choose>
+                                    <when test="searchCondition == 0 and searchKeyword != '' and searchKeyword != null">
+                                        mp.user_no = #{userNo} AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+                                    </when>
+                                    <when test="searchCondition == 1 and searchKeyword != '' and searchKeyword != null">
+                                        mp.user_no = #{userNo} AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+                                    </when>
+                                    <when test="searchCondition == 2 and searchKeyword != '' and searchKeyword != null">
+                                        mp.user_no = #{userNo} AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+                                    </when>
+                                    <otherwise>
+                                        mp.user_no = #{userNo}
+                                    </otherwise>
+                                </choose>
+                            </where>
+                        </if>
+                    </when>
+                    <when test="meetingPostListSearchCondition == 2">
+                        JOIN meeting_participation mpp ON mp.mp_no = mpp.mp_no
+                        <if test="searchCondition != null">
+                            <where>
+                                <choose>
+                                    <when test="searchCondition == 0 and searchKeyword != '' and searchKeyword != null">
+                                        mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+                                    </when>
+                                    <when test="searchCondition == 1 and searchKeyword != '' and searchKeyword != null">
+                                        mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+                                    </when>
+                                    <when test="searchCondition == 2 and searchKeyword != '' and searchKeyword != null">
+                                        mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+                                    </when>
+                                    <otherwise>
+                                        mpp.user_no = #{userNo} AND mpp.participation_status = 0
+                                    </otherwise>
+                                </choose>
+                            </where>
+                        </if>
+                    </when>
+                    <when test="meetingPostListSearchCondition == 3">
+                        JOIN meeting_participation mpp ON mp.mp_no = mpp.mp_no
+                        <if test="searchCondition != null">
+                            <where>
+                                <choose>
+                                    <when test="searchCondition == 0 and searchKeyword != '' and searchKeyword != null">
+                                        mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+                                    </when>
+                                    <when test="searchCondition == 1 and searchKeyword != '' and searchKeyword != null">
+                                        mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+                                    </when>
+                                    <when test="searchCondition == 2 and searchKeyword != '' and searchKeyword != null">
+                                        mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+                                    </when>
+                                    <otherwise>
+                                        mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2
+                                    </otherwise>
+                                </choose>
+                            </where>
+                        </if>
+                    </when>
+                    <when test="meetingPostListSearchCondition == 4">
+                        JOIN likes l ON mp.mp_no = l.post_no
+                        <if test="searchCondition != null">
+                            <where>
+                                <choose>
+                                    <when test="searchCondition == 0 and searchKeyword != '' and searchKeyword != null">
+                                        l.user_no = #{userNo} AND l.post_type = 1 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+                                    </when>
+                                    <when test="searchCondition == 1 and searchKeyword != '' and searchKeyword != null">
+                                        l.user_no = #{userNo} AND l.post_type = 1 AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+                                    </when>
+                                    <when test="searchCondition == 2 and searchKeyword != '' and searchKeyword != null">
+                                        l.user_no = #{userNo} AND l.post_type = 1 AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+                                    </when>
+                                    <otherwise>
+                                        l.user_no = #{userNo} AND l.post_type = 1
+                                    </otherwise>
+                                </choose>
+                            </where>
+                        </if>
+                    </when>
+                </choose>
+            </if>
+            ORDER BY mp.mp_no
+        ) inner_table
+        WHERE ROWNUM &lt;= #{endRowNum}
+    )
+    WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum}    
+	</select>
 	
 	<select id="getMeetingPostTotalCount" parameterType="site.dearmysanta.domain.meeting.MeetingPostSearch" resultType="int">
-        SELECT COUNT(*)
-        FROM (SELECT mp.mp_title, mp.recruitment_status, mp.mp_creation_date, u.nickname, u.profile_image
-						FROM meeting_post mp
-       					<choose>
-       						<when test="meetingPostListSearchCondition == 0">
-       							JOIN users u ON mp.user_no = u.user_no
-	       						<where>
-	       							<choose>
-	       								<when test="searchCondition == 0 and searchKeyword != '' ">
-	       									mp.mp_title LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 1 and searchKeyword != '' ">
-	       									mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 2 and searchKeyword != '' ">
-	       									u.nickname LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       							</choose>
-	       						</where>
-       						</when>
-       						<when test="meetingPostListSearchCondition == 1">
-	       						JOIN users u ON mp.user_no = u.user_no
-	       						<where>
-	       							<choose>
-	       								<when test="searchCondition == 0 and searchKeyword != '' ">
-	       									mp.user_no = #{userNo} AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 1 and searchKeyword != '' ">
-	       									mp.user_no = #{userNo} AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 2 and searchKeyword != '' ">
-	       									mp.user_no = #{userNo} AND u.nickname LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<otherwise>
-	       									mp.user_no = #{userNo}
-	       								</otherwise>
-	       							</choose>
-	       						</where>
-       						</when>
-       						<when test="meetingPostListSearchCondition == 2">
-	       						JOIN users u ON mp.user_no = u.user_no
-								JOIN meeting_participation mpp ON mp.mp_no = mpp.mp_no
-	       						<where>
-	       							<choose>
-	       								<when test="searchCondition == 0 and searchKeyword != '' ">
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 1 and searchKeyword != '' ">
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 2 and searchKeyword != '' ">
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND u.nickname LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<otherwise>
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0
-	       								</otherwise>
-	       							</choose>
-	       						</where>
-       						</when>
-       						<when test="meetingPostListSearchCondition == 3">
-	       						JOIN users u ON mp.user_no = u.user_no
-								JOIN meeting_participation mpp ON mp.mp_no = mpp.mp_no
-	       						<where>
-	       							<choose>
-	       								<when test="searchCondition == 0 and searchKeyword != '' ">
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 1 and searchKeyword != '' ">
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 2 and searchKeyword != '' ">
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<otherwise>
-	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2
-	       								</otherwise>
-	       							</choose>
-	       						</where>
-       						</when>
-       						<when test="meetingPostListSearchCondition == 4">
-	       						JOIN users u ON mp.user_no = u.user_no
-								JOIN likes l ON mp.mp_no = l.post_no
-	       						<where>
-	       							<choose>
-	       								<when test="searchCondition == 0 and searchKeyword != '' ">
-	       									l.user_no = #{userNo} AND l.post_type = 1 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 1 and searchKeyword != '' ">
-	       									l.user_no = #{userNo} AND l.post_type = 1 AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<when test="searchCondition == 2 and searchKeyword != '' ">
-	       									l.user_no = #{userNo} AND l.post_type = 1 AND u.nickname LIKE '%'||#{searchKeyword}||'%'
-	       								</when>
-	       								<otherwise>
-	       									l.user_no = #{userNo} AND l.post_type = 1
-	       								</otherwise>
-	       							</choose>
-	       						</where>
-       						</when>
-       					</choose> ) count_table)
-        
-    </select>
+	    SELECT COUNT(*)
+	    FROM (
+	        SELECT mp.mp_title, mp.recruitment_status, mp.mp_creation_date, u.nickname, u.profile_image
+	        FROM meeting_post mp
+	        JOIN users u ON mp.user_no = u.user_no
+	        <if test="meetingPostListSearchCondition != null">
+	            <choose>
+	                <when test="meetingPostListSearchCondition == 0">
+	                    <if test="searchCondition != null">
+	                        <where>
+	                            <choose>
+	                                <when test="searchCondition == 0 and searchKeyword != '' and searchKeyword != null">
+	                                    mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	                                </when>
+	                                <when test="searchCondition == 1 and searchKeyword != '' and searchKeyword != null">
+	                                    mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+	                                </when>
+	                                <when test="searchCondition == 2 and searchKeyword != '' and searchKeyword != null">
+	                                    u.nickname LIKE '%'||#{searchKeyword}||'%'
+	                                </when>
+	                            </choose>
+	                        </where>
+	                    </if>
+	                </when>
+	                <when test="meetingPostListSearchCondition == 1">
+	                    <if test="searchCondition != null">
+	                        <where>
+	                            <choose>
+	                                <when test="searchCondition == 0 and searchKeyword != '' and searchKeyword != null">
+	                                    mp.user_no = #{userNo} AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	                                </when>
+	                                <when test="searchCondition == 1 and searchKeyword != '' and searchKeyword != null">
+	                                    mp.user_no = #{userNo} AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+	                                </when>
+	                                <when test="searchCondition == 2 and searchKeyword != '' and searchKeyword != null">
+	                                    mp.user_no = #{userNo} AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+	                                </when>
+	                                <otherwise>
+	                                    mp.user_no = #{userNo}
+	                                </otherwise>
+	                            </choose>
+	                        </where>
+	                    </if>
+	                </when>
+	                <when test="meetingPostListSearchCondition == 2">
+	                    JOIN meeting_participation mpp ON mp.mp_no = mpp.mp_no
+	                    <if test="searchCondition != null">
+	                        <where>
+	                            <choose>
+	                                <when test="searchCondition == 0 and searchKeyword != '' and searchKeyword != null">
+	                                    mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	                                </when>
+	                                <when test="searchCondition == 1 and searchKeyword != '' and searchKeyword != null">
+	                                    mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+	                                </when>
+	                                <when test="searchCondition == 2 and searchKeyword != '' and searchKeyword != null">
+	                                    mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+	                                </when>
+	                                <otherwise>
+	                                    mpp.user_no = #{userNo} AND mpp.participation_status = 0
+	                                </otherwise>
+	                            </choose>
+	                        </where>
+	                    </if>
+	                </when>
+	                <when test="meetingPostListSearchCondition == 3">
+	                    JOIN meeting_participation mpp ON mp.mp_no = mpp.mp_no
+	                    <if test="searchCondition != null">
+	                        <where>
+	                            <choose>
+	                                <when test="searchCondition == 0 and searchKeyword != '' and searchKeyword != null">
+	                                    mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	                                </when>
+	                                <when test="searchCondition == 1 and searchKeyword != '' and searchKeyword != null">
+	                                    mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+	                                </when>
+	                                <when test="searchCondition == 2 and searchKeyword != '' and searchKeyword != null">
+	                                    mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+	                                </when>
+	                                <otherwise>
+	                                    mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2
+	                                </otherwise>
+	                            </choose>
+	                        </where>
+	                    </if>
+	                </when>
+	                <when test="meetingPostListSearchCondition == 4">
+	                    JOIN likes l ON mp.mp_no = l.post_no
+	                    <if test="searchCondition != null">
+	                        <where>
+	                            <choose>
+	                                <when test="searchCondition == 0 and searchKeyword != '' and searchKeyword != null">
+	                                    l.user_no = #{userNo} AND l.post_type = 1 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	                                </when>
+	                                <when test="searchCondition == 1 and searchKeyword != '' and searchKeyword != null">
+	                                    l.user_no = #{userNo} AND l.post_type = 1 AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+	                                </when>
+	                                <when test="searchCondition == 2 and searchKeyword != '' and searchKeyword != null">
+	                                    l.user_no = #{userNo} AND l.post_type = 1 AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+	                                </when>
+	                                <otherwise>
+	                                    l.user_no = #{userNo} AND l.post_type = 1
+	                                </otherwise>
+	                            </choose>
+	                        </where>
+	                    </if>
+	                </when>
+	            </choose>
+	        </if>
+	    ) count_table
+	</select>
 	
 	<select id="getMeetingPostLikeStatus" parameterType="map" resultType="int">
         SELECT COUNT(*)
