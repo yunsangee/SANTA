@@ -7,6 +7,10 @@
     
 <title>Insert title here</title>
 </head>
+<body>
+	<header></header>
+	
+		<main>
 <h1>Certification Post List</h1>
     <c:forEach var="certificationPost" items="${certificationPost}" varStatus="status">
      <p>Post Number: ${status.count}</p> <!-- 게시글 갯수맞는지 확인하기위한 넘버링 -->
@@ -58,5 +62,12 @@
         </p>
         <hr/>
     </c:forEach>
+    
+    
+    </main>
+    
+    
+    
+    	<footer></footer>
 </body>
 </html>

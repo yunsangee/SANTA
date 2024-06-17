@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import site.dearmysanta.domain.certificationPost.CertificationPost;
 import site.dearmysanta.domain.certificationPost.CertificationPostComment;
 import site.dearmysanta.domain.common.Search;
-import site.dearmysanta.domain.meeting.MeetingParticipation;
 import site.dearmysanta.domain.meeting.MeetingPost;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.certification.CertificationPostService;
@@ -64,11 +63,8 @@ public class CertificationPostController {
    
 //   Submit해서 들어오는건 포스트매핑
 //    url타고들어오는건 겟
-/*    @GetMapping(value ="addCertificationPost")
-    public String addCertificationPost() throws Exception {
-    	
-    	  return "forward:/certificationPost/addCertificationPost.jsp";
-    } */
+
+    
     @GetMapping(value = "addCertificationPost")
     public String addCertificationPost(int userNo, Model model) throws Exception {
         List<MeetingPost> unCertifiedMeetingPosts = meetingService.getUnCertifiedMeetingPost(userNo);
@@ -97,6 +93,20 @@ public class CertificationPostController {
            // 디비에 postNo 가져오기
            int postNo = certificationPost.getPostNo();
 
+           if (certificationPost.getCertificationPostImage() != null && !certificationPost.getCertificationPostImage().isEmpty()) {
+               List<MultipartFile> images = certificationPost.getCertificationPostImage();
+               int imageCount = images.size();
+
+               for (int i = 1; i <= imageCount; i++) { // 인덱스는 1부터 시작
+                   MultipartFile image = images.get(i - 1); // 리스트 인덱스는 0부터 시작하므로 i-1 사용
+                   String fileName = postNo + "_" + 0 + "_" +  i;
+
+                   
+                   System.out.println(fileName);
+
+                   objectStorageService.uploadFile(image, fileName);
+               }
+           }
 
            // 산 통계 
            String certificationPostMountainName = certificationPost.getCertificationPostMountainName();
@@ -227,22 +237,23 @@ public class CertificationPostController {
     	 meetingService.updateMeetingPostCertifiedStatus(postNo);
     	 CertificationPost certificationPost = (CertificationPost)map.get("certificationPost");
  		
- 		List<MultipartFile> certificationPostImages = new ArrayList<>();
- 		int imageCount = certificationPost.getCertificationPostImageCount();
- 		
- 		for (int i = 1; i <= imageCount; i++) {
-             String fileName = postNo + "_" + i;
-             MultipartFile downloadedImage = objectStorageService.downloadFile(bucketName, fileName);
-             certificationPostImages.add(downloadedImage);
+    	 List<String> certificationPostImages = new ArrayList<>();
+         int imageCount = certificationPost.getCertificationPostImageCount();
+         for (int i = 1; i <= imageCount; i++) {
+             String fileName = postNo + "_" + 0 + "_" + i;
+             String imageUrl = objectStorageService.getImageURL(fileName);
+             certificationPostImages.add(imageUrl);
          }
+         model.addAttribute("certificationPostImages", certificationPostImages);
+
  		
  		 model.addAttribute("unCertifiedMeetingPosts", map.get("unCertifiedMeetingPosts"));
     	 model.addAttribute("certificationPost", map.get("certificationPost"));
     	 model.addAttribute("certificationPostComments", certificationPostComment);
        model.addAttribute("hashtagList", map.get("hashtagList"));
-       model.addAttribute("certificationPostImages", certificationPostImages);
+    
        model.addAttribute("selectedPost", selectedPost);
-       System.out.println("Total downloaded images: " + certificationPostImages.size());
+
     	
          System.out.println("이거맞지"+certificationPostComment);
          

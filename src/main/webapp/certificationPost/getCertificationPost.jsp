@@ -14,6 +14,8 @@
 
     <!-- 다른 필드들도 여기에 추가할 수 있습니다 -->
 
+    
+    <img src="${imageUrl}" alt="Certification Post Image"/>
 
 
 <h2>Like Status</h2>

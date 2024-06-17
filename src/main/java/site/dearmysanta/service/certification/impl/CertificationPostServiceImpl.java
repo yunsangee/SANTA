@@ -40,12 +40,12 @@ public class CertificationPostServiceImpl implements CertificationPostService {
     //post
     @Override
     public void addCertificationPost(CertificationPost certificationPost) {
-//    	 if (certificationPost.getCertificationPostImage() == null || certificationPost.getCertificationPostImage().isEmpty()) {
-//    	        throw new IllegalArgumentException("이미지는 최소 한 개 이상 포함되어야 합니다.");
-//    	    } else {
-//    	        // 이미지의 개수를 설정
-//    	        certificationPost.setCertificationPostImageCount(certificationPost.getCertificationPostImage().size());
-//    	    }
+    	 if (certificationPost.getCertificationPostImage() == null || certificationPost.getCertificationPostImage().isEmpty()) {
+    	        throw new IllegalArgumentException("이미지는 최소 한 개 이상 포함되어야 합니다.");
+    	    } else {
+    	        // 이미지의 개수를 설정
+    	        certificationPost.setCertificationPostImageCount(certificationPost.getCertificationPostImage().size());
+    	    }
         certificationPostDao.addCertificationPost(certificationPost);
         certificationPostDao.addHashtag(certificationPost);
     }
@@ -59,6 +59,7 @@ public class CertificationPostServiceImpl implements CertificationPostService {
     	certificationPost.setCertificationPostLikeStatus(likeStatus);
     	int likeCount = certificationPostDao.getCertificationPostLikeCount(postNo);
     	certificationPost.setCertificationPostLikeCount(likeCount);
+    	
     	
     	 List<String> hashtagList = certificationPostDao.getHashtag(postNo);
     	List<CertificationPostComment> certificationPostCommentList = certificationPostDao.getCertificationPostCommentList(postNo);

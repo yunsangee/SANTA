@@ -85,7 +85,11 @@
             <td>HASHTAG:</td>
             <td><input type="text" name="certificationPostHashtagContents" maxLength="20"></td>
         </tr>
-        
+         <tr>
+          <td>이미지:</td>
+         <input type="file" name="certificationPostImage" maxLength="20"></td>
+   
+         </tr>
         <tr>
             <td colspan="2">
                 <input type="submit" value="Submit">

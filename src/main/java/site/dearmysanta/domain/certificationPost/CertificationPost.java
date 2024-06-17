@@ -25,7 +25,7 @@ public class CertificationPost extends Post {
 
     private List<MultipartFile> certificationPostImage;
     private int certificationPostImageCount;
-  
+    private int  certificationPostType;
     private String certificationPostMountainName;
     private int certificationPostHikingDifficulty;
     private String certificationPostHikingTrail;

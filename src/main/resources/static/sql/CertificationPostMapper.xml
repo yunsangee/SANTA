@@ -59,7 +59,7 @@
         ) VALUES (
             seq_cp_no.currval, 
             #{userNo}, 
-            0,
+            #{certificationPostType},
             #{title}, 
             #{contents}, 
             #{certificationPostMountainName}, 
