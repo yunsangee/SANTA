@@ -73,7 +73,7 @@
             #{certificationPostHikingDifficulty},
             0,
             0,
-            #{certificationPostImageCount}
+            0
         )
     </insert>
     

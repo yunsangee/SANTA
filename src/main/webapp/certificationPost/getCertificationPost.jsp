@@ -10,6 +10,12 @@
 <h1>Certification Post Detail Page</h1>
 <body>
 
+    <p>Meeting Name: ${selectedPost}</p>
+
+    <!-- 다른 필드들도 여기에 추가할 수 있습니다 -->
+
+
+
 <h2>Like Status</h2>
     <c:choose>
         <c:when test="${certificationPost.certificationPostLikeStatus == 0}">
@@ -44,13 +50,6 @@
 </c:forEach>
 
 <hr>
-
- <h2>Post Images</h2>
-    <c:forEach var="image" items="${certificationPostImages}">
-        <img src="data:image/jpeg;base64,${image.bytes}" alt="Image" />
-      이거  
-    </c:forEach>
-    
 
 
 
