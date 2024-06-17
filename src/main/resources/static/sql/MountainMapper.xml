@@ -378,7 +378,7 @@
         GROUP BY 
             MOUNTAIN_NAME
         ORDER BY 
-			(SUM(SC) + SUM(SC)) DESC, MOUNTAIN_NAME
+			(SUM(SC) + SUM(PC)) DESC, MOUNTAIN_NAME
 	</select>
 	
 	
