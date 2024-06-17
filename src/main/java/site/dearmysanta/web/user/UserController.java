@@ -92,7 +92,7 @@ public class UserController {
 		    // 비밀번호 일치 여부 확인
 		    if (user.getUserPassword().equals(dbUser.getUserPassword())) {
 		        session.setAttribute("user", dbUser);
-		        return "forward:/user/main.jsp";
+		        return "forward:/common/main.jsp";
 		    } else {
 		        model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
 		        return "redirect:/user/login.jsp";
