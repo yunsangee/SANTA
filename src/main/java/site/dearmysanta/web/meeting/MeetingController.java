@@ -67,27 +67,28 @@ public class MeetingController {
 		
 //		int userNo = ((User)session.getAttribute("user")).getUserNo();
 		int userNo = 1;
+		int postType = 1;
 		
 		Map<String, Object> map = meetingService.getMeetingPostAll(postNo, userNo);
 		
 		MeetingPost meetingPost = (MeetingPost)map.get("meetingPost");
 		System.out.println("meetingPost==="+meetingPost);
 		
-		List<MultipartFile> meetingPostImages = new ArrayList<>();
+		List<String> meetingPostImages = new ArrayList<>();
 		int imageCount = meetingPost.getMeetingPostImageCount();
 		
 		System.out.println("imageCount==="+imageCount);
 		
-//		for (int i = 0; i < imageCount; i++) {
-//            String fileName = postNo+ "_" +(i+1);
-//            MultipartFile downloadedImage = objectStorageService.downloadFile(bucketName, fileName);
-//            meetingPostImages.add(downloadedImage);
-//        }
+		for (int i = 0; i < imageCount; i++) {
+            String fileName = postNo+ "_" +postType+ "_" +(i+1);
+            String imageURL = objectStorageService.getImageURL(fileName);
+            meetingPostImages.add(imageURL);
+        }
 		
 		model.addAttribute("meetingPost", meetingPost);
 		model.addAttribute("meetingParticipations", map.get("meetingParticipations"));
 		model.addAttribute("meetingPostComments", map.get("meetingPostComments"));
-//		model.addAttribute("meetingPostImages", meetingPostImages);
+		model.addAttribute("meetingPostImages", meetingPostImages);
 		
 		return "forward:/meeting/getMeetingPost.jsp";
 	}
@@ -102,6 +103,7 @@ public class MeetingController {
 	public String addMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost) throws Exception {
 		
 		int postNo = meetingService.addMeetingPost(meetingPost);
+		int postType = 1;
 		String appointedHikingMountain = meetingPost.getAppointedHikingMountain();
 		
 		//mountainService.addMountainStatistics(appointedHikingMountain, 1);
@@ -117,7 +119,7 @@ public class MeetingController {
             for (int i = 0; i < imageCount; i++) {
             	
                 MultipartFile image = images.get(i);
-                String fileName = postNo+ "_" +(i+1);
+                String fileName = postNo+ "_" +postType+ "_" +(i+1);
                 
                 System.out.println("fileName : "+fileName);
                 
