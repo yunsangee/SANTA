@@ -480,7 +480,9 @@ public class MountainServiceImpl implements MountainService {
 		
 		//((#{search.currentPage} - 1) * #{search.pageSize} +
 		//1) AND #{search.currentPage} * #{search.pageSize}
-		for(int i = (search.getCurrentPage() - 1) * search.getPageSize() ; i < search.getCurrentPage() * search.getPageSize()  ; i ++) {
+		
+		int maxSize = ((mountainNames.size() > search.getPageSize() ) ?  search.getPageSize()  : mountainNames.size() );
+		for(int i = 0; i <  maxSize  ; i ++) {
 //			SantaLogger.makeLog("info", "::" + this.getMountainListByName(mountainNames.get(i)).toString());
 			list.add(this.getMountainListByName(mountainNames.get(i)).get(0));
 		}
