@@ -36,6 +36,8 @@ public class ObjectStorageService {
 	
 	@Value("${bucketName}")
 	private String bucketName;
+	@Value("${cloud.aws.s3.endpoint}")
+	private String endpoint;
 
 	
     public ObjectStorageService(AmazonS3 amazonS3, ObjectMapper objectMapper) {
@@ -48,7 +50,6 @@ public class ObjectStorageService {
         amazonS3.putObject(new PutObjectRequest(bucketName, fileName, file)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         Files.delete(file.toPath());  
-        Files.delete(file.toPath());  // 업로드 후 임시 파일 삭제
     }
 
     public MultipartFile downloadFile(String bucketName, String fileName) throws IOException {
@@ -127,5 +128,11 @@ public class ObjectStorageService {
          String fileContent = stringBuilder.toString();
          
          return fileContent;
+    }
+    
+    
+    
+    public String getImageURL( String fileName) {
+    	return endpoint+"/"+bucketName+"/"+fileName;
     }
 }
