@@ -60,7 +60,7 @@ public class Main {
 //	}//o
 	@GetMapping("/")
 	public String mainTemp() {
-		return "forward:/mountain/mainTemp.jsp";
+		return "forward:/common/main.jsp";
 	}
 //	
 //	@GetMapping("/")
