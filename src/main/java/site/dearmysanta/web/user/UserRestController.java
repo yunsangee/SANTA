@@ -1,6 +1,8 @@
 package site.dearmysanta.web.user;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import site.dearmysanta.common.SantaLogger;
+import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.user.UserService;
@@ -136,7 +139,7 @@ public class UserRestController {
 //        if (targetUserNo == null) {
 //            return ResponseEntity.badRequest().body("{\"error\": \"사용자 번호가 전송되지 않았습니다.\"}");
 //        }
-
+        
         // DB에서 해당 사용자 정보 가져오기
         User dbUser = userService.getUser(targetUserNo);
 
@@ -184,4 +187,75 @@ public class UserRestController {
 		userService.deleteSchedule(postNo, userNo);
 	}
 	
+	//
+	// UserList
+	//
+	
+	@GetMapping("rest/getUserList")
+    public Object getUserList(@RequestBody User user, @ModelAttribute Search search, HttpSession session) throws Exception {
+        System.out.println("getUserList : GET");
+
+        if (search != null && search.getCurrentPage() == 0) {
+            search.setCurrentPage(1);
+        }
+        
+        Integer targetUserNo = user.getUserNo();
+        // DB에서 해당 사용자 정보 가져오기
+        User dbUser = userService.getUser(targetUserNo);
+
+        System.out.println("admin login : " + dbUser);
+
+        // 세션에 로그인한 관리자 정보가 있는지 확인
+        if (dbUser == null || dbUser.getRole() != 1) { // assuming 1 is for admin
+            // 관리자가 아닌 경우 에러 처리
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "관리자만 접근할 수 있습니다.");
+            return error;
+        }
+
+        try {
+            List<User> userList = userService.getUserList(search);
+            System.out.println("userList : " + userList);
+            return userList;
+        } catch (Exception e) {
+            // 예외 처리
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "사용자 목록을 가져오는 중 오류가 발생했습니다.");
+            return error;
+        }
+    }
+	
+	@GetMapping("rest/withdrawUserList")
+    public Object withdrawUserList(@RequestBody User user, @ModelAttribute Search search, HttpSession session) throws Exception {
+        System.out.println("withdrawUserList : GET");
+
+        if (search != null && search.getCurrentPage() == 0) {
+            search.setCurrentPage(1);
+        }
+        
+        Integer targetUserNo = user.getUserNo();
+        // DB에서 해당 사용자 정보 가져오기
+        User dbUser = userService.getUser(targetUserNo);
+
+        System.out.println("admin login : " + dbUser);
+
+        // 세션에 로그인한 관리자 정보가 있는지 확인
+        if (dbUser == null || dbUser.getRole() != 1) { // assuming 1 is for admin
+            // 관리자가 아닌 경우 에러 처리
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "관리자만 접근할 수 있습니다.");
+            return error;
+        }
+
+        try {
+            List<User> userList = userService.getUserList(search);
+            System.out.println("userList : " + userList);
+            return userList;
+        } catch (Exception e) {
+            // 예외 처리
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "사용자 목록을 가져오는 중 오류가 발생했습니다.");
+            return error;
+        }
+    }
 }

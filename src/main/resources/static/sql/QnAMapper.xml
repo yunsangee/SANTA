@@ -86,6 +86,15 @@
 		qna_no = #{postNo}
 </update>
 
+<update id="updateAnswerQnA" parameterType="site.dearmysanta.domain.user.QNA">
+	UPDATE QNA
+	<set>
+		admin_answer = #{adminAnswer}
+	</set>
+	WHERE
+		qna_no = #{postNo}
+</update>
+
 	<delete id="deleteQnA" parameterType="map">
 		DELETE 
 		FROM 

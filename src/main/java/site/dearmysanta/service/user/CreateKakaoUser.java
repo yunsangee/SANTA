@@ -1,8 +1,24 @@
-//package site.dearmysanta.domain.user;
+//package site.dearmysanta.service.user;
 //
+//import java.io.BufferedReader;
+//import java.io.IOException;
+//import java.io.InputStreamReader;
+//import java.net.HttpURLConnection;
+//import java.net.URL;
 //
-//public void createKakaoUser(String token) throws BaseException {
+//import org.springframework.stereotype.Service;
+//import org.springframework.transaction.annotation.Transactional;
 //
+//import com.google.gson.JsonElement;
+//import com.google.gson.JsonParser;
+//
+//@Service
+//@Transactional
+//
+//public class OAuthService {
+//
+//public void CreateKakaoUser(String token) throws BaseException {
+//	
 //	String reqURL = "https://kapi.kakao.com/v2/user/me";
 //
 //    //access_token을 이용하여 사용자 정보 조회
@@ -48,3 +64,4 @@
 //            e.printStackTrace();
 //       }
 // }
+//}

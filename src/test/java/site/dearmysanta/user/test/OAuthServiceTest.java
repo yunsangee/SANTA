@@ -22,7 +22,7 @@ public class OAuthServiceTest {
 	 @Test
 	    public void testGetKakaoAccessToken() {
 	        // 실제 테스트를 위해서는 유효한 카카오 인가 코드를 사용해야 합니다.
-	        String testCode = "mXppNm3WRFIDlpsVs5t8dfZeo9A7vq4xl4glX6rCyj24R4c6IpCDyAAAAAQKKcleAAABj__qiSRtZc76WqiBKA";
+	        String testCode = "UreCZZOJ_L4loS5E5l10ZU-PZ4fLjiY14xnRiUCDZn-lDGkmuZLrfQAAAAQKPXLqAAABkB-4Dgv7Ewsnpgvovw";
 	        
 	        // access token을 가져오는 메서드를 호출합니다.
 	        String accessToken = oAuthService.getKakaoAccessToken(testCode);

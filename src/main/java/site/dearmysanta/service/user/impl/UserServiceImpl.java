@@ -281,6 +281,12 @@ import site.dearmysanta.service.user.UserService;
 		return userDao.getUserPassword(userPassword);
 	}
 
+	@Override
+	public void updateAnswer(QNA qna) throws Exception {
+		// TODO Auto-generated method stub
+		userDao.updateAnswer(qna);
+	}
+
 	
 	
 }

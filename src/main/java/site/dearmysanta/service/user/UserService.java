@@ -69,6 +69,8 @@ public interface UserService {
 	
 	public void addAdminAnswer(QNA qna) throws Exception;
 	
+	public void updateAnswer(QNA qna) throws Exception;
+	
 	public void deleteQnA(int postNo, int userNo) throws Exception;
 	
 	//

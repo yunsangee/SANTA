@@ -56,6 +56,16 @@
     <p><strong>내용:</strong> ${qna.contents}</p>
     <p><strong>관리자 답변:</strong> ${qna.adminAnswer}</p>
 </div>
+	<c:if test="${user.role == 1}">
+    <c:choose>
+        <c:when test="${qna.answerState == 0}">
+            <button type="button" onclick="location.href='/user/addAdminAnswer?postNo=${qna.postNo}&userNo=${qna.userNo}'">답변 작성하기</button>
+        </c:when>
+        <c:otherwise>
+            <button type="button" onclick="location.href='/user/addAdminAnswer?postNo=${qna.postNo}&userNo=${qna.userNo}'">수정하기</button>
+        </c:otherwise>
+    </c:choose>
+</c:if>
 	<button type="button" onclick="history.back()">뒤로</button>
 
 </body>

@@ -54,7 +54,7 @@
     	<p><strong>내용:</strong> ${qna.contents}</p>
         <div class="form-group">
             <label for="adminAnswer">관리자 답변</label>
-            <textarea id="contents" name="adminAnswer" rows="10" placeholder="답변을 입력하세요" required></textarea>
+            <textarea id="adminAnswer" name="adminAnswer" rows="10" placeholder="답변을 입력하세요" required>${qna.answerState != 1 ? qna.adminAnswer : ''}</textarea>
         </div>
         
        <input type="hidden" id="userNo" name="userNo" value="${qna.userNo}">
@@ -72,7 +72,7 @@
             </select>
         </div>-->
         <div class="form-group">
-            <button type="submit">답변 작성하기</button>
+            <button type="button" onclick="location.href='/user/getQnA?postNo=${qna.postNo}&userNo=${qna.userNo}'">수정하기</button>
         </div> 
         
     </form>

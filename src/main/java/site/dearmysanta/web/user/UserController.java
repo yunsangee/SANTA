@@ -23,9 +23,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.alarmMessage.AlarmMessage;
 import site.dearmysanta.domain.common.Search;
+import site.dearmysanta.domain.correctionPost.CorrectionPost;
 import site.dearmysanta.domain.user.QNA;
 import site.dearmysanta.domain.user.Schedule;
 import site.dearmysanta.domain.user.User;
+import site.dearmysanta.service.correctionpost.CorrectionPostService;
 import site.dearmysanta.service.user.UserService;
 
 @Controller
@@ -38,15 +40,6 @@ public class UserController {
 		//
 		// addUser(Post)
 		//
-	
-//	 	@GetMapping(value = "addUser")
-//	    public String addUser(@ModelAttribute Model model) {
-//	        
-//	 		model.addAttribute("user", new User());
-//	        
-//	 		return "forward:/user/addUser.jsp";
-//	    }
-	
 	
 		@PostMapping(value="addUser" )
 		public String addUser(@ModelAttribute User user, Model model ) throws Exception {
@@ -799,7 +792,7 @@ public class UserController {
 		    // 세션에서 로그인한 관리자 정보 가져오기
 		    User sessionUser = (User) session.getAttribute("user");
 		    
-		    System.out.println("admin login : " +sessionUser);
+		    System.out.println("sessionUser : " +sessionUser);
 		    
 		    if (sessionUser == null) {
 		        // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
@@ -899,7 +892,58 @@ public class UserController {
 		    
 		    return "forward:/user/month-view.jsp";
 		}
+		
+		//
+		//	updateAnswerQnA /////////////////////////////////////////////
+		//
+		
+		@GetMapping(value="updateAnswerQnA")
+		public String updateAnswerQnA(@RequestParam int postNo, @RequestParam int userNo, Model model) throws Exception {
+		   
+			System.out.println("updateAnswerQnA : GET");
+		    
+			// Business Logic
+		    QNA qna = userService.getQnA(postNo, userNo);
+		    
+		    // Model 과 View 연결
+		   model.addAttribute("qna", qna);
+		    
+		   return "forward:/user/updateAnswerQnA.jsp";
+		}
+		
+		@PostMapping(value = "updateAnswer")
+		public String updateAnswer(@ModelAttribute QNA qna, Model model, HttpSession session) throws Exception {
+		    System.out.println("updateAnswer : POST");
+		  
+		    System.out.println("postNo : " +qna.getPostNo());
+		    System.out.println("userNo : " +qna.getUserNo());	    
+		    
+		    // 세션에서 로그인한 관리자 정보 가져오기
+		    User admin = (User) session.getAttribute("user");
+		    
+		    System.out.println("admin login : " +admin);
+		    
+		    // 세션에 로그인한 관리자 정보가 있는지 확인
+		    if (admin.getRole() == 0) {
+		        // 관리자가 아닌 경우 에러 처리
+		        model.addAttribute("error", "관리자만 접근할 수 있습니다.");
+		        return "redirect:/admin/login.jsp";
+		    }
+		    
+		    // QNA 정보 조회
+		    QNA dbqna = userService.getQnA(qna.getPostNo(), qna.getUserNo());
+		    
+		    // 관리자 답변 추가
+		    dbqna.setAdminAnswer(qna.getAdminAnswer());
 
+		    // QNA 업데이트
+		    userService.addAdminAnswer(dbqna);
+		    
+		    model.addAttribute("qna", dbqna);
 
+		    System.out.println("updateAnswer : " + dbqna);
+
+		    return "forward:/user/getQnA.jsp";
+		}
 		
 }

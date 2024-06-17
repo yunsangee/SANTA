@@ -67,8 +67,8 @@
                 기차
             </c:when>
     </c:choose></p>
-    
-    	 <a href="/user/updateSchedule.jsp">일정 수정하기</a>
+    	<button type="button" onclick="location.href='/user/updateSchedule?postNo=${schedule.postNo}&userNo=${schedule.userNo}'">수정하기</button>
+    	 <!-- <a href="/user/updateSchedule.jsp">일정 수정하기</a> -->
     	 <button type="button" onclick="history.back()">뒤로</button>
     
 </div>

@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.net.URLEncoder" %>
+<%@ page import="java.security.SecureRandom" %>
+<%@ page import="java.math.BigInteger" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,6 +42,16 @@ button {
         <div>
             <button type="submit">로그인</button>
         </div>
+        
+        <div class="text-center">
+    <!-- <a href="http://localhost:8001/oauth/kakao" -->
+     <a href="https://kauth.kakao.com/oauth/authorize?client_id=af43c655326aaa2ca97588ce636e1e29&redirect_uri=http://localhost:8001/oauth/kakao&response_type=code">
+        <img src="/image/kakao_login_medium_wide.png">
+    </a>
+</div>
+
+  <%-- <a href="<%=apiURL%>"><img height="50" src="/image/btnG_완성형.png"/></a> --%>
+        
     </form>
 </body>
 </html>

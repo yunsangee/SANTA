@@ -71,6 +71,8 @@ import site.dearmysanta.domain.user.User;
 		
 		public void addAdminAnswer(QNA qna) throws Exception;
 		
+		public void updateAnswer(QNA qna) throws Exception;
+		
 		public void deleteQnA(int postNo, int userNo) throws Exception;
 		
 		//

@@ -104,6 +104,8 @@
         
    		 </c:if>
    		 
+   		 <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
+   		 
    		 <a href="/user/updateUser.jsp">회원정보 수정하기</a> 
    		  <a href="/user/deleteUser.jsp">탈퇴하기</a>   
    		    <button type="button" onclick="history.back()">뒤로</button>
