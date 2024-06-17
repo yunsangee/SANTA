@@ -17,7 +17,7 @@
 		<result property = "birthDate"	column = "birth_date"	jdbcType = "VARCHAR"/>
 		<result property = "phoneNumber"	column = "phone_number"	jdbcType = "VARCHAR"/>
 		<result property = "gender"	column = "gender"	jdbcType = "NUMERIC"/>
-		<!-- <result property = "profileImage"	column = "profile_image"	jdbcType = "VARCHAR"/> -->
+		<result property = "profileImage"	column = "profile_image"	jdbcType = "VARCHAR"/> 
 		<result property = "creationDate"	column = "creation_date"	jdbcType = "DATE"/>
 		<result property = "hikingPurpose"	column = "hiking_purpose"	jdbcType = "NUMERIC"/>
 		<result property = "hikingDifficulty"	column = "hiking_difficulty"	jdbcType = "NUMERIC"/>
@@ -26,7 +26,7 @@
 		<result property = "withedrawReason"	column = "withdraw_reaseon"	jdbcType = "NUMERIC"/>
 		<result property = "withdrawContent"	column = "withdraw_content"	jdbcType = "VARCHAR"/>
 		<result property = "role"	column = "role"	jdbcType = "NUMERIC"/>
-		<!-- <result property = "badgeImage"	column = "badge_image"	jdbcType = "VARCHAR"/> -->
+		<result property = "badgeImage"	column = "badge_image"	jdbcType = "VARCHAR"/>
 		<result property = "certificationCount"	column = "cp_count"	jdbcType = "NUMERIC"/>
 		<result property = "meetingCount"	column = "mp_count"	jdbcType = "NUMERIC"/>
 		<result property = "introduceContent"	column = "introduce_content"	jdbcType = "VARCHAR"/>
@@ -42,6 +42,18 @@
 		<result property = "timeSetting"	column = "time_setting"	jdbcType = "VARCHAR"/>
 	</resultMap>
 	
+	
+	<resultMap id="alarmMessageSelectMap"
+	type="site.dearmysanta.domain.alarmMessage.AlarmMessage">
+	<id property="alarmNo" column="ALARM_NO" />
+	<result property="userNo" column="USER_NO" />
+	<result property="userName" column="NAME" />
+	<result property="title" column="TITLE" />
+	<result property="alarmTypeNo" column="ALARM_TYPE_NO" />
+	<result property="postTypeNo" column="POST_TYPE_NO" />
+	<result property="checkedFlag" column="CHECKED_FLAG" />
+</resultMap>
+
 	<select id="getCertificationCount" parameterType="int" resultType="int">
 		SELECT cp_count FROM USERS WHERE USER_NO = #{value}
 	</select>
@@ -50,21 +62,152 @@
 		SELECT mp_count FROM USERS WHERE USER_NO = #{value}
 	</select>
 	
-	<update id="updateCertificationCount" parameterType="int">
+	<update id="updateCertificationCount" parameterType="map">
 		UPDATE USERS
 		SET
-		cp_count = cp_count+1
-		WHERE USER_NO = #{value}
+		<if test='type==0'>
+			cp_count = cp_count+1
+		</if>
+		<if test='type==1'>
+			cp_count = cp_count-1
+		</if>
+		WHERE USER_NO = #{userNo}
 	</update>
 	
 	<update id="updateMeetingCount" parameterType="int">
 		UPDATE USERS
 		SET
-		mp_count = mp_count+1
-		WHERE USER_NO = #{value}
+		<if test='type==0'>
+			mp_count = mp_count+1
+		</if>
+		<if test='type==1'>
+			mp_count = mp_count-1
+		</if>
+		WHERE USER_NO = #{userNo}
 	</update>
 	
 	
+	<insert id="addFollow" parameterType="map">
+		INSERT INTO FOLLOW (FOLLOW_NO, FOLLOWER_NO, FOLLOWING_NO)
+		VALUES (seq_follow_no.NEXTVAL, #{followerUserNo},#{followingUserNo}) 
+	</insert>
 	
+	<delete id="deleteFollow" parameterType="map">
+		DELETE FROM FOLLOW
+		WHERE FOLLOWER_NO = #{followerUserNo} AND FOLLOWING_NO = #{followingUserNo}	
+	</delete>
+	
+	<select id="getFollowerList" parameterType="int" resultMap="userSelectMap">
+		SELECT u.USER_NO, u.NAME, u.profile_image, u.badge_image
+		FROM USERS u, FOLLOW f
+		WHERE u.USER_NO = f.FOLLOWER_NO AND f.FOLLOWING_NO = #{userNo}
+	</select>
+	
+	<select id="getFollowingList" parameterType="int" resultMap="userSelectMap">
+		SELECT u.USER_NO, u.NAME,u.profile_image,u.badge_image
+		FROM USERS u, FOLLOW f
+		WHERE u.USER_NO = f.FOLLOWING_NO AND f.FOLLOWER_NO = #{userNo}
+	</select>
+	
+	
+	<select id="getFollowerCount" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+		FROM FOLLOW 
+		WHERE FOLLOWING_NO = #{userNo}
+		
+	</select>
+	
+	<select id="getFollowingCount" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+		FROM FOLLOW 
+		WHERE FOLLOWER_NO = #{userNo}	
+	</select>
+	
+	<insert id="addAlarmMessage" parameterType="site.dearmysanta.domain.alarmMessage.AlarmMessage">
+		INSERT INTO ALARM_MESSAGE (AM_NO, USER_NO, TITLE, ALARM_TYPE_NO, POST_TYPE_NO, checked_Flag)
+		VALUES(seq_am_no.NEXTVAL, #{userNo}, #{title}, #{alarmTypeNo}, #{postTypeNo},0)
+	</insert>
+	
+	<select id="getAlarmMessageList" parameterType="int" resultMap="alarmMessageSelectMap">
+		SELECT am.*, u.NAME
+		FROM ALARM_MESSAGE am, USERS u
+		WHERE CHECKED_FLAG = 0 AND u.USER_NO = am.USER_NO AND am.USER_NO = #{userNo}
+	</select>
+	
+	
+	<update id="deleteAlarmMessage" parameterType="int">
+		UPDATE alarm_message
+		SET
+			checked_flag = 1
+		WHERE am_no = #{alarmNo}
+	</update>
+		
+		
+	 <update id="updateSearchRecordFlag" parameterType="int">
+        UPDATE USERS
+        SET SEARCH_RECORD_SETTING = 
+            CASE 
+                WHEN SEARCH_RECORD_SETTING = 1 THEN 0
+                ELSE 1
+            END
+        WHERE USER_NO = #{userNo}
+    </update>
+    
+    <update id="updateAlarmSetting" parameterType="map">
+    UPDATE USERS
+        <choose>
+            <when test="alarmSettingType == 0">
+                SET ALL_ALERT_SETTING = 
+                    CASE 
+                        WHEN ALL_ALERT_SETTING = 1 THEN 0
+                        ELSE 1
+                    END
+           
+            </when>
+            <when test="alarmSettingType == 1">
+            
+                SET CP_SETTING = 
+                    CASE 
+                        WHEN CP_SETTING = 1 THEN 0
+                        ELSE 1
+                    END
+               
+            </when>
+            <when test="alarmSettingType == 2">
+            
+                SET MP_SETTING = 
+                    CASE 
+                        WHEN MP_SETTING = 1 THEN 0
+                        ELSE 1
+                    END
+                
+            </when>
+            <when test="alarmSettingType == 3">
+             
+                SET HG_SETTING = 
+                    CASE 
+                        WHEN HG_SETTING = 1 THEN 0
+                        ELSE 1
+                    END
+              
+            </when>
+        </choose>
+        WHERE USER_NO = #{userNo}
+    </update>
+    
+
+    <select id="getUserSettings" parameterType="site.dearmysanta.domain.user.User" resultMap="userSelectMap">
+        SELECT 
+            ALL_ALERT_SETTING,
+            CP_SETTING,
+            MP_SETTING,
+            HG_SETTING
+        FROM USERS
+        WHERE USER_NO = #{userNo}
+    </select>
+
+    
+   
+   
 	
 </mapper>
