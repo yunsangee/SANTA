@@ -48,7 +48,6 @@ public class ObjectStorageService {
         amazonS3.putObject(new PutObjectRequest(bucketName, fileName, file)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         Files.delete(file.toPath());  
-        Files.delete(file.toPath());  // 업로드 후 임시 파일 삭제
     }
 
     public MultipartFile downloadFile(String bucketName, String fileName) throws IOException {

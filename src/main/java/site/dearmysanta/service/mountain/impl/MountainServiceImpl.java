@@ -488,15 +488,18 @@ public class MountainServiceImpl implements MountainService {
 		return list;
 	}//이거 산 이름으로 해야해 ?
 	
-	public List<Mountain> getCustomMountainList(List<Statistics> statistics, User user){
-		
-		 List<String> orderedMountainNames = statistics.stream()
-	                .map(Statistics::getMountainName)
-	                .collect(Collectors.toList());
-		 
-		SantaLogger.makeLog("info", "serviceImpl::" + orderedMountainNames.toString());
-		return mountainDao.getCustomMountainList(orderedMountainNames,user);
+	public List<Mountain> getCustomMountainList(List<String> statistics, User user){
+
+//		 List<String> orderedMountainNames = statistics.stream()
+//	                .map(Statistics::getMountainName)
+//	                .collect(Collectors.toList());
+//
+//		SantaLogger.makeLog("info", "serviceImpl::" + orderedMountainNames.toString());
+//		return mountainDao.getCustomMountainList(orderedMountainNames,user);
+		SantaLogger.makeLog("info", "serviceImpl::" + statistics.toString());
+		return mountainDao.getCustomMountainList(statistics,user);
 	}
+
 	
 	
 	public void addMountainTrail(MountainTrail mountainTrail) {
@@ -504,6 +507,9 @@ public class MountainServiceImpl implements MountainService {
 	}
 	
 	
+	public int isMountain(String mountainName){
+		return mountainDao.isMountain(mountainName);
+	}
 	//
 	//like
 	//
@@ -531,7 +537,7 @@ public class MountainServiceImpl implements MountainService {
 	
 	public void addSearchKeyword(MountainSearch mountainSearch) {
 		
-		if(mountainSearch.getSearchCondition() == 0) {
+		if(mountainSearch.getSearchCondition() == 0 & mountainDao.isMountain(mountainSearch.getSearchKeyword()) == 1) {
 			SantaLogger.makeLog("info","add mountain statistics");
 			this.addMountainStatistics(mountainSearch.getSearchKeyword(),0);
 		}
@@ -564,7 +570,7 @@ public class MountainServiceImpl implements MountainService {
 		// 1 : post
 		//
 
-		if(this.checkStatisticsMountainColumnExist(mountainName) == 0) {
+		if(this.checkStatisticsMountainColumnExist(mountainName) == 0 & this.isMountain(mountainName) == 1 ) {
 			mountainDao.addMountainStatistics(mountainName);
 			SantaLogger.makeLog("info","create mountain statistics column");
 		}
@@ -578,8 +584,12 @@ public class MountainServiceImpl implements MountainService {
 		return mountainDao.checkStatisticsMountainColumnExist(mountainName);
 	}
 	
-	public List<Statistics> getStatisticsList(int which,int type){  // 0: get normal list, 1: get popular searchKeyword list
-		return mountainDao.getStatisticsList(which,type); 
+	public List<Statistics> getStatisticsWeekly(){  // 0: get normal list, 1: get popular searchKeyword list
+		return mountainDao.getStatisticsWeekly(); 
+	}
+
+	public List<Statistics> getStatisticsDaily(String date){
+		return mountainDao.getStatisticsDaily(date);
 	}
 	
 	public List<String> getStatisticsMountainNameList(int which){
