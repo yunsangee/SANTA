@@ -36,6 +36,8 @@ public class ObjectStorageService {
 	
 	@Value("${bucketName}")
 	private String bucketName;
+	@Value("${cloud.aws.s3.endpoint}")
+	private String endpoint;
 
 	
     public ObjectStorageService(AmazonS3 amazonS3, ObjectMapper objectMapper) {
@@ -126,5 +128,11 @@ public class ObjectStorageService {
          String fileContent = stringBuilder.toString();
          
          return fileContent;
+    }
+    
+    
+    
+    public String getImageURL( String fileName) {
+    	return endpoint+"/"+bucketName+"/"+fileName;
     }
 }
