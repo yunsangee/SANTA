@@ -72,7 +72,7 @@ public class Main {
 		
 		model.addAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
 //		model.addAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), userService.getUser(1)));
-//		model.addAttribute("meetingPostList", meetingService.getMeetingPostList(meetingPostSearch,0));
+//		model.addAttribute("meetingPostList", meetingService.getMeetingPostList(meetingPostSearch));
 //		model.addAttribute("certificationPostList",certificationPostService.getCertificationPostList(search));
 		
 		
