@@ -67,19 +67,22 @@ public class MeetingController {
 		
 //		int userNo = ((User)session.getAttribute("user")).getUserNo();
 		int userNo = 1;
+		int postType = 1;
 		
 		Map<String, Object> map = meetingService.getMeetingPostAll(postNo, userNo);
 		
 		MeetingPost meetingPost = (MeetingPost)map.get("meetingPost");
+		System.out.println("meetingPost==="+meetingPost);
 		
-		List<MultipartFile> meetingPostImages = new ArrayList<>();
+		List<String> meetingPostImages = new ArrayList<>();
 		int imageCount = meetingPost.getMeetingPostImageCount();
 		
-		for (int i = 1; i < imageCount; i++) {
-            String fileName = postNo + "_" + i;
-            MultipartFile downloadedImage = objectStorageService.downloadFile(bucketName, fileName);
-            System.out.println(downloadedImage.getOriginalFilename());
-            meetingPostImages.add(downloadedImage);
+		System.out.println("imageCount==="+imageCount);
+		
+		for (int i = 0; i < imageCount; i++) {
+            String fileName = postNo+ "_" +postType+ "_" +(i+1);
+            String imageURL = objectStorageService.getImageURL(fileName);
+            meetingPostImages.add(imageURL);
         }
 		
 		model.addAttribute("meetingPost", meetingPost);
@@ -100,9 +103,10 @@ public class MeetingController {
 	public String addMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost) throws Exception {
 		
 		int postNo = meetingService.addMeetingPost(meetingPost);
+		int postType = 1;
 		String appointedHikingMountain = meetingPost.getAppointedHikingMountain();
 		
-		mountainService.addMountainStatistics(appointedHikingMountain, 1);
+		//mountainService.addMountainStatistics(appointedHikingMountain, 1);
 		
 		chattingService.createChattingRoom(postNo);
 		
@@ -110,13 +114,14 @@ public class MeetingController {
 			
             List<MultipartFile> images = meetingPost.getMeetingPostImage();
             int imageCount = images.size();
+            System.out.println("imageCount : "+imageCount);
             
-            for (int i = 1; i < imageCount; i++) {
+            for (int i = 0; i < imageCount; i++) {
             	
                 MultipartFile image = images.get(i);
-                String fileName = postNo+ "_" +i;
+                String fileName = postNo+ "_" +postType+ "_" +(i+1);
                 
-                System.out.println(fileName);
+                System.out.println("fileName : "+fileName);
                 
                 objectStorageService.uploadFile(image, fileName);
             }
@@ -150,30 +155,46 @@ public class MeetingController {
 		return "redirect:/meeting/getMeetingPostList.jsp";
 	}
 	
-	@GetMapping(value = "getMeetingPostList") // currentPage
+	@RequestMapping(value = "getMeetingPostList") // currentPage
 	public String getMeetingPostList(@ModelAttribute("meetingPostSearch") MeetingPostSearch meetingPostSearch, 
 			Model model) throws Exception {
 		
-		System.out.println("/meeting/getlistMeetingPostListByListSearchCondition : GET");
+		System.out.println("/meeting/getMeetingPostList : GET/Post");
+		System.out.println("meetingPostSearch ===== "+meetingPostSearch);
 		
 //		int userNo = ((User)session.getAttribute("user")).getUserNo();
+//		meetingPostSearch.setUserNo(userNo);
 		int userNo = 1;
 		
 		if(meetingPostSearch.getCurrentPage() ==0 ){
 			meetingPostSearch.setCurrentPage(1);
 		}
-		
 		meetingPostSearch.setPageSize(pageSize);
 		
-		Map<String, Object> map = meetingService.getMeetingPostList(meetingPostSearch, userNo);
+		meetingPostSearch.setUserNo(userNo);
 		
-		Page resultPage = new Page(meetingPostSearch.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println("Before calling meetingService.getMeetingPostList");
+	    System.out.println("meetingPostSearch: " + meetingPostSearch);
+		
+		Map<String, Object> map = meetingService.getMeetingPostList(meetingPostSearch);
+		
+		System.out.println("After calling meetingService.getMeetingPostList");
+	    System.out.println("map: " + map);
+	    
+	    System.out.println("meetingPostSearch.getCurrentPage ==="+meetingPostSearch.getCurrentPage());
+	    System.out.println("totalcount intvalue ==="+((Integer)map.get("meetingPostTotalCount")).intValue());
+	    System.out.println("pageunit, pagesize==="+pageUnit +" "+pageSize);
+	    
+		
+		Page resultPage = new Page(meetingPostSearch.getCurrentPage(), ((Integer)map.get("meetingPostTotalCount")).intValue(), pageUnit, pageSize);
+		
+		System.out.println("resultPage ======="+resultPage);
 		
 		model.addAttribute("meetingPosts", map.get("meetingPosts"));
 		model.addAttribute("meetingPostSearch", meetingPostSearch);
 		model.addAttribute("resultPage", resultPage);
 		
-		return "forward:/meeting/getMeetingPostList.jsp";
+		return "forward:/meeting/listMeetingPost.jsp";
 	}
 	
 }

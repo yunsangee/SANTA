@@ -6,20 +6,23 @@
 
 <mapper namespace="site.dearmysanta.service.meeting.MeetingDAO">
 
+	<!-- 생각해보니 필요가 없다.. 
 	<resultMap id="likeSelectMap" type="site.dearmysanta.domain.common.Like">
         <result property="userNo"         column="user_no"          jdbcType="NUMERIC"/>
         <result property="postNo"         column="post_like_no"     jdbcType="NUMERIC"/>
         <result property="postLikeType"   column="post_like_type"   jdbcType="NUMERIC"/>
         <result property="likeDate"       column="like_date"        jdbcType="DATE"/>
     </resultMap>
+     -->
 
 	<resultMap id="meetingParticipationSelectMap" type="site.dearmysanta.domain.meeting.MeetingParticipation">
-        <result property="userNo" 					column="participation_no" 		jdbcType="NUMERIC"/>
+		<result property="participationNo"			column="participation_no"		jdbcType="NUMERIC"/>
+		<result property="postNo"					column="mp_no"					jdbcType="NUMERIC"/>
+        <result property="userNo" 					column="user_no" 				jdbcType="NUMERIC"/>
         <result property="profileImage" 			column="profile_image" 			jdbcType="VARCHAR"/>
         <result property="nickname" 				column="nickname" 				jdbcType="VARCHAR"/>
         <result property="participationStatus" 		column="participation_status" 	jdbcType="NUMERIC"/>
-        <result property="chattingRoomExitTime" 	column="chattingroom_exit_time" jdbcType="DATE"/>
-        <result property="participationRole" 		column="mp_role" 				jdbcType="NUMERIC"/>
+        <result property="participationRole" 		column="participation_role" 	jdbcType="NUMERIC"/>
         <result property="withdrawFlag" 			column="withdraw_flag" 			jdbcType="NUMERIC"/>
     </resultMap>
     
@@ -42,7 +45,7 @@
         <result property="contents" 				column="mp_contents" 				jdbcType="VARCHAR"/>
         <result property="postDate" 				column="mp_creation_date" 			jdbcType="DATE"/>
        	
-		<result property="meetingPostImage"			column="image"						jdbcType="VARCHAR"/>
+		<result property="meetingPostImageCount"	column="mp_image_count"				jdbcType="NUMERIC"/>
 		<result property="meetingName"				column="meeting_name"				jdbcType="VARCHAR"/>
 		<result property="recruitmentDeadline"		column="recruitment_deadline"		jdbcType="DATE"/>
 		<result property="appointedDeparture"		column="appointed_departure"	    jdbcType="VARCHAR"/>
@@ -58,20 +61,26 @@
 	</resultMap>
 	
 	<insert id="insertMeetingPost" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
+		<selectKey keyProperty="postNo" resultType="int" order="BEFORE">
+            SELECT seq_mp_no.NEXTVAL FROM DUAL
+        </selectKey>
+		
 		INSERT
-		INTO meeting_post(mp_no, user_no, mp_title, mp_contents, meeting_name, recruitment_deadline,
+		INTO meeting_post(mp_no, user_no, mp_title, mp_contents, mp_image_count, meeting_name, recruitment_deadline,
 		 appointed_departure, appointed_hiking_mountain, appointed_hiking_date, maximum_personnel, 
 		 participation_age, participation_grade, participation_gender)
-		VALUES (seq_mp_no.NEXTVAL, #{userNo}, #{title}, #{contents}, #{meetingName}, #{recruitmentDeadline},
-		 #{appointedDeparture}, #{appointedHikingMountain}, #{appointedHikingDate}, #{maximumPersonnel},
-		 #{participationAge}, #{participationGrade}, #{participationGender})
+		VALUES (seq_mp_no.CURRVAL, #{userNo}, #{title}, #{contents}, #{meetingPostImageCount}, #{meetingName}, 
+		 #{recruitmentDeadline}, #{appointedDeparture}, #{appointedHikingMountain}, #{appointedHikingDate}, 
+		 #{maximumPersonnel}, #{participationAge}, #{participationGrade}, #{participationGender})
 	</insert>
 	
+	<!-- 
 	<insert id="insertPostImage" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
 		INSERT
 		INTO post_image(image_no, post_no, image, post_flag)
 		VALUES (seq_image_no.NEXTVAL, #{mp_no}, #{image}, 1) 
 	</insert>
+	 -->
 	
 	<update id="updateMeetingPost" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
 		UPDATE meeting_post
@@ -88,47 +97,301 @@
 		WHERE mp_no = #{postNo}
 	</update>
 	
+	<!-- 
 	<update id="updatePostImage" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
 		UPDATE post_image
 		SET image = #{image}
 		Where image_no = #{image_no}
 	</update>
+	 -->
 
-	<select id="findMeetingPost" parameterType="int" resultMap="meetingPostSelectMap">
+	<select id="getMeetingPost" parameterType="int" resultMap="meetingPostSelectMap">
     	SELECT 
         	u.user_no, u.nickname, u.profile_image, mp.mp_no, mp.mp_title, mp.mp_contents, mp.mp_creation_date,
-        	pi.image, mp.meeting_name, mp.recruitment_deadline, mp.appointed_departure, mp.appointed_hiking_mountain,
+        	mp.meeting_name, mp.recruitment_deadline, mp.appointed_departure, mp.appointed_hiking_mountain,
         	mp.appointed_hiking_date, mp.participation_age, mp.maximum_personnel, mp.participation_grade,
         	mp.participation_gender, mp.recruitment_status, mp.mp_deleted_flag, mp.mp_certified_flag
     	FROM
         	meeting_post mp
     	JOIN
         	users u ON mp.user_no = u.user_no
+        <!-- 
     	LEFT JOIN
         	post_image pi ON mp.mp_no = pi.post_no AND pi.post_flag = 1
+         -->
     	WHERE
         	mp.mp_no = #{postNo}
 	</select>
 	
+	<select id="getMeetingPostList" parameterType="map" resultType="site.dearmysanta.domain.meeting.MeetingPost">
+        SELECT *
+        FROM (SELECT inner_table.*, ROWNUM AS row_seq 
+        		FROM (SELECT mp.mp_title, mp.recruitment_status, mp.mp_creation_date, u.nickname, u.profile_image
+						FROM meeting_post mp
+       					<choose>
+       						<when test="meetingPostListSearchCondition == 0">
+       							JOIN users u ON mp.user_no = u.user_no
+	       						<where>
+	       							<choose>
+	       								<when test="searchCondition == 0 and searchKeyword != '' ">
+	       									mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 1 and searchKeyword != '' ">
+	       									mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 2 and searchKeyword != '' ">
+	       									u.nickname LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       							</choose>
+	       						</where>
+       						</when>
+       						<when test="meetingPostListSearchCondition == 1">
+	       						JOIN users u ON mp.user_no = u.user_no
+	       						<where>
+	       							<choose>
+	       								<when test="searchCondition == 0 and searchKeyword != '' ">
+	       									mp.user_no = #{userNo} AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 1 and searchKeyword != '' ">
+	       									mp.user_no = #{userNo} AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 2 and searchKeyword != '' ">
+	       									mp.user_no = #{userNo} AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<otherwise>
+	       									mp.user_no = #{userNo}
+	       								</otherwise>
+	       							</choose>
+	       						</where>
+       						</when>
+       						<when test="meetingPostListSearchCondition == 2">
+	       						JOIN users u ON mp.user_no = u.user_no
+								JOIN meeting_participation mpp ON mp.mp_no = mpp.mp_no
+	       						<where>
+	       							<choose>
+	       								<when test="searchCondition == 0 and searchKeyword != '' ">
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 1 and searchKeyword != '' ">
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 2 and searchKeyword != '' ">
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<otherwise>
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0
+	       								</otherwise>
+	       							</choose>
+	       						</where>
+       						</when>
+       						<when test="meetingPostListSearchCondition == 3">
+	       						JOIN users u ON mp.user_no = u.user_no
+								JOIN meeting_participation mpp ON mp.mp_no = mpp.mp_no
+	       						<where>
+	       							<choose>
+	       								<when test="searchCondition == 0 and searchKeyword != '' ">
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 1 and searchKeyword != '' ">
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 2 and searchKeyword != '' ">
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<otherwise>
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2
+	       								</otherwise>
+	       							</choose>
+	       						</where>
+       						</when>
+       						<when test="meetingPostListSearchCondition == 4">
+	       						JOIN users u ON mp.user_no = u.user_no
+								JOIN likes l ON mp.mp_no = l.post_no
+	       						<where>
+	       							<choose>
+	       								<when test="searchCondition == 0 and searchKeyword != '' ">
+	       									l.user_no = #{userNo} AND l.post_type = 1 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 1 and searchKeyword != '' ">
+	       									l.user_no = #{userNo} AND l.post_type = 1 AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 2 and searchKeyword != '' ">
+	       									l.user_no = #{userNo} AND l.post_type = 1 AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<otherwise>
+	       									l.user_no = #{userNo} AND l.post_type = 1
+	       								</otherwise>
+	       							</choose>
+	       						</where>
+       						</when>
+       					</choose>
+        				ORDER BY mp.mp_no) inner_table
+        		WHERE ROWNUM &lt;= #{endRowNum} )
+        WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 	
+    </select>
+	
+	
+	
+	<select id="getMeetingPostTotalCount" parameterType="site.dearmysanta.domain.meeting.MeetingPostSearch" resultType="int">
+        SELECT COUNT(*)
+        FROM (SELECT mp.mp_title, mp.recruitment_status, mp.mp_creation_date, u.nickname, u.profile_image
+						FROM meeting_post mp
+       					<choose>
+       						<when test="meetingPostListSearchCondition == 0">
+       							JOIN users u ON mp.user_no = u.user_no
+	       						<where>
+	       							<choose>
+	       								<when test="searchCondition == 0 and searchKeyword != '' ">
+	       									mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 1 and searchKeyword != '' ">
+	       									mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 2 and searchKeyword != '' ">
+	       									u.nickname LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       							</choose>
+	       						</where>
+       						</when>
+       						<when test="meetingPostListSearchCondition == 1">
+	       						JOIN users u ON mp.user_no = u.user_no
+	       						<where>
+	       							<choose>
+	       								<when test="searchCondition == 0 and searchKeyword != '' ">
+	       									mp.user_no = #{userNo} AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 1 and searchKeyword != '' ">
+	       									mp.user_no = #{userNo} AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 2 and searchKeyword != '' ">
+	       									mp.user_no = #{userNo} AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<otherwise>
+	       									mp.user_no = #{userNo}
+	       								</otherwise>
+	       							</choose>
+	       						</where>
+       						</when>
+       						<when test="meetingPostListSearchCondition == 2">
+	       						JOIN users u ON mp.user_no = u.user_no
+								JOIN meeting_participation mpp ON mp.mp_no = mpp.mp_no
+	       						<where>
+	       							<choose>
+	       								<when test="searchCondition == 0 and searchKeyword != '' ">
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 1 and searchKeyword != '' ">
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 2 and searchKeyword != '' ">
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0 AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<otherwise>
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 0
+	       								</otherwise>
+	       							</choose>
+	       						</where>
+       						</when>
+       						<when test="meetingPostListSearchCondition == 3">
+	       						JOIN users u ON mp.user_no = u.user_no
+								JOIN meeting_participation mpp ON mp.mp_no = mpp.mp_no
+	       						<where>
+	       							<choose>
+	       								<when test="searchCondition == 0 and searchKeyword != '' ">
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 1 and searchKeyword != '' ">
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 2 and searchKeyword != '' ">
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<otherwise>
+	       									mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2
+	       								</otherwise>
+	       							</choose>
+	       						</where>
+       						</when>
+       						<when test="meetingPostListSearchCondition == 4">
+	       						JOIN users u ON mp.user_no = u.user_no
+								JOIN likes l ON mp.mp_no = l.post_no
+	       						<where>
+	       							<choose>
+	       								<when test="searchCondition == 0 and searchKeyword != '' ">
+	       									l.user_no = #{userNo} AND l.post_type = 1 AND mp.mp_title LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 1 and searchKeyword != '' ">
+	       									l.user_no = #{userNo} AND l.post_type = 1 AND mp.mp_contents LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<when test="searchCondition == 2 and searchKeyword != '' ">
+	       									l.user_no = #{userNo} AND l.post_type = 1 AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+	       								</when>
+	       								<otherwise>
+	       									l.user_no = #{userNo} AND l.post_type = 1
+	       								</otherwise>
+	       							</choose>
+	       						</where>
+       						</when>
+       					</choose> ) count_table)
+        
+    </select>
+	
+	<select id="getMeetingPostLikeStatus" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM likes
+        WHERE user_no = #{userNo} AND post_no = #{postNo} AND post_type = 1
+    </select>
+	
 	<insert id="insertMeetingPostLike" parameterType="site.dearmysanta.domain.common.Like">
 		INSERT
-		INTO likes(like_no, user_no, post_like_no, post_like_type, like_date)
-		VALUES(seq_like_no.NEXTVAL, #{userNo}, #{postNo}, #{postLikeType}, #{likeDate})
+		INTO likes(like_no, user_no, post_no, post_type)
+		VALUES(seq_like_no.NEXTVAL, #{userNo}, #{postNo}, 1)
 	</insert>
 	
 	<delete id="deleteMeetingPostLike" parameterType="site.dearmysanta.domain.common.Like">
 		DELETE FROM likes
-        WHERE user_no = #{userNo} AND post_like_no = #{postNo} AND post_like_type = 1
+        WHERE user_no = #{userNo} AND post_no = #{postNo} AND post_type = 1
 	</delete>
 	
+	<select id="getMeetingPostComment" parameterType="int" resultMap="meetingPostCommentSelectMap">
+		SELECT 
+        	c.post_no,
+        	c.comment_no,
+        	c.comment_contents,
+        	c.comment_creation_date,
+        	u.user_no,
+        	u.nickname,
+        	u.profile_image
+    	FROM 
+        	comments c
+    	JOIN 
+        	users u ON c.user_no = u.user_no
+    	WHERE 
+        	c.comment_no = #{meetingPostCommentNo}
+	</select>
+	
 	<insert id="insertMeetingPostComment" parameterType="site.dearmysanta.domain.meeting.MeetingPostComment">
-        INSERT INTO comments(comment_no, user_no, post_no, comment_contents, post_type_no)
-        VALUES(seq_comment_no.NEXTVAL, #{userNo}, #{meetingPostNo}, #{meetingPostCommentContent}, 1)
+		<selectKey keyProperty="meetingPostCommentNo" resultType="int" order="BEFORE">
+            SELECT seq_comment_no.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO comments (
+        	comment_no, 
+        	user_no, 
+        	post_no, 
+        	comment_contents, 
+        	post_type
+        ) VALUES (
+        	seq_comment_no.CURRVAL, 
+        	#{userNo}, 
+        	#{meetingPostNo}, 
+        	#{meetingPostCommentContents}, 
+        	1
+        )
     </insert>
     
-    <delete id="deleteMeetingPostComment" parameterType="site.dearmysanta.domain.meeting.MeetingPostComment">
+    <delete id="deleteMeetingPostComment" parameterType="int">
         DELETE FROM comments
-        WHERE comment_no = #{meetingPostCommentNo} AND post_no = #{meetingPostNo} AND post_type_no = 1
+        WHERE comment_no = #{meetingPostCommentNo}
     </delete>
     
     <select id="getMeetingPostLikeCount" parameterType="int" resultType="int">
@@ -148,5 +411,138 @@
         FROM meeting_post
         WHERE appointed_hiking_mountain = #{appointedHikingMountain}
     </select>
-
+    
+    <select id="getMeetingParticipationList" parameterType="int" resultMap="meetingParticipationSelectMap">
+    	SELECT 
+        	mpp.participation_no,
+        	u.user_no,
+        	u.profile_image,
+        	u.nickname,
+        	mpp.participation_status,
+        	mpp.participation_role,
+        	mpp.withdraw_flag
+    	FROM 
+        	meeting_participation mpp
+    	JOIN 
+        	users u ON mpp.user_no = u.user_no
+    	WHERE 
+        	mpp.mp_no = #{postNo} AND mpp.withdraw_flag = 0
+	</select>
+	
+	<select id="getMeetingPostCommentList" parameterType="int" resultMap="meetingPostCommentSelectMap">
+    	SELECT 
+        	c.post_no,
+        	c.comment_no,
+        	c.comment_contents,
+        	c.comment_creation_date,
+        	u.user_no,
+        	u.nickname,
+        	u.profile_image
+    	FROM 
+        	comments c
+    	JOIN 
+        	users u ON c.user_no = u.user_no
+    	WHERE 
+        	c.post_no = #{postNo} AND c.post_type = 1
+	</select>
+	
+	<select id="getMeetingParticipation" parameterType="int" resultMap="meetingParticipationSelectMap">
+		SELECT 
+        	mpp.participation_no,
+        	u.profile_image,
+        	u.nickname,
+        	mpp.participation_status,
+        	mpp.participation_role,
+        	mpp.withdraw_flag
+    	FROM 
+        	meeting_participation mpp
+    	JOIN 
+        	users u ON mpp.user_no = u.user_no
+    	WHERE 
+        	mpp.participation_no = #{participationNo}
+	</select>
+	
+	<insert id="insertMeetingParticipation" parameterType="site.dearmysanta.domain.meeting.MeetingParticipation">
+		<selectKey keyProperty="participationNo" resultType="int" order="BEFORE">
+            SELECT seq_participation_no.NEXTVAL FROM DUAL
+        </selectKey>
+	
+        INSERT INTO meeting_participation (
+        	participation_no,
+            mp_no,
+            user_no,
+            participation_status,
+            participation_role
+        ) VALUES (
+        	seq_participation_no.CURRVAL,
+            #{postNo},
+            #{userNo}, 
+            #{participationStatus},
+            #{participationRole}
+        )
+    </insert>
+    
+    <delete id="deleteMeetingParticipation" parameterType="int">
+    	DELETE FROM meeting_participation
+    	WHERE participation_no = #{participationNo}
+	</delete>
+    
+	<update id="updateMeetingParticipationStatus" parameterType="int">
+    	UPDATE meeting_participation
+    	SET participation_status = 1,
+        	participation_role = 2
+    	WHERE participation_no = #{participationNo}
+	</update>
+	
+	<update id="updateMeetingParticipationWithdrawStatus" parameterType="map">
+    	UPDATE meeting_participation
+    	SET withdraw_flag = 1
+    	WHERE mp_no = #{postNo} AND user_no = #{userNo}
+	</update>
+	
+	<update id="updateMeetingPostRecruitmentStatus" parameterType="site.dearmysanta.domain.meeting.MeetingPost">
+    	UPDATE meeting_post
+    	SET recruitment_status = #{recruitmentStatus}
+    	WHERE mp_no = #{postNo}
+	</update>
+	
+	<update id="updateMeetingPostRecruitmentStatusToEnd" parameterType="int">
+    	UPDATE meeting_post
+    	SET recruitment_status = 2
+    	WHERE mp_no = #{postNo}
+	</update>
+	
+	<update id="updateMeetingPostDeletedStatus" parameterType="int">
+    	UPDATE meeting_post
+    	SET mp_deleted_flag = 1
+    	WHERE mp_no = #{postNo}
+	</update>
+	
+	<update id="updateMeetingPostCertifiedStatus" parameterType="int">
+    	UPDATE meeting_post
+    	SET mp_certified_flag = 1
+    	WHERE mp_no = #{postNo}
+	</update>
+	
+	<select id="getUnCertifiedMeetingPost" parameterType="int" resultMap="meetingPostSelectMap">
+		SELECT 
+        	mp_no, mp_title, mp_creation_date, meeting_name
+    	FROM
+        	meeting_post
+    	WHERE
+        	user_no = #{userNo} AND mp_certified_flag = 0 AND recruitment_status = 2
+	</select>
+	
+	<select id="getChattingRoomList" parameterType="int" resultMap="meetingPostSelectMap">
+    	SELECT
+    		mp.mp_no, mp.meeting_name
+		FROM
+			meeting_post mp
+		JOIN
+			meeting_participation mpp ON mp.mp_no = mpp.mp_no
+		WHERE
+			mpp.user_no = ${userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2 and mp.mp_certified_flag = 0;
+	</select>
+	
+	
 </mapper>

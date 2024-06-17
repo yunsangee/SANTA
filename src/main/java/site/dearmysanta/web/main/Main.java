@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.common.Search;
+import site.dearmysanta.domain.meeting.MeetingPostSearch;
 import site.dearmysanta.service.certification.CertificationPostService;
 import site.dearmysanta.service.meeting.MeetingService;
 import site.dearmysanta.service.mountain.MountainService;
@@ -59,7 +60,22 @@ public class Main {
 //		return "forward:/mountain/getMountain.jsp";
 //	}//o
 	@GetMapping("/")
-	public String mainTemp() {
+	public String mainTemp(Model model) throws Exception {
+		Search search = new Search();
+		if(search != null & search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
+		search.setPageSize(pageSize);
+		search.setPageUnit(pageUnit);
+		
+		MeetingPostSearch meetingPostSearch = new MeetingPostSearch();
+		
+		model.addAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
+//		model.addAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), userService.getUser(1)));
+//		model.addAttribute("meetingPostList", meetingService.getMeetingPostList(meetingPostSearch));
+//		model.addAttribute("certificationPostList",certificationPostService.getCertificationPostList(search));
+		
+		
 		return "forward:/common/main.jsp";
 	}
 //	
