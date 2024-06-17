@@ -64,7 +64,44 @@
 
 <body>
 	<header> <c:import url="./top.jsp"/> </header>
-	<main></main>
+	<main>
+		<nav>
+			<div class="container-fluid testimonial py-5">
+            <div class="container py-5">
+                <div class="testimonial-header text-center">
+                    <h4 class="text-primary">인기산 목록</h4>
+                </div>
+                <div class="owl-carousel testimonial-carousel owl-loaded owl-drag">
+                    
+                    
+                    
+                <div class="owl-stage-outer"><div class="owl-stage" style="transform: translate3d(-2163px, 0px, 0px); transition: all 2s ease 0s; width: 5047px;"><div class="owl-item cloned" style="width: 696px; margin-right: 25px;"><div class="testimonial-item img-border-radius bg-light rounded p-4">
+                        <div class="position-relative">
+                            <div class="d-flex align-items-center flex-nowrap">
+                                <div class="bg-secondary rounded">
+                                    <img src="img/testimonial-1.jpg" class="img-fluid rounded" style="width: 100px; height: 100px;" alt="">
+                                </div>
+                                <div class="ms-4 d-block">
+                                    <h4 class="text-dark">Client Name</h4>
+                                    <p class="m-0 pb-3">Profession</p>
+                                    <div class="d-flex pe-5">
+                                        <i class="fas fa-star text-primary"></i>
+                                        <i class="fas fa-star text-primary"></i>
+                                        <i class="fas fa-star text-primary"></i>
+                                        <i class="fas fa-star text-primary"></i>
+                                        <i class="fas fa-star text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div></div>
+				</div></div>
+				<div class="owl-nav"><div class="owl-prev"><i class="bi bi-arrow-left"></i></div><div class="owl-next"><i class="bi bi-arrow-right"></i></div></div><div class="owl-dots"><div class="owl-dot"><span></span></div><div class="owl-dot active"><span></span></div><div class="owl-dot"><span></span></div></div></div>
+            </div>
+        </div>
+		</nav>
+	
+	</main>
 	<footer></footer>
 
 </body>
