@@ -131,7 +131,7 @@ public class ObjectStorageService {
     }
     
     
-    
+    //getImageUrl(mountainName + "사진")
     public String getImageURL( String fileName) {
     	return endpoint+"/"+bucketName+"/"+fileName;
     }
