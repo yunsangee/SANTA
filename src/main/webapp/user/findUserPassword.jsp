@@ -26,23 +26,27 @@
             font-family: Arial, sans-serif;
         }
 
-        .container {
+     /*    .container {
             max-width: 400px;
             width: 100%;
             padding: 20px;
-        }
+        } */
 
         main {
+        	margin-top:10px;
             padding: 20px;
             text-align: center;
+            justify-content: center;
+            align-items: center;
         }
 
-        h2 {
+        .container h2 {
             color: #333;
+            margin-top:5px;
             margin-bottom: 20px;
         }
 
-        p {
+        .container p {
             color: #999999;
             font-size: 13px;
             margin-bottom: 20px;
@@ -54,8 +58,19 @@
             align-items: center;
         }
 
-       .email, .code {
-            width: 40%;
+       .email {
+            width: 30%;
+            padding: 10px;
+            margin-bottom: 10px;
+            margin-top:30px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            align-items: center;
+        }
+        
+        .code {
+            width: 30%;
             padding: 10px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
@@ -65,63 +80,67 @@
         }
         
         .phone {
-        	width: 30%;
+        	width: 21.8%;
             padding: 10px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
             align-items: center;
-            margin-left : -140px;
+            margin-right : 77px;
         }
 
-        .form-group {
+       /*  .form-group {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
+        } */
 
        /*  .form-group input[type="text"] {
             width: 40%;
             margin-right: 10px;
         } */
 
-        .button {
-            width: 40%;
+        .send {
+            width: 8%;
             padding: 10px;
-            background-color: #4CAF50;
+            font-size: 16px;
+            background-color: #81C408;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-right: -100px;
+            margin-left: -77px;
         }
 
         .form-group button:hover {
-            background-color: #45a049;
+            background-color: #578906;
         }
 
-        button {
-            width: 40%;
-            padding: 10px;
-            background-color: #4CAF50;
+        .submit {
+            width: 30%;
+            padding: 15px;
+            font-size: 16px;
+            background-color: #81C408;
+            margin-top: 10px;
             margin-bottom: 10px;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
         }
 
-        button:hover {
-            background-color: #45a049;
+        .submit:hover {
+            background-color: #578906;
         }
 
         .container .link {
-            display: block;
+            display: inline-block;
+            font-size: 12px;
             text-align: center;
             margin-top: 10px;
             color: #333;
+            justify-content: center; 
             text-decoration: none;
         }
 
@@ -157,20 +176,21 @@
     <form action="findUserPassword" method="post">
         <div>
             <label for="email"></label>
-            <input type="text" class ="email" id="email" name="email" placeholder="email" required>
+            <input type="text" class ="email" id="userId" name="userId" placeholder="email" required>
         </div>
         <div class="form-group">
             <label for="phoneNumber"></label>
-            <input type="text" class ="phone" id="phoneNumber" name="phoneNumber" placeholder="휴대폰 번호" pattern="01[0-9]{8,9}" required>
-            <button type="button" class="button" onclick="sendVerificationCode()">인증번호</button>
+            <input type="text" class ="phone" id="phoneNumber" name="phoneNumber" placeholder="휴대폰 번호" required>
+            <button type="button" class="send" onclick="sendVerificationCode()">인증번호</button>
         </div>
         <div>
             <label for="verifyCode"></label>
-            <input type="text" class ="code" id="verifyCode" name="verifyCode" placeholder="인증번호" required>
+            <input type="text" class ="code" id="verifyCode" name="verifyCode" placeholder="인증번호" >
         </div>
-        <button type="submit">비밀번호 찾기</button>
-        <a href="/user/findUserId.jsp" class="link">아이디 찾기</a>
-        <a href="/user/login.jsp" class="link">로그인 페이지로 가기</a>
+        <button type="submit" class="submit">비밀번호 찾기</button>
+        <br>
+        <a href="/user/findUserId.jsp" class="link">아이디 찾기</a>&emsp;&emsp;&emsp;
+        &emsp;<a href="/user/login.jsp" class="link">로그인 페이지로 가기</a>
     </form>
 </main> 
 
@@ -180,6 +200,12 @@
         alert('인증번호가 전송되었습니다.');
     }
 </script>
+
+<!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// -->
+
+<footer>
+	
+</footer>
 
 </body>
 </html>
