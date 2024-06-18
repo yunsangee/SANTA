@@ -46,6 +46,21 @@ public class UserController {
 
 			System.out.println("addUser : POST");
 			
+			String addPassword = user.getUserPassword();
+		    
+		    System.out.println("addPassword : " +addPassword);
+		    
+		    // 새로운 비밀번호 확인용 비밀번호
+		    String checkPassword = user.getCheckPassword(); // 사용자가 입력한 새로운 비밀번호 확인용
+		    
+		    System.out.println("checkPassword : " +checkPassword);
+		    
+		    if (!addPassword.equals(checkPassword)) {
+		        // 새로운 비밀번호와 비밀번호 확인이 일치하지 않는 경우
+		        model.addAttribute("error", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+		        return "redirect:/user/addUser.jsp";
+		    }
+			
 			userService.addUser(user);
 			
 			return "redirect:/user/login.jsp";
@@ -78,7 +93,7 @@ public class UserController {
 		    // DB에서 사용자 정보 조회
 		    User dbUser = userService.getUserByUserId(user.getUserId());
 		    
-		    System.out.println("확인 : " +dbUser);
+		    System.out.println("확인 : " + dbUser);
 		    
 		    // 사용자가 존재하는지 확인
 		    if (dbUser == null) {
@@ -87,7 +102,12 @@ public class UserController {
 		    }
 		    
 		    System.out.println("dbUser : " + dbUser);
-		    System.out.println("user : " + user);
+		    
+		    // 탈퇴일시가 null인지 확인
+		    if (dbUser.getWithdrawDate() != null) {
+		        model.addAttribute("error", "탈퇴한 사용자입니다.");
+		        return "redirect:/user/login.jsp";
+		    }
 		    
 		    // 비밀번호 일치 여부 확인
 		    if (user.getUserPassword().equals(dbUser.getUserPassword())) {
@@ -98,7 +118,7 @@ public class UserController {
 		        return "redirect:/user/login.jsp";
 		    }
 		}
-		
+
 		
 		//
 		// logout(Get)
@@ -295,13 +315,16 @@ public class UserController {
 //		
 		
 		@GetMapping( value="updateUser")
-		public String updateUser( @RequestParam int userNo , Model model ) throws Exception {
+		public String updateUser(@RequestParam int userNo , Model model ) throws Exception {
 
 			System.out.println("updateUser : GET");
 			//Business Logic
 			User user = userService.getUser(userNo);
 			// Model 과 View 연결
-			model.addAttribute("user", user);
+			
+			System.out.println("user :" +user);
+			
+			model.addAttribute("user", user);	
 			
 			return "forward:/user/updateUser.jsp";
 		}
@@ -339,11 +362,11 @@ public class UserController {
 		        return "redirect:/user/updateUser.jsp";
 		    }
 
-		    // 사용자 정보 업데이트
+		    // 사용자 정보 업데이트;
 		    dbUser.setNickName(user.getNickName());
 		    dbUser.setAddress(user.getAddress());
 		    dbUser.setPhoneNumber(user.getPhoneNumber());
-		    dbUser.setProfileImage(user.getProfileImage());
+			/* dbUser.setProfileImage(user.getProfileImage()); */
 		    dbUser.setHikingPurpose(user.getHikingPurpose());
 		    dbUser.setHikingDifficulty(user.getHikingDifficulty());
 		    dbUser.setHikingLevel(user.getHikingLevel());
@@ -368,6 +391,18 @@ public class UserController {
 		//
 		// deleteUser
 		//
+			
+		@GetMapping( value="deleteUser")
+		public String deleteUser(@RequestParam int userNo , Model model ) throws Exception {
+
+			System.out.println("deleteUser : GET");
+			//Business Logic
+			User user = userService.getUser(userNo);
+			// Model 과 View 연결
+			model.addAttribute("user", user);
+			
+			return "forward:/user/deleteUser.jsp";
+		}
 		
 		@PostMapping(value="deleteUser")
 		public String deleteUser(@ModelAttribute User user, @RequestParam(required = false) Integer userNo, Model model, HttpSession session) throws Exception {
@@ -419,7 +454,9 @@ public class UserController {
 		    System.out.println("deleteUser : " + dbUser2);
 
 		    // 탈퇴 성공 후 메인 페이지로 리다이렉트
-		    return "forward:/user/main.jsp";
+		    return "redirect:/common/main.jsp";
+		    
+		   // return "redirect:/user/getUser?userNo=" + dbUser.getUserNo();
 		}
 		
 		//

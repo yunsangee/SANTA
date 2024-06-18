@@ -19,6 +19,7 @@
 <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
 
  <style>
+ 
 html, body {
     height: 100%;
     margin: 0;
@@ -83,7 +84,7 @@ input[type="password"] {
 }
 
 button {
-    width: 300px;
+    width: 100%;
     padding: 15px;
     font-size: 16px;
     margin-top: 10px;
@@ -96,7 +97,7 @@ button {
 
 button:hover {
     background-color: #578906; 
-}
+} 
 
 .links {
     margin-top: 15px;
@@ -137,6 +138,7 @@ button:hover {
             width: 100px;
             margin-right: 10px;
         }
+           
 </style>
 
 </head>
