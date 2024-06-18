@@ -17,5 +17,15 @@ import lombok.ToString;
 @ToString(callSuper=true)
 public class MeetingPostSearch extends Search{
 	private int meetingPostListSearchCondition; // Condition for searching the meeting post list by category
+	private int endRowNum;
+	private int startRowNum;
+	
+	public int getEndRowNum() {
+		return getCurrentPage()*getPageSize();
+	}
+	//==> Select Query 시 ROWNUM 시작 값
+	public int getStartRowNum() {
+		return (getCurrentPage()-1)*getPageSize()+1;
+	}
 
 }

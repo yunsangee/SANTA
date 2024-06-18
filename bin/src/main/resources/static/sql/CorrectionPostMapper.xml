@@ -29,6 +29,14 @@
 	
 	</insert>
 	
+	<update id="updateCorrestionPostStatus" parameterType="int">
+		UPDATE CORRECTION_POST
+		SET
+			CRP_STATUS = 1
+		WHERE CRP_NO = #{value}
+	
+	</update>
+	
 	<delete id="deleteCorrectionPost" parameterType="map">
 		DELETE FROM CORRECTION_POST
 		WHERE USER_NO = #{userNo} AND CRP_NO = #{postNo}
@@ -37,7 +45,7 @@
 	<select id="getCorrectionPostList" resultMap="CorrectionPostResultMap">
 		SELECT crp.crp_no, crp.crp_content, crp.crp_date, crp.crp_status, m.MOUNTAIN_NO, m.MOUNTAIN_NAME, u.USER_NO
 		FROM USERS u, CORRECTION_POST crp, MOUNTAIN m
-		WHERE crp.USER_NO = u.USER_NO AND crp.MOUNTAIN_NO = m.MOUNTAIN_NO
+		WHERE crp.USER_NO = u.USER_NO AND crp.MOUNTAIN_NO = m.MOUNTAIN_NO AND crp.crp_status = 0
 	</select>
 
 
