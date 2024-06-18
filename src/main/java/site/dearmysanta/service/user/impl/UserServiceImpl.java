@@ -2,12 +2,14 @@ package site.dearmysanta.service.user.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.user.QNA;
 import site.dearmysanta.domain.user.Schedule;
 import site.dearmysanta.domain.user.User;
@@ -36,9 +38,13 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public List<User> getUserList() throws Exception {
+	public List<User> getUserList(Search search) throws Exception {
 		// TODO Auto-generated method stub
-		return userDao.getUserList();
+		return userDao.getUserList(search);
+	}
+	
+	public List<User> withdrawUserList(Search search) throws Exception {
+		return userDao.withdrawUserList(search);
 	}
 
 	@Override
@@ -49,10 +55,9 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public void deleteUser(int userNo) throws Exception {
+	public void deleteUser(User user) throws Exception {
 		// TODO Auto-generated method stub
-		
-        userDao.deleteUser(userNo);
+        userDao.deleteUser(user);
 		
         //userDao.deleteUser(userNo);
 		
@@ -94,10 +99,10 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public User setUserPassword(String userId, String userPassword) throws Exception {
+	public void setUserPassword(String userId, String userPassword) throws Exception {
 		// TODO Auto-generated method stub
-		return userDao.setUserPassword(userId, userPassword);
-		
+		userDao.setUserPassword(userId, userPassword);
+
 	}
 
 	@Override
@@ -171,20 +176,23 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public QNA getQnA(int postNo) throws Exception {
-		return userDao.getQnA(postNo);
+	public QNA getQnA(int postNo, int userNo) throws Exception {
+		return userDao.getQnA(postNo, userNo);
 	}
 
 	@Override
-	public List<User> getQnAList() throws Exception {
+	public List<QNA> getQnAList(Search search) throws Exception {
 		// TODO Auto-generated method stub
-		return userDao.getQnAList();
+		return userDao.getQnAList(search);
 	}
 
+	public void addAdminAnswer(QNA qna) throws Exception {
+		userDao.addAdminAnswer(qna);
+	}
 	@Override
-	public void deleteQnA(int postNo) throws Exception {
+	public void deleteQnA(int postNo, int userNo) throws Exception {
 		// TODO Auto-generated method stub
-		userDao.deleteQnA(postNo);
+		userDao.deleteQnA(postNo, userNo);
 	}
 
 	@Override
@@ -194,15 +202,15 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public void getSchedule(int postNo) throws Exception {
+	public Schedule getSchedule(int postNo, int userNo) throws Exception {
 		// TODO Auto-generated method stub
-		userDao.getSchedule(postNo);
+		return userDao.getSchedule(postNo, userNo);
 	}
 
 	@Override
-	public List<User> getScheduleList() throws Exception {
+	public List<Schedule> getScheduleList(Search search) throws Exception {
 		// TODO Auto-generated method stub
-		return userDao.getScheduleList();
+		return userDao.getScheduleList(search);
 	}
 
 	@Override
@@ -212,15 +220,71 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public void deleteSchedule(int postNo) throws Exception {
+	public void deleteSchedule(int postNo, int userNo) throws Exception {
 		// TODO Auto-generated method stub
-		userDao.deleteSchedule(postNo);
+		userDao.deleteSchedule(postNo, userNo);
 	}
 
 	@Override
-	public void getMountainTotalCount() throws Exception {
+	public int getMountainTotalCount(String mountainName) throws Exception {
+		return userDao.getMountainTotalCount(mountainName);
+	}
+
+	@Override
+//	public User login(String userId, String password) throws Exception {
+//		// TODO Auto-generated method stub
+//		String login = userDao.login(userId, password);
+//		
+//		if (userId == null) {
+//		       
+//		        throw new Exception("사용자를 찾을 수 없습니다."); //  not exist UserId
+//		    
+//		    } else {
+//		   
+//		    return;
+//		    
+//		    }
+//	}
+	public User login(String userId, String password) throws Exception {
+        // userId와 password를 사용하여 사용자를 조회
+        //User user = userDao.login(userId, password);
+        return userDao.login(userId, password);
+        // 사용자가 존재하면 사용자 정보 반환, 존재하지 않으면 null 반환
+        //return user;
+    }
+
+	@Override
+	public String findUserPhoneNumber(String phoneNumber) throws Exception {
 		// TODO Auto-generated method stub
-		userDao.getMountainTotalCount();
+		String phone = userDao.findUserPhoneNumber(phoneNumber); // confirm UserInfo
+	    
+	    if (phone == null) {
+	       
+	        throw new Exception("사용자를 찾을 수 없습니다."); //  not exist UserId
+	    
+	    } else {
+	   
+	    return phone;
+	    
+	    }
+	}
+
+	@Override
+	public User getUserByUserId(String userId) throws Exception {
+		// TODO Auto-generated method stub
+		return userDao.getUserByUserId(userId);
+	}
+
+	@Override
+	public String getUserPassword(String userPassword) throws Exception {
+		// TODO Auto-generated method stub
+		return userDao.getUserPassword(userPassword);
+	}
+
+	@Override
+	public void updateAnswer(QNA qna) throws Exception {
+		// TODO Auto-generated method stub
+		userDao.updateAnswer(qna);
 	}
 
 	
