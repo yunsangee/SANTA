@@ -54,7 +54,7 @@ public interface MountainService {
 	
 	public void deleteMountainLike(Like like);
 	
-	public int getTotalMountainLikeCount(Like like);
+	public int getTotalMountainLikeCount(int mountainNo);
 	
 	public List<Mountain> getMountainLikeList(Search search);
 	
