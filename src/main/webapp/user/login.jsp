@@ -182,7 +182,7 @@ button:hover {
        
         
         <div class="links">
-            <a href="/user/findUserPassword.jsp">비밀번호 재설정</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            <a href="/user/findUserPassword.jsp">비밀번호 찾기</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
             &nbsp&nbsp<a href="/user/addUser.jsp">회원가입</a>
         </div>
         <!-- <a href="/user/addUser.jsp">회원가입</a>  

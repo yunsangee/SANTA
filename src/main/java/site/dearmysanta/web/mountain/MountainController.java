@@ -153,7 +153,7 @@ public class MountainController {
 	@GetMapping(value="getStatistics")
 	public String getStatistics(Model model) throws JsonProcessingException {
 
-		LocalDate today = LocalDate.now().minusDays(3);
+		LocalDate today = LocalDate.now().minusDays(7);
 
         // 날짜를 "YYYY-MM-DD" 형식으로 포맷
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
