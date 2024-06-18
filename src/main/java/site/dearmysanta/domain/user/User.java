@@ -1,6 +1,7 @@
 package site.dearmysanta.domain.user;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -26,8 +27,10 @@ public class User {
 	private String userId;
 	private String userName;
 	private String userPassword;
+	private String checkPassword;
 	private String nickName;
 	private String address;
+	private String detailaddress;
 	private String birthDate;
 	private String phoneNumber;
 	private int gender;
@@ -43,7 +46,8 @@ public class User {
 	private String badgeImage;
 	private int certificationCount;
 	private int meetingCount;
-	private List<String> surveyContent;
+	//private List<String> surveyContent;
+	private String verifyCode;
 	private String passwordNew;
 	private String introduceContent;
 	private int searchRecordFlag;

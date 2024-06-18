@@ -70,7 +70,7 @@
             hr_mountain_name
         FROM hiking_record
         WHERE user_no = #{userNo, jdbcType=NUMERIC}
-        ORDER BY hr_date
+        ORDER BY hr_date desc
     </select>
 
 </mapper>

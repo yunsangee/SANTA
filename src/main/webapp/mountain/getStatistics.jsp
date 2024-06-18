@@ -1,20 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<c:import url="../common/header.jsp"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-
-<h1>Daily Statistics</h1>
-    <canvas id="dailyChart"></canvas>
-
-    <script>
+<script>
+	$(document).ready(function(){
         var dailyStats = ${dailyStats};
         var labels = [];
         var searchCounts = [];
@@ -60,13 +55,7 @@
                 }
             }
         });
-    </script>
-    
-    
-     <h1>Weekly Statistics</h1>
-    <canvas id="weeklyChart"></canvas>
-
-    <script>
+        
         var weeklyStats = ${weeklyStats};
         var labels = [];
         var searchCounts = [];
@@ -111,10 +100,46 @@
                 }
             }
         });
-    </script>
-    
-    
-    
+	});
 
+    </script>
+
+</head>
+<body>
+
+
+	 <header><c:import url="../common/top.jsp"/></header>
+	
+	
+	
+
+	<main>
+	
+	<div class="container-fluid contact "style="margin-top:100px;">
+    <div class="container">
+        <div class="map-container">
+            <h3>Daily Statistics</h3>
+    		<canvas id="dailyChart"></canvas>
+        </div>
+        
+        <div class="map-container">
+            <h3>Weekly Statistics</h3>
+   			<canvas id="weeklyChart"></canvas>
+        </div>
+    </div>
+</div>
+		
+	</main>
+	
+	
+	
+	
+	
+	<footer><c:import url="../common/footer.jsp"/></footer>
+	
+	
+	
+	
+	
 </body>
 </html>
