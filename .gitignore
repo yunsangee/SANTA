@@ -33,3 +33,4 @@ build/
 .vscode/
 
 /src/main/resources/static/config/mountain/naver.properties
+/src/main/resources/static/config/user/cool.properties
