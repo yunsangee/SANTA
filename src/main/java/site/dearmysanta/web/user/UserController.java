@@ -74,14 +74,14 @@ public class UserController {
 		public String login(@ModelAttribute String userId, String password, Model model, HttpSession session) throws Exception {
 		    System.out.println("login : GET");
 		    
-		    // login
-		    User user = userService.login(userId, password);
-		    System.out.println("login : " + user);
-		    
-		    // success login -> session : userNo
-		    if (user != null) {
-		        session.setAttribute("userNo", user.getUserNo());
-		    }
+//		    // login
+//		    User user = userService.login(userId, password);
+//		    System.out.println("login : " + user);
+//		    
+//		    // success login -> session : userNo
+//		    if (user != null) {
+//		        session.setAttribute("userNo", user.getUserNo());
+//		    }
 		    
 		    return "redirect:/user/login.jsp";
 		}	
