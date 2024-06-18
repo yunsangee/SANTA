@@ -92,18 +92,18 @@ public class MountainRestController {
 	
 	@PostMapping("rest/addMountainLike")
 	public int addMountainLike(@RequestBody Like like) {
-		SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like));
+		//SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like.getPostNo()));
 		mountainService.addMountainLike(like);
-		SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like));
-		return mountainService.getTotalMountainLikeCount(like);
+		SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like.getPostNo()));
+		return mountainService.getTotalMountainLikeCount(like.getPostNo());
 	}//o
 	
 	@PostMapping("rest/deleteMountainLike")
 	public int deleteMountainLike(@RequestBody Like like) {
-		SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like));
+		//SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like.getPostNo()));
 		mountainService.deleteMountainLike(like);
-		SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like));
-		return mountainService.getTotalMountainLikeCount(like);
+		//SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like.getPostNo()));
+		return mountainService.getTotalMountainLikeCount(like.getPostNo());
 	}//o
 	
 	@PostMapping("rest/updateMountain")
