@@ -373,7 +373,7 @@
             FROM 
                 STATISTICS
             WHERE
-                SEARCH_DATE BETWEEN SYSDATE - 6 AND SYSDATE
+                SEARCH_DATE BETWEEN SYSDATE - 100 AND SYSDATE
         )
         GROUP BY 
             MOUNTAIN_NAME

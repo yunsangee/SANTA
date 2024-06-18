@@ -30,7 +30,7 @@
                     slideBy: 1,
                     center: true, // 슬라이드를 가운데 정렬합니다.
                     autoplay: true, // 자동 재생을 활성화합니다.
-                    autoplayTimeout: 3000// 3초마다 슬라이드를 넘깁니다.
+                    autoplayTimeout: 5000// 5초마다 슬라이드를 넘깁니다.
                    /*  autoplayHoverPause: true */ // 마우스 호버 시 자동 재생을 일시 중지합니다.
                 });
                 
@@ -71,8 +71,9 @@
             	window.location.href = 'http://${javaServerIp}/mountain/mapMountain';
             });
 
-            $('.item').on('click',function(){
-            	var h4Value = $(this).children().find('h4').text();
+            $('.fa-external-link-alt').on('click',function(){
+            	console.log($($(this).parent()).text());
+            	var h4Value = $($(this).parent()).text().trim();
             	console.log(h4Value);
             	
             	window.location.href = "http://${javaServerIp}/mountain/mapMountain?searchCondition=0&searchKeyword=" + h4Value;
@@ -81,8 +82,12 @@
 
             // Like button toggle
             $(document).on('click', '.like-button', function() {
-                $(this).toggleClass('fas far');
-                $(this).toggleClass('text-danger');
+            	let user = ${sessionScope.user != null ? sessionScope.user : 'null'};
+            	
+            	if(user != null){
+                	$(this).toggleClass('fas far');
+                	$(this).toggleClass('text-danger');
+            	}
             });
         });
     </script>
@@ -112,10 +117,7 @@
 </head>
 
 <body>
-    <header>
-    	<c:import url="./top.jsp"/>
-    	
-    </header>
+    <header><c:import url="./top.jsp"/></header>
     <main>
 	
 
@@ -155,7 +157,10 @@
 												style="width: 250px; height: 150px;" alt="">
 										</div>
 										<div class="ms-3 d-block" style="flex-grow: 1;">
-											<h4 class="text-dark">${mountain.mountainName}</h4>
+											<div class="d-flex justify-content-between align-items-center">
+        										<h4 class="text-dark mb-0">${mountain.mountainName}</h4>
+            									<i class="fas fa-external-link-alt"></i>
+    										</div>
 											<p class="m-0 pb-3" style="font-size: 0.75em;">${mountain.mountainLocation}</p>
 											<p class="m-0 pb-3">${mountain.mountainAltitude}m</p>
 											<p class="m-0 pb-3">
@@ -201,7 +206,10 @@
 												style="width: 250px; height: 150px;" alt="">
 										</div>
 										<div class="ms-3 d-block" style="flex-grow: 1;">
-											<h4 class="text-dark">${mountain.mountainName}</h4>
+											<div class="d-flex justify-content-between align-items-center">
+        										<h4 class="text-dark mb-0">${mountain.mountainName}</h4>
+            									<i class="fas fa-external-link-alt"></i>
+    										</div>
 											<p class="m-0 pb-3" style="font-size: 0.75em;">${mountain.mountainLocation}</p>
 											<p class="m-0 pb-3">${mountain.mountainAltitude}m</p>
 											<p class="m-0 pb-3">
@@ -227,7 +235,6 @@
 			<%--             </c:if> --%>
 		</nav>
 	</main>
-    <footer></footer>
+    <footer><c:import url="../common/footer.jsp"/></footer>
 </body>
 </html>
-
