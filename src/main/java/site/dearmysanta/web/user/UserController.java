@@ -50,14 +50,14 @@ public class UserController {
 		    
 		    System.out.println("addPassword : " +addPassword);
 		    
-		    // »õ·Î¿î ºñ¹Ð¹øÈ£ È®ÀÎ¿ë ºñ¹Ð¹øÈ£
-		    String checkPassword = user.getCheckPassword(); // »ç¿ëÀÚ°¡ ÀÔ·ÂÇÑ »õ·Î¿î ºñ¹Ð¹øÈ£ È®ÀÎ¿ë
+		    // ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Ð¹ï¿½È£ È®ï¿½Î¿ï¿½ ï¿½ï¿½Ð¹ï¿½È£
+		    String checkPassword = user.getCheckPassword(); // ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Ð¹ï¿½È£ È®ï¿½Î¿ï¿½
 		    
 		    System.out.println("checkPassword : " +checkPassword);
 		    
 		    if (!addPassword.equals(checkPassword)) {
-		        // »õ·Î¿î ºñ¹Ð¹øÈ£¿Í ºñ¹Ð¹øÈ£ È®ÀÎÀÌ ÀÏÄ¡ÇÏÁö ¾Ê´Â °æ¿ì
-		        model.addAttribute("error", "ºñ¹Ð¹øÈ£¿Í ºñ¹Ð¹øÈ£ È®ÀÎÀÌ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
+		        // ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½ï¿½Ð¹ï¿½È£ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½
+		        model.addAttribute("error", "ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½ï¿½Ð¹ï¿½È£ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.");
 		        return "redirect:/user/addUser.jsp";
 		    }
 			
@@ -90,31 +90,31 @@ public class UserController {
 		public String login(@ModelAttribute User user, String userId, String userPassword, HttpSession session, Model model) throws Exception {
 		    System.out.println("/user/login : POST");
 		    
-		    // DB¿¡¼­ »ç¿ëÀÚ Á¤º¸ Á¶È¸
+		    // DBï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
 		    User dbUser = userService.getUserByUserId(user.getUserId());
 		    
-		    System.out.println("È®ÀÎ : " + dbUser);
+		    System.out.println("È®ï¿½ï¿½ : " + dbUser);
 		    
-		    // »ç¿ëÀÚ°¡ Á¸ÀçÇÏ´ÂÁö È®ÀÎ
+		    // ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 		    if (dbUser == null) {
-		        model.addAttribute("error", "»ç¿ëÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+		        model.addAttribute("error", "ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 		        return "redirect:/user/login.jsp";
 		    }
 		    
 		    System.out.println("dbUser : " + dbUser);
 		    
-		    // Å»ÅðÀÏ½Ã°¡ nullÀÎÁö È®ÀÎ
+		    // Å»ï¿½ï¿½ï¿½Ï½Ã°ï¿½ nullï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 		    if (dbUser.getWithdrawDate() != null) {
-		        model.addAttribute("error", "Å»ÅðÇÑ »ç¿ëÀÚÀÔ´Ï´Ù.");
+		        model.addAttribute("error", "Å»ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.");
 		        return "redirect:/user/login.jsp";
 		    }
 		    
-		    // ºñ¹Ð¹øÈ£ ÀÏÄ¡ ¿©ºÎ È®ÀÎ
+		    // ï¿½ï¿½Ð¹ï¿½È£ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 		    if (user.getUserPassword().equals(dbUser.getUserPassword())) {
 		        session.setAttribute("user", dbUser);
 		        return "forward:/common/main.jsp";
 		    } else {
-		        model.addAttribute("error", "ºñ¹Ð¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
+		        model.addAttribute("error", "ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.");
 		        return "redirect:/user/login.jsp";
 		    }
 		}
@@ -199,38 +199,38 @@ public class UserController {
 			
 			System.out.println("userId : " +user.getUserId());
 
-		    // »ç¿ëÀÚÀÇ ¾ÆÀÌµð¿Í ÀüÈ­¹øÈ£·Î ÇöÀç ºñ¹Ð¹øÈ£ °¡Á®¿À±â
+		    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ï¿½ ï¿½ï¿½È­ï¿½ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ð¹ï¿½È£ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    String currentPassword = user.getUserPassword();
 		    
 		    //System.out.println("find : " +findAttribute);
 		    System.out.println("password : " +currentPassword);
 
-		    // »õ·Î¿î ºñ¹Ð¹øÈ£ È®ÀÎ
-		    String newPassword = user.getPasswordNew(); // »ç¿ëÀÚ°¡ ÀÔ·ÂÇÑ »õ·Î¿î ºñ¹Ð¹øÈ£
+		    // ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Ð¹ï¿½È£ È®ï¿½ï¿½
+		    String newPassword = user.getPasswordNew(); // ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Ð¹ï¿½È£
 		    
 		    System.out.println("newPassword : " +newPassword);
 		    
-		    // »õ·Î¿î ºñ¹Ð¹øÈ£ È®ÀÎ¿ë ºñ¹Ð¹øÈ£
-		    String confirmPassword = user.getCheckPassword(); // »ç¿ëÀÚ°¡ ÀÔ·ÂÇÑ »õ·Î¿î ºñ¹Ð¹øÈ£ È®ÀÎ¿ë
+		    // ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Ð¹ï¿½È£ È®ï¿½Î¿ï¿½ ï¿½ï¿½Ð¹ï¿½È£
+		    String confirmPassword = user.getCheckPassword(); // ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Ð¹ï¿½È£ È®ï¿½Î¿ï¿½
 		    
 		    System.out.println("confirmPassword : " +confirmPassword);
 		    
 		    if (!newPassword.equals(confirmPassword)) {
-		        // »õ·Î¿î ºñ¹Ð¹øÈ£¿Í ºñ¹Ð¹øÈ£ È®ÀÎÀÌ ÀÏÄ¡ÇÏÁö ¾Ê´Â °æ¿ì
-		        model.addAttribute("error", "ºñ¹Ð¹øÈ£¿Í ºñ¹Ð¹øÈ£ È®ÀÎÀÌ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
+		        // ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½ï¿½Ð¹ï¿½È£ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½
+		        model.addAttribute("error", "ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½ï¿½Ð¹ï¿½È£ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.");
 		        return "redirect:/user/setUserPassword.jsp";
 		    }
 
 		    if (newPassword.equals(currentPassword)) {
-		        // »õ·Î¿î ºñ¹Ð¹øÈ£°¡ ÇöÀç ºñ¹Ð¹øÈ£¿Í °°Àº °æ¿ì
-		        model.addAttribute("error", "»õ·Î¿î ºñ¹Ð¹øÈ£´Â ÇöÀç ºñ¹Ð¹øÈ£¿Í ´Þ¶ó¾ß ÇÕ´Ï´Ù.");
+		        // ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+		        model.addAttribute("error", "ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½Þ¶ï¿½ï¿½ ï¿½Õ´Ï´ï¿½.");
 		        return "redirect:/user/setUserPassword.jsp";
 		    }
 
-		    // º¯°æµÈ ºñ¹Ð¹øÈ£¸¦ ÀúÀåÇÏ°Å³ª Ã³¸®ÇÏ´Â ·ÎÁ÷ Ãß°¡
+		    // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°Å³ï¿½ Ã³ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
 		    userService.setUserPassword(user.getUserId(), newPassword);
 		    
-		    // º¯°æµÈ ºñ¹Ð¹øÈ£¸¦ ºä·Î Àü´Þ
+		    // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		    model.addAttribute("userPassword", newPassword);
 		    
 		    System.out.println("newPassword2 : " +newPassword);
@@ -250,7 +250,7 @@ public class UserController {
 //			System.out.println("getUser : GET");
 //			//Business Logic
 //			User user = userService.getUser(userId);
-//			// Model °ú View ¿¬°á
+//			// Model ï¿½ï¿½ View ï¿½ï¿½ï¿½ï¿½
 //			model.addAttribute("user", user);
 //			
 //			return "forward:/user/getUser.jsp";
@@ -267,16 +267,16 @@ public class UserController {
 		    User user = null;
 
 		    if (userNo!=null) {
-		        // ¿äÃ» ¸Å°³º¯¼ö·Î ¹ÞÀº userNo°¡ ÀÖ´Â °æ¿ì
+		        // ï¿½ï¿½Ã» ï¿½Å°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ userNoï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½
 		        user = userService.getUser(userNo);
 		        System.out.println("getUser: userNo from request parameter = " + userNo);
 		    } else if (sessionUser != null) {
-		        // ¼¼¼Ç¿¡¼­ ÇöÀç ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		        // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		        user = userService.getUser(sessionUser.getUserNo());
 		        System.out.println("getUser: sessionUser = " + sessionUser.getUserNo());
 		    } else {
 		        System.out.println("getUser: No userNo provided and no sessionUser");
-		        model.addAttribute("error", "»ç¿ëÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+		        model.addAttribute("error", "ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 		        return "redirect:/user/login.jsp";
 		    }
 		    
@@ -286,7 +286,7 @@ public class UserController {
 		    	
 		    }
 
-		    // »ç¿ëÀÚ Á¤º¸ ¸ðµ¨¿¡ Ãß°¡
+		    // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ðµ¨¿ï¿½ ï¿½ß°ï¿½
 		    model.addAttribute("user", user);
 
 		    return "forward:/user/getUser.jsp";
@@ -320,7 +320,7 @@ public class UserController {
 			System.out.println("updateUser : GET");
 			//Business Logic
 			User user = userService.getUser(userNo);
-			// Model °ú View ¿¬°á
+			// Model ï¿½ï¿½ View ï¿½ï¿½ï¿½ï¿½
 			
 			System.out.println("user :" +user);
 			
@@ -334,35 +334,35 @@ public class UserController {
 		public String updateUser(@ModelAttribute User user, @RequestParam(required = false) Integer userNo, Model model, HttpSession session) throws Exception {
 		    System.out.println("updateUser : POST");
 
-		    // ¼¼¼Ç¿¡¼­ ÇöÀç ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    User sessionUser = (User) session.getAttribute("user");
 
-		    // ¼¼¼Ç »ç¿ëÀÚ Á¤º¸ ·Î±× Ãâ·Â
+		    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ ï¿½ï¿½ï¿½
 		    if (sessionUser != null) {
 		        System.out.println("updateUser: sessionUser = " + sessionUser.getUserId());
 		    } else {
 		        System.out.println("updateUser: sessionUser is null");
 		    }
 
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸°¡ ÀÖ´ÂÁö È®ÀÎ
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 		    if (sessionUser == null) {
-		        // ·Î±×ÀÎÇÏÁö ¾ÊÀº °æ¿ì ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®
-		        model.addAttribute("error", "·Î±×ÀÎÀÌ ÇÊ¿äÇÕ´Ï´Ù.");
+		        // ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì·ï¿½Æ®
+		        model.addAttribute("error", "ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Õ´Ï´ï¿½.");
 		        return "redirect:/user/login.jsp";
 		    }
 
-		    // ¾÷µ¥ÀÌÆ®ÇÏ·Á´Â »ç¿ëÀÚ ¹øÈ£ ¼³Á¤
+		    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Ï·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½
 		    int targetUserNo = (userNo != null) ? userNo : sessionUser.getUserNo();
 
-		    // DB¿¡¼­ ÃÖ½Å »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // DBï¿½ï¿½ï¿½ï¿½ ï¿½Ö½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    User dbUser = userService.getUser(targetUserNo);
 
 		    if (dbUser == null) {
-		        model.addAttribute("error", "»ç¿ëÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+		        model.addAttribute("error", "ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 		        return "redirect:/user/updateUser.jsp";
 		    }
 
-		    // »ç¿ëÀÚ Á¤º¸ ¾÷µ¥ÀÌÆ®;
+		    // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®;
 		    dbUser.setNickName(user.getNickName());
 		    dbUser.setAddress(user.getAddress());
 		    dbUser.setPhoneNumber(user.getPhoneNumber());
@@ -371,18 +371,18 @@ public class UserController {
 		    dbUser.setHikingDifficulty(user.getHikingDifficulty());
 		    dbUser.setHikingLevel(user.getHikingLevel());
 		    dbUser.setIntroduceContent(user.getIntroduceContent());
-		    // ÇÊ¿äÇÑ ´Ù¸¥ ÇÊµåµµ ¾÷µ¥ÀÌÆ®
+		    // ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½Êµåµµ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 
 		    userService.updateUser(dbUser);
 
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ »ç¿ëÀÚ¿Í ¾÷µ¥ÀÌÆ®ÇÑ »ç¿ëÀÚ°¡ µ¿ÀÏÇÑ °æ¿ì, ¼¼¼Ç Á¤º¸¸¦ ¾÷µ¥ÀÌÆ®
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 		    if (sessionUser.getUserNo() == dbUser.getUserNo()) {
 		        session.setAttribute("user", dbUser);
 		    }
 
 		    System.out.println("updateUser : " + dbUser);
 
-		    // ¾÷µ¥ÀÌÆ® ¼º°ø ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®
+		    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì·ï¿½Æ®
 		    return "redirect:/user/getUser?userNo=" + dbUser.getUserNo();
 		}
 
@@ -398,7 +398,7 @@ public class UserController {
 			System.out.println("deleteUser : GET");
 			//Business Logic
 			User user = userService.getUser(userNo);
-			// Model °ú View ¿¬°á
+			// Model ï¿½ï¿½ View ï¿½ï¿½ï¿½ï¿½
 			model.addAttribute("user", user);
 			
 			return "forward:/user/deleteUser.jsp";
@@ -409,35 +409,35 @@ public class UserController {
 		    
 		    System.out.println("deleteUser : POST");
 		    
-		    // ¼¼¼Ç¿¡¼­ ÇöÀç ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    User sessionUser = (User) session.getAttribute("user");
 
-		    // ¼¼¼Ç »ç¿ëÀÚ Á¤º¸ ·Î±× Ãâ·Â
+		    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ ï¿½ï¿½ï¿½
 		    if (sessionUser != null) {
 		        System.out.println("deleteUser: sessionUser = " + sessionUser.getUserId());
 		    } else {
 		        System.out.println("deleteUser: sessionUser is null");
 		    }
 
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸°¡ ÀÖ´ÂÁö È®ÀÎ
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 		    if (sessionUser == null) {
-		        // ·Î±×ÀÎÇÏÁö ¾ÊÀº °æ¿ì ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®
-		        model.addAttribute("error", "·Î±×ÀÎÀÌ ÇÊ¿äÇÕ´Ï´Ù.");
+		        // ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì·ï¿½Æ®
+		        model.addAttribute("error", "ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Õ´Ï´ï¿½.");
 		        return "redirect:/user/login.jsp";
 		    }
 
-		    // ¾÷µ¥ÀÌÆ®ÇÏ·Á´Â »ç¿ëÀÚ ¹øÈ£ ¼³Á¤
+		    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Ï·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½
 		    int targetUserNo = (userNo != null) ? userNo : sessionUser.getUserNo();
 
-		    // DB¿¡¼­ ÃÖ½Å »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // DBï¿½ï¿½ï¿½ï¿½ ï¿½Ö½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    User dbUser = userService.getUser(targetUserNo);
 
 		    if (dbUser == null) {
-		        model.addAttribute("error", "»ç¿ëÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+		        model.addAttribute("error", "ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 		        return "redirect:/user/updateUser.jsp";
 		    }
 
-		    // »ç¿ëÀÚ Á¤º¸ ¾÷µ¥ÀÌÆ®
+		    // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 		    dbUser.setWithdrawReason(user.getWithdrawReason());
 		    dbUser.setWithdrawContent(user.getWithdrawContent());    
 		    //userService.updateUser(dbUser);
@@ -446,14 +446,14 @@ public class UserController {
 		    
 		    User dbUser2 = userService.getUser(targetUserNo);
 
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ »ç¿ëÀÚ¿Í ¾÷µ¥ÀÌÆ®ÇÑ »ç¿ëÀÚ°¡ µ¿ÀÏÇÑ °æ¿ì, ¼¼¼Ç Á¤º¸¸¦ ¹«È¿È­
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¿È­
 		    if (sessionUser.getUserNo() == dbUser2.getUserNo()) {
-		        session.invalidate(); // ¼¼¼Ç ¹«È¿È­
+		        session.invalidate(); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¿È­
 		    }
 
 		    System.out.println("deleteUser : " + dbUser2);
 
-		    // Å»Åð ¼º°ø ÈÄ ¸ÞÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®
+		    // Å»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì·ï¿½Æ®
 		    return "redirect:/common/main.jsp";
 		    
 		   // return "redirect:/user/getUser?userNo=" + dbUser.getUserNo();
@@ -475,15 +475,15 @@ public class UserController {
 //			search.setPageSize(pageSize);
 //			search.setPageUnit(pageUnit);
 		    
-			 // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸ °¡Á®¿À±â
+			 // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    User admin = (User) session.getAttribute("user");
 		    
 		    System.out.println("admin login : " +admin);
 		    
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸°¡ ÀÖ´ÂÁö È®ÀÎ
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 		    if (admin.getRole() == 0) {
-		        // °ü¸®ÀÚ°¡ ¾Æ´Ñ °æ¿ì ¿¡·¯ Ã³¸®
-		        model.addAttribute("error", "°ü¸®ÀÚ¸¸ Á¢±ÙÇÒ ¼ö ÀÖ½À´Ï´Ù.");
+		        // ï¿½ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+		        model.addAttribute("error", "ï¿½ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.");
 		        return "redirect:/user/login.jsp";
 		    }
 			
@@ -512,15 +512,15 @@ public class UserController {
 //			search.setPageSize(pageSize);
 //			search.setPageUnit(pageUnit);
 		    
-			 // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸ °¡Á®¿À±â
+			 // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    User admin = (User) session.getAttribute("user");
 		    
 		    System.out.println("admin login : " +admin);
 		    
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸°¡ ÀÖ´ÂÁö È®ÀÎ
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 		    if (admin.getRole() == 0) {
-		        // °ü¸®ÀÚ°¡ ¾Æ´Ñ °æ¿ì ¿¡·¯ Ã³¸®
-		        model.addAttribute("error", "°ü¸®ÀÚ¸¸ Á¢±ÙÇÒ ¼ö ÀÖ½À´Ï´Ù.");
+		        // ï¿½ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+		        model.addAttribute("error", "ï¿½ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.");
 		        return "redirect:/user/login.jsp";
 		    }
 			
@@ -556,21 +556,21 @@ public class UserController {
 		    
 			System.out.println("addQnA : POST");
 
-		    // ¼¼¼Ç¿¡¼­ ÇöÀç ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    User sessionUser = (User) session.getAttribute("user");
 
 		    if (sessionUser == null) {
-		        // ·Î±×ÀÎÇÏÁö ¾ÊÀº °æ¿ì ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®
-		        model.addAttribute("error", "·Î±×ÀÎÀÌ ÇÊ¿äÇÕ´Ï´Ù.");
+		        // ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì·ï¿½Æ®
+		        model.addAttribute("error", "ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Õ´Ï´ï¿½.");
 		        return "redirect:/user/login.jsp";
 		    }
 
-		    // QNA °´Ã¼¿¡ »ç¿ëÀÚ Á¤º¸ ¼³Á¤
+		    // QNA ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		    qna.setUserNo(sessionUser.getUserNo());
 		    qna.setNickName(sessionUser.getNickName());
 		    qna.setProfileImage(sessionUser.getProfileImage());
 
-		    // QNA Ãß°¡
+		    // QNA ï¿½ß°ï¿½
 		    userService.addQnA(qna);
 		    
 		    session.setAttribute("qna", qna);
@@ -590,7 +590,7 @@ public class UserController {
 		    
 			System.out.println("getQnA : GET");
 
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    User sessionUser = (User) session.getAttribute("user");
 		    
 		    System.out.println("user : " +sessionUser);
@@ -600,28 +600,28 @@ public class UserController {
 		    QNA qna = userService.getQnA(postNo, userNo);
 
 //		    if (user == null) {
-//		        // ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸°¡ ¾ø´Â °æ¿ì ¿À·ù Ã³¸®
-//		        model.addAttribute("error", "·Î±×ÀÎ Á¤º¸¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
-//		        return "redirect:/login"; // ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ® ¶Ç´Â ´Ù¸¥ Ã³¸®
+//		        // ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+//		        model.addAttribute("error", "ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
+//		        return "redirect:/login"; // ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì·ï¿½Æ® ï¿½Ç´ï¿½ ï¿½Ù¸ï¿½ Ã³ï¿½ï¿½
 //		    }
 
 		    if (qna == null) {
-		        // QNA Á¤º¸°¡ ¾ø´Â °æ¿ì ¿À·ù Ã³¸®
-		        model.addAttribute("error", "QNA Á¤º¸¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+		        // QNA ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+		        model.addAttribute("error", "QNA ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 		        return "redirect:/user/addQnA.jsp";
 		    }
 
 		    if (postNo != null && qna.getPostNo() == postNo) {
-		        // °Ô½Ã¹° ¹øÈ£·Î Á¶È¸ÇÏ´Â °æ¿ì
+		        // ï¿½Ô½Ã¹ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ï¿½ï¿½È¸ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½
 		        model.addAttribute("qna", qna);
 		        return "forward:/user/getQnA.jsp";
 		    } else if (userNo != null && qna.getUserNo() == userNo) {
-		        // »ç¿ëÀÚ ¹øÈ£·Î Á¶È¸ÇÏ´Â °æ¿ì
+		        // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ï¿½ï¿½È¸ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½
 		        model.addAttribute("qna", qna);
 		        return "forward:/user/getQnA.jsp";
 		    } else {
-		        // Àß¸øµÈ ¿äÃ» Ã³¸®
-		        model.addAttribute("error", "¿Ã¹Ù¸¥ ¿äÃ»ÀÌ ¾Æ´Õ´Ï´Ù.");
+		        // ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» Ã³ï¿½ï¿½
+		        model.addAttribute("error", "ï¿½Ã¹Ù¸ï¿½ ï¿½ï¿½Ã»ï¿½ï¿½ ï¿½Æ´Õ´Ï´ï¿½.");
 		    }
 		    
 		    if (sessionUser.getRole()==1) {
@@ -650,7 +650,7 @@ public class UserController {
 			// Business Logic
 		    QNA qna = userService.getQnA(postNo, userNo);
 		    
-		    // Model °ú View ¿¬°á
+		    // Model ï¿½ï¿½ View ï¿½ï¿½ï¿½ï¿½
 		   model.addAttribute("qna", qna);
 		    
 		   return "forward:/user/addAdminAnswer.jsp";
@@ -663,25 +663,25 @@ public class UserController {
 		    System.out.println("postNo : " +qna.getPostNo());
 		    System.out.println("userNo : " +qna.getUserNo());	    
 		    
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    User admin = (User) session.getAttribute("user");
 		    
 		    System.out.println("admin login : " +admin);
 		    
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸°¡ ÀÖ´ÂÁö È®ÀÎ
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 		    if (admin.getRole() == 0) {
-		        // °ü¸®ÀÚ°¡ ¾Æ´Ñ °æ¿ì ¿¡·¯ Ã³¸®
-		        model.addAttribute("error", "°ü¸®ÀÚ¸¸ Á¢±ÙÇÒ ¼ö ÀÖ½À´Ï´Ù.");
+		        // ï¿½ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+		        model.addAttribute("error", "ï¿½ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.");
 		        return "redirect:/admin/login.jsp";
 		    }
 		    
-		    // QNA Á¤º¸ Á¶È¸
+		    // QNA ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
 		    QNA dbqna = userService.getQnA(qna.getPostNo(), qna.getUserNo());
 		    
-		    // °ü¸®ÀÚ ´äº¯ Ãß°¡
+		    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½äº¯ ï¿½ß°ï¿½
 		    dbqna.setAdminAnswer(qna.getAdminAnswer());
 
-		    // QNA ¾÷µ¥ÀÌÆ®
+		    // QNA ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 		    userService.addAdminAnswer(dbqna);
 		    
 		    model.addAttribute("qna", dbqna);
@@ -707,7 +707,7 @@ public class UserController {
 //			search.setPageSize(pageSize);
 //			search.setPageUnit(pageUnit);
 		    
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    User user = (User) session.getAttribute("user");
 			
 			List<QNA> qnaList = userService.getQnAList(search);
@@ -742,19 +742,19 @@ public class UserController {
 		    
 			System.out.println("addSchedule : POST");
 			schedule.setScheduleDate(schedule.getStringDate());
-		    // ¼¼¼Ç¿¡¼­ ÇöÀç ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    User sessionUser = (User) session.getAttribute("user");
 
 		    if (sessionUser == null) {
-		        // ·Î±×ÀÎÇÏÁö ¾ÊÀº °æ¿ì ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®
-		        model.addAttribute("error", "·Î±×ÀÎÀÌ ÇÊ¿äÇÕ´Ï´Ù.");
+		        // ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì·ï¿½Æ®
+		        model.addAttribute("error", "ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Õ´Ï´ï¿½.");
 		        return "redirect:/user/login.jsp";
 		    }
 
-		    // SCHEDULE °´Ã¼¿¡ »ç¿ëÀÚ Á¤º¸ ¼³Á¤
+		    // SCHEDULE ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		    schedule.setUserNo(sessionUser.getUserNo());
 
-		    // SCHEDULE Ãß°¡
+		    // SCHEDULE ï¿½ß°ï¿½
 		    userService.addSchedule(schedule);
 		    Search search = new Search();
 		    List<Schedule> scheduleList = userService.getScheduleList(search);
@@ -764,7 +764,7 @@ public class UserController {
 		    	  scheduleJson.add(objectMapper.writeValueAsString(sd));
 		    }
 		    
-		    // ¸ðµ¨¿¡ ½ºÄÉÁÙ ¸ñ·Ï Ãß°¡
+		    // ï¿½ðµ¨¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
 		    model.addAttribute("scheduleList", scheduleJson);
 
 		    return "forward:/user/month-view.jsp";
@@ -775,30 +775,30 @@ public class UserController {
 		    
 			System.out.println("getSchedule : GET");
 
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    User user = (User) session.getAttribute("user");
 
 		    Schedule schedule = userService.getSchedule(postNo, userNo);
 
 //		    if (user == null) {
-//		        // ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸°¡ ¾ø´Â °æ¿ì ¿À·ù Ã³¸®
-//		        model.addAttribute("error", "·Î±×ÀÎ Á¤º¸¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
-//		        return "redirect:/login"; // ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ® ¶Ç´Â ´Ù¸¥ Ã³¸®
+//		        // ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+//		        model.addAttribute("error", "ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
+//		        return "redirect:/login"; // ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì·ï¿½Æ® ï¿½Ç´ï¿½ ï¿½Ù¸ï¿½ Ã³ï¿½ï¿½
 //		    }
 
 		    if (schedule == null) {
-		        // Schedule Á¤º¸°¡ ¾ø´Â °æ¿ì ¿À·ù Ã³¸®
-		        model.addAttribute("error", "Schedule Á¤º¸¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+		        // Schedule ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+		        model.addAttribute("error", "Schedule ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 		        return "redirect:/user/addSchedule.jsp";
 		    }
 
 		    if (userNo != null && schedule.getUserNo() == userNo) {
-		        // »ç¿ëÀÚ ¹øÈ£·Î Á¶È¸ÇÏ´Â °æ¿ì
+		        // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ï¿½ï¿½È¸ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½
 		        model.addAttribute("schedule", schedule);
 		        return "forward:/user/getSchedule.jsp";
 		    } else {
-		        // Àß¸øµÈ ¿äÃ» Ã³¸®
-		        model.addAttribute("error", "¿Ã¹Ù¸¥ ¿äÃ»ÀÌ ¾Æ´Õ´Ï´Ù.");
+		        // ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» Ã³ï¿½ï¿½
+		        model.addAttribute("error", "ï¿½Ã¹Ù¸ï¿½ ï¿½ï¿½Ã»ï¿½ï¿½ ï¿½Æ´Õ´Ï´ï¿½.");
 		        return "redirect:/user/addSchedule.jsp";
 		    }
 		    
@@ -812,7 +812,7 @@ public class UserController {
 			// Business Logic
 		    Schedule schedule = userService.getSchedule(postNo, userNo);
 		    
-		    // Model °ú View ¿¬°á
+		    // Model ï¿½ï¿½ View ï¿½ï¿½ï¿½ï¿½
 		   model.addAttribute("schedule", schedule);
 		    
 		   return "forward:/user/updateSchedule.jsp";
@@ -826,24 +826,24 @@ public class UserController {
 		    System.out.println("postNo : " +schedule.getPostNo());
 		    System.out.println("userNo : " +schedule.getUserNo());	    
 		    
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    User sessionUser = (User) session.getAttribute("user");
 		    
 		    System.out.println("sessionUser : " +sessionUser);
 		    
 		    if (sessionUser == null) {
-		        // ·Î±×ÀÎÇÏÁö ¾ÊÀº °æ¿ì ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®
-		        model.addAttribute("error", "·Î±×ÀÎÀÌ ÇÊ¿äÇÕ´Ï´Ù.");
+		        // ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì·ï¿½Æ®
+		        model.addAttribute("error", "ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Õ´Ï´ï¿½.");
 		        return "redirect:/user/login.jsp";
 		    }
 		    
-		    // Schedule Á¤º¸ Á¶È¸
+		    // Schedule ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
 		    Schedule dbschedule = userService.getSchedule(schedule.getPostNo(), schedule.getUserNo());
 		    
-		 // SCHEDULE °´Ã¼¿¡ »ç¿ëÀÚ Á¤º¸ ¼³Á¤
+		 // SCHEDULE ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		    schedule.setUserNo(sessionUser.getUserNo());
 		    
-		    // ¾÷µ¥ÀÌÆ®
+		    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 		    dbschedule.setTitle(schedule.getTitle());
 		    dbschedule.setMountainName(schedule.getMountainName());
 		    dbschedule.setHikingTotalTime(schedule.getHikingTotalTime());
@@ -852,7 +852,7 @@ public class UserController {
 		    dbschedule.setHikingDifficulty(schedule.getHikingDifficulty());
 		    dbschedule.setTransportation(schedule.getTransportation());
 
-		    // Schedule ¾÷µ¥ÀÌÆ®
+		    // Schedule ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 		    userService.updateSchedule(dbschedule);
 		    
 		    model.addAttribute("schedule", dbschedule);
@@ -882,7 +882,7 @@ public class UserController {
 ////			search.setPageSize(pageSize);
 ////			search.setPageUnit(pageUnit);
 //		    
-//		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+//		    // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //		    User user = (User) session.getAttribute("user");
 //			
 //			List<Schedule> scheduleList = userService.getScheduleList(search);
@@ -899,32 +899,32 @@ public class UserController {
 		    
 		    System.out.println("getScheduleList : GET");
 		    
-		    // search ÃÊ±âÈ­
+		    // search ï¿½Ê±ï¿½È­
 		    if (search != null && search.getCurrentPage() == 0) {
 		        search.setCurrentPage(1);
 		    }
 
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    User user = (User) session.getAttribute("user");
 		    
 		    if (user == null) {
-		        model.addAttribute("error", "·Î±×ÀÎÀÌ ÇÊ¿äÇÕ´Ï´Ù.");
+		        model.addAttribute("error", "ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Õ´Ï´ï¿½.");
 		        return "redirect:/user/login.jsp";
 		    }
 
-		    // userService¸¦ ÅëÇØ ½ºÄÉÁÙ ¸ñ·Ï °¡Á®¿À±â
+		    // userServiceï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    List<Schedule> scheduleList = userService.getScheduleList(search);
 		    
 		    System.out.println("scheduleList : " + scheduleList);
 		    
-		    // Schedule °´Ã¼¸¦ JSON Çü½ÄÀ¸·Î º¯È¯ÇÏ¿© ¸ðµ¨¿¡ Ãß°¡
+		    // Schedule ï¿½ï¿½Ã¼ï¿½ï¿½ JSON ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ï¿ï¿½ ï¿½ðµ¨¿ï¿½ ï¿½ß°ï¿½
 		    ObjectMapper objectMapper = new ObjectMapper();
 		    List<String> scheduleJson = new ArrayList<>();
 		    for(Schedule schedule : scheduleList) {
 		    	  scheduleJson.add(objectMapper.writeValueAsString(schedule));
 		    }
 		    
-		    // ¸ðµ¨¿¡ ½ºÄÉÁÙ ¸ñ·Ï Ãß°¡
+		    // ï¿½ðµ¨¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
 		    model.addAttribute("scheduleList", scheduleJson);
 		    
 		    return "forward:/user/month-view.jsp";
@@ -942,7 +942,7 @@ public class UserController {
 			// Business Logic
 		    QNA qna = userService.getQnA(postNo, userNo);
 		    
-		    // Model °ú View ¿¬°á
+		    // Model ï¿½ï¿½ View ï¿½ï¿½ï¿½ï¿½
 		   model.addAttribute("qna", qna);
 		    
 		   return "forward:/user/updateAnswerQnA.jsp";
@@ -955,25 +955,25 @@ public class UserController {
 		    System.out.println("postNo : " +qna.getPostNo());
 		    System.out.println("userNo : " +qna.getUserNo());	    
 		    
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		    User admin = (User) session.getAttribute("user");
 		    
 		    System.out.println("admin login : " +admin);
 		    
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸°¡ ÀÖ´ÂÁö È®ÀÎ
+		    // ï¿½ï¿½ï¿½Ç¿ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 		    if (admin.getRole() == 0) {
-		        // °ü¸®ÀÚ°¡ ¾Æ´Ñ °æ¿ì ¿¡·¯ Ã³¸®
-		        model.addAttribute("error", "°ü¸®ÀÚ¸¸ Á¢±ÙÇÒ ¼ö ÀÖ½À´Ï´Ù.");
+		        // ï¿½ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+		        model.addAttribute("error", "ï¿½ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.");
 		        return "redirect:/admin/login.jsp";
 		    }
 		    
-		    // QNA Á¤º¸ Á¶È¸
+		    // QNA ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
 		    QNA dbqna = userService.getQnA(qna.getPostNo(), qna.getUserNo());
 		    
-		    // °ü¸®ÀÚ ´äº¯ Ãß°¡
+		    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½äº¯ ï¿½ß°ï¿½
 		    dbqna.setAdminAnswer(qna.getAdminAnswer());
 
-		    // QNA ¾÷µ¥ÀÌÆ®
+		    // QNA ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 		    userService.addAdminAnswer(dbqna);
 		    
 		    model.addAttribute("qna", dbqna);
