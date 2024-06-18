@@ -16,24 +16,20 @@
     <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
 
     <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
-    <style>
-        main {
+  <style>
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            /* background-color: #f9f9f9; */
             font-family: Arial, sans-serif;
         }
 
         .container {
             max-width: 400px;
             width: 100%;
-            background-color: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         main {
@@ -58,16 +54,25 @@
             align-items: center;
         }
 
-        .container input[type="text"],
-        .container input[type="password"],
-        .container input[type="email"] {
-            width: calc(100% - 20px);
+       .email, .code {
+            width: 40%;
             padding: 10px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
             align-items: center;
+        }
+        
+        .phone {
+        	width: 30%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            align-items: center;
+            margin-left : -140px;
         }
 
         .form-group {
@@ -76,19 +81,20 @@
             align-items: center;
         }
 
-        .form-group input[type="text"] {
-            width: calc(100% - 120px);
+       /*  .form-group input[type="text"] {
+            width: 40%;
             margin-right: 10px;
-        }
+        } */
 
-        .form-group button {
-            width: 100px;
+        .button {
+            width: 40%;
             padding: 10px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin-right: -100px;
         }
 
         .form-group button:hover {
@@ -96,7 +102,7 @@
         }
 
         button {
-            width: calc(100% - 20px);
+            width: 40%;
             padding: 10px;
             background-color: #4CAF50;
             margin-bottom: 10px;
@@ -151,16 +157,16 @@
     <form action="findUserPassword" method="post">
         <div>
             <label for="email"></label>
-            <input type="text" id="email" name="email" placeholder="email" required>
+            <input type="text" class ="email" id="email" name="email" placeholder="email" required>
         </div>
         <div class="form-group">
             <label for="phoneNumber"></label>
-            <input type="text" id="phoneNumber" name="phoneNumber" placeholder="휴대폰 번호" pattern="01[0-9]{8,9}" required>
-            <button type="button" onclick="sendVerificationCode()">인증번호</button>
+            <input type="text" class ="phone" id="phoneNumber" name="phoneNumber" placeholder="휴대폰 번호" pattern="01[0-9]{8,9}" required>
+            <button type="button" class="button" onclick="sendVerificationCode()">인증번호</button>
         </div>
         <div>
             <label for="verifyCode"></label>
-            <input type="text" id="verifyCode" name="verifyCode" placeholder="인증번호" required>
+            <input type="text" class ="code" id="verifyCode" name="verifyCode" placeholder="인증번호" required>
         </div>
         <button type="submit">비밀번호 찾기</button>
         <a href="/user/findUserId.jsp" class="link">아이디 찾기</a>
