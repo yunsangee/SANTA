@@ -316,7 +316,7 @@
 	<select id="getSearchKeywordList" parameterType="int"
 		resultMap="MountainSearchResultMap">
 
-		select ms.*, ROWNUM from mountain_search ms where user_no = #{userNo} AND ROWNUM <![CDATA[<=]]> 10 order by search_date desc
+		select ms.*, ROWNUM from mountain_search ms where user_no = #{userNo} AND ROWNUM <![CDATA[<=]]> 20 order by search_date desc
 	</select>
 	
 
@@ -416,7 +416,7 @@
             FROM 
                 STATISTICS
             WHERE
-                SEARCH_DATE BETWEEN SYSDATE - 6 AND SYSDATE
+                SEARCH_DATE BETWEEN SYSDATE - 12 AND SYSDATE-7
         )
         GROUP BY 
             MOUNTAIN_NAME
@@ -428,7 +428,7 @@
                 TOTAL_SEARCH_COUNT DESC
             </if>
     )
-    WHERE ROWNUM <![CDATA[<=]]> 10
+    WHERE ROWNUM <![CDATA[<=]]> 20
 </select>
 
 

@@ -2,11 +2,13 @@ package site.dearmysanta.service.user;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.user.QNA;
 import site.dearmysanta.domain.user.Schedule;
 import site.dearmysanta.domain.user.User;
@@ -22,11 +24,15 @@ import site.dearmysanta.domain.user.User;
 		// SELECT ONE
 		public User getUser(int userNo) throws Exception;
 		
-		public List<User> getUserList() throws Exception;
+		public User login(String userId, String password) throws Exception;
+		
+		public List<User> getUserList(Search search) throws Exception;
+		
+		public List<User> withdrawUserList(Search search) throws Exception;
 		
 		public void updateUser(User user) throws Exception;
 		
-		public void deleteUser(int userNo) throws Exception;
+		public void deleteUser(User user) throws Exception;
 		
 		//
 		//
@@ -35,7 +41,9 @@ import site.dearmysanta.domain.user.User;
 		
 		public String findUserPassword(String userId, String phoneNumber) throws Exception;
 		
-		public User setUserPassword(String userId, String userPassword) throws Exception;
+		public void setUserPassword(String userId, String userPassword) throws Exception;
+		
+		public String findUserPhoneNumber(String phoneNumber) throws Exception;
 		
 		//
 		//
@@ -57,28 +65,36 @@ import site.dearmysanta.domain.user.User;
 		
 		public void addQnA(QNA qna) throws Exception;
 		
-		public QNA getQnA(int postNo) throws Exception;
+		public QNA getQnA(int postNo, int userNo) throws Exception;
 		
-		public List<User> getQnAList() throws Exception;
+		public List<QNA> getQnAList(Search search) throws Exception;
 		
-		public void deleteQnA(int postNo) throws Exception;
+		public void addAdminAnswer(QNA qna) throws Exception;
+		
+		public void updateAnswer(QNA qna) throws Exception;
+		
+		public void deleteQnA(int postNo, int userNo) throws Exception;
 		
 		//
 		//
 	
 		public void addSchedule(Schedule schedule) throws Exception;
 		
-		public void getSchedule(int postNo) throws Exception;
+		public Schedule getSchedule(int postNo, int userNo) throws Exception;
 		
-		public List<User> getScheduleList() throws Exception;
+		public List<Schedule> getScheduleList(Search search) throws Exception;
 		
 		public void updateSchedule(Schedule schedule) throws Exception;
 		
-		public void deleteSchedule(int postNo) throws Exception;
+		public void deleteSchedule(int postNo, int userNo) throws Exception;
 		
 		//
 		//
 		
-		public void getMountainTotalCount() throws Exception;
+		public int getMountainTotalCount(String mountainName) throws Exception;
+
+		public User getUserByUserId(String userId) throws Exception;
+		
+		public String getUserPassword(String userPassword) throws Exception;
 		
 }

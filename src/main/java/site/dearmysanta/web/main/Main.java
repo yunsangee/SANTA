@@ -3,6 +3,8 @@ package site.dearmysanta.web.main;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.common.Search;
+import site.dearmysanta.domain.meeting.MeetingPostSearch;
 import site.dearmysanta.service.certification.CertificationPostService;
 import site.dearmysanta.service.meeting.MeetingService;
 import site.dearmysanta.service.mountain.MountainService;
@@ -45,6 +48,12 @@ public class Main {
 	@Value("${pageUnit}")
 	private int pageUnit;
 	
+	@Value("${javaServerIp}")
+	private String javaServerIp;
+	
+	@Value("${reactServerIp")
+	private String reactServerIp;
+	
 	
 //	@GetMapping(value="/")
 //	public String getMountain(@RequestParam int mountainNo, double lat, double lon,Model model) { // 나중에 위도 경도는 현재 위치로 들어와야할듯? 
@@ -59,7 +68,26 @@ public class Main {
 //		return "forward:/mountain/getMountain.jsp";
 //	}//o
 	@GetMapping("/")
-	public String mainTemp() {
+	public String mainTemp(Model model, HttpSession session) throws Exception {
+		
+		session.setAttribute("javaServerIp", javaServerIp);
+		session.setAttribute("reactServerIp", reactServerIp);
+		
+		Search search = new Search();
+		if(search != null & search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
+		search.setPageSize(pageSize);
+		search.setPageUnit(pageUnit);
+		
+		MeetingPostSearch meetingPostSearch = new MeetingPostSearch();
+		
+		model.addAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
+		model.addAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), userService.getUser(1)));
+//		model.addAttribute("meetingPostList", meetingService.getMeetingPostList(meetingPostSearch));
+//		model.addAttribute("certificationPostList",certificationPostService.getCertificationPostList(search));
+		
+		
 		return "forward:/common/main.jsp";
 	}
 //	

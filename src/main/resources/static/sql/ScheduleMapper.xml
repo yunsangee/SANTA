@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="site.dearmysanta.service.user.UserDao">
+
+	<resultMap id="ScheduleResultMap" type="site.dearmysanta.domain.user.Schedule">
+	    <result property="postNo" column="schedule_no"		jdbcType = "NUMERIC"/>
+	    <result property="userNo" column="user_no"	jdbcType = "NUMERIC"/>
+	    <result property="title" column="schedule_title"	jdbcType = "VARCHAR"/>
+	    <result property="contents" column="schedule_content"	jdbcType = "VARCHAR"/>
+	    <result property="scheduleDate" column="schedule_date"	jdbcType = "DATE"/>	    
+	    <result property="mountainName" column="schedule_mountain_name"	jdbcType = "VARCHAR"/>
+	    <result property="hikingDifficulty" column="schedule_difficulty"	jdbcType = "NUMERIC"/>
+	    <result property="hikingTotalTime" column="schedule_total_time"	jdbcType = "VARCHAR"/>
+	    <result property="hikingDescentTime" column="schedule_descent_time"	jdbcType = "VARCHAR"/>
+	    <result property="hikingAscentTime" column="schedule_ascent_time"	jdbcType = "VARCHAR"/>
+	    <result property="transportation" column="schedule_transportation"	jdbcType = "NUMERIC"/>
+	</resultMap>
+
+	<insert id="addSchedule" parameterType="site.dearmysanta.domain.user.Schedule">
+	    INSERT 
+	    INTO schedule (schedule_no, schedule_content, schedule_date, schedule_title, schedule_mountain_name, schedule_total_time, schedule_descent_time, schedule_ascent_time,
+	    							schedule_difficulty, schedule_transportation, user_no)
+	    VALUES (seq_qna_no.NEXTVAL, #{contents}, #{scheduleDate}, #{title}, #{mountainName}, #{hikingTotalTime}, #{hikingDescentTime}, #{hikingAscentTime},
+	    				#{hikingDifficulty}, #{Transportation}, #{userNo})
+	</insert>
+	
+	<select id="getScheduleList" resultMap="ScheduleResultMap">
+	 SELECT
+       s.schedule_no, s.user_no, s.schedule_title, s.schedule_content, s.schedule_date, s.schedule_mountain_name,
+        s.schedule_total_time, s.schedule_descent_time, s.schedule_ascent_time, s.schedule_difficulty, s.schedule_transportation
+    FROM 
+        schedule s, users u
+    WHERE 
+       s.user_no = u.user_no
+	</select>
+	
+	<select id="getSchedule" resultMap="ScheduleResultMap">
+	 SELECT
+        schedule_no, user_no, schedule_title, schedule_content, schedule_date, schedule_mountain_name,
+        schedule_total_time, schedule_descent_time, schedule_ascent_time, schedule_difficulty, schedule_transportation
+    FROM 
+        schedule
+    WHERE 
+       schedule_no = #{postNo}
+	</select>
+	
+	<update id="updateSchedule" parameterType="map">
+	    UPDATE SCHEDULE 
+	    SET 
+	    	schedule_content = #{contents, jdbcType = VARCHAR},
+	    	schedule_title = #{title}, 
+	    	schedule_mountain_name = #{mountainName}, 
+	    	schedule_total_time = #{hikingTotalTime}, 
+	    	schedule_descent_time =  #{hikingDescentTime}, 
+	    	schedule_ascent_time = #{hikingAscentTime},
+	    	schedule_difficulty = #{hikingDifficulty}, 
+	    	schedule_transportation = #{Transportation}
+	    WHERE
+	    	schedule_no = #{postNo}
+	</update>
+	
+	<delete id="deleteSchedule" parameterType="map">
+		DELETE 
+		FROM 
+			SCHEDULE
+		WHERE 
+			user_no = #{userNo} AND schedule_no = #{postNo}
+	</delete>
+	
+	<select id="getMountainTotalCount" parameterType="String" resultType="int">
+	SELECT 
+		COUNT(*) 
+	FROM 
+		schedule 
+	WHERE 
+		SCHEDULE_MOUNTAIN_NAME = #{mountainName}
+</select>
+
+</mapper>

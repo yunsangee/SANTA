@@ -51,6 +51,7 @@ public class MountainController {
 	@Value("${pageUnit}")
 	private int pageUnit;
 	
+	
 	ObjectMapper objectMapper = new ObjectMapper();
 	
 	public MountainController() {
@@ -109,9 +110,9 @@ public class MountainController {
 		//
 		
 		
-		model.addAttribute("mountainSearchKeywords", mountainService.getSearchKeywordList(1));
+		model.addAttribute("mountainSearchKeywords", mountainService.getSearchKeywordList(1)); //change to userno
 		
-		model.addAttribute("popularSearchKeywords",mountainService.getStatisticsMountainNameList(1));
+		model.addAttribute("popularSearchKeywords",mountainService.getStatisticsMountainNameList(1));  //change to userNo
 		
 		
 		
@@ -119,28 +120,31 @@ public class MountainController {
 	}
 	
 	
-	@GetMapping(value="mapMountain")
-	public String mapMountain(MountainSearch mountainSearch, Model model) throws JsonProcessingException {
+	@RequestMapping(value="mapMountain")
+	public String mapMountain(@ModelAttribute MountainSearch mountainSearch, Model model) throws JsonProcessingException {
 
 		//
 		//나중에 jsp쪽에 search Condition 추가하기    
 		//
 
-		mountainSearch.setSearchCondition(0);
+		SantaLogger.makeLog("info", "mountainSearch:" + mountainSearch.toString());
+		if (mountainSearch.getSearchKeyword() != null) {
 
+			if (mountainSearch.getSearchCondition() == 0 & mountainSearch.getUserNo() != 0) { // if condition is mountain
+				mountainService.addSearchKeyword(mountainSearch);
+			}
 
-		if(mountainSearch.getSearchCondition() == 0) { // if condition is mountain
-			mountainService.addSearchKeyword(mountainSearch);
-		}
+			List<Mountain> list = mountainService.getMountainListByName(mountainSearch.getSearchKeyword());
 
+			List<String> jsonList = new ArrayList<>();
+			for (Mountain mt : list) {
+				SantaLogger.makeLog("info", mt.toString());
 
-		List<Mountain> list = mountainService.getMountainListByName(mountainSearch.getSearchKeyword());
-
-		List<String> jsonList = new ArrayList<>();
-		for (Mountain mt: list) {
-			SantaLogger.makeLog("info", mt.toString());
+				jsonList.add(objectMapper.writeValueAsString(mt));
+			}
 			
-			jsonList.add(objectMapper.writeValueAsString(mt.toString()));
+			model.addAttribute("mountainList", jsonList);
+
 		}
 
 		return "forward:/mountain/mapMountain.jsp";
