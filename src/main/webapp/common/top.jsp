@@ -39,6 +39,18 @@
 			$('#userProfile').on('click',function(){
 				window.location.href = 'http://${javaServerIp}/mountain/searchMountain';
 			});  // need to fix to popup
+			
+			$('#getUserList').on('click',function(){
+				window.location.href = 'http://${javaServerIp}/user/getUserList';
+			});  // need to fix to popup
+			
+			$('#statistics').on('click',function(){
+				window.location.href = 'http://${javaServerIp}/mountain/getStatistics';
+			});  // need to fix to popup
+			
+			$('#correctionPost').on('click',function(){
+				window.location.href = 'http://${javaServerIp}/correctionPost/getCorrectionPostList';
+			});  // need to fix to popup
     	});
     </script>
 
@@ -55,11 +67,20 @@
             </button>
             <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                 <div class="navbar-nav mx-auto">
-                    <a href="#" id="Home" class="nav-item nav-link active">홈</a>
-                    <a href="#" id="mountain" class="nav-item nav-link">산</a>
-                    <a href="#" id="certificationPost" class="nav-item nav-link">인증게시판</a>
-                    <a href="#" id="meetingPost" class="nav-item nav-link">모임게시판</a>
-                    <a href="#" id="hikingGuide" class="nav-item nav-link">등산안내</a>
+                	<c:if test="${empty sessionScope.user or sessionScope.user.role == 0 }">
+                	
+                    	<a href="#" id="Home" class="nav-item nav-link active">홈</a>
+                    	<a href="#" id="mountain" class="nav-item nav-link">산</a>
+                    	<a href="#" id="certificationPost" class="nav-item nav-link">인증게시판</a>
+                    	<a href="#" id="meetingPost" class="nav-item nav-link">모임게시판</a>
+                    	<a href="#" id="hikingGuide" class="nav-item nav-link">등산안내</a>
+                    </c:if>
+                    <c:if test="${not empty sessionScope.user and sessionScope.user.role == 1 }">
+                    	<a href="#" id="Home" class="nav-item nav-link active">홈</a>
+                    	<a href="#" id="getUserList" class="nav-item nav-link">회원목록조회</a>
+                    	<a href="#" id="statistics" class="nav-item nav-link">통계</a>
+                    	<a href="#" id="correctionPost" class="nav-item nav-link">정정제보</a>
+                    </c:if>
                 </div>
                 <div class="d-flex m-3 me-0">
                     <c:if test="${not empty sessionScope.user}">

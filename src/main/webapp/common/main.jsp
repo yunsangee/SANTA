@@ -18,8 +18,8 @@
                     slideBy: 1,
                     center: true, // 슬라이드를 가운데 정렬합니다.
                     autoplay: true, // 자동 재생을 활성화합니다.
-                    autoplayTimeout: 3000 // 3초마다 슬라이드를 넘깁니다.
-  /*                   autoplayHoverPause: true  */// 마우스 호버 시 자동 재생을 일시 중지합니다.
+                    autoplayTimeout: 5000 // 3초마다 슬라이드를 넘깁니다.
+	               /*  autoplayHoverPause: true  */ // 마우스 호버 시 자동 재생을 일시 중지합니다.
                 });
 
                 var owl2 = $('#carousel2').owlCarousel({
@@ -31,7 +31,15 @@
                     center: true, // 슬라이드를 가운데 정렬합니다.
                     autoplay: true, // 자동 재생을 활성화합니다.
                     autoplayTimeout: 5000// 5초마다 슬라이드를 넘깁니다.
-                   /*  autoplayHoverPause: true */ // 마우스 호버 시 자동 재생을 일시 중지합니다.
+                    /* autoplayHoverPause: true  */ // 마우스 호버 시 자동 재생을 일시 중지합니다.
+                });
+                
+                $('#carousel1').on('mouseleave', function() {
+                    owl1.trigger('play.owl.autoplay', [5000]);
+                });
+                
+                $('#carousel2').on('mouseleave', function() {
+                    owl1.trigger('play.owl.autoplay', [5000]);
                 });
                 
                 // Custom navigation
@@ -82,11 +90,31 @@
 
             // Like button toggle
             $(document).on('click', '.like-button', function() {
-            	let user = ${sessionScope.user != null ? sessionScope.user : 'null'};
-            	
+            	let user = "${sessionScope.user != null ? sessionScope.user : 'null'}";
+            	console.log($(this).parent().find('input:hidden').val())
+            	console.log($(this).text())
             	if(user != null){
                 	$(this).toggleClass('fas far');
                 	$(this).toggleClass('text-danger');
+                	
+                	const mountainLike = {
+                			userNo: parseInt(${sessionScope.user.userNo}),
+                			postNo: $(this).parent().find('input:hidden').val().trim(),
+                			postLikeType:2
+                			
+                	}
+                	
+                	 $.ajax({
+                		url: "/mountain/rest/addMountainLike",
+                		type:"POST",
+                		contentType: "application/json",
+        	            dataType: "json",
+                		data : JSON.stringify(mountainLike),
+                		success: function(response,status){
+                			console.log(response);
+                			
+                		},
+                	}); 
             	}
             });
         });
@@ -162,10 +190,10 @@
             									<i class="fas fa-external-link-alt"></i>
     										</div>
 											<p class="m-0 pb-3" style="font-size: 0.75em;">${mountain.mountainLocation}</p>
-											<p class="m-0 pb-3">${mountain.mountainAltitude}m</p>
+											<p class="m-0 pb-3">${mountain.mountainAltitude}</p>
 											<p class="m-0 pb-3">
-												<i class="far fa-heart like-button" style="cursor: pointer;"></i>
-												${mountain.likeCount}
+												<i class="far fa-heart like-button" style="cursor: pointer;">${mountain.likeCount}</i>
+												<input type="hidden" id="mountainNo" value="${mountain.mountainNo }"/>
 											</p>
 											<p class="m-0 pb-3">${mountain.mountainViewCount}</p>
 											<div class="d-flex pe-5">
