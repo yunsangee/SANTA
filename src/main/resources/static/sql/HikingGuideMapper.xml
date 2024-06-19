@@ -17,6 +17,7 @@
       <result property="hikingDifficulty" column="hr_hikingdifficulty" jdbcType="NUMERIC"/>
       <result property="weather.skyCondition" column="hr_skycondition" jdbcType="NUMERIC"/>
       <result property="mountain.mountainName" column="hr_mountain_name" jdbcType="VARCHAR"/>
+      <result property="meeting.participationNo" column="hr_participation_no" jdbcType="NUMERIC"/>
    </resultMap>
    
    <!--SQL : hikingRecord INSERT -->
