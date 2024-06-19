@@ -1,67 +1,53 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%
-    String roomNo = request.getParameter("roomNo");
-    String nickname = request.getParameter("nickname");
-    String userNo = request.getParameter("userNo");
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-    request.setAttribute("roomNo", roomNo);
-    request.setAttribute("nickname", nickname);
-    request.setAttribute("userNo", userNo);
-%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chat Room</title>
+	<meta charset="UTF-8">
+    <title>Chatting Room</title>
+    <c:import url="../common/header.jsp"/>
+    
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-    <script>
+    <script type="text/javascript">
+    $(function() {
+    	
         var socket = io("http://192.168.0.52:3000");
-        var roomNo = "${roomNo}";
-        var userNickname = "${nickname}";
+        
         var userNo = "${userNo}";
+        var userNickname = "${nickname}";
+        var roomNo = "${roomNo}";
+
+        var initialSpaces = "                           ";
         
         console.log("roomNo:", roomNo);
         console.log("userNo:", userNo);
         console.log("userNickname:", userNickname);
-
-        socket.emit('joinRoom', roomNo);
-
-        // 과거 채팅 기록을 로드하여 표시
-        socket.on('loadMessages', function(messages) {
-            var chatBox = document.getElementById("chatBox");
-            messages.forEach(function(message) {
-                appendMessage(chatBox, message);
-            });
-        });
-
-        socket.on('message', function(message) {
-            var chatBox = document.getElementById("chatBox");
-            
-            console.log(message);
-            appendMessage(chatBox, message);
-        });
-
-        socket.on('deleteMessage', function(data) {
-            var messageElement = document.getElementById(data.messageId);
-            
-            if (messageElement) {
-                messageElement.innerHTML = data.userNickname + ": 삭제된 메시지입니다.";
-                messageElement.style.backgroundColor = 'lightgrey';
+        
+         // 공백 15개
+        $("#messageInput").val(initialSpaces);
+         
+        $("#messageInput").on('input', function() {
+            var currentVal = $(this).val();
+            if (!currentVal.startsWith(initialSpaces)) {
+                $(this).val(initialSpaces + currentVal.trimStart());
             }
         });
 
+
         function sendMessage() {
-            var input = document.getElementById("messageInput");
+            var contents = $("#messageInput").val().trimStart(); // 앞 공백 제거
+            
             var message = {
                 userNo: userNo,
                 userNickname: userNickname,
-                contents: input.value
+                contents: contents
             };
             
             console.log("Message:", message);
             
             socket.emit('chatMessage', { roomNo: roomNo, message: message });
-            input.value = "";
+            $("#messageInput").val(initialSpaces);
         }
 
         function deleteMessage(messageId) {
@@ -69,51 +55,167 @@
         }
 
         function appendMessage(chatBox, message) {
-            var messageElement = document.createElement("div");
-            messageElement.id = message._id;
+            var messageElement = $("<div></div>").attr("id", message._id);
             
-            if (message.isDeleted) {
-                messageElement.innerHTML = message.userNickname + ": 삭제된 메시지입니다.";
-                messageElement.style.backgroundColor = 'lightgrey';
-            } else {
-                messageElement.innerHTML = message.userNickname + ": " + message.contents;
+            var userNicknameElement = $("<div></div>").text(message.userNickname);
+            var messageContentsElement = $("<div></div>").addClass("p-4 rounded message-contents");
 
-	            if (message.userNo == userNo) {
-	                var deleteButton = document.createElement("button");
-	                deleteButton.innerHTML = "Delete";
-	                deleteButton.onclick = function() {
-	                    deleteMessage(message._id);
-	                };
-	                messageElement.appendChild(deleteButton);
-	                
-	                messageElement.style.backgroundColor = 'lightgreen';
-	            }
+            if (message.userNo == userNo) {
+            	
+            	messageElement.addClass("my");
+            	
+            	$('#message._id').attr("class", "my");
+            	
+                if (message.isDeleted) {
+                    messageContentsElement.text("삭제된 메시지입니다.");
+                } else {
+                    messageContentsElement.text(message.contents);
+                    
+                    var deleteButton = $("<button class='btn'><i class='bi bi-x' style='font-size: 24px; color: red;'></i></button>")
+                        .on("click", function() {
+                            deleteMessage(message._id);
+                        });
+                    
+                    messageElement.append(deleteButton);
+                                          
+                }
+                messageContentsElement.addClass("bg-warning col-md-5");
+                
+                messageElement.append(messageContentsElement);
+                
+            } else {
+                if (message.isDeleted) {
+                    messageContentsElement.text("삭제된 메시지입니다.");
+                } else {
+                    messageContentsElement.text(message.contents);
+                }
+                messageContentsElement.addClass("bg-lightgrey col-md-5");
+                
+                messageElement.append(userNicknameElement)
+                              .append(messageContentsElement);
             }
 
-            chatBox.appendChild(messageElement);
+            $(chatBox).append(messageElement);
         }
         
         // Enter 키 눌러 전송
-        document.addEventListener('DOMContentLoaded', (event) => {
-            var input = document.getElementById("messageInput");
-            input.addEventListener("keydown", function(event) {
-                if (event.key === "Enter") {
-                    event.preventDefault();
-                    sendMessage();
-                }
-            });
+        $(document).on('keydown', '#messageInput', function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // 버튼 클릭 이벤트 처리
+        $("button:contains('전송')").on('click', function() {
+            sendMessage();
         });
         
+        $("button:contains('사진')").on('click', function() {
+            $('#imageInput').click();
+            
+            uploadImage();
+        });
+        
+        socket.emit('joinRoom', roomNo);
+
+        // 과거 채팅 기록을 로드하여 표시
+        socket.on('loadMessages', function(messages) {
+            var chatBox = $("#chatBox");
+            $.each(messages, function(index, message) {
+                appendMessage(chatBox, message);
+            });
+        });
+
+        socket.on('message', function(message) {
+            var chatBox = $("#chatBox");
+            
+            console.log(message);
+            appendMessage(chatBox, message);
+        });
+
+        socket.on('deleteMessage', function(data) {
+            var messageElement = $("#" + data.messageId);
+            
+            if (messageElement.length) {
+            	
+                var messageContentsElement = messageElement.find("div.message-contents");
+                
+                if (messageContentsElement.length) {
+                	
+                    messageContentsElement.text("삭제된 메시지입니다.");
+                    messageElement.find("button").remove(); // 삭제 아이콘 제거
+                    
+                    
+                }
+                
+                
+            }
+        });
+    });
     </script>
-</head>
-<body>
-    <h1>Chat Room ${roomNo}</h1>
-    <div id="chatBox">
-        <!-- 실시간 메시지와 과거 채팅 기록이 표시됩니다 -->
-    </div>
-    <input type="text" id="messageInput">
-    <button onclick="sendMessage()">Send</button>
-    <input type="file" id="imageInput">
-    <button onclick="uploadImage()">Upload Image</button>
+    
+    <style>
+        .bg-lightgrey {
+            background-color: #D9D9D9;
+        }
+        
+        .my {
+        	display: flex;
+        	align-items: center;
+        	justify-content: flex-end;
+        }
+        
+        #send {
+        	display: flex;
+        	align-items: center;
+        }       
+        
+        /*
+        .my .bi-x {
+        	margin-right:10px;
+        }
+        */
+    </style>
+    
+    </head>
+    <body>
+    <header><c:import url="../common/top.jsp"/></header>
+    <main>
+        <div class="container-fluid py-5">
+            <div class="container py-5">
+                <h1>${roomName} 채팅방</h1>
+                
+                <div class="p-5 bg-light rounded">
+                    <div class="row g-4" id="chatBox">
+                        <!-- 채팅 표시되는 부분 -->
+                    </div>
+                    <div class="row g-4 mt-5 ms-3" id="send">
+                    
+                        <div class="col-md-10">
+                            <div class="position-relative mx-auto">
+                                <button type="button" class="btn btn-primary border-0 py-3 px-5 position-absolute rounded-pill text-white" style="top: 0; left: 0;">사진</button>
+                                <input class="form-control border w-100 py-3 px-4 rounded-pill" type="text" id="messageInput">
+                                <input type="file" id="imageInput" style="display: none;">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="position-relative mx-auto">
+                                <button class="btn btn-primary border-0 rounded text-white ms-2 py-3 px-5">전송</button>
+                            </div>
+                        </div>
+                                     
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </main>
+    <footer></footer>
 </body>
 </html>
+
+
+
+
