@@ -251,7 +251,7 @@
 		parameterType="site.dearmysanta.domain.common.Like" resultType="int">
 		SELECT
 		COUNT(*) FROM LIKES
-		WHERE POST_LIKE_NO = #{postNo}
+		WHERE POST_LIKE_NO = #{value}
 	</select>
 
 	<!-- parameterType="site.dearmysanta.domain.common.Like" -->
