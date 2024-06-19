@@ -26,6 +26,7 @@ import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
+import site.dearmysanta.domain.mountain.Weather;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.certification.CertificationPostService;
 import site.dearmysanta.service.correctionpost.CorrectionPostService;
@@ -47,6 +48,15 @@ public class MountainController {
 	@Autowired
 	private CorrectionPostService correctionPostService;
 	
+	@Autowired 
+	private MeetingService meetingService;
+	
+	@Autowired
+	private CertificationPostService certificationPostService;
+	
+	@Autowired
+	private UserService userService;
+	
 	
 	@Value("${pageSize}")
 	private int pageSize;
@@ -63,13 +73,19 @@ public class MountainController {
 	
 	
 	@GetMapping(value="getMountain")
-	public String getMountain(@RequestParam int mountainNo, double lat, double lon,Model model) { // 나중에 위도 경도는 현재 위치로 들어와야할듯? 
+	public String getMountain(@RequestParam int mountainNo, double lat, double lon,Model model) throws Exception { // 나중에 위도 경도는 현재 위치로 들어와야할듯? 
 		mountainService.updateMountainViewCount(mountainNo);
 		
 		SantaLogger.makeLog("info", mountainService.getMountain(mountainNo).getMountainImage());
-		model.addAttribute("mountain", mountainService.getMountain(mountainNo));
+		
+		Mountain mountain =  mountainService.getMountain(mountainNo);
+		
+		model.addAttribute("mountain", mountain);
 		model.addAttribute("weatherList", weatherService.getWeatherList(lat, lon));
 		
+		model.addAttribute("meetingCount", meetingService.getMountainTotalCount(mountain.getMountainName()));
+		model.addAttribute("certificationCount", certificationPostService.getTotalMountainCount(mountain.getMountainName()));
+		model.addAttribute("scheduleCount", userService.getMountainTotalCount(mountain.getMountainName()));
 		
 		
 		return "forward:/mountain/getMountain.jsp";
@@ -130,7 +146,7 @@ public class MountainController {
 	
 	
 	@RequestMapping(value="mapMountain")
-	public String mapMountain(@ModelAttribute MountainSearch mountainSearch, Model model, HttpSession session) throws JsonProcessingException {
+	public String mapMountain(@ModelAttribute MountainSearch mountainSearch, Model model, HttpSession session) throws Exception {
 
 		//
 		//나중에 jsp쪽에 search Condition 추가하기    
@@ -140,19 +156,23 @@ public class MountainController {
 		if (mountainSearch.getSearchKeyword() != null) {
 
 			if (mountainSearch.getSearchCondition() == 0 & session.getAttribute("user") != null) { // if condition is mountain
+				mountainService.deleteSearchKeyword(mountainSearch);				
 				mountainService.addSearchKeyword(mountainSearch);
 			}
 
 			List<Mountain> list = mountainService.getMountainListByName(mountainSearch.getSearchKeyword());
-
+			List<String> weatherList = new ArrayList<>();
+			
 			List<String> jsonList = new ArrayList<>();
 			for (Mountain mt : list) {
 				SantaLogger.makeLog("info", mt.toString());
 
 				jsonList.add(objectMapper.writeValueAsString(mt));
+				weatherList.add(objectMapper.writeValueAsString(weatherService.getWeather(mt.getMountainLatitude(), mt.getMountainLongitude())));	
 			}
 			
 			model.addAttribute("mountainList", jsonList);
+			model.addAttribute("weatherList", weatherList);
 
 		}
 

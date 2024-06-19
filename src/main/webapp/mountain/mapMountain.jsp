@@ -8,7 +8,6 @@
 <c:import url="../common/header.jsp"/>
 
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=xpk093fqk1&submodules=geocoder"></script>
-
 <script type="text/javascript">
 	let latitude;
 	let longitude;
@@ -16,6 +15,7 @@
     let mountainList;
     let zoomValue;
     var markers = [];
+    var infoWindows = [];
     
     var customIcon = {
             content: `
@@ -33,7 +33,7 @@
 		mountainList = ${mountainList != null ? mountainList : 'null'};
 		console.log('mountainList:' + mountainList);
 		
-		clearMarkers();
+		clearAll();
 		getLocation();
 		
 		if(mountainList != null){
@@ -141,6 +141,23 @@
 	    return { center, bounds };
 	}
 	
+	function getWeatherIcon(skyCondition) {
+        switch(skyCondition) {
+            case "1":
+                return "https://openweathermap.org/img/wn/01d@2x.png"; // 맑은 날씨 아이콘
+            case "2":
+                return "https://openweathermap.org/img/wn/02d@2x.png"; // 약간 흐림 아이콘
+            case "3":
+                return "https://openweathermap.org/img/wn/03d@2x.png"; // 구름 아이콘
+            case "4":
+                return "https://openweathermap.org/img/wn/09d@2x.png"; // 비 아이콘
+            case "5":
+                return "https://openweathermap.org/img/wn/10d@2x.png"; // 소나기 아이콘
+            default:
+                return "https://openweathermap.org/img/wn/50d@2x.png"; // 알 수 없는 날씨 아이콘
+        }
+    }
+	
 	function getMountainMarker(){
 		
 		let mountainLocation;
@@ -150,6 +167,8 @@
 				function(index, mountain) {
 					//console.log(mountain);
 					mountain = JSON.parse(JSON.stringify(mountain));
+					console.log('mountain:');
+					console.log(mountain);
 					console.log(mountain.mountainLatitude + ':'  + mountain.mountainLongitude);
 					
 					latitudes.push(mountain.mountainLatitude);
@@ -160,11 +179,71 @@
 							mountain.mountainLongitude);
 					let mountainMarker = new naver.maps.Marker({
 						position : mountainLocation,
-/* 						map : map, */
+						map : map, 
 						icon: customIcon
 					});
+					
+					let mountainNoData = mountain.mountainNo;
+					let mountainNameData = mountain.mountainName;
+				    let mountainLatitudeData = mountain.mountainLatitude;
+				    let mountainLongitudeData = mountain.mountainLongitude;
+				    let mountainLocationData = mountain.mountainLocation;
+				    let mountainImageData = mountain.mountainImage;
+				    let mountainAltitudeData = mountain.mountainAltitude;
+				    let likeCountData = mountain.likeCount;
+					
+					
+				    console.log("no, lat, lon" ,mountainNoData,mountainLatitudeData,mountainLongitudeData )
+				    
+				    
+				    let weatherList = ${weatherList};
+				    let weather = weatherList[index];
+				    let weatherIcon = getWeatherIcon(weather.skyCondition);
+				    let sunriseIcon = '<i class="bi bi-sunrise icon" style="width:20px;height:20px;"></i>';
+	                let sunsetIcon ='<i class="bi bi-sunset icon" style="width:20px;height:20px;"></i>';
+				    
+				    console.log(weather);
+					
 
-					markers.push(mountainMarker)
+				    let infoWindowContent = 
+	                    '<div class="info-window">' +
+	                    //'<img src="' + mountainImageData + '" alt="' + mountainNameData + '" style="width:100%; height:auto; max-height:100px; object-fit:cover;">' +
+	                  	'<div class="title">' + mountainNameData + 
+                    	'<a href="/mountain/getMountain?mountainNo=' + mountainNoData + '&lat=' + mountainLatitudeData + '&lon=' + mountainLongitudeData + '" class="link">상세보기</a>' +
+                    	'</div>' +
+	                    '<div>위치: ' + mountainLocationData + '</div>' +
+	                    '<div>높이: ' + mountainAltitudeData + 'm</div>' +
+	                    '<div>좋아요: ' + likeCountData + '</div>' +
+	                    '<div><img src="' + weatherIcon + '" class="weather-icon" style="width:20px;height:20px;"> ' + weather.temperature + '°C</div>' +
+	                    '<div>강수: ' + weather.precipitation + '</div>' +
+	                    '<div>강수 확률: ' + weather.precipitationProbability + '%</div>' +
+	                    '<div>' + sunriseIcon + ' 일출: ' + weather.sunriseTime.trim() + '</div>' +
+	                    '<div>' + sunsetIcon + ' 일몰: ' + weather.sunsetTime.trim() + '</div>' +
+	                    '</div>';
+	                console.log('infoWindowContent:', infoWindowContent);
+
+	                let infoWindow = new naver.maps.InfoWindow({
+	                    content: infoWindowContent,
+	                    backgroundColor: "#fff",
+	                    borderColor: "#333",
+	                    borderWidth: 1,
+	                    anchorSize: new naver.maps.Size(10, 10),
+	                    anchorSkew: true,
+	                    anchorColor: "#fff",
+	                    pixelOffset: new naver.maps.Point(10, -10)
+	                });
+
+	                naver.maps.Event.addListener(mountainMarker, 'click', function(e) {
+	                    if (infoWindow.getMap()) {
+	                        infoWindow.close();
+	                    } else {
+	                        infoWindow.open(map, mountainMarker);
+	                    }
+	                });
+
+
+					markers.push(mountainMarker);
+					infoWindows.push(infoWindow);  //지우는거 1 안나오는거 2 날씨 연동 3
 				});
 		
 		
@@ -185,6 +264,8 @@
 	}// call Naver Map
 	
 	
+	
+	
 	$(function() {
 		$('#search').on('click', function() {
 			getAddressFromUserInput();
@@ -196,7 +277,7 @@
 
 	function getAddressFromUserInput() {
 		var userInput = $('#address').val();
-		clearMarkers();
+		clearAll();
 
 		$.ajax({
 			url : 'http://127.0.0.1:8001/mountain/rest/searchKeywordToAddress',
@@ -251,6 +332,19 @@
 		}
 		markers = [];
 	}
+	
+	function clearInfoWindows() {
+	    for (var i = 0; i < infoWindows.length; i++) {
+	        infoWindows[i].close();
+	    }
+	    infoWindows = [];
+	}
+	
+
+	function clearAll() {
+	    clearMarkers();
+	    clearInfoWindows();
+	}
 </script>
 
 <style>
@@ -265,7 +359,30 @@
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-
+ 		.info-window {
+            width: 220px;
+            max-width: 220px;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow: hidden; /* 내용이 넘칠 경우 숨김 */
+        }
+        .info-window img {
+            width: 100%;
+            height: auto;
+            max-height: 100px; /* 최대 높이 설정 */
+            object-fit: cover; /* 이미지가 잘리지 않고 창에 맞도록 설정 */
+        }
+        .info-window .title {
+            font-weight: bold;
+        }
+        .weather-icon, .sunrise-icon, .sunset-icon {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+        }
+        .weather-icon {
+            background-color: transparent;
+        }
 
 </style>
 
