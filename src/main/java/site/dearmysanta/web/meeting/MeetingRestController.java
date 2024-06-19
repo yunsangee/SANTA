@@ -1,5 +1,7 @@
 package site.dearmysanta.web.meeting;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,12 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.meeting.MeetingParticipation;
 import site.dearmysanta.domain.meeting.MeetingPost;
 import site.dearmysanta.domain.meeting.MeetingPostComment;
 import site.dearmysanta.service.meeting.MeetingService;
+import site.dearmysanta.service.user.etc.UserEtcService;
 
 @RestController
 @RequestMapping("/meeting/*")
@@ -23,6 +27,9 @@ public class MeetingRestController {
 	@Autowired
 	@Qualifier("meetingService")
 	private MeetingService meetingService;
+	
+	@Autowired
+	private UserEtcService userEtcService;
 	
 	public MeetingRestController() {
 		System.out.println(this.getClass());
@@ -99,8 +106,18 @@ public class MeetingRestController {
 	public void updateMeetingPostRecruitmentStatusToEnd(@RequestParam int postNo) throws Exception {
 		
 		meetingService.updateMeetingPostRecruitmentStatusToEnd(postNo);
+		
+		List<MeetingParticipation> meetingParticipationList = meetingService.getMeetingParticipationList(postNo);
+		
+		for (int i = 0; i < meetingParticipationList.size(); i++) {
+        	
+            MeetingParticipation meetingParticipation = meetingParticipationList.get(i);
+            int userNo = meetingParticipation.getUserNo();
+            
+            userEtcService.updateMeetingCount(userNo, 1);
+            
+        }
+		
 	}
-	
-	
 	
 }
