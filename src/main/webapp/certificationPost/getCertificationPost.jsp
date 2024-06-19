@@ -9,13 +9,15 @@
 </head>
 <h1>Certification Post Detail Page</h1>
 <body>
+<!--  
+<c:if test="${not empty certificationPostType && certificationPostType != '0'}">
+    <p>Meeting Name: ${certificationPostType}</p>
+</c:if>
 
-    <p>Meeting Name: ${selectedPost}</p>
+    -->
 
-    <!-- 다른 필드들도 여기에 추가할 수 있습니다 -->
-
-    
-    <img src="${imageUrl}" alt="Certification Post Image"/>
+        <img src="${image}" alt="Image" />
+  
 
 
 <h2>Like Status</h2>

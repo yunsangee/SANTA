@@ -26,7 +26,7 @@
         <result property="certificationPostHashtagContents" column="hashtag_content" jdbcType="VARCHAR"/>
         <result property="certificationPostLikeCount" column="cp_like_count" jdbcType="NUMERIC"/>
         <result property="certificationPostImageCount" column="cp_image_count" jdbcType="NUMERIC"/>
-        
+        <result property="certificationPostType" column="cp_type" jdbcType="NUMERIC"/>
     </resultMap>
 
 
@@ -73,7 +73,7 @@
             #{certificationPostHikingDifficulty},
             0,
             0,
-            0
+              #{certificationPostImageCount}
         )
     </insert>
     

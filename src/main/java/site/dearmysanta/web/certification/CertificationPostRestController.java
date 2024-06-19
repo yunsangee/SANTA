@@ -48,7 +48,7 @@ public class CertificationPostRestController {
     }
     
     @PostMapping(value = "rest/listCertificationPost")
-    public Map<String, Object> listCertificationPost(@RequestParam(required = false) Search search, Model model) throws Exception {
+    public Map<String, Object> listCertificationPost(@RequestBody Search search, Model model) throws Exception {
     	if (search == null) {
             search = new Search(); // 기본 검색 조건 설정 또는 처리
         }

@@ -76,7 +76,7 @@ public class CertificationPostServiceImpl implements CertificationPostService {
         certificationPostDao.updateCertificationPost(certificationPost);
     }
     
-	@Override
+/*	@Override
 	public Map<String, Object> getCertificationPostList(Search search) throws Exception {
 		List<CertificationPost> list= certificationPostDao.getCertificationPostList(search);
 		
@@ -85,7 +85,30 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 		map.put("list", list );
 	
 		return map;
-	}
+	}*/
+    
+    @Override
+    public Map<String, Object> getCertificationPostList(Search search) throws Exception {
+        // 인증 포스트 목록을 가져옵니다.
+        List<CertificationPost> list = certificationPostDao.getCertificationPostList(search);
+
+        // 각 인증 포스트에 대해 해시태그 및 좋아요 수를 추가합니다.
+        for (CertificationPost post : list) {
+            // 해시태그 가져오기
+           
+
+            // 좋아요 수 가져오기
+            int likeCount = certificationPostDao.getCertificationPostLikeCount(post.getPostNo());
+            post.setCertificationPostLikeCount(likeCount); // 인증 포스트 객체에 좋아요 수를 설정합니다.
+        }
+
+        // 결과를 맵에 넣습니다.
+        Map<String, Object> map = new HashMap<>();
+        map.put("list", list);
+
+        return map;
+    }
+
 
 	@Override
 	public List<CertificationPost> getMyCertificationPostList(int userNo) throws Exception {

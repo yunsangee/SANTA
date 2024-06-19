@@ -1,6 +1,7 @@
 package site.dearmysanta.web.certification;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import site.dearmysanta.domain.meeting.MeetingPost;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.certification.CertificationPostService;
 import site.dearmysanta.service.common.ObjectStorageService;
+import site.dearmysanta.service.meeting.MeetingDAO;
 import site.dearmysanta.service.meeting.MeetingService;
 import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.user.UserService;
@@ -82,44 +84,89 @@ public class CertificationPostController {
         model.addAttribute("unCertifiedMeetingPosts", unCertifiedMeetingPosts);
         return "forward:/certificationPost/addCertificationPost.jsp";
     }
-
     
-
+ 
     @PostMapping(value = "addCertificationPost")
-       public String addCertificationPost(@RequestParam String selectedPost, @ModelAttribute CertificationPost certificationPost, Model model) throws Exception {
+    public String addCertificationPost(
+                                       @ModelAttribute CertificationPost certificationPost,
+                                       Model model) throws Exception {
+
+          certificationPostService.addCertificationPost(certificationPost);
+
+        // 디비에 postNo 가져오기
+        int postNo = certificationPost.getPostNo();
+        int postType = 0;
         
-           certificationPostService.addCertificationPost(certificationPost);
+     
 
-           // 디비에 postNo 가져오기
-           int postNo = certificationPost.getPostNo();
+        if (certificationPost.getCertificationPostImage() != null && !certificationPost.getCertificationPostImage().isEmpty()) {
+            List<MultipartFile> images = certificationPost.getCertificationPostImage();
+            int imageCount = images.size();
 
-           if (certificationPost.getCertificationPostImage() != null && !certificationPost.getCertificationPostImage().isEmpty()) {
-               List<MultipartFile> images = certificationPost.getCertificationPostImage();
-               int imageCount = images.size();
+            for (int i = 0; i < imageCount; i++) { // 인덱스는 1부터 시작
+                MultipartFile image = images.get(i); // 리스트 인덱스는 0부터 시작하므로 i-1 사용
+                String fileName = postNo + "_" + postType + "_"+(i+1);
 
-               for (int i = 1; i <= imageCount; i++) { // 인덱스는 1부터 시작
-                   MultipartFile image = images.get(i - 1); // 리스트 인덱스는 0부터 시작하므로 i-1 사용
-                   String fileName = postNo + "_" + 0 + "_" +  i;
+                System.out.println(fileName);
 
-                   
-                   System.out.println(fileName);
+                objectStorageService.uploadFile(image, fileName);
+            }
+        }
 
-                   objectStorageService.uploadFile(image, fileName);
-               }
-           }
+        // 산 통계 
+        String certificationPostMountainName = certificationPost.getCertificationPostMountainName();
+        mountainService.addMountainStatistics(certificationPostMountainName, 1);
 
-           // 산 통계 
-           String certificationPostMountainName = certificationPost.getCertificationPostMountainName();
-           mountainService.addMountainStatistics(certificationPostMountainName, 1);
+        // 사용자 인증 카운트 
+        int userNo = certificationPost.getUserNo();
+        userEtcService.updateCertificationCount(userNo, 0); // type 0: 추가
 
-           // 사용자 인증 카운트 
-           int userNo = certificationPost.getUserNo();
-          userEtcService.updateCertificationCount(userNo, 0); // type 0: 추가
+        // forward를 통해 다음 페이지로 이동
+        return "redirect:/certificationPost/getCertificationPost?postNo=" + postNo;
+    }
 
-           // forward를 통해 다음 페이지로 이동
-         return "redirect:/certificationPost/getCertificationPost?postNo="+postNo+"&selectedPost="+selectedPost;
-       
-       }
+    /*
+    @PostMapping(value = "addCertificationPost")
+    public String addCertificationPost(@RequestParam(required = false) int certificationPostType,
+                                       @ModelAttribute CertificationPost certificationPost,
+                                       Model model) throws Exception {
+
+        certificationPost.setCertificationPostType(certificationPostType);
+        
+        System.out.println("add " + certificationPostType);
+        certificationPostService.addCertificationPost(certificationPost);
+
+        // 디비에 postNo 가져오기
+        int postNo = certificationPost.getPostNo();
+        int postType = 0;
+        
+     
+
+        if (certificationPost.getCertificationPostImage() != null && !certificationPost.getCertificationPostImage().isEmpty()) {
+            List<MultipartFile> images = certificationPost.getCertificationPostImage();
+            int imageCount = images.size();
+
+            for (int i = 0; i < imageCount; i++) { // 인덱스는 1부터 시작
+                MultipartFile image = images.get(i); // 리스트 인덱스는 0부터 시작하므로 i-1 사용
+                String fileName = postNo + "_" + postType + "_"+(i+1);
+
+                System.out.println(fileName);
+
+                objectStorageService.uploadFile(image, fileName);
+            }
+        }
+
+        // 산 통계 
+        String certificationPostMountainName = certificationPost.getCertificationPostMountainName();
+        mountainService.addMountainStatistics(certificationPostMountainName, 1);
+
+        // 사용자 인증 카운트 
+        int userNo = certificationPost.getUserNo();
+        userEtcService.updateCertificationCount(userNo, 0); // type 0: 추가
+
+        // forward를 통해 다음 페이지로 이동
+        return "redirect:/certificationPost/getCertificationPost?postNo=" + postNo + "&certificationPostType=" + certificationPostType;
+    }*/
 
 //    @PostMapping(value = "addCertificationPost")
 //    public String addCertificationPost(@ModelAttribute CertificationPost certificationPost, Model model) throws Exception {
@@ -186,13 +233,7 @@ public class CertificationPostController {
     }
 
 */
- //   @PostMapping(value = "updateCertificationPost")
-//    public String updateCertificationPost(@ModelAttribute CertificationPost certificationPost ) throws Exception {
-//    	
-//    	certificationPostService.updateCertificationPost(certificationPost);
-//    	return "forward:/certificationPost/updateCertificationPost.jsp";
-//    	
-//    }
+
 
 	@GetMapping(value = "updateCertificationPost")
 	public String updateCertificationPost(@RequestParam int postNo, Model model) throws Exception {
@@ -212,7 +253,7 @@ public class CertificationPostController {
 	}
 	
     
-    
+   /* 
     ///이건 리스트조회 무한스크롤은 rest?!
     @GetMapping(value = "listCertificationPost")
   //  public String listCertificationPost(@ModelAttribute Search search, Model model) throws Exception {
@@ -221,16 +262,38 @@ public class CertificationPostController {
         System.out.println(result);
         List<CertificationPost> certificationPost = (List<CertificationPost>) result.get("list");
         model.addAttribute("certificationPost", certificationPost);
-
+        model.addAttribute("hashtagList", result.get("hashtagList"));
          System.out.println("Certification Post: " + certificationPost);
 
         return "forward:/certificationPost/listCertificationPost.jsp";
     }
-    
-    // 게시글 상세조회..
+    */
+	
+	@GetMapping(value = "listCertificationPost")
+	public String listCertificationPost(@RequestParam(required = false)  Search search, Model model) throws Exception {
+	    Map<String, Object> result = certificationPostService.getCertificationPostList(search);
+	    List<CertificationPost> certificationPostList = (List<CertificationPost>) result.get("list");
+
+	    int postType = 0;
+	    List<String> certificationPostImages = new ArrayList<>();
+	    for (CertificationPost certificationPost : certificationPostList) {
+	        String fileName = certificationPost.getPostNo() + "_" +postType + "_1"; // 첫 번째 사진 파일명
+	        String imageURL = objectStorageService.getImageURL(fileName);
+	        certificationPostImages.add(imageURL);
+	    }
+       
+	    model.addAttribute("certificationPost", certificationPostList);
+	    model.addAttribute("hashtagList", result.get("hashtagList"));
+	    model.addAttribute("certificationPostImages", certificationPostImages);
+	    return "forward:/certificationPost/listCertificationPost.jsp";
+	}
+
+	
+    // 게시글 상세조회..@RequestParam int certificationPostType, 
     @GetMapping(value="getCertificationPost")
-    public String getCertificationPost(@RequestParam int postNo, @RequestParam String selectedPost,  Model model) throws Exception {
+    public String getCertificationPost(@RequestParam int postNo,  Model model) throws Exception {
     	int userNo = 1;
+    	int postType = 0;
     	 Map<String, Object> map = certificationPostService.getCertificationPost(postNo, userNo);
     	 List<CertificationPostComment> certificationPostComment = certificationPostService.getCertificationPostCommentList(postNo);
     	 List<MeetingPost> unCertifiedMeetingPosts = meetingService.getUnCertifiedMeetingPost(userNo);
@@ -239,20 +302,21 @@ public class CertificationPostController {
  		
     	 List<String> certificationPostImages = new ArrayList<>();
          int imageCount = certificationPost.getCertificationPostImageCount();
-         for (int i = 1; i <= imageCount; i++) {
-             String fileName = postNo + "_" + 0 + "_" + i;
-             String imageUrl = objectStorageService.getImageURL(fileName);
-             certificationPostImages.add(imageUrl);
+          System.out.println("imageCount==="+imageCount);
+         for (int i = 0; i < imageCount; i++) {
+        	 String fileName = postNo+ "_" +postType+ "_" +(i+1);
+             String imageURL = objectStorageService.getImageURL(fileName);
+             certificationPostImages.add(imageURL);
          }
-         model.addAttribute("certificationPostImages", certificationPostImages);
+       
 
  		
  		 model.addAttribute("unCertifiedMeetingPosts", map.get("unCertifiedMeetingPosts"));
     	 model.addAttribute("certificationPost", map.get("certificationPost"));
     	 model.addAttribute("certificationPostComments", certificationPostComment);
        model.addAttribute("hashtagList", map.get("hashtagList"));
-    
-       model.addAttribute("selectedPost", selectedPost);
+      model.addAttribute("certificationPostImages", certificationPostImages);
+      // model.addAttribute("certificationPostType", certificationPostType);
 
     	
          System.out.println("이거맞지"+certificationPostComment);
