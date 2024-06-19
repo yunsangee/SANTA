@@ -484,7 +484,10 @@ public class MountainServiceImpl implements MountainService {
 		int maxSize = ((mountainNames.size() > search.getPageSize() ) ?  search.getPageSize()  : mountainNames.size() );
 		for(int i = 0; i <  maxSize  ; i ++) {
 //			SantaLogger.makeLog("info", "::" + this.getMountainListByName(mountainNames.get(i)).toString());
-			list.add(this.getMountainListByName(mountainNames.get(i)).get(0));
+			
+			Mountain mountain = this.getMountainListByName(mountainNames.get(i)).get(0);
+			mountain.setLikeCount(mountainDao.getTotalMountainLikeCount(mountain.getMountainNo()));
+			list.add(mountain);
 		}
 		
 		return list;
@@ -524,8 +527,8 @@ public class MountainServiceImpl implements MountainService {
 		mountainDao.deleteMountainLike(like);
 	}
 	
-	public int getTotalMountainLikeCount(Like like) {
-		return mountainDao.getTotalMountainLikeCount(like);
+	public int getTotalMountainLikeCount(int mountainNo) {
+		return mountainDao.getTotalMountainLikeCount(mountainNo);
 	}
 	
 	public List<Mountain> getMountainLikeList(Search search){
