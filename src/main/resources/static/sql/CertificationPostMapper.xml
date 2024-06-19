@@ -92,7 +92,8 @@
             cp_hiking_date,
             cp_creation_date,
             cp_transportation,
-            cp_difficulty
+            cp_difficulty,
+            cp_image_count
         FROM
             certification_post
         WHERE
@@ -223,7 +224,7 @@
     	JOIN 
         	users u ON c.user_no = u.user_no
     	WHERE 
-        	c.post_no = #{postNo} AND c.post_type = 1
+        	c.post_no = #{postNo} AND c.post_type = 0
 	</select>
 
 <!-- search -->

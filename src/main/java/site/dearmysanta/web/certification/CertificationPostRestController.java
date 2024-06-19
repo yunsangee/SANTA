@@ -1,5 +1,6 @@
 package site.dearmysanta.web.certification;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.certification.CertificationPostService;
+import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.user.UserService;
 import site.dearmysanta.service.user.etc.UserEtcService;
 
@@ -42,6 +44,9 @@ public class CertificationPostRestController {
     @Autowired
     @Qualifier("userEtcServiceImpl")
     private UserEtcService userEtcService;
+    
+	@Autowired
+	private ObjectStorageService objectStorageService;
     
     public CertificationPostRestController() {
         System.out.println(this.getClass());
@@ -102,6 +107,14 @@ public class CertificationPostRestController {
         return result;
     }
     
+
+    @GetMapping(value="rest/getCertificationPostComment")
+    public List<CertificationPostComment> getCertificationPostComment(@RequestParam int postNo) throws Exception {
+        List<CertificationPostComment> certificationPostComment = certificationPostService.getCertificationPostCommentList(postNo);
+        return certificationPostComment;
+    }
+    
+    
     @PostMapping(value="rest/addCertificationPostComment")
     public void addCertificationPostComment(@RequestBody CertificationPostComment certificationPostComment)throws Exception {
     
@@ -117,6 +130,51 @@ public class CertificationPostRestController {
     	
 }
 
+  
+    public String getCertificationPost(@RequestParam int postNo,  Model model) throws Exception {
+    	int userNo = 1;
+    	int postType = 0;
+    	 Map<String, Object> map = certificationPostService.getCertificationPost(postNo, userNo);
+    	 List<CertificationPostComment> certificationPostComment = certificationPostService.getCertificationPostCommentList(postNo);
+    	// List<MeetingPost> unCertifiedMeetingPosts = meetingService.getUnCertifiedMeetingPost(userNo);
+    	 //meetingService.updateMeetingPostCertifiedStatus(postNo);
+    	 CertificationPost certificationPost = (CertificationPost)map.get("certificationPost");
+ 		
+    	 List<String> certificationPostImages = new ArrayList<>();
+         int imageCount = certificationPost.getCertificationPostImageCount();
+          System.out.println("imageCount==="+imageCount);
+         for (int i = 0; i < imageCount; i++) {
+        	 String fileName = postNo+ "_" +postType+ "_" +(i+1);
+             String imageURL = objectStorageService.getImageURL(fileName);
+             certificationPostImages.add(imageURL);
+         }
+       
+ 		// model.addAttribute("unCertifiedMeetingPosts", map.get("unCertifiedMeetingPosts"));
+    	 model.addAttribute("certificationPost", map.get("certificationPost"));
+    	 model.addAttribute("certificationPostComments", certificationPostComment);
+       model.addAttribute("hashtagList", map.get("hashtagList"));
+      model.addAttribute("certificationPostImages", certificationPostImages);
+      // model.addAttribute("certificationPostType", certificationPostType);
+
+    	
+         System.out.println("이거맞지"+certificationPostComment);
+         
+         return "forward:/certificationPost/getCertificationPost.jsp";
+ 					  
+    	 
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 	//like
     @PostMapping(value="rest/addCertificationPostLike")
     public void addCertificationPostLike(@RequestBody Like like) throws Exception {
@@ -142,6 +200,9 @@ public class CertificationPostRestController {
     public void deleteHashtag(@PathVariable int hashtagNo) throws Exception {
         certificationPostService.deleteHashtag(hashtagNo);
     }
+    
+    
+    
 }
     
     

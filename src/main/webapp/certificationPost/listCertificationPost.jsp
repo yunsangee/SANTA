@@ -116,7 +116,7 @@
                       <img src="${certificationPostImages[status.index]}" alt="Certification Post Image">
 
                             </div>
-                            <div class="details">
+                            <div class="details"><h4>${certificationPost.postNo}</h4>
                                 <h4>${certificationPost.title}</h4>
                                 <p>산명칭 : ${certificationPost.certificationPostMountainName}</p>
                                 <p>Hiking Date: ${certificationPost.certificationPostHikingDate}</p>
@@ -148,6 +148,6 @@
         <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
     </div>
 
-    <footer></footer>
+    <footer><c:import url="../common/footer.jsp"/></footer>
 </body>
 </html>

@@ -65,7 +65,9 @@ public class CertificationPostServiceImpl implements CertificationPostService {
     	List<CertificationPostComment> certificationPostCommentList = certificationPostDao.getCertificationPostCommentList(postNo);
     	Map<String, Object> map = new HashMap<String, Object>();
 		map.put("certificationPost", certificationPost);
+		
 		map.put("certificationPostCommentList", certificationPostCommentList);
+		System.out.println("´ñ±Û"+postNo+userNo+certificationPostCommentList);
 		map.put("hashtagList", hashtagList);
     	return map;
     }

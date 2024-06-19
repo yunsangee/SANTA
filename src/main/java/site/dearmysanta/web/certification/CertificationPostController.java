@@ -89,41 +89,49 @@ public class CertificationPostController {
     @PostMapping(value = "addCertificationPost")
     public String addCertificationPost(
                                        @ModelAttribute CertificationPost certificationPost,
+                                       @RequestParam int totalTimeHours,
+                                       @RequestParam int totalTimeMinutes,
+                                       @RequestParam int ascentTimeHours,
+                                       @RequestParam int ascentTimeMinutes,
+                                       @RequestParam int descentTimeHours,
+                                       @RequestParam int descentTimeMinutes,
                                        Model model) throws Exception {
 
-          certificationPostService.addCertificationPost(certificationPost);
+        // 시간을 "ㅇㅇ시 ㅇㅇ분" 형식으로 변환하여 설정
+        String totalTime = totalTimeHours + "시간 " + totalTimeMinutes + "분";
+        String ascentTime = ascentTimeHours + "시간 " + ascentTimeMinutes + "분";
+        String descentTime = descentTimeHours + "시간 " + descentTimeMinutes + "분";
+
+        certificationPost.setCertificationPostTotalTime(totalTime);
+        certificationPost.setCertificationPostAscentTime(ascentTime);
+        certificationPost.setCertificationPostDescentTime(descentTime);
+
+        certificationPostService.addCertificationPost(certificationPost);
 
         // 디비에 postNo 가져오기
         int postNo = certificationPost.getPostNo();
         int postType = 0;
-        
-     
 
         if (certificationPost.getCertificationPostImage() != null && !certificationPost.getCertificationPostImage().isEmpty()) {
             List<MultipartFile> images = certificationPost.getCertificationPostImage();
             int imageCount = images.size();
 
             for (int i = 0; i < imageCount; i++) { // 인덱스는 1부터 시작
-                MultipartFile image = images.get(i); // 리스트 인덱스는 0부터 시작하므로 i-1 사용
+                MultipartFile image = images.get(i); // 리스트 인덱스는 0부터 시작하므로 i 사용
                 String fileName = postNo + "_" + postType + "_"+(i+1);
 
                 System.out.println(fileName);
 
                 objectStorageService.uploadFile(image, fileName);
+                
+                int userNo = certificationPost.getUserNo();
+                userEtcService.updateCertificationCount(userNo, 0);
             }
         }
-
-        // 산 통계 
-        String certificationPostMountainName = certificationPost.getCertificationPostMountainName();
-        mountainService.addMountainStatistics(certificationPostMountainName, 1);
-
-        // 사용자 인증 카운트 
-        int userNo = certificationPost.getUserNo();
-        userEtcService.updateCertificationCount(userNo, 0); // type 0: 추가
-
-        // forward를 통해 다음 페이지로 이동
         return "redirect:/certificationPost/getCertificationPost?postNo=" + postNo;
+
     }
+
 
     /*
     @PostMapping(value = "addCertificationPost")
@@ -234,24 +242,60 @@ public class CertificationPostController {
 
 */
 
+    @GetMapping(value = "updateCertificationPost")
+    public String updateCertificationPost(@RequestParam int postNo, Model model) throws Exception {
+        CertificationPost certificationPost = certificationPostService.getCertificationPost(postNo);
+        model.addAttribute("certificationPost", certificationPost);
 
-	@GetMapping(value = "updateCertificationPost")
-	public String updateCertificationPost(@RequestParam int postNo, Model model) throws Exception {
-		
-		CertificationPost certificationPost = certificationPostService.getCertificationPost(postNo);
-		model.addAttribute(certificationPost);
-		
-		return "forward:/certificationPost/updateCertificationPost.jsp";
-	}
-	
-	@PostMapping(value = "updateCertificationPost")
-	public String updateCertificationPost(@ModelAttribute CertificationPost certificationPost) throws Exception {
-		
-		certificationPostService.updateCertificationPost(certificationPost);
-		
-		return "redirect:/certificationPost/getCertificationPost?postNo=" + certificationPost.getPostNo();
-	}
-	
+        // 시간 데이터를 분리하여 모델에 추가
+        String[] totalTimeParts = certificationPost.getCertificationPostTotalTime().split(" ");
+        String[] ascentTimeParts = certificationPost.getCertificationPostAscentTime().split(" ");
+        String[] descentTimeParts = certificationPost.getCertificationPostDescentTime().split(" ");
+        
+        model.addAttribute("totalTimeHours", totalTimeParts[0].replace("시간", "").trim());
+        model.addAttribute("totalTimeMinutes", totalTimeParts[1].replace("분", "").trim());
+        model.addAttribute("ascentTimeHours", ascentTimeParts[0].replace("시간", "").trim());
+        model.addAttribute("ascentTimeMinutes", ascentTimeParts[1].replace("분", "").trim());
+        model.addAttribute("descentTimeHours", descentTimeParts[0].replace("시간", "").trim());
+        model.addAttribute("descentTimeMinutes", descentTimeParts[1].replace("분", "").trim());
+
+        int postType = 0;
+        List<String> certificationPostImages = new ArrayList<>();
+        int imageCount = certificationPost.getCertificationPostImageCount();
+        System.out.println("imageCount===" + imageCount);
+        for (int i = 0; i < imageCount; i++) {
+            String fileName = postNo + "_" + postType + "_" + (i + 1);
+            String imageURL = objectStorageService.getImageURL(fileName);
+            certificationPostImages.add(imageURL);
+        }
+        model.addAttribute("certificationPostImages", certificationPostImages);
+
+        return "forward:/certificationPost/updateCertificationPost.jsp";
+    }
+
+    @PostMapping(value = "updateCertificationPost")
+    public String updateCertificationPost(@ModelAttribute CertificationPost certificationPost,
+                                          @RequestParam int totalTimeHours,
+                                          @RequestParam int totalTimeMinutes,
+                                          @RequestParam int ascentTimeHours,
+                                          @RequestParam int ascentTimeMinutes,
+                                          @RequestParam int descentTimeHours,
+                                          @RequestParam int descentTimeMinutes) throws Exception {
+
+        // 시간을 "ㅇㅇ시 ㅇㅇ분" 형식으로 변환하여 설정
+        String totalTime = totalTimeHours + "시간 " + totalTimeMinutes + "분";
+        String ascentTime = ascentTimeHours + "시간 " + ascentTimeMinutes + "분";
+        String descentTime = descentTimeHours + "시간 " + descentTimeMinutes + "분";
+
+        certificationPost.setCertificationPostTotalTime(totalTime);
+        certificationPost.setCertificationPostAscentTime(ascentTime);
+        certificationPost.setCertificationPostDescentTime(descentTime);
+
+        certificationPostService.updateCertificationPost(certificationPost);
+
+        return "redirect:/certificationPost/getCertificationPost?postNo=" + certificationPost.getPostNo();
+    }
+
     
    /* 
     ///이건 리스트조회 무한스크롤은 rest?!
@@ -295,9 +339,9 @@ public class CertificationPostController {
     	int userNo = 1;
     	int postType = 0;
     	 Map<String, Object> map = certificationPostService.getCertificationPost(postNo, userNo);
-    	 List<CertificationPostComment> certificationPostComment = certificationPostService.getCertificationPostCommentList(postNo);
-    	 List<MeetingPost> unCertifiedMeetingPosts = meetingService.getUnCertifiedMeetingPost(userNo);
-    	 meetingService.updateMeetingPostCertifiedStatus(postNo);
+    	 List<CertificationPostComment> certificationPostCommentList = certificationPostService.getCertificationPostCommentList(postNo);
+    	// List<MeetingPost> unCertifiedMeetingPosts = meetingService.getUnCertifiedMeetingPost(userNo);
+    	 //meetingService.updateMeetingPostCertifiedStatus(postNo);
     	 CertificationPost certificationPost = (CertificationPost)map.get("certificationPost");
  		
     	 List<String> certificationPostImages = new ArrayList<>();
@@ -310,16 +354,16 @@ public class CertificationPostController {
          }
        
 
- 		
- 		 model.addAttribute("unCertifiedMeetingPosts", map.get("unCertifiedMeetingPosts"));
+     	System.out.println("댓글"+postNo+userNo+certificationPostCommentList);
+ 		// model.addAttribute("unCertifiedMeetingPosts", map.get("unCertifiedMeetingPosts"));
     	 model.addAttribute("certificationPost", map.get("certificationPost"));
-    	 model.addAttribute("certificationPostComments", certificationPostComment);
+    	 model.addAttribute("certificationPostCommentList", certificationPostCommentList);
        model.addAttribute("hashtagList", map.get("hashtagList"));
       model.addAttribute("certificationPostImages", certificationPostImages);
       // model.addAttribute("certificationPostType", certificationPostType);
 
     	
-         System.out.println("이거맞지"+certificationPostComment);
+         System.out.println("이거맞지"+certificationPostCommentList);
          
          return "forward:/certificationPost/getCertificationPost.jsp";
  					  
