@@ -53,6 +53,8 @@ public interface MountainDao {
 	
 	public int getTotalMountainLikeCount(int mountainNo);
 	
+	public int isLiked(int mountainNo, int userNo);
+	
 	public List<Mountain> getMountainLikeList(Search search);
 	
 	public List<String> getStatisticsMountainNameList(int which);

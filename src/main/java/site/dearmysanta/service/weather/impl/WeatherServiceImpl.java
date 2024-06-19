@@ -210,6 +210,8 @@ public class WeatherServiceImpl implements WeatherService{
 
         for (int i = 0; i < dailyArray.length(); i++) {
             JSONObject dailyObject = dailyArray.getJSONObject(i);
+            SantaLogger.makeLog("info", "dailyObject:" + dailyObject);
+            
             Weather weather = new Weather();
             
             long dateUnix = dailyObject.getLong("dt");
@@ -231,6 +233,11 @@ public class WeatherServiceImpl implements WeatherService{
             JSONArray weatherArray = dailyObject.getJSONArray("weather");
             if (weatherArray.length() > 0) {
                 weather.setSkyCondition(weatherArray.getJSONObject(0).getString("description"));
+                weather.setSkyCondition(weatherArray.getJSONObject(0).getString("description"));
+                weather.setIcon(weatherArray.getJSONObject(0).getString("icon"));
+                weather.setDescription(weatherArray.getJSONObject(0).getString("description"));
+                weather.setMain(weatherArray.getJSONObject(0).getString("main"));
+                weather.setId(weatherArray.getJSONObject(0).getInt("id"));
             }
 
             // 일출, 일몰 시간 설정
@@ -243,6 +250,8 @@ public class WeatherServiceImpl implements WeatherService{
 
             weather.setSunriseTime(sunriseDateTime.format(formatter));
             weather.setSunsetTime(sunsetDateTime.format(formatter));
+            
+            weather.setWindSpeed(((Number) dailyObject.get("wind_speed")).doubleValue());
 
             // 위도와 경도 설정
             weather.setLatitude(lat);
@@ -266,11 +275,12 @@ public class WeatherServiceImpl implements WeatherService{
             } else {
                 weather.setPrecipitationType(0);
             }
-
+            
+            SantaLogger.makeLog("info", "weather:" + weather);            
             weatherList.add(weather);
         }
 
-        return weatherList;
+       return weatherList;
     }
     
    

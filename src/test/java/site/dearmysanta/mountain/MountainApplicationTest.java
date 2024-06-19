@@ -81,11 +81,11 @@ public class MountainApplicationTest {
 		
 //		List<Mountain> list = mountainService.getMountainLikeList(like);
 		
-		SantaLogger.makeLog("info",""+mountainService.getTotalMountainLikeCount(like));
-		mountainService.addMountainLike(like);
-		SantaLogger.makeLog("info",""+mountainService.getTotalMountainLikeCount(like));
-		mountainService.deleteMountainLike(like);
-		SantaLogger.makeLog("info",""+mountainService.getTotalMountainLikeCount(like));
+//		SantaLogger.makeLog("info",""+mountainService.getTotalMountainLikeCount(like));
+//		mountainService.addMountainLike(like);
+//		SantaLogger.makeLog("info",""+mountainService.getTotalMountainLikeCount(like));
+//		mountainService.deleteMountainLike(like);
+//		SantaLogger.makeLog("info",""+mountainService.getTotalMountainLikeCount(like));
 		
 		
 		

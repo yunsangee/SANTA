@@ -2,6 +2,8 @@ package site.dearmysanta.web.mountain;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,18 +93,60 @@ public class MountainRestController {
 	
 	
 	@PostMapping("rest/addMountainLike")
-	public int addMountainLike(@RequestBody Like like) {
+	public int addMountainLike(@RequestBody Like like, @RequestParam int index, int isPop ,HttpSession session) {
 		//SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like.getPostNo()));
 		mountainService.addMountainLike(like);
 		SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like.getPostNo()));
+		Object obj;
+		
+		if(isPop == 1) {
+			obj = session.getAttribute("popularMountainList");
+			if(obj != null) {
+				List<Mountain> list = (List<Mountain>) obj;
+			
+				list.get(index).setIsLiked(1);
+				session.setAttribute("popularMountainList", list);
+			}
+		}else {
+			obj = session.getAttribute("customMountainList");
+			if(obj != null) {
+				List<Mountain> list = (List<Mountain>) obj;
+			
+				list.get(index).setIsLiked(1);
+				session.setAttribute("customMountainList", list);
+			}
+		}
+		
+		
 		return mountainService.getTotalMountainLikeCount(like.getPostNo());
 	}//o
 	
 	@PostMapping("rest/deleteMountainLike")
-	public int deleteMountainLike(@RequestBody Like like) {
+	public int deleteMountainLike(@RequestBody Like like, @RequestParam int index, int isPop, HttpSession session) {
 		//SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like.getPostNo()));
 		mountainService.deleteMountainLike(like);
 		//SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like.getPostNo()));
+		
+		Object obj;
+		
+		if(isPop == 1) {
+			obj = session.getAttribute("popularMountainList");
+			if(obj != null) {
+				List<Mountain> list = (List<Mountain>) obj;
+			
+				list.get(index).setIsLiked(0);
+				session.setAttribute("popularMountainList", list);
+			}
+		}else {
+			obj = session.getAttribute("customMountainList");
+			if(obj != null) {
+				List<Mountain> list = (List<Mountain>) obj;
+			
+				list.get(index).setIsLiked(0);
+				session.setAttribute("customMountainList", list);
+			}
+		}
+		
 		return mountainService.getTotalMountainLikeCount(like.getPostNo());
 	}//o
 	
@@ -124,10 +168,11 @@ public class MountainRestController {
 	}
 	
 	
-	@GetMapping("rest/deleteSearchKeyword")
-	public List<MountainSearch> deleteSearchKeyword(@ModelAttribute MountainSearch mountainSearch ){
+	@PostMapping("rest/deleteSearchKeyword")
+	public List<MountainSearch> deleteSearchKeyword(@RequestBody MountainSearch mountainSearch ){
 		//세션에서 userId 받아오기 
 		//나중에 반환형도 지우기 
+		SantaLogger.makeLog("info", "deleteSearchKeyword:" + mountainSearch);
 		mountainService.deleteSearchKeyword(mountainSearch);
 		
 		return mountainService.getSearchKeywordList(1);

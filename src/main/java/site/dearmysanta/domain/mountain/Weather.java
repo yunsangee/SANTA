@@ -35,4 +35,10 @@ public class Weather {
 	private String isHeatWave;
 	private String isColdWave;
 	
+	private double windSpeed;
+	private String icon;
+	private String description;
+	private String main;
+	private int id;
+	
 }
