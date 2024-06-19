@@ -158,7 +158,7 @@ button:hover {
 	<main>
 	
    <div class="logo-and-text">
-        <img src="/image/logo.png" alt="Logo"> <!-- 로고 이미지 -->
+         <img src="/image/logo.png" alt="Logo"> <!-- 로고 이미지 -->
         <h2>SANTA</h2> <!-- 텍스트 "SANTA" 추가 -->
     </div>
     

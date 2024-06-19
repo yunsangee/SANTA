@@ -253,6 +253,12 @@
 		COUNT(*) FROM LIKES
 		WHERE POST_LIKE_NO = #{value}
 	</select>
+	
+	<select id="isLiked" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM LIKES
+		WHERE POST_LIKE_TYPE = 2 AND USER_NO = #{userNo} AND POST_LIKE_NO = #{mountainNo}
+	
+	</select>
 
 	<!-- parameterType="site.dearmysanta.domain.common.Like" -->
 	<!-- !!!!!! -->
@@ -416,7 +422,7 @@
             FROM 
                 STATISTICS
             WHERE
-                SEARCH_DATE BETWEEN SYSDATE - 12 AND SYSDATE-7
+                SEARCH_DATE BETWEEN SYSDATE - 100 AND SYSDATE
         )
         GROUP BY 
             MOUNTAIN_NAME
@@ -435,7 +441,9 @@
 
 	<select id="getCustomMountainList" parameterType="map"
 		resultMap="MountainResultMap">
-		SELECT *
+		
+		SELECT * FROM (
+		SELECT MOUNTAIN.* , ROWNUM AS ROW_SEQ
 		FROM MOUNTAIN
 		<!-- WHERE MOUNTAIN_LOCATION LIKE '%' || #{user.address} || '%' -->
 		<!-- <choose>
@@ -464,6 +472,7 @@
 		</foreach>
 		END
 
+	) WHERE ROW_SEQ <![CDATA[<=]]> 10
 
 	</select>
 	

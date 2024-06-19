@@ -7,10 +7,14 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.mountain.MountainSearch;
@@ -25,6 +29,15 @@ public class UserRestController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Value("${pageSize}")
+	private int pageSize;
+	
+	@Value("${pageUnit}")
+	private int pageUnit;
+	
+	
+	ObjectMapper objectMapper = new ObjectMapper();
 	
 	public UserRestController() {
 		SantaLogger.makeLog("info", this.getClass().toString());
@@ -45,84 +58,63 @@ public class UserRestController {
 	//
 	
 	@PostMapping("rest/findUserId")
-	public String findUserId(@RequestBody User user) throws Exception {
-	    
-		System.out.println("findUserId : POST");
-	    
-		System.out.println("name: " + user.getUserName());
-	    
-		System.out.println("phoneNumber: " + user.getPhoneNumber());
-		
-		userService.findUserId(user.getUserName(), user.getPhoneNumber());
+    public Map<String, Object> findUserId(@RequestBody User user) throws Exception {
+        Map<String, Object> response = new HashMap<>();
+        
+        System.out.println("findUserId : POST");
+        System.out.println("name: " + user.getUserName());
+        System.out.println("phoneNumber: " + user.getPhoneNumber());
 
-	    return userService.findUserId(user.getUserName(), user.getPhoneNumber());
-	}
+        String userId = userService.findUserId(user.getUserName(), user.getPhoneNumber());
+        
+        if (userId == null) {
+            response.put("userExists", false);
+        } else {
+            response.put("userExists", true);
+            response.put("userId", userId);
+        }
+
+        return response;
+    }
 	
 	//
 	// findUserPassword
 	//
 
 	@PostMapping( value="rest/findUserPassword")
-	public String findUserPassword(@RequestBody User user) throws Exception {
-		
-		System.out.println("findUserPassword : POST");
-		
-		System.out.println("id :" +user.getUserId());
-		
-		System.out.println("phoneNumber : " +user.getPhoneNumber());
-		
-		userService.findUserPassword(user.getUserId(), user.getPhoneNumber());
+	 public ResponseEntity<Object> setUserPassword(@RequestBody User user, HttpSession session) throws Exception {
+        System.out.println("setUserPassword : POST");
+        System.out.println("userId : " + user.getUserId());
 
-		return userService.findUserPassword(user.getUserId(), user.getPhoneNumber());
-	}
-	
-	//
-	// setUserPassword
-	//
-	
-	@PostMapping("/rest/setUserPassword")
-	public ResponseEntity<Object> setUserPassword(@RequestBody User user) throws Exception {
-	    System.out.println("setUserPassword : POST");
-	    System.out.println("userId : " + user.getUserId());
+        // 사용자의 아이디로 DB에 저장된 실제 비밀번호 가져오기
+        String currentPassword = (String) session.getAttribute("userPassword");
+        
+        System.out.println("currentPassword : " + currentPassword);
 
-	    // 사용자의 아이디로 DB에 저장된 실제 비밀번호 가져오기
-	    String currentPassword = userService.getUserPassword(user.getUserId());
-	    
-	    System.out.println("currentPassword : " + currentPassword);
+        // 새로운 비밀번호
+        String newPassword = user.getPasswordNew();
+        System.out.println("newPassword : " + newPassword);
 
-	    // 사용자가 입력한 현재 비밀번호
-	    String inputPassword = user.getUserPassword();
-	    System.out.println("inputPassword : " + inputPassword);
+        // 비밀번호 확인용 입력
+        String confirmPassword = user.getCheckPassword();
+        System.out.println("confirmPassword : " + confirmPassword);
 
-	    // 새로운 비밀번호
-	    String newPassword = user.getPasswordNew();
-	    System.out.println("newPassword : " + newPassword);
+        // 새로운 비밀번호와 비밀번호 확인이 일치하는지 확인
+        if (!newPassword.equals(confirmPassword)) {
+            return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.");
+        }
 
-	    // 비밀번호 확인용 입력
-	    String confirmPassword = user.getCheckPassword();
-	    System.out.println("confirmPassword : " + confirmPassword);
+        // 새로운 비밀번호와 현재 비밀번호가 같은지 확인
+        if (newPassword.equals(currentPassword)) {
+            return ResponseEntity.badRequest().body("기존 비밀번호와 같은 비밀번호입니다.");
+        }
 
-	    // 현재 비밀번호가 DB에 저장된 비밀번호와 일치하는지 확인
-	    if (!inputPassword.equals(currentPassword)) {
-	        return ResponseEntity.badRequest().body("Current password is incorrect");
-	    }
+        // 변경된 비밀번호를 DB에 저장
+        userService.setUserPassword(user.getUserId(), newPassword);
 
-	    // 새로운 비밀번호와 비밀번호 확인이 일치하는지 확인
-	    if (!newPassword.equals(confirmPassword)) {
-	        return ResponseEntity.badRequest().body("Passwords do not match");
-	    }
-
-	    // 새로운 비밀번호와 현재 비밀번호가 같은지 확인
-	    if (newPassword.equals(inputPassword)) {
-	        return ResponseEntity.badRequest().body("New password must be different from current password");
-	    }
-
-	    // 변경된 비밀번호를 DB에 저장
-	    userService.setUserPassword(user.getUserId(), newPassword);
-
-	    // 변경된 비밀번호를 성공적으로 클라이언트에게 알림
-	    return ResponseEntity.ok("Password updated successfully");
-	}
+        // 변경된 비밀번호를 성공적으로 클라이언트에게 알림
+        return ResponseEntity.ok("비밀번호가 변경되었습니다.");
+    }
 	
 	//
 	// updateUser
@@ -190,72 +182,111 @@ public class UserRestController {
 	//
 	// UserList
 	//
+
+	    @GetMapping("rest/getUserList")
+	    public Map<String, Object> getUserList(@ModelAttribute Search search, HttpSession session) throws Exception {
+	        System.out.println("getUserList : GET");
+
+	        if (search != null && search.getCurrentPage() == 0) {
+	            search.setCurrentPage(1);
+	        }
+
+	        int pageSize = this.pageSize; // 페이지당 항목 수
+		    int pageUnit = this.pageUnit; // 페이지 네비게이션에 표시할 페이지 수
+		    int currentPage = search.getCurrentPage();
+
+	        // 세션에서 로그인한 관리자 정보 가져오기
+	        User admin = (User) session.getAttribute("user");
+
+	        System.out.println("admin login : " + admin);
+
+	        // 세션에 로그인한 관리자 정보가 있는지 확인
+	        if (admin == null || admin.getRole() != 1) { // assuming 1 is for admin
+	            // 관리자가 아닌 경우 에러 처리
+	            Map<String, Object> error = new HashMap<>();
+	            error.put("error", "관리자만 접근할 수 있습니다.");
+	            return error;
+	        }
+
+	        try {
+	            List<User> userList = userService.getUserList(search);
+	            int totalCount = userList.size(); // 총 사용자 수
+	            int totalPages = (int) Math.ceil((double) totalCount / pageSize); // 총 페이지 수 계산
+
+	            // 페이징 처리를 위한 startRow와 endRow 계산
+	            int startRow = (currentPage - 1) * pageSize;
+	            int endRow = Math.min(startRow + pageSize, totalCount);
+	            List<User> paginatedUserList = userList.subList(startRow, endRow);
+
+	            int currentPageCount = paginatedUserList.size(); // 현재 페이지에 표시되는 회원 수
+
+	            Map<String, Object> result = new HashMap<>();
+	            result.put("userList", paginatedUserList);
+	            result.put("currentPage", currentPage);
+	            result.put("totalPages", totalPages);
+	            result.put("totalCount", totalCount);
+	            result.put("currentPageCount", currentPageCount);
+
+	            return result;
+	        } catch (Exception e) {
+	            // 예외 처리
+	            Map<String, Object> error = new HashMap<>();
+	            error.put("error", "사용자 목록을 가져오는 중 오류가 발생했습니다.");
+	            return error;
+	        }
+	    }
+
 	
-	@GetMapping("rest/getUserList")
-    public Object getUserList(@RequestBody User user, @ModelAttribute Search search, HttpSession session) throws Exception {
-        System.out.println("getUserList : GET");
+	    @GetMapping("rest/withdrawUserList")
+	    public Map<String, Object> withdrawUserList(@ModelAttribute Search search, HttpSession session) throws Exception {
+	        System.out.println("withdrawUserList : GET");
 
-        if (search != null && search.getCurrentPage() == 0) {
-            search.setCurrentPage(1);
-        }
-        
-        Integer targetUserNo = user.getUserNo();
-        // DB에서 해당 사용자 정보 가져오기
-        User dbUser = userService.getUser(targetUserNo);
+	        if (search != null && search.getCurrentPage() == 0) {
+	            search.setCurrentPage(1);
+	        }
 
-        System.out.println("admin login : " + dbUser);
+	        int pageSize = this.pageSize; // 페이지당 항목 수
+	        int pageUnit = this.pageUnit; // 페이지 네비게이션에 표시할 페이지 수
+	        int currentPage = search.getCurrentPage();
 
-        // 세션에 로그인한 관리자 정보가 있는지 확인
-        if (dbUser == null || dbUser.getRole() != 1) { // assuming 1 is for admin
-            // 관리자가 아닌 경우 에러 처리
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "관리자만 접근할 수 있습니다.");
-            return error;
-        }
+	        // 세션에서 로그인한 관리자 정보 가져오기
+	        User admin = (User) session.getAttribute("user");
 
-        try {
-            List<User> userList = userService.getUserList(search);
-            System.out.println("userList : " + userList);
-            return userList;
-        } catch (Exception e) {
-            // 예외 처리
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "사용자 목록을 가져오는 중 오류가 발생했습니다.");
-            return error;
-        }
-    }
-	
-	@GetMapping("rest/withdrawUserList")
-    public Object withdrawUserList(@RequestBody User user, @ModelAttribute Search search, HttpSession session) throws Exception {
-        System.out.println("withdrawUserList : GET");
+	        System.out.println("admin login : " + admin);
 
-        if (search != null && search.getCurrentPage() == 0) {
-            search.setCurrentPage(1);
-        }
-        
-        Integer targetUserNo = user.getUserNo();
-        // DB에서 해당 사용자 정보 가져오기
-        User dbUser = userService.getUser(targetUserNo);
+	        // 세션에 로그인한 관리자 정보가 있는지 확인
+	        if (admin == null || admin.getRole() != 1) { // assuming 1 is for admin
+	            // 관리자가 아닌 경우 에러 처리
+	            Map<String, Object> error = new HashMap<>();
+	            error.put("error", "관리자만 접근할 수 있습니다.");
+	            return error;
+	        }
 
-        System.out.println("admin login : " + dbUser);
+	        try {
+	            List<User> userList = userService.withdrawUserList(search);
+	            int totalCount = userList.size(); // 총 사용자 수
+	            int totalPages = (int) Math.ceil((double) totalCount / pageSize); // 총 페이지 수 계산
 
-        // 세션에 로그인한 관리자 정보가 있는지 확인
-        if (dbUser == null || dbUser.getRole() != 1) { // assuming 1 is for admin
-            // 관리자가 아닌 경우 에러 처리
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "관리자만 접근할 수 있습니다.");
-            return error;
-        }
+	            // 페이징 처리를 위한 startRow와 endRow 계산
+	            int startRow = (currentPage - 1) * pageSize;
+	            int endRow = Math.min(startRow + pageSize, totalCount);
+	            List<User> paginatedUserList = userList.subList(startRow, endRow);
 
-        try {
-            List<User> userList = userService.getUserList(search);
-            System.out.println("userList : " + userList);
-            return userList;
-        } catch (Exception e) {
-            // 예외 처리
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "사용자 목록을 가져오는 중 오류가 발생했습니다.");
-            return error;
-        }
-    }
+	            int currentPageCount = paginatedUserList.size(); // 현재 페이지에 표시되는 회원 수
+
+	            Map<String, Object> result = new HashMap<>();
+	            result.put("userList", paginatedUserList);
+	            result.put("currentPage", currentPage);
+	            result.put("totalPages", totalPages);
+	            result.put("totalCount", totalCount);
+	            result.put("currentPageCount", currentPageCount);
+
+	            return result;
+	        } catch (Exception e) {
+	            // 예외 처리
+	            Map<String, Object> error = new HashMap<>();
+	            error.put("error", "사용자 목록을 가져오는 중 오류가 발생했습니다.");
+	            return error;
+	        }
+	    }
 }
