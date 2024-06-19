@@ -40,6 +40,7 @@ main {
     justify-content: center;
     align-items: center;
     background-color: white; 
+    margin-top:120px;
 }
 
 .profile-header {
@@ -270,7 +271,7 @@ button, a.button {
         
         
         <c:if test="${admin != null}">
-            <p>Creation Date: ${user.creationDate}</p>
+           <%--  <p>Creation Date: ${user.creationDate}</p> --%>
             <p>Withdraw Date: ${user.withdrawDate}</p>
             <p>Withdraw Reason: 
                 <c:choose>

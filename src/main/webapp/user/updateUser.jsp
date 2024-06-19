@@ -26,6 +26,7 @@ main {
     justify-content: center;
     align-items: center;
     background-color: white; 
+    margin-top:120px;
 }
 
 .profile-header {
@@ -160,8 +161,13 @@ button, a.button {
     justify-content: center;
 }
 
-.detail-section a, .creation-section a {
+.detail-section a {
 	 font-size: 12px;
+}
+
+.creation-section a {
+	 font-size: 12px;
+	 align-items: center;
 }
 
 .detail-section p {
