@@ -168,10 +168,11 @@ public class MountainRestController {
 	}
 	
 	
-	@GetMapping("rest/deleteSearchKeyword")
-	public List<MountainSearch> deleteSearchKeyword(@ModelAttribute MountainSearch mountainSearch ){
+	@PostMapping("rest/deleteSearchKeyword")
+	public List<MountainSearch> deleteSearchKeyword(@RequestBody MountainSearch mountainSearch ){
 		//세션에서 userId 받아오기 
 		//나중에 반환형도 지우기 
+		SantaLogger.makeLog("info", "deleteSearchKeyword:" + mountainSearch);
 		mountainService.deleteSearchKeyword(mountainSearch);
 		
 		return mountainService.getSearchKeywordList(1);

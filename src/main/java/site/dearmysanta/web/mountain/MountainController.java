@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,7 @@ import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
+import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.certification.CertificationPostService;
 import site.dearmysanta.service.correctionpost.CorrectionPostService;
 import site.dearmysanta.service.meeting.MeetingService;
@@ -103,16 +106,22 @@ public class MountainController {
 	
 	
 	@GetMapping(value="searchMountain")
-	public String searchMountain(Model model) {
+	public String searchMountain(Model model, HttpSession session) {
 		
 		//
 		//need to get userNo from session 
 		//
 		
+		int userNo = -1;
 		
-		model.addAttribute("mountainSearchKeywords", mountainService.getSearchKeywordList(1)); //change to userno
+		if(session.getAttribute("user") != null) {
+			userNo = ((User)session.getAttribute("user")).getUserNo();
+		}
 		
-		model.addAttribute("popularSearchKeywords",mountainService.getStatisticsMountainNameList(1));  //change to userNo
+		
+		model.addAttribute("mountainSearchKeywords", mountainService.getSearchKeywordList(userNo)); //change to userno
+		
+		model.addAttribute("popularSearchKeywords",mountainService.getStatisticsMountainNameList(0));  //change to userNo
 		
 		
 		
@@ -121,7 +130,7 @@ public class MountainController {
 	
 	
 	@RequestMapping(value="mapMountain")
-	public String mapMountain(@ModelAttribute MountainSearch mountainSearch, Model model) throws JsonProcessingException {
+	public String mapMountain(@ModelAttribute MountainSearch mountainSearch, Model model, HttpSession session) throws JsonProcessingException {
 
 		//
 		//나중에 jsp쪽에 search Condition 추가하기    
@@ -130,7 +139,7 @@ public class MountainController {
 		SantaLogger.makeLog("info", "mountainSearch:" + mountainSearch.toString());
 		if (mountainSearch.getSearchKeyword() != null) {
 
-			if (mountainSearch.getSearchCondition() == 0 & mountainSearch.getUserNo() != 0) { // if condition is mountain
+			if (mountainSearch.getSearchCondition() == 0 & session.getAttribute("user") != null) { // if condition is mountain
 				mountainService.addSearchKeyword(mountainSearch);
 			}
 
