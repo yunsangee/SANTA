@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 
 <!DOCTYPE html>
 <html>
@@ -11,10 +12,11 @@
     <meta charset="UTF-8">
     <title>아이디를 잃어버리셨나요?!</title>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
-
-    <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.min.js"></script>
+    
+ <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->   
+    
     <style>
         body {
             display: flex;
@@ -94,6 +96,14 @@
             cursor: pointer;
             margin-left: -77px;
         }
+        
+        .name:focus,
+        .code:focus,
+        .phone:focus {
+        	border: 1px solid #81C408; /* 클릭 시 테두리 두께와 색상 설정 */
+		    outline: none; /* 기본 포커스 효과 제거 */
+		    box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); /* 선택적으로 포커스 시 그림자 효과 추가 */	
+        }
 
         .form-group button:hover {
             background-color: #578906;
@@ -137,58 +147,59 @@
         }
     </style>
     
-<!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->    
+<!--  ////////////////////////////////////////////// script  ///////////////////////////////////////////////// -->    
     
- <script>
-    function sendVerificationCode() {
-        const userName = document.getElementById("userName").value;
-        const phoneNumber = document.getElementById("phoneNumber").value;
-
-        $.ajax({
-            url: "/message/send-one",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({
-                userName: userName,
-                phoneNumber: phoneNumber
-            }),
-            success: function(response) {
-                alert('인증번호가 전송되었습니다.');
-            },
-            error: function(xhr, status, error) {
-                alert('인증번호 전송에 실패하였습니다.');
-            }
+    <script>
+        $(document).ready(function() {
+            $(".send").click(function() {
+                sendVerificationCode();
+            });
         });
-    }
 
-    document.getElementById("verifyCode").addEventListener("input", function() {
-        const phoneNumber = document.getElementById("phoneNumber").value;
-        const verifyCode = this.value;
+        function sendVerificationCode() {
+            const userName = $("#userName").val();
+            const phoneNumber = $("#phoneNumber").val();
 
-        $.ajax({
-            url: "/message/check-one",
-            type: "GET",
-            data: {
-                phoneNumber: phoneNumber,
-                validationNumber: verifyCode
-            },
-            success: function(response) {
-                const verificationResult = document.getElementById("verificationResult");
-                if (response === -1) {
-                    verificationResult.textContent = "인증번호가 일치하지 않습니다.";
-                } else {
-                    verificationResult.textContent = "인증번호가 확인되었습니다.";
-                    verificationResult.style.color = "green";
+            $.ajax({
+                url: "/user/rest/findUserId",
+                type: "POST",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({
+                    userName: userName,
+                    phoneNumber: phoneNumber
+                }),
+                success: function(response) {
+                    if (!response.userExists) {
+                        alert("이름과 전화번호가 일치하지 않습니다. 다시 확인해주세요.");
+                    } else {
+                        $.ajax({
+                            url: "/message/send-one",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify({
+                                userName: userName,
+                                phoneNumber: phoneNumber
+                            }),
+                            success: function(response) {
+                                if (response) {
+                                    alert("인증번호가 전송되었습니다.");
+                                } else {
+                                    alert("인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                alert('인증번호 전송에 실패했습니다. 다시 시도해주세요.');
+                            }
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('회원정보가 일치하지 않습니다. 다시 시도해주세요.');
                 }
-            },
-            error: function(xhr, status, error) {
-                alert('인증번호 확인에 실패하였습니다.');
-            }
-        });
-    });
-</script>
-
-    <c:import url="../common/header.jsp"/>
+            });
+        }
+    </script>
 </head>
 
 <!--  ////////////////////////////////////////////// body ///////////////////////////////////////////////// -->
@@ -205,26 +216,27 @@
 
 <main class="container">
     <h2>아이디 찾기</h2>
-    <p>회원정보에 등록한 휴대폰 번호와 입력한 휴대폰 번호가 동일해야 인증번호를 받을 수 있습니다.</p>
-    <form id="findUserIdForm" action="findUserId" method="post">
+    	<p>회원정보에 등록한 휴대폰 번호와 입력한 휴대폰 번호가 동일해야 인증번호를 받을 수 있습니다.</p>
+    <form id="findUserIdForm" action="/user/findUserId" method="post">
         <div>
             <label for="name"></label>
             <input type="text" class="name" id="userName" name="userName" placeholder="이름" required>
         </div>
+        
         <div class="form-group">
             <label for="phoneNumber"></label>
             <input type="text" class="phone" id="phoneNumber" name="phoneNumber" placeholder="휴대폰 번호" required>
-            <button type="button" class="send" onclick="sendVerificationCode()">인증번호</button>
+            <button type="button" class="send">인증번호</button>
         </div>
+        
         <div>
             <label for="verifyCode"></label>
             <input type="text" class="code" id="verifyCode" name="verifyCode" placeholder="인증번호">
             <span id="verificationResult" class="error-message"></span>
+        
         </div>
+        
         <button type="submit" class="submit">아이디 찾기</button>
-        <br>
-        <a href="/user/findUserPassword.jsp" class="link">비밀번호 찾기</a>&emsp;&emsp;&emsp;
-        &emsp;<a href="/user/login.jsp" class="link">로그인 페이지로 가기</a>
     </form>
 </main>
 
