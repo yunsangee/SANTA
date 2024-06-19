@@ -93,6 +93,11 @@
         .styled-line {
             border-top: 2px solid #77C043; /* Add to cart 버튼과 동일한 색상 */
         }
+        
+        .title-style{
+        	color: #77C043;
+        
+        }
 
         .btn-grid {
             margin-bottom: 5px;
@@ -131,6 +136,7 @@
     			</div>
 				
 			<div class="container py-3">
+				<h3 class="title-style">검색 기록</h3>
     
             		<c:forEach var="searchKeyword" items="${mountainSearchKeywords}" varStatus="status">
                     		<button 
@@ -160,7 +166,7 @@
     			</div>
 				
 			<div class="container py-3">
-    
+    			<h3 class="title-style">인기 검색어</h3>
             		<c:forEach var="searchKeyword" items="${popularSearchKeywords}" varStatus="status">
                     		<button class="btn border border-secondary rounded-pill px-2 text-primary btn-popular-keyword">
                         		<i class="fa fa-mountain me-2 text-primary">${searchKeyword}</i>
@@ -180,6 +186,6 @@
 	
 	
 	
-	<footer></footer>
+	<footer><c:import url="../common/footer.jsp"/></footer>
 
 </body>

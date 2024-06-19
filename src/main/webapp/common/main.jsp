@@ -90,12 +90,20 @@
 
             // Like button toggle
             $(document).on('click', '.like-button', function() {
+            	
             	let user = "${sessionScope.user != null ? sessionScope.user : 'null'}";
-            	console.log($(this).parent().find('input:hidden').val())
-            	console.log($(this).text())
-            	if(user != null){
+            	console.log("mountainNo:" + $(this).parent().find('input:hidden[id="mountainNo"]').val());
+            	let clickedElement = $(this)
+            	
+            	
+            	console.log('index:' + $(this).parent().find('input:hidden[id="mountainIndex"]').val());
+            	let index =  $(this).parent().find('input:hidden[id="mountainIndex"]').val();
+            	
+            	let isPop = 0;
+            	
+            	if(user != 'null'){
                 	$(this).toggleClass('fas far');
-                	$(this).toggleClass('text-danger');
+                	//$(this).toggleClass('text-danger');
                 	
                 	const mountainLike = {
                 			userNo: parseInt(${sessionScope.user.userNo}),
@@ -104,17 +112,38 @@
                 			
                 	}
                 	
+                	if(clickedElement.hasClass('fas')){
+                	 if(clickedElement.hasClass('popular')){
+                		 isPop = 1;
+                	 }
+                		
                 	 $.ajax({
-                		url: "/mountain/rest/addMountainLike",
+                		url: "/mountain/rest/addMountainLike?index="+index+"&isPop="+isPop,
                 		type:"POST",
                 		contentType: "application/json",
         	            dataType: "json",
                 		data : JSON.stringify(mountainLike),
                 		success: function(response,status){
-                			console.log(response);
+                			console.log("res:" + response);
+                			//$(this).text(response);
+                			clickedElement.text(response);
+                			console.log(clickedElement.text());
                 			
                 		},
                 	}); 
+                	}else{
+                		 $.ajax({
+                     		url: "/mountain/rest/deleteMountainLike?index="+index+"&isPop="+isPop,
+                     		type:"POST",
+                     		contentType: "application/json",
+             	            dataType: "json",
+                     		data : JSON.stringify(mountainLike),
+                     		success: function(response,status){
+                     			clickedElement.text(response);
+                     			
+                     		},
+                     	}); 
+                	}
             	}
             });
         });
@@ -141,6 +170,15 @@
             cursor: pointer;
             z-index: 10;
         }
+        
+        .fas.fa-heart {
+    color: red; /* 좋아요가 눌린 경우의 색상 */
+}
+
+.far.fa-heart {
+    color: gray; /* 좋아요가 눌리지 않은 경우의 색상 */
+}
+        
     </style>
 </head>
 
@@ -171,7 +209,7 @@
 						<h4 class="text-primary">인기산 목록</h4>
 					</div>
 					<div id="carousel1" class="owl-carousel testimonial-carousel">
-						<c:forEach var="mountain" items="${popularMountainList}">
+						<c:forEach var="mountain" items="${popularMountainList}" varStatus="index">
 							<div class="item">
 								<div
 									class="testimonial-item img-border-radius bg-light rounded p-4">
@@ -192,8 +230,11 @@
 											<p class="m-0 pb-3" style="font-size: 0.75em;">${mountain.mountainLocation}</p>
 											<p class="m-0 pb-3">${mountain.mountainAltitude}</p>
 											<p class="m-0 pb-3">
-												<i class="far fa-heart like-button" style="cursor: pointer;">${mountain.likeCount}</i>
+												
+												<i class="${mountain.isLiked==1 ? 'fas' : 'far' } fa-heart popular like-button" style="cursor: pointer;">${mountain.likeCount}</i>
+												
 												<input type="hidden" id="mountainNo" value="${mountain.mountainNo }"/>
+												<input type="hidden" id="mountainIndex" value="${index.index}"/>
 											</p>
 											<p class="m-0 pb-3">${mountain.mountainViewCount}</p>
 											<div class="d-flex pe-5">
@@ -220,7 +261,7 @@
 						<h4 class="text-primary">사용자 맞춤 산 목록</h4>
 					</div>
 					<div id="carousel2" class="owl-carousel testimonial-carousel">
-						<c:forEach var="mountain" items="${customMountainList}">
+						<c:forEach var="mountain" items="${customMountainList}" varStatus="index">
 							<div class="item">
 								<div
 									class="testimonial-item img-border-radius bg-light rounded p-4">
@@ -241,8 +282,9 @@
 											<p class="m-0 pb-3" style="font-size: 0.75em;">${mountain.mountainLocation}</p>
 											<p class="m-0 pb-3">${mountain.mountainAltitude}m</p>
 											<p class="m-0 pb-3">
-												<i class="far fa-heart like-button" style="cursor: pointer;"></i>
-												${mountain.likeCount}
+												<i class="${mountain.isLiked==1 ? 'fas' : 'far' } fa-heart custom like-button" style="cursor: pointer;">${mountain.likeCount}</i>
+												<input type="hidden" id="mountainNo" value="${mountain.mountainNo }"/>
+												<input type="hidden" id="mountainIndex" value="${index.index}"/>
 											</p>
 											<p class="m-0 pb-3">${mountain.mountainViewCount}</p>
 											<div class="d-flex pe-5">
