@@ -68,7 +68,7 @@
     		
     	});
     	$('#mapSearch').on('click',function(){
-        	window.location.href = 'http://${javaServerIp}/mountain/mapMountain';
+        	window.location.href = 'https://${javaServerIp}/mountain/mapMountain';
         });
     	
     	$('#search').on('click',function(){

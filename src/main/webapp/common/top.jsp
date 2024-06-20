@@ -13,19 +13,19 @@
     	$(function(){
 
     		$('#logoName').on('click',function(){
-    			window.location.href ='https://${javaServerIp}/';
+    			window.location.href ='/';
     		});
     		
 			$('#mountain').on('click',function(){
-				window.location.href = 'https://${javaServerIp}/mountain/searchMountain';
+				window.location.href = '/mountain/searchMountain';
 			});
 			
 			$('#certificationPost').on('click',function(){
-				window.location.href = 'https://${javaServerIp}/certificationPost/listCertificationPost';
+				window.location.href = '/certificationPost/listCertificationPost';
 			});
 			
 			$('#meetingPost').on('click',function(){
-				window.location.href = 'https://${javaServerIp}/meetingPost/getMeetingPostList';
+				window.location.href = '/meetingPost/getMeetingPostList';
 			});
 			
 			$('#hikingGuide').on('click',function(){
@@ -33,23 +33,23 @@
 			});
 			
 			$('#loginButton').on('click',function(){
-				window.location.href = 'https://${javaServerIp}/user/login';
+				window.location.href = '/user/login';
 			});
 			
 			$('#userProfile').on('click',function(){
-				window.location.href = 'http://${javaServerIp}/mountain/searchMountain';
+				window.location.href = '/mountain/searchMountain';
 			});  // need to fix to popup
 			
 			$('#getUserList').on('click',function(){
-				window.location.href = 'https://${javaServerIp}/user/getUserList';
+				window.location.href = '/user/getUserList';
 			});  // need to fix to popup
 			
 			$('#statistics').on('click',function(){
-				window.location.href = 'https://${javaServerIp}/mountain/getStatistics';
+				window.location.href = '/mountain/getStatistics';
 			});  // need to fix to popup
 			
 			$('#correctionPost').on('click',function(){
-				window.location.href = 'https://${javaServerIp}/correctionPost/getCorrectionPostList';
+				window.location.href = '/correctionPost/getCorrectionPostList';
 			});  // need to fix to popup
     	});
     </script>

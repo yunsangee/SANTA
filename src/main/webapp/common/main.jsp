@@ -34,15 +34,15 @@
             }); */
             
             $('#search').on('click',function(){
-            	window.location.href = 'http://${javaServerIp}/mountain/searchMountain';
+            	window.location.href = '/mountain/searchMountain';
             });
             
             $('#searchBox').on('click',function(){
-            	window.location.href = 'http://${javaServerIp}/mountain/searchMountain';
+            	window.location.href = '/mountain/searchMountain';
             });
             
             $('#mapSearch').on('click',function(){
-            	window.location.href = 'http://${javaServerIp}/mountain/mapMountain';
+            	window.location.href = 'https://${javaServerIp}/mountain/mapMountain';
             });
 
             $('.fa-external-link-alt').on('click',function(){
@@ -50,7 +50,7 @@
             	var h4Value = $($(this).parent()).text().trim();
             	console.log(h4Value);
             	
-            	window.location.href = "http://${javaServerIp}/mountain/mapMountain?searchCondition=0&searchKeyword=" + h4Value;
+            	window.location.href = "https://${javaServerIp}/mountain/mapMountain?searchCondition=0&searchKeyword=" + h4Value;
             });
            
 
