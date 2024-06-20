@@ -5,11 +5,15 @@
 <!DOCTYPE html>
 <html class="fontawesome-i2svg-active fontawesome-i2svg-complete">
 
+<!--  ////////////////////////////////////////////// head ///////////////////////////////////////////////// -->
+
 <head>
     <c:import url="../common/header.jsp"/>
     <title>User List</title>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
 
 <style>
     .tabs {
@@ -54,7 +58,7 @@
         height: 30px;
         align-items: center;
         justify-content: center;
-        display: flex;
+        /* display: flex; */
     }
 
     .pagination a:hover {
@@ -109,6 +113,8 @@
     }
 
 </style>
+
+<!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
 
 <script>
     $(document).ready(function() {
@@ -175,11 +181,17 @@
 
 </head>
 
+<!--  ////////////////////////////////////////////// body ///////////////////////////////////////////////// -->
+
 <body>
+
+<!--  ////////////////////////////////////////////// header ///////////////////////////////////////////////// -->
 
     <header>
         <c:import url="../common/top.jsp"/>
     </header>
+   
+<!--  ////////////////////////////////////////////// main ///////////////////////////////////////////////// -->
    
     <main>
         <div class="container-fluid py-5">
@@ -293,6 +305,8 @@
             </div>
         </div>
     </main>
+
+<!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// -->
     
     <footer></footer>
 </body>

@@ -2,6 +2,7 @@ package site.dearmysanta.web.user;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,7 +31,9 @@ import site.dearmysanta.domain.correctionPost.CorrectionPost;
 import site.dearmysanta.domain.user.QNA;
 import site.dearmysanta.domain.user.Schedule;
 import site.dearmysanta.domain.user.User;
+import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.correctionpost.CorrectionPostService;
+import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.user.UserService;
 
 @Controller
@@ -39,12 +43,17 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	MountainService mountainService;
+	
 	@Value("${pageSize}")
 	private int pageSize;
 	
 	@Value("${pageUnit}")
 	private int pageUnit;
 	
+//	@Autowired
+//	private ObjectStorageService objectStorageService;
 	
 	ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -98,11 +107,11 @@ public class UserController {
 //		        session.setAttribute("userNo", user.getUserNo());
 //		    }
 		    
-		    return "redirect:/user/login.jsp";
+		    return "forward:/user/login.jsp";
 		}	
 
 		@PostMapping(value = "login")
-		public String login(@ModelAttribute User user, String userId, String userPassword, HttpSession session, Model model) throws Exception {
+		public String login(@ModelAttribute User user, String userId, String userPassword, HttpSession session, Model model, Search search) throws Exception {
 		    System.out.println("/user/login : POST");
 		    
 		    // DB에서 사용자 정보 조회
@@ -127,6 +136,10 @@ public class UserController {
 		    // 비밀번호 일치 여부 확인
 		    if (user.getUserPassword().equals(dbUser.getUserPassword())) {
 		        session.setAttribute("user", dbUser);
+		        
+		        session.setAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
+				session.setAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), user));
+		        
 		        return "forward:/common/main.jsp";
 		    } else {
 		        model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
@@ -746,28 +759,46 @@ public class UserController {
 		//
 		
 		@GetMapping(value="getQnAList")
-		public String getQnAList(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
-			
-			System.out.println("getQnAList : GET");
-			
-			if(search != null & search.getCurrentPage() == 0) {
-				search.setCurrentPage(1);
-			}
+		 public String getQnAList(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
+	        System.out.println("getQnAList : GET");
 
-//			search.setPageSize(pageSize);
-//			search.setPageUnit(pageUnit);
-		    
-		    // 세션에서 로그인한 사용자 정보 가져오기
-		    User user = (User) session.getAttribute("user");
-			
-			List<QNA> qnaList = userService.getQnAList(search);
-			
-			System.out.println("qanList : " + qnaList);		
-			
-			model.addAttribute("qna", qnaList);
-			
-			return "forward:/user/getQnAList.jsp";
-		}
+	        // 세션에서 사용자 정보 가져오기
+	        User user = (User) session.getAttribute("user");
+	        
+	        if (user.getRole()==1) {
+		    	
+		    	model.addAttribute("admin", 1);
+		    	
+		    }
+
+	        // 현재 페이지와 시작 인덱스 계산
+	        int currentPage = (search.getCurrentPage() == 0) ? 1 : search.getCurrentPage();
+	        int startIndex = (currentPage - 1) * pageSize;
+	        int endIndex = currentPage * pageSize;
+
+	        List<QNA> allQnaList = userService.getQnAList(search);
+	        int totalCount = allQnaList.size();
+
+	        // 필요한 페이지의 데이터만 추출
+	        List<QNA> qnaList = allQnaList.subList(
+	            Math.min(startIndex, totalCount), 
+	            Math.min(endIndex, totalCount)
+	        );
+	     
+	        // 전체 항목 수 및 페이지 수 계산
+	        int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	        
+	        System.out.println("QNAList_controller : "+qnaList);
+
+	        // 모델에 데이터 추가
+	        model.addAttribute("qnaList", qnaList);
+	        model.addAttribute("totalCount", totalCount);
+	        model.addAttribute("totalPages", totalPages);
+	        model.addAttribute("currentPage", currentPage);
+	        model.addAttribute("currentPageCount", qnaList.size());
+
+	        return "forward:/user/getQnAList.jsp";
+	    }
 
 		//
 		// ---------------> SCHEDULE

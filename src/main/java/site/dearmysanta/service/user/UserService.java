@@ -69,6 +69,8 @@ public interface UserService {
 	
 	public List<QNA> getQnAList(Search search) throws Exception;
 	
+	public int getQnATotalCount(Search search) throws Exception;
+	
 	public void addAdminAnswer(QNA qna) throws Exception;
 	
 	public void updateAnswer(QNA qna) throws Exception;
