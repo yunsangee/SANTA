@@ -24,7 +24,7 @@
 			});
 			
 			$('#meetingPost').on('click',function(){
-				window.location.href = '/meetingPost/getMeetingPostList';
+				window.location.href = '/meeting/getMeetingPostList';
 			});
 			
 			$('#hikingGuide').on('click',function(){
