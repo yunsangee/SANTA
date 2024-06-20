@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 public class CertificationPostComment {
 
 	private int userNo;
-	private String nickName;
+	private String nickname;
 	private String profileImage; //??
 	
 	private int certificationPostNo;

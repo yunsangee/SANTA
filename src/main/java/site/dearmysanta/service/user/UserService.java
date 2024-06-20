@@ -23,6 +23,8 @@ public interface UserService {
 	
 	public List<User> getUserList(Search search) throws Exception;
 	
+	public int getTotalCount(Search search) throws Exception;
+	
 	public List<User> withdrawUserList(Search search) throws Exception;
 	
 	public void updateUser(User user) throws Exception;

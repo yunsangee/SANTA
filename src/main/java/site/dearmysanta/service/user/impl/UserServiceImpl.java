@@ -287,6 +287,10 @@ import site.dearmysanta.service.user.UserService;
 		userDao.updateAnswer(qna);
 	}
 
-	
+	@Override
+	public int getTotalCount(Search search) throws Exception {
+		// TODO Auto-generated method stub
+		return userDao.getTotalCount(search);
+	}
 	
 }

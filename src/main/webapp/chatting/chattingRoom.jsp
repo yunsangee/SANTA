@@ -12,7 +12,7 @@
     <script type="text/javascript">
     $(function() {
     	
-        var socket = io("http://192.168.0.52:3000");
+        var socket = io("http://192.168.0.52:4001");
         
         var userNo = "${userNo}";
         var userNickname = "${nickname}";
@@ -212,7 +212,7 @@
             </div>
         </div>
     </main>
-    <footer></footer>
+    <footer><c:import url="../common/footer.jsp"/></footer>
 </body>
 </html>
 

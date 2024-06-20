@@ -13,7 +13,7 @@
 		
 		$(function () {
 			
-			var socket = io("http://192.168.0.52:3000");
+			var socket = io("http://192.168.0.52:4001");
 			
 			socket.on('lastMessage', function(data) {
                 var roomElement = $('#chattingRoom-' +data.roomNo);
@@ -92,6 +92,6 @@
     	</div>
     	
     </main>
-    <footer></footer>
+    <footer><c:import url="../common/footer.jsp"/></footer>
 </body>
 </html>
