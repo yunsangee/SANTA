@@ -99,6 +99,7 @@ public class MountainController {
 		//
 		SantaLogger.makeLog("info","updateMountainView");
 		model.addAttribute("crpNo", crpNo);
+		model.addAttribute("mountain",mountainService.getMountain(mountainNo));
 		
 		return "forward:/mountain/updateMountain.jsp";
 	}

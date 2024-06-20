@@ -31,9 +31,9 @@ public class CorrectionPostRestController {
 	}
 	
 	
-	@GetMapping("rest/deleteCorrectionPost")
-	public void deleteCorrectionPost(@RequestParam int userNo,int crpNo) {
-		correctionPostSerivce.deleteCorrectionPost(userNo, crpNo);
+	@PostMapping("rest/deleteCorrectionPost")
+	public void deleteCorrectionPost(@RequestBody CorrectionPost correctionPost) {
+		correctionPostSerivce.deleteCorrectionPost(correctionPost.getUserNo(), correctionPost.getPostNo());
 	}
 
 }

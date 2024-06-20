@@ -10,7 +10,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <c:import url="../common/header.jsp"/>
 <script>
 	$(function(){
@@ -91,22 +90,23 @@
 		
 		$("#delete").on('click',function(){
 				const data  = {
-					crpNo : parseInt(($(this).parent()).find("input:hidden[id='crpNo']").val()),
+					postNo : parseInt(($(this).parent()).find("input:hidden[id='crpNo']").val()),
 					userNo : parseInt(($(this).parent()).find("input:hidden[id='userNo']").val())
 				}
 				
-				
+				console.log(data.postNo);
+				console.log(data.userNo);
 				
 				$.ajax({
 					url:"http://${javaServerIp}/correctionPost/rest/deleteCorrectionPost",
-					method: "GET",
+					method: "POST",
 					contentType:"application/json",
 					//dataType: "json",
 					data: JSON.stringify(data),
 					success: function(response) {
 	                    alert('Mountain updated successfully');
 	                    //console.log(response);
-	                    $("div.correction-post"+data.crpNo).remove();
+	                    $("#"+data.postNo).remove();
 	                    
 	                },
 	                error: function(jqXHR, textStatus, errorThrown) {
@@ -115,6 +115,14 @@
 	                }
 						
 				});
+		});
+		
+		$("#update").on('click',function(e){
+			
+			let mountainNo = parseInt(($(this).parent()).find("input:hidden[id='mountainNo']").val());
+			console.log(mountainNo);
+			
+			window.open("http://${javaServerIp}/mountain/updateMountain?mountainNo="+mountainNo, 'updateMountainPopup', 'width=600,height=400');
 		});
 	});
 
@@ -253,7 +261,7 @@
                         </thead>
                         <tbody>
     <c:forEach var="correctionPost" items="${correctionPostList}">
-        <tr data-postid="${correctionPost.postNo}">
+        <tr id="${correctionPost.postNo}">
             <th scope="row">
                 <div class="d-flex align-items-center">
                     <p class="mb-0 mt-4">${correctionPost.postNo}</p>

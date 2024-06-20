@@ -9,7 +9,7 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 	<script>
-		$(function(){
+		$(document).ready(function(){
 			$("#inputButton").on("click",function(){
 				const data  = {
 					userNo : parseInt($("#userNo").val()),
@@ -22,24 +22,23 @@
 				alert(data.userNo);
 				alert(data.mountainNo);
 				alert(data.mountainName);
+			 	alert('http://${javaServerIp}/correctionPost/rest/addCorrectionPost');
+				let url = 'http://${javaServerIp}/correctionPost/rest/addCorrectionPost';
 				
-				
-				$.ajax({
-					url:"http://${javaServerIp}/correctionPost/rest/addCorrectionPost",
-					method: "POST",
-					contentType:"application/json",
-					dataType: "json",
-					data: JSON.stringify(data),
-					success: function(response) {
-	                    alert('Mountain updated successfully');
-	                    //console.log(response);
-	                },
-	                error: function(jqXHR, textStatus, errorThrown) {
-	                    //console.error('Error:', textStatus, errorThrown);
-	                    //alert('Failed to update mountain');
-	                }
-						
-				});
+			 	$.ajax({
+			 	    url: url,
+			 	    type: "POST",
+			 	    dataType: "json",
+			 	    data: JSON.stringify(data),
+			 	    success: function(response) {
+			 	        alert('Mountain updated successfully');
+			 	        console.log(response);
+			 	    },
+			 	    error: function(jqXHR, textStatus, errorThrown) {
+			 	        console.error('Error:', textStatus, errorThrown);
+			 	        alert('Failed to update mountain');
+			 	    }
+			 	});
 				
 				window.close();
 				
