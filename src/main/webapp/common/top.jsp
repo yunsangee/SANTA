@@ -13,27 +13,27 @@
     	$(function(){
 
     		$('#logoName').on('click',function(){
-    			window.location.href ='http://${javaServerIp}/';
+    			window.location.href ='https://${javaServerIp}/';
     		});
     		
 			$('#mountain').on('click',function(){
-				window.location.href = 'http://${javaServerIp}/mountain/searchMountain';
+				window.location.href = 'https://${javaServerIp}/mountain/searchMountain';
 			});
 			
 			$('#certificationPost').on('click',function(){
-				window.location.href = 'http://${javaServerIp}/certificationPost/listCertificationPost';
+				window.location.href = 'https://${javaServerIp}/certificationPost/listCertificationPost';
 			});
 			
 			$('#meetingPost').on('click',function(){
-				window.location.href = 'http://${javaServerIp}/meetingPost/getMeetingPostList';
+				window.location.href = 'https://${javaServerIp}/meetingPost/getMeetingPostList';
 			});
 			
 			$('#hikingGuide').on('click',function(){
-				window.location.href = 'http://${reactServerIp}';
+				window.location.href = 'https://${reactServerIp}';
 			});
 			
 			$('#loginButton').on('click',function(){
-				window.location.href = 'http://${javaServerIp}/user/login';
+				window.location.href = 'https://${javaServerIp}/user/login';
 			});
 			
 			$('#userProfile').on('click',function(){
@@ -41,15 +41,15 @@
 			});  // need to fix to popup
 			
 			$('#getUserList').on('click',function(){
-				window.location.href = 'http://${javaServerIp}/user/getUserList';
+				window.location.href = 'https://${javaServerIp}/user/getUserList';
 			});  // need to fix to popup
 			
 			$('#statistics').on('click',function(){
-				window.location.href = 'http://${javaServerIp}/mountain/getStatistics';
+				window.location.href = 'https://${javaServerIp}/mountain/getStatistics';
 			});  // need to fix to popup
 			
 			$('#correctionPost').on('click',function(){
-				window.location.href = 'http://${javaServerIp}/correctionPost/getCorrectionPostList';
+				window.location.href = 'https://${javaServerIp}/correctionPost/getCorrectionPostList';
 			});  // need to fix to popup
     	});
     </script>
