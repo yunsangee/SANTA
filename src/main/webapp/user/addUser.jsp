@@ -27,7 +27,119 @@ $(function() {
         $(this).addClass("selected");
         $("#" + $(this).data("target")).prop("checked", true);
     });
+
+    $(".email-verify-btn").click(function() {
+        var email = $("input[name='userId']").val();
+        if (email) {
+            $.ajax({
+                url: '/user/rest/sendVerification',
+                type: 'GET',
+                data: { email: email },
+                success: function(response) {
+                    alert("인증번호가 전송되었습니다. 이메일을 확인해주세요.");
+                    if ($("#emailVerificationSection").length === 0) {
+                        $(".email-section").append(
+                            '<div id="emailVerificationSection">' +
+                            '<label>인증번호</label>' +
+                            '<input type="text" id="emailVerificationCode" name="emailVerificationCode" placeholder="인증번호를 입력하세요" required>' +
+                            '<button type="button" class="email-verify-check-btn">인증번호 확인</button>' +
+                            '</div>'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("이메일 전송에 실패했습니다. 다시 시도해주세요.");
+                }
+            });
+        } else {
+            alert("이메일을 입력해주세요.");
+        }
+    });
+
+    $(document).on("click", ".email-verify-check-btn", function() {
+        var email = $("input[name='userId']").val();
+        var code = $("#emailVerificationCode").val();
+        if (code) {
+            $.ajax({
+                url: '/user/rest/verify',
+                type: 'POST',
+                data: { email: email, code: code },
+                success: function(response) {
+                    alert(response);
+                },
+                error: function(xhr, status, error) {
+                    alert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                }
+            });
+        } else {
+            alert("인증번호를 입력해주세요.");
+        }
+    });
+
+    $(".phone-verify-btn").click(function() {
+        var phoneNumber = $("input[name='phoneNumber']").val();
+        var userName = $("input[name='userName']").val();
+        if (phoneNumber && userName) {
+            $.ajax({
+                url: '/message/send-one',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ phoneNumber: phoneNumber, userName: userName }),
+                success: function(response) {
+                    alert("휴대폰 인증번호가 전송되었습니다.");
+                    if ($("#phoneVerificationSection").length === 0) {
+                        $(".phone-section").append(
+                            '<div id="phoneVerificationSection">' +
+                            '<label>휴대폰 인증번호</label>' +
+                            '<input type="text" id="phoneVerificationCode" name="phoneVerificationCode" placeholder="휴대폰 인증번호를 입력하세요" required>' +
+                            '<button type="button" class="phone-verify-check-btn">인증번호 확인</button>' +
+                            '</div>'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("휴대폰 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+                }
+            });
+        } else {
+            alert("이름과 휴대폰 번호를 입력해주세요.");
+        }
+    });
+
+    $(document).on("click", ".phone-verify-check-btn", function() {
+        var phoneNumber = $("input[name='phoneNumber']").val();
+        var validationNumber = $("#phoneVerificationCode").val();
+        if (validationNumber) {
+            $.ajax({
+                url: '/message/check-one',
+                type: 'GET',
+                data: { phoneNumber: phoneNumber, validationNumber: validationNumber },
+                success: function(response) {
+                    if (response != -1) {
+                        alert("휴대폰 인증이 완료되었습니다.");
+                    } else {
+                        alert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                }
+            });
+        } else {
+            alert("인증번호를 입력해주세요.");
+        }
+    });
+
+    // 주소 검색
+    $("input[name='address']").click(function() {
+        window.open("/user/address.jsp", "pop", "width=570,height=420, scrollbars=yes, resizable=yes"); 
+    });
 });
+
+function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, engAddr, jibunAddr, zipNo, admCd, rnMgtSn, bdMgtSn, detBdNmList, bdNm, bdKdcd, siNm, sggNm, emdNm, liNm, rn, udrtYn, buldMnnm, buldSlno, mtYn, lnbrMnnm, lnbrSlno, emdNo) {
+    $("input[name='address']").val(roadAddrPart1);
+    $("input[name='detailAddress']").val(addrDetail);
+}
 </script>
 
 <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
@@ -69,7 +181,7 @@ select:focus {
     box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); /* 선택적으로 포커스 시 그림자 효과 추가 */
 }
 
-.email-verify-btn {   
+.email-verify-btn, .phone-verify-btn {   
     width: 100%;
     padding: 15px;
     font-size: 16px;
@@ -82,7 +194,7 @@ select:focus {
     box-sizing: border-box;
 }
 
-.email-verify-btn:hover {
+.email-verify-btn:hover, .phone-verify-btn:hover {
     background-color: #DEFBA7; 
 }
 
@@ -276,7 +388,10 @@ label {
         
         <div class="phone-section">
             <label>휴대폰 번호</label>
+           <div class="phone-input">
             <input type="text" name="phoneNumber" placeholder="휴대폰번호" pattern="01[0-9]{8,9}" required>
+        </div>
+        	<button type="button" class="phone-verify-btn">휴대폰 번호 인증하기</button>
         </div>
         
         <div class="address-section">

@@ -44,15 +44,20 @@
 	
 	<!--  SQL : INSERT -->
  	
-	<insert id = "addUser"	parameterType = "site.dearmysanta.domain.user.User" >
-		INSERT
-		INTO users(user_no, user_id, name, password, nickname, address, birth_date, phone_number, gender, 
-							hiking_purpose, hiking_difficulty, hiking_level, role, cp_count, mp_count, creation_date,
-							profile_image)
-		VALUES	( seq_user_no.NEXTVAL, #{userId}, #{userName}, #{userPassword}, #{nickName}, #{address}, #{birthDate},
-							#{phoneNumber, jdbcType=VARCHAR}, #{gender}, #{hikingPurpose}, #{hikingDifficulty}, 
-							#{hikingLevel}, #{role},  0, 0, SYSDATE, #{profileImage})
-	</insert>
+<insert id="addUser" parameterType="site.dearmysanta.domain.user.User">
+    INSERT INTO users (
+        user_no, user_id, name, password, nickname, address, birth_date, phone_number, gender,
+        hiking_purpose, hiking_difficulty, hiking_level, role, cp_count, mp_count, creation_date,
+        profile_image
+    ) VALUES (
+        seq_user_no.NEXTVAL, #{userId}, #{userName, jdbcType=VARCHAR}, #{userPassword, jdbcType=VARCHAR}, 
+        #{nickName, jdbcType=VARCHAR}, #{address, jdbcType=VARCHAR}, #{birthDate, jdbcType=DATE}, 
+        #{phoneNumber, jdbcType=VARCHAR}, #{gender, jdbcType=DECIMAL}, #{hikingPurpose, jdbcType=DECIMAL}, 
+        #{hikingDifficulty, jdbcType=DECIMAL}, #{hikingLevel, jdbcType=DECIMAL}, 0, 0, 0, SYSDATE, 
+        #{profileImage, jdbcType=VARCHAR}
+    )
+</insert>
+
 
 	<!--  SQL : SELECT ONE -->
 	
