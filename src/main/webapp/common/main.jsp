@@ -42,7 +42,7 @@
             });
             
             $('#mapSearch').on('click',function(){
-            	window.location.href = '${javaServerIp}/mountain/mapMountain';
+            	window.location.href = '/mountain/mapMountain';
             });
 
             $('.fa-external-link-alt').on('click',function(){
@@ -50,7 +50,7 @@
             	var h4Value = $($(this).parent()).text().trim();
             	console.log(h4Value);
             	
-            	window.location.href = "${javaServerIp}/mountain/mapMountain?searchCondition=0&searchKeyword=" + h4Value;
+            	window.location.href = "/mountain/mapMountain?searchCondition=0&searchKeyword=" + h4Value;
             });
            
 
