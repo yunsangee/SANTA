@@ -5,7 +5,7 @@
 <head>
     <c:import url="../common/header.jsp"/>
     <title>게시글 수정</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   
 </head>
 <body>
 
