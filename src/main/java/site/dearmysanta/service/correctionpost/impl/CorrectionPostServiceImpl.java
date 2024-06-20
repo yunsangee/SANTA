@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.correctionPost.CorrectionPost;
 import site.dearmysanta.service.correctionpost.CorrectionPostDao;
 import site.dearmysanta.service.correctionpost.CorrectionPostService;
@@ -21,8 +22,8 @@ public class CorrectionPostServiceImpl implements CorrectionPostService{
 		
 	}
 	
-	public List<CorrectionPost> getCorrectionPostList(){
-		return correctionPostDao.getCorrectionPostList();
+	public List<CorrectionPost> getCorrectionPostList(Search search){
+		return correctionPostDao.getCorrectionPostList(search);
 	}
 	
 	public void deleteCorrectionPost(int userNo, int postNo) {
@@ -31,5 +32,9 @@ public class CorrectionPostServiceImpl implements CorrectionPostService{
 	
 	public void updateCorrectionPostStatus(int crpNo) {
 		correctionPostDao.updateCorrectionPostStatus(crpNo);
+	}
+	
+	public int getCorrectionPostTotalCount(Search search) {
+		return correctionPostDao.getCorrectionPostTotalCount(search);
 	}
 }

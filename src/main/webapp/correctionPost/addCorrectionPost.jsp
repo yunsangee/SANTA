@@ -18,21 +18,25 @@
 					contents: $("#contents").val()
 				}
 				
+				alert(data.contents);
+				alert(data.userNo);
+				alert(data.mountainNo);
+				alert(data.mountainName);
 				
 				
 				$.ajax({
-					url:"${javaServerIp}/correctionPost/rest/addCorrectionPost",
+					url:"http://${javaServerIp}/correctionPost/rest/addCorrectionPost",
 					method: "POST",
 					contentType:"application/json",
-					//dataType: "json",
+					dataType: "json",
 					data: JSON.stringify(data),
 					success: function(response) {
 	                    alert('Mountain updated successfully');
 	                    //console.log(response);
 	                },
 	                error: function(jqXHR, textStatus, errorThrown) {
-	                    console.error('Error:', textStatus, errorThrown);
-	                    alert('Failed to update mountain');
+	                    //console.error('Error:', textStatus, errorThrown);
+	                    //alert('Failed to update mountain');
 	                }
 						
 				});
@@ -126,9 +130,9 @@
     </div>
 
 
-	<input type="hidden" id="userNo" name="userNo" value="1" />
-	<input type="hidden" id="mountainNo" name="mountainNo" value="1010" />
-	<input type="hidden" id="mountainName" name="mountainName" value="관악산" />
+	<input type="hidden" id="userNo" name="userNo" value="${sessionScope.user.userNo}" />
+	<input type="hidden" id="mountainNo" name="mountainNo" value="${mountain.mountainNo}" />
+	<input type="hidden" id="mountainName" name="mountainName" value="${mountain.mountainName}" />
 
 
 

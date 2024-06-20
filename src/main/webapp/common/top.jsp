@@ -8,7 +8,6 @@
 <meta charset="UTF-8">
 
     <title>Fruitables - Free Bootstrap 5 eCommerce Website Template</title>
-   	<c:import url="../common/header.jsp"/>
     <script>
     	$(function(){
 

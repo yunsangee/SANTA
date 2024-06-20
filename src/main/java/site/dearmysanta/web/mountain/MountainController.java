@@ -73,14 +73,14 @@ public class MountainController {
 	
 	
 	@GetMapping(value="getMountain")
-	public String getMountain(@RequestParam int mountainNo, double lat, double lon,Model model) throws Exception { // 나중에 위도 경도는 현재 위치로 들어와야할듯? 
+	public String getMountain(@RequestParam int mountainNo, double lat, double lon,Model model, HttpSession session) throws Exception { // 나중에 위도 경도는 현재 위치로 들어와야할듯? 
 		mountainService.updateMountainViewCount(mountainNo);
 		
 		SantaLogger.makeLog("info", mountainService.getMountain(mountainNo).getMountainImage());
 		
 		Mountain mountain =  mountainService.getMountain(mountainNo);
 		
-		model.addAttribute("mountain", mountain);
+		session.setAttribute("mountain", mountain);
 		model.addAttribute("weatherList", weatherService.getWeatherList(lat, lon));
 		
 		model.addAttribute("meetingCount", meetingService.getMountainTotalCount(mountain.getMountainName()));
