@@ -478,13 +478,9 @@ public class MountainServiceImpl implements MountainService {
 		SantaLogger.makeLog("info", "serivceImpl getpopMountain:" + mountainNames.toString());
 		List<Mountain> list = new ArrayList<>();
 		
-		//((#{search.currentPage} - 1) * #{search.pageSize} +
-		//1) AND #{search.currentPage} * #{search.pageSize}
-		
-//		int maxSize = ((mountainNames.size() > search.getPageSize() ) ?  search.getPageSize()  : mountainNames.size() );
+
 		int maxSize = 10;
 		for(int i = 0; i <  maxSize  ; i ++) {
-//			SantaLogger.makeLog("info", "::" + this.getMountainListByName(mountainNames.get(i)).toString());
 			
 			Mountain mountain = this.getMountainListByName(mountainNames.get(i)).get(0);
 			mountain.setLikeCount(mountainDao.getTotalMountainLikeCount(mountain.getMountainNo()));

@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.mountain.MountainSearch;
+import site.dearmysanta.domain.user.QNA;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.user.UserService;
 
@@ -289,4 +290,47 @@ public class UserRestController {
 	            return error;
 	        }
 	    }
+	    
+	   //
+	   // QNAList
+	   //
+
+	    @GetMapping("rest/getQnAList")
+	    public @ResponseBody Map<String, Object> getQnAList(@ModelAttribute Search search, HttpSession session) throws Exception {
+	        System.out.println("getQnAList : GET");
+
+	        // 세션에서 사용자 정보 가져오기
+	        User user = (User) session.getAttribute("user");
+
+	        // 현재 페이지와 시작 인덱스 계산
+	        int currentPage = (search.getCurrentPage() == 0) ? 1 : search.getCurrentPage();
+	        int startIndex = (currentPage - 1) * pageSize;
+	        int endIndex = currentPage * pageSize;
+
+	        List<QNA> allQnaList = userService.getQnAList(search);
+	        int totalCount = allQnaList.size();
+
+	        List<QNA> qnaList = allQnaList.subList(
+	            Math.min(startIndex, totalCount), 
+	            Math.min(endIndex, totalCount)
+	        );
+	        
+	        // 전체 항목 수 및 페이지 수 계산
+	        int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	        
+	        System.out.println("Search : "+search);
+	        
+	        System.out.println("QNAList_restcontroller : "+qnaList);
+	        
+	        // 응답 데이터 준비
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("qnaList", qnaList);
+	        response.put("totalCount", totalCount);
+	        response.put("totalPages", totalPages);
+	        response.put("currentPage", currentPage);
+	        response.put("currentPageCount", qnaList.size());
+
+	        return response;
+	    }
+
 }

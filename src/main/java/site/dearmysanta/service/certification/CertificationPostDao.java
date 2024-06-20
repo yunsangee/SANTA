@@ -13,9 +13,6 @@ import site.dearmysanta.domain.certificationPost.CertificationPostComment;
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.common.Search;
 
-
-
-
 @Mapper
 @Component("CertificationPostDao")
 public interface CertificationPostDao {
@@ -27,15 +24,21 @@ public interface CertificationPostDao {
 
 	public void updateCertificationPost(CertificationPost certificationPost) throws Exception;
 	
+	public void updateCertificationPostDeleteFlag(int postNo) throws Exception; //ªË¡¶
+	
 	public List<CertificationPost> getCertificationPostList(Search search) throws Exception;
 	
 	public List<CertificationPost> getMyCertificationPostList(int usrNo) throws Exception;
 	
+	//postImage
+	public void addCertificationPostImage(CertificationPost certificationPost) throws Exception;
+	public void addCertificationPostImageCount(int postNo, int imageCount) throws Exception;
+
 	
 	//hashtag
 	public void addHashtag(CertificationPost certificationPost);
 	
-	public	 void deleteHashtag(int HashtagNo) throws Exception;
+	public	 void deleteHashtag(int hashtagNo) throws Exception;
 	
 	public List<String> getHashtag(int postNo) throws Exception;
 	
@@ -50,13 +53,16 @@ public interface CertificationPostDao {
 	
 	public int getCertificationPostLikeCount(int postNo);
 	
-	public List<CertificationPost> getCertificationPostLikeList(Like like);
+	public List<CertificationPost> getCertificationPostLikeList(int userNo);
 
+	public int getCertificationPostLikeStatus(int postNo, int userNo) throws Exception;
+	
+	
 	
 	//Comment
 	public void addCertificationPostComment(CertificationPostComment certificationPostComment) throws Exception;
 
-	public void deleteCertificationPostComment(CertificationPostComment certificationPostComment) throws Exception;
+	public void deleteCertificationPostComment(int certificationPostCommentNo, int userNo) throws Exception;
 	
 	public List<CertificationPostComment> getCertificationPostCommentList(int postNo) throws Exception;
 

@@ -133,6 +133,20 @@
 	    </choose>
 	</where>
 	</select>
+	
+<select id="getQnATotalCount" parameterType="site.dearmysanta.domain.common.Search" resultType="int">
+    SELECT COUNT(*) FROM QNA
+    <where>
+        <choose>
+           <when test="searchCondition == 0 and searchKeyword != null and searchKeyword != ''">
+	            AND qna_title LIKE '%' || #{searchKeyword} || '%'
+	        </when>
+	        <when test="searchCondition == 1 and searchKeyword != null and searchKeyword != ''">
+	            AND u.nickname LIKE '%' || #{searchKeyword} || '%'
+	        </when>
+        </choose>
+    </where>
+</select>
 
 
 

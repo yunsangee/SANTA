@@ -47,6 +47,14 @@
         $('#certificationPost').on('click',function(){
         	window.location.href = '/certificationPost/listCertificationPost';
         });
+        
+        $('.bi-info-circle').on('click', function(){
+        	
+        	let user  = '${sessionScope.user != null ? sessionScope.user : "null"}';
+        	if(user != 'null'){
+        	 window.open('../correctionPost/addCorrectionPost.jsp', '정정제보', 'width=400,height=400');
+        	}
+        });
     });
     </script>
 
@@ -148,7 +156,9 @@
            </div>
         <div class="row mountain-description">
             <div class="col-md-12">
-                 <div class="title"><h2>${mountain.mountainName} </h2></div>
+                 <div class="title"><h2>${mountain.mountainName} </h2>
+                 					<i class="bi bi-info-circle"></i>
+                 </div>
     			 <div>위치: ${mountain.mountainLocation}</div>
     			 <div>높이: ${mountain.mountainAltitude}m</div>
     			 <div>좋아요: ${mountain.likeCount}</div>

@@ -10,22 +10,29 @@ import site.dearmysanta.domain.certificationPost.CertificationPostComment;
 
 import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.common.Search;
+import site.dearmysanta.domain.meeting.MeetingPost;
 
 public interface CertificationPostService {
 
 	//post
 	public void addCertificationPost(CertificationPost certificationPost) throws Exception;
 	
-	public Map<String, Object> getCertificationPost(int postNo) throws Exception;
+	public Map<String, Object> getCertificationPost(int postNo, int userNo) throws Exception;
+	
+	public CertificationPost getCertificationPost(int postNo) throws Exception;
 	
 	public void updateCertificationPost(CertificationPost certificationPost) throws Exception;
+	
+	public void updateCertificationPostDeleteFlag(int postNo) throws Exception; //����
 
 	public Map<String, Object> getCertificationPostList(Search search) throws Exception;
 	
 	public	List<CertificationPost> getMyCertificationPostList(int userNo) throws Exception;
 
 	//hashtag	
-	public void deleteHashtag(int HashtagNo) throws Exception;
+	public void addHashtag(CertificationPost certificationPost);
+	
+	public void deleteHashtag(int hashtagNo) throws Exception;
 	
 	//public CertificationPost getHashtag(int postNo) throws Exception;
 	
@@ -34,16 +41,16 @@ public interface CertificationPostService {
 	
 	public void deleteCertificationPostLike(Like like) ;
 	
-	//public int getTotalCertificationPostLikeCount(Like like); get¿¡ÇÕÃÄ¼­¾È½áµµµÇ³ª?
+	//public int getTotalCertificationPostLikeCount(Like like); 
 	
-	public List<CertificationPost> getCertificationPostLikeList(Like like);
+	public List<CertificationPost> getCertificationPostLikeList(int userNo);
 
 
 	//Comment 
 	
 	public void addCertificationPostComment(CertificationPostComment certificationPostComment) throws Exception;
 
-	public void deleteCertificationPostComment(CertificationPostComment certificationPostComment) throws Exception;
+	public void deleteCertificationPostComment(int certificationPostCommentNo, int userNo) throws Exception;
 
 	public List<CertificationPostComment> getCertificationPostCommentList(int postNo) throws Exception;
 	

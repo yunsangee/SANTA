@@ -7,6 +7,7 @@
 <head>
     <title>Search Keywords</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <c:import url="../common/header.jsp"/>
     <script>
     $(document).ready(function(){
     	$('.btn-search-keyword').on('click',function(){
@@ -68,7 +69,7 @@
     		
     	});
     	$('#mapSearch').on('click',function(){
-        	window.location.href = 'http://${javaServerIp}/mountain/mapMountain';
+        	window.location.href = '${javaServerIp}/mountain/mapMountain';
         });
     	
     	$('#search').on('click',function(){

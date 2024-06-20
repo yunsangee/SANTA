@@ -36,7 +36,7 @@
 		clearAll();
 		getLocation();
 		
-		if(mountainList != null){
+		if(mountainList != null | mountainList != 'null'){
 			waitForMapAndProcess();
 		}
 		
@@ -196,7 +196,9 @@
 				    console.log("no, lat, lon" ,mountainNoData,mountainLatitudeData,mountainLongitudeData )
 				    
 				    
-				    let weatherList = ${weatherList};
+				    let weatherList = ${weatherList != null ? weatherList : 'null'};
+				    
+				    if(weatherList != 'null'){
 				    let weather = weatherList[index];
 				    let weatherIcon = getWeatherIcon(weather.skyCondition);
 				    let sunriseIcon = '<i class="bi bi-sunrise icon" style="width:20px;height:20px;"></i>';
@@ -244,6 +246,8 @@
 
 					markers.push(mountainMarker);
 					infoWindows.push(infoWindow);  //지우는거 1 안나오는거 2 날씨 연동 3
+					
+				    }
 				});
 		
 		

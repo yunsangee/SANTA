@@ -1,7 +1,7 @@
 package site.dearmysanta.certification;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Map;
 
@@ -59,13 +59,13 @@ public class CertificationPostTest {
         }
     }
 	//@Test
-	public void testgetCertification() throws Exception {
-		
-		Map<String, Object> certificationPost = certificationPostService.getCertificationPost(1);
-		
-		SantaLogger.makeLog("info", certificationPost.toString());
-		
-	}
+//	public void testgetCertification() throws Exception {
+//		
+//		Map<String, Object> certificationPost = certificationPostService.getCertificationPost(1);
+//		
+//		SantaLogger.makeLog("info", certificationPost.toString());
+//		
+//	}
 	
 	 //@Test
 	    public void testMyCertificationPostList() throws Exception {
