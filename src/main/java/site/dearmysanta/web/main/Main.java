@@ -52,7 +52,7 @@ public class Main {
 	@Value("${javaServerIp}")
 	private String javaServerIp;
 	
-	@Value("${reactServerIp")
+	@Value("${reactServerIp}")
 	private String reactServerIp;
 	
 	

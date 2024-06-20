@@ -292,5 +292,11 @@ import site.dearmysanta.service.user.UserService;
 		// TODO Auto-generated method stub
 		return userDao.getTotalCount(search);
 	}
+
+	@Override
+	public int getQnATotalCount(Search search) throws Exception {
+		// TODO Auto-generated method stub
+		return userDao.getQnATotalCount(search);
+	}
 	
 }

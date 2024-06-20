@@ -24,7 +24,7 @@
 				console.log(data);
 
 	            $.ajax({
-	                url: "http://127.0.0.1:8001/mountain/rest/updateMountain?crpNo=${crpNo}",
+	                url: "http://127.0.0.1:8001/mountain/rest/updateMountain?postNo=${crpNo}",
 	                method: "POST",
 	                contentType: "application/json",
 	                dataType: "json",
@@ -44,24 +44,39 @@
 
 </script>
 
+<style>
+		.close {
+            color: #aaa;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+</style>
+
 
 </head>
 <body>
-
+		<span class="close" onclick="window.close()">&times;</span>
         <label for="mountainNo">Mountain No:</label>
-        <input type="text" id="mountainNo" name="mountainNo" value=20><br><br>
+        <input type="text" id="mountainNo" name="mountainNo" value="${mountain.mountainNo}"><br><br>
         
         <label for="mountainLocation">Mountain Location:</label>
-        <input type="text" id="mountainLocation" name="mountainLocation"><br><br>
+        <input type="text" id="mountainLocation" name="mountainLocation" value="${mountain.mountainLocation}"><br><br>
         
-        <label for="mountainDescription">Mountain Description:</label>
-        <input type="text" id="mountainDescription" name="mountainDescription"><br><br>
         
         <label for="mountainAltitude">Mountain Altitude:</label>
-        <input type="text" id="mountainAltitude" name="mountainAltitude"><br><br>
+        <input type="text" id="mountainAltitude" name="mountainAltitude" value="${mountain.mountainAltitude}"><br><br>
         
-        <label for="mountainTrailCount">Mountain Trail Count:</label>
-        <input type="number" id="mountainTrailCount" name="mountainTrailCount"><br><br>
         
         <button id="submit">Update Mountain</button>
 
