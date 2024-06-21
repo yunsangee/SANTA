@@ -123,7 +123,7 @@
                 return;
             }
 
-            fetch('rest/findUserPassword', {
+            fetch('rest/setUserPassword', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

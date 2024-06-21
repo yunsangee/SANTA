@@ -161,8 +161,119 @@
             } */
         }
     </style>
+    
+        <c:import url="../common/header.jsp"/>
+    
+<!--  ////////////////////////////////////////////// script  ///////////////////////////////////////////////// -->       
 
-    <c:import url="../common/header.jsp"/>
+<script>
+        $(document).ready(function() {
+            $(".send").click(function() {
+                sendVerificationCode();
+            });
+
+        // 동적으로 인증번호 입력칸과 확인 버튼 추가
+        function addVerificationSection() {
+            if ($("#verificationSection").length === 0) {
+                $(".form-group").append(
+                    '<div id="verificationSection">' +
+                    '<label for="verifyCode"></label>' +
+                    '<input type="text" class="code" id="verifyCode" name="verifyCode" placeholder="인증번호" required>' +
+                    '<button type="button" class="verify-check-btn">인증번호 확인</button>' +
+                    '<span id="verificationResult" class="error-message"></span>' +
+                    '</div>'
+                );
+            }
+        }
+
+        // 인증번호 버튼 클릭 시 인증번호 입력란 추가
+        $(".send").click(function() {
+            addVerificationSection();
+        });
+
+        // 인증번호 확인 버튼 클릭 이벤트
+        $(document).on("click", ".verify-check-btn", function() {
+            var phoneNumber = $("#phoneNumber").val();
+            var verifyCode = $("#verifyCode").val();
+            verifyCodeFunction(phoneNumber, verifyCode);
+        });
+    });
+
+    function sendVerificationCode() {
+        const userId = $("#userId").val();
+        const phoneNumber = $("#phoneNumber").val();
+//
+        $.ajax({
+            url: "/user/rest/findUserPassword",
+            type: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+            	userId: userId,
+                phoneNumber: phoneNumber
+            }),
+            success: function(response) {
+                if (!response.userExists) {
+                    alert("이름과 전화번호가 일치하지 않습니다. 다시 확인해주세요.");
+                } else {
+                    $.ajax({
+                        url: "/message/send-one",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                        	userId: userId,
+                            phoneNumber: phoneNumber
+                        }),
+                        success: function(response) {
+                            if (response) {
+                                alert("인증번호가 전송되었습니다.");
+                            } else {
+                                alert("인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            alert('인증번호 전송에 실패했습니다. 다시 시도해주세요.');
+                        }
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('회원정보가 일치하지 않습니다. 다시 시도해주세요.');
+            }
+        });
+    }
+
+    function verifyCodeFunction(phoneNumber, verifyCode) {
+        $.ajax({
+            url: "/message/check-one",
+            type: "GET",
+            data: { phoneNumber: phoneNumber, validationNumber: verifyCode },
+            success: function(response) {
+                if (response != -1) {
+                    alert("휴대폰 인증이 완료되었습니다.");
+                    $("#isPhoneVerified").val("true");
+                } else {
+                    alert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                }
+            },
+            error: function(xhr, status, error) {
+                alert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        $("#findUserPasswordForm").on("submit", function(e) {
+            var isPhoneVerified = $("#isPhoneVerified").val() === "true";
+
+            if (!isPhoneVerified) {
+                e.preventDefault();
+                alert("휴대폰 인증을 완료해주세요.");
+            }
+        });
+    });
+
+     </script>
 </head>
 
 <!--  ////////////////////////////////////////////// body ///////////////////////////////////////////////// -->
@@ -180,33 +291,36 @@
 <main class="container">
     <h2>비밀번호 찾기</h2>
     <p>회원정보에 등록한 휴대폰 번호와 입력한 휴대폰 번호가 동일해야 인증번호를 받을 수 있습니다.</p>
-    <form action="/user/findUserPassword" method="post">
+    <form id="findUserPasswordForm" action="/user/findUserPassword" method="post">
         <div>
             <label for="email"></label>
             <input type="text" class="email" id="userId" name="userId" placeholder="email" required>
         </div>
+        
         <div class="form-group">
             <label for="phoneNumber"></label>
             <input type="text" class="phone" id="phoneNumber" name="phoneNumber" placeholder="휴대폰 번호" required>
-            <button type="button" class="send" onclick="sendVerificationCode()">인증번호</button>
+            <button type="button" class="send">인증번호</button>
         </div>
+        
         <div>
+            <input type="hidden" id="isPhoneVerified" value="false">
+        </div>
+        
+    <!--      <div>
             <label for="verifyCode"></label>
             <input type="text" class="code" id="verifyCode" name="verifyCode" placeholder="인증번호">
-        </div>
+            <span id="verificationResult" class="error-message"></span>  
+        </div> -->
+        
         <button type="submit" class="submit">비밀번호 찾기</button>
+        
         <br>
         <a href="/user/findUserId.jsp" class="link">아이디 찾기</a>&emsp;&emsp;&emsp;
         &emsp;<a href="/user/login.jsp" class="link">로그인 페이지로 가기</a>
+        
     </form>
 </main>
-
-<script>
-    function sendVerificationCode() {
-        // 인증번호 전송 로직 구현
-        alert('인증번호가 전송되었습니다.');
-    }
-</script>
 
 <!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// -->
 
