@@ -49,7 +49,11 @@
         });
         
         $('.bi-info-circle').on('click', function(){
+        	
+        	let user  = '${sessionScope.user != null ? sessionScope.user : "null"}';
+        	if(user != 'null'){
         	 window.open('../correctionPost/addCorrectionPost.jsp', '정정제보', 'width=400,height=400');
+        	}
         });
     });
     </script>

@@ -98,13 +98,13 @@
 	</delete>
 	
 	<select id="getFollowerList" parameterType="int" resultMap="userSelectMap">
-		SELECT u.USER_NO, u.NAME, u.profile_image, u.badge_image
+		SELECT u.nickname, u.profile_image, u.badge_image
 		FROM USERS u, FOLLOW f
 		WHERE u.USER_NO = f.FOLLOWER_NO AND f.FOLLOWING_NO = #{userNo}
 	</select>
 	
 	<select id="getFollowingList" parameterType="int" resultMap="userSelectMap">
-		SELECT u.USER_NO, u.NAME,u.profile_image,u.badge_image
+		SELECT u.nickname, u.profile_image,u.badge_image
 		FROM USERS u, FOLLOW f
 		WHERE u.USER_NO = f.FOLLOWING_NO AND f.FOLLOWER_NO = #{userNo}
 	</select>

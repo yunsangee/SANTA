@@ -85,7 +85,7 @@ public class WeatherServiceImpl implements WeatherService{
 		
 		LocalDateTime now = LocalDateTime.now();
 		
-		String[] givenTimes = {"02:10", "05:10", "08:10", "11:10", "14:10", "17:10", "20:10", "23:10"};
+		String[] givenTimes = {"00:00","02:10", "05:10", "08:10", "11:10", "14:10", "17:10", "20:10", "23:10"};
 
         
 

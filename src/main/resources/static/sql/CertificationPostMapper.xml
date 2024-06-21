@@ -79,25 +79,28 @@
     
     <select id="getCertificationPost" parameterType="int" resultMap="CertificationPostSelectMap">
         SELECT
-            cp_no,
-            user_no,
-            cp_type,
-            cp_title,
-            cp_contents,
-            cp_mountain_name,
-            cp_hiking_trail,
-            cp_total_time,
-            cp_ascent_time,
-            cp_descent_time,
-            cp_hiking_date,
-            cp_creation_date,
-            cp_transportation,
-            cp_difficulty,
-            cp_image_count
+            cp.cp_no,
+             cp.user_no,
+             u.nickname,
+             cp.cp_type,
+             cp.cp_title,
+             cp.cp_contents,
+             cp.cp_mountain_name,
+             cp.cp_hiking_trail,
+             cp.cp_total_time,
+             cp.cp_ascent_time,
+             cp.cp_descent_time,
+             cp.cp_hiking_date,
+             cp.cp_creation_date,
+             cp.cp_transportation,
+             cp.cp_difficulty,
+             cp.cp_image_count
         FROM
-            certification_post
+            certification_post cp
+            JOIN
+            users u ON cp.user_no = u.user_no
         WHERE
-            cp_no = #{postNo} AND cp_deleted_flag = 0
+            cp.cp_no = #{postNo} AND cp.cp_deleted_flag = 0
     </select>
     
         <insert id="addHashtag" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
@@ -184,9 +187,10 @@
 		parameterType="site.dearmysanta.domain.common.Like"
 		resultMap="CertificationPostSelectMap">
 		SELECT c.*
-		FROM LIKES l, certification_post c
-		WHERE l.POST_TYPE=0
-		AND l.USER_NO = #{userNo} AND l.POST_NO = c.cp_no 
+    FROM LIKES l
+    JOIN certification_post c ON l.POST_NO = c.cp_no
+    WHERE l.POST_TYPE = 0 AND CP_DELETED_FLAG=0
+      AND l.USER_NO = #{userNo}
 	</select>
 	
 	<select id="getCertificationPostLikeStatus" parameterType="map" resultType="int">
@@ -199,7 +203,7 @@
 	<!-- Comment -->
 
 		<insert id="addCertificationPostComment" parameterType="site.dearmysanta.domain.certificationPost.CertificationPostComment">
-        INSERT INTO comments(comment_no, user_no, post_no, comment_contents,comment_creation_date, post_type)
+        INSERT INTO comments(comment_no, user_no,post_no, comment_contents,comment_creation_date, post_type)
         VALUES(seq_comment_no.NEXTVAL, #{userNo}, #{certificationPostNo}, #{certificationPostCommentContents},sysdate, 0)
     </insert>
     
@@ -217,8 +221,7 @@
         	c.post_no,
         	c.comment_no,
         	c.comment_contents,
-        	c.comment_creation_date
-        	
+        	c.comment_creation_date   	
     	FROM 
         	comments c
     	JOIN 

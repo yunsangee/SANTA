@@ -13,7 +13,7 @@
 		
 		$(function () {
 			
-			var socket = io("http://192.168.0.52:4001");
+			var socket = io("http://192.168.0.89:4001");
 			
 			socket.on('lastMessage', function(data) {
                 var roomElement = $('#chattingRoom-' +data.roomNo);

@@ -42,11 +42,45 @@
 		WHERE USER_NO = #{userNo} AND CRP_NO = #{postNo}
 	</delete>
 	
-	<select id="getCorrectionPostList" resultMap="CorrectionPostResultMap">
-		SELECT crp.crp_no, crp.crp_content, crp.crp_date, crp.crp_status, m.MOUNTAIN_NO, m.MOUNTAIN_NAME, u.USER_NO
-		FROM USERS u, CORRECTION_POST crp, MOUNTAIN m
-		WHERE crp.USER_NO = u.USER_NO AND crp.MOUNTAIN_NO = m.MOUNTAIN_NO AND crp.crp_status = 0
-	</select>
+<select id="getCorrectionPostList" parameterType="site.dearmysanta.domain.common.Search" resultMap="CorrectionPostResultMap">
+    SELECT * FROM (
+        SELECT 
+            crp.crp_no, 
+            crp.crp_content, 
+            crp.crp_date, 
+            crp.crp_status, 
+            m.MOUNTAIN_NO, 
+            m.MOUNTAIN_NAME, 
+            u.USER_NO,
+            u.nickname,
+            ROW_NUMBER() OVER (ORDER BY crp.crp_no) AS ROW_SEQ
+        FROM 
+            USERS u, 
+            CORRECTION_POST crp, 
+            MOUNTAIN m
+        WHERE 
+            crp.USER_NO = u.USER_NO 
+            AND crp.MOUNTAIN_NO = m.MOUNTAIN_NO 
+            AND crp.crp_status = 0
+        <choose>
+            <when test="searchCondition == 0 and searchKeyword != null and searchKeyword != ''">
+                AND m.MOUNTAIN_NAME LIKE '%' || #{searchKeyword} || '%'
+            </when>
+        </choose>
+    )
+    WHERE ROW_SEQ BETWEEN ((#{currentPage} - 1) * #{pageSize} + 1) AND #{currentPage} * #{pageSize}
+</select>
+
+<select id="getCorrectionPostTotalCount" parameterType="site.dearmysanta.domain.common.Search" resultType="int">
+        SELECT COUNT(*) 
+        FROM correction_post crp,   MOUNTAIN m
+        WHERE crp.crp_status = 0 AND crp.MOUNTAIN_NO = m.MOUNTAIN_NO 
+        <choose>
+            <when test="searchCondition == 0 and searchKeyword != null and searchKeyword != ''">
+                AND m.MOUNTAIN_NAME LIKE '%' || #{searchKeyword} || '%'
+            </when>
+        </choose>
+    </select>
 
 
 

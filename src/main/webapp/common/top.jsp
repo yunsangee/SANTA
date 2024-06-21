@@ -8,7 +8,6 @@
 <meta charset="UTF-8">
 
     <title>Fruitables - Free Bootstrap 5 eCommerce Website Template</title>
-   	<c:import url="../common/header.jsp"/>
     <script>
     	$(function(){
 
@@ -25,7 +24,7 @@
 			});
 			
 			$('#meetingPost').on('click',function(){
-				window.location.href = '/meetingPost/getMeetingPostList';
+				window.location.href = '/meeting/getMeetingPostList';
 			});
 			
 			$('#hikingGuide').on('click',function(){

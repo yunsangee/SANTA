@@ -26,7 +26,7 @@
                                     <img src="${follower.profileImage}" alt="Profile Image" style="width: 50px; height: 50px; border-radius: 50%;">
                                 </td>
                                 <td style="vertical-align: middle; padding-right: 10px;">
-                                    <p class="mb-0">${follower.userName}</p>
+                                    <p class="mb-0">${follower.nickName}</p>
                                 </td>
                                 <td style="vertical-align: middle; padding-right: 10px;">
                                     <img src="${follower.badgeImage}" alt="Badge Image" style="width: 24px; height: 24px;">
