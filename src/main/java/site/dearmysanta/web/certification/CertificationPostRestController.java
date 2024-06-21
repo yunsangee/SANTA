@@ -78,13 +78,29 @@ public class CertificationPostRestController {
        userEtcService.updateCertificationCount(userNo, 1);
 	}
     
-    @GetMapping(value="rest/listMyCertificationPost")
-    public List<CertificationPost> listMyCertificationPost(@RequestParam int userNo) throws Exception {
-    	List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
-        System.out.println("오잉:" + myCertificationPost);
-        return myCertificationPost;
+    @GetMapping(value = "rest/listMyCertificationPost")
+    public Map<String, Object> listMyCertificationPost(@RequestParam int userNo) throws Exception {
+        List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
+        
+        System.out.println("내 인증 게시물: " + myCertificationPost);
+        
+        int postType = 0;
+        List<String> certificationPostImages = new ArrayList<>();
+        for (CertificationPost certificationPost : myCertificationPost) {
+            String fileName = certificationPost.getPostNo() + "_" + postType + "_1"; // 첫 번째 사진 파일명
+            String imageURL = objectStorageService.getImageURL(fileName);
+            certificationPostImages.add(imageURL);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("certificationPostList", myCertificationPost);
+        response.put("certificationPostImages", certificationPostImages);
+        
+        System.out.println("이미지: " + certificationPostImages);
+        
+        return response;
     }
-    
+
     @GetMapping(value="rest/getProfile")
     public Map<String, Object> getProfile(@RequestParam int userNo) throws Exception {
         Map<String, Object> result = new HashMap<>();
@@ -100,13 +116,35 @@ public class CertificationPostRestController {
         List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
         result.put("myCertificationPost", myCertificationPost);
 
-        List<CertificationPost> myLikeCertificationPost = certificationPostService.getCertificationPostLikeList(userNo);
-        System.out.println("myLikeCertificationPost: " + myLikeCertificationPost);
-        result.put("myLikeCertificationPost", myLikeCertificationPost);
+        List<CertificationPost> getCertificationPostLikeList = certificationPostService.getCertificationPostLikeList(userNo);
+        System.out.println("getCertificationPostLikeList: " + getCertificationPostLikeList);
+        result.put("getCertificationPostLikeList", getCertificationPostLikeList);
 
         return result;
     }
     
+    @PostMapping(value = "rest/getCertificationPostLikeList")
+    public Map<String, Object> getCertificationPostLikeList(@RequestParam int userNo) throws Exception {
+        List<CertificationPost> getCertificationPostLikeList = certificationPostService.getCertificationPostLikeList(userNo);
+        System.out.println("좋아요한 게시물: " + getCertificationPostLikeList);
+
+        int postType = 0;
+        List<String> certificationPostImages = new ArrayList<>();
+        for (CertificationPost certificationPost : getCertificationPostLikeList) {
+            String fileName = certificationPost.getPostNo() + "_" + postType + "_1"; // 첫 번째 사진 파일명
+            String imageURL = objectStorageService.getImageURL(fileName);
+            certificationPostImages.add(imageURL);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("certificationPostList", getCertificationPostLikeList);
+        response.put("certificationPostImages", certificationPostImages);
+
+        System.out.println("이미지" + certificationPostImages);
+
+        return response;
+    }
+
 
     @GetMapping(value="rest/getCertificationPostComment")
     public List<CertificationPostComment> getCertificationPostComment(@RequestParam int postNo) throws Exception {
@@ -130,7 +168,7 @@ public class CertificationPostRestController {
     	
 }
 
-  
+    @GetMapping(value="rest/getCertificationPost")
     public String getCertificationPost(@RequestParam int postNo,  Model model) throws Exception {
     	int userNo = 1;
     	int postType = 0;

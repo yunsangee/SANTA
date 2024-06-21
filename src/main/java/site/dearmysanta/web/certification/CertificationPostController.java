@@ -410,11 +410,33 @@ public class CertificationPostController {
          
     	 List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
           model.addAttribute("myCertificationPost", myCertificationPost);
-       
+          System.out.println("myCertificationPost: " + myCertificationPost);
+          
+          for (CertificationPost post : myCertificationPost) {
+              System.out.println("Certification Post 여기다: " + post.getPostNo());
+          }
+          
           List<CertificationPost> myLikeCertificationPost = certificationPostService.getCertificationPostLikeList(userNo);
           System.out.println("myLikeCertificationPost: " + myLikeCertificationPost);
           model.addAttribute("myLikeCertificationPost", myLikeCertificationPost);
     
+          
+          
+          int postType = 0;
+  	    List<String> certificationPostImages = new ArrayList<>();
+  	    for (CertificationPost certificationPost : myCertificationPost) {
+  	        String fileName = certificationPost.getPostNo() + "_" +postType + "_1"; // 첫 번째 사진 파일명
+  	        String imageURL = objectStorageService.getImageURL(fileName);
+  	        certificationPostImages.add(imageURL);
+  	    }
+  
+  
+  	    model.addAttribute("certificationPostImages", certificationPostImages);
+
+          
+          System.out.println("이미지"+certificationPostImages);
+          
+          
  return "forward:/certificationPost/getProfile.jsp";  
 }
     
