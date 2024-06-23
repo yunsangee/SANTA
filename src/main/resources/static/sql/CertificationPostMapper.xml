@@ -116,20 +116,21 @@
  </select>
     
     <update id="updateCertificationPost" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
-        UPDATE certification_post
-        SET
-             cp_title = #{title},
-            cp_contents = #{contents},
-            cp_mountain_name = #{certificationPostMountainName},
-            cp_hiking_trail = #{certificationPostHikingTrail},
-            cp_total_time = #{certificationPostTotalTime},
-            cp_ascent_time = #{certificationPostAscentTime},
-            cp_descent_time = #{certificationPostDescentTime},
-            cp_hiking_date = #{certificationPostHikingDate},
-            cp_transportation = #{certificationPostTransportation},
-            cp_difficulty = #{certificationPostHikingDifficulty}
-        WHERE
-               cp_no = #{postNo}
+     UPDATE certification_post
+		SET
+		    cp_title = #{title},
+		    cp_contents = #{contents},
+		    cp_mountain_name = #{certificationPostMountainName},
+		    cp_hiking_trail = #{certificationPostHikingTrail},
+		    cp_total_time = #{certificationPostTotalTime},
+		    cp_ascent_time = #{certificationPostAscentTime},
+		    cp_descent_time = #{certificationPostDescentTime},
+		    cp_hiking_date = #{certificationPostHikingDate},
+		    cp_transportation = #{certificationPostTransportation},
+		    cp_difficulty = #{certificationPostHikingDifficulty}
+		WHERE
+		    cp_no = #{postNo} AND userNo = #{userNo}
+
     </update>
     
     	<update id="updateCertificationPostDeleteFlag" parameterType="int">
@@ -233,34 +234,35 @@
 <!-- search -->
 <!---->
  <select id="getCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="site.dearmysanta.domain.common.Search">
-       SELECT * FROM certification_post 
+       SELECT cp.* , u.nickname FROM certification_post cp , users u
     <where>
-    cp_deleted_flag = 0
+
         <choose>
-            <when test='searchCondition == 0 and searchKeyword != "" '>
-                cp_title LIKE '%' || #{searchKeyword} || '%'
+            <when test='searchCondition == 0 and searchKeyword != "" and searchKeyword != null '>
+                cp.cp_title LIKE '%' || #{searchKeyword} || '%'
             </when>
-            <when test="searchCondition == 1 and searchKeyword != ''">
-                nickname LIKE '%' || #{searchKeyword} || '%'
+            <when test='searchCondition == 1 and searchKeyword != "" and searchKeyword != null' >
+                u.nickname LIKE '%' || #{searchKeyword} || '%'
             </when>
-            <when test="searchCondition == 2 and searchKeyword != ''">
-                cp_mountain_name = #{searchKeyword}
+            <when test='searchCondition == 2 and searchKeyword != "" and searchKeyword != null' >
+                cp.cp_mountain_name  LIKE '%' || #{searchKeyword} || '%'
             </when>
             <!-- 다른 검색 조건 추가 가능 -->
-        </choose>
+        </choose> 
+        AND  cp.cp_deleted_flag = 0 AND u.user_no = cp.user_no
     </where>
     <choose>
         <when test="searchCondition == 3">
-            ORDER BY NVL(cp_like_count,0) DESC
+            ORDER BY NVL(cp.cp_like_count,0) DESC
         </when>
         <when test="searchCondition == 4">
-            ORDER BY NVL(cp_like_count,0) ASC
+            ORDER BY NVL(cp.cp_like_count,0) ASC
         </when>
         <when test="searchCondition == 5">
-            ORDER BY cp_difficulty DESC
+            ORDER BY cp.cp_difficulty DESC
         </when>
         <when test="searchCondition == 6">
-            ORDER BY cp_difficulty ASC
+            ORDER BY cp.cp_difficulty ASC
         </when>
     </choose>
 </select>

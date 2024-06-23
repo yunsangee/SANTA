@@ -62,6 +62,7 @@ public class CertificationPostServiceImpl implements CertificationPostService {
     	
     	
     	 List<String> hashtagList = certificationPostDao.getHashtag(postNo);
+    	 System.out.println("여기hashtagList" + hashtagList);
     	List<CertificationPostComment> certificationPostCommentList = certificationPostDao.getCertificationPostCommentList(postNo);
     	Map<String, Object> map = new HashMap<String, Object>();
 		map.put("certificationPost", certificationPost);
@@ -75,20 +76,18 @@ public class CertificationPostServiceImpl implements CertificationPostService {
   
     @Override
     public void updateCertificationPost(CertificationPost certificationPost) throws Exception {
+      
+        List<String> hashtagList = certificationPostDao.getHashtag(certificationPost.getPostNo());
+        System.out.println("해시태그 리스트: " + hashtagList);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("hashtagList", hashtagList);
+      
+
         certificationPostDao.updateCertificationPost(certificationPost);
     }
+
     
-/*	@Override
-	public Map<String, Object> getCertificationPostList(Search search) throws Exception {
-		List<CertificationPost> list= certificationPostDao.getCertificationPostList(search);
-		
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("list", list );
-	
-		return map;
-	}*/
-    
+
     @Override
     public Map<String, Object> getCertificationPostList(Search search) throws Exception {
         // 인증 포스트 목록을 가져옵니다.
@@ -198,6 +197,13 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 		CertificationPost certificationPost = certificationPostDao.getCertificationPost(postNo);
 		
 		return certificationPost;
+	}
+
+
+	@Override
+	public List<String> getHashtag(int postNo) throws Exception {
+	
+		return certificationPostDao.getHashtag(postNo);
 	}
 
 

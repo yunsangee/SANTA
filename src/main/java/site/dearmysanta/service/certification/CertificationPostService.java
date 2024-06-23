@@ -34,7 +34,7 @@ public interface CertificationPostService {
 	
 	public void deleteHashtag(int hashtagNo) throws Exception;
 	
-	//public CertificationPost getHashtag(int postNo) throws Exception;
+	public List<String> getHashtag(int postNo) throws Exception;
 	
 	//Like
 	public void addCertificationPostLike(Like like);

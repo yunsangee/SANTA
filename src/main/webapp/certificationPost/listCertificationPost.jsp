@@ -64,27 +64,26 @@
 </style>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
+
     $(document).ready(function() {
-        // Certification post click event
         $(".certification-post").click(function() {
             var postNo = $(this).data("postno");
             var certificationPostType = $(this).data("certificationPostType"); // 게시물에 대한 선택 정보
             window.location.href = "/certificationPost/getCertificationPost?postNo=" + postNo;
         });
 
-        // Scroll to top button click event
+     
         $(".top-button").click(function() {
             $('html, body').animate({scrollTop: 0}, 'slow');
         });
 
-        // Certify meeting button click event
+     
         $(".btn-certify-hiking").click(function() {
             alert('인증하기');
-            var userNo = 1; // userNo 값을 2로 설정
+            var userNo =2 // userNo 값을 2로 설정
             window.location.href = "/certificationPost/addCertificationPost?userNo=" + userNo;
         });
 
-        // Certify hiking button click event
     
     });
 </script>
@@ -97,11 +96,11 @@
             <div class="container py-5">
                 <div class="position-relative mx-auto mb-5" style="max-width: 600px;">
                     <form id="searchForm" class="d-flex align-items-center" action="/certificationPost/listCertificationPost" method="get">
-  <!--   <select name="searchCondition" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 150px; height: 45px;">
+   <select name="searchCondition" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 150px; height: 45px;">
         <option value="0" ${ !empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>글제목</option>
         <option value="1" ${ !empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>닉네임</option>
         <option value="2" ${ !empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>산명칭</option>
-    </select>--> 
+    </select> 
       <input type="text" id="searchInput" name="searchKeyword" value="" placeholder="Search" class="form-control border-2 border-secondary rounded-pill me-2"  style="width: 300px; height: 45px;">
      <button type="submit" class="btn btn-primary border-2 border-secondary rounded-pill text-white search-button" style="height: 45px;">검색</button>
    

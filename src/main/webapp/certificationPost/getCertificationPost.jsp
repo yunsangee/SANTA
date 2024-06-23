@@ -132,15 +132,15 @@ $(document).ready(function() {
                 var commentsSection = $('.comments-section');
                 commentsSection.find('.comment-item').remove();
                 $.each(comments, function(index, comment) {
-                    var commentItem = `
-                        <div class="comment-item">
-                            <p><i class="fas fa-user"></i> 닉네임: &ensp; ${comment.nickname}</p>
-                            <p><i class="fas fa-comment"></i> 내용: ${comment.certificationPostCommentContents}</p>
-                            <p><i class="fas fa-clock"></i> 작성 날짜: ${comment.certificationPostCommentCreationDate}</p>
-                            <button class="btn btn-danger btn-sm" data-comment-id="${comment.certificationPostCommentNo}"><i class="fa fa-trash"></i></button>
-                            <hr/>
-                        </div>
-                    `;
+                    var commentItem = 
+                       ' <div class="comment-item">' +
+                            '<p><i class="fas fa-user"></i> 닉네임: &ensp;'+ comment.nickname+'</p>'+
+                           ' <p><i class="fas fa-comment"></i> 내용:' + comment.certificationPostCommentContents +'</p>' +
+                            '<p><i class="fas fa-clock"></i> 작성 날짜: ' + comment.certificationPostCommentCreationDate + '</p>'+
+                            '<button class="btn btn-danger btn-sm" data-comment-id="'+comment.certificationPostCommentNo+'"><i class="fa fa-trash"></i></button>'+
+                            '<hr/>'+
+                        '</div>'
+                   ;
                     commentsSection.append(commentItem);
                 });
 
@@ -157,42 +157,7 @@ $(document).ready(function() {
         });
     }
 
- // 댓글 조회
-    function loadComments() {
-        console.log('Loading comments...');
-        $.ajax({
-            url: 'rest/getCertificationPostComment',
-            type: 'GET',
-            data: { postNo: postNo },
-            success: function(comments) {
-                console.log('Comments loaded:', comments);
-                var commentsSection = $('.comments-section');
-                commentsSection.find('.comment-item').remove();
-                $.each(comments, function(index, comment) {
-                    var commentItem = `
-                        <div class="comment-item">
-                            <p><i class="fas fa-user"></i> 닉네임: &ensp; ${comment.nickname}</p>
-                            <p><i class="fas fa-comment"></i> 내용: ${comment.certificationPostCommentContents}</p>
-                            <p><i class="fas fa-clock"></i> 작성 날짜: ${comment.certificationPostCommentCreationDate}</p>
-                            <button class="btn btn-danger btn-sm" data-comment-id="${comment.certificationPostCommentNo}"><i class="fa fa-trash"></i></button>
-                            <hr/>
-                        </div>
-                    `;
-                    commentsSection.append(commentItem);
-                });
-
-                // 댓글 삭제 버튼 클릭 이벤트 바인딩
-                $('.btn-danger[data-comment-id]').on('click', function() {
-                    var commentId = $(this).data('comment-id');
-                    console.log('Delete button clicked for comment ID:', commentId);
-                    deleteComment(commentId);
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error('댓글 조회 오류:', xhr, status, error);
-            }
-        });
-    }
+              
 
     // 댓글 추가
     $('.comment-form').on('submit', function(event) {
@@ -330,13 +295,13 @@ $(document).ready(function() {
                                 <i class="fa fa-heart like-button ${certificationPost.certificationPostLikeStatus == 0 ? 'text-secondary' : 'text-danger'}"></i>
                                 <p class="mb-0 ml-2">${certificationPost.certificationPostLikeCount}</p>
                             </div>
-                              
+                                          <c:if test="${user.userNo == certificationPost.userNo}">
                                 <form action="/certificationPost/updateCertificationPost" method="get">
                                     <input type="hidden" name="postNo" value="${certificationPost.postNo}"/>
                                     <button type="submit" class="btn btn-secondary"><i class="fa fa-edit"></i></button>
                                 </form>
                                 <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
-                           
+                           </c:if>
                             
                             
                         </div>

@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script>
     $(document).ready(function(){
-        const followerUserNo =1; // followerUserNo을 3으로 고정
+        const followerUserNo =1; //유저번호임의로 지정해둠
 
         $("button.delete-follow").on('click', function(){
             const followingUserNo = $(this).data("following-id");

@@ -97,7 +97,9 @@
             $('#followerCount').click(function() {
                 window.location.href = "/certificationPost/listFollower?userNo=" + userNo;
             });
-
+            $('#followingCount').click(function() {
+                window.location.href = "/certificationPost/listFollowing?userNo=" + userNo;
+            });
             // 내 인증 탭을 클릭했을 때 호출되는 함수
             $('#my-certifications-tab').click(function(e) {
                 e.preventDefault();
@@ -191,7 +193,9 @@
                 <div class="profile-details">
                     <p><strong>닉네임:</strong> ${infouser.nickName} <i class="fas fa-flag"></i></p><!-- 뱃지이미지 들어가야함 -->
                     <p>${infouser.introduceContent}</p>
-                    <p id="followerCount"><strong>Follower Count:</strong> ${followerCount}</p>
+                    <p id="followerCount"><i class="fas fa-user"></i>&ensp;<strong>팔로워 :</strong> ${followerCount}</p>
+
+                    <p id="followingCount"><i class="fas fa-user"></i>&ensp;<strong>팔로잉 :</strong> ${followingCount}</p>
                 </div>
                 <button class="follow-button btn btn-secondary">팔로우하기</button>
             </div>

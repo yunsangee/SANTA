@@ -71,9 +71,11 @@
                     <input type="date" class="form-control" id="certificationPostHikingDate" name="certificationPostHikingDate" value="${certificationPost.certificationPostHikingDate}" required>
                 </div>
                 
-                <div class="form-group col-md-6">
+                 <div class="form-group col-md-6">
                     <label for="certificationPostHashtagContents">해시태그<sup>*</sup> <small>(최대 5개)</small></label>
-                    <input type="text" class="form-control" id="certificationPostHashtagContents" name="certificationPostHashtagContents" maxlength="20" value="${certificationPost.certificationPostHashtagContents}" required>
+                    <c:forEach var="hashtag" items="${hashtagList}">
+                        <input type="text" class="form-control" id="certificationPostHashtagContents" name="certificationPostHashtagContents" maxlength="20" value="${hashtag.certificationPostHashtagContents}" required>
+                    </c:forEach>
                 </div>
                 
                 <div class="form-group">

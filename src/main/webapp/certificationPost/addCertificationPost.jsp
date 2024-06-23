@@ -14,21 +14,11 @@
             $('#certificationPostImage').on('change', function() {
                 var files = $(this)[0].files;
                 if (files.length > 5) {
-                    alert("You can only upload a maximum of 5 images.");
+                    alert("사진은 최대 5장까지 가능합니다.");
                     $(this).val(''); // 선택한 파일 리셋
                 }
             });
-
-            // 폼 제출 시 파일 개수 확인
-            $('#certificationForm').on('submit', function(e) {
-                var files = $('#certificationPostImage')[0].files;
-                if (files.length > 5) {
-                    alert("You can only upload a maximum of 5 images.");
-                    e.preventDefault(); // Prevent form submission
-                }
-
-              
-            });
+       
         });
     </script>
 </head>
