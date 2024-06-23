@@ -45,7 +45,7 @@
 	
 	<resultMap id="alarmMessageSelectMap"
 	type="site.dearmysanta.domain.alarmMessage.AlarmMessage">
-	<id property="alarmNo" column="ALARM_NO" />
+	<id property="alarmNo" column="AM_NO" />
 	<result property="userNo" column="USER_NO" />
 	<result property="userName" column="NAME" />
 	<result property="title" column="TITLE" />

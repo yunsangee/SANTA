@@ -208,20 +208,20 @@
 					
 
 				    let infoWindowContent = 
-	                    '<div class="info-window">' +
-	                    //'<img src="' + mountainImageData + '" alt="' + mountainNameData + '" style="width:100%; height:auto; max-height:100px; object-fit:cover;">' +
-	                  	'<div class="title">' + mountainNameData + 
-                    	'<a href="/mountain/getMountain?mountainNo=' + mountainNoData + '&lat=' + mountainLatitudeData + '&lon=' + mountainLongitudeData + '" class="link">상세보기</a>' +
-                    	'</div>' +
-	                    '<div>위치: ' + mountainLocationData + '</div>' +
-	                    '<div>높이: ' + mountainAltitudeData + 'm</div>' +
-	                    '<div>좋아요: ' + likeCountData + '</div>' +
-	                    '<div><img src="' + weatherIcon + '" class="weather-icon" style="width:20px;height:20px;"> ' + weather.temperature + '°C</div>' +
-	                    '<div>강수: ' + weather.precipitation + '</div>' +
-	                    '<div>강수 확률: ' + weather.precipitationProbability + '%</div>' +
-	                    '<div>' + sunriseIcon + ' 일출: ' + weather.sunriseTime.trim() + '</div>' +
-	                    '<div>' + sunsetIcon + ' 일몰: ' + weather.sunsetTime.trim() + '</div>' +
-	                    '</div>';
+				        '<div class="info-window">' +
+				        '<div class="title">' + mountainNameData + 
+				        '<a href="/mountain/getMountain?mountainNo=' + mountainNoData + '&lat=' + mountainLatitudeData + '&lon=' + mountainLongitudeData + '" class="link">상세보기</a>' +
+				        '</div>' +
+				        '<div>위치: ' + mountainLocationData + '</div>' +
+				        '<div>높이: ' + mountainAltitudeData + 'm</div>' +
+				        '<div>좋아요: ' + likeCountData + '</div>' +
+				        (weather && weatherIcon && weather.temperature ? '<div><img src="' + weatherIcon + '" class="weather-icon" style="width:20px;height:20px;"> ' + weather.temperature + '°C</div>' : '') +
+				        (weather && weather.precipitation ? '<div>강수: ' + weather.precipitation + '</div>' : '') +
+				        (weather && weather.precipitationProbability ? '<div>강수 확률: ' + weather.precipitationProbability + '%</div>' : '') +
+				        (weather && weather.sunriseTime ? '<div>' + sunriseIcon + ' 일출: ' + weather.sunriseTime.trim() + '</div>' : '') +
+				        (weather && weather.sunsetTime ? '<div>' + sunsetIcon + ' 일몰: ' + weather.sunsetTime.trim() + '</div>' : '') +
+				        '</div>';
+
 	                console.log('infoWindowContent:', infoWindowContent);
 
 	                let infoWindow = new naver.maps.InfoWindow({

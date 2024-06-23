@@ -152,7 +152,7 @@ public class MountainController {
 		//
 		//나중에 jsp쪽에 search Condition 추가하기    
 		//
-
+		System.out.println("mountainSearch!");
 		SantaLogger.makeLog("info", "mountainSearch:" + mountainSearch.toString());
 		if (mountainSearch.getSearchKeyword() != null) {
 
@@ -169,7 +169,7 @@ public class MountainController {
 				SantaLogger.makeLog("info", mt.toString());
 
 				jsonList.add(objectMapper.writeValueAsString(mt));
-				weatherList.add(objectMapper.writeValueAsString(weatherService.getWeather(mt.getMountainLatitude(), mt.getMountainLongitude())));	
+				weatherList.add(objectMapper.writeValueAsString(weatherService.getWeatherList(mt.getMountainLatitude(), mt.getMountainLongitude()).get(0)));	
 			}
 			
 			model.addAttribute("mountainList", jsonList);

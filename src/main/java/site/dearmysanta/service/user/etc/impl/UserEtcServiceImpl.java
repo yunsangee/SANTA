@@ -1,5 +1,6 @@
 package site.dearmysanta.service.user.etc.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +85,27 @@ import site.dearmysanta.service.user.etc.UserEtcService;
 	}
 	
 	public List<AlarmMessage> getAlarmMessageList(int userNo) throws Exception{
-		return userEtcDao.getAlarmMessageList(userNo);
+		List<AlarmMessage> list = userEtcDao.getAlarmMessageList(userNo);
+		
+		for(AlarmMessage alarmMessage : list) {
+			String sentence = alarmMessage.getUserName()+"님!" + alarmMessage.getTitle();
+			
+			if(alarmMessage.getPostTypeNo() == 0) {
+				sentence += " 인증게시글에 ";
+			}else {
+				sentence += " 모임게시글에 ";
+			}
+			
+			if(alarmMessage.getAlarmTypeNo() == 0) {
+				sentence += "좋아요가 달렸어요!";
+			}else {
+				sentence += "댓글이 달렸어요!";
+			}
+				
+			alarmMessage.setMessage(sentence);
+				
+		}
+		return list;
 	}
 	
 	public void updateSearchRecordFlag(int userNo) throws Exception{
