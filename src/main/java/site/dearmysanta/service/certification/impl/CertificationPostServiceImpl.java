@@ -38,18 +38,21 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 	
     
     //post
-    @Override
+	@Override
     public void addCertificationPost(CertificationPost certificationPost) {
-    	 if (certificationPost.getCertificationPostImage() == null || certificationPost.getCertificationPostImage().isEmpty()) {
-    	        throw new IllegalArgumentException("이미지는 최소 한 개 이상 포함되어야 합니다.");
-    	    } else {
-    	        // 이미지의 개수를 설정
-    	        certificationPost.setCertificationPostImageCount(certificationPost.getCertificationPostImage().size());
-    	    }
+        if (certificationPost.getCertificationPostImage() == null || certificationPost.getCertificationPostImage().isEmpty()) {
+            throw new IllegalArgumentException("이미지는 최소 한 개 이상 포함되어야 합니다.");
+        } else {
+            // 이미지의 개수를 설정
+            certificationPost.setCertificationPostImageCount(certificationPost.getCertificationPostImage().size());
+        }
         certificationPostDao.addCertificationPost(certificationPost);
-        certificationPostDao.addHashtag(certificationPost);
     }
-    
+
+    @Override
+    public void addHashtag(int postNo, String certificationPostHashtagContents) {
+        certificationPostDao.addHashtag(postNo, certificationPostHashtagContents);
+    }
 
     @Override
     public Map<String, Object> getCertificationPost(int postNo,  int userNo) throws Exception {
@@ -128,18 +131,23 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 	
     //hashtag
 	
-
 	@Override
-	public void addHashtag(CertificationPost certificationPost) {
-		certificationPostDao.addHashtag(certificationPost);
-		
-	}
+	public void deleteHashtag(int hashtagNo) {
+        certificationPostDao.deleteHashtag(hashtagNo);
+    }
 
     @Override
-    public void deleteHashtag(int HashtagNo) throws Exception {
-    		certificationPostDao.deleteHashtag(HashtagNo);
-		
+    public void updateHashtag(int hashtagNo, String certificationPostHashtagContents) {
+        certificationPostDao.updateHashtag(hashtagNo, certificationPostHashtagContents);
     }
+
+
+//
+//    @Override
+//    public void deleteHashtag(int HashtagNo) throws Exception {
+//    		certificationPostDao.deleteHashtag(HashtagNo);
+//		
+//    }
     
 	
     //Like
@@ -205,8 +213,6 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 	
 		return certificationPostDao.getHashtag(postNo);
 	}
-
-
 
 
 

@@ -73,19 +73,7 @@ public class CertificationPostController {
     
     @GetMapping(value = "addCertificationPost")
     public String addCertificationPost(int userNo, Model model) throws Exception {
-        List<MeetingPost> unCertifiedMeetingPosts = meetingService.getUnCertifiedMeetingPost(userNo);
 
-        // 리스트의 크기 출력
-        System.out.println("UnCertified Meeting Posts Count: " + unCertifiedMeetingPosts.size());
-
-        // 리스트 내용 개별 필드 출력
-        for (MeetingPost post : unCertifiedMeetingPosts) {
-            System.out.println("Post meetingName: " + post.getMeetingName());
-            System.out.println("Title: " + post.getTitle());
-   
-        }
-
-        model.addAttribute("unCertifiedMeetingPosts", unCertifiedMeetingPosts);
         return "forward:/certificationPost/addCertificationPost.jsp";
     }
     
@@ -99,6 +87,7 @@ public class CertificationPostController {
                                        @RequestParam int ascentTimeMinutes,
                                        @RequestParam int descentTimeHours,
                                        @RequestParam int descentTimeMinutes,
+                                       @RequestParam(value = "certificationPostHashtagContents") String[] certificationPostHashtagContents,
                                        Model model) throws Exception {
 
         // 시간을 "ㅇㅇ시 ㅇㅇ분" 형식으로 변환하여 설정
@@ -127,36 +116,38 @@ public class CertificationPostController {
                 System.out.println(fileName);
 
                 objectStorageService.uploadFile(image, fileName);
-                
+
                 int userNo = certificationPost.getUserNo();
                 userEtcService.updateCertificationCount(userNo, 0);
             }
         }
-        return "redirect:/certificationPost/getCertificationPost?postNo=" + postNo;
 
+        // 해시태그 저장
+        for (String hashtagContent : certificationPostHashtagContents) {
+            if (!hashtagContent.isEmpty()) {
+                certificationPostService.addHashtag(postNo, hashtagContent);
+            }
+        }
+
+        return "redirect:/certificationPost/getCertificationPost?postNo=" + postNo;
     }
 
-
     @GetMapping(value = "updateCertificationPost")
-    public String updateCertificationPost(@RequestParam int postNo , Model model) throws Exception {
-    	 System.out.println("postNo: " + postNo);
+    public String updateCertificationPost(@RequestParam int postNo, Model model) throws Exception {
+        System.out.println("postNo: " + postNo);
 
-    	 CertificationPost certificationPost = certificationPostService.getCertificationPost(postNo);
-    	    List<String> hashtagList = certificationPostService.getHashtag(postNo);
-    	    
-    	    System.out.println("hashtagList11 : " + hashtagList );
+        CertificationPost certificationPost = certificationPostService.getCertificationPost(postNo);
+        List<String> hashtagList = certificationPostService.getHashtag(postNo);
 
-    	    // CertificationPost 객체와 해시태그 정보를 모델에 추가
-    	    model.addAttribute("certificationPost", certificationPost);
-    	    System.out.println("certificationPost " + certificationPost  );
-    	    model.addAttribute("hashtagList", hashtagList);
-    	    System.out.println("hashtagList " + hashtagList  );
+        System.out.println("hashtagList: " + hashtagList);
 
-        // 시간 데이터를 분리하여 모델에 추가
+        model.addAttribute("certificationPost", certificationPost);
+        model.addAttribute("hashtagList", hashtagList);
+
         String[] totalTimeParts = certificationPost.getCertificationPostTotalTime().split(" ");
         String[] ascentTimeParts = certificationPost.getCertificationPostAscentTime().split(" ");
         String[] descentTimeParts = certificationPost.getCertificationPostDescentTime().split(" ");
-        
+
         model.addAttribute("totalTimeHours", totalTimeParts[0].replace("시간", "").trim());
         model.addAttribute("totalTimeMinutes", totalTimeParts[1].replace("분", "").trim());
         model.addAttribute("ascentTimeHours", ascentTimeParts[0].replace("시간", "").trim());
@@ -164,11 +155,9 @@ public class CertificationPostController {
         model.addAttribute("descentTimeHours", descentTimeParts[0].replace("시간", "").trim());
         model.addAttribute("descentTimeMinutes", descentTimeParts[1].replace("분", "").trim());
 
-
         int postType = 0;
         List<String> certificationPostImages = new ArrayList<>();
         int imageCount = certificationPost.getCertificationPostImageCount();
-        System.out.println("imageCount===" + imageCount);
         for (int i = 0; i < imageCount; i++) {
             String fileName = postNo + "_" + postType + "_" + (i + 1);
             String imageURL = objectStorageService.getImageURL(fileName);
@@ -179,17 +168,21 @@ public class CertificationPostController {
         return "forward:/certificationPost/updateCertificationPost.jsp";
     }
 
-    
     @PostMapping(value = "updateCertificationPost")
-    public String updateCertificationPost(@ModelAttribute CertificationPost certificationPost,
+    public String updateCertificationPost(
+                                          @ModelAttribute CertificationPost certificationPost,
                                           @RequestParam int totalTimeHours,
                                           @RequestParam int totalTimeMinutes,
                                           @RequestParam int ascentTimeHours,
                                           @RequestParam int ascentTimeMinutes,
                                           @RequestParam int descentTimeHours,
-                                          @RequestParam int descentTimeMinutes) throws Exception {
+                                          @RequestParam int descentTimeMinutes,
+                                          @RequestParam(value = "existingHashtags", required = false) String[] existingHashtags,
+                                          @RequestParam(value = "existingHashtagNos", required = false) int[] existingHashtagNos,
+                                          @RequestParam(value = "newHashtags", required = false) String[] newHashtags,
+                                          @RequestParam(value = "deleteHashtagNos", required = false) int[] deleteHashtagNos,
+                                          Model model) throws Exception {
 
-        // 시간을 "ㅇㅇ시 ㅇㅇ분" 형식으로 변환하여 설정
         String totalTime = totalTimeHours + "시간 " + totalTimeMinutes + "분";
         String ascentTime = ascentTimeHours + "시간 " + ascentTimeMinutes + "분";
         String descentTime = descentTimeHours + "시간 " + descentTimeMinutes + "분";
@@ -200,10 +193,31 @@ public class CertificationPostController {
 
         certificationPostService.updateCertificationPost(certificationPost);
 
-        
-   
+        if (deleteHashtagNos != null) {
+            for (int hashtagNo : deleteHashtagNos) {
+                certificationPostService.deleteHashtag(hashtagNo);
+            }
+        }
+
+        if (existingHashtags != null && existingHashtagNos != null) {
+            for (int i = 0; i < existingHashtags.length; i++) {
+                if (!existingHashtags[i].isEmpty()) {
+                    certificationPostService.updateHashtag(existingHashtagNos[i], existingHashtags[i]);
+                }
+            }
+        }
+
+        if (newHashtags != null) {
+            for (String hashtagContent : newHashtags) {
+                if (!hashtagContent.isEmpty()) {
+                    certificationPostService.addHashtag(certificationPost.getPostNo(), hashtagContent);
+                }
+            }
+        }
+
         return "redirect:/certificationPost/getCertificationPost?postNo=" + certificationPost.getPostNo();
     }
+
 
 
     @GetMapping(value = "listCertificationPost")

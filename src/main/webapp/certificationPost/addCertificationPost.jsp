@@ -18,7 +18,17 @@
                     $(this).val(''); // 선택한 파일 리셋
                 }
             });
-       
+
+            // 해시태그 추가 버튼 기능
+            var hashtagCount = 1;
+            $('#addHashtag').click(function() {
+                if (hashtagCount < 5) {
+                    $('#additionalHashtags').append('<input type="text" class="form-control" name="certificationPostHashtagContents" maxlength="20">');
+                    hashtagCount++;
+                } else {
+                    alert("최대 5개의 해시태그만 가능합니다.");
+                }
+            });
         });
     </script>
 </head>
@@ -82,8 +92,10 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="certificationPostHashtagContents">HASHTAG<sup>*</sup> <small>(최대 5개)</small></label>
-                        <input type="text" class="form-control" id="certificationPostHashtagContents" name="certificationPostHashtagContents" maxlength="20" required>
+                        <input type="text" class="form-control" id="certificationPostHashtagContents" name="certificationPostHashtagContents" maxlength="20">
+                        <button type="button" id="addHashtag">+</button>
                     </div>
+                    <div id="additionalHashtags"></div>
                     <div class="form-group">
                         <label>Transportation<sup>*</sup></label>
                         <div>

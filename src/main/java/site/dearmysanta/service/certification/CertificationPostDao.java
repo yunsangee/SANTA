@@ -36,14 +36,15 @@ public interface CertificationPostDao {
 
 	
 	//hashtag
-	public void addHashtag(CertificationPost certificationPost);
-	
-	public	 void deleteHashtag(int hashtagNo) throws Exception;
+	//public void addHashtag(CertificationPost certificationPost);
+	public void addHashtag(int postNo, String certificationPostHashtagContents);
+	//public	 void deleteHashtag(int hashtagNo) throws Exception;
 	
 	public List<String> getHashtag(int postNo) throws Exception;
 	
 	
-	
+	   void deleteHashtag(int hashtagNo);
+	    void updateHashtag(int hashtagNo, String certificationPostHashtagContents);
 	//Like
 	public void addCertificationPostLike(Like like);
 	
