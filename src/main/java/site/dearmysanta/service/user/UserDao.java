@@ -28,6 +28,8 @@ import site.dearmysanta.domain.user.User;
 		
 		public List<User> getUserList(Search search) throws Exception;
 		
+		public int getTotalCount(Search search) throws Exception;
+		
 		public List<User> withdrawUserList(Search search) throws Exception;
 		
 		public void updateUser(User user) throws Exception;
@@ -68,6 +70,8 @@ import site.dearmysanta.domain.user.User;
 		public QNA getQnA(int postNo, int userNo) throws Exception;
 		
 		public List<QNA> getQnAList(Search search) throws Exception;
+		
+		public int getQnATotalCount(Search search) throws Exception;
 		
 		public void addAdminAnswer(QNA qna) throws Exception;
 		

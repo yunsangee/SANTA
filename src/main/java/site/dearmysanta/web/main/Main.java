@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.meeting.MeetingPostSearch;
+import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.certification.CertificationPostService;
 import site.dearmysanta.service.meeting.MeetingService;
 import site.dearmysanta.service.mountain.MountainService;
@@ -51,7 +52,7 @@ public class Main {
 	@Value("${javaServerIp}")
 	private String javaServerIp;
 	
-	@Value("${reactServerIp")
+	@Value("${reactServerIp}")
 	private String reactServerIp;
 	
 	
@@ -77,13 +78,21 @@ public class Main {
 		if(search != null & search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
 		}
+		
+		User user = (User)session.getAttribute("user");
+		
+		if(user != null) {
+			search.setUserNo(user.getUserNo());
+		}else {
+			search.setUserNo(-1);
+		}
 		search.setPageSize(pageSize);
 		search.setPageUnit(pageUnit);
 		
 		MeetingPostSearch meetingPostSearch = new MeetingPostSearch();
 		
 		session.setAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
-		session.setAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), userService.getUser(1)));
+		session.setAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), user));
 //		model.addAttribute("meetingPostList", meetingService.getMeetingPostList(meetingPostSearch));
 //		model.addAttribute("certificationPostList",certificationPostService.getCertificationPostList(search));
 		

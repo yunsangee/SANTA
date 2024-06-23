@@ -30,6 +30,7 @@ public class Mountain {
     private double mountainAltitude; // mountain altitude
     private int mountainTrailCount; // number of trails
     private int likeCount; // like count
+    private int isLiked;
     private int mountainViewCount; // view count
     private int certifiedPostCount; // certified post count
     private int calandarRegisteredCount; // calendar registered count

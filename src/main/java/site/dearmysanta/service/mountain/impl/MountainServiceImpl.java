@@ -478,15 +478,18 @@ public class MountainServiceImpl implements MountainService {
 		SantaLogger.makeLog("info", "serivceImpl getpopMountain:" + mountainNames.toString());
 		List<Mountain> list = new ArrayList<>();
 		
-		//((#{search.currentPage} - 1) * #{search.pageSize} +
-		//1) AND #{search.currentPage} * #{search.pageSize}
-		
-		int maxSize = ((mountainNames.size() > search.getPageSize() ) ?  search.getPageSize()  : mountainNames.size() );
+
+		int maxSize = 10;
 		for(int i = 0; i <  maxSize  ; i ++) {
-//			SantaLogger.makeLog("info", "::" + this.getMountainListByName(mountainNames.get(i)).toString());
 			
 			Mountain mountain = this.getMountainListByName(mountainNames.get(i)).get(0);
 			mountain.setLikeCount(mountainDao.getTotalMountainLikeCount(mountain.getMountainNo()));
+			
+			if(search.getUserNo() != -1) {
+				SantaLogger.makeLog("info", "mountainNo & userNo" + mountain.getMountainNo()+ " "+search.getUserNo());
+				mountain.setIsLiked(mountainDao.isLiked(mountain.getMountainNo(), search.getUserNo()));
+			}
+			SantaLogger.makeLog("info", "mountainNo & isLiked:" + mountain.getMountainNo() +" " + mountain.getIsLiked());
 			list.add(mountain);
 		}
 		
@@ -502,7 +505,21 @@ public class MountainServiceImpl implements MountainService {
 //		SantaLogger.makeLog("info", "serviceImpl::" + orderedMountainNames.toString());
 //		return mountainDao.getCustomMountainList(orderedMountainNames,user);
 		SantaLogger.makeLog("info", "serviceImpl::" + statistics.toString());
-		return mountainDao.getCustomMountainList(statistics,user);
+		List<Mountain> list = mountainDao.getCustomMountainList(statistics,user);
+		
+		
+		int maxSize = 10;
+		for(int i = 0; i <  maxSize  ; i ++) {
+			Mountain mountain = list.get(i);
+			mountain.setLikeCount(mountainDao.getTotalMountainLikeCount(mountain.getMountainNo()));
+			
+			if(user != null) {
+				mountain.setIsLiked(mountainDao.isLiked(mountain.getMountainNo(), user.getUserNo()));
+		
+			}
+		}
+		
+		return list;
 	}
 
 	
@@ -529,6 +546,10 @@ public class MountainServiceImpl implements MountainService {
 	
 	public int getTotalMountainLikeCount(int mountainNo) {
 		return mountainDao.getTotalMountainLikeCount(mountainNo);
+	}
+	
+	public int isLiked(int userNo, int mountainNo) {
+		return mountainDao.isLiked(userNo, mountainNo);
 	}
 	
 	public List<Mountain> getMountainLikeList(Search search){

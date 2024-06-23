@@ -25,13 +25,15 @@ public class CorrectionPostRestController {
 	
 	@PostMapping("rest/addCorrectionPost")
 	public void addCorrectionPost(@RequestBody CorrectionPost correctionPost) {
+		SantaLogger.makeLog("info", "addCorrectionPost");
+		SantaLogger.makeLog("info", correctionPost.toString());
 		correctionPostSerivce.addCorrectionPost(correctionPost);
 	}
 	
 	
-	@GetMapping("rest/deleteCorrectionPost")
-	public void deleteCorrectionPost(@RequestParam int userNo,int crpNo) {
-		correctionPostSerivce.deleteCorrectionPost(userNo, crpNo);
+	@PostMapping("rest/deleteCorrectionPost")
+	public void deleteCorrectionPost(@RequestBody CorrectionPost correctionPost) {
+		correctionPostSerivce.deleteCorrectionPost(correctionPost.getUserNo(), correctionPost.getPostNo());
 	}
 
 }

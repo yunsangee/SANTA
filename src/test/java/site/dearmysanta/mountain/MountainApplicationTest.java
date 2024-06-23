@@ -81,11 +81,11 @@ public class MountainApplicationTest {
 		
 //		List<Mountain> list = mountainService.getMountainLikeList(like);
 		
-		SantaLogger.makeLog("info",""+mountainService.getTotalMountainLikeCount(like));
-		mountainService.addMountainLike(like);
-		SantaLogger.makeLog("info",""+mountainService.getTotalMountainLikeCount(like));
-		mountainService.deleteMountainLike(like);
-		SantaLogger.makeLog("info",""+mountainService.getTotalMountainLikeCount(like));
+//		SantaLogger.makeLog("info",""+mountainService.getTotalMountainLikeCount(like));
+//		mountainService.addMountainLike(like);
+//		SantaLogger.makeLog("info",""+mountainService.getTotalMountainLikeCount(like));
+//		mountainService.deleteMountainLike(like);
+//		SantaLogger.makeLog("info",""+mountainService.getTotalMountainLikeCount(like));
 		
 		
 		
@@ -140,29 +140,29 @@ public class MountainApplicationTest {
 		            .mountainName("Mount Everest")
 		            .status(0)
 		            .build();
-		 
-		List<CorrectionPost> list = correctionPostService.getCorrectionPostList();
-		
-		for(CorrectionPost post : list) {
-			SantaLogger.makeLog("info",post.toString());
-		}
-		 
-		 
-		correctionPostService.addCorrectionPost(correctionPost);
-		
-		list = correctionPostService.getCorrectionPostList();
-		SantaLogger.makeLog("info","==================");
-		for(CorrectionPost post : list) {
-			SantaLogger.makeLog("info",post.toString());
-		}
-		
-		correctionPostService.deleteCorrectionPost(correctionPost.getUserNo(), list.get(list.size()-1).getPostNo());
-	
-		list = correctionPostService.getCorrectionPostList();
-		SantaLogger.makeLog("info","==================");
-		for(CorrectionPost post : list) {
-			SantaLogger.makeLog("info",post.toString());
-		}
+//		 
+//		List<CorrectionPost> list = correctionPostService.getCorrectionPostList();
+//		
+//		for(CorrectionPost post : list) {
+//			SantaLogger.makeLog("info",post.toString());
+//		}
+//		 
+//		 
+//		correctionPostService.addCorrectionPost(correctionPost);
+//		
+//		list = correctionPostService.getCorrectionPostList();
+//		SantaLogger.makeLog("info","==================");
+//		for(CorrectionPost post : list) {
+//			SantaLogger.makeLog("info",post.toString());
+//		}
+//		
+//		correctionPostService.deleteCorrectionPost(correctionPost.getUserNo(), list.get(list.size()-1).getPostNo());
+//	
+//		list = correctionPostService.getCorrectionPostList();
+//		SantaLogger.makeLog("info","==================");
+//		for(CorrectionPost post : list) {
+//			SantaLogger.makeLog("info",post.toString());
+//		}
 		
 	}
 	

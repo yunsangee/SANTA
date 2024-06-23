@@ -7,13 +7,15 @@
 <head>
     <title>Search Keywords</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <c:import url="../common/header.jsp"/>
     <script>
     $(document).ready(function(){
     	$('.btn-search-keyword').on('click',function(){
     		console.log($(this).text());
     		//console.log($($(this).parent()).find('button').val());
     		
-    		buttonValue = $($(this).parent()).find('button');
+    		//buttonValue = $($(this).parent()).find('button');
+    		buttonValue = $($(this).parent());
     		
     		//console.log($(this).data);
     		
@@ -67,7 +69,7 @@
     		
     	});
     	$('#mapSearch').on('click',function(){
-        	window.location.href = 'http://${javaServerIp}/mountain/mapMountain';
+        	window.location.href = '${javaServerIp}/mountain/mapMountain';
         });
     	
     	$('#search').on('click',function(){
@@ -87,11 +89,45 @@
 	        // 폼을 body에 추가하고 제출
 	        form.appendTo('body').submit();
     	});
+    	
+    	
+    	$('.deleteSearchKeyword').on('click', function(){
+    		
+    		console.log($(this).html());
+    		
+    		let buttonValue = $(this).parent();
+    		let clickedElement = $(this);
+    		
+    		const mountainSearch = {
+		                userNo: buttonValue.data('user-no'),
+		                searchKeyword: buttonValue.data('search-keyword'),
+		            	searchDate : buttonValue.data('search-date')
+		        };
+    		 
+    		 console.log(mountainSearch);
+		 
+    		$.ajax({
+          		url: "/mountain/rest/deleteSearchKeyword",
+          		type:"POST",
+          		contentType: "application/json",
+  	            dataType: "json",
+          		data : JSON.stringify(mountainSearch),
+          		success: function(response,status){
+          			clickedElement.parent().remove();
+          			
+          		},
+          	});  
+		});
     });
     </script>
      <style>
         .styled-line {
             border-top: 2px solid #77C043; /* Add to cart 버튼과 동일한 색상 */
+        }
+        
+        .title-style{
+        	color: #77C043;
+        
         }
 
         .btn-grid {
@@ -101,6 +137,11 @@
         .btn-keyword {
         margin-right: 15px; /* 각 버튼 간격 추가 */
     	}
+    	
+    	 .header {
+            display: flex;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -130,11 +171,15 @@
        				 <hr class="styled-line">
     			</div>
 				
-			<div class="container py-3">
+			<div id="searchReord" class="container py-3">
+				<div class="header">
+        			<h3 class="title-style">검색 기록</h3>
+            			<!-- <input type="checkbox" id="toggleButton" data-toggle="toggle"> -->
+    			</div>
     
             		<c:forEach var="searchKeyword" items="${mountainSearchKeywords}" varStatus="status">
                     		<button 
-            class="btn border border-secondary rounded-pill px-2 text-primary btn-search-keyword" 
+            class="btn border border-secondary rounded-pill px-2 text-primary" 
             data-user-no="${searchKeyword.userNo}" 
             data-search-condition="${searchKeyword.searchCondition}"
             data-search-keyword="${searchKeyword.searchKeyword}"
@@ -145,8 +190,10 @@
             data-location-no="${searchKeyword.locationNo}"
             data-altitude-no="${searchKeyword.altitudeNo}"
             data-difficulty-no="${searchKeyword.difficultyNo}">
-            <i class="fa fa-mountain me-2 text-primary">${searchKeyword.searchKeyword}</i>
+            <i class="fa fa-mountain me-2 text-primary btn-search-keyword">${searchKeyword.searchKeyword}</i>
+            <i class="fas fa-times close-icon deleteSearchKeyword"></i>
         </button>
+        
 
                 		<c:if test="${status.index == 9}">
                     		<div class="row" style="margin-bottom: 5px;"></div>
@@ -160,7 +207,7 @@
     			</div>
 				
 			<div class="container py-3">
-    
+    			<h3 class="title-style">인기 검색어</h3>
             		<c:forEach var="searchKeyword" items="${popularSearchKeywords}" varStatus="status">
                     		<button class="btn border border-secondary rounded-pill px-2 text-primary btn-popular-keyword">
                         		<i class="fa fa-mountain me-2 text-primary">${searchKeyword}</i>
@@ -180,6 +227,6 @@
 	
 	
 	
-	<footer></footer>
+	<footer><c:import url="../common/footer.jsp"/></footer>
 
 </body>

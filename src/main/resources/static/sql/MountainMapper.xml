@@ -234,8 +234,8 @@
 
 	<insert id="addMountainLike"
 		parameterType="site.dearmysanta.domain.common.Like">
-		INSERT INTO LIKES (LIKE_NO, USER_NO, POST_LIKE_NO,
-		POST_LIKE_TYPE, LIKE_DATE)
+		INSERT INTO LIKES (LIKE_NO, USER_NO, post_no,
+		post_type, LIKE_DATE)
 		VALUES (seq_like_no.NEXTVAL, #{userNo},
 		#{postNo}, 2, SYSDATE)
 	</insert>
@@ -244,14 +244,20 @@
 		parameterType="site.dearmysanta.domain.common.Like">
 		DELETE FROM LIKES
 		WHERE USER_NO = #{userNo} AND
-		POST_LIKE_NO = #{postNo} AND POST_LIKE_TYPE=2
+		post_no = #{postNo} AND post_type=2
 	</delete>
 
 	<select id="getTotalMountainLikeCount"
 		parameterType="site.dearmysanta.domain.common.Like" resultType="int">
 		SELECT
 		COUNT(*) FROM LIKES
-		WHERE POST_LIKE_NO = #{value}
+		WHERE post_no = #{value}
+	</select>
+	
+	<select id="isLiked" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM LIKES
+		WHERE post_type = 2 AND USER_NO = #{userNo} AND post_no = #{mountainNo}
+	
 	</select>
 
 	<!-- parameterType="site.dearmysanta.domain.common.Like" -->
@@ -264,7 +270,7 @@
 		SELECT * FROM
 		(
 		SELECT m.*, ROWNUM as ROW_SEQ FROM LIKES l, MOUNTAIN m
-		WHERE l.POST_LIKE_TYPE=2 AND l.USER_NO = #{userNo} AND l.POST_LIKE_NO =
+		WHERE l.post_type=2 AND l.USER_NO = #{userNo} AND l.post_no =
 		m.MOUNTAIN_NO AND ROWNUM <![CDATA[<=]]>
 		#{currentPage} * #{pageSize}
 		)
@@ -416,7 +422,7 @@
             FROM 
                 STATISTICS
             WHERE
-                SEARCH_DATE BETWEEN SYSDATE - 12 AND SYSDATE-7
+                SEARCH_DATE BETWEEN SYSDATE - 100 AND SYSDATE
         )
         GROUP BY 
             MOUNTAIN_NAME
@@ -435,7 +441,9 @@
 
 	<select id="getCustomMountainList" parameterType="map"
 		resultMap="MountainResultMap">
-		SELECT *
+		
+		SELECT * FROM (
+		SELECT MOUNTAIN.* , ROWNUM AS ROW_SEQ
 		FROM MOUNTAIN
 		<!-- WHERE MOUNTAIN_LOCATION LIKE '%' || #{user.address} || '%' -->
 		<!-- <choose>
@@ -464,6 +472,7 @@
 		</foreach>
 		END
 
+	) WHERE ROW_SEQ <![CDATA[<=]]> 10
 
 	</select>
 	

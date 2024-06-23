@@ -23,6 +23,8 @@ public interface UserService {
 	
 	public List<User> getUserList(Search search) throws Exception;
 	
+	public int getTotalCount(Search search) throws Exception;
+	
 	public List<User> withdrawUserList(Search search) throws Exception;
 	
 	public void updateUser(User user) throws Exception;
@@ -45,11 +47,11 @@ public interface UserService {
 	// User check and confirm
 	//
 	
-	public int getPassword(String userId, String userPassword) throws Exception;
+	public int checkPassword(String userId, String userPassword) throws Exception;
 	
-	public String getDuplicationId(String userId) throws Exception; 
+	public String checkDuplicationId(String userId) throws Exception; 
 	
-	public String getDuplicationNickName(String nickName) throws Exception;
+	public String checkDuplicationNickName(String nickName) throws Exception;
 	
 	public User checkPhoneNumber(String phoneNumber) throws Exception;
 	
@@ -66,6 +68,8 @@ public interface UserService {
 	public QNA getQnA(int postNo, int userNo) throws Exception;
 	
 	public List<QNA> getQnAList(Search search) throws Exception;
+	
+	public int getQnATotalCount(Search search) throws Exception;
 	
 	public void addAdminAnswer(QNA qna) throws Exception;
 	

@@ -26,6 +26,7 @@ main {
     justify-content: center;
     align-items: center;
     background-color: white; 
+    margin-top:120px;
 }
 
 .profile-header {
@@ -36,13 +37,39 @@ main {
     margin-bottom: 25px;
 }
 
-.profile-image {
+.profile-container {
+    position: relative;
+}
+
+/* .profile {
     width: 100px;
     height: 100px;
     border-radius: 50%;
     background-color: #ccc;
     margin-right: 20px;
-    /* margin-left: -40px; */
+    margin-left: -40px;
+} */
+
+.profile {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin-right: 20px;
+    margin-left: -40px;
+}
+
+.pencil {
+    position: absolute;
+    top: 70px; /* Adjust as needed */
+    left: 70px; /* Adjust as needed */
+    background-color: white;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 20px;
+    margin-left: -40px;
 }
 
 .profile-info {
@@ -160,8 +187,13 @@ button, a.button {
     justify-content: center;
 }
 
-.detail-section a, .creation-section a {
+.detail-section a {
 	 font-size: 12px;
+}
+
+.creation-section a {
+	 font-size: 12px;
+	 align-items: center;
 }
 
 .detail-section p {
@@ -185,6 +217,26 @@ button, a.button {
 
 </style>
 
+<!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
+
+<script>
+$(document).ready(function() {
+	$(".submit").click(function() {
+		
+		console.log("click");
+		if($("#profile").val() != ""){
+			$("form").attr("enctype", "multipart/form-data").submit();
+		} else {
+			$("#profile").remove();
+			$("form").submit();
+		}
+	
+});
+	});
+
+</script>
+
+
 <c:import url="../common/header.jsp"/>
 </head>
 
@@ -201,30 +253,33 @@ button, a.button {
 <!--  ////////////////////////////////////////////// main ///////////////////////////////////////////////// -->
 
 <main class="container">
-	<form action="/user/updateUser" method="post">
+	<form action="/user/updateUser" method="post" >
     	<div class="profile-header">
-        	<div class="profile-image">
-            <!-- 프로필 이미지가 들어갈 자리 -->
+        	<!-- <div class="profile-image"> -->
+        	<div class="profile-container">
+          		<img src="${user.profileImage}" class="profile">
+          		<a class="pencil">✏️</a>
         </div>
         <div class="profile-info">
             <p>${user.badgeImage} 인증 ${user.certificationCount}회, 모임 ${user.meetingCount}회</p>
-            <p>${user.userId}</p>
+            <p>${user.userId}</p> 
+              <!--  <button type="button" ><input type="file" id="profile" name="image" value=""></button> -->
         </div>
     </div>
-    
+
     <div class="detail-section">
         <input type="text" class="update" name="nickName" value="${user.nickName}">
          <p>${user.birthDate}</p> <!-- Birth Date는 수정 불가 -->
-        <input type="text" class="update"  name="phoneNumber" value="${user.phoneNumber}" pattern="01[0-9]{8,9}" >
+        <input type="text" class="update"  name="phoneNumber" value="${user.phoneNumber}" >
         <input type="text" class="update" name="address" value="${user.address}">
-        <input type="text" class="update" name="detailaddress" value="${user.detailaddress}" placeholder="상세 주소">
+        <input type="text" class="update" name="detailAddress" value="${user.detailAddress}" placeholder="상세 주소">
         <p> 
             <c:choose>
                 <c:when test="${user.gender == 0}">
-                    남자
+                    여자
                 </c:when>
                 <c:when test="${user.gender == 1}">
-                    여자
+                    남자
                 </c:when>
             </c:choose>
         </p> <!-- Gender는 수정 불가 -->
@@ -272,11 +327,12 @@ button, a.button {
     	</div>
     
     <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
+    <input type="hidden" id="userId" name="userId" value="${user.userId}">
     
 	<br>
 		
 	<div class="link-section">
-            <button type="submit" class="a">수정 완료하기</button>
+            <button type="button" class="a submit" >수정 완료하기</button>
     </div>    
 	
 	</form>

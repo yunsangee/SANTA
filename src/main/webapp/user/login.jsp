@@ -123,7 +123,7 @@ button:hover {
 
 
 .sns-icon {
-    width: 50px; /* 모든 이미지의 너비를 동일하게 설정 */
+    width: 100%; /* 모든 이미지의 너비를 동일하게 설정 */
     margin: 0 20px; /* 이미지 간 여백 설정 */
     cursor: pointer;
 }
@@ -140,6 +140,24 @@ button:hover {
         }
            
 </style>
+
+<!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
+
+<script>
+    function logoutAndRedirect() {
+        $.ajax({
+            url: '/oauth/logout/kakao',
+            type: 'POST',
+            success: function() {
+                window.location.href = "https://kauth.kakao.com/oauth/authorize?client_id=53ae98941fff9e24b11901e9a79432d9&redirect_uri=http://localhost:8001/oauth/kakao&response_type=code";
+            },
+            error: function(xhr, status, error) {
+                console.error("Logout failed:", error);
+                window.location.href = "https://kauth.kakao.com/oauth/authorize?client_id=53ae98941fff9e24b11901e9a79432d9&redirect_uri=http://localhost:8001/oauth/kakao&response_type=code";
+            }
+        });
+    }
+</script>
 
 </head>
 
@@ -158,7 +176,7 @@ button:hover {
 	<main>
 	
    <div class="logo-and-text">
-        <img src="/image/logo.png" alt="Logo"> <!-- 로고 이미지 -->
+         <img src="/image/logo.png" alt="Logo"> <!-- 로고 이미지 -->
         <h2>SANTA</h2> <!-- 텍스트 "SANTA" 추가 -->
     </div>
     
@@ -182,7 +200,7 @@ button:hover {
        
         
         <div class="links">
-            <a href="/user/findUserPassword.jsp">비밀번호 찾기</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            <a href="/user/findUserPassword.jsp">비밀번호 찾기</a>&nbsp;&nbsp;&nbsp;&nbsp&nbsp&nbsp
             &nbsp&nbsp<a href="/user/addUser.jsp">회원가입</a>
         </div>
         <!-- <a href="/user/addUser.jsp">회원가입</a>  
@@ -191,13 +209,18 @@ button:hover {
         <div class="sns-login">
             <p>SNS계정으로 간편 로그인/회원가입</p>
         </div>
-        <div class="sns-login">
-    		<a href="https://kauth.kakao.com/oauth/authorize?client_id=af43c655326aaa2ca97588ce636e1e29&redirect_uri=http://localhost:8001/oauth/kakao&response_type=code">
+        
+    		<!-- <a href="https://kauth.kakao.com/oauth/authorize?client_id=53ae98941fff9e24b11901e9a79432d9&redirect_uri=http://localhost:8001/oauth/kakao&response_type=code">
         		<img src="/image/kakaotalk_sharing_btn_medium.png" alt="Kakao Login" class="sns-icon">
-    		</a>
-    		<a href="https://nid.naver.com/oauth2.0/authorize">
+    		</a> -->
+    		
+    		<div class="sns-login">
+                <!-- <img src="/image/kakaotalk_sharing_btn_medium.png" alt="Kakao Login" class="sns-icon" onclick="logoutAndRedirect()"> -->
+                <img src="/image/kakao_login_medium_wide.png" alt="Kakao Login" class="sns-icon" onclick="logoutAndRedirect()">
+    		
+    		<!-- <a href="https://nid.naver.com/oauth2.0/authorize">
         		<img src="/image/btnG_아이콘사각.png" alt="Naver Login" class="sns-icon">
-    		</a>
+    		</a> -->
 		</div>
 
         

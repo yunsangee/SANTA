@@ -36,7 +36,7 @@ public class MailServiceImpl implements MailService{
 		Random random = new Random();
 		
 		int randomNumber = random.nextInt(888888)+111111;
-		System.out.println(receiverEmail +" : " + randomNumber);
+		System.out.println("randomNumber : " + randomNumber);
 		map.put(receiverEmail, randomNumber);
 		
 	}
