@@ -52,8 +52,8 @@ public class UserController {
 	@Value("${pageUnit}")
 	private int pageUnit;
 	
-//	@Autowired
-//	private ObjectStorageService objectStorageService;
+	@Autowired
+	private ObjectStorageService objectStorageService;
 	
 	ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -137,8 +137,8 @@ public class UserController {
 		    if (user.getUserPassword().equals(dbUser.getUserPassword())) {
 		        session.setAttribute("user", dbUser);
 		        
-		        session.setAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
-				session.setAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), user));
+//		        session.setAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
+//				session.setAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), user));
 		        
 		        return "forward:/common/main.jsp";
 		    } else {
@@ -294,7 +294,7 @@ public class UserController {
 
 		    User sessionUser = (User) session.getAttribute("user");
 		    
-		    System.out.println("user : " +sessionUser);
+		    System.out.println("user : " +sessionUser);    
 		    
 		    User user = null;
 
@@ -317,6 +317,10 @@ public class UserController {
 		    	model.addAttribute("admin", 1);
 		    	
 		    }
+		    
+		    String profileImage = objectStorageService.getImageURL(user.getUserId());
+			
+			user.setProfileImage(profileImage);
 
 		    // 사용자 정보 모델에 추가
 		    model.addAttribute("user", user);
@@ -354,6 +358,10 @@ public class UserController {
 			User user = userService.getUser(userNo);
 			// Model 과 View 연결
 			
+			String profileImage = objectStorageService.getImageURL(user.getUserId());
+			
+			user.setProfileImage(profileImage);
+			
 			System.out.println("user :" +user);
 			
 			model.addAttribute("user", user);	
@@ -365,7 +373,11 @@ public class UserController {
 		@PostMapping(value = "updateUser")
 		public String updateUser(@ModelAttribute User user, @RequestParam(required = false) Integer userNo, Model model, HttpSession session) throws Exception {
 		    System.out.println("updateUser : POST");
-
+		  
+		    if ( user.getImage() != null) {  
+		    	objectStorageService.uploadFile(user.getImage(), user.getUserId());
+		     }
+		    
 		    // 세션에서 현재 로그인한 사용자 정보 가져오기
 		    User sessionUser = (User) session.getAttribute("user");
 
@@ -397,6 +409,7 @@ public class UserController {
 		    // 사용자 정보 업데이트;
 		    dbUser.setNickName(user.getNickName());
 		    dbUser.setAddress(user.getAddress());
+		    dbUser.setDetailAddress(user.getDetailAddress());
 		    dbUser.setPhoneNumber(user.getPhoneNumber());
 			/* dbUser.setProfileImage(user.getProfileImage()); */
 		    dbUser.setHikingPurpose(user.getHikingPurpose());
@@ -614,6 +627,57 @@ public class UserController {
 //			return "redirect:/user/getQnA.jsp";
 //		}
 		
+		@GetMapping(value = "addQnA")
+		public String addQnA(@RequestParam(required = false) Integer postNo, @RequestParam(required = false) Integer userNo, HttpSession session, Model model) throws Exception {
+		    System.out.println("addQnA : GET");
+		    
+		    // 세션에서 로그인한 사용자 정보 가져오기
+		    User sessionUser = (User) session.getAttribute("user");
+		    
+		    System.out.println("user : " +sessionUser);
+		    
+		    User user = null;
+		    
+		    QNA qna = userService.getQnA(postNo, userNo);
+
+//		    if (user == null) {
+//		        // 로그인한 사용자 정보가 없는 경우 오류 처리
+//		        model.addAttribute("error", "로그인 정보를 찾을 수 없습니다.");
+//		        return "redirect:/login"; // 로그인 페이지로 리다이렉트 또는 다른 처리
+//		    }
+
+		    if (postNo != null && qna.getPostNo() == postNo) {
+		        // 게시물 번호로 조회하는 경우
+		        model.addAttribute("qna", qna);
+		        return "forward:/user/getQnA.jsp";
+		    } else if (userNo != null && qna.getUserNo() == userNo) {
+		        // 사용자 번호로 조회하는 경우
+		        model.addAttribute("qna", qna);
+		        return "forward:/user/getQnA.jsp";
+		    } else {
+		        // 잘못된 요청 처리
+		        model.addAttribute("error", "올바른 요청이 아닙니다.");
+		    }
+		    
+		    if (sessionUser.getRole()==1) {
+		    	
+		    	model.addAttribute("admin", 1);
+		    	
+		    }
+		    
+		    String profileImage = objectStorageService.getImageURL(user.getUserId());
+			
+			user.setProfileImage(profileImage);
+
+		    
+		    System.out.println("sessionUser : " +sessionUser);
+		    
+		    model.addAttribute("user", user);
+
+		    return "forward:/user/getUser.jsp";
+		}
+		
+		
 		@PostMapping(value = "addQnA")
 		public String addQnA(@ModelAttribute QNA qna, Model model, HttpSession session) throws Exception {
 		    
@@ -627,7 +691,7 @@ public class UserController {
 		        model.addAttribute("error", "로그인이 필요합니다.");
 		        return "redirect:/user/login.jsp";
 		    }
-
+		    
 		    // QNA 객체에 사용자 정보 설정
 		    qna.setUserNo(sessionUser.getUserNo());
 		    qna.setNickName(sessionUser.getNickName());
@@ -636,7 +700,7 @@ public class UserController {
 		    // QNA 추가
 		    userService.addQnA(qna);
 		    
-		    session.setAttribute("qna", qna);
+		    session.setAttribute("qna", qna);		    
 		    
 		    System.out.println("addQnA : " + qna);
 

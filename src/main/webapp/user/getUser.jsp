@@ -50,7 +50,7 @@ main {
     margin-bottom: 20px;
 }
 
-.profile-image {
+.profile {
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -191,7 +191,7 @@ button, a.button {
     <div class="profile-header">
         <div class="profile-image">
             <!-- 프로필 이미지가 들어갈 자리 -->
-            
+            <img src="${user.profileImage}" class="profile">
         </div>
         <div class="profile-info">
             <p>${user.badgeImage} 인증 ${user.certificationCount}회, 모임 ${user.meetingCount}회</p>
@@ -206,14 +206,14 @@ button, a.button {
         <p>${user.birthDate}</p>
         <p>${user.phoneNumber}</p>
         <p>${user.address}</p>
-        <p>${user.detailaddress}</p>
+        <p>${user.detailAddress}</p>
         <p> 
             <c:choose>
                 <c:when test="${user.gender == 0}">
-                    남자
+                    여자
                 </c:when>
                 <c:when test="${user.gender == 1}">
-                    여자
+                    남자
                 </c:when>
             </c:choose>
         </p>
@@ -300,6 +300,7 @@ button, a.button {
     </div>
     
     <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
+    <input type="hidden" id="userId" name="userId" value="${user.userId}">
     
 	<br>
 		

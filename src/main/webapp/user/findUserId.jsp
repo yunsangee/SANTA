@@ -154,6 +154,32 @@
             $(".send").click(function() {
                 sendVerificationCode();
             });
+
+            // 동적으로 인증번호 입력칸과 확인 버튼 추가
+            function addVerificationSection() {
+                if ($("#verificationSection").length === 0) {
+                    $(".form-group").append(
+                        '<div id="verificationSection">' +
+                        '<label for="verifyCode"></label>' +
+                        '<input type="text" class="code" id="verifyCode" name="verifyCode" placeholder="인증번호" required>' +
+                        '<button type="button" class="verify-check-btn">인증번호 확인</button>' +
+                        '<span id="verificationResult" class="error-message"></span>' +
+                        '</div>'
+                    );
+                }
+            }
+
+            // 인증번호 버튼 클릭 시 인증번호 입력란 추가
+            $(".send").click(function() {
+                addVerificationSection();
+            });
+
+            // 인증번호 확인 버튼 클릭 이벤트
+            $(document).on("click", ".verify-check-btn", function() {
+                var phoneNumber = $("#phoneNumber").val();
+                var verifyCode = $("#verifyCode").val();
+                verifyCodeFunction(phoneNumber, verifyCode);
+            });
         });
 
         function sendVerificationCode() {
@@ -199,6 +225,36 @@
                 }
             });
         }
+
+        function verifyCodeFunction(phoneNumber, verifyCode) {
+            $.ajax({
+                url: "/message/check-one",
+                type: "GET",
+                data: { phoneNumber: phoneNumber, validationNumber: verifyCode },
+                success: function(response) {
+                    if (response != -1) {
+                        alert("휴대폰 인증이 완료되었습니다.");
+                        $("#isPhoneVerified").val("true");
+                    } else {
+                        alert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            $("#findUserIdForm").on("submit", function(e) {
+                var isPhoneVerified = $("#isPhoneVerified").val() === "true";
+
+                if (!isPhoneVerified) {
+                    e.preventDefault();
+                    alert("휴대폰 인증을 완료해주세요.");
+                }
+            });
+        });
     </script>
 </head>
 
@@ -230,13 +286,15 @@
         </div>
         
         <div>
-            <label for="verifyCode"></label>
-            <input type="text" class="code" id="verifyCode" name="verifyCode" placeholder="인증번호">
-            <span id="verificationResult" class="error-message"></span>
-        
+            <input type="hidden" id="isPhoneVerified" value="false">
         </div>
         
         <button type="submit" class="submit">아이디 찾기</button>
+        
+        <br>
+        <a href="/user/findUserPassword.jsp" class="link">비밀번호 찾기</a>&emsp;&emsp;&emsp;
+        &emsp;<a href="/user/login.jsp" class="link">로그인 페이지로 가기</a>
+        
     </form>
 </main>
 

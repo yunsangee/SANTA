@@ -12,8 +12,6 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.servlet.http.HttpServletResponse;
-
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import org.springframework.stereotype.Service;
@@ -89,9 +87,11 @@ public class OAuthService{
         return access_Token;
     }
 
-    public void CreateKakaoUser(String token) throws Exception {
+    public User CreateKakaoUser(String token) throws Exception {
     	
     	String reqURL = "https://kapi.kakao.com/v2/user/me";
+    	
+    	User user = null;
 
         //access_token을 이용하여 사용자 정보 조회
         try {
@@ -108,17 +108,16 @@ public class OAuthService{
 
            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-           String line = "";
-           String result = "";
-
+           StringBuilder result = new StringBuilder();
+           String line;
            while ((line = br.readLine()) != null) {
-               result += line;
+               result.append(line);
            }
            System.out.println("response body : " + result);
 
            //Gson 라이브러리로 JSON파싱
            JsonParser parser = new JsonParser();
-           JsonElement element = parser.parse(result);
+           JsonElement element = parser.parse(result.toString());
 
 //           int id = element.getAsJsonObject().get("id").getAsInt();
 //           String name=element.getAsJsonObject().get("name").getAsString();
@@ -150,7 +149,7 @@ public class OAuthService{
 //           User user = new User();
 //           user.setUserId(email);
 
-           User user = new User();
+           user = new User();
            user.setUserId(email);
            user.setUserName(name);
            user.setProfileImage(profileImage);
@@ -166,6 +165,8 @@ public class OAuthService{
         } catch (IOException e) {
             throw new Exception("Error while creating Kakao user", e);
         }
+        
+        return user;
      }
     
     private String getStringFromJson(JsonElement jsonElement, String key) {
@@ -185,7 +186,7 @@ public class OAuthService{
     
     private String convertPhoneNumber(String phoneNumber) {
         if (phoneNumber.startsWith("+82")) {
-            phoneNumber = phoneNumber.replace("+82", "0").replace("-", "");
+            phoneNumber = phoneNumber.replace("+82", "0").replace("-", "").replaceAll("\\s+", "");
         }
         return phoneNumber;
     }
@@ -222,30 +223,5 @@ public class OAuthService{
             e.printStackTrace();
         }
     }
-    
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    
-    public void startKakaoLogin(HttpServletResponse response) throws IOException {
-        String clientId = "53ae98941fff9e24b11901e9a79432d9";
-        String redirectUri = "http://localhost:8001/oauth/kakao";
-        String kakaoAuthUrl = "https://kauth.kakao.com/oauth/authorize?client_id=" + clientId + "&redirect_uri=" + redirectUri + "&response_type=code&prompt=consent";
-        response.sendRedirect(kakaoAuthUrl);
-    }
-    
-    ////////////////////////////////////////////// 새로운 로그인 /////////////////////////////////////////////////////////
-    
-//    public void startKakaoLogin() {
-//        // 카카오 로그아웃
-//        kakaoLogout(currentAccessToken); // 현재 액세스 토큰을 사용하여 로그아웃
-//
-//        // 새로운 로그인 요청 시작
-//        String redirectURL = "https://kauth.kakao.com/oauth/authorize?client_id=YOUR_CLIENT_ID&redirect_uri=http://localhost:8001/oauth/kakao&response_type=code";
-//        try {
-//            // 브라우저를 열어 로그인 페이지로 리다이렉트
-//            java.awt.Desktop.getDesktop().browse(java.net.URI.create(redirectURL));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
 }
