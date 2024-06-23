@@ -205,7 +205,7 @@
                         <c:forEach var="qna" items="${qnaList}">
                             <tr>
                                 <td>${qnaList.indexOf(qna) + 1}</td>
-                                <td>${qna.qnaPostCategory}</td>
+                                <td>${qna.qnaPostCategory == 0 ? '계정' : }</td>
                                 <td><a class="text" href="/user/getQnA?postNo=${qna.postNo}&userNo=${qna.userNo}">${qna.title}</a></td>
                                 <td>${qna.nickName}</td>
                                 <td>${qna.postDate}</td>
