@@ -218,7 +218,7 @@
                 <button type="submit">일정 수정하기</button>
                 <button type="button" class="cancel-button" onclick="history.back()">취소</button>
             </div>
-            <input type="hidden" id="userNo" name="userNo" value="${schedule.userNo}">
+        	<input type="hidden" id="userNo" name="userNo" value="${schedule.userNo}">
             <input type="hidden" id="postNo" name="postNo" value="${schedule.postNo}">
         </form>
     </div>

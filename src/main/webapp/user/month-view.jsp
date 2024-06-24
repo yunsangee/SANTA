@@ -48,6 +48,7 @@
     // 스케줄 목록을 JSP 모델에서 가져오기
     var scheduleList = JSON.parse('${scheduleList}');
 	console.log(${scheduleList});
+	
     // 스케줄 목록을 FullCalendar 이벤트로 추가
     scheduleList.forEach(function(schedule) {
       calendar.addEvent({

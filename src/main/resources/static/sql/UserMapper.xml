@@ -49,13 +49,13 @@
     INSERT INTO users (
         user_no, user_id, name, password, nickname, address, birth_date, phone_number, gender,
         hiking_purpose, hiking_difficulty, hiking_level, role, cp_count, mp_count, creation_date,
-        profile_image, detail_address
+        profile_image, detail_address, badge_image
     ) VALUES (
         seq_user_no.NEXTVAL, #{userId}, #{userName, jdbcType=VARCHAR}, #{userPassword, jdbcType=VARCHAR}, 
         #{nickName, jdbcType=VARCHAR}, #{address, jdbcType=VARCHAR}, #{birthDate, jdbcType=DATE}, 
         #{phoneNumber, jdbcType=VARCHAR}, #{gender, jdbcType=DECIMAL}, #{hikingPurpose, jdbcType=DECIMAL}, 
         #{hikingDifficulty, jdbcType=DECIMAL}, #{hikingLevel, jdbcType=DECIMAL}, 0, 0, 0, SYSDATE, 
-        'profile1.png', #{detailAddress, jdbcType=VARCHAR}
+        'profile1.png', #{detailAddress, jdbcType=VARCHAR}, 'badge1.png'
     )
 </insert>
 
@@ -139,12 +139,12 @@
 		UPDATE users
 		<set>
 		    nickname = #{nickName},
-		    address = #{address},
-		    phone_Number = #{phoneNumber},
+		    address = #{address, jdbcType=VARCHAR},
+		    phone_Number = #{phoneNumber, jdbcType=VARCHAR},
 		    profile_image = #{profileImage, jdbcType=VARCHAR},
-		    hiking_purpose = #{hikingPurpose},
-		    hiking_difficulty = #{hikingDifficulty},
-		    hiking_level = #{hikingLevel},
+		    hiking_purpose = #{hikingPurpose, jdbcType=DECIMAL},
+		    hiking_difficulty = #{hikingDifficulty, jdbcType=DECIMAL},
+		    hiking_level = #{hikingLevel, jdbcType=DECIMAL},
 		    introduce_content = #{introduceContent, jdbcType = VARCHAR},
 		    detail_address=#{detailAddress, jdbcType = VARCHAR}
 		</set>
