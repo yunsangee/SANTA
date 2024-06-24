@@ -26,5 +26,5 @@ public class Search {
 	private int currentPage;
 	private int pageUnit;
 	private int pageSize;
-
+	private int sortCondition;
 }// search super class

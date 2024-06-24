@@ -20,7 +20,7 @@ public class ChattingServiceImpl implements ChattingService {
 	
 //	@Value("${nodejsServerUrl}")
 //	private String nodeJsServerUrl;
-	private String nodeJsServerUrl = "http://localhost:3000";
+	private String nodeJsServerUrl = "http://localhost:3002";
 	
 	@Autowired
 	@Qualifier("chattingDAO")
@@ -44,6 +44,8 @@ public class ChattingServiceImpl implements ChattingService {
         if (response.getStatusCode().is2xxSuccessful()) {
             if (response.getBody().contains("already exists")) {
                 System.out.println("Chatting room already exists.");
+            } else {
+            	System.out.println("Chatting room created");
             }
         }
 	}

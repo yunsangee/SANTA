@@ -13,7 +13,7 @@
 		
 		$(function () {
 			
-			var socket = io("http://192.168.0.89:4001");
+			var socket = io("https://www.dearmysanta.site/chatting");
 			
 			socket.on('lastMessage', function(data) {
                 var roomElement = $('#chattingRoom-' +data.roomNo);
@@ -80,7 +80,7 @@
 	    						<td></td>
 	    					</tr>
 	    				<c:forEach var="chattingRoom" items="${chattingRooms}">
-                            <tr id="chattingRoom-${chattingRoom.postNo}">
+                            <tr id="chattingRoom-${chattingRoom.postNo}">		<!-- 아래 userNo, nickname 지워야함. 로컬에서만 지금처럼 쓰는거임 -->
                                 <td class="col-md-3"><a href="/chatting/getChattingRoom?roomNo=${chattingRoom.postNo}&roomName=${chattingRoom.meetingName}">${chattingRoom.meetingName}</a></td>
                                 <!-- <input type="hidden" id="roomNo" value="${chattingRoom.postNo }"/> -->
                                 <td class="col-md-9 last-message">Loading...</td>

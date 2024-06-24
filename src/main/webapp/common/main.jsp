@@ -25,6 +25,87 @@
                         clickable: true,
                     },
                 });
+                
+                $(document).on('click', '.like-button', function() {
+                	
+                	let user = "${sessionScope.user != null ? sessionScope.user : 'null'}";
+                	console.log("mountainNo:" + $(this).parent().find('input:hidden[id="mountainNo"]').val());
+                	let clickedElement = $(this)
+                	
+                	
+                	console.log('index:' + $(this).parent().find('input:hidden[id="mountainIndex"]').val());
+                	let index =  $(this).parent().find('input:hidden[id="mountainIndex"]').val();
+                	
+                	let isPop = 0;
+                	
+                	if(user != 'null'){
+                    	$(this).toggleClass('fas far');
+                    	//$(this).toggleClass('text-danger');
+                    	
+                    	const mountainLike = {
+                    			userNo: parseInt(${sessionScope.user.userNo}),
+                    			postNo: $(this).parent().find('input:hidden').val().trim(),
+                    			postLikeType:2
+                    			
+                    	}
+                    	
+                    	let likeCount= 0;
+                    	
+                    	if(clickedElement.hasClass('popular')){
+                   		 isPop = 1;
+                   		 }
+                    	
+                    	if(clickedElement.hasClass('fas')){
+                    	 
+                    		
+                    	 $.ajax({
+                    		url: "/mountain/rest/addMountainLike?index="+index+"&isPop="+isPop,
+                    		type:"POST",
+                    		contentType: "application/json",
+            	            dataType: "json",
+                    		data : JSON.stringify(mountainLike),
+                    		success: function(response,status){
+                    			console.log("res:" + response);
+                    			//$(this).text(response);
+                    			clickedElement.text(response);
+                    			console.log(clickedElement.text());
+                    			likeCount = response;
+                    			if(isPop == 1){
+                            		$('.custom.post-'+mountainLike.postNo).text(likeCount);
+                            		$('.custom.post-'+mountainLike.postNo).toggleClass('fas far');
+                            	}else{
+                            		$('.popular.post-'+mountainLike.postNo).text(likeCount);
+                            		$('.popular.post-'+mountainLike.postNo).toggleClass('fas far');
+                            	}
+                    			
+                    		},
+                    	}); 
+                    	}else{
+                    		 $.ajax({
+                         		url: "/mountain/rest/deleteMountainLike?index="+index+"&isPop="+isPop,
+                         		type:"POST",
+                         		contentType: "application/json",
+                 	            dataType: "json",
+                         		data : JSON.stringify(mountainLike),
+                         		success: function(response,status){
+                         			clickedElement.text(response);
+                         			likeCount = response;
+                         			if(isPop == 1){
+                                		$('.custom.post-'+mountainLike.postNo).text(likeCount);
+                                		$('.custom.post-'+mountainLike.postNo).toggleClass('fas far');
+                                	}else{
+                                		$('.popular.post-'+mountainLike.postNo).text(likeCount);
+                                		$('.popular.post-'+mountainLike.postNo).toggleClass('fas far');
+                                	}
+                         		},
+                         	}); 
+                    	}
+                    	
+                    	
+                    	
+                    	
+                	}
+                });
 
         });
         
@@ -55,63 +136,7 @@
            
 
             // Like button toggle
-            $(document).on('click', '.like-button', function() {
-            	
-            	let user = "${sessionScope.user != null ? sessionScope.user : 'null'}";
-            	console.log("mountainNo:" + $(this).parent().find('input:hidden[id="mountainNo"]').val());
-            	let clickedElement = $(this)
-            	
-            	
-            	console.log('index:' + $(this).parent().find('input:hidden[id="mountainIndex"]').val());
-            	let index =  $(this).parent().find('input:hidden[id="mountainIndex"]').val();
-            	
-            	let isPop = 0;
-            	
-            	if(user != 'null'){
-                	$(this).toggleClass('fas far');
-                	//$(this).toggleClass('text-danger');
-                	
-                	const mountainLike = {
-                			userNo: parseInt(${sessionScope.user.userNo}),
-                			postNo: $(this).parent().find('input:hidden').val().trim(),
-                			postLikeType:2
-                			
-                	}
-                	
-                	if(clickedElement.hasClass('fas')){
-                	 if(clickedElement.hasClass('popular')){
-                		 isPop = 1;
-                	 }
-                		
-                	 $.ajax({
-                		url: "/mountain/rest/addMountainLike?index="+index+"&isPop="+isPop,
-                		type:"POST",
-                		contentType: "application/json",
-        	            dataType: "json",
-                		data : JSON.stringify(mountainLike),
-                		success: function(response,status){
-                			console.log("res:" + response);
-                			//$(this).text(response);
-                			clickedElement.text(response);
-                			console.log(clickedElement.text());
-                			
-                		},
-                	}); 
-                	}else{
-                		 $.ajax({
-                     		url: "/mountain/rest/deleteMountainLike?index="+index+"&isPop="+isPop,
-                     		type:"POST",
-                     		contentType: "application/json",
-             	            dataType: "json",
-                     		data : JSON.stringify(mountainLike),
-                     		success: function(response,status){
-                     			clickedElement.text(response);
-                     			
-                     		},
-                     	}); 
-                	}
-            	}
-            });
+           
         });
     </script>
     
@@ -220,7 +245,7 @@
                                 <p class="m-0 pb-3" style="font-size: 0.75em;">${mountain.mountainLocation}</p>
                                 <p class="m-0 pb-3">${mountain.mountainAltitude}</p>
                                 <p class="m-0 pb-3">
-                                    <i class="${mountain.isLiked == 1 ? 'fas' : 'far'} fa-heart popular like-button" style="cursor: pointer;">${mountain.likeCount}</i>
+                                    <i class="${mountain.isLiked == 1 ? 'fas' : 'far'} fa-heart popular like-button post-${mountain.mountainNo}" style="cursor: pointer;">${mountain.likeCount}</i>
                                     <input type="hidden" id="mountainNo" value="${mountain.mountainNo}"/>
                                     <input type="hidden" id="mountainIndex" value="${index.index}"/>
                                 </p>
@@ -265,7 +290,7 @@
                                 <p class="m-0 pb-3" style="font-size: 0.75em;">${mountain.mountainLocation}</p>
                                 <p class="m-0 pb-3">${mountain.mountainAltitude}m</p>
                                 <p class="m-0 pb-3">
-                                    <i class="${mountain.isLiked == 1 ? 'fas' : 'far'} fa-heart custom like-button" style="cursor: pointer;">${mountain.likeCount}</i>
+                                    <i class="${mountain.isLiked == 1 ? 'fas' : 'far'} fa-heart custom like-button post-${mountain.mountainNo}" style="cursor: pointer;">${mountain.likeCount}</i>
                                     <input type="hidden" id="mountainNo" value="${mountain.mountainNo}"/>
                                     <input type="hidden" id="mountainIndex" value="${index.index}"/>
                                 </p>

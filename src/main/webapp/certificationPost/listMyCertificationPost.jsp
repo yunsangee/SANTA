@@ -33,7 +33,7 @@
                                 <th scope="col">글제목</th>
                                 <th scope="col">등산일자</th>
                                 <th scope="col">작성일자</th>
-                                <th scope="col">Actions</th>
+                  
                             </tr>
                         </thead>
                         <tbody>
@@ -56,14 +56,7 @@
                                     <td>
                                         <p class="mb-0 mt-4">${certificationPost.postDate}</p>
                                     </td>
-                                    <td>
-                                        <button class="btn btn-md rounded-circle bg-light border mt-4">
-                                            <i class="fa fa-edit text-primary"></i>
-                                        </button>
-                                        <button class="btn btn-md rounded-circle bg-light border mt-4">
-                                            <i class="fa fa-times text-danger"></i>
-                                        </button>
-                                    </td>
+                                   
                                 </tr>
                             </c:forEach>
                         </tbody>
@@ -72,6 +65,8 @@
             </div>
         </div>
     </main>
-    <footer></footer>
+   <footer>
+    <c:import url="../common/footer.jsp"/>
+</footer>
 </body>
 </html>
