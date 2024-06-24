@@ -2,9 +2,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
+
+<!--  ////////////////////////////////////////////// head ///////////////////////////////////////////////// -->
+
 <head>
     <meta charset="UTF-8">
-    <title>QNA Details</title>
+    <title>QNA 상세정보</title>
+    
+<!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->    
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -125,12 +131,16 @@
         }
     </style>
 </head>
+
+<!--  ////////////////////////////////////////////// body ///////////////////////////////////////////////// -->
+
 <body>
     <div class="container">
         <div class="profile-header">
             <img src="${sessionScope.user.profileImage}" alt="Profile Image">
             <p>${qna.nickName}</p>
         </div>
+        
         <div class="qna-details">
             <p><strong>카테고리:</strong>
                 <c:choose>
@@ -154,26 +164,30 @@
                     </c:when>
                 </c:choose>
             </p>
+            
             <p><strong>제목:</strong> ${qna.title}</p>
             <p><strong>내용:</strong> ${qna.contents}</p>
         </div>
+        
         <div class="qna-answer">
-            <p><strong>관리자 답변:</strong> ${qna.adminAnswer}</p>
+            <p><strong></strong> ${qna.adminAnswer}</p>
         </div>
+        
         <div class="actions">
-            <c:if test="${user.role == 1}">
+           <c:if test="${admin != null}">
                 <c:choose>
                     <c:when test="${qna.answerState == 0}">
                         <button type="button" class="edit-button" onclick="location.href='/user/addAdminAnswer?postNo=${qna.postNo}&userNo=${qna.userNo}'">답변 작성하기</button>
                     </c:when>
                     <c:otherwise>
-                        <button type="button" class="edit-button" onclick="location.href='/user/addAdminAnswer?postNo=${qna.postNo}&userNo=${qna.userNo}'">수정하기</button>
+                        <button type="button" class="edit-button" onclick="location.href='/user/addAdminAnswer?postNo=${qna.postNo}&userNo=${qna.userNo}'">답변 수정하기</button>
                     </c:otherwise>
                 </c:choose>
             </c:if>
-            <button type="button" class="back-button" onclick="history.back()">뒤로</button>
+           <!--  <button type="button" class="back-button" onclick="history.back()">뒤로</button> -->
         </div>
-        <a href="/user/qnaList" class="list-button">목록으로</a>
+        
+        <a href="/user/getQnAList" class="list-button">목록으로</a>
     </div>
 </body>
 </html>

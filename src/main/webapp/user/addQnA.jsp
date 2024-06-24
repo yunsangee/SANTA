@@ -2,9 +2,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
+
+<!--  ////////////////////////////////////////////// head ///////////////////////////////////////////////// -->
+
 <head>
     <meta charset="UTF-8">
-    <title>QNA 작성</title>
+    <title>QNA 등록</title>
+    
+<!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->    
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -102,8 +108,12 @@
             background-color: #c82333;
         }
 
-    </style>
+    </style>    
+    
 </head>
+
+<!--  ////////////////////////////////////////////// body ///////////////////////////////////////////////// -->    
+
 <body>
     <div class="container">
         <h2>QNA 작성</h2>
