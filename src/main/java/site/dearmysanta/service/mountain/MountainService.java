@@ -24,7 +24,7 @@ public interface MountainService {
 	
 	public Mountain getMountain(String mountainName) throws Exception;
 	
-	public Mountain getMountain(int mountainNo);
+	public Mountain getMountain(int userNo,int mountainNo);
 	
 	public int checkMountainExist(int mountainNo);
 	public int isMountain(String mountainName);
