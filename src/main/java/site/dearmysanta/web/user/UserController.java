@@ -35,6 +35,7 @@ import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.correctionpost.CorrectionPostService;
 import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.user.UserService;
+import site.dearmysanta.service.user.etc.UserEtcService;
 
 @Controller
 @RequestMapping("/user/*")
@@ -45,6 +46,9 @@ public class UserController {
 	
 	@Autowired
 	MountainService mountainService;
+	
+	@Autowired
+	UserEtcService userEtcService; 
 	
 	@Value("${pageSize}")
 	private int pageSize;
@@ -140,11 +144,15 @@ public class UserController {
 		    		dbUser.setProfileImage(objectStorageService.getImageURL(dbUser.getProfileImage()));
 					}	
 		    	
+//		    	session.setAttribute("alarmMessageList",userEtcService.getAlarmMessageList(user.getUserNo()));
+//				session.setAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
+//				session.setAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), user));
+		    	
 		    	session.setAttribute("user", dbUser);	
 		    	
 		    	System.out.println("»Æ¿Œ : " + dbUser);
 		    	
-		        return "forward:/common/main.jsp";
+		        return "redirect:/common/main.jsp";
 		        
 		}
 
