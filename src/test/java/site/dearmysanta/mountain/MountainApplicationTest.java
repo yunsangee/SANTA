@@ -287,7 +287,7 @@ public class MountainApplicationTest {
 		mountainService.addMountain(mountain);
 		mountainService.addMountain(mountain2);
 		mountainService.addMountain(mountain3);
-		SantaLogger.makeLog("info",mountainService.getMountain(mountain.getMountainNo()).toString());
+//		SantaLogger.makeLog("info",mountainService.getMountain(mountain.getMountainNo()).toString());
 		SantaLogger.makeLog("info","=====================");
 		
 		
@@ -305,11 +305,11 @@ public class MountainApplicationTest {
 		
 		mountain.setMountainTrailCount(77);
 		mountainService.updateMountain(mountain);
-		SantaLogger.makeLog("info",mountainService.getMountain(mountain.getMountainNo()).toString());
+//		SantaLogger.makeLog("info",mountainService.getMountain(mountain.getMountainNo()).toString());
 		SantaLogger.makeLog("info","=====================");
 		
 		mountainService.updateMountainViewCount(mountain.getMountainNo());
-		SantaLogger.makeLog("info",mountainService.getMountain(mountain.getMountainNo()).toString());
+//		SantaLogger.makeLog("info",mountainService.getMountain(mountain.getMountainNo()).toString());
 		SantaLogger.makeLog("info","=====================");
 		
 		SantaLogger.makeLog("info",""+mountainService.checkMountainExist(mountain.getMountainNo()));
