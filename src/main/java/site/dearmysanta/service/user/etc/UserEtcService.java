@@ -43,6 +43,9 @@ public interface UserEtcService {
 		public int getFollowerCount(int userNo);
 		
 		public int getFollowingCount(int userNo);
+		
+		
+		public int isFollowing(int followerNo, int followingNo);
 //		
 //		
 //		//

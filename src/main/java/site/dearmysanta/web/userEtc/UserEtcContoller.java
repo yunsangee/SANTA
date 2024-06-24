@@ -25,38 +25,38 @@ public class UserEtcContoller {
 		SantaLogger.makeLog("info", this.getClass().toString());
 	}
 	
-	@GetMapping(value="getAlarmMessageList")
-	public String getAlarmMessageList(@RequestParam int userNo, Model model) throws Exception {
-		
-		
-		List<AlarmMessage> list = userEtcService.getAlarmMessageList(userNo);
-		SantaLogger.makeLog("info", "list:" + list.toString());
-
-		List<String> messages = new ArrayList<>();
-		
-		for(AlarmMessage message : list) {
-			String sentence = message.getUserName()+"님! " + message.getTitle();
-			
-			if(message.getPostTypeNo() == 0) {
-				sentence += " 인증 게시글에 ";
-			}else {
-				sentence += " 모임 게시글에 ";
-			}
-			
-			if(message.getAlarmTypeNo() == 0) {
-				sentence += "좋아요가 늘어났어요!";
-			}else {
-				sentence += "댓글이 달렸어요!";
-			}
-			
-			messages.add(sentence);
-		}
-		
-		SantaLogger.makeLog("info", "alarmMessageList:" + messages);
-		
-		
-		model.addAttribute("alarmMessageList", messages);
-		
-		return "forward:/userEtc/getAlarmMessageList.jsp";
-	}//test clear
+//	@GetMapping(value="getAlarmMessageList")
+//	public String getAlarmMessageList(@RequestParam int userNo, Model model) throws Exception {
+//		
+//		
+//		List<AlarmMessage> list = userEtcService.getAlarmMessageList(userNo);
+//		SantaLogger.makeLog("info", "list:" + list.toString());
+//
+//		List<String> messages = new ArrayList<>();
+//		
+//		for(AlarmMessage message : list) {
+//			String sentence = message.getUserName()+"님! " + message.getTitle();
+//			
+//			if(message.getPostTypeNo() == 0) {
+//				sentence += " 인증 게시글에 ";
+//			}else {
+//				sentence += " 모임 게시글에 ";
+//			}
+//			
+//			if(message.getAlarmTypeNo() == 0) {
+//				sentence += "좋아요가 늘어났어요!";
+//			}else {
+//				sentence += "댓글이 달렸어요!";
+//			}
+//			
+//			messages.add(sentence);
+//		}
+//		
+//		SantaLogger.makeLog("info", "alarmMessageList:" + messages);
+//		
+//		
+//		model.addAttribute("alarmMessageList", messages);
+//		
+//		return "forward:/userEtc/getAlarmMessageList.jsp";
+//	}//test clear
 }

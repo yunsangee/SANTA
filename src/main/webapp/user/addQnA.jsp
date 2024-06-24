@@ -120,6 +120,7 @@
                 <label for="contents">내용</label>
                 <textarea id="contents" name="contents" rows="10" placeholder="내용을 입력하세요" required></textarea>
             </div>
+            
             <div class="form-group">
                 <label for="qnaPostCategory">카테고리</label>
                 <select id="qnaPostCategory" name="qnaPostCategory" required>

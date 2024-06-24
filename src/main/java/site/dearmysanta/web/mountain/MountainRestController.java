@@ -151,8 +151,8 @@ public class MountainRestController {
 	}//o
 	
 	@PostMapping("rest/updateMountain")
-	public Mountain updateMountain(@RequestBody Mountain mountain, @RequestParam int crpNo) {
-		SantaLogger.makeLog("info", mountain.toString());
+	public Mountain updateMountain(@RequestParam int crpNo, @RequestBody Mountain mountain) {
+		SantaLogger.makeLog("info", mountain.toString() + " :: " + crpNo + "/" );
 		mountainService.updateMountain(mountain);
 		
 		correctionPostService.updateCorrectionPostStatus(crpNo);

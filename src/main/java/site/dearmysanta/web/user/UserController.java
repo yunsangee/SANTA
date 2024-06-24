@@ -133,13 +133,19 @@ public class UserController {
 		        return "redirect:/user/login.jsp";
 		    }
 		    
+
+		    
 		    // 비밀번호 일치 여부 확인
-		    if (user.getUserPassword().equals(dbUser.getUserPassword())) {
-		        session.setAttribute("user", dbUser);
+		    if (user.getUserPassword().equals(dbUser.getUserPassword())) {    	
 		        
 //		        session.setAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
 //				session.setAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), user));
-		        
+			    
+		    	if(dbUser.getProfileImage() != null&&!dbUser.getProfileImage().contains("ncloudstorage") ) {
+		    		dbUser.setProfileImage(objectStorageService.getImageURL(dbUser.getProfileImage()));
+					}	
+		    	session.setAttribute("user", dbUser);	
+		    	System.out.println("확인 : " + dbUser);
 		        return "forward:/common/main.jsp";
 		    } else {
 		        model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
@@ -996,7 +1002,8 @@ public class UserController {
 		    dbschedule.setHikingDescentTime(schedule.getHikingDescentTime());
 		    dbschedule.setHikingDifficulty(schedule.getHikingDifficulty());
 		    dbschedule.setTransportation(schedule.getTransportation());
-
+		    dbschedule.setContents(schedule.getContents());
+		    
 		    // Schedule 업데이트
 		    userService.updateSchedule(dbschedule);
 		    

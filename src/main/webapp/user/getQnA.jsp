@@ -128,7 +128,7 @@
 <body>
     <div class="container">
         <div class="profile-header">
-            <img src="${qna.profileImage}" alt="Profile Image">
+            <img src="${sessionScope.user.profileImage}" alt="Profile Image">
             <p>${qna.nickName}</p>
         </div>
         <div class="qna-details">

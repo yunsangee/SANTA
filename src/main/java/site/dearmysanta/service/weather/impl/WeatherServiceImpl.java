@@ -93,6 +93,11 @@ public class WeatherServiceImpl implements WeatherService{
         // 문자열 형식으로 변환
         String dateString = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String timeString = this.getClosestTime(givenTimes,0);
+        
+        System.out.println("timeString:" + timeString);
+        
+        if(!timeString.equals("0000")) {
+       
 
         // 출력
         SantaLogger.makeLog("info","현재 날짜: " + dateString);
@@ -164,7 +169,7 @@ public class WeatherServiceImpl implements WeatherService{
         
 
         SantaLogger.makeLog("info",weather.toString());
-      
+        }
         
         return weather;
 		

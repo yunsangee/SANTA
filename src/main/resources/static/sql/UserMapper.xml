@@ -55,7 +55,7 @@
         #{nickName, jdbcType=VARCHAR}, #{address, jdbcType=VARCHAR}, #{birthDate, jdbcType=DATE}, 
         #{phoneNumber, jdbcType=VARCHAR}, #{gender, jdbcType=DECIMAL}, #{hikingPurpose, jdbcType=DECIMAL}, 
         #{hikingDifficulty, jdbcType=DECIMAL}, #{hikingLevel, jdbcType=DECIMAL}, 0, 0, 0, SYSDATE, 
-        #{profileImage, jdbcType=VARCHAR}, #{detailAddress, jdbcType=VARCHAR}
+        'profile1.png', #{detailAddress, jdbcType=VARCHAR}
     )
 </insert>
 

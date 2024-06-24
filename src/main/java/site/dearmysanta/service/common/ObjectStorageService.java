@@ -1,8 +1,12 @@
 package site.dearmysanta.service.common;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,8 +22,14 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -38,6 +48,12 @@ public class ObjectStorageService {
 	private String bucketName;
 	@Value("${cloud.aws.s3.endpoint}")
 	private String endpoint;
+	
+	@Value("${cloud.aws.credentials.accessKey}")
+    private String accessKey;
+
+    @Value("${cloud.aws.credentials.secretKey}")
+    private String secretKey;
 
 	
     public ObjectStorageService(AmazonS3 amazonS3, ObjectMapper objectMapper) {
@@ -135,4 +151,9 @@ public class ObjectStorageService {
     public String getImageURL( String fileName) {
     	return endpoint+"/"+bucketName+"/"+fileName;
     }
+    
+    public void deleteObjectFromStorage(String fileName) throws Exception {
+        amazonS3.deleteObject(bucketName, fileName);
+    }
+
 }
