@@ -81,8 +81,32 @@ public class UserRestController {
 	//
 	// findUserPassword
 	//
+	
+	@PostMapping("rest/findUserPassword")
+    public Map<String, Object> findUserPassword(@RequestBody User user) throws Exception {
+        Map<String, Object> response = new HashMap<>();
+        
+        System.out.println("findUserPassword : POST");
+        System.out.println("id: " + user.getUserId());
+        System.out.println("phoneNumber: " + user.getPhoneNumber());
 
-	@PostMapping( value="rest/findUserPassword")
+        String userPassword = userService.findUserPassword(user.getUserId(), user.getPhoneNumber());
+        
+        if (userPassword == null) {
+            response.put("userExists", false);
+        } else {
+            response.put("userExists", true);
+            response.put("userId", userPassword);
+        }
+
+        return response;
+    }
+	
+	//
+	// setUserPassword
+	//
+
+	@PostMapping( value="rest/setUserPassword")
 	 public ResponseEntity<Object> setUserPassword(@RequestBody User user, HttpSession session) throws Exception {
         System.out.println("setUserPassword : POST");
         System.out.println("userId : " + user.getUserId());
@@ -332,5 +356,81 @@ public class UserRestController {
 
 	        return response;
 	    }
+	    
+	    ////////////////////////////// 아이디 중복확인 //////////////////////////////////
+	    
+	    @GetMapping("rest/checkDuplicationId")
+	    public Map<String, String> checkDuplicationId(@RequestParam String userId) {
+	        Map<String, String> response = new HashMap<>();
+	        try {
+	            String duplicationId = userService.checkDuplicationId(userId);
+	            if (duplicationId != null) {
+	                response.put("status", "duplicated");
+	                response.put("message", "중복된 아이디입니다.");
+	            } else {
+	                response.put("status", "available");
+	                response.put("message", "사용 가능한 아이디입니다.");
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            response.put("status", "error");
+	            response.put("message", "오류가 발생했습니다.");
+	        }
+	        return response;
+	    }
 
+	    /////////////////////////////// 닉네임 중복확인 //////////////////////////////
+	    
+	    @GetMapping("rest/checkDuplicationNickName")
+	    public Map<String, String> checkDuplicationNickName(@RequestParam String nickName) {
+	        Map<String, String> response = new HashMap<>();
+	        try {
+	            String duplicationNickName = userService.checkDuplicationNickName(nickName);
+	            if (duplicationNickName != null) {
+	                response.put("status", "duplicated");
+	                response.put("message", "중복된 닉네임입니다.");
+	            } else {
+	                response.put("status", "available");
+	                response.put("message", "사용 가능한 닉네임입니다.");
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            response.put("status", "error");
+	            response.put("message", "오류가 발생했습니다.");
+	        }
+	        return response;
+	    }
+	    
+	    ////////////////////////////// 회원가입 비밀번호 확인 //////////////////////////////
+	    @PostMapping(value="rest/addUserPassword")
+	    public Map<String, String> addUserPassword(@RequestBody Map<String, String> request) throws Exception {
+	        
+	    	String userPassword = request.get("userPassword");
+	        String checkPassword = request.get("checkPassword");
+
+	        System.out.println("addUserPassword : POST");
+	        System.out.println("newPassword : " + userPassword);
+	        System.out.println("confirmPassword : " + checkPassword);
+
+	        Map<String, String> response = new HashMap<>();
+	        try {
+	        	if (userPassword.length() < 10) {
+	                response.put("status", "shortpassword");
+	                response.put("message", "비밀번호를 10자 이상 입력해주세요.");
+	            } else if (!userPassword.equals(checkPassword)) {
+	                response.put("status", "notequals");
+	                response.put("message", "비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+	            } else {
+	                response.put("status", "equals");
+	                response.put("message", "비밀번호가 일치합니다.");
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            response.put("status", "error");
+	            response.put("message", "오류가 발생했습니다.");
+	        }
+	        return response;
+	            
+	    }
 }
+

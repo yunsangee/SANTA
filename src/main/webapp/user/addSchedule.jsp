@@ -1,74 +1,204 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Schedule Form</title>
-    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
- --></head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 500px;
+            max-width: 100%;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group select {
+            height: 40px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .form-group .inline-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-group .inline-group input {
+            width: 30%;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .button-group .button {
+            flex: 1;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            margin-right: 5px;
+        }
+
+        .button-group .button:last-child {
+            margin-right: 0;
+        }
+
+        .button-group .button.active {
+            background-color: #218838;
+        }
+
+        .hidden-radio {
+            display: none;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .form-group button:hover {
+            background-color: #218838;
+        }
+
+        .form-group .cancel-button {
+            background-color: #dc3545;
+            margin-top: 10px;
+        }
+
+        .form-group .cancel-button:hover {
+            background-color: #c82333;
+        }
+
+    </style>
+    <script>
+        function toggleButton(target) {
+            const group = target.parentElement;
+            const buttons = group.querySelectorAll('.button');
+            const input = document.getElementById(target.getAttribute('data-target'));
+
+            if (target.classList.contains('active')) {
+                target.classList.remove('active');
+                input.checked = false;
+            } else {
+                buttons.forEach(button => {
+                    button.classList.remove('active');
+                    document.getElementById(button.getAttribute('data-target')).checked = false;
+                });
+                target.classList.add('active');
+                input.checked = true;
+            }
+        }
+    </script>
+</head>
 <body>
     <div class="container">
-        <h1 class="mt-5">Add Schedule</h1>
+        <h2></h2>
         <form action="/user/addSchedule" method="post">
             <div class="form-group">
                 <label for="title"></label>
-                <input type="text" class="form-control" id="title" name="title" placeholder="일정명을 입력하세요"  required>
+                <input type="text" id="title" name="title" placeholder="일정명을 입력하세요" required>
             </div>
             <div class="form-group">
                 <label for="mountainName"></label>
-                <input type="text" class="form-control" id="mountainName" name="mountainName" placeholder="산 명칭"  required>
+                <input type="text" id="mountainName" name="mountainName" placeholder="산 명칭" required>
             </div>
-
-            <div class="form-group">
-                <label for="hikingTotalTime"></label>
-                <input type="text" class="form-control" id="hikingTotalTime" name="hikingTotalTime" placeholder="총 소요시간" required>
-            </div>
-            <div class="form-group">
-                <label for="hikingAscentTime"></label>
-                <input type="text" class="form-control" id="hikingAscentTime" name="hikingAscentTime" placeholder="상행시간" required>
+            <div class="form-group inline-group">
+                <input type="text" id="hikingTotalTime" name="hikingTotalTime" placeholder="총 소요시간" required>
+                <input type="text" id="hikingAscentTime" name="hikingAscentTime" placeholder="상행시간" required>
+                <input type="text" id="hikingDescentTime" name="hikingDescentTime" placeholder="하행시간" required>
             </div>
             <div class="form-group">
-                <label for="hikingDescentTime"></label>
-                <input type="text" class="form-control" id="hikingDescentTime" name="hikingDescentTime" placeholder="하행시간" required>
+                <label>등산 난이도</label>
+                <div class="button-group">
+                    <div class="button" data-target="difficultyHard" onclick="toggleButton(this)">어려움</div>
+                    <div class="button" data-target="difficultyNormal" onclick="toggleButton(this)">보통</div>
+                    <div class="button" data-target="difficultyEasy" onclick="toggleButton(this)">쉬움</div>
+                </div>
+                <input type="radio" id="difficultyHard" name="hikingDifficulty" value="0" class="hidden-radio" required>
+                <input type="radio" id="difficultyNormal" name="hikingDifficulty" value="1" class="hidden-radio" required>
+                <input type="radio" id="difficultyEasy" name="hikingDifficulty" value="2" class="hidden-radio" required>
             </div>
-            <tr>
-              <td>등산 난이도</td>
-              <br>
-            <td>
-             <input type="radio" name="hikingDifficulty" value="0"> 어려움
-                <input type="radio" name="hikingDifficulty" value="1"> 보통
-                <input type="radio" name="hikingDifficulty" value="2"> 쉬움
-            </td>
-            </tr>
-            <br>
-            
-            <tr>
-              <td>교통수단</td>
-              <br>
-            <td>
-             <input type="radio" name="Transportation" value="0"> 도보
-                <input type="radio" name="Transportation" value="1"> 자전거
-                <input type="radio" name="Transportation" value="2"> 버스
-                <input type="radio" name="Transportation" value="3"> 자동차
-                <input type="radio" name="Transportation" value="4"> 지하철
-                <input type="radio" name="Transportation" value="5"> 기차
-            </td>
-            </tr>
-
-            <br>
             <div class="form-group">
-            <label for="contents">내용</label>
-            <textarea id="contents" name="contents" rows="10" placeholder="내용을 입력하세요" required></textarea>
-        </div>
-            
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="button" onclick="history.back()">뒤로</button>
-            
-  <c:set var="clickedDate" value="${param.date}" />
-<input type="hidden" name="stringDate" value="${clickedDate}">
-
+                <label>교통수단</label>
+                <div class="button-group">
+                    <div class="button" data-target="transportationWalk" onclick="toggleButton(this)">도보</div>
+                    <div class="button" data-target="transportationBike" onclick="toggleButton(this)">자전거</div>
+                    <div class="button" data-target="transportationBus" onclick="toggleButton(this)">버스</div>
+                    <div class="button" data-target="transportationCar" onclick="toggleButton(this)">자동차</div>
+                    <div class="button" data-target="transportationSubway" onclick="toggleButton(this)">지하철</div>
+                    <div class="button" data-target="transportationTrain" onclick="toggleButton(this)">기차</div>
+                </div>
+                <input type="radio" id="transportationWalk" name="Transportation" value="0" class="hidden-radio" required>
+                <input type="radio" id="transportationBike" name="Transportation" value="1" class="hidden-radio" required>
+                <input type="radio" id="transportationBus" name="Transportation" value="2" class="hidden-radio" required>
+                <input type="radio" id="transportationCar" name="Transportation" value="3" class="hidden-radio" required>
+                <input type="radio" id="transportationSubway" name="Transportation" value="4" class="hidden-radio" required>
+                <input type="radio" id="transportationTrain" name="Transportation" value="5" class="hidden-radio" required>
+            </div>
+            <div class="form-group">
+                <label for="contents">내용</label>
+                <textarea id="contents" name="contents" rows="10" placeholder="내용을 입력하세요" required></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit">일정 등록하기</button>
+                <button type="button" class="cancel-button" onclick="history.back()">취소</button>
+            </div>
+            <c:set var="clickedDate" value="${param.date}" />
+            <input type="hidden" name="stringDate" value="${clickedDate}">
         </form>
     </div>
 </body>

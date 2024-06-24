@@ -123,7 +123,7 @@ button:hover {
 
 
 .sns-icon {
-    width: 50px; /* 모든 이미지의 너비를 동일하게 설정 */
+    width: 100%; /* 모든 이미지의 너비를 동일하게 설정 */
     margin: 0 20px; /* 이미지 간 여백 설정 */
     cursor: pointer;
 }
@@ -215,11 +215,12 @@ button:hover {
     		</a> -->
     		
     		<div class="sns-login">
-                <img src="/image/kakaotalk_sharing_btn_medium.png" alt="Kakao Login" class="sns-icon" onclick="logoutAndRedirect()">
+                <!-- <img src="/image/kakaotalk_sharing_btn_medium.png" alt="Kakao Login" class="sns-icon" onclick="logoutAndRedirect()"> -->
+                <img src="/image/kakao_login_medium_wide.png" alt="Kakao Login" class="sns-icon" onclick="logoutAndRedirect()">
     		
-    		<a href="https://nid.naver.com/oauth2.0/authorize">
+    		<!-- <a href="https://nid.naver.com/oauth2.0/authorize">
         		<img src="/image/btnG_아이콘사각.png" alt="Naver Login" class="sns-icon">
-    		</a>
+    		</a> -->
 		</div>
 
         

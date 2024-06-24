@@ -14,6 +14,7 @@
 		<result property = "userPassword"	column = "password"	jdbcType = "VARCHAR"/>
 		<result property = "nickName"	column = "nickname"	jdbcType = "VARCHAR"/>
 		<result property = "address"	column = "address"	jdbcType = "VARCHAR"/>
+		<result property = "detailAddress"	column = "detail_address"	jdbcType = "VARCHAR"/>
 		<result property = "birthDate"	column = "birth_date"	jdbcType = "VARCHAR"/>
 		<result property = "phoneNumber"	column = "phone_number"	jdbcType = "VARCHAR"/>
 		<result property = "gender"	column = "gender"	jdbcType = "NUMERIC"/>
@@ -48,13 +49,13 @@
     INSERT INTO users (
         user_no, user_id, name, password, nickname, address, birth_date, phone_number, gender,
         hiking_purpose, hiking_difficulty, hiking_level, role, cp_count, mp_count, creation_date,
-        profile_image
+        profile_image, detail_address
     ) VALUES (
         seq_user_no.NEXTVAL, #{userId}, #{userName, jdbcType=VARCHAR}, #{userPassword, jdbcType=VARCHAR}, 
         #{nickName, jdbcType=VARCHAR}, #{address, jdbcType=VARCHAR}, #{birthDate, jdbcType=DATE}, 
         #{phoneNumber, jdbcType=VARCHAR}, #{gender, jdbcType=DECIMAL}, #{hikingPurpose, jdbcType=DECIMAL}, 
         #{hikingDifficulty, jdbcType=DECIMAL}, #{hikingLevel, jdbcType=DECIMAL}, 0, 0, 0, SYSDATE, 
-        #{profileImage, jdbcType=VARCHAR}
+        'profile1.png', #{detailAddress, jdbcType=VARCHAR}
     )
 </insert>
 
@@ -67,7 +68,7 @@
 	    hiking_purpose, hiking_difficulty, hiking_level, withdraw_date, withdraw_reason, withdraw_content, role,
 	    badge_image, cp_count, mp_count, introduce_content, search_record_setting, all_alert_setting,
 	    cp_setting,mp_setting, hg_setting, time_alert_setting, location_over_setting, destination_setting,
-	    sunset_setting, time_setting
+	    sunset_setting, time_setting, detail_address
 	    FROM 
 	    	users
 	    WHERE 
@@ -140,11 +141,12 @@
 		    nickname = #{nickName},
 		    address = #{address},
 		    phone_Number = #{phoneNumber},
-		    profile_image = #{profileImage},
+		    profile_image = #{profileImage, jdbcType=VARCHAR},
 		    hiking_purpose = #{hikingPurpose},
 		    hiking_difficulty = #{hikingDifficulty},
 		    hiking_level = #{hikingLevel},
-		    introduce_content = #{introduceContent, jdbcType = VARCHAR}
+		    introduce_content = #{introduceContent, jdbcType = VARCHAR},
+		    detail_address=#{detailAddress, jdbcType = VARCHAR}
 		</set>
 		WHERE user_no = #{userNo}
 	</update>

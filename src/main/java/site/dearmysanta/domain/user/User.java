@@ -30,7 +30,7 @@ public class User {
 	private String checkPassword;
 	private String nickName;
 	private String address;
-	private String detailaddress;
+	private String detailAddress;
 	private String birthDate;
 	private String phoneNumber;
 	private int gender;
@@ -61,4 +61,5 @@ public class User {
 	private int sunsetAlertSetting;
 	private String timeSetting;
 	
+	private MultipartFile image;
 }
