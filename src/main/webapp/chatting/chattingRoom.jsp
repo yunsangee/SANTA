@@ -12,7 +12,7 @@
     <script type="text/javascript">
     $(function() {
     	
-        var socket = io("http://192.168.0.52:3002");
+        var socket = io("https://www.dearmysanta.site/chatting");
         
         var userNo = "${userNo}";
         var userNickname = "${nickname}";
