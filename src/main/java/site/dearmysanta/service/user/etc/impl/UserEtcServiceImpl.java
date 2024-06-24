@@ -78,6 +78,11 @@ import site.dearmysanta.service.user.etc.UserEtcService;
 	}//directly use
 	
 	
+	public int isFollowing(int followerNo, int followingNo) {
+		return userEtcDao.isFollowing(followerNo, followingNo);
+	}
+	
+	
 	public void addAlarmMessage(AlarmMessage alarmMessage) throws Exception{
 		
 		

@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 
     <title>Fruitables - Free Bootstrap 5 eCommerce Website Template</title>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script>
     	$(function(){
 
@@ -87,9 +88,14 @@
             height: 24px; /* Set the desired height */
             border-radius: 50%;
         }
+        
+        .d-flex{
+        	align-items: center;	
+        }
+        
         .dropdown-menu {
             width: 200px; /* Reduced size */
-            left: -125px !important; /* Adjust the value based on your layout */
+            left: -150px !important; /* Adjust the value based on your layout */
         }
         .dropdown-menu .dropdown-header {
             display: flex;
@@ -137,9 +143,17 @@
 		}
 
 		.alarm-dropdown-menu .dropdown-item .close-icon {
-            margin-left: 10px;
+            margin-left: 20px;
             cursor: pointer;
         }
+        
+        .settings{
+        	width:150px;
+        	right: 100px;
+        	buttom: 50px;
+        	font-size: 0.6em;
+        }
+        
     </style>
 
 </head>
@@ -168,10 +182,91 @@
                         <a href="#" id="correctionPost" class="nav-item nav-link">정정제보</a>
                     </c:if>
                 </div>
-                <div class="d-flex m-3 me-0">
+                <div class="d-flex m-3 me-0" >
                     <c:if test="${not empty sessionScope.user}">
-                    	
                     	<div class="dropdown">
+                            <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src="${sessionScope.user.profileImage}" class="user-image" alt="User Image"/>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-left profle" aria-labelledby="navbarDropdown">
+                                 <div class="dropdown-header">
+                                    <img src="${sessionScope.user.profileImage}" alt="User Image"/>
+                                    <div class="info">
+                                        <div class="name">${sessionScope.user.userName}</div>
+                                        <div class="email">${sessionScope.user.userId}</div>
+                                    </div>
+                                    <i class="fas fa-cog setting-icon" id="settingsIcon"></i>
+                                </div>
+                                <a class="dropdown-item" href="#"><i class="fas fa-certificate"></i> 인증 ${sessionScope.user.certificationCount}회, 모임 ${sessionScope.user.meetingCount}회 </a>
+                                <a class="dropdown-item" id="myInfo" href="#"><i class="fas fa-user"></i> 내 정보보기 <i class="fas fa-chevron-right"></i></a>
+                                <a class="dropdown-item" id="myMeetingPost" href="#"><i class="fas fa-users"></i> 내가 쓴 모임 게시글 보기 <i class="fas fa-chevron-right"></i></a>
+                                <a class="dropdown-item" id="myCertificationPost" href="#"><i class="fas fa-check-circle"></i> 내가 쓴 인증 게시글 보기 <i class="fas fa-chevron-right"></i></a>
+                                <a class="dropdown-item" id="myMountainLike" href="#"><i class="fas fa-heart"></i> 내가 좋아요 한 산 보기 <i class="fas fa-chevron-right"></i></a>
+                                <a class="dropdown-item" id="mySchedule" href="#"><i class="fas fa-calendar-alt"></i> 내 일정 보기 <i class="fas fa-chevron-right"></i></a>
+                                <a class="dropdown-item" id="myHikingRecord" href="#"><i class="fas fa-hiking"></i> 등산 기록 보기 <i class="fas fa-chevron-right"></i></a>
+                                <a class="dropdown-item" id="qna" href="#"><i class="fas fa-question-circle"></i> Q&A <i class="fas fa-chevron-right"></i></a>
+                                <!-- <a class="dropdown-item" id="logout" href="#"><i class="fas fa-sign-out-alt"></i> 로그아웃 <i class="fas fa-chevron-right"></i></a> -->
+                                
+                            </div>
+                        </div>
+                        
+                        <div class="container settings" id="settingsModal" style="display:none; position:absolute; top: 65%; mari right: 0; background: white; border: 1px solid #ccc; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    <h2>알림 설정</h2>
+    <div class="form-group">
+        <label class="d-flex align-items-center">
+            전체알림
+            <label class="form-switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </label>
+    </div>
+    <div class="form-group">
+        <label class="d-flex align-items-center">
+            인증 게시글 알림
+            <label class="form-switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </label>
+    </div>
+    <div class="form-group">
+        <label class="d-flex align-items-center">
+            모임 게시글 알림
+            <label class="form-switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </label>
+    </div>
+    <div class="form-group">
+        <label class="d-flex align-items-center">
+            등산 안내 알림
+            <label class="form-switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </label>
+    </div>
+    <div class="form-group">
+        <label class="d-flex align-items-center">
+            기타 알림
+            <label class="form-switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </label>
+    </div>
+    <div class="form-group">
+        <label class="d-flex align-items-center">
+            설정
+            <i class="fas fa-cog setting-icon"></i>
+        </label>
+    </div>
+</div>
+                        
+                    	
+                    	<div class="dropdown" style="margin-left:30px;">
                             <a class="dropdown-toggle" href="#" id="alarmDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell"></i>
                             </a>
@@ -188,36 +283,17 @@
                             </div>
                         </div>
                         
-                    
-                        <div class="dropdown">
-                            <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="${sessionScope.user.profileImage}" class="user-image" alt="User Image"/>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-left profle" aria-labelledby="navbarDropdown">
-                                 <div class="dropdown-header">
-                                    <img src="${sessionScope.user.profileImage}" alt="User Image"/>
-                                    <div class="info">
-                                        <div class="name">${sessionScope.user.userName}</div>
-                                        <div class="email">${sessionScope.user.userId}</div>
-                                    </div>
-                                </div>
-                                <a class="dropdown-item" href="#"><i class="fas fa-certificate"></i> 인증 ${sessionScope.user.certificationCount}회, 모임 ${sessionScope.user.meetingCount}회 </a>
-                                <a class="dropdown-item" id="myInfo" href="#"><i class="fas fa-user"></i> 내 정보보기 <i class="fas fa-chevron-right"></i></a>
-                                <a class="dropdown-item" id="myMeetingPost" href="#"><i class="fas fa-users"></i> 내가 쓴 모임 게시글 보기 <i class="fas fa-chevron-right"></i></a>
-                                <a class="dropdown-item" id="myCertificationPost" href="#"><i class="fas fa-check-circle"></i> 내가 쓴 인증 게시글 보기 <i class="fas fa-chevron-right"></i></a>
-                                <a class="dropdown-item" id="myMountainLike" href="#"><i class="fas fa-heart"></i> 내가 좋아요 한 산 보기 <i class="fas fa-chevron-right"></i></a>
-                                <a class="dropdown-item" id="mySchedule" href="#"><i class="fas fa-calendar-alt"></i> 내 일정 보기 <i class="fas fa-chevron-right"></i></a>
-                                <a class="dropdown-item" id="myHikingRecord" href="#"><i class="fas fa-hiking"></i> 등산 기록 보기 <i class="fas fa-chevron-right"></i></a>
-                                <a class="dropdown-item" id="qna" href="#"><i class="fas fa-question-circle"></i> Q&A <i class="fas fa-chevron-right"></i></a>
-                                <a class="dropdown-item" id="logout" href="#"><i class="fas fa-sign-out-alt"></i> 로그아웃 <i class="fas fa-chevron-right"></i></a>
-                                
-                            </div>
-                        </div>
+                    <a href="#" class="my-auto nav-link" id='logout'><i id="loginButton" class="fas fa-sign-in-alt fa-1x"> 로그아웃</i></a>
+                        
                     </c:if>
+                    
+                    
+                    
+                    
                     <c:if test="${empty sessionScope.user}">
                         <a href="#" class="my-auto nav-link"><i id="loginButton" class="fas fa-sign-in-alt fa-1x"> 로그인</i></a>
                     </c:if>
-                </div>
+                </div><!-- /* d-flex */ -->
             </div>
         </nav>
     </div>
@@ -238,8 +314,24 @@ $(document).ready(function() {
     
     $('.dropdown-toggle').on('click', function(event) {
         event.stopPropagation();
-        $('.dropdown-menu').removeClass('show');
-        $(this).next('.dropdown-menu').toggleClass('show');
+       /*  $('.dropdown-menu').removeClass('show');
+        $(this).next('.dropdown-menu').toggleClass('show'); */
+        
+       	let dropdownMenu = $(this).next('.dropdown-menu');
+        
+        if (dropdownMenu.hasClass('show')) {
+            dropdownMenu.removeClass('show');
+        } else {
+            $('.dropdown-menu').removeClass('show'); // 다른 모든 드롭다운 메뉴 숨기기
+            dropdownMenu.addClass('show'); // 현재 드롭다운 메뉴 보이기
+        }
+        
+        
+        var modal = document.getElementById('settingsModal');
+        
+        if(modal.style.display == 'block'){
+        	modal.style.display = 'none';
+        }
     });
 
     // Close dropdown when clicking outside
@@ -275,6 +367,20 @@ $(document).ready(function() {
                 }
             });
         });
+        
+        document.getElementById('settingsIcon').addEventListener('click', function () {
+            closeAlarmSetting();
+        });
+        
+        
+        function closeAlarmSetting() {
+        	var modal = document.getElementById('settingsModal');
+            if (modal.style.display === 'none' || modal.style.display === '') {
+                modal.style.display = 'block';
+            } else {
+                modal.style.display = 'none';
+            }
+        }
 
 });
 </script>

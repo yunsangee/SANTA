@@ -43,6 +43,9 @@ import site.dearmysanta.domain.user.User;
 	
 	public int getFollowingCount(int userNo);
 	
+	public int isFollowing(int followerNo, int followingNo);
+	
+	
 	public void addAlarmMessage(AlarmMessage alarmMessage) throws Exception;
 	//0: certification 1: meeting
 	

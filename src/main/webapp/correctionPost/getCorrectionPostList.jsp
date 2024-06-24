@@ -120,9 +120,18 @@
 		$("#update").on('click',function(e){
 			
 			let mountainNo = parseInt(($(this).parent()).find("input:hidden[id='mountainNo']").val());
+			let crpNo = parseInt(($(this).parent()).find("input:hidden[id='crpNo']").val());
 			console.log(mountainNo);
 			
-			window.open("http://${javaServerIp}/mountain/updateMountain?mountainNo="+mountainNo, 'updateMountainPopup', 'width=600,height=400');
+			let updateWindow = window.open("../mountain/updateMountain?mountainNo="+mountainNo+"&crpNo="+crpNo, 'updateMountainPopup', 'width=600,height=400');
+		
+			let checkPopupClosed = setInterval(function() {
+		            if (updateWindow.closed) {
+		                clearInterval(checkPopupClosed);
+		                location.reload();
+		            }
+		        }, 500);
+		
 		});
 	});
 

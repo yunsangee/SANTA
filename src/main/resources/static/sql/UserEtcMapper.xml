@@ -205,6 +205,13 @@
         FROM USERS
         WHERE USER_NO = #{userNo}
     </select>
+    
+    
+    <select id="isFollowing" parameterType="map" resultType="int">
+    	SELECT COUNT(*) FROM FOLLOW 
+    	WHERE #{followerNo} = follwer_no AND #{followingNo} = following_no;
+    
+    </select>
 
     
    
