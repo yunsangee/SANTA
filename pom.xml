@@ -152,11 +152,11 @@
 			<version>4.3.0</version>  <!--문자인증 -->
 		</dependency>
 
-		<!--
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency> -->
+		</dependency> 
 		<!-- 보안 -->
 
 		<!--	<dependency>

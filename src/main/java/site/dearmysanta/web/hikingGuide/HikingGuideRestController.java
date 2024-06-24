@@ -16,9 +16,9 @@ import site.dearmysanta.service.hikingGuide.HikingGuideService;
 import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.weather.WeatherService;
 
-@CrossOrigin(origins = "https://www.dearmysanata.site")
+@CrossOrigin(origins = "https://www.dearmysanta.site")
 @RestController
-@RequestMapping("/hikingguide/*")
+@RequestMapping("/hiking/*")
 public class HikingGuideRestController {
 
     @Autowired

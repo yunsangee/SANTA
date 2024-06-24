@@ -97,37 +97,37 @@ public class UserEtcApplicationTest {
 		userEtcService.addAlarmMessage(alarmMessage3);
 		userEtcService.addAlarmMessage(alarmMessage4);
 		
-		List<AlarmMessage> list = userEtcService.getAlarmMessageList(1);
-		
-		for(AlarmMessage alarmMessage5 : list) {
-			String sentence = alarmMessage5.getUserName()+"nim! " + alarmMessage5.getTitle();
-			
-			if(alarmMessage5.getPostTypeNo() == 0) {
-				sentence += " certification Post ";
-			}else {
-				sentence += " meeting Post ";
-			}
-			
-			if(alarmMessage5.getAlarmTypeNo() == 0) {
-				sentence += "add like!";
-			}else {
-				sentence += "add comment!";
-			}
-				
-			System.out.println(alarmMessage5);
-			System.out.println(sentence);
-				
-		}
-		
-		System.out.println("====================");
-		
-		for(AlarmMessage alarmMessage5 : list) {
-			userEtcService.deleteAlarmMessage(alarmMessage5.getAlarmNo());
-		}
-		
-		for(AlarmMessage alarmMessage5 : list) {
-			System.out.println(alarmMessage5);
-		}
+//		List<AlarmMessage> list = userEtcService.getAlarmMessageList(1);
+//		
+//		for(AlarmMessage alarmMessage5 : list) {
+//			String sentence = alarmMessage5.getUserName()+"nim! " + alarmMessage5.getTitle();
+//			
+//			if(alarmMessage5.getPostTypeNo() == 0) {
+//				sentence += " certification Post ";
+//			}else {
+//				sentence += " meeting Post ";
+//			}
+//			
+//			if(alarmMessage5.getAlarmTypeNo() == 0) {
+//				sentence += "add like!";
+//			}else {
+//				sentence += "add comment!";
+//			}
+//				
+//			System.out.println(alarmMessage5);
+//			System.out.println(sentence);
+//				
+//		}
+//		
+//		System.out.println("====================");
+//		
+//		for(AlarmMessage alarmMessage5 : list) {
+//			userEtcService.deleteAlarmMessage(alarmMessage5.getAlarmNo());
+//		}
+//		
+//		for(AlarmMessage alarmMessage5 : list) {
+//			System.out.println(alarmMessage5);
+//		}
 		
 	}
 	

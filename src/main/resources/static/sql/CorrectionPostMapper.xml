@@ -29,11 +29,11 @@
 	
 	</insert>
 	
-	<update id="updateCorrestionPostStatus" parameterType="int">
+	<update id="updateCorrectionPostStatus" parameterType="int">
 		UPDATE CORRECTION_POST
 		SET
 			CRP_STATUS = 1
-		WHERE CRP_NO = #{value}
+		WHERE CRP_NO = #{crpNo}
 	
 	</update>
 	

@@ -11,7 +11,7 @@
 <body>
 
 <div class="mountain-details">
-    <img src="${mountain.mountainImage}" alt="Mountain Image">
+    <img src="https://kr.object.ncloudstorage.com/santabucket/1_2" alt="Mountain Image">
     <h2>${mountain.mountainName}</h2>
     <p><strong>Latitude:</strong> ${mountain.mountainLatitude}</p>
     <p><strong>Longitude:</strong> ${mountain.mountainLongitude}</p>

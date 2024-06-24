@@ -20,9 +20,11 @@ import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.meeting.MeetingPostSearch;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.certification.CertificationPostService;
+import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.meeting.MeetingService;
 import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.user.UserService;
+import site.dearmysanta.service.user.etc.UserEtcService;
 import site.dearmysanta.service.weather.WeatherService;
 
 @Controller
@@ -42,6 +44,12 @@ public class Main {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserEtcService userEtcService;
+	
+	@Autowired
+	private ObjectStorageService objectStorageService;
 	
 	@Value("${pageSize}")
 	private int pageSize;
@@ -83,6 +91,12 @@ public class Main {
 		
 		if(user != null) {
 			search.setUserNo(user.getUserNo());
+			
+			if(!user.getProfileImage().contains("ncloudstorage")) {
+				user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+			}
+			session.setAttribute("alarmMessageList",userEtcService.getAlarmMessageList(user.getUserNo()));
+			
 		}else {
 			search.setUserNo(-1);
 		}
@@ -90,6 +104,7 @@ public class Main {
 		search.setPageUnit(pageUnit);
 		
 		MeetingPostSearch meetingPostSearch = new MeetingPostSearch();
+		
 		
 		session.setAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
 		session.setAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), user));
