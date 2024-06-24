@@ -84,6 +84,8 @@ public class MeetingServiceImpl implements MeetingService {
 	
 	public Map<String, Object> getMeetingPostAll(int postNo, int userNo) throws Exception {
 		
+		int isMember = 0;
+		
 		MeetingPost meetingPost = meetingDAO.getMeetingPost(postNo);
 		System.out.println(meetingPost);
 		
@@ -106,10 +108,27 @@ public class MeetingServiceImpl implements MeetingService {
 		List<MeetingParticipation> meetingParticipations = meetingDAO.getMeetingParticipationList(postNo);
 		List<MeetingPostComment> meetingPostComments = meetingDAO.getMeetingPostCommentList(postNo);
 		
+		System.out.println(meetingParticipations);
+		System.out.println(meetingPostComments);
+		
+		
+		for (MeetingParticipation participation : meetingParticipations) {
+	        if (participation.getUserNo() == userNo) {
+	        	if (participation.getParticipationStatus() == 0) {
+	        		isMember = 1;
+	        	} else if (participation.getParticipationRole() == 2) {
+	        		isMember = 2;
+	        	}
+	        		
+	            break;
+	        }
+	    }
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("meetingPost", meetingPost);
 		map.put("meetingParticipations", meetingParticipations);
 		map.put("meetingPostComments", meetingPostComments);
+		map.put("isMember", isMember);
 
 		
 		return map;

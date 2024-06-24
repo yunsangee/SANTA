@@ -3,6 +3,7 @@ package site.dearmysanta.web.meeting;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
@@ -19,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import site.dearmysanta.domain.common.Page;
+import site.dearmysanta.domain.meeting.MeetingParticipation;
 import site.dearmysanta.domain.meeting.MeetingPost;
 import site.dearmysanta.domain.meeting.MeetingPostSearch;
+import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.chatting.ChattingService;
 import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.meeting.MeetingService;
@@ -77,7 +80,7 @@ public class MeetingController {
 		List<String> meetingPostImages = new ArrayList<>();
 		int imageCount = meetingPost.getMeetingPostImageCount();
 		
-		System.out.println("imageCount==="+imageCount);
+//		System.out.println("imageCount==="+imageCount);
 		
 		for (int i = 0; i < imageCount; i++) {
             String fileName = postNo+ "_" +postType+ "_" +(i+1);
@@ -85,10 +88,14 @@ public class MeetingController {
             meetingPostImages.add(imageURL);
         }
 		
+		List<MeetingParticipation> meetingParticipation = (List<MeetingParticipation>)map.get("meetingParticipations");
+				
+		
 		model.addAttribute("meetingPost", meetingPost);
 		model.addAttribute("meetingParticipations", map.get("meetingParticipations"));
 		model.addAttribute("meetingPostComments", map.get("meetingPostComments"));
 		model.addAttribute("meetingPostImages", meetingPostImages);
+		model.addAttribute("isMember", map.get("isMember"));
 		
 		return "forward:/meeting/getMeetingPost.jsp";
 	}
@@ -102,6 +109,13 @@ public class MeetingController {
 	@PostMapping(value = "addMeetingPost") // userNo to Session
 	public String addMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost) throws Exception {
 		
+//		int userNo = ((User)session.getAttribute("user")).getUserNo();
+		
+		int userNo = 1;
+		
+		meetingPost.setUserNo(userNo);
+		
+		
 		int postNo = meetingService.addMeetingPost(meetingPost);
 		int postType = 1;
 		String appointedHikingMountain = meetingPost.getAppointedHikingMountain();
@@ -110,9 +124,11 @@ public class MeetingController {
 		
 		chattingService.createChattingRoom(postNo);
 		
-		if (meetingPost.getMeetingPostImage() != null && !meetingPost.getMeetingPostImage().isEmpty()) {
+		if (meetingPost.getMeetingPostImage() != null) {
+	        List<MultipartFile> images = meetingPost.getMeetingPostImage().stream()
+	            .filter(image -> !image.isEmpty())
+	            .collect(Collectors.toList());
 			
-            List<MultipartFile> images = meetingPost.getMeetingPostImage();
             int imageCount = images.size();
             System.out.println("imageCount : "+imageCount);
             
@@ -124,6 +140,7 @@ public class MeetingController {
                 System.out.println("fileName : "+fileName);
                 
                 objectStorageService.uploadFile(image, fileName);
+                
             }
 		}
 		
@@ -152,7 +169,7 @@ public class MeetingController {
 		
 		meetingService.updateMeetingPostDeletedStatus(postNo);
 		
-		return "redirect:/meeting/getMeetingPostList.jsp";
+		return "redirect:/meeting/getMeetingPostList";
 	}
 	
 	@RequestMapping(value = "getMeetingPostList") // currentPage

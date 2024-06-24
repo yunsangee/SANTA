@@ -28,18 +28,22 @@ public class ChattingController {
         System.out.println(this.getClass());
     }
 	
-	@GetMapping(value = "getChattingRoomList")
-    public String getChatRoomList(@RequestParam int userNo, Model model) throws Exception {
+	@GetMapping(value = "getChattingRoomList") //requestparam userNo 지우고, session 주석풀면됨.
+    public String getChatRoomList(@RequestParam int userNo, @RequestParam String nickname, Model model) throws Exception {
 		
 //		int userNo = ((User)session.getAttribute("user")).getUserNo();
 		
         List<MeetingPost> chattingRooms = meetingService.getChattingRoomList(userNo);
+        System.out.println("채팅방리스트 ======= "+chattingRooms);
+        
         model.addAttribute("chattingRooms", chattingRooms);
+        model.addAttribute("userNo", userNo);		//실제론 지워야함
+        model.addAttribute("nickname", nickname);	//실제론 지워야함
         
         return "forward:/chatting/listChattingRoom.jsp";
     }
 	
-	@GetMapping(value = "getChattingRoom") // userNo, nickname은 지워야함
+	@GetMapping(value = "getChattingRoom") // userNo, nickname은 지우고 session 주석풀면됨
     public String getChatRoom(@RequestParam int userNo, @RequestParam String nickname, @RequestParam int roomNo, @RequestParam String roomName, HttpSession session, Model model) throws Exception {
 		
 //		int userNo = ((User)session.getAttribute("user")).getUserNo();
