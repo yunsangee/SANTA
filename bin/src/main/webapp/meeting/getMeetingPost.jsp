@@ -12,6 +12,10 @@
     <h2>Post Information</h2>
     <p>Title: ${meetingPost.title}</p>
     <p>Contents: ${meetingPost.contents}</p>
+    <c:forEach var="image" items="${meetingPostImages}">
+        <img src="${image}" alt="Image" />
+        <hr/>
+    </c:forEach>
     <p>Meeting Name: ${meetingPost.meetingName}</p>
     <p>Recruitment Deadline: ${meetingPost.recruitmentDeadline}</p>
     <p>Appointed Departure: ${meetingPost.appointedDeparture}</p>
@@ -45,12 +49,6 @@
         <p>Nickname: ${comment.nickname}</p>
         <p>Contents: ${comment.meetingPostCommentContents}</p>
         <p>Creation Date: ${comment.meetingPostCommentCreationDate}</p>
-        <hr/>
-    </c:forEach>
-
-    <h2>Post Images</h2>
-    <c:forEach var="image" items="${meetingPostImages}">
-        <img src="data:image/jpeg;base64,${image.bytes}" alt="Image" />
         <hr/>
     </c:forEach>
     

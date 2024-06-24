@@ -34,42 +34,45 @@
 	
    <!-- SQL : hikingAlertSetting Update -->
    
-	<update id="updateAlertSetting" parameterType="map">
+<update id="updateAlertSetting" parameterType="map">
     UPDATE users
     <set>
-        <if test="settings.hikingAlertFlag == 1">
-            destination_setting = #{settings.destinationAlert},
-            sunset_setting = #{settings.sunsetAlert},
-            location_over_setting = #{settings.locationOverAlert},
-            time_alert_setting = #{settings.meetingTimeAlert}
-        </if>
-        <if test="settings.hikingAlertFlag == 0">
-            destination_setting = 0,
-            sunset_setting = 0,
-            location_over_setting = 0,
-            time_alert_setting = 0
-        </if>
+        <choose>
+            <when test="settings.hikingAlertFlag == 1">
+                destination_setting = #{settings.destinationAlert},
+                sunset_setting = #{settings.sunsetAlert},
+                location_over_setting = #{settings.locationOverAlert},
+                time_alert_setting = #{settings.meetingTimeAlert},
+            </when>
+            <otherwise>
+                destination_setting = 0,
+                sunset_setting = 0,
+                location_over_setting = 0,
+                time_alert_setting = 0,
+            </otherwise>
+        </choose>
         hg_setting = #{settings.hikingAlertFlag}
     </set>
     WHERE 
         user_no = #{settings.userNo}
-	</update>
+</update>
 
 
 
 
   <!-- SQL : hikingAlertSetting meetingTime Update -->
   
-	<update id="updateMeetingTime" parameterType="map">
+<update id="updateMeetingTime" parameterType="map">
     UPDATE users
     <set>
-        <if test="meetingTimeAlert == 1">
-            time_setting = #{meetingTime, jdbcType=VARCHAR}
-        </if>
+        time_setting = CASE
+            WHEN #{meetingTimeAlert} = 1 THEN #{meetingTime, jdbcType=VARCHAR}
+            ELSE time_setting
+        END
     </set>
     WHERE user_no = #{userNo, jdbcType=NUMERIC}
-	</update>
-	
+</update>
+
 
 	
 </mapper>

@@ -18,7 +18,7 @@ import site.dearmysanta.service.weather.WeatherService;
 
 @CrossOrigin(origins = "https://www.dearmysanata.site")
 @RestController
-@RequestMapping("/hikingguide/*")
+@RequestMapping("/hiking/*")
 public class HikingGuideRestController {
 
     @Autowired
