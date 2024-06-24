@@ -30,11 +30,11 @@ public interface CertificationPostService {
 	public	List<CertificationPost> getMyCertificationPostList(int userNo) throws Exception;
 
 	//hashtag	
-	public void addHashtag(CertificationPost certificationPost);
-	
+	//public void addHashtag(CertificationPost certificationPost);
+	public void addHashtag(int postNo, String certificationPostHashtagContents);
 	public void deleteHashtag(int hashtagNo) throws Exception;
 	
-	//public CertificationPost getHashtag(int postNo) throws Exception;
+	public List<String> getHashtag(int postNo) throws Exception;
 	
 	//Like
 	public void addCertificationPostLike(Like like);
@@ -56,6 +56,8 @@ public interface CertificationPostService {
 	
 
 	public int getTotalMountainCount(String certificationPostMountainName) throws Exception;
+
+	void updateHashtag(int hashtagNo, String certificationPostHashtagContents);
 	
 
 }

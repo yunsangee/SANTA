@@ -2,14 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html>
+<html class="fontawesome-i2svg-active fontawesome-i2svg-complete">
 <head>
+    <c:import url="../common/header.jsp"/>
 
 <title>Certification Post Detail Page</title>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style>
     .carousel-item img {
         width: 100%;
@@ -17,7 +15,6 @@
         object-fit: cover; /* 이미지를 잘라서 채움 */
     }
     .carousel-item {
-        transition: transform 0.5s ease-in-out;
     }
     .details-container {
         margin-top: 20px;
@@ -69,100 +66,11 @@
     }
 </style>
 
+
 <script>
 $(document).ready(function() {
     var postNo = ${certificationPost.postNo};  // JSP에서 postNo 값을 가져옵니다.
     var userNo = 2; // JSP에서 userNo 값을 가져옵니다.
-
-    // 댓글 목록 불러오기
-    function loadComments() {
-        $.ajax({
-            url: 'rest/getCertificationPostComment',
-            type: 'GET',
-            data: { postNo: postNo },
-            success: function(response) {
-                console.log("댓글 목록 불러오기 성공:", response);
-                var commentsHtml = '';
-                response.forEach(function(comment) {
-                    commentsHtml += `
-                        <div class="comment-item">
-                            <p>Nickname: ${comment.nickname}</p>
-                            <p>Contents: ${comment.certificationPostCommentContents}</p>
-                            <p>Creation Date: ${comment.certificationPostCommentCreationDate}</p>
-                            <button class="btn btn-danger btn-sm delete-comment-button" data-comment-no="${comment.certificationPostCommentNo}"><i class="fa fa-trash"></i></button>
-                            <hr/>
-                        </div>
-                    `;
-                });
-                $('.comment-list').html(commentsHtml);
-            },
-            error: function(xhr, status, error) {
-                console.error("댓글 목록 불러오기 오류:", error);
-            }
-        });
-    }
-
-    // 초기 댓글 목록 불러오기
-    loadComments();
-
-    // 댓글 등록
-    $('#commentForm').on('submit', function(event) {
-        event.preventDefault(); // 폼의 기본 제출 방식을 막음
-
-        var newComment = $('#newComment').val().trim();
-
-        if (newComment) {
-            var commentData = {
-                postNo: postNo,
-                userNo: userNo,
-                certificationPostCommentContents: newComment
-            };
-
-            $.ajax({
-                url: 'rest/addCertificationPostComment',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(commentData),
-                success: function(response) {
-                    console.log("댓글 작성 성공:", response);
-                    $('#newComment').val(''); // 입력 필드 비우기
-                    loadComments(); // 댓글 목록 새로고침
-                },
-                error: function(xhr, status, error) {
-                    console.error("댓글 작성 오류:", error);
-                }
-            });
-        } else {
-            alert("댓글 내용을 입력해주세요.");
-        }
-    });
-
-    // 댓글 삭제
-    $(document).on('click', '.delete-comment-button', function() {
-        var commentNo = $(this).data('comment-no');
-
-        if (confirm('정말로 삭제하시겠습니까?')) {
-            $.ajax({
-                url: 'rest/deleteCertificationPostComment',
-                type: 'DELETE',
-                data: JSON.stringify({ certificationPostCommentNo: commentNo, userNo: userNo }),
-                contentType: 'application/json',
-                success: function(response) {
-                    console.log("댓글 삭제 성공:", response);
-                    loadComments(); // 댓글 목록 새로고침
-                },
-                error: function(xhr, status, error) {
-                    console.error("댓글 삭제 오류:", error);
-                }
-            });
-        }
-    });
-});
-</script>
-<script>
-$(document).ready(function() {
-    var postNo = ${certificationPost.postNo};  // JSP에서 postNo 값을 가져옵니다.
-    var userNo =2; // JSP에서 userNo 값을 가져옵니다.
 
     $('.like-button').on('click', function() {
         var likeButton = $(this);
@@ -212,10 +120,95 @@ $(document).ready(function() {
             });
         }
     });
-    
- // 삭제 버튼 클릭 시
-    $('.btn-danger').on('click', function() {
+ // 댓글 조회
+    function loadComments() {
+        console.log('Loading comments...');
+        $.ajax({
+            url: 'rest/getCertificationPostComment',
+            type: 'GET',
+            data: { postNo: postNo },
+            success: function(comments) {
+                console.log('Comments loaded:', comments);
+                var commentsSection = $('.comments-section');
+                commentsSection.find('.comment-item').remove();
+                $.each(comments, function(index, comment) {
+                    var commentItem = 
+                       ' <div class="comment-item">' +
+                            '<p><i class="fas fa-user"></i> 닉네임: &ensp;'+ comment.nickname+'</p>'+
+                           ' <p><i class="fas fa-comment"></i> 내용:' + comment.certificationPostCommentContents +'</p>' +
+                            '<p><i class="fas fa-clock"></i> 작성 날짜: ' + comment.certificationPostCommentCreationDate + '</p>'+
+                            '<button class="btn btn-danger btn-sm" data-comment-id="'+comment.certificationPostCommentNo+'"><i class="fa fa-trash"></i></button>'+
+                            '<hr/>'+
+                        '</div>'
+                   ;
+                    commentsSection.append(commentItem);
+                });
+
+                // 댓글 삭제 버튼 클릭 이벤트 바인딩
+                $('.btn-danger[data-comment-id]').on('click', function() {
+                    var commentId = $(this).data('comment-id');
+                    console.log('Delete button clicked for comment ID:', commentId);
+                    deleteComment(commentId);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('댓글 조회 오류:', xhr, status, error);
+            }
+        });
+    }
+
+              
+
+    // 댓글 추가
+    $('.comment-form').on('submit', function(event) {
+        event.preventDefault();
+        var newComment = $('#newComment').val().trim();
+        console.log('New comment submission:', newComment);
+        if (newComment) {
+            $.ajax({
+                url: 'rest/addCertificationPostComment',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ certificationPostNo: postNo, userNo: userNo, certificationPostCommentContents: newComment }),
+                success: function(response) {
+                    console.log('댓글 추가 성공:', response);
+                    $('#newComment').val('');
+                    loadComments();
+                },
+                error: function(xhr, status, error) {
+                    console.error('댓글 추가 오류:', xhr, status, error);
+                }
+            });
+        } else {
+            alert('댓글을 입력해주세요.');
+        }
+    });
+
+    // 댓글 삭제
+ function deleteComment(certificationPostCommentNo) {
+    console.log('Deleting comment ID:', certificationPostCommentNo);
+    $.ajax({
+        url: 'rest/deleteCertificationPostComment',
+        type: 'DELETE',
+        data: { certificationPostCommentNo: certificationPostCommentNo, userNo: userNo },
+        success: function(response) {
+            console.log('댓글 삭제 성공:', response);
+            loadComments();
+        },
+        error: function(xhr, status, error) {
+            console.error('댓글 삭제 오류:', xhr, status, error);
+        }
+    });
+}
+
+
+    // 초기 댓글 로드
+    loadComments();
+
+    // 게시글 삭제 버튼 클릭 시
+    $('.btn-danger:not([data-comment-id])').on('click', function() {
         if (confirm('정말로 삭제하시겠습니까?')) {
+            console.log('Post delete confirmed for postNo:', postNo);
             $.ajax({
                 url: 'rest/updateCertificationPostDeleteFlag',
                 type: 'GET',
@@ -226,12 +219,37 @@ $(document).ready(function() {
                     window.location.href = 'listCertificationPost'; // 게시글 목록 페이지로 리디렉션
                 },
                 error: function(xhr, status, error) {
-                    console.error('게시글 삭제 오류:', error);
+                    console.error('게시글 삭제 오류:', xhr, status, error);
                 }
             });
         }
     });
 });
+$(document).ready(function() {
+    // 작성자 클릭 이벤트 설정
+    $('.details-container').on('click', 'p.author-link', function() {
+        var userNo = $(this).data('user-no'); // 작성자의 userNo 가져오기
+        console.log('Clicked author link for userNo:', userNo);
+        
+        // AJAX 요청 보내기
+        $.ajax({
+            type: 'GET',
+            url: 'getProfile',
+            data: { userNo: userNo },
+            success: function(response) {
+                // 요청이 성공하면 여기에서 필요한 작업을 수행 (예: 페이지 이동 등)
+                console.log('Profile loaded successfully.');
+                // 예를 들어, 이동할 URL을 사용하여 페이지를 이동할 수 있습니다.
+                window.location.href = 'getProfile?userNo=' + userNo;
+            },
+            error: function(xhr, status, error) {
+                // 요청이 실패한 경우 여기에서 에러 처리
+                console.error('Error loading profile:', error);
+            }
+        });
+    });
+});
+
 
 </script>
 </head>
@@ -240,7 +258,7 @@ $(document).ready(function() {
     <c:import url="../common/top.jsp"/>
 </header>
 <main class="container my-5">
-    <div class="container-fluid py-5 mt-5">
+  
         <div class="container py-5">
             <div class="row justify-content-center g-4 mb-5">
                 <div class="col-lg-8 col-xl-9">
@@ -268,18 +286,24 @@ $(document).ready(function() {
                     </div>
                     <div class="details-container">
                         <div class="details-header">
+                           <p class="author-link" data-user-no="${certificationPost.userNo}">
+         <i class="fas fa-user"></i> 작성자: ${certificationPost.nickName}
+
+        </p>
                             <p><i class="fas fa-calendar-alt"></i> 작성 일자: ${certificationPost.postDate}</p>
                             <div class="d-flex align-items-center">
                                 <i class="fa fa-heart like-button ${certificationPost.certificationPostLikeStatus == 0 ? 'text-secondary' : 'text-danger'}"></i>
                                 <p class="mb-0 ml-2">${certificationPost.certificationPostLikeCount}</p>
                             </div>
-                              
+                            
+                            <!--  유저 받아오ㄴ는법 머지user.userNo --> <!-- 일단 2 로 넣어둠 -->
+                                          <c:if test="${2 == certificationPost.userNo}">
                                 <form action="/certificationPost/updateCertificationPost" method="get">
                                     <input type="hidden" name="postNo" value="${certificationPost.postNo}"/>
                                     <button type="submit" class="btn btn-secondary"><i class="fa fa-edit"></i></button>
                                 </form>
                                 <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
-                           
+                           </c:if>
                             
                             
                         </div>
@@ -322,19 +346,15 @@ $(document).ready(function() {
                     </div>
                     <hr><br>
                  <div class="comments-section">
-                        <h3><i class="fas fa-comments"></i> 댓글작성하기</h3>
-                        
-                        <form id="commentForm" class="comment-form">
-                            <textarea class="form-control" id="newComment" rows="3" placeholder="댓글을 입력해주세요. (최대 100자)" maxlength="100"></textarea>
-                            <button type="submit" class="btn btn-primary">등록</button>
-                        </form>
-                        <hr><br>
-                        <div class="comment-list">
-                            <!-- 댓글 목록이 여기에 로드됩니다 -->
-                        </div>
-                    </div>
-                    <hr>
-                </div>
+                    <h3><i class="fas fa-comments"></i> 댓글작성하기</h3>
+                    
+                    <form class="comment-form">
+                        <textarea class="form-control" id="newComment" rows="3" placeholder="댓글을 입력해주세요. (최대 100자)" maxlength="100"></textarea>
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </form>
+               <hr><br>
+               </div>
+               <hr>
             </div>
         </div>
     </div>

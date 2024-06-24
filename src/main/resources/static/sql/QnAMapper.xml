@@ -51,7 +51,8 @@
         q.qna_content,
         q.qna_date,
         q.admin_answer,
-        q.qna_category
+        q.qna_category,
+        q.answer_status
     FROM 
         QNA q, USERS u
     WHERE 

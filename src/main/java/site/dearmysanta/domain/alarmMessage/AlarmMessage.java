@@ -32,4 +32,5 @@ public class AlarmMessage {
 	
 	private int checkedFlag;
 
+	private String message;
 }

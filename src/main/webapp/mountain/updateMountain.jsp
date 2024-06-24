@@ -22,9 +22,13 @@
 			
 				console.log("data:");
 				console.log(data);
-
+				
+				
+				let crpNo = ${crpNo};
+				
+				alert('crpNo:' + crpNo);
 	            $.ajax({
-	                url: "http://127.0.0.1:8001/mountain/rest/updateMountain?postNo=${crpNo}",
+	                url: "/mountain/rest/updateMountain?crpNo=" + crpNo,
 	                method: "POST",
 	                contentType: "application/json",
 	                dataType: "json",
@@ -32,6 +36,7 @@
 	                success: function(response) {
 	                    alert('Mountain updated successfully');
 	                    console.log(response);
+	                    window.close();
 	                },
 	                error: function(jqXHR, textStatus, errorThrown) {
 	                    console.error('Error:', textStatus, errorThrown);

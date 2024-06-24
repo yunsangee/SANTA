@@ -24,6 +24,7 @@ import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.mountain.Statistics;
 import site.dearmysanta.domain.mountain.Weather;
 import site.dearmysanta.domain.user.User;
+import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.correctionpost.CorrectionPostService;
 import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.mountain.impl.MountainServiceImpl;
@@ -44,6 +45,9 @@ public class MountainApplicationTest {
 	
 	@Autowired
 	WeatherService weatherService;
+	
+	@Autowired
+	ObjectStorageService objectStorageService;
 	
 	//@Test
 	public void apiTest() throws Exception {
@@ -283,7 +287,7 @@ public class MountainApplicationTest {
 		mountainService.addMountain(mountain);
 		mountainService.addMountain(mountain2);
 		mountainService.addMountain(mountain3);
-		SantaLogger.makeLog("info",mountainService.getMountain(mountain.getMountainNo()).toString());
+//		SantaLogger.makeLog("info",mountainService.getMountain(mountain.getMountainNo()).toString());
 		SantaLogger.makeLog("info","=====================");
 		
 		
@@ -301,11 +305,11 @@ public class MountainApplicationTest {
 		
 		mountain.setMountainTrailCount(77);
 		mountainService.updateMountain(mountain);
-		SantaLogger.makeLog("info",mountainService.getMountain(mountain.getMountainNo()).toString());
+//		SantaLogger.makeLog("info",mountainService.getMountain(mountain.getMountainNo()).toString());
 		SantaLogger.makeLog("info","=====================");
 		
 		mountainService.updateMountainViewCount(mountain.getMountainNo());
-		SantaLogger.makeLog("info",mountainService.getMountain(mountain.getMountainNo()).toString());
+//		SantaLogger.makeLog("info",mountainService.getMountain(mountain.getMountainNo()).toString());
 		SantaLogger.makeLog("info","=====================");
 		
 		SantaLogger.makeLog("info",""+mountainService.checkMountainExist(mountain.getMountainNo()));
@@ -565,6 +569,11 @@ public class MountainApplicationTest {
 //			SantaLogger.makeLog("info", list2.get(i).toString());
 //		}
 		
+	}
+	
+	@Test
+	public void deleteTest() throws Exception {
+		objectStorageService.deleteObjectFromStorage("profile22.png");
 	}
 	
 }

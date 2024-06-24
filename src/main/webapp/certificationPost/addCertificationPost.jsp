@@ -6,7 +6,7 @@
 <head>
     <c:import url="../common/header.jsp"/>
     <title>Certification Post</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+ 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -14,20 +14,20 @@
             $('#certificationPostImage').on('change', function() {
                 var files = $(this)[0].files;
                 if (files.length > 5) {
-                    alert("You can only upload a maximum of 5 images.");
+                    alert("사진은 최대 5장까지 가능합니다.");
                     $(this).val(''); // 선택한 파일 리셋
                 }
             });
 
-            // 폼 제출 시 파일 개수 확인
-            $('#certificationForm').on('submit', function(e) {
-                var files = $('#certificationPostImage')[0].files;
-                if (files.length > 5) {
-                    alert("You can only upload a maximum of 5 images.");
-                    e.preventDefault(); // Prevent form submission
+            // 해시태그 추가 버튼 기능
+            var hashtagCount = 1;
+            $('#addHashtag').click(function() {
+                if (hashtagCount < 5) {
+                    $('#additionalHashtags').append('<input type="text" class="form-control" name="certificationPostHashtagContents" maxlength="20">');
+                    hashtagCount++;
+                } else {
+                    alert("최대 5개의 해시태그만 가능합니다.");
                 }
-
-              
             });
         });
     </script>
@@ -92,8 +92,10 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="certificationPostHashtagContents">HASHTAG<sup>*</sup> <small>(최대 5개)</small></label>
-                        <input type="text" class="form-control" id="certificationPostHashtagContents" name="certificationPostHashtagContents" maxlength="20" required>
+                        <input type="text" class="form-control" id="certificationPostHashtagContents" name="certificationPostHashtagContents" maxlength="20">
+                        <button type="button" id="addHashtag">+</button>
                     </div>
+                    <div id="additionalHashtags"></div>
                     <div class="form-group">
                         <label>Transportation<sup>*</sup></label>
                         <div>

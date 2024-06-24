@@ -47,11 +47,11 @@ public interface UserService {
 	// User check and confirm
 	//
 	
-	public int getPassword(String userId, String userPassword) throws Exception;
+	public int checkPassword(String userId, String userPassword) throws Exception;
 	
-	public String getDuplicationId(String userId) throws Exception; 
+	public String checkDuplicationId(String userId) throws Exception; 
 	
-	public String getDuplicationNickName(String nickName) throws Exception;
+	public String checkDuplicationNickName(String nickName) throws Exception;
 	
 	public User checkPhoneNumber(String phoneNumber) throws Exception;
 	
@@ -85,7 +85,7 @@ public interface UserService {
 	
 	public Schedule getSchedule(int postNo, int userNo) throws Exception;
 	
-	public List<Schedule> getScheduleList(Search search) throws Exception;
+	public List<Schedule> getScheduleList(int userNo, Search search) throws Exception;
 	
 	public void updateSchedule(Schedule schedule) throws Exception;
 	
@@ -101,6 +101,7 @@ public interface UserService {
 	public User getUserByUserId(String userId) throws Exception;
 	
 	public String getUserPassword(String userPassword) throws Exception;
+
 
 	
 	

@@ -106,7 +106,7 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public int getPassword(String userId, String userPassword) throws Exception {
+	public int checkPassword(String userId, String userPassword) throws Exception {
 		// TODO Auto-generated method stub
 		int checkPassword = userDao.checkPassword(userId, userPassword);
 		if(checkPassword == 1) {
@@ -121,7 +121,7 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public String getDuplicationId(String userId) throws Exception {
+	public String checkDuplicationId(String userId) throws Exception {
 		// TODO Auto-generated method stub
 		String duplicationId = userDao.checkDuplicationId(userId);
 		if(duplicationId != null) {
@@ -136,7 +136,7 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public String getDuplicationNickName(String nickName) throws Exception {
+	public String checkDuplicationNickName(String nickName) throws Exception {
 		// TODO Auto-generated method stub
 		String duplicaionNickName = userDao.checkDuplicationNickName(nickName);
 		if(duplicaionNickName != null) {
@@ -208,9 +208,9 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public List<Schedule> getScheduleList(Search search) throws Exception {
+	public List<Schedule> getScheduleList(int userNo, Search search) throws Exception {
 		// TODO Auto-generated method stub
-		return userDao.getScheduleList(search);
+		return userDao.getScheduleList(userNo, search);
 	}
 
 	@Override

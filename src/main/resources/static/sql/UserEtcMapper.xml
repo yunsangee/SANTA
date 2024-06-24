@@ -45,7 +45,7 @@
 	
 	<resultMap id="alarmMessageSelectMap"
 	type="site.dearmysanta.domain.alarmMessage.AlarmMessage">
-	<id property="alarmNo" column="ALARM_NO" />
+	<id property="alarmNo" column="AM_NO" />
 	<result property="userNo" column="USER_NO" />
 	<result property="userName" column="NAME" />
 	<result property="title" column="TITLE" />
@@ -98,13 +98,13 @@
 	</delete>
 	
 	<select id="getFollowerList" parameterType="int" resultMap="userSelectMap">
-		SELECT u.nickname, u.profile_image, u.badge_image
+		SELECT u.user_no, u.nickname, u.profile_image, u.badge_image
 		FROM USERS u, FOLLOW f
 		WHERE u.USER_NO = f.FOLLOWER_NO AND f.FOLLOWING_NO = #{userNo}
 	</select>
 	
 	<select id="getFollowingList" parameterType="int" resultMap="userSelectMap">
-		SELECT u.nickname, u.profile_image,u.badge_image
+		SELECT u.user_no, u.nickname, u.profile_image,u.badge_image
 		FROM USERS u, FOLLOW f
 		WHERE u.USER_NO = f.FOLLOWING_NO AND f.FOLLOWER_NO = #{userNo}
 	</select>
@@ -204,6 +204,13 @@
             HG_SETTING
         FROM USERS
         WHERE USER_NO = #{userNo}
+    </select>
+    
+    
+    <select id="isFollowing" parameterType="map" resultType="int">
+    	SELECT COUNT(*) FROM FOLLOW 
+    	WHERE #{followerNo} = follwer_no AND #{followingNo} = following_no;
+    
     </select>
 
     

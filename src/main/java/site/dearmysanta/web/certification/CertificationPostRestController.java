@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +46,13 @@ public class CertificationPostRestController {
     @Qualifier("userEtcServiceImpl")
     private UserEtcService userEtcService;
     
+	@Value("${pageSize}")
+	private int pageSize;
+	
+	@Value("${pageUnit}")
+	private int pageUnit;
+    
+    
 	@Autowired
 	private ObjectStorageService objectStorageService;
     
@@ -52,39 +60,71 @@ public class CertificationPostRestController {
         System.out.println(this.getClass());
     }
     
-    @PostMapping(value = "rest/listCertificationPost")
-    public Map<String, Object> listCertificationPost(@RequestBody Search search, Model model) throws Exception {
-    	if (search == null) {
-            search = new Search(); // 기본 검색 조건 설정 또는 처리
-        }
-        
-        if (search.getSearchKeyword() == null) {
-            search.setSearchKeyword(""); // 검색어가 null인 경우 빈 문자열로 설정
-        }
-        
-        Map<String, Object> result = certificationPostService.getCertificationPostList(search);
-        System.out.println(result);
-        List<CertificationPost> certificationPost = (List<CertificationPost>) result.get("list");
-        model.addAttribute("certificationPost", certificationPost);
 
-        System.out.println("Certification Post: " + certificationPost);
+        @PostMapping(value = "rest/listCertificationPost")
+        public Map<String, Object> listCertificationPost(
+            @RequestBody Search search, 
+            @RequestParam(defaultValue = "0") int currentPage,
+            @RequestParam(defaultValue = "10") int pageSize) throws Exception {
+            
+            if (search == null) {
+                search = new Search(); // 기본 검색 조건 설정 또는 처리
+            }
+            
+            if (search.getSearchKeyword() == null) {
+                search.setSearchKeyword(""); // 검색어가 null인 경우 빈 문자열로 설정
+            }
+            
+            // 페이지네이션 파라미터 설정
+            search.setCurrentPage(currentPage);
+            search.setPageSize(pageSize);
+            
+            Map<String, Object> result = certificationPostService.getCertificationPostList(search);
+            List<CertificationPost> certificationPostList = (List<CertificationPost>) result.get("list");
+            List<String> certificationPostImages = new ArrayList<>();
+            for (CertificationPost certificationPost : certificationPostList) {
+                String fileName = certificationPost.getPostNo() + "_0_1"; // 첫 번째 사진 파일명
+                String imageURL = objectStorageService.getImageURL(fileName);
+                certificationPostImages.add(imageURL);
+            }
 
-        return result;
-    }
-    
+            // 클라이언트로 전송할 결과에 이미지 URL 추가
+            result.put("certificationPostImages", certificationPostImages);
+
+            return result;
+        }
+
+
+
     @GetMapping(value="rest/updateCertificationPostDeleteFlag")
     public void updateCertificationPostDeleteFlag(@RequestParam int postNo, @RequestParam int userNo) throws Exception {
     	certificationPostService.updateCertificationPostDeleteFlag(postNo);
        userEtcService.updateCertificationCount(userNo, 1);
 	}
     
-    @GetMapping(value="rest/listMyCertificationPost")
-    public List<CertificationPost> listMyCertificationPost(@RequestParam int userNo) throws Exception {
-    	List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
-        System.out.println("오잉:" + myCertificationPost);
-        return myCertificationPost;
+    @GetMapping(value = "rest/listMyCertificationPost")
+    public Map<String, Object> listMyCertificationPost(@RequestParam int userNo) throws Exception {
+        List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
+        
+        System.out.println("내 인증 게시물: " + myCertificationPost);
+        
+        int postType = 0;
+        List<String> certificationPostImages = new ArrayList<>();
+        for (CertificationPost certificationPost : myCertificationPost) {
+            String fileName = certificationPost.getPostNo() + "_" + postType + "_1"; // 첫 번째 사진 파일명
+            String imageURL = objectStorageService.getImageURL(fileName);
+            certificationPostImages.add(imageURL);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("certificationPostList", myCertificationPost);
+        response.put("certificationPostImages", certificationPostImages);
+        
+        System.out.println("이미지: " + certificationPostImages);
+        
+        return response;
     }
-    
+
     @GetMapping(value="rest/getProfile")
     public Map<String, Object> getProfile(@RequestParam int userNo) throws Exception {
         Map<String, Object> result = new HashMap<>();
@@ -100,13 +140,35 @@ public class CertificationPostRestController {
         List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
         result.put("myCertificationPost", myCertificationPost);
 
-        List<CertificationPost> myLikeCertificationPost = certificationPostService.getCertificationPostLikeList(userNo);
-        System.out.println("myLikeCertificationPost: " + myLikeCertificationPost);
-        result.put("myLikeCertificationPost", myLikeCertificationPost);
+        List<CertificationPost> getCertificationPostLikeList = certificationPostService.getCertificationPostLikeList(userNo);
+        System.out.println("getCertificationPostLikeList: " + getCertificationPostLikeList);
+        result.put("getCertificationPostLikeList", getCertificationPostLikeList);
 
         return result;
     }
     
+    @PostMapping(value = "rest/getCertificationPostLikeList")
+    public Map<String, Object> getCertificationPostLikeList(@RequestParam int userNo) throws Exception {
+        List<CertificationPost> getCertificationPostLikeList = certificationPostService.getCertificationPostLikeList(userNo);
+        System.out.println("좋아요한 게시물: " + getCertificationPostLikeList);
+
+        int postType = 0;
+        List<String> certificationPostImages = new ArrayList<>();
+        for (CertificationPost certificationPost : getCertificationPostLikeList) {
+            String fileName = certificationPost.getPostNo() + "_" + postType + "_1"; // 첫 번째 사진 파일명
+            String imageURL = objectStorageService.getImageURL(fileName);
+            certificationPostImages.add(imageURL);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("certificationPostList", getCertificationPostLikeList);
+        response.put("certificationPostImages", certificationPostImages);
+
+        System.out.println("이미지" + certificationPostImages);
+
+        return response;
+    }
+
 
     @GetMapping(value="rest/getCertificationPostComment")
     public List<CertificationPostComment> getCertificationPostComment(@RequestParam int postNo) throws Exception {
@@ -130,7 +192,7 @@ public class CertificationPostRestController {
     	
 }
 
-  
+    @GetMapping(value="rest/getCertificationPost")
     public String getCertificationPost(@RequestParam int postNo,  Model model) throws Exception {
     	int userNo = 1;
     	int postType = 0;
@@ -191,13 +253,13 @@ public class CertificationPostRestController {
 }
     //hashtag
     
-    @PostMapping(value="rest/addHashtag")
-    public void addHashtag(@RequestBody CertificationPost certificationPost )throws Exception {
-    	certificationPostService.addHashtag(certificationPost);
-}
-    
-    @DeleteMapping(value="rest/deleteHashtag/{hashtagNo}")
-    public void deleteHashtag(@PathVariable int hashtagNo) throws Exception {
+//    @PostMapping(value="rest/addHashtag")
+//    public void addHashtag(@RequestBody CertificationPost certificationPost )throws Exception {
+//    	certificationPostService.addHashtag(certificationPost);
+//}
+//    
+    @PostMapping(value="rest/deleteHashtag")
+    public void deleteHashtag(@RequestParam int hashtagNo) throws Exception {
         certificationPostService.deleteHashtag(hashtagNo);
     }
     

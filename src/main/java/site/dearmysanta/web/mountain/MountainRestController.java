@@ -28,6 +28,7 @@ import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.mountain.Weather;
+import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.correctionpost.CorrectionPostService;
 import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.weather.WeatherService;
@@ -99,24 +100,26 @@ public class MountainRestController {
 		SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like.getPostNo()));
 		Object obj;
 		
-		if(isPop == 1) {
-			obj = session.getAttribute("popularMountainList");
-			if(obj != null) {
-				List<Mountain> list = (List<Mountain>) obj;
-			
-				list.get(index).setIsLiked(1);
-				session.setAttribute("popularMountainList", list);
-			}
-		}else {
-			obj = session.getAttribute("customMountainList");
-			if(obj != null) {
-				List<Mountain> list = (List<Mountain>) obj;
-			
-				list.get(index).setIsLiked(1);
-				session.setAttribute("customMountainList", list);
+		if(index != -1) {
+
+			if (isPop == 1) {
+				obj = session.getAttribute("popularMountainList");
+				if (obj != null) {
+					List<Mountain> list = (List<Mountain>) obj;
+
+					list.get(index).setIsLiked(1);
+					session.setAttribute("popularMountainList", list);
+				}
+			} else {
+				obj = session.getAttribute("customMountainList");
+				if (obj != null) {
+					List<Mountain> list = (List<Mountain>) obj;
+
+					list.get(index).setIsLiked(1);
+					session.setAttribute("customMountainList", list);
+				}
 			}
 		}
-		
 		
 		return mountainService.getTotalMountainLikeCount(like.getPostNo());
 	}//o
@@ -129,6 +132,8 @@ public class MountainRestController {
 		
 		Object obj;
 		
+		if(index != -1) {
+		
 		if(isPop == 1) {
 			obj = session.getAttribute("popularMountainList");
 			if(obj != null) {
@@ -146,19 +151,31 @@ public class MountainRestController {
 				session.setAttribute("customMountainList", list);
 			}
 		}
+		}
 		
 		return mountainService.getTotalMountainLikeCount(like.getPostNo());
 	}//o
 	
 	@PostMapping("rest/updateMountain")
-	public Mountain updateMountain(@RequestBody Mountain mountain, @RequestParam int crpNo) {
-		SantaLogger.makeLog("info", mountain.toString());
+	public Mountain updateMountain(@RequestParam int crpNo, @RequestBody Mountain mountain, HttpSession session) {
+		SantaLogger.makeLog("info", mountain.toString() + " :: " + crpNo + "/" );
 		mountainService.updateMountain(mountain);
 		
 		correctionPostService.updateCorrectionPostStatus(crpNo);
 		
-		System.out.println(mountainService.getMountain(mountain.getMountainNo()));
-		return mountainService.getMountain(mountain.getMountainNo());
+
+		User user = (User)session.getAttribute("user");
+		if(user == null) {
+			SantaLogger.makeLog("info", "user null");
+			
+			mountain =  mountainService.getMountain(-1,mountain.getMountainNo());
+		}else {
+		
+			SantaLogger.makeLog("info", "user  not null");
+		
+			mountain =  mountainService.getMountain(user.getUserNo(),mountain.getMountainNo());
+		}
+		return mountain;
 	}//o
 	
 	

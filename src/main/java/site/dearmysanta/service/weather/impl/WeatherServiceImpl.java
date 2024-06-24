@@ -85,7 +85,7 @@ public class WeatherServiceImpl implements WeatherService{
 		
 		LocalDateTime now = LocalDateTime.now();
 		
-		String[] givenTimes = {"02:10", "05:10", "08:10", "11:10", "14:10", "17:10", "20:10", "23:10"};
+		String[] givenTimes = {"00:00","02:10", "05:10", "08:10", "11:10", "14:10", "17:10", "20:10", "23:10"};
 
         
 
@@ -93,6 +93,11 @@ public class WeatherServiceImpl implements WeatherService{
         // 문자열 형식으로 변환
         String dateString = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String timeString = this.getClosestTime(givenTimes,0);
+        
+        System.out.println("timeString:" + timeString);
+        
+        if(!timeString.equals("0000")) {
+       
 
         // 출력
         SantaLogger.makeLog("info","현재 날짜: " + dateString);
@@ -164,7 +169,7 @@ public class WeatherServiceImpl implements WeatherService{
         
 
         SantaLogger.makeLog("info",weather.toString());
-      
+        }
         
         return weather;
 		
