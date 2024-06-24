@@ -82,6 +82,24 @@
         .form-group .cancel-button:hover {
             background-color: #c82333;
         }
+        
+         .list-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .list-button:hover {
+            background-color: #218838;
+        }
+        
     </style>
 </head>
 <body>
@@ -133,9 +151,13 @@
                 <textarea id="contents" name="contents" rows="10"  value="${schedule.contents}" placeholder="내용을 입력하세요" required>${schedule.contents}</textarea>
             </div>
             
+            <input type="hidden" id="userNo" name="userNo" value="${schedule.userNo}">
+            <input type="hidden" id="postNo" name="postNo" value="${schedule.postNo}">
+            
             <div class="form-group">
                 <button type="button" onclick="location.href='/user/updateSchedule?postNo=${schedule.postNo}&userNo=${schedule.userNo}'">수정하기</button>
-                <button type="button" class="cancel-button" onclick="history.back()">뒤로</button>
+               <!--  <button type="button" class="cancel-button" onclick="history.back()">뒤로</button> -->
+                <a href="/user/getScheduleList" class="list-button">목록으로</a>
             </div>
         </form>
     </div>

@@ -1,23 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <!DOCTYPE html>
 <html>
 
 <!--  ////////////////////////////////////////////// head ///////////////////////////////////////////////// -->
 
 <head>
-    <c:import url="../common/header.jsp" />
-    <title>QNA Post List</title>
+    <meta charset="UTF-8">
+    <title>산타가 궁금해요!</title>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    
-<!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->    
-    
+
+<!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
+
     <style>
-        .pagination {
-            justify-content: center;
+      /*  .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-top: 20px;
+        } */
+
+        .pagination {
+            display: flex;
+            justify-content: center;
         }
         
         .pagination a {
@@ -27,10 +33,6 @@
             border-radius: 5px;
             text-decoration: none;
             color: #81C408;
-            width: 30px;
-            height: 30px;
-            align-items: center;
-            justify-content: center;
         }
         
         .pagination a:hover {
@@ -42,54 +44,78 @@
             color: white;
         }
         
-        .dropdown-custom {
+        .dropdown-custom, .search-input {
             padding: 7px;
             font-size: 13px;
-            background-color: white;
             border: 1px solid #D4D4D4;
             border-radius: 5px;
-            cursor: pointer;
             box-sizing: border-box;
-            color: black;
-            width: auto;
+        }
+
+        .dropdown-custom {
             margin-left: 10px;
         }
         
         .search-input {
-            padding: 7px;
-            font-size: 13px;
-            background-color: white;
-            border: 1px solid #D4D4D4;
-            border-radius: 5px;
-            cursor: pointer;
-            box-sizing: border-box;
-            color: black;
             width: 200px;
             margin-right: 10px;
         }
-        
+
         .search-container {
             display: flex;
             justify-content: flex-end;
             align-items: center;
             gap: 10px;
             margin-bottom: 20px;
-            flex-grow: 1;
         }
         
         .text {
-        	color: inherit; /* 부모 요소의 색상 상속 */
+        	color : inherit;
+        }
+        
+         .btn-custom {
+            margin: 0 5px;
+            padding: 10px;
+            border: 1px solid #81C408;
+            border-radius: 5px;
             text-decoration: none;
+            color: #81C408;
+        }
+
+        .btn-custom:hover {
+            background-color: #DEFBA7;
+        }
+
+        .btn-custom.active {
+            background-color: #81C408;
+            color: white;
+        }
+
+        .btn-write {
+            padding: 10px 20px;
+            background-color: #81C408;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            float: right;
+        }
+
+        .btn-write:hover {
+            background-color: #578906;
         }
         
     </style>
-    
-<!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->    
+    	
+    	<c:import url="../common/header.jsp"/>
+    	
+  <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->  
     
     <script>
     $(document).ready(function() {
         $('#searchForm').submit(function(event) {
-            console.log($(this).serialize());
             event.preventDefault();
             $.ajax({
                 url: $(this).attr('action'),
@@ -97,7 +123,6 @@
                 dataType: 'json',
                 data: $(this).serialize(),
                 success: function(data) {
-                    console.log('Success:', data);
                     updateTable(data);
                 },
                 error: function(xhr, status, error) {
@@ -127,7 +152,7 @@
                     '<tr>' +
                     '<td>' + (index + 1) + '</td>' +
                     '<td>' + getCategory(qna.qnaPostCategory) + '</td>' +
-                    '<td><a href="/qna/getQnaDetail?qnaNo=' + qna.qnaNo + '">' + qna.title + '</a></td>' +
+                    '<td><a href="/user/getQnA?qnaNo=' + qna.qnaNo + '">' + qna.title + '</a></td>' +
                     '<td>' + qna.nickName + '</td>' +
                     '<td>' + qna.postDate + '</td>' +
                     '<td>' + (qna.answerState === 0 ? '답변 대기' : '답변 완료') + '</td>' +
@@ -187,6 +212,7 @@
                     <input type="hidden" id="currentPage" name="currentPage" value="1">
                 </form>
             </div>
+            
             <div class="table-responsive">
                 <table class="table">
                     <thead>
@@ -196,34 +222,44 @@
                             <th scope="col">Title</th>
                             <th scope="col">Nick Name</th>
                             <th scope="col">Post Date</th>
-                            <c:if test="${admin != null}">
-                            <th scope="col">Answer State</th>
-                            </c:if>
+                            	 <c:if test="${admin != null}">
+                           			 <th scope="col">Answer State</th>
+                           		 </c:if>
                         </tr>
                     </thead>
                     <tbody id="qnaTable">
                         <c:forEach var="qna" items="${qnaList}">
                             <tr>
                                 <td>${qnaList.indexOf(qna) + 1}</td>
-                                <td>${qna.qnaPostCategory == 0 ? '계정' : }</td>
+                                <td>${qna.qnaPostCategory == 0 ? '계정' : 
+                                    qna.qnaPostCategory == 1 ? '일정' : 
+                                    qna.qnaPostCategory == 2 ? '인증' : 
+                                    qna.qnaPostCategory == 3 ? '모임' : 
+                                    qna.qnaPostCategory == 4 ? '등산기록' : 
+                                    qna.qnaPostCategory == 5 ? '산 검색' : ''}</td>
                                 <td><a class="text" href="/user/getQnA?postNo=${qna.postNo}&userNo=${qna.userNo}">${qna.title}</a></td>
                                 <td>${qna.nickName}</td>
                                 <td>${qna.postDate}</td>
-                                 <c:if test="${admin != null}">
-                                	<td>${qna.answerState == 0 ? '답변 대기' : '답변 완료'}</td>
-                            	</c:if>
+                                	 <c:if test="${admin != null}">
+                                <td>${qna.answerState == 0 ? '답변 대기' : '답변 완료'}</td>
+                                	</c:if>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
             </div>
+            
             <div class="pagination">
                 <c:forEach var="i" begin="1" end="${totalPages}">
                     <a href="javascript:void(0);" data-page="${i}" class="btn-custom ${i == currentPage ? 'active' : ''}">${i}</a>
                 </c:forEach>
             </div>
+          	 	  <c:if test="${admin == null}">
+             <button class="btn-write" onclick="location.href='/user/addQnA.jsp'">작성하기</button>
+             	</c:if>
         </div>
     </div>
+    
 </main>
 
 <!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// -->

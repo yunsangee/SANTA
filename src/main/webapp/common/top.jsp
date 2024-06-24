@@ -154,6 +154,21 @@
         	font-size: 0.6em;
         }
         
+        
+        .alarmSettings{
+        	width:150px;
+        	right: 100px;
+        	buttom: 50px;
+        	font-size: 0.6em;
+
+        }
+        
+        .alarmSettings .form-switch{
+        	display:flex;
+        	align-items: center;	
+        
+        }
+        
     </style>
 
 </head>
@@ -188,7 +203,7 @@
                             <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img src="${sessionScope.user.profileImage}" class="user-image" alt="User Image"/>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-left profle" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-menu dropdown-menu-left profile" aria-labelledby="navbarDropdown">
                                  <div class="dropdown-header">
                                     <img src="${sessionScope.user.profileImage}" alt="User Image"/>
                                     <div class="info">
@@ -210,61 +225,50 @@
                             </div>
                         </div>
                         
-                        <div class="container settings" id="settingsModal" style="display:none; position:absolute; top: 65%; mari right: 0; background: white; border: 1px solid #ccc; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-    <h2>알림 설정</h2>
+ 
+<div class="container alarmSettings" id="settingsModal" style="display:none; position:absolute; top: 65%; margin-left:5px; right: 0; background: white; border: 1px solid #ccc; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    <h6>알림 설정</h6>
     <div class="form-group">
         <label class="d-flex align-items-center">
             전체알림
-            <label class="form-switch">
-                <input type="checkbox">
-                <span class="slider"></span>
-            </label>
+            <div class="form-check form-switch ml-auto">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchAllAlert"
+                       ${sessionScope.user.allAlertSetting == 1 ? "checked" : ""}>
+                <label class="form-check-label" for="flexSwitchAllAlert"></label>
+            </div>
         </label>
     </div>
     <div class="form-group">
         <label class="d-flex align-items-center">
             인증 게시글 알림
-            <label class="form-switch">
-                <input type="checkbox">
-                <span class="slider"></span>
-            </label>
+            <div class="form-check form-switch ml-auto">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCertificationPostAlert"
+                       ${sessionScope.user.certificationPostAlertSetting == 1 ? "checked" : ""}>
+                <label class="form-check-label" for="flexSwitchCertificationPostAlert"></label>
+            </div>
         </label>
     </div>
     <div class="form-group">
         <label class="d-flex align-items-center">
             모임 게시글 알림
-            <label class="form-switch">
-                <input type="checkbox">
-                <span class="slider"></span>
-            </label>
+            <div class="form-check form-switch ml-auto">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchMeetingPostAlert"
+                       ${sessionScope.user.meetingPostAlertSetting == 1 ? "checked" : ""}>
+                <label class="form-check-label" for="flexSwitchMeetingPostAlert"></label>
+            </div>
         </label>
     </div>
     <div class="form-group">
         <label class="d-flex align-items-center">
             등산 안내 알림
-            <label class="form-switch">
-                <input type="checkbox">
-                <span class="slider"></span>
-            </label>
-        </label>
-    </div>
-    <div class="form-group">
-        <label class="d-flex align-items-center">
-            기타 알림
-            <label class="form-switch">
-                <input type="checkbox">
-                <span class="slider"></span>
-            </label>
-        </label>
-    </div>
-    <div class="form-group">
-        <label class="d-flex align-items-center">
-            설정
-            <i class="fas fa-cog setting-icon"></i>
+            <div class="form-check form-switch ml-auto">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchHikingGuideAlert"
+                       ${sessionScope.user.hikingGuideAlertSetting == 1 ? "checked" : ""}>
+                <label class="form-check-label" for="flexSwitchHikingGuideAlert"></label>
+            </div>
         </label>
     </div>
 </div>
-                        
                     	
                     	<div class="dropdown" style="margin-left:30px;">
                             <a class="dropdown-toggle" href="#" id="alarmDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -372,6 +376,10 @@ $(document).ready(function() {
             closeAlarmSetting();
         });
         
+        $('.form-switch').on('click', function(event){
+        	event.stopPropagation();
+        });
+        
         
         function closeAlarmSetting() {
         	var modal = document.getElementById('settingsModal');
@@ -381,6 +389,81 @@ $(document).ready(function() {
                 modal.style.display = 'none';
             }
         }
+        
+        
+        $('#flexSwitchAllAlert').on('click', function() {
+            var isChecked = $(this).is(':checked');
+            console.log('전체알림:', isChecked);
+            // AJAX 요청을 통해 서버에 업데이트
+            
+            let userNo = ${sessionScope.user.userNo};
+            let alarmSettingType = 0;
+            
+            console.log('userNo:' + userNo);
+            
+            $.ajax({
+            	url:'userEtc/rest/updateAlarmSetting?userNo=' + userNo +'&alarmSettingType='+alarmSettingType,
+        		method:"GET",
+        		success:function(response){
+        			console.log('all alarm setting clear');
+        			location.reload();
+        		}
+            });
+        });
+
+        $('#flexSwitchCertificationPostAlert').on('click', function() {
+            var isChecked = $(this).is(':checked');
+            console.log('인증 게시글 알림:', isChecked);
+            // AJAX 요청을 통해 서버에 업데이트
+            
+            let userNo = ${sessionScope.user.userNo};
+            let alarmSettingType = 1;
+            
+            $.ajax({
+            	url:'userEtc/rest/updateAlarmSetting?userNo=' + userNo +'&alarmSettingType='+alarmSettingType,
+        		method:"GET",
+        		success:function(response){
+        			console.log('all alarm setting clear');
+        			location.reload();
+        		}
+            });
+        });
+
+        $('#flexSwitchMeetingPostAlert').on('click', function() {
+            var isChecked = $(this).is(':checked');
+            console.log('모임 게시글 알림:', isChecked);
+            // AJAX 요청을 통해 서버에 업데이트
+            
+            let userNo = ${sessionScope.user.userNo};
+            let alarmSettingType = 2;
+            
+            $.ajax({
+            	url:'userEtc/rest/updateAlarmSetting?userNo=' + userNo +'&alarmSettingType='+alarmSettingType,
+        		method:"GET",
+        		success:function(response){
+        			console.log('all alarm setting clear');
+        			location.reload();
+        		}
+            });
+        });
+
+        $('#flexSwitchHikingGuideAlert').on('click', function() {
+            var isChecked = $(this).is(':checked');
+            console.log('등산 안내 알림:', isChecked);
+            // AJAX 요청을 통해 서버에 업데이트
+            
+            let userNo = ${sessionScope.user.userNo};
+            let alarmSettingType = 3;
+            
+            $.ajax({
+            	url:'userEtc/rest/updateAlarmSetting?userNo=' + userNo +'&alarmSettingType='+alarmSettingType,
+        		method:"GET",
+        		success:function(response){
+        			console.log('all alarm setting clear');
+        			location.reload();
+        		}
+            });
+        });
 
 });
 </script>

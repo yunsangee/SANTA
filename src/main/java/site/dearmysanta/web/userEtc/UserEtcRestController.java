@@ -2,6 +2,8 @@ package site.dearmysanta.web.userEtc;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.alarmMessage.AlarmMessage;
 import site.dearmysanta.domain.user.User;
+import site.dearmysanta.service.user.UserService;
 import site.dearmysanta.service.user.etc.UserEtcService;
 
 @RestController
@@ -20,6 +23,9 @@ import site.dearmysanta.service.user.etc.UserEtcService;
 public class UserEtcRestController {
 	@Autowired
 	private UserEtcService userEtcService;
+	
+	@Autowired
+	private UserService userService;
 	
 	public UserEtcRestController(){
 		SantaLogger.makeLog("info", this.getClass().toString());
@@ -79,9 +85,10 @@ public class UserEtcRestController {
 	}//o
 	
 	@GetMapping(value="rest/updateAlarmSetting")
-	public void updateAlarmSetting(@RequestParam int userNo, int alarmSettingType) throws Exception {
+	public void updateAlarmSetting(@RequestParam int userNo, int alarmSettingType, HttpSession session) throws Exception {
 		SantaLogger.makeLog("info","userNo, alarmSettingType:" + userNo + " " + alarmSettingType);
 		userEtcService.updateAlarmSetting(userNo, alarmSettingType);
+		session.setAttribute("user", userService.getUser(userNo));
 	}//o
 	
 	@GetMapping(value="rest/getUserSettings")

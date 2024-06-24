@@ -86,7 +86,7 @@ import site.dearmysanta.domain.user.User;
 		
 		public Schedule getSchedule(int postNo, int userNo) throws Exception;
 		
-		public List<Schedule> getScheduleList(Search search) throws Exception;
+		public List<Schedule> getScheduleList(int userNo, Search search) throws Exception;
 		
 		public void updateSchedule(Schedule schedule) throws Exception;
 		

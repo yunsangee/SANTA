@@ -55,6 +55,61 @@
         	 window.open('../correctionPost/addCorrectionPost.jsp', '정정제보', 'width=400,height=400');
         	}
         });
+        
+        $(document).on('click', '.like-button', function() {
+        	
+        	let user = "${sessionScope.user != null ? sessionScope.user : 'null'}";
+        	console.log("mountainNo:" + $(this).parent().find('input:hidden[id="mountainNo"]').val());
+        	let clickedElement = $(this)
+        	
+        	
+        	console.log('index:' + $(this).parent().find('input:hidden[id="mountainIndex"]').val());
+        	let index =  $(this).parent().find('input:hidden[id="mountainIndex"]').val();
+        	
+        	let isPop = 0;
+        	
+        	if(user != 'null'){
+            	$(this).toggleClass('fas far');
+            	//$(this).toggleClass('text-danger');
+            	
+            	const mountainLike = {
+            			
+            			postNo: $('#mountainNo').val(),
+
+            			
+            	}
+            	
+            	if(clickedElement.hasClass('fas')){
+            		
+            	 $.ajax({
+            		url: "/mountain/rest/addMountainLike?index="+'-1'+"&isPop="+0,
+            		type:"POST",
+            		contentType: "application/json",
+    	            dataType: "json",
+            		data : JSON.stringify(mountainLike),
+            		success: function(response,status){
+            			console.log("res:" + response);
+            			//$(this).text(response);
+            			clickedElement.text(response);
+            			console.log(clickedElement.text());
+            			
+            		},
+            	}); 
+            	}else{
+            		 $.ajax({
+                 		url: "/mountain/rest/deleteMountainLike?index="+'-1'+"&isPop="+0,
+                 		type:"POST",
+                 		contentType: "application/json",
+         	            dataType: "json",
+                 		data : JSON.stringify(mountainLike),
+                 		success: function(response,status){
+                 			clickedElement.text(response);
+                 			
+                 		},
+                 	}); 
+            	}
+        	}
+        });
     });
     </script>
 
@@ -136,6 +191,14 @@
 .stat-item span {
     font-size: 1.1em;
 }
+
+.fas.fa-heart {
+    color: red; /* 좋아요가 눌린 경우의 색상 */
+}
+
+.far.fa-heart {
+    color: gray; /* 좋아요가 눌리지 않은 경우의 색상 */
+}
         
     </style>
 </head>
@@ -158,6 +221,9 @@
             <div class="col-md-12">
                  <div class="title"><h2>${mountain.mountainName} </h2>
                  					<i class="bi bi-info-circle"></i>
+                 					<div class='like'>
+                                    <i class="${mountain.isLiked == 1 ? 'fas' : 'far'} fa-heart popular like-button" style="cursor: pointer;">${mountain.likeCount}</i>
+                                    <input type="hidden" id="mountainNo" value="${mountain.mountainNo}"/>
                  </div>
     			 <div>위치: ${mountain.mountainLocation}</div>
     			 <div>높이: ${mountain.mountainAltitude}m</div>

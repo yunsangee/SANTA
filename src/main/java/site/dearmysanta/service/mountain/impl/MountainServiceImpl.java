@@ -404,8 +404,17 @@ public class MountainServiceImpl implements MountainService {
 		mountainDao.addMountain(mountain);
 	}
 	
-	public Mountain getMountain(int mountainNo) {
-		return mountainDao.getMountain(mountainNo);
+	public Mountain getMountain(int userNo, int mountainNo) {
+		
+		Mountain mountain = mountainDao.getMountain(mountainNo);
+		mountain.setLikeCount(mountainDao.getTotalMountainLikeCount(mountain.getMountainNo()));
+		
+		if(userNo != -1) {
+			SantaLogger.makeLog("info", "mountainNo & userNo" + mountain.getMountainNo()+ " "+userNo);
+			mountain.setIsLiked(mountainDao.isLiked(mountain.getMountainNo(), userNo));
+		}
+		
+		return mountain;
 	}
 	
 	//

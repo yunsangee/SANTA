@@ -28,7 +28,7 @@
 	    				#{hikingDifficulty}, #{Transportation}, #{userNo})
 	</insert>
 	
-	<select id="getScheduleList" resultMap="ScheduleResultMap">
+	<!-- <select id="getScheduleList" resultMap="ScheduleResultMap">
 	 SELECT
        s.schedule_no, s.user_no, s.schedule_title, s.schedule_content, s.schedule_date, s.schedule_mountain_name,
         s.schedule_total_time, s.schedule_descent_time, s.schedule_ascent_time, s.schedule_difficulty, s.schedule_transportation
@@ -36,7 +36,19 @@
         schedule s, users u
     WHERE 
        s.user_no = u.user_no
+	</select> -->
+	
+	<select id="getScheduleList" parameterType="int" resultMap="ScheduleResultMap">
+	    SELECT 
+	    	* 
+	    FROM 
+	    	schedule
+	    WHERE 
+	    	user_no = #{userNo}
+	    ORDER BY 
+	    	schedule_date DESC
 	</select>
+
 	
 	<select id="getSchedule" resultMap="ScheduleResultMap">
 	 SELECT

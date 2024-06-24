@@ -208,9 +208,9 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public List<Schedule> getScheduleList(Search search) throws Exception {
+	public List<Schedule> getScheduleList(int userNo, Search search) throws Exception {
 		// TODO Auto-generated method stub
-		return userDao.getScheduleList(search);
+		return userDao.getScheduleList(userNo, search);
 	}
 
 	@Override

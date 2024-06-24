@@ -76,10 +76,18 @@ public class MountainController {
 	public String getMountain(@RequestParam int mountainNo, double lat, double lon,Model model, HttpSession session) throws Exception { // 나중에 위도 경도는 현재 위치로 들어와야할듯? 
 		mountainService.updateMountainViewCount(mountainNo);
 		
-		SantaLogger.makeLog("info", mountainService.getMountain(mountainNo).getMountainImage());
+		User user = (User)session.getAttribute("user");
+		Mountain mountain;
+		if(user == null) {
+			SantaLogger.makeLog("info", "user null");
+			
+			mountain =  mountainService.getMountain(-1,mountainNo);
+		}else {
 		
-		Mountain mountain =  mountainService.getMountain(mountainNo);
+			SantaLogger.makeLog("info", "user null");
 		
+			mountain =  mountainService.getMountain(user.getUserNo(),mountainNo);
+		}
 		session.setAttribute("mountain", mountain);
 		model.addAttribute("weatherList", weatherService.getWeatherList(lat, lon));
 		
@@ -92,14 +100,29 @@ public class MountainController {
 	}//o
 	
 	@GetMapping(value="updateMountain")
-	public String updateMountain(@RequestParam int crpNo, @RequestParam int mountainNo, Model model) {
+	public String updateMountain(@RequestParam int crpNo, @RequestParam int mountainNo, Model model, HttpSession session) {
 		
 		//
 		// need to get mountain info
 		//
 		SantaLogger.makeLog("info","updateMountainView");
+		
+		User user = (User)session.getAttribute("user");
+		Mountain mountain;
+		if(user == null) {
+			SantaLogger.makeLog("info", "user null");
+			
+			mountain =  mountainService.getMountain(-1,mountainNo);
+		}else {
+		
+			SantaLogger.makeLog("info", "user null");
+		
+			mountain =  mountainService.getMountain(user.getUserNo(),mountainNo);
+		}
+		
+		
 		model.addAttribute("crpNo", crpNo);
-		model.addAttribute("mountain",mountainService.getMountain(mountainNo));
+		model.addAttribute("mountain",mountain);
 		
 		return "forward:/mountain/updateMountain.jsp";
 	}

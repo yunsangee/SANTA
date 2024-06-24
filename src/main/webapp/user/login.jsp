@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>   
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.security.SecureRandom" %>
@@ -18,11 +16,9 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
 
- <style>
- 
+<style>
 html, body {
-    height: 100%;
-    margin: 0;
+    height: 95%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -42,10 +38,7 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* background: white; */
     padding: 30px;
-   /*  border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
 }
 
 h2 {
@@ -53,15 +46,27 @@ h2 {
 }
 
 input[type="email"] {
-     width: 300px; /* 원하는 크기로 조절합니다. */
+    width: 300px; /* 원하는 크기로 조절합니다. */
     padding: 15px; /* 입력 필드 내부 여백(padding)을 추가합니다. */
     font-size: 16px; /* 폰트 크기를 조정합니다. */
-   /*  margin-bottom: 10px; /* 입력 필드 간의 간격(margin)을 추가합니다. */ */
-	background-color: #ffffff; /* 배경색 추가 */
+    background-color: #ffffff; /* 배경색 추가 */
     color: black;
+    margin-top: -10px;
     border: 1px solid #ccc; /* 테두리 추가 */
     border-radius: 5px;
-    /* cursor: pointer; */
+    margin-bottom: 10px; /* 입력 필드 간의 간격(margin)을 추가합니다. */
+}
+
+input[type="password"] {
+    width: 300px; /* 원하는 크기로 조절합니다. */
+    padding: 15px; /* 입력 필드 내부 여백(padding)을 추가합니다. */
+    font-size: 16px; /* 폰트 크기를 조정합니다. */
+    background-color: #ffffff; /* 배경색 추가 */
+    color: black;
+    margin-top: -10px;
+    border: 1px solid #ccc; /* 테두리 추가 */
+    border-radius: 5px;
+    margin-bottom: 10px; /* 입력 필드 간의 간격(margin)을 추가합니다. */
 }
 
 input[type="email"]:focus,
@@ -71,20 +76,8 @@ input[type="password"]:focus {
     box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); /* 선택적으로 포커스 시 그림자 효과 추가 */
 }
 
-input[type="password"] {
-    width: 300px; /* 원하는 크기로 조절합니다. */
-    padding: 15px; /* 입력 필드 내부 여백(padding)을 추가합니다. */
-    font-size: 16px; /* 폰트 크기를 조정합니다. */
-    margin-bottom: 10px; /* 입력 필드 간의 간격(margin)을 추가합니다. */
-	/* background-color: #00aaff; */
-    color: black;
-    border: 1px solid #ccc; /* 테두리 추가 */
-    border-radius: 5px;
-    /* cursor: pointer; */
-}
-
-button {
-    width: 100%;
+.button {
+    width: 340px;
     padding: 15px;
     font-size: 16px;
     margin-top: 10px;
@@ -95,7 +88,7 @@ button {
     cursor: pointer; 
 }
 
-button:hover {
+.button:hover {
     background-color: #578906; 
 } 
 
@@ -104,7 +97,7 @@ button:hover {
     margin-bottom: 10px; /* 아래쪽 마진 추가 */
     display: flex;
     font-size: 13px;
-     justify-content: center; /* 가운데 정렬 */
+    justify-content: center; /* 가운데 정렬 */
     width: 100%;
 }
 
@@ -118,9 +111,8 @@ button:hover {
     display: flex;
     font-size: 12px;
     justify-content: center;
-    color:  #999999; /* 회색*/
+    color: #999999; /* 회색*/
 }
-
 
 .sns-icon {
     width: 100%; /* 모든 이미지의 너비를 동일하게 설정 */
@@ -129,21 +121,44 @@ button:hover {
 }
 
 .logo-and-text {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
 
-        .logo-and-text img {
-            width: 100px;
-            margin-right: 10px;
-        }
-           
+.logo-and-text img {
+    width: 100px;
+    margin-right: 10px;
+}
+
+.logo-and-text h2 {
+	margin-left: -20px;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: -1px;
+    margin-left: 70px;
+    margin-bottom: 10px;
+    text-align: left;
+    width: 400px;
+    align-items: center;
+    justify-content: center;
+}
+
 </style>
 
 <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
 
 <script>
+    $(document).ready(function() {
+        // 탈퇴한 회원 경고 메시지 표시
+        <c:if test="${not empty withdrawError}">
+            alert("${withdrawError}");
+        </c:if>
+    });
+
     function logoutAndRedirect() {
         $.ajax({
             url: '/oauth/logout/kakao',
@@ -167,70 +182,50 @@ button:hover {
 
 <!--  ////////////////////////////////////////////// header ///////////////////////////////////////////////// -->
 
-	<header>
-	
-	</header>
-	
+<header>
+</header>
+
 <!--  ////////////////////////////////////////////// main ///////////////////////////////////////////////// -->
-	
-	<main>
-	
-   <div class="logo-and-text">
-         <img src="/image/logo.png" alt="Logo"> <!-- 로고 이미지 -->
-        <h2>SANTA</h2> <!-- 텍스트 "SANTA" 추가 -->
+
+<main>
+
+<div class="logo-and-text">
+    <img src="/image/산타 로고.png" alt="Logo"> <!-- 로고 이미지 -->
+    <h2>SANTA</h2> <!-- 텍스트 "SANTA" 추가 -->
+</div>
+
+<form action="/user/login" method="post">
+    <div>
+        <input type="email" id="userId" name="userId" placeholder="이메일" required>
+    </div>
+    <div>
+        <input type="password" id="userPassword" name="userPassword" placeholder="비밀번호" required>
+        <c:if test="${not empty loginError}">
+            <div class="error-message">${loginError}</div>
+        </c:if>
     </div>
     
-    <form action="/user/login" method="post">
+    <div>
+    <button type="submit" class="button">로그인</button>
+    </div>
     
-        <div>
-           <!--  <label for="userId"></label> -->
-            <!-- <input class="userId" name="email" type="email" position="top" placeholder="이메일" required> -->
-             <input type="email" id="userId" name="userId" placeholder="이메일" required>
-        </div>
-        <div>
-             <input type="password" id="userPassword" name="userPassword" placeholder="비밀번호" required>
-         </div>
-              
-              <button type="submit">로그인</button>
-              
-            <!-- <input type="text" id="userId" name="userId" placeholder="이메일" required> -->
-            <!-- <label for="userPassword"></label> -->
-            <!-- <input class="password" name="password" type="password" position="bottom" placeholder="비밀번호" required> -->
-            <!-- <input type="password" id="userPassword" name="userPassword" placeholder="비밀번호" required> -->
-       
-        
-        <div class="links">
-            <a href="/user/findUserPassword.jsp">비밀번호 찾기</a>&nbsp;&nbsp;&nbsp;&nbsp&nbsp&nbsp
-            &nbsp&nbsp<a href="/user/addUser.jsp">회원가입</a>
-        </div>
-        <!-- <a href="/user/addUser.jsp">회원가입</a>  
-        <a href="/user/findUserPassword.jsp">비밀번호 찾기</a> -->
-        
-        <div class="sns-login">
-            <p>SNS계정으로 간편 로그인/회원가입</p>
-        </div>
-        
-    		<!-- <a href="https://kauth.kakao.com/oauth/authorize?client_id=53ae98941fff9e24b11901e9a79432d9&redirect_uri=http://localhost:8001/oauth/kakao&response_type=code">
-        		<img src="/image/kakaotalk_sharing_btn_medium.png" alt="Kakao Login" class="sns-icon">
-    		</a> -->
-    		
-    		<div class="sns-login">
-                <!-- <img src="/image/kakaotalk_sharing_btn_medium.png" alt="Kakao Login" class="sns-icon" onclick="logoutAndRedirect()"> -->
-                <img src="/image/kakao_login_medium_wide.png" alt="Kakao Login" class="sns-icon" onclick="logoutAndRedirect()">
-    		
-    		<!-- <a href="https://nid.naver.com/oauth2.0/authorize">
-        		<img src="/image/btnG_아이콘사각.png" alt="Naver Login" class="sns-icon">
-    		</a> -->
-		</div>
+    <div class="links">
+        <a href="/user/findUserPassword.jsp">비밀번호 찾기</a>&nbsp;&nbsp;&nbsp;&nbsp&nbsp&nbsp
+        &nbsp&nbsp<a href="/user/addUser.jsp">회원가입</a>
+    </div>
+    <div class="sns-login">
+        <p>SNS계정으로 간편 로그인/회원가입</p>
+    </div>
+    <div class="sns-login">
+        <img src="/image/kakao_login_medium_wide.png" alt="Kakao Login" class="sns-icon" onclick="logoutAndRedirect()">
+    </div>
+</form>
 
-        
-    </form>
-    
-    </main>
-    
+</main>
+
 <!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// -->
-    
-    <footer></footer>
-    
+
+<footer></footer>
+
 </body>
 </html>
