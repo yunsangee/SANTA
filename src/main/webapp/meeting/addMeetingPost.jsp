@@ -10,6 +10,8 @@
         user.setUserNo(1);  // userNo 값을 임의로 설정합니다.
         user.setNickName("재호짱");
         session.setAttribute("user", user);
+    } else {
+    	System.out.println("있는데 ??????/"+session.getAttribute("user"));
     }
 %>
 

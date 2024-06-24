@@ -1,5 +1,6 @@
 package site.dearmysanta.web.meeting;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +90,8 @@ public class MeetingController {
         }
 		
 		List<MeetingParticipation> meetingParticipation = (List<MeetingParticipation>)map.get("meetingParticipations");
+		
+		System.out.println("사진사진사진"+meetingPostImages);
 				
 		
 		model.addAttribute("meetingPost", meetingPost);
@@ -151,6 +154,10 @@ public class MeetingController {
 	public String updateMeetingPost(@RequestParam int postNo, Model model) throws Exception {
 		
 		MeetingPost meetingPost = meetingService.getMeetingPost(postNo);
+		
+		DateTimeFormatter formatterUntilDay = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		
+		
 		model.addAttribute(meetingPost);
 		
 		return "forward:/meeting/updateMeetingPost.jsp";

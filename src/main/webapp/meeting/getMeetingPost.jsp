@@ -27,10 +27,16 @@
     <script type = "text/javascript">
 	    $(function() {
 	    	
-	    	$('#deletePostButton').click(function() {
+	    	$('#deletePostButton').on('click', function() {
 	    		
 	    		var postNo = "${meetingPost.postNo}";
                 self.location = "/meeting/deleteMeetingPost?postNo="+postNo;
+            });
+	    	
+			$('#updatePostButton').on('click', function() {
+	    		
+	    		var postNo = "${meetingPost.postNo}";
+                self.location = "/meeting/updateMeetingPost?postNo="+postNo;
             });
 	    	
 	    	
@@ -458,7 +464,7 @@
 						            </c:when>
 						            <c:otherwise>
 						                <%-- 모임이 끝난 상태가 아니라면 수정하기 버튼 표시 --%>
-						                <button class="btn btn-primary border-0 rounded text-white" id="update">수정하기</button>
+						                <button id="updatePostButton" class="btn btn-primary border-0 rounded text-white" id="update">수정하기</button>
 						            </c:otherwise>
 						        </c:choose>
 						        
@@ -482,44 +488,49 @@
     			</div>
     			
     			<div class="row mb-5">
-    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-2 title">작성자</div>
-    				<div class="col-md-5 border align-items-center text-start py-2">${meetingPost.nickName}</div>
-    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-2 title">작성 일자</div>
-    				<div class="col-md-2 border align-items-center text-center py-2">
+    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">작성자</div>
+    				<div class="col-md-5 border align-items-center text-start py-3">${meetingPost.nickName}</div>
+    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">작성 일자</div>
+    				<div class="col-md-2 border align-items-center text-center py-3">
     					<fmt:formatDate value="${meetingPost.postDate}" pattern="yyyy-MM-dd HH:mm" />
     				</div>
     				
-    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-2 title">제목</div>
-    				<div class="col-md-5 border align-items-center text-start py-2">${meetingPost.title}</div>
-    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-2 title">참여 가능 등급</div>
-    				<div class="col-md-2 border align-items-center text-center py-2">${meetingPost.participationGrade}(이미지) 이상</div>
+    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">제목</div>
+    				<div class="col-md-5 border align-items-center text-start py-3">${meetingPost.title}</div>
+    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 가능 등급</div>
+    				<div class="col-md-2 border align-items-center text-center py-3">${meetingPost.participationGrade}(이미지) 이상</div>
     				
-    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-2 title">모임 명</div>
-    				<div class="col-md-5 border align-items-center text-start py-2">${meetingPost.meetingName}</div>
-    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-2 title">모집 마감일</div>
-    				<div class="col-md-2 border align-items-center text-center py-2">
+    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">모임 명</div>
+    				<div class="col-md-5 border align-items-center text-start py-3">${meetingPost.meetingName}</div>
+    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">모집 마감일</div>
+    				<div class="col-md-2 border align-items-center text-center py-3">
     					<fmt:formatDate value="${meetingPost.recruitmentDeadline}" pattern="yyyy-MM-dd" />
     				</div>
     				
-    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-2 title">출발 예정지</div>
-    				<div class="col-md-9 border align-items-center text-start py-2">${meetingPost.appointedDeparture} ${meetingPost.appointedDetailDeparture}</div>
+    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">출발 예정지</div>
+    				<div class="col-md-9 border align-items-center text-start py-3">${meetingPost.appointedDeparture} ${meetingPost.appointedDetailDeparture}</div>
     				
-    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-2 title">등산 예정 산</div>
-    				<div class="col-md-5 border align-items-center text-start py-2">${meetingPost.appointedHikingMountain}</div>
-    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-2 title">등산 예정 일자</div>
-    				<div class="col-md-2 border align-items-center text-center py-2">
+    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">등산 예정 산</div>
+    				<div class="col-md-5 border align-items-center text-start py-3">${meetingPost.appointedHikingMountain}</div>
+    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">등산 예정 일자</div>
+    				<div class="col-md-2 border align-items-center text-center py-3">
     					<fmt:formatDate value="${meetingPost.appointedHikingDate}" pattern="yyyy-MM-dd" />
     				</div>
     				
-    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-2 title">최대 인원</div>
-    				<div class="col-md-2 border align-items-center text-center py-2">${meetingPost.maximumPersonnel}</div>
-    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-2 title">참여 가능 성별</div>
-    				<div class="col-md-2 border align-items-center text-center py-2">${meetingPost.participationGender}</div>
-    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-2 title">참여 가능 연령대</div>
-    				<div class="col-md-2 border align-items-center text-center py-2">${meetingPost.participationAge}</div>
+    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">최대 인원</div>
+    				<div class="col-md-2 border align-items-center text-center py-3">${meetingPost.maximumPersonnel}</div>
+    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 가능 성별</div>
+    				<div class="col-md-2 border align-items-center text-center py-3">${meetingPost.participationGender}</div>
+    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 가능 연령대</div>
+    				<div class="col-md-2 border align-items-center text-center py-3">${meetingPost.participationAge}</div>
     				
-    				<div class="col-md-3 border bg-light align-items-center py-2 title contents d-flex justify-content-center">내용</div>
-    				<div class="col-md-9 border align-items-center text-start py-2 contents">${meetingPost.contents}</div>
+    				<div class="col-md-2 border bg-light align-items-center title contents d-flex justify-content-center">내용</div>
+    				<div class="col-md-10 border align-items-center text-start contents">
+    					<c:forEach var="image" items="${meetingPostImages}">
+					        <img src="${image}" alt="Image" />
+					    </c:forEach>
+    					${meetingPost.contents}
+    				</div>
     			
     			</div>
     			
