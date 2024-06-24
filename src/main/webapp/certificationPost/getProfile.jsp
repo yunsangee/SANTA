@@ -201,7 +201,7 @@
             </div>
             <div class="tab-menu">
                 <a href="#" id="my-certifications-tab" class="active"><strong>${infouser.nickName}</strong> 산타의 인증</a>
-                <a href="#" id="liked-posts-tab">좋아요한 게시글</a>
+                <a href="#" id="liked-posts-tab"><strong>${infouser.nickName}</strong> 산타가 좋아요한 게시글</a>
             </div>
             <div id="my-posts-container" class="posts-container">
                 <c:forEach var="certificationPost" items="${myCertificationPost}" varStatus="status">
@@ -213,9 +213,7 @@
             <div id="like-posts-container" class="posts-container">
                 <c:forEach var="certificationPost" items="${getCertificationPostLikeList}" varStatus="status">
                     <div class="post-preview" data-postNo="${certificationPost.postNo}">
-                        <p>산 이름: ${certificationPost.certificationPostMountainName}</p>
-                        <p>제목: ${certificationPost.title}</p>
-                        <p>등산 날짜: ${certificationPost.certificationPostHikingDate}</p>
+                        
                         <img src="${myCertificationPostImages[status.index]}" alt="Certification Post Image">
                     </div>
                 </c:forEach>

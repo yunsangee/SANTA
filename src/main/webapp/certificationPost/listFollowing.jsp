@@ -8,8 +8,25 @@
     <title>팔로잉목록</title>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script>
+
     $(document).ready(function(){
-        const followerUserNo =1; //유저번호임의로 지정해둠
+        const followerUserNo = 1; // 유저번호 임의로 지정해둠
+      
+        $(document).on('click', 'p.clickable', function() {
+            var userNo = $(this).closest('tr').attr('id').replace('row-', ''); // 클릭된 닉네임의 부모 tr의 id에서 userNo 추출
+
+            // 클릭된 유저 번호를 콘솔에 출력
+            console.log('Clicked user number:', userNo);
+
+            // 추가로 필요한 작업을 여기에 추가
+            // 예를 들어, 클릭된 유저 번호를 기반으로 다른 데이터를 가져오거나 다른 기능을 실행할 수 있습니다.
+
+            // 페이지 이동
+            window.location.href = "/certificationPost/getProfile?userNo=" + userNo;
+        });
+
+
+        
 
         $("button.delete-follow").on('click', function(){
             const followingUserNo = $(this).data("following-id");
@@ -40,6 +57,7 @@
             });
         });
 
+        
         function getFollowingList(userNo) {
             $.ajax({
                 url: "http://127.0.0.1:8001/userEtc/rest/getFollowingList",
@@ -113,6 +131,9 @@
         }
     });
     </script>
+    
+
+    
 </head>
 <body>
     <header>
@@ -131,7 +152,8 @@
                                         <img src="${following.profileImage}" alt="Profile Image" style="width: 50px; height: 50px; border-radius: 50%;">
                                     </td>
                                     <td style="vertical-align: middle; padding-right: 10px;">
-                                        <p class="mb-0">${following.nickName}</p>
+                                 <p class="mb-0 clickable" data-userNo="${following.userNo}">${following.nickName}</p>
+                                     
                                     </td>
                                     <td style="vertical-align: middle; padding-right: 10px;">
                                         <img src="${following.badgeImage}" alt="Badge Image" style="width: 24px; height: 24px;">
@@ -156,6 +178,8 @@
             </div>
         </div>
     </main>
-    <footer></footer>
+       <footer>
+        <c:import url="../common/footer.jsp"/>
+    </footer>
 </body>
 </html>
