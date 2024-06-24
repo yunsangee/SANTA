@@ -6,62 +6,113 @@
     <c:import url="../common/header.jsp"/>
     <meta charset="UTF-8">
     <title>Certification Post List</title>
-    <style>
-        .certification-post-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-        .certification-post {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            overflow: hidden;
-            width: 300px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-        .certification-post:hover {
-            transform: scale(1.05);
-        }
-        .certification-post img {
-            width: 100%;
-            height: auto;
-        }
-        .certification-post .details {
-            padding: 15px;
-        }
-        .fixed-buttons {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .btn-cp {
-            border: 2px solid orange;
-            background-color: white;
-            color: limegreen;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
-        }
-        .btn-cp:hover {
-            transform: scale(1.1);
-        }
-        .btn-cp .fa {
-            font-size: 24px;
-        }
-    </style>
+    
+<style>
+
+.certification-post-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.certification-post {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 300px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+.certification-post:hover {
+    transform: scale(1.05);
+}
+.certification-post img {
+    width: 100%;
+    height: auto;
+}
+.certification-post .details {
+    padding: 15px;
+}
+.fixed-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.btn-cp {
+    border: 2px solid orange;
+    background-color: white;
+    color: limegreen;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+}
+.btn-cp:hover {
+    transform: scale(1.1);
+}
+.btn-cp .fa {
+    font-size: 24px;
+}
+
+.radio-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px; /* 추가된 마진 */
+    margin-left: 0; /* 검색 폼과 라디오 버튼의 시작 위치 맞춤 */
+}
+
+.radio-container input[type="radio"] {
+    display: none;
+}
+
+.radio-container label {
+    padding: 5px 15px; /* 패딩 크기 조정 */
+    border: 2px solid #ccc;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px; /* 폰트 크기 조정 */
+    color: #6c757d; /* 검색 폼과 동일한 색상 */
+    transition: all 0.3s ease;
+}
+
+.radio-container input[type="radio"]:checked + label {
+    background-color: #81c408; /* 검색 버튼과 동일한 배경 색상 */
+    color: white;
+    border-color: #81c408; /* 검색 버튼과 동일한 테두리 색상 */
+}
+
+.radio-container label:hover {
+    border-color: #81c408; /* 검색 버튼과 동일한 테두리 색상 */
+    color: #81c408; /* 검색 폼과 동일한 색상 */
+}
+
+#searchForm {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; /* 검색 폼과 라디오 컨테이너 사이의 간격 */
+    margin-left: 0; /* 검색 폼과 라디오 버튼의 시작 위치 맞춤 */
+    margin-top: 20px; /* 헤더와의 간격 추가 */
+}
+
+.header {
+    margin-bottom: 20px; /* 헤더와의 간격 추가 */
+}
+</style>
+
+
+
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
     <script>
     $(document).ready(function() {
         let page = 0;
@@ -175,7 +226,7 @@
                         <input type="text" id="searchInput" name="searchKeyword" value="" placeholder="Search" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 300px; height: 45px;">
                         <button type="submit" class="btn btn-primary border-2 border-secondary rounded-pill text-white search-button" style="height: 45px;">검색</button>
                     </form>
-                    <div>
+                    <div class="radio-container">
                         <input type="radio" id="likeDesc" name="sortCondition" value="3" ${ !empty search.sortCondition && search.sortCondition==3 ? "checked" : "" }>
                         <label for="likeDesc">좋아요 많은 순</label>
                         <input type="radio" id="likeAsc" name="sortCondition" value="4" ${ !empty search.sortCondition && search.sortCondition==4 ? "checked" : "" }>

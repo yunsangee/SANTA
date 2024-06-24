@@ -295,7 +295,9 @@ $(document).ready(function() {
                                 <i class="fa fa-heart like-button ${certificationPost.certificationPostLikeStatus == 0 ? 'text-secondary' : 'text-danger'}"></i>
                                 <p class="mb-0 ml-2">${certificationPost.certificationPostLikeCount}</p>
                             </div>
-                                          <c:if test="${user.userNo == certificationPost.userNo}">
+                            
+                            <!--  유저 받아오ㄴ는법 머지user.userNo --> <!-- 일단 2 로 넣어둠 -->
+                                          <c:if test="${2 == certificationPost.userNo}">
                                 <form action="/certificationPost/updateCertificationPost" method="get">
                                     <input type="hidden" name="postNo" value="${certificationPost.postNo}"/>
                                     <button type="submit" class="btn btn-secondary"><i class="fa fa-edit"></i></button>

@@ -310,55 +310,57 @@ public class CertificationPostController {
     return "forward:/certificationPost/listFollowing.jsp";
 }
     
-    @RequestMapping(value="getProfile")
-    public String getProfile(@RequestParam int userNo, Model model) throws Exception {
-    	 User user = userService.getUser(userNo);
-         System.out.println("User Info: " + user);
-         model.addAttribute("infouser", user);
 
-         int followerCount = userEtcService.getFollowerCount(userNo);
-         System.out.println("Follower Count: " + followerCount);
-         model.addAttribute("followerCount", followerCount);
-         
-         int followingCount = userEtcService.getFollowingCount(userNo);
-         System.out.println("Follower Count: " + followingCount);
-         model.addAttribute("followingCount", followingCount);
-  
-  
-         
-    	 List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
-          model.addAttribute("myCertificationPost", myCertificationPost);
-          System.out.println("myCertificationPost: " + myCertificationPost);
-          
-//          for (CertificationPost post : myCertificationPost) {
-//              System.out.println("Certification Post 여기다: " + post.getPostNo());
-//          }
-//          
-          List<CertificationPost> myLikeCertificationPost = certificationPostService.getCertificationPostLikeList(userNo);
-          System.out.println("myLikeCertificationPost: " + myLikeCertificationPost);
-          model.addAttribute("myLikeCertificationPost", myLikeCertificationPost);
+        @RequestMapping(value = "getProfile")
+        public String getProfile(@RequestParam int userNo, Model model) throws Exception {
+            User user = userService.getUser(userNo);
+            System.out.println("User Info: " + user);
+            model.addAttribute("infouser", user);
+
+            int followerCount = userEtcService.getFollowerCount(userNo);
+            System.out.println("Follower Count: " + followerCount);
+            model.addAttribute("followerCount", followerCount);
+
+            int followingCount = userEtcService.getFollowingCount(userNo);
+            System.out.println("Following Count: " + followingCount);
+            model.addAttribute("followingCount", followingCount);
+
+            // 임의로 설정한 followerNo (로그인한 사용자의 번호라고 가정)
+            int followerNo = 1; // 예시로 1번 유저를 설정
+
+            int isFollowing = userEtcService.isFollowing(followerNo, userNo);
+            model.addAttribute("isFollowing", isFollowing);
+            System.out.println("Is Following: " + isFollowing);
+
+            List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
+            model.addAttribute("myCertificationPost", myCertificationPost);
+            System.out.println("myCertificationPost: " + myCertificationPost);
+
+            List<CertificationPost> myLikeCertificationPost = certificationPostService.getCertificationPostLikeList(userNo);
+            System.out.println("myLikeCertificationPost: " + myLikeCertificationPost);
+            model.addAttribute("myLikeCertificationPost", myLikeCertificationPost);
+
+            int postType = 0;
+            List<String> certificationPostImages = new ArrayList<>();
+            for (CertificationPost certificationPost : myCertificationPost) {
+                String fileName = certificationPost.getPostNo() + "_" + postType + "_1"; // 첫 번째 사진 파일명
+                String imageURL = objectStorageService.getImageURL(fileName);
+                certificationPostImages.add(imageURL);
+            }
+
+            model.addAttribute("certificationPostImages", certificationPostImages);
+
+            System.out.println("이미지" + certificationPostImages);
+
+            return "forward:/certificationPost/getProfile.jsp";
+        }
+        
+        
+
+        
+    }
     
-          
-          
-          int postType = 0;
-  	    List<String> certificationPostImages = new ArrayList<>();
-  	    for (CertificationPost certificationPost : myCertificationPost) {
-  	        String fileName = certificationPost.getPostNo() + "_" +postType + "_1"; // 첫 번째 사진 파일명
-  	        String imageURL = objectStorageService.getImageURL(fileName);
-  	        certificationPostImages.add(imageURL);
-  	    }
-  
-  
-  	    model.addAttribute("certificationPostImages", certificationPostImages);
 
-          
-          System.out.println("이미지"+certificationPostImages);
-          
-          
- return "forward:/certificationPost/getProfile.jsp";  
-}
-    
 
-}
     
     
