@@ -43,6 +43,8 @@ public interface MountainService {
 	
 	public List<Mountain> getCustomMountainList(List<String> statistics,User user);
 	
+	public int getTotalMountainLikeListCount(int userNo);
+	
 	
 	
 	public void addMountainTrail(MountainTrail mountainTrail);
@@ -59,6 +61,9 @@ public interface MountainService {
 	public int isLiked(int mountainNo, int userNo);
 	
 	public List<Mountain> getMountainLikeList(Search search);
+	
+	
+	public List<MountainTrail> getMountainTrailListFromVWorld(int mountainNo, String mountainName, String emdCd) throws IOException;
 	
 	//
 	//search

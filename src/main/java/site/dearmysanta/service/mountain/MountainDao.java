@@ -41,6 +41,7 @@ public interface MountainDao {
 	public List<Mountain> getCustomMountainList(List<String> mountainNames, User user);
 	
 	
+	
 	public void addMountainTrail(MountainTrail mountainTrail);
 	
 	//
@@ -58,7 +59,7 @@ public interface MountainDao {
 	public List<Mountain> getMountainLikeList(Search search);
 	
 	public List<String> getStatisticsMountainNameList(int which);
-	
+	public int getTotalMountainLikeListCount(int userNo);
 	//
 	//
 	//
