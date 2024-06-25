@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -72,12 +74,19 @@ public class CertificationPostController {
 
     
     @GetMapping(value = "addCertificationPost")
-    public String addCertificationPost(int userNo, Model model) throws Exception {
+    public String addCertificationPost(HttpSession session, Model model) throws Exception {
+        // 세션에서 사용자 정보 가져오기
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            model.addAttribute("user", user);
+        } else {
+            // 사용자 정보가 없으면 로그인 페이지로 리디렉션
+            return "redirect:/user/login";
+        }
 
         return "forward:/certificationPost/addCertificationPost.jsp";
     }
-    
- 
+
     @PostMapping(value = "addCertificationPost")
     public String addCertificationPost(
                                        @ModelAttribute CertificationPost certificationPost,
@@ -88,7 +97,17 @@ public class CertificationPostController {
                                        @RequestParam int descentTimeHours,
                                        @RequestParam int descentTimeMinutes,
                                        @RequestParam(value = "certificationPostHashtagContents") String[] certificationPostHashtagContents,
-                                       Model model) throws Exception {
+                                       Model model,
+                                       HttpSession session) throws Exception {
+
+        // 세션에서 사용자 정보 가져오기
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            certificationPost.setUserNo(user.getUserNo());
+        } else {
+            // 사용자 정보가 없으면 로그인 페이지로 리디렉션
+            return "redirect:/user/login";
+        }
 
         // 시간을 "ㅇㅇ시 ㅇㅇ분" 형식으로 변환하여 설정
         String totalTime = totalTimeHours + "시간 " + totalTimeMinutes + "분";
@@ -111,7 +130,7 @@ public class CertificationPostController {
 
             for (int i = 0; i < imageCount; i++) { // 인덱스는 1부터 시작
                 MultipartFile image = images.get(i); // 리스트 인덱스는 0부터 시작하므로 i 사용
-                String fileName = postNo + "_" + postType + "_"+(i+1);
+                String fileName = postNo + "_" + postType + "_" + (i + 1);
 
                 System.out.println(fileName);
 
@@ -132,8 +151,9 @@ public class CertificationPostController {
         return "redirect:/certificationPost/getCertificationPost?postNo=" + postNo;
     }
 
+
     @GetMapping(value = "updateCertificationPost")
-    public String updateCertificationPost(@RequestParam int postNo, Model model) throws Exception {
+    public String updateCertificationPost(@RequestParam int postNo, Model model, HttpSession session) throws Exception {
         System.out.println("postNo: " + postNo);
 
         CertificationPost certificationPost = certificationPostService.getCertificationPost(postNo);
@@ -165,6 +185,12 @@ public class CertificationPostController {
         }
         model.addAttribute("certificationPostImages", certificationPostImages);
 
+        // 사용자 세션에서 user 정보 가져오기
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            model.addAttribute("user", user);
+        }
+
         return "forward:/certificationPost/updateCertificationPost.jsp";
     }
 
@@ -181,7 +207,8 @@ public class CertificationPostController {
                                           @RequestParam(value = "existingHashtagNos", required = false) int[] existingHashtagNos,
                                           @RequestParam(value = "newHashtags", required = false) String[] newHashtags,
                                           @RequestParam(value = "deleteHashtagNos", required = false) int[] deleteHashtagNos,
-                                          Model model) throws Exception {
+                                          Model model,
+                                          HttpSession session) throws Exception {
 
         String totalTime = totalTimeHours + "시간 " + totalTimeMinutes + "분";
         String ascentTime = ascentTimeHours + "시간 " + ascentTimeMinutes + "분";
@@ -215,9 +242,14 @@ public class CertificationPostController {
             }
         }
 
+        // 사용자 세션에서 user 정보 가져오기
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            model.addAttribute("user", user);
+        }
+
         return "redirect:/certificationPost/getCertificationPost?postNo=" + certificationPost.getPostNo();
     }
-
 
 
     @GetMapping(value = "listCertificationPost")
