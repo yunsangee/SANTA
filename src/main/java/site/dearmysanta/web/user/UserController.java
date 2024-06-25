@@ -146,7 +146,7 @@ public class UserController {
 		    session.setAttribute("user", dbUser);	
 		    
 		    // 쿠키 설정
-		    Cookie cookie = new Cookie("userId", dbUser.getUserId());
+		    Cookie cookie = new Cookie("userNo", ""+dbUser.getUserNo());
 		    cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
 		    response.addCookie(cookie);
 		    
@@ -445,7 +445,7 @@ public class UserController {
 		    response.addCookie(nickNameCookie);
 		    
 		    // 쿠키 설정
-		    Cookie cookie = new Cookie("userId", dbUser.getUserId());
+		    Cookie cookie = new Cookie("userNo", ""+dbUser.getUserNo());
 		    cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
 		    response.addCookie(cookie);
 
