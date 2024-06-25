@@ -1,13 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 
 <!DOCTYPE html>
 <html>
-
-<!--  ////////////////////////////////////////////// head ///////////////////////////////////////////////// -->
-
 <head>
     <meta charset="UTF-8">
     <title>비밀번호를 잃어버리셨나요?!</title>
@@ -19,33 +15,32 @@
     <style>
         body {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            flex-direction: column;
+            min-height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
         }
 
         main {
-            margin-top: 10px;
+            flex: 1;
             padding: 20px;
             text-align: center;
             justify-content: center;
             align-items: center;
-            width: 90%;
-            max-width: 500px;
+            margin-top:265px;
         }
 
         .container h2 {
             color: #333;
             margin-top: 5px;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
+            font-size:33.5px;
         }
 
         .container p {
             color: #999999;
             font-size: 13px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .container label {
@@ -54,21 +49,28 @@
             align-items: center;
         }
 
-        .email,
-        .code {
+        .email {
             width: 30%;
+            padding: 10px;
+            margin-bottom: 10px;
+            margin-top: 30px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            align-items: center;
+        }
+        
+        .code {
+            width: 22%;
             padding: 10px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
-        }
-
-        /* .form-group {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-        } */
+            display: inline-block;
+            margin-left: 0px;
+        }
 
         .phone {
             width: 21.8%;
@@ -77,15 +79,16 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
+            align-items: center;
             margin-right: 77px;
         }
         
         .email:focus,
         .code:focus,
         .phone:focus {
-        	border: 1px solid #81C408; /* 클릭 시 테두리 두께와 색상 설정 */
-		    outline: none; /* 기본 포커스 효과 제거 */
-		    box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); /* 선택적으로 포커스 시 그림자 효과 추가 */	
+            border: 1px solid #81C408; /* 클릭 시 테두리 두께와 색상 설정 */
+            outline: none; /* 기본 포커스 효과 제거 */
+            box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); /* 선택적으로 포커스 시 그림자 효과 추가 */ 
         }
 
         .send {
@@ -102,6 +105,18 @@
 
         .send:hover {
             background-color: #578906;
+        }
+        
+        .verify-check-btn {
+            width: 8%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #81C408;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
         }
 
         .submit {
@@ -146,7 +161,8 @@
             .code,
             .phone,
             .send,
-            .submit {
+            .submit,
+            .verify-check-btn {
                 width: 100%;
                 margin: 5px 0;
             }
@@ -155,125 +171,132 @@
                 flex-direction: column;
                 align-items: stretch;
             }
-
-            /* .send {
-                margin-left: 0;
-            } */
         }
+
+        footer {
+            width: 100%;
+            margin-bottom:-249px;
+           /*  text-align: center; */
+           /*  padding: 10px; */
+           /*  background-color: #f1f1f1; */
+        }
+        
     </style>
     
-        <c:import url="../common/header.jsp"/>
+    <c:import url="../common/header.jsp"/>
     
-<!--  ////////////////////////////////////////////// script  ///////////////////////////////////////////////// -->       
+    <!--  ////////////////////////////////////////////// script  ///////////////////////////////////////////////// -->       
 
-<script>
+    <script>
         $(document).ready(function() {
             $(".send").click(function() {
                 sendVerificationCode();
             });
 
-        // 동적으로 인증번호 입력칸과 확인 버튼 추가
-        function addVerificationSection() {
-            if ($("#verificationSection").length === 0) {
-                $(".form-group").append(
-                    '<div id="verificationSection">' +
-                    '<label for="verifyCode"></label>' +
-                    '<input type="text" class="code" id="verifyCode" name="verifyCode" placeholder="인증번호" required>' +
-                    '<button type="button" class="verify-check-btn">인증번호 확인</button>' +
-                    '<span id="verificationResult" class="error-message"></span>' +
-                    '</div>'
-                );
-            }
+            // 인증번호 버튼 클릭 시 인증번호 입력란 추가
+            $(".send").unbind("click").click(function() {
+                var userId = $("#userId").val();
+                var phoneNumber = $("#phoneNumber").val();
+                if (userId && phoneNumber) {
+                    sendVerificationCode();
+                } else {
+                    alert("이름과 휴대폰 번호를 모두 입력해주세요.");
+                }
+            });
+            
+            // 인증번호 확인 버튼 클릭 이벤트
+            $(document).on("click", ".verify-check-btn", function() {
+                var phoneNumber = $("#phoneNumber").val();
+                var verifyCode = $("#verifyCode").val();
+                verifyCodeFunction(phoneNumber, verifyCode);
+            });
+        
+            $("#findUserPasswordForm").on("submit", function(e) {
+                var isPhoneVerified = $("#isPhoneVerified").val() === "true";
+                var userId = $("#userId").val();
+                var phoneNumber = $("#phoneNumber").val();
+                
+                if (!userId || !phoneNumber) {
+                    e.preventDefault();
+                    alert("이메일과 휴대폰 번호를 모두 입력해주세요.");
+                } else if (!isPhoneVerified) {
+                    e.preventDefault();
+                    alert("휴대폰 인증을 완료해주세요.");
+                }
+            });
+        });
+
+        function sendVerificationCode() {
+            const userId = $("#userId").val();
+            const phoneNumber = $("#phoneNumber").val();
+
+            $.ajax({
+                url: "/user/rest/findUserPassword",
+                type: "POST",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({
+                    userId: userId,
+                    phoneNumber: phoneNumber
+                }),
+                success: function(response) {
+                    if (!response.userExists) {
+                        alert("회원정보가 일치하지 않습니다. 다시 확인해주세요.");
+                    } else {
+                        $.ajax({
+                            url: "/message/send-one",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify({
+                                userId: userId,
+                                phoneNumber: phoneNumber
+                            }),
+                            success: function(response) {
+                                if (response) {
+                                    alert("인증번호가 전송되었습니다.");
+                                    $(".form-group").append(
+                                        '<div id="verificationSection">' +
+                                        '<label for="verifyCode"></label>' +
+                                        '<input type="text" class="code" id="verifyCode" name="verifyCode" placeholder="인증번호" required>' +
+                                        '<button type="button" class="verify-check-btn">확인</button>' +
+                                        '<span id="verificationResult" class="error-message"></span>' +
+                                        '</div>'
+                                    );    
+                                } else {
+                                    alert("인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                alert('인증번호 전송에 실패했습니다. 다시 시도해주세요.');
+                            }
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('회원정보가 일치하지 않습니다. 다시 시도해주세요.');
+                }
+            });
         }
 
-        // 인증번호 버튼 클릭 시 인증번호 입력란 추가
-        $(".send").click(function() {
-            addVerificationSection();
-        });
-
-        // 인증번호 확인 버튼 클릭 이벤트
-        $(document).on("click", ".verify-check-btn", function() {
-            var phoneNumber = $("#phoneNumber").val();
-            var verifyCode = $("#verifyCode").val();
-            verifyCodeFunction(phoneNumber, verifyCode);
-        });
-    });
-
-    function sendVerificationCode() {
-        const userId = $("#userId").val();
-        const phoneNumber = $("#phoneNumber").val();
-//
-        $.ajax({
-            url: "/user/rest/findUserPassword",
-            type: "POST",
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify({
-            	userId: userId,
-                phoneNumber: phoneNumber
-            }),
-            success: function(response) {
-                if (!response.userExists) {
-                    alert("이름과 전화번호가 일치하지 않습니다. 다시 확인해주세요.");
-                } else {
-                    $.ajax({
-                        url: "/message/send-one",
-                        type: "POST",
-                        contentType: "application/json",
-                        data: JSON.stringify({
-                        	userId: userId,
-                            phoneNumber: phoneNumber
-                        }),
-                        success: function(response) {
-                            if (response) {
-                                alert("인증번호가 전송되었습니다.");
-                            } else {
-                                alert("인증번호 전송에 실패했습니다. 다시 시도해주세요.");
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            alert('인증번호 전송에 실패했습니다. 다시 시도해주세요.');
-                        }
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                alert('회원정보가 일치하지 않습니다. 다시 시도해주세요.');
-            }
-        });
-    }
-
-    function verifyCodeFunction(phoneNumber, verifyCode) {
-        $.ajax({
-            url: "/message/check-one",
-            type: "GET",
-            data: { phoneNumber: phoneNumber, validationNumber: verifyCode },
-            success: function(response) {
-                if (response != -1) {
-                    alert("휴대폰 인증이 완료되었습니다.");
-                    $("#isPhoneVerified").val("true");
-                } else {
+        function verifyCodeFunction(phoneNumber, verifyCode) {
+            $.ajax({
+                url: "/message/check-one",
+                type: "GET",
+                data: { phoneNumber: phoneNumber, validationNumber: verifyCode },
+                success: function(response) {
+                    if (response != -1) {
+                        alert("휴대폰 인증이 완료되었습니다.");
+                        $("#isPhoneVerified").val("true");
+                    } else {
+                        alert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                    }
+                },
+                error: function(xhr, status, error) {
                     alert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
                 }
-            },
-            error: function(xhr, status, error) {
-                alert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
-            }
-        });
-    }
-
-    $(document).ready(function() {
-        $("#findUserPasswordForm").on("submit", function(e) {
-            var isPhoneVerified = $("#isPhoneVerified").val() === "true";
-
-            if (!isPhoneVerified) {
-                e.preventDefault();
-                alert("휴대폰 인증을 완료해주세요.");
-            }
-        });
-    });
-
-     </script>
+            });
+        }
+    </script>
 </head>
 
 <!--  ////////////////////////////////////////////// body ///////////////////////////////////////////////// -->
@@ -307,12 +330,6 @@
             <input type="hidden" id="isPhoneVerified" value="false">
         </div>
         
-    <!--      <div>
-            <label for="verifyCode"></label>
-            <input type="text" class="code" id="verifyCode" name="verifyCode" placeholder="인증번호">
-            <span id="verificationResult" class="error-message"></span>  
-        </div> -->
-        
         <button type="submit" class="submit">비밀번호 찾기</button>
         
         <br>
@@ -325,6 +342,7 @@
 <!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// -->
 
 <footer>
+    <c:import url="../common/footer.jsp"/>
 </footer>
 
 </body>

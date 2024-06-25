@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +117,7 @@ public class UserController {
 		}	
 
 		@PostMapping(value = "login")
-		public String login(@ModelAttribute User user, String userId, String userPassword, HttpSession session, Model model, Search search) throws Exception {
+		public String login(@ModelAttribute User user, String userId, String userPassword, HttpSession session, Model model, Search search, HttpServletResponse response) throws Exception {
 		    System.out.println("/user/login : POST");
 		    
 		    // DB에서 사용자 정보 조회
@@ -136,24 +138,28 @@ public class UserController {
 		        model.addAttribute("withdrawError", "탈퇴한 산타님입니다.");
 		        return "forward:/user/login.jsp";
 		    }	
-		        
-//		        session.setAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
-//				session.setAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), user));
-			    
-		    	if(dbUser.getProfileImage() != null&&!dbUser.getProfileImage().contains("ncloudstorage") ) {
-		    		dbUser.setProfileImage(objectStorageService.getImageURL(dbUser.getProfileImage()));
-					}	
-		    	
-//		    	session.setAttribute("alarmMessageList",userEtcService.getAlarmMessageList(user.getUserNo()));
-//				session.setAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
-//				session.setAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), user));
-		    	
-		    	session.setAttribute("user", dbUser);	
-		    	
-		    	System.out.println("확인 : " + dbUser);
-		    	
-		        return "redirect:/common/main.jsp";
-		        
+		    
+		    if(dbUser.getProfileImage() != null && !dbUser.getProfileImage().contains("ncloudstorage")) {
+		        dbUser.setProfileImage(objectStorageService.getImageURL(dbUser.getProfileImage()));
+		    }
+		    
+		    session.setAttribute("user", dbUser);	
+		    
+		    // 쿠키 설정
+		    Cookie cookie = new Cookie("userId", dbUser.getUserId());
+		    cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+		    response.addCookie(cookie);
+		    
+		    // 쿠키 설정
+		    Cookie nickNameCookie = new Cookie("nickName", dbUser.getNickName());
+		    nickNameCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+		    response.addCookie(nickNameCookie);
+		    
+		    System.out.println("쿠키확인 닉네임 : " + nickNameCookie);
+		    
+		    System.out.println("쿠키확인 아이디 : " + cookie);
+		    
+		    return "redirect:/common/main.jsp";
 		}
 
 		
@@ -168,7 +174,7 @@ public class UserController {
 			
 			session.invalidate();
 			
-			return "redirect:/main.jsp";
+			return "redirect:/common/main.jsp";
 		}
 		
 		//
@@ -380,13 +386,13 @@ public class UserController {
 		
 		
 		@PostMapping(value = "updateUser")
-		public String updateUser(@ModelAttribute User user, @RequestParam(required = false) Integer userNo, Model model, HttpSession session) throws Exception {
+		public String updateUser(@ModelAttribute User user, @RequestParam(required = false) Integer userNo, Model model, HttpSession session, HttpServletResponse response) throws Exception {
 		    System.out.println("updateUser : POST");
-		  
-		    if ( user.getImage() != null) {  
-		    	objectStorageService.uploadFile(user.getImage(), user.getUserId());
-		     }
-		    
+
+		    if (user.getImage() != null) {
+		        objectStorageService.uploadFile(user.getImage(), user.getUserId());
+		    }
+
 		    // 세션에서 현재 로그인한 사용자 정보 가져오기
 		    User sessionUser = (User) session.getAttribute("user");
 
@@ -415,12 +421,11 @@ public class UserController {
 		        return "redirect:/user/updateUser.jsp";
 		    }
 
-		    // 사용자 정보 업데이트;
+		    // 사용자 정보 업데이트
 		    dbUser.setNickName(user.getNickName());
 		    dbUser.setAddress(user.getAddress());
 		    dbUser.setDetailAddress(user.getDetailAddress());
 		    dbUser.setPhoneNumber(user.getPhoneNumber());
-			/* dbUser.setProfileImage(user.getProfileImage()); */
 		    dbUser.setHikingPurpose(user.getHikingPurpose());
 		    dbUser.setHikingDifficulty(user.getHikingDifficulty());
 		    dbUser.setHikingLevel(user.getHikingLevel());
@@ -434,13 +439,25 @@ public class UserController {
 		        session.setAttribute("user", dbUser);
 		    }
 
+		    // 쿠키 설정
+		    Cookie nickNameCookie = new Cookie("nickName", dbUser.getNickName());
+		    nickNameCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+		    response.addCookie(nickNameCookie);
+		    
+		    // 쿠키 설정
+		    Cookie cookie = new Cookie("userId", dbUser.getUserId());
+		    cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+		    response.addCookie(cookie);
+
+		    System.out.println("쿠키확인 닉네임 : " + nickNameCookie);
+		    
+		    System.out.println("쿠키확인 아이디 : " + cookie);
+		    
 		    System.out.println("updateUser : " + dbUser);
 
 		    // 업데이트 성공 페이지로 리다이렉트
 		    return "redirect:/user/getUser?userNo=" + dbUser.getUserNo();
 		}
-
-
 		
 		//
 		// deleteUser

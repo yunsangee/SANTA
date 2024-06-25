@@ -1,22 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 
 <!DOCTYPE html>
 <html>
-
-<!--  ////////////////////////////////////////////// head ///////////////////////////////////////////////// -->
-
 <head>
     <meta charset="UTF-8">
-    <title>아이디를 잃어버리셨나요?!</title>
+    <title>비밀번호를 변경하시나요?!</title>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.min.js"></script>
-    
- <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->   
-    
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+
+    <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
     <style>
         body {
             display: flex;
@@ -26,7 +21,7 @@
             font-family: Arial, sans-serif;
         }
 
-         main {
+        main {
             flex: 1;
             padding: 20px;
             text-align: center;
@@ -54,7 +49,7 @@
             align-items: center;
         }
 
-        .name {
+        .email {
             width: 30%;
             padding: 10px;
             margin-bottom: 10px;
@@ -64,7 +59,7 @@
             box-sizing: border-box;
             align-items: center;
         }
-
+        
         .code {
             width: 22%;
             padding: 10px;
@@ -74,7 +69,7 @@
             box-sizing: border-box;
             align-items: center;
             display: inline-block;
-            margin-left:0px;
+            margin-left: 0px;
         }
 
         .phone {
@@ -86,6 +81,14 @@
             box-sizing: border-box;
             align-items: center;
             margin-right: 77px;
+        }
+        
+        .email:focus,
+        .code:focus,
+        .phone:focus {
+            border: 1px solid #81C408; /* 클릭 시 테두리 두께와 색상 설정 */
+            outline: none; /* 기본 포커스 효과 제거 */
+            box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); /* 선택적으로 포커스 시 그림자 효과 추가 */ 
         }
 
         .send {
@@ -99,6 +102,10 @@
             cursor: pointer;
             margin-left: -77px;
         }
+
+        .send:hover {
+            background-color: #578906;
+        }
         
         .verify-check-btn {
             width: 8%;
@@ -110,18 +117,6 @@
             border-radius: 5px;
             cursor: pointer;
             margin-left: 5px;
-        }
-        
-        .name:focus,
-        .code:focus,
-        .phone:focus {
-            border: 1px solid #81C408; /* 클릭 시 테두리 두께와 색상 설정 */
-            outline: none; /* 기본 포커스 효과 제거 */
-            box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); /* 선택적으로 포커스 시 그림자 효과 추가 */    
-        }
-
-        .form-group button:hover {
-            background-color: #578906;
         }
 
         .submit {
@@ -160,9 +155,9 @@
             text-align: center;
             margin-bottom: 10px;
         }
-        
-         @media (max-width: 768px) {
-            .name,
+
+        @media (max-width: 768px) {
+            .email,
             .code,
             .phone,
             .send,
@@ -177,48 +172,53 @@
                 align-items: stretch;
             }
         }
-        
+
         footer {
-        	width: 100%;
-        	 margin-bottom:-249px;
+            width: 100%;
+            margin-bottom:-249px;
+           /*  text-align: center; */
+           /*  padding: 10px; */
+           /*  background-color: #f1f1f1; */
         }
+        
     </style>
-    	
-    	<c:import url="../common/header.jsp"/>
-<!--  ////////////////////////////////////////////// script  ///////////////////////////////////////////////// -->    
     
+    <c:import url="../common/header.jsp"/>
+    
+    <!--  ////////////////////////////////////////////// script  ///////////////////////////////////////////////// -->       
+
     <script>
         $(document).ready(function() {
-            $(".send").unbind("click").click(function() {
+            $(".send").click(function() {
                 sendVerificationCode();
             });
 
             // 인증번호 버튼 클릭 시 인증번호 입력란 추가
             $(".send").unbind("click").click(function() {
-                var userName = $("#userName").val();
+                var userId = $("#userId").val();
                 var phoneNumber = $("#phoneNumber").val();
-                if (userName && phoneNumber) {
+                if (userId && phoneNumber) {
                     sendVerificationCode();
                 } else {
                     alert("이름과 휴대폰 번호를 모두 입력해주세요.");
                 }
             });
-
+            
             // 인증번호 확인 버튼 클릭 이벤트
             $(document).on("click", ".verify-check-btn", function() {
                 var phoneNumber = $("#phoneNumber").val();
                 var verifyCode = $("#verifyCode").val();
                 verifyCodeFunction(phoneNumber, verifyCode);
             });
-
-            $("#findUserIdForm").on("submit", function(e) {
+        
+            $("#findUserPasswordForm").on("submit", function(e) {
                 var isPhoneVerified = $("#isPhoneVerified").val() === "true";
-                var userName = $("#userName").val();
+                var userId = $("#userId").val();
                 var phoneNumber = $("#phoneNumber").val();
-
-                if (!userName || !phoneNumber) {
+                
+                if (!userId || !phoneNumber) {
                     e.preventDefault();
-                    alert("이름과 휴대폰 번호를 모두 입력해주세요.");
+                    alert("이메일과 휴대폰 번호를 모두 입력해주세요.");
                 } else if (!isPhoneVerified) {
                     e.preventDefault();
                     alert("휴대폰 인증을 완료해주세요.");
@@ -227,16 +227,16 @@
         });
 
         function sendVerificationCode() {
-            const userName = $("#userName").val();
+            const userId = $("#userId").val();
             const phoneNumber = $("#phoneNumber").val();
 
             $.ajax({
-                url: "/user/rest/findUserId",
+                url: "/user/rest/findUserPassword",
                 type: "POST",
                 contentType: "application/json",
                 dataType: "json",
                 data: JSON.stringify({
-                    userName: userName,
+                    userId: userId,
                     phoneNumber: phoneNumber
                 }),
                 success: function(response) {
@@ -248,22 +248,20 @@
                             type: "POST",
                             contentType: "application/json",
                             data: JSON.stringify({
-                                userName: userName,
+                                userId: userId,
                                 phoneNumber: phoneNumber
                             }),
                             success: function(response) {
                                 if (response) {
                                     alert("인증번호가 전송되었습니다.");
-                                    
-                                    // 인증번호가 전송된 후 인증번호 입력란을 추가
-                                    $(".form-group").after(
+                                    $(".form-group").append(
                                         '<div id="verificationSection">' +
                                         '<label for="verifyCode"></label>' +
                                         '<input type="text" class="code" id="verifyCode" name="verifyCode" placeholder="인증번호" required>' +
                                         '<button type="button" class="verify-check-btn">확인</button>' +
                                         '<span id="verificationResult" class="error-message"></span>' +
                                         '</div>'
-                                    );
+                                    );    
                                 } else {
                                     alert("인증번호 전송에 실패했습니다. 다시 시도해주세요.");
                                 }
@@ -314,12 +312,12 @@
 <!--  ////////////////////////////////////////////// main ///////////////////////////////////////////////// -->
 
 <main class="container">
-    <h2>아이디 찾기</h2>
-        <p>회원정보에 등록한 휴대폰 번호와 입력한 휴대폰 번호가 동일해야 인증번호를 받을 수 있습니다.</p>
-    <form id="findUserIdForm" action="/user/findUserId" method="post">
+    <h2>비밀번호 찾기</h2>
+    <p>회원정보에 등록한 휴대폰 번호와 입력한 휴대폰 번호가 동일해야 인증번호를 받을 수 있습니다.</p>
+    <form id="findUserPasswordForm" action="/user/findUserPassword" method="post">
         <div>
-            <label for="name"></label>
-            <input type="text" class="name" id="userName" name="userName" placeholder="이름" required>
+            <label for="email"></label>
+            <input type="text" class="email" id="userId" name="userId" placeholder="email" required>
         </div>
         
         <div class="form-group">
@@ -332,10 +330,10 @@
             <input type="hidden" id="isPhoneVerified" value="false">
         </div>
         
-        <button type="submit" class="submit">아이디 찾기</button>
+        <button type="submit" class="submit">비밀번호 찾기</button>
         
         <br>
-        <a href="/user/findUserPassword.jsp" class="link">비밀번호 찾기</a>&emsp;&emsp;&emsp;
+        <a href="/user/findUserId.jsp" class="link">아이디 찾기</a>&emsp;&emsp;&emsp;
         &emsp;<a href="/user/login.jsp" class="link">로그인 페이지로 가기</a>
         
     </form>
@@ -344,8 +342,9 @@
 <!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// -->
 
 <footer>
-	<c:import url="../common/footer.jsp"/>
+    <c:import url="../common/footer.jsp"/>
 </footer>
 
 </body>
+
 </html>
