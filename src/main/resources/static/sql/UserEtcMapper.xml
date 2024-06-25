@@ -207,11 +207,13 @@
     </select>
     
     
-    <select id="isFollowing" parameterType="map" resultType="int">
-    	SELECT COUNT(*) FROM FOLLOW 
-    	WHERE #{followerNo} = follwer_no AND #{followingNo} = following_no;
-    
-    </select>
+  <select id="isFollowing" parameterType="map" resultType="int">
+    SELECT COUNT(*) 
+    FROM FOLLOW 
+    WHERE follower_no = #{followerNo} 
+    AND following_no = #{followingNo}
+</select>
+
 
     
    
