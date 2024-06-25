@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
-<html>
+<html class="fontawesome-i2svg-active fontawesome-i2svg-complete">
 <head>
     <meta charset="UTF-8"/>
     <title>Fruitables - Free Bootstrap 5 eCommerce Website Template</title>
@@ -25,6 +25,21 @@
                         clickable: true,
                     },
                 });
+                
+                
+                var swiper2 = new Swiper('.swiper2-container', {
+                    slidesPerView: 3,  // 한 슬라이드에 보여줄 카드 수
+                    spaceBetween: 20,
+                    navigation: {
+                        nextEl: '.certification-button-next-cp',
+                        prevEl: '.certification-button-prev-cp',
+                    },
+                    pagination: {
+                        el: '.swiper-pagination-cp',
+                        clickable: true,
+                    },
+                });
+                
                 
                 $(document).on('click', '.like-button', function() {
                 	
@@ -133,6 +148,21 @@
             	
             	window.location.href = "/mountain/mapMountain?searchCondition=0&searchKeyword=" + h4Value;
             });
+            
+            $(".top-button").click(function() {
+                $('html, body').animate({scrollTop: 0}, 'slow');
+            });
+            
+            $(".moreMeetingPost").on('click',function(event){
+            	event.preventDefault();
+				window.location.href = '/meeting/getMeetingPostList';
+            });
+            
+            
+			$(".moreCertificationPost").on('click',function(event){
+				event.preventDefault();
+				window.location.href = '/certificationPost/listCertificationPost';
+            });
            
 
             // Like button toggle
@@ -142,14 +172,25 @@
     
     <style>
         .testimonial-item {
+        	width:100%;
             position: relative;
         }
 
          .swiper-container {
-            padding-bottom: 40px;
+            position: relative;
+        }
+        
+        .swiper2-container {
+            margin:0px;
             position: relative;
         }
         .swiper-pagination {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+        }
+        .swiper-pagination-cp {
             position: absolute;
             bottom: 10px;
             width: 100%;
@@ -161,6 +202,12 @@
             transform: translateY(-50%);
         }
         
+        .swiper-button-next-cp,
+        .swiper-button-prev-cp {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
         .fas.fa-heart {
     color: red; /* 좋아요가 눌린 경우의 색상 */
 }
@@ -168,14 +215,15 @@
 .far.fa-heart {
     color: gray; /* 좋아요가 눌리지 않은 경우의 색상 */
 }
-        
+
         .popular-testimonial-item{
         	text-align: left;
             padding: 10px;
+            margin:5px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            margin: 15px;
             min-width: 150px;
+            height:300px;
             flex: 1;
             display:flex;
             position:relative;
@@ -185,13 +233,27 @@
         .custom-testimonial-item{
         	text-align: left;
             padding: 10px;
+            margin:5px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            margin: 15px;
+            min-width: 150px;
+            height:300px;
+            
+            flex: 1;
+            display:flex;
+            position:relative;
+        }
+        
+        
+        .table-responsive{
+        	text-align: left;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             min-width: 150px;
             flex: 1;
             display:flex;
             position:relative;
+        
         }
         
         .swiper-container {
@@ -199,11 +261,106 @@
     border-radius: 5px;
     margin: 15px;
     width: 100%; /* 전체 너비로 설정 */
+
     overflow: hidden; /* 내용이 넘치는 경우를 대비하여 오버플로우를 숨김 */
     }
-    
-   .container-fluid {
+    .swiper2-container {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 15px;
+    width: 100%; /* 전체 너비로 설정 */
+    height: 500px;
+
+    overflow: hidden; /* 내용이 넘치는 경우를 대비하여 오버플로우를 숨김 */
+    }
+    .swiper-slide .certification-post{
+    	margin-buttom:5px !important;
+    }
+
+.fixed-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
+.btn-cp {
+    border: 2px solid orange;
+    background-color: white;
+    color: limegreen;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+}
+.btn-cp:hover {
+    transform: scale(1.1);
+}
+.btn-cp .fa {
+    font-size: 0.75em;
+}
+
+.certification-post img {
+    width: 100%;
+    height: 200px;
+}
+.certification-post .details {
+}
+
+.certification-post-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.certification-post {
+	margin-top:5px;
+	margin-buttom:5px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 200px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.table-header{
+	display: flex; 
+	justify-content: space-between; 
+	align-items: center;
+}
+
+.container-fluid .meetingPost{
+	padding: 0 !important;
+
+}
+
+.section-container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left:12px;
+    padding-right:12px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+.py-5 {
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+}
+
+.first-container{
+	margin-top:90px;
+
+}
+
     </style>
 </head>
 
@@ -211,12 +368,13 @@
     <header><c:import url="./top.jsp"/></header>
     
     
-    <main style="margin-top:30px;">
+    <main>
 
 <nav>
 
-<div class="container-fluid testimonial">
+<div class="container-fluid testimonial first-container" >
     <div class="container py-5">
+    <div class="row g-4 mb-5">
         <div class="search-container" style="display: flex; justify-content: center; align-items: center; margin-top: 30px; margin-bottom: 20px;">
             <input id="searchBox" type="text" placeholder="검색" style="flex: 1; padding: 10px; border: none; outline: none; border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
             <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" style="background: none; border: none; cursor: pointer; margin-left: 10px;">
@@ -226,7 +384,7 @@
                 <i class="fas fa-map text-primary" id="mapSearch"></i>
             </button>
         </div>
-        <div class="testimonial-header text-center" style="margin-top:10px;">
+        <div class="testimonial-header text-left" style="margin-top:10px;">
             <h4 class="text-primary">인기산 목록</h4>
         </div>
         <div class="swiper-container popular-swiper-container">
@@ -265,15 +423,18 @@
             <div class="swiper-button-prev popular-swiper-button-prev"></div>
         </div>
     </div>
+    </div>
 </div>
 
 <!-- Second Carousel -->
-			<div class="container-fluid testimonial" style="margin-top:10px;">
+			<div class="container-fluid testimonial section-container">
     <div class="container py-5">
 
-        <div class="testimonial-header text-center">
+        <div class="testimonial-header text-left">
             <h4 class="text-primary">사용자 맞춤 산 목록</h4>
         </div>
+        <div style="height:20px;"></div>
+        <div class="row g-4 mb-5" >
         <div class="swiper-container custom-swiper-container">
             <div class="swiper-wrapper">
                 <c:forEach var="mountain" items="${customMountainList}" varStatus="index">
@@ -309,9 +470,137 @@
             <div class="swiper-button-next custom-swiper-button-next"></div>
             <div class="swiper-button-prev custom-swiper-button-prev"></div>
         </div>
+        </div>
 	</div></div>
+
+			<div class="container-fluid testimonial section-container">
+	<div class="container-fluid py-5 meetingPostr">
+    		<div class="container py-5">
+    			<div class="table-header text-center">
+            			<h4 class="text-primary">인기산 목록</h4>
+            			
+            			<div class="moreMeetingPost">
+            			더보기
+            			<i class="fas fa-chevron-right"></i>
+            			</div>
+       				</div>
+    			<div class="row g-4 ms-1 mb-5">
+    				
+       				
+		    		<div class="table-responsive">
+		    			<table class="table">
+		    				<thead>
+		    					<tr>
+		    						<th scope="col">순번</th>
+		    						<th scope="col">작성자</th>
+		    						<th scope="col">제목</th>
+		    						<th scope="col">모집상태</th>
+		    						<th scope="col">작성일자</th>
+		    					</tr>
+		    				</thead>
+		    				<tbody>
+		    					<c:forEach var="post" items="${meetingPostList}" varStatus="status">
+    <c:if test="${status.index < 10}">
+        <tr>
+            <td>
+                <p class="mb-4 mt-4">${post.postNo}</p>
+            </td>
+            <td>
+                <p class="mb-4 mt-4">${post.nickName}</p>
+            </td>
+            <td>
+                <p class="mb-4 mt-4">
+                    <a href="/meeting/getMeetingPost?postNo=${post.postNo}">${post.title}</a>
+                </p>
+            </td>
+            <td>
+                <p class="mb-4 mt-4">
+                    <c:choose>
+                        <c:when test="${post.recruitmentStatus == 0}">
+                            모집중
+                        </c:when>
+                        <c:when test="${post.recruitmentStatus == 1}">
+                            모집종료
+                        </c:when>
+                        <c:when test="${post.recruitmentStatus == 2}">
+                            모임종료
+                        </c:when>
+                    </c:choose>
+                </p>
+            </td>
+            <td>
+                <p class="mb-4 mt-4">${post.postDate}</p>
+            </td>
+        </tr>
+    </c:if>
+</c:forEach>
+
+		    				</tbody>
+		    			</table>
+		    		</div> <!-- table-responsive -->
+		    	
+		    	</div> <!-- row g-4 mb-5 -->
+	    	</div> <!-- container py-5 -->
+	    </div> <!-- container-fluid py-5 -->
+	</div>
+
+	   <div class="container-fluid py-5 certificationPost section-container">
+    <div class="container py-5">
+    	<div class="row g-4 mb-5">
+    		<div class="table-header text-center">
+            	<h4 class="text-primary">인증 게시글 목록</h4>
+            	<div class="moreCertificationPost">
+            			더보기
+            			<i class="fas fa-chevron-right"></i>
+            		</div>
+       		</div>
+   
+            <div class="swiper2-container certification-swiper">
+                <div class="swiper-wrapper">
+                    <c:forEach var="certificationPost" items="${certificationPostList}" varStatus="status">
+                        <c:if test="${status.index < 10}">
+                            <div class="swiper-slide certification-post" data-postno="${certificationPost.postNo}">
+                                <div class="fruite-img">
+                                    <img src="${certificationPostImages[status.index]}" alt="Certification Post Image">
+                                </div>
+                                <div class="details">
+                                    <h4>${certificationPost.postNo}</h4>
+                                    <h4>${certificationPost.title}</h4>
+                                    <p>산명칭 : ${certificationPost.certificationPostMountainName}</p>
+                                    <p>Hiking Date: ${certificationPost.certificationPostHikingDate}</p>
+                                    <p>좋아요수: ${certificationPost.certificationPostLikeCount}</p>
+                                    <p>등산난이도 :
+                                        <c:choose>
+                                            <c:when test="${certificationPost.certificationPostHikingDifficulty == 0}">
+                                                어려움
+                                            </c:when>
+                                            <c:when test="${certificationPost.certificationPostHikingDifficulty == 1}">
+                                                중간
+                                            </c:when>
+                                            <c:when test="${certificationPost.certificationPostHikingDifficulty == 2}">
+                                                쉬움
+                                            </c:when>
+                                        </c:choose>
+                                    </p>
+                                </div>
+                            </div>
+                        </c:if>
+                    </c:forEach>
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination-cp custom-swiper-pagination"></div>
+            <!-- Add Navigation -->
+            <div class="swiper-button-next custom-swiper-button-next certification-button-next-cp"></div>
+            <div class="swiper-button-prev custom-swiper-button-prev certification-button-prev-cp"></div>
+            </div>
+        </div>
+        </div>
+    </div>
 	</nav>
 	</main>
+	<div class="fixed-buttons">
+        <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
+    </div>
     <footer><c:import url="../common/footer.jsp"/></footer>
 </body>
 </html>
