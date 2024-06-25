@@ -62,7 +62,7 @@
 		            window.location.href = 'certificationPost/getCertificationPostList';
 		        });
 		        $('#myMountainLike').on('click', function() {
-		            window.location.href = '/myMountainLike'; //??
+		            window.location.href = '/mountain/getMountainLikeList?userNo='+'${sessionScope.user.userNo}'; //??
 		        });
 		        $('#mySchedule').on('click', function() {
 		            window.location.href = '/user/getSchedule';
