@@ -29,7 +29,7 @@
 			});
 			
 			$('#hikingGuide').on('click',function(){
-				window.location.href = 'https://${reactServerIp}';
+				window.location.href = '/hikingguide';
 			});
 			
 			$('#loginButton').on('click',function(){

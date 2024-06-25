@@ -99,7 +99,7 @@ public class MountainApplicationTest {
 	@Test
 	public void mountainApiTest() throws Exception {
 //		mountainService.getMountain("");
-		List<MountainTrail> list = mountainService.getMountainTrailListFromVWorld(1010,"관악산",  "41173102");
+		List<MountainTrail> list = mountainService.getMountainTrailListFromVWorld(1010,"관악산",  "41290107");
 	}
 //	
 //	@Test
