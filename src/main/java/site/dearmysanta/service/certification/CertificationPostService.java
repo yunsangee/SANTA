@@ -58,6 +58,8 @@ public interface CertificationPostService {
 	public int getTotalMountainCount(String certificationPostMountainName) throws Exception;
 
 	void updateHashtag(int hashtagNo, String certificationPostHashtagContents);
+
+
 	
 
 }

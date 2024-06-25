@@ -242,7 +242,7 @@
                 const imageUrl = images[index] ? images[index] : 'default-image-url.png';
 
                 // 제목과 작성자 글자 수 제한
-                const shortTitle = post.title.length > 5 ? post.title.substring(0, 5) + '...' : post.title;
+                const shortTitle = post.title.length > 5 ? post.title.substring(0, 8) + '...' : post.title;
                // const shortAuthor = post.nickName.length > 5 ? post.nickName.substring(0, 5) + '...' : post.nickName;
 
                 postElement.innerHTML = 
@@ -281,11 +281,11 @@
             $('html, body').animate({scrollTop: 0}, 'slow');
         });
         
-        var userNo = ${user.userNo};
-        
+      
+         var userNo = ${user.userNo};
         $(".btn-certify-hiking").click(function() {
             alert('인증하기');
-       
+        
             window.location.href = "/certificationPost/addCertificationPost?userNo=" + userNo;
         });
     });
@@ -331,8 +331,8 @@
                         <h4 class="post-title"> 
                             <i class="fas fa-heading"></i> 
                             <c:choose>
-                                <c:when test="${fn:length(certificationPost.title) > 5}">
-                                    ${fn:substring(certificationPost.title, 0, 5)}...
+                                <c:when test="${fn:length(certificationPost.title) > 8}">
+                                    ${fn:substring(certificationPost.title, 0, 8)}...
                                 </c:when>
                                 <c:otherwise>
                                     ${certificationPost.title}

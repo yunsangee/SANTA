@@ -125,8 +125,9 @@
     <script>
     $(document).ready(function() {
         var userNo = ${infouser.userNo}; // JSP에서 userNo 값을 가져옴
+        var loggedInUserNo = ${sessionScope.user.userNo}; // JSP에서 로그인된 사용자 번호를 가져옴
         var isFollowing = ${isFollowing}; // 서버에서 팔로우 상태를 받아옴
-        var followerUserNo = 1; // 예시로 설정한 팔로워 사용자 번호
+        var followerUserNo = loggedInUserNo; // 팔로워 사용자 번호는 로그인된 사용자 번호와 동일
 
         // 팔로우 버튼 텍스트 설정
         updateFollowButtonText(isFollowing);
@@ -150,7 +151,7 @@
             });
         });
 
-     // 팔로우 버튼 텍스트 및 스타일 업데이트 함수
+        // 팔로우 버튼 텍스트 및 스타일 업데이트 함수
         function updateFollowButtonText(isFollowing) {
             var button = $('.follow-button');
             if (isFollowing) {
@@ -160,18 +161,21 @@
             }
         }
 
-
         // 팔로워 수 업데이트 함수
         function updateFollowerCount(followerCount) {
             $('#followerCount').html('<i class="fas fa-user"></i>&ensp;<strong>팔로워 :</strong> ' + followerCount);
         }
-    
+
         // 클릭 시 Follower Count의 경로로 이동하는 이벤트 핸들러
         $('#followerCount').click(function() {
-            window.location.href = "/certificationPost/listFollower?userNo=" + userNo;
+            if (userNo === loggedInUserNo) {
+                window.location.href = "/certificationPost/listFollower?userNo=" + userNo;
+            }
         });
         $('#followingCount').click(function() {
-            window.location.href = "/certificationPost/listFollowing?userNo=" + userNo;
+            if (userNo === loggedInUserNo) {
+                window.location.href = "/certificationPost/listFollowing?userNo=" + userNo;
+            }
         });
 
         // 내 인증 탭을 클릭했을 때 호출되는 함수
@@ -267,15 +271,13 @@
                 <div class="profile-details">
                     <p><strong>닉네임:</strong> ${infouser.nickName} <i class="fas fa-flag"></i></p><!-- 뱃지이미지 들어가야함 -->
                     <p><strong>한줄소개:</strong>${infouser.introduceContent}</p>
-                 <div class="follow-info">
-					    <p id="followingCount"><i class="fas fa-user"></i>&ensp;<strong>팔로잉 :</strong> ${followingCount}</p>
-					    <span class="separator">•</span>
-					    <p id="followerCount"><i class="fas fa-user"></i>&ensp;<strong>팔로워 :</strong> ${followerCount}</p>
-					    <c:if test="${loggedInUserNo != infouser.userNo}"> <!-- 유저로그인정보 받아와야함 -->
-					        <button class="follow-button btn btn-secondary">팔로우하기</button>
-					    </c:if>
-					</div>
-
+                    <div class="follow-info">
+                        <p id="followingCount" class="${sessionScope.user.userNo != infouser.userNo ? 'disabled' : ''}"><i class="fas fa-user"></i>&ensp;<strong>팔로잉 :</strong> ${followingCount}</p>
+                        <span class="separator">•</span>
+                        <p id="followerCount" class="${sessionScope.user.userNo != infouser.userNo ? 'disabled' : ''}"><i class="fas fa-user"></i>&ensp;<strong>팔로워 :</strong> ${followerCount}</p>
+                        <c:if test="${sessionScope.user.userNo != infouser.userNo}">
+                            <button class="follow-button btn btn-secondary">팔로우하기</button>
+                        </c:if>
                     </div>
                 </div>
             </div>

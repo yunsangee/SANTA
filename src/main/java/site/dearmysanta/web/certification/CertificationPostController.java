@@ -1,7 +1,6 @@
 package site.dearmysanta.web.certification;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,11 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import site.dearmysanta.domain.certificationPost.CertificationPost;
 import site.dearmysanta.domain.certificationPost.CertificationPostComment;
 import site.dearmysanta.domain.common.Search;
-import site.dearmysanta.domain.meeting.MeetingPost;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.certification.CertificationPostService;
 import site.dearmysanta.service.common.ObjectStorageService;
-import site.dearmysanta.service.meeting.MeetingDAO;
 import site.dearmysanta.service.meeting.MeetingService;
 import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.user.UserService;
@@ -69,18 +66,18 @@ public class CertificationPostController {
         System.out.println(this.getClass());
     }
 
-//   SubmitÇØ¼­ µé¾î¿À´Â°Ç Æ÷½ºÆ®¸ÅÇÎ
-//    urlÅ¸°íµé¾î¿À´Â°Ç °Ù
+//   Submití•´ì„œ ë“¤ì–´ì˜¤ëŠ”ê±´ í¬ìŠ¤íŠ¸ë§¤í•‘
+//    urlíƒ€ê³ ë“¤ì–´ì˜¤ëŠ”ê±´ ê²Ÿ
 
     
     @GetMapping(value = "addCertificationPost")
     public String addCertificationPost(HttpSession session, Model model) throws Exception {
-        // ¼¼¼Ç¿¡¼­ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+        // ì„¸ì…˜ì—ì„œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
         User user = (User) session.getAttribute("user");
         if (user != null) {
             model.addAttribute("user", user);
         } else {
-            // »ç¿ëÀÚ Á¤º¸°¡ ¾øÀ¸¸é ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®µğ·º¼Ç
+            // ì‚¬ìš©ì ì •ë³´ê°€ ì—†ìœ¼ë©´ ë¡œê·¸ì¸ í˜ì´ì§€ë¡œ ë¦¬ë””ë ‰ì…˜
             return "redirect:/user/login";
         }
 
@@ -100,19 +97,19 @@ public class CertificationPostController {
                                        Model model,
                                        HttpSession session) throws Exception {
 
-        // ¼¼¼Ç¿¡¼­ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+        // ì„¸ì…˜ì—ì„œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
         User user = (User) session.getAttribute("user");
         if (user != null) {
             certificationPost.setUserNo(user.getUserNo());
         } else {
-            // »ç¿ëÀÚ Á¤º¸°¡ ¾øÀ¸¸é ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®µğ·º¼Ç
+            // ì‚¬ìš©ì ì •ë³´ê°€ ì—†ìœ¼ë©´ ë¡œê·¸ì¸ í˜ì´ì§€ë¡œ ë¦¬ë””ë ‰ì…˜
             return "redirect:/user/login";
         }
 
-        // ½Ã°£À» "¤·¤·½Ã ¤·¤·ºĞ" Çü½ÄÀ¸·Î º¯È¯ÇÏ¿© ¼³Á¤
-        String totalTime = totalTimeHours + "½Ã°£ " + totalTimeMinutes + "ºĞ";
-        String ascentTime = ascentTimeHours + "½Ã°£ " + ascentTimeMinutes + "ºĞ";
-        String descentTime = descentTimeHours + "½Ã°£ " + descentTimeMinutes + "ºĞ";
+        // ì‹œê°„ì„ "ã…‡ã…‡ì‹œ ã…‡ã…‡ë¶„" í˜•ì‹ìœ¼ë¡œ ë³€í™˜í•˜ì—¬ ì„¤ì •
+        String totalTime = totalTimeHours + "ì‹œê°„ " + totalTimeMinutes + "ë¶„";
+        String ascentTime = ascentTimeHours + "ì‹œê°„ " + ascentTimeMinutes + "ë¶„";
+        String descentTime = descentTimeHours + "ì‹œê°„ " + descentTimeMinutes + "ë¶„";
 
         certificationPost.setCertificationPostTotalTime(totalTime);
         certificationPost.setCertificationPostAscentTime(ascentTime);
@@ -120,7 +117,7 @@ public class CertificationPostController {
 
         certificationPostService.addCertificationPost(certificationPost);
 
-        // µğºñ¿¡ postNo °¡Á®¿À±â
+        // ë””ë¹„ì— postNo ê°€ì ¸ì˜¤ê¸°
         int postNo = certificationPost.getPostNo();
         int postType = 0;
 
@@ -128,8 +125,8 @@ public class CertificationPostController {
             List<MultipartFile> images = certificationPost.getCertificationPostImage();
             int imageCount = images.size();
 
-            for (int i = 0; i < imageCount; i++) { // ÀÎµ¦½º´Â 1ºÎÅÍ ½ÃÀÛ
-                MultipartFile image = images.get(i); // ¸®½ºÆ® ÀÎµ¦½º´Â 0ºÎÅÍ ½ÃÀÛÇÏ¹Ç·Î i »ç¿ë
+            for (int i = 0; i < imageCount; i++) { // ì¸ë±ìŠ¤ëŠ” 1ë¶€í„° ì‹œì‘
+                MultipartFile image = images.get(i); // ë¦¬ìŠ¤íŠ¸ ì¸ë±ìŠ¤ëŠ” 0ë¶€í„° ì‹œì‘í•˜ë¯€ë¡œ i ì‚¬ìš©
                 String fileName = postNo + "_" + postType + "_" + (i + 1);
 
                 System.out.println(fileName);
@@ -141,7 +138,7 @@ public class CertificationPostController {
             }
         }
 
-        // ÇØ½ÃÅÂ±× ÀúÀå
+        // í•´ì‹œíƒœê·¸ ì €ì¥
         for (String hashtagContent : certificationPostHashtagContents) {
             if (!hashtagContent.isEmpty()) {
                 certificationPostService.addHashtag(postNo, hashtagContent);
@@ -168,12 +165,12 @@ public class CertificationPostController {
         String[] ascentTimeParts = certificationPost.getCertificationPostAscentTime().split(" ");
         String[] descentTimeParts = certificationPost.getCertificationPostDescentTime().split(" ");
 
-        model.addAttribute("totalTimeHours", totalTimeParts[0].replace("½Ã°£", "").trim());
-        model.addAttribute("totalTimeMinutes", totalTimeParts[1].replace("ºĞ", "").trim());
-        model.addAttribute("ascentTimeHours", ascentTimeParts[0].replace("½Ã°£", "").trim());
-        model.addAttribute("ascentTimeMinutes", ascentTimeParts[1].replace("ºĞ", "").trim());
-        model.addAttribute("descentTimeHours", descentTimeParts[0].replace("½Ã°£", "").trim());
-        model.addAttribute("descentTimeMinutes", descentTimeParts[1].replace("ºĞ", "").trim());
+        model.addAttribute("totalTimeHours", totalTimeParts[0].replace("ì‹œê°„", "").trim());
+        model.addAttribute("totalTimeMinutes", totalTimeParts[1].replace("ë¶„", "").trim());
+        model.addAttribute("ascentTimeHours", ascentTimeParts[0].replace("ì‹œê°„", "").trim());
+        model.addAttribute("ascentTimeMinutes", ascentTimeParts[1].replace("ë¶„", "").trim());
+        model.addAttribute("descentTimeHours", descentTimeParts[0].replace("ì‹œê°„", "").trim());
+        model.addAttribute("descentTimeMinutes", descentTimeParts[1].replace("ë¶„", "").trim());
 
         int postType = 0;
         List<String> certificationPostImages = new ArrayList<>();
@@ -185,7 +182,7 @@ public class CertificationPostController {
         }
         model.addAttribute("certificationPostImages", certificationPostImages);
 
-        // »ç¿ëÀÚ ¼¼¼Ç¿¡¼­ user Á¤º¸ °¡Á®¿À±â
+        // ì‚¬ìš©ì ì„¸ì…˜ì—ì„œ user ì •ë³´ ê°€ì ¸ì˜¤ê¸°
         User user = (User) session.getAttribute("user");
         if (user != null) {
             model.addAttribute("user", user);
@@ -210,9 +207,9 @@ public class CertificationPostController {
                                           Model model,
                                           HttpSession session) throws Exception {
 
-        String totalTime = totalTimeHours + "½Ã°£ " + totalTimeMinutes + "ºĞ";
-        String ascentTime = ascentTimeHours + "½Ã°£ " + ascentTimeMinutes + "ºĞ";
-        String descentTime = descentTimeHours + "½Ã°£ " + descentTimeMinutes + "ºĞ";
+        String totalTime = totalTimeHours + "ì‹œê°„ " + totalTimeMinutes + "ë¶„";
+        String ascentTime = ascentTimeHours + "ì‹œê°„ " + ascentTimeMinutes + "ë¶„";
+        String descentTime = descentTimeHours + "ì‹œê°„ " + descentTimeMinutes + "ë¶„";
 
         certificationPost.setCertificationPostTotalTime(totalTime);
         certificationPost.setCertificationPostAscentTime(ascentTime);
@@ -242,7 +239,7 @@ public class CertificationPostController {
             }
         }
 
-        // »ç¿ëÀÚ ¼¼¼Ç¿¡¼­ user Á¤º¸ °¡Á®¿À±â
+        // ì‚¬ìš©ì ì„¸ì…˜ì—ì„œ user ì •ë³´ ê°€ì ¸ì˜¤ê¸°
         User user = (User) session.getAttribute("user");
         if (user != null) {
             model.addAttribute("user", user);
@@ -257,137 +254,138 @@ public class CertificationPostController {
 	
 
     	System.out.println("search" +search ) ;
-        // CertificationPost ¸ñ·Ï ¹× °ü·Ã µ¥ÀÌÅÍ °¡Á®¿À±â
+        // CertificationPost ëª©ë¡ ë° ê´€ë ¨ ë°ì´í„° ê°€ì ¸ì˜¤ê¸°
         Map<String, Object> result = certificationPostService.getCertificationPostList(search);
         List<CertificationPost> certificationPostList = (List<CertificationPost>) result.get("list");
         System.out.println(" certificationPostList  " + certificationPostList );
-        // CertificationPost ÀÌ¹ÌÁö URL °¡Á®¿À±â
+        // CertificationPost ì´ë¯¸ì§€ URL ê°€ì ¸ì˜¤ê¸°
         List<String> certificationPostImages = new ArrayList<>();
         for (CertificationPost certificationPost : certificationPostList) {
-            String fileName = certificationPost.getPostNo() + "_0_1"; // Ã¹ ¹øÂ° »çÁø ÆÄÀÏ¸í
+            String fileName = certificationPost.getPostNo() + "_0_1"; // ì²« ë²ˆì§¸ ì‚¬ì§„ íŒŒì¼ëª…
             String imageURL = objectStorageService.getImageURL(fileName);
             certificationPostImages.add(imageURL);
         }
 
-        // ¸ğµ¨¿¡ µ¥ÀÌÅÍ Ãß°¡
-        model.addAttribute("certificationPost", certificationPostList); // CertificationPost ¸ñ·Ï
-        model.addAttribute("hashtagList", result.get("hashtagList")); // ÇØ½ÃÅÂ±× ¸ñ·Ï
-        model.addAttribute("certificationPostImages", certificationPostImages); // CertificationPost ÀÌ¹ÌÁö URL ¸ñ·Ï
+        // ëª¨ë¸ì— ë°ì´í„° ì¶”ê°€
+        model.addAttribute("certificationPost", certificationPostList); // CertificationPost ëª©ë¡
+        model.addAttribute("hashtagList", result.get("hashtagList")); // í•´ì‹œíƒœê·¸ ëª©ë¡
+        model.addAttribute("certificationPostImages", certificationPostImages); // CertificationPost ì´ë¯¸ì§€ URL ëª©ë¡
         model.addAttribute("search", search); 
 
-        return "forward:/certificationPost/listCertificationPost.jsp"; // JSP ÆäÀÌÁö·Î Æ÷¿öµù
+        return "forward:/certificationPost/listCertificationPost.jsp"; // JSP í˜ì´ì§€ë¡œ í¬ì›Œë”©
     }
 
 
 	
-    // °Ô½Ã±Û »ó¼¼Á¶È¸..@RequestParam int certificationPostType, 
+    // ê²Œì‹œê¸€ ìƒì„¸ì¡°íšŒ..@RequestParam int certificationPostType, 
     @GetMapping(value="getCertificationPost")
-    public String getCertificationPost(@RequestParam int postNo,  Model model) throws Exception {
-    	int userNo = 1;
-    	int postType = 0;
-    	 Map<String, Object> map = certificationPostService.getCertificationPost(postNo, userNo);
-    	 List<CertificationPostComment> certificationPostCommentList = certificationPostService.getCertificationPostCommentList(postNo);
-    	// List<MeetingPost> unCertifiedMeetingPosts = meetingService.getUnCertifiedMeetingPost(userNo);
-    	 //meetingService.updateMeetingPostCertifiedStatus(postNo);
-    	 CertificationPost certificationPost = (CertificationPost)map.get("certificationPost");
- 		
-    	 List<String> certificationPostImages = new ArrayList<>();
-         int imageCount = certificationPost.getCertificationPostImageCount();
-          System.out.println("imageCount==="+imageCount);
-         for (int i = 0; i < imageCount; i++) {
-        	 String fileName = postNo+ "_" +postType+ "_" +(i+1);
-             String imageURL = objectStorageService.getImageURL(fileName);
-             certificationPostImages.add(imageURL);
-         }
-       
+    public String getCertificationPost(@RequestParam int postNo, Model model, HttpSession session) throws Exception {
+        // ì„¸ì…˜ì—ì„œ ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            // ë¡œê·¸ì¸ì´ ë˜ì–´ ìˆì§€ ì•Šì€ ê²½ìš° ì²˜ë¦¬
+            return "redirect:/user/login"; // ë¡œê·¸ì¸ í˜ì´ì§€ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
+        }
 
-     	System.out.println("´ñ±Û"+postNo+userNo+certificationPostCommentList);
- 	 	 model.addAttribute("certificationPost", map.get("certificationPost"));
-    	 model.addAttribute("certificationPostCommentList", certificationPostCommentList);
-       model.addAttribute("hashtagList", map.get("hashtagList"));
-      model.addAttribute("certificationPostImages", certificationPostImages);
-     
-    	
-         System.out.println("ÀÌ°Å¸ÂÁö"+certificationPostCommentList);
-         
-         return "forward:/certificationPost/getCertificationPost.jsp";
- 					  
-    	 
+        int userNo = user.getUserNo(); // ë¡œê·¸ì¸í•œ ì‚¬ìš©ìì˜ ìœ ì €ë²ˆí˜¸
+
+        int postType = 0;
+        Map<String, Object> map = certificationPostService.getCertificationPost(postNo, userNo);
+        List<CertificationPostComment> certificationPostCommentList = certificationPostService.getCertificationPostCommentList(postNo);
+
+        CertificationPost certificationPost = (CertificationPost) map.get("certificationPost");
+
+        List<String> certificationPostImages = new ArrayList<>();
+        int imageCount = certificationPost.getCertificationPostImageCount();
+        System.out.println("imageCount===" + imageCount);
+        for (int i = 0; i < imageCount; i++) {
+            String fileName = postNo + "_" + postType + "_" + (i + 1);
+            String imageURL = objectStorageService.getImageURL(fileName);
+            certificationPostImages.add(imageURL);
+        }
+
+        System.out.println("ëŒ“ê¸€" + postNo + userNo + certificationPostCommentList);
+        model.addAttribute("certificationPost", map.get("certificationPost"));
+        model.addAttribute("certificationPostCommentList", certificationPostCommentList);
+        model.addAttribute("hashtagList", map.get("hashtagList"));
+        model.addAttribute("certificationPostImages", certificationPostImages);
+
+        System.out.println("ì´ê±°ë§ì§€" + certificationPostCommentList);
+
+        return "forward:/certificationPost/getCertificationPost.jsp";
     }
 
-    //³»°¡ ÀÛ¼ºÇÑ °Ô½Ã±Û ¸ñ·ÏÁ¶È¸ 
+    //ë‚´ê°€ ì‘ì„±í•œ ê²Œì‹œê¸€ ëª©ë¡ì¡°íšŒ 
     @RequestMapping(value="listMyCertificationPost")
     public String listMyCertificationPost(@RequestParam int userNo, Model model) throws Exception {
         List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
         model.addAttribute("myCertificationPost", myCertificationPost);
-        System.out.println("¿ÀÀ×:" + myCertificationPost);
+        System.out.println("ì˜¤ì‰:" + myCertificationPost);
         return "forward:/certificationPost/listMyCertificationPost.jsp";
     }
     
-    //ÆÈ·Î¿ö¸®½ºÆ® 
+    //íŒ”ë¡œì›Œë¦¬ìŠ¤íŠ¸ 
     @RequestMapping(value="listFollower")
     public String listFollower(@RequestParam int userNo, Model model) throws Exception {
     	List<User> followerList = userEtcService.getFollowerList(userNo);
         model.addAttribute("followerList", followerList);
-        System.out.println("ÆÈ·Î¿ö¸®½ºÆ®º¸±â:" + followerList);
+        System.out.println("íŒ”ë¡œì›Œë¦¬ìŠ¤íŠ¸ë³´ê¸°:" + followerList);
     return "forward:/certificationPost/listFollower.jsp";
 }
 
-    //ÆÈ·ÎÀ×¸®½ºÆ®
+    //íŒ”ë¡œì‰ë¦¬ìŠ¤íŠ¸
     @RequestMapping(value="listFollowing")
     public String listFollowing(@RequestParam int userNo, Model model) throws Exception {
     	List<User> followingList = userEtcService.getFollowingList(userNo);
         model.addAttribute("followingList", followingList);
-        System.out.println("ÆÈ·ÎÀ×¸®½ºÆ®º¸±â:" + followingList);
+        System.out.println("íŒ”ë¡œì‰ë¦¬ìŠ¤íŠ¸ë³´ê¸°:" + followingList);
     return "forward:/certificationPost/listFollowing.jsp";
 }
     
 
-        @RequestMapping(value = "getProfile")
-        public String getProfile(@RequestParam int userNo, Model model) throws Exception {
-            User user = userService.getUser(userNo);
-            System.out.println("User Info: " + user);
-            model.addAttribute("infouser", user);
+    @GetMapping(value="getProfile")
+    public String getProfile(@RequestParam int userNo, Model model) throws Exception {
+        User user = userService.getUser(userNo);
+        System.out.println("User Info: " + user);
+        model.addAttribute("infouser", user);
 
-            int followerCount = userEtcService.getFollowerCount(userNo);
-            System.out.println("Follower Count: " + followerCount);
-            model.addAttribute("followerCount", followerCount);
+        int followerCount = userEtcService.getFollowerCount(userNo);
+        System.out.println("Follower Count: " + followerCount);
+        model.addAttribute("followerCount", followerCount);
 
-            int followingCount = userEtcService.getFollowingCount(userNo);
-            System.out.println("Following Count: " + followingCount);
-            model.addAttribute("followingCount", followingCount);
+        int followingCount = userEtcService.getFollowingCount(userNo);
+        System.out.println("Following Count: " + followingCount);
+        model.addAttribute("followingCount", followingCount);
 
-            // ÀÓÀÇ·Î ¼³Á¤ÇÑ followerNo (·Î±×ÀÎÇÑ »ç¿ëÀÚÀÇ ¹øÈ£¶ó°í °¡Á¤)
-            int followerNo = 1; // ¿¹½Ã·Î 1¹ø À¯Àú¸¦ ¼³Á¤
+        // ì„ì˜ë¡œ ì„¤ì •í•œ followerNo (ë¡œê·¸ì¸í•œ ì‚¬ìš©ìì˜ ë²ˆí˜¸ë¼ê³  ê°€ì •)
+        int followerNo = 1; // ì˜ˆì‹œë¡œ 1ë²ˆ ìœ ì €ë¥¼ ì„¤ì •
 
-            int isFollowing = userEtcService.isFollowing(followerNo, userNo);
-            model.addAttribute("isFollowing", isFollowing);
-            System.out.println("Is Following: " + isFollowing);
+        int isFollowing = userEtcService.isFollowing(followerNo, userNo);
+        model.addAttribute("isFollowing", isFollowing);
+        System.out.println("Is Following: " + isFollowing);
 
-            List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
-            model.addAttribute("myCertificationPost", myCertificationPost);
-            System.out.println("myCertificationPost: " + myCertificationPost);
+        List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
+        model.addAttribute("myCertificationPost", myCertificationPost);
+        System.out.println("myCertificationPost: " + myCertificationPost);
 
-            List<CertificationPost> myLikeCertificationPost = certificationPostService.getCertificationPostLikeList(userNo);
-            System.out.println("myLikeCertificationPost: " + myLikeCertificationPost);
-            model.addAttribute("myLikeCertificationPost", myLikeCertificationPost);
+        List<CertificationPost> myLikeCertificationPost = certificationPostService.getCertificationPostLikeList(userNo);
+        System.out.println("myLikeCertificationPost: " + myLikeCertificationPost);
+        model.addAttribute("myLikeCertificationPost", myLikeCertificationPost);
 
-            int postType = 0;
-            List<String> certificationPostImages = new ArrayList<>();
-            for (CertificationPost certificationPost : myCertificationPost) {
-                String fileName = certificationPost.getPostNo() + "_" + postType + "_1"; // Ã¹ ¹øÂ° »çÁø ÆÄÀÏ¸í
-                String imageURL = objectStorageService.getImageURL(fileName);
-                certificationPostImages.add(imageURL);
-            }
-
-            model.addAttribute("certificationPostImages", certificationPostImages);
-
-            System.out.println("ÀÌ¹ÌÁö" + certificationPostImages);
-
-            return "forward:/certificationPost/getProfile.jsp";
+        int postType = 0;
+        List<String> certificationPostImages = new ArrayList<>();
+        for (CertificationPost certificationPost : myCertificationPost) {
+            String fileName = certificationPost.getPostNo() + "_" + postType + "_1"; // ì²« ë²ˆì§¸ ì‚¬ì§„ íŒŒì¼ëª…
+            String imageURL = objectStorageService.getImageURL(fileName);
+            certificationPostImages.add(imageURL);
         }
-        
-        
+
+        model.addAttribute("certificationPostImages", certificationPostImages);
+
+        System.out.println("ì´ë¯¸ì§€" + certificationPostImages);
+
+        return "forward:/certificationPost/getProfile.jsp";
+    }
 
         
     }

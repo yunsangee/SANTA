@@ -26,7 +26,7 @@
     .comments-section {
         margin-top: 40px;
     }
-  .comment-item {
+    .comment-item {
         position: relative;
         padding: 10px;
         border: 1px solid #ccc;
@@ -131,46 +131,47 @@ $(document).ready(function() {
         }
     });
 
+    // 댓글 조회
+    function loadComments() {
+        $.ajax({
+            url: 'rest/getCertificationPostComment',
+            type: 'GET',
+            data: { postNo: postNo },
+            success: function(comments) {
+                var commentsList = $('.comments-list');
+                commentsList.empty(); // 기존 댓글을 비웁니다.
+                $.each(comments, function(index, comment) {
+                    var isAuthor = comment.userNo == userNo;
+                    var authorLabel = isAuthor ? ' <span class="badge badge-primary">(작성자)</span>' : '';
+                    var deleteButton = isAuthor ? '<button class="btn btn-danger btn-sm" data-comment-id="'+comment.certificationPostCommentNo+'"><i class="fa fa-trash"></i></button>' : '';
+                    var formattedDate = comment.certificationPostCommentCreationDate.split('T')[0];
+                    var commentItem = 
+                        '<div class="comment-item" style="margin-bottom: 10px;">' +
+                            '<div class="comment-meta">' +
+                                '<p><i class="fas fa-user"></i> 닉네임 : ' + comment.nickname + authorLabel + '</p>' +
+                                '<span>' +
+                                    '<span style="font-size: smaller;"><i class="fas fa-clock"></i> 작성 날짜 : ' + formattedDate + '</span>' +
+                                    deleteButton +
+                                '</span>' +
+                            '</div>' +
+                            '<p><i class="fas fa-comment"></i> 댓글 : ' + comment.certificationPostCommentContents + '</p>' +
+                        '</div>';
+                    commentsList.append(commentItem);
+                });
 
-// 댓글 조회
-function loadComments() {
-    $.ajax({
-        url: 'rest/getCertificationPostComment',
-        type: 'GET',
-        data: { postNo: postNo },
-        success: function(comments) {
-            var commentsSection = $('.comments-section');
-            commentsSection.find('.comment-item').remove();
-            $.each(comments, function(index, comment) {
-                var isAuthor = comment.userNo == userNo;
-                var authorLabel = isAuthor ? ' <span class="badge badge-primary">(작성자)</span>' : '';
-                var deleteButton = isAuthor ? '<button class="btn btn-danger btn-sm" data-comment-id="'+comment.certificationPostCommentNo+'"><i class="fa fa-trash"></i></button>' : '';
-                var formattedDate = comment.certificationPostCommentCreationDate.split('T')[0];
-                var commentItem = 
-                    '<div class="comment-item">' +
-                        '<div class="comment-meta">' +
-                            '<p><i class="fas fa-user"></i> 닉네임 : ' + comment.nickname + authorLabel + '</p>' +
-                            '<span>' +
-                                '<span style="font-size: smaller;"><i class="fas fa-clock"></i> 작성 날짜 : ' + formattedDate + '</span>' +
-                                deleteButton +
-                            '</span>' +
-                        '</div>' +
-                        '<p><i class="fas fa-comment"></i> 댓글 : ' + comment.certificationPostCommentContents + '</p>' +
-                    '</div><hr/>';
-                commentsSection.append(commentItem);
-            });
-
-            // 댓글 삭제 버튼 클릭 이벤트 바인딩
-            $('.btn-danger[data-comment-id]').on('click', function() {
-                var commentId = $(this).data('comment-id');
-                deleteComment(commentId);
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error('댓글 조회 오류:', xhr, status, error);
-        }
-    });
-}
+                // 댓글 삭제 버튼 클릭 이벤트 바인딩
+                $('.btn-danger[data-comment-id]').on('click', function() {
+                    if (confirm('정말로 삭제하시겠습니까?')) {
+                        var commentId = $(this).data('comment-id');
+                        deleteComment(commentId);
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('댓글 조회 오류:', xhr, status, error);
+            }
+        });
+    }
 
 
     // 댓글 추가
@@ -234,18 +235,8 @@ function loadComments() {
 
     // 작성자 클릭 이벤트 설정
     $('.details-container').on('click', 'p.author-link', function() {
-        var userNo = $(this).data('user-no'); // 작성자의 userNo 가져오기
-        $.ajax({
-            type: 'GET',
-            url: 'getProfile',
-            data: { userNo: userNo },
-            success: function(response) {
-                window.location.href = 'getProfile?userNo=' + userNo;
-            },
-            error: function(xhr, status, error) {
-                console.error('Error loading profile:', error);
-            }
-        });
+        var authorUserNo = $(this).data('user-no'); // 작성자의 userNo 가져오기
+        window.location.href = 'getProfile?userNo=' + authorUserNo;
     });
 });
 </script>
@@ -258,99 +249,98 @@ function loadComments() {
     <c:import url="../common/top.jsp"/>
 </header>
 <main class="container my-5">
-  
-        <div class="container py-5">
-            <div class="row justify-content-center g-4 mb-5">
-                <div class="col-lg-8 col-xl-9">
-                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                        <ol class="carousel-indicators">
-                            <c:forEach var="image" items="${certificationPostImages}" varStatus="status">
-                                <li data-target="#carouselExampleIndicators" data-slide-to="${status.index}" class="${status.index == 0 ? 'active' : ''}"></li>
-                            </c:forEach>
-                        </ol>
-                        <div class="carousel-inner">
-                            <c:forEach var="image" items="${certificationPostImages}" varStatus="status">
-                                <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
-                                    <img src="${image}" class="d-block w-100" alt="Image">
-                                </div>
-                            </c:forEach>
-                        </div>
-                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </div>
-                    <div class="details-container">
-                        <div class="details-header">
-                           <p class="author-link" data-user-no="${certificationPost.userNo}">
-         <i class="fas fa-user"></i> 작성자: ${certificationPost.nickName}
-
-        </p>
-                            <p><i class="fas fa-calendar-alt"></i> 작성 일자: ${certificationPost.postDate}</p>
-                            <div class="d-flex align-items-center">
-                                <i class="fa fa-heart like-button ${certificationPost.certificationPostLikeStatus == 0 ? 'text-secondary' : 'text-danger'}"></i>
-                                <p class="mb-0 ml-2">${certificationPost.certificationPostLikeCount}</p>
+    <div class="container py-5">
+        <div class="row justify-content-center g-4 mb-5">
+            <div class="col-lg-8 col-xl-9">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <c:forEach var="image" items="${certificationPostImages}" varStatus="status">
+                            <li data-target="#carouselExampleIndicators" data-slide-to="${status.index}" class="${status.index == 0 ? 'active' : ''}"></li>
+                        </c:forEach>
+                    </ol>
+                    <div class="carousel-inner">
+                        <c:forEach var="image" items="${certificationPostImages}" varStatus="status">
+                            <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
+                                <img src="${image}" class="d-block w-100" alt="Image">
                             </div>
-                            <c:if test="${user != null && user.userNo == certificationPost.userNo}">
-                                <form action="/certificationPost/updateCertificationPost" method="get">
-                                    <input type="hidden" name="postNo" value="${certificationPost.postNo}"/>
-                                    <button type="submit" class="btn btn-secondary"><i class="fa fa-edit"></i></button>
-                                </form>
-                                <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
-                            </c:if>
-                        </div>
-                        <div class="hashtags mb-3">
-                            <c:forEach var="hashtag" items="${hashtagList}">
-                                <span class="hashtag"><i class="fas fa-hashtag"></i> ${hashtag.certificationPostHashtagContents}</span>
-                            </c:forEach>
-                        </div>
-                        <h4 class="fw-bold mb-3">${certificationPost.title}</h4>
-                        <hr>
-                        <div class="inline-info mb-3">
-                            <span><i class="fas fa-mountain"></i> 산이름:&ensp; ${certificationPost.certificationPostMountainName}</span>
-                            <span><i class="fas fa-route"></i> 등산경로:&ensp; ${certificationPost.certificationPostHikingTrail}</span>
-                        </div>
-                        <div class="inline-info mb-3">
-                            <span><i class="fas fa-hourglass-start"></i> 총소요시간:&ensp; ${certificationPost.certificationPostTotalTime}</span>
-                            <span><i class="fas fa-arrow-up"></i> 상행시간: &ensp;${certificationPost.certificationPostAscentTime}</span>
-                            <span><i class="fas fa-arrow-down"></i> 하행시간: &ensp; ${certificationPost.certificationPostDescentTime}</span>
-                        </div>
-                        <p class="mb-3"><i class="fas fa-calendar-day"></i> 등산 일자: &ensp;${certificationPost.certificationPostHikingDate}</p>
-                        <p class="mb-3"><i class="fas fa-car"></i> 교통수단: &ensp;
-                            <c:choose>
-                                <c:when test="${certificationPost.certificationPostTransportation == 0}">도보</c:when>
-                                <c:when test="${certificationPost.certificationPostTransportation == 1}">자전거</c:when>
-                                <c:when test="${certificationPost.certificationPostTransportation == 2}">버스</c:when>
-                                <c:when test="${certificationPost.certificationPostTransportation == 3}">자동차</c:when>
-                                <c:when test="${certificationPost.certificationPostTransportation == 4}">지하철</c:when>
-                                <c:when test="${certificationPost.certificationPostTransportation == 5}">기차</c:when>
-                                <c:otherwise>Unknown</c:otherwise>
-                            </c:choose>
-                        </p>
-                        <p class="mb-3"><i class="fas fa-chart-line"></i> 등산 난이도: &ensp;
-                            <c:choose>
-                                <c:when test="${certificationPost.certificationPostHikingDifficulty == 0}">어려움</c:when>
-                                <c:when test="${certificationPost.certificationPostHikingDifficulty == 1}">중간</c:when>
-                                <c:when test="${certificationPost.certificationPostHikingDifficulty == 2}">쉬움</c:when>
-                                <c:otherwise>Unknown</c:otherwise>
-                            </c:choose>
-                        </p>
+                        </c:forEach>
                     </div>
-                    <hr><br>
-                 <div class="comments-section">
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+                <div class="details-container">
+                    <div class="details-header">
+                        <p class="author-link" data-user-no="${certificationPost.userNo}">
+                            <i class="fas fa-user"></i> 작성자: ${certificationPost.nickName}
+                        </p>
+                        <p><i class="fas fa-calendar-alt"></i> 작성 일자: ${certificationPost.postDate}</p>
+                        <div class="d-flex align-items-center">
+                            <i class="fa fa-heart like-button ${certificationPost.certificationPostLikeStatus == 0 ? 'text-secondary' : 'text-danger'}"></i>
+                            <p class="mb-0 ml-2">${certificationPost.certificationPostLikeCount}</p>
+                        </div>
+                        <c:if test="${user != null && user.userNo == certificationPost.userNo}">
+                            <form action="/certificationPost/updateCertificationPost" method="get">
+                                <input type="hidden" name="postNo" value="${certificationPost.postNo}"/>
+                                <button type="submit" class="btn btn-secondary"><i class="fa fa-edit"></i></button>
+                            </form>
+                            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                        </c:if>
+                    </div>
+                    <div class="hashtags mb-3">
+                        <c:forEach var="hashtag" items="${hashtagList}">
+                            <span class="hashtag"><i class="fas fa-hashtag"></i> ${hashtag.certificationPostHashtagContents}</span>
+                        </c:forEach>
+                    </div>
+                    <h4 class="fw-bold mb-3">${certificationPost.title}</h4>
+                    <hr>
+                    <div class="inline-info mb-3">
+                        <span><i class="fas fa-mountain"></i> 산이름:&ensp; ${certificationPost.certificationPostMountainName}</span>
+                        <span><i class="fas fa-route"></i> 등산경로:&ensp; ${certificationPost.certificationPostHikingTrail}</span>
+                    </div>
+                    <div class="inline-info mb-3">
+                        <span><i class="fas fa-hourglass-start"></i> 총소요시간:&ensp; ${certificationPost.certificationPostTotalTime}</span>
+                        <span><i class="fas fa-arrow-up"></i> 상행시간: &ensp;${certificationPost.certificationPostAscentTime}</span>
+                        <span><i class="fas fa-arrow-down"></i> 하행시간: &ensp; ${certificationPost.certificationPostDescentTime}</span>
+                    </div>
+                    <p class="mb-3"><i class="fas fa-calendar-day"></i> 등산 일자: &ensp;${certificationPost.certificationPostHikingDate}</p>
+                    <p class="mb-3"><i class="fas fa-car"></i> 교통수단: &ensp;
+                        <c:choose>
+                            <c:when test="${certificationPost.certificationPostTransportation == 0}">도보</c:when>
+                            <c:when test="${certificationPost.certificationPostTransportation == 1}">자전거</c:when>
+                            <c:when test="${certificationPost.certificationPostTransportation == 2}">버스</c:when>
+                            <c:when test="${certificationPost.certificationPostTransportation == 3}">자동차</c:when>
+                            <c:when test="${certificationPost.certificationPostTransportation == 4}">지하철</c:when>
+                            <c:when test="${certificationPost.certificationPostTransportation == 5}">기차</c:when>
+                            <c:otherwise>Unknown</c:otherwise>
+                        </c:choose>
+                    </p>
+                    <p class="mb-3"><i class="fas fa-chart-line"></i> 등산 난이도: &ensp;
+                        <c:choose>
+                            <c:when test="${certificationPost.certificationPostHikingDifficulty == 0}">어려움</c:when>
+                            <c:when test="${certificationPost.certificationPostHikingDifficulty == 1}">중간</c:when>
+                            <c:when test="${certificationPost.certificationPostHikingDifficulty == 2}">쉬움</c:when>
+                            <c:otherwise>Unknown</c:otherwise>
+                        </c:choose>
+                    </p>
+                </div>
+                <hr><br>
+                <div class="comments-section">
                     <h3><i class="fas fa-comments"></i> 댓글작성하기</h3>
-                    
-                    <form class="comment-form">
+                                        <form class="comment-form">
                         <textarea class="form-control" id="newComment" rows="3" placeholder="댓글을 입력해주세요. (최대 100자)" maxlength="100"></textarea>
                         <button type="submit" class="btn btn-primary">등록</button>
                     </form>
-               <hr><br>
-               </div>
-               <hr>
+                    <div class="comments-list" style="margin-top: 20px;">
+                        <!-- 댓글 내용이 여기에 쌓입니다 -->
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
