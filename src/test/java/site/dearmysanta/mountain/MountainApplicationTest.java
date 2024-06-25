@@ -21,6 +21,7 @@ import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.correctionPost.CorrectionPost;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
+import site.dearmysanta.domain.mountain.MountainTrail;
 import site.dearmysanta.domain.mountain.Statistics;
 import site.dearmysanta.domain.mountain.Weather;
 import site.dearmysanta.domain.user.User;
@@ -95,9 +96,10 @@ public class MountainApplicationTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void mountainApiTest() throws Exception {
-		mountainService.getMountain("관악산");
+//		mountainService.getMountain("");
+		List<MountainTrail> list = mountainService.getMountainTrailListFromVWorld(1010,"관악산",  "41173102");
 	}
 //	
 //	@Test
@@ -571,7 +573,7 @@ public class MountainApplicationTest {
 		
 	}
 	
-	@Test
+	//@Test
 	public void deleteTest() throws Exception {
 		objectStorageService.deleteObjectFromStorage("profile22.png");
 	}

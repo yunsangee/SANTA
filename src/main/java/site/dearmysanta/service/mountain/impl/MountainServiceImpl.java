@@ -80,6 +80,9 @@ public class MountainServiceImpl implements MountainService {
 	@Autowired
 	ObjectStorageService objectStorageService;
 	
+	
+	private int index =108;
+	
 	 
 	//
 	// mountainName, fix mountainName in mountainTrail class
@@ -207,16 +210,25 @@ public class MountainServiceImpl implements MountainService {
 				if (features.get(i) != null) {
 					
 					MountainTrail mountainTrail = mapJsonToMountainTrail(features.get(i));
-					mountainTrail.setCoordinatesUrl(mountainTrail.getMountainName() + "" + i);
+					mountainTrail.setCoordinatesUrl(mountainTrail.getMountainName() + "" +i);
 					mountainTrail.setMountainNo(mountainNo);
 					mountainTrail.setMountainName(mountainName);
 
 					//
 					// upload on objectStorage
 					//
-//					objectStorageService.uploadListData(mountainTrail.getMountainTrailCoordinates(),
-//							mountainTrail.getCoordinatesUrl());
+					
+					
+					
+					
+					
+					objectStorageService.uploadListData(mountainTrail.getMountainTrailCoordinates(),
+							mountainTrail.getCoordinatesUrl());
 
+					
+					
+					
+					
 					mountainTrails.add(mountainTrail);
 					SantaLogger.makeLog("info", "info:"+mountainNo + " "+mountainName);
 					SantaLogger.makeLog("info", "mountainTrail:" + mountainTrail);
@@ -246,12 +258,13 @@ public class MountainServiceImpl implements MountainService {
             
 		}//get MountainTrail information using mountain Trail api
 	 
-	 public List<MountainTrail> doAllLogic(int mountainNo, double lat, double lon,String mountainName) throws IOException{
+	 public List<MountainTrail> doAllLogic(int mountainNo, double lat, double lon,String mountainName, String locations) throws IOException{
 	 //public void doAllLogic(double lat, double lon,String mountainName) throws JsonMappingException, JsonProcessingException{
 		String location = getEmdCodeByCoordinates(lat, lon);
 		SantaLogger.makeLog("info","====================================");
 		String emdCd =  getRegionCode(location);
 		SantaLogger.makeLog("info","====================================");
+		
 		
 		return getMountainTrailListFromVWorld(mountainNo,mountainName, emdCd);
 		
@@ -279,9 +292,9 @@ public class MountainServiceImpl implements MountainService {
 		Mountain mountain = new Mountain();
 
 		
-		String url = "http://apis.data.go.kr/B553662/top100FamtListBasiInfoService/getTop100FamtListBasiInfoList?serviceKey="+API_KEY +"&numOfRows=100&pageNo=1"
-				+ "&srchFrtrlNm="
-				+ mountainName;//remove later
+		String url = "http://apis.data.go.kr/B553662/top100FamtListBasiInfoService/getTop100FamtListBasiInfoList?serviceKey="+API_KEY +"&numOfRows=100&pageNo=1";
+				//+ "&srchFrtrlNm="
+				//+ mountainName;//remove later
 
 		HttpHeaders headers = new HttpHeaders();
 
@@ -332,6 +345,11 @@ public class MountainServiceImpl implements MountainService {
            
            SantaLogger.makeLog("info", "url:"+objectStorageService.dounLoadImageURL(bucketname, mountain.getMountainName()+"사진"));
            mountain.setMountainImage(objectStorageService.dounLoadImageURL(bucketname, mountain.getMountainName()+"사진"));
+           
+           
+           
+           
+           
            //
            // for test
            //
@@ -344,10 +362,14 @@ public class MountainServiceImpl implements MountainService {
            
            
            SantaLogger.makeLog("info","mountain" + mountain);
+           
+           
+           
+           
            this.addMountain(mountain);
            
 
-           mountain.setMountainTrail(doAllLogic(mountain.getMountainNo(), mountain.getMountainLatitude(),mountain.getMountainLongitude(), mountain.getMountainName()));
+           mountain.setMountainTrail(doAllLogic(mountain.getMountainNo(), mountain.getMountainLatitude(),mountain.getMountainLongitude(), mountain.getMountainName(), mountain.getMountainLocation()));
         	   
            
          }
@@ -562,7 +584,17 @@ public class MountainServiceImpl implements MountainService {
 	}
 	
 	public List<Mountain> getMountainLikeList(Search search){
-		return mountainDao.getMountainLikeList(search);
+		
+		List<Mountain> list = mountainDao.getMountainLikeList(search);
+		
+		for(Mountain mountain : list) {
+			mountain.setLikeCount(mountainDao.getTotalMountainLikeCount(mountain.getMountainNo()));
+		}
+		return list;
+	}
+	
+	public int getTotalMountainLikeListCount(int userNo) {
+		return mountainDao.getTotalMountainLikeListCount(userNo);
 	}
 	
 	//
