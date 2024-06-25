@@ -10,70 +10,88 @@
     <title>Fruitables - Free Bootstrap 5 eCommerce Website Template</title>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script>
-    	$(function(){
+    	$(function(event){
 
-    		$('#logoName').on('click',function(){
+    		$('#logoName').on('click',function(event){
+    			event.preventDefault();
     			window.location.href ='/';
     		});
     		
-			$('#mountain').on('click',function(){
+			$('#mountain').on('click',function(event){
+				event.preventDefault();
 				window.location.href = '/mountain/searchMountain';
 			});
 			
-			$('#certificationPost').on('click',function(){
+			$('#certificationPost').on('click',function(event){
+				event.preventDefault();
 				window.location.href = '/certificationPost/listCertificationPost';
 			});
 			
-			$('#meetingPost').on('click',function(){
+			$('#meetingPost').on('click',function(event){
+				event.preventDefault();
 				window.location.href = '/meeting/getMeetingPostList';
 			});
 			
-			$('#hikingGuide').on('click',function(){
+			$('#hikingGuide').on('click',function(event){
+				event.preventDefault();
 				window.location.href = '/hikingguide';
 			});
 			
-			$('#loginButton').on('click',function(){
+			$('#loginButton').on('click',function(event){
+				event.preventDefault();
 				window.location.href = '/user/login';
 			});
 			
-			$('#userProfile').on('click',function(){
+			$('#userProfile').on('click',function(event){
+				event.preventDefault();
 				window.location.href = '/mountain/searchMountain';
 			});  // need to fix to popup
 			
-			$('#getUserList').on('click',function(){
+			$('#getUserList').on('click',function(event){
+				event.preventDefault();
 				window.location.href = '/user/getUserList';
 			});  // need to fix to popup
 			
-			$('#statistics').on('click',function(){
+			$('#statistics').on('click',function(event){
+				event.preventDefault();
 				window.location.href = '/mountain/getStatistics';
 			});  // need to fix to popup
 			
-			$('#correctionPost').on('click',function(){
+			$('#correctionPost').on('click',function(event){
+				event.preventDefault();
 				window.location.href = '/correctionPost/getCorrectionPostList';
 			});  // need to fix to popup
 			
-			 $('#myInfo').on('click', function() {
+			 $('#myInfo').on('click', function(event) {
+				 event.preventDefault();
 		            window.location.href = '/user/getUser';
 		        });
-		        $('#myMeetingPost').on('click', function() {
-		            window.location.href = 'meeting/getMeetingPostList';
+		        $('#myMeetingPost').on('click', function(event) {
+		        	event.preventDefault();
+		            window.location.href = 'meeting/getMeetingPostList?userNo=${sessionScope.user.userNo}';
 		        });
-		        $('#myCertificationPost').on('click', function() {
-		            window.location.href = 'certificationPost/getCertificationPostList';
+		        $('#myCertificationPost').on('click', function(event) {
+		        	event.preventDefault();
+		            window.location.href = 'certificationPost/listMyCertificationPost?userNo=${sessionScope.user.userNo}';
 		        });
-		        $('#myMountainLike').on('click', function() {
+		        $('#myMountainLike').on('click', function(event) {
+		        	event.preventDefault();
 		            window.location.href = '/mountain/getMountainLikeList?userNo='+'${sessionScope.user.userNo}'; //??
 		        });
-		        $('#mySchedule').on('click', function() {
+		        $('#mySchedule').on('click', function(event) {
+		        	event.preventDefault();
 		            window.location.href = '/user/getSchedule';
 		        });
-		        $('#myHikingRecord').on('click', function() {
-		            window.location.href = '/myHikingRecord'; //? 
+		        $('#myHikingRecord').on('click', function(event) {
+		        	event.preventDefault();
+		            window.location.href = '/hikingguide/hikingRecord';
 		        });
-		        $('#qna').on('click', function() {
+		        $('#qna').on('click', function(event) {
+		        	event.preventDefault();
 		            window.location.href = '/user/getQna';
 		        });
-		        $('#logout').on('click', function() {
+		        $('#logout').on('click', function(event) {
+		        	event.preventDefault();
 		            window.location.href = '/user/logout';
 		        });
              
@@ -305,8 +323,8 @@
 
 
 <script>
-$(document).ready(function() {
-    $('.navbar-toggler').on('click', function() {
+$(document).ready(function(event) {
+    $('.navbar-toggler').on('click', function(event) {
         var target = $(this).attr('data-target');
         $(target).collapse('toggle');
     });
@@ -391,7 +409,7 @@ $(document).ready(function() {
         }
         
         
-        $('#flexSwitchAllAlert').on('click', function() {
+        $('#flexSwitchAllAlert').on('click', function(event) {
             var isChecked = $(this).is(':checked');
             console.log('전체알림:', isChecked);
             // AJAX 요청을 통해 서버에 업데이트
@@ -411,7 +429,7 @@ $(document).ready(function() {
             });
         });
 
-        $('#flexSwitchCertificationPostAlert').on('click', function() {
+        $('#flexSwitchCertificationPostAlert').on('click', function(event) {
             var isChecked = $(this).is(':checked');
             console.log('인증 게시글 알림:', isChecked);
             // AJAX 요청을 통해 서버에 업데이트
@@ -429,7 +447,7 @@ $(document).ready(function() {
             });
         });
 
-        $('#flexSwitchMeetingPostAlert').on('click', function() {
+        $('#flexSwitchMeetingPostAlert').on('click', function(event) {
             var isChecked = $(this).is(':checked');
             console.log('모임 게시글 알림:', isChecked);
             // AJAX 요청을 통해 서버에 업데이트
@@ -447,7 +465,7 @@ $(document).ready(function() {
             });
         });
 
-        $('#flexSwitchHikingGuideAlert').on('click', function() {
+        $('#flexSwitchHikingGuideAlert').on('click', function(event) {
             var isChecked = $(this).is(':checked');
             console.log('등산 안내 알림:', isChecked);
             // AJAX 요청을 통해 서버에 업데이트
