@@ -156,9 +156,9 @@ public class UserController {
 		    // 쿠키 설정
 		    Cookie nickNameCookie = new Cookie("nickName", dbUser.getNickName());
 		    nickNameCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
-		    cookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
-		    cookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
-		    cookie.setSecure(false); // 
+		    nickNameCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+		    nickNameCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+		    nickNameCookie.setSecure(false); // 
 		    response.addCookie(nickNameCookie);
 		    
 		    System.out.println("쿠키확인 닉네임 : " + nickNameCookie);
@@ -456,9 +456,9 @@ public class UserController {
 		    // 쿠키 설정
 		    Cookie nickNameCookie = new Cookie("nickName", dbUser.getNickName());
 		    nickNameCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
-		    cookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
-		    cookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
-		    cookie.setSecure(false); // 
+		    nickNameCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+		    nickNameCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+		    nickNameCookie.setSecure(false); // 
 		    response.addCookie(nickNameCookie);
 		  
 		    System.out.println("쿠키확인 닉네임 : " + nickNameCookie);

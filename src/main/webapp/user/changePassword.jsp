@@ -26,7 +26,7 @@
             text-align: center;
             justify-content: center;
             align-items: center;
-            margin-top: 100px;
+            margin-top: 21px;
         }
 
         .container h2 {
@@ -96,8 +96,9 @@
 
         .error-message {
             color: red;
-            text-align: center;
+            text-align: left;
             margin-bottom: 10px;
+            font-size: 13px;
         }
 
         @media (max-width: 768px) {
@@ -107,12 +108,7 @@
             }
         }
 
-        footer {
-            width: 100%;
-            text-align: center;
-            position: absolute;
-            bottom: 0;
-        }
+
     </style>
     
     <script>

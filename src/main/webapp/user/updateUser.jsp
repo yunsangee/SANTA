@@ -290,7 +290,7 @@ $(document).ready(function() {
     // 사용자 ID 클릭 시 비밀번호 변경 팝업 창 열기
     $(".text-link").click(function(event) {
         event.preventDefault(); // 기본 동작 막기
-        window.open($(this).attr("href"), "비밀번호 변경", "width=500,height=600,scrollbars=yes,resizable=yes");
+        window.open($(this).attr("href"), "비밀번호 변경", "width=500,height=420,scrollbars=yes,resizable=yes");
     });
 });
 
