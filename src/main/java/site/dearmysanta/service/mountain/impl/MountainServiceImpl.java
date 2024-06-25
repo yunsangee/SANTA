@@ -81,7 +81,9 @@ public class MountainServiceImpl implements MountainService {
 	ObjectStorageService objectStorageService;
 	
 	
-	private int index =108;
+	private int index =0;
+	
+	// 나중에 테스트할 때 등산로 박는 부분 산이름 뒤에 숫자를 index로 바꿔서 사용할 것
 	
 	 
 	//
@@ -210,7 +212,10 @@ public class MountainServiceImpl implements MountainService {
 				if (features.get(i) != null) {
 					
 					MountainTrail mountainTrail = mapJsonToMountainTrail(features.get(i));
-					mountainTrail.setCoordinatesUrl(mountainTrail.getMountainName() + "" +i);
+					String[] mountainNames = mountainTrail.getMountainName().split("산");
+		
+					mountainTrail.setCoordinatesUrl(mountainNames[0]+"산" + "" +i);
+					
 					mountainTrail.setMountainNo(mountainNo);
 					mountainTrail.setMountainName(mountainName);
 
