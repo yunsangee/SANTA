@@ -1,20 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ page import="site.dearmysanta.domain.user.User" %>
 <!DOCTYPE html>
 <html class="fontawesome-i2svg-active fontawesome-i2svg-complete">
 <head>
     <c:import url="../common/header.jsp"/>
-
 <title>Certification Post Detail Page</title>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style>
     .carousel-item img {
         width: 100%;
         height: 500px; /* 원하는 높이로 조정 */
         object-fit: cover; /* 이미지를 잘라서 채움 */
-    }
-    .carousel-item {
     }
     .details-container {
         margin-top: 20px;
@@ -26,11 +26,33 @@
     .comments-section {
         margin-top: 40px;
     }
-    .comment-item {
-        margin-bottom: 20px;
+  .comment-item {
+        position: relative;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+    .comment-item .btn-danger {
+        background: none;
+        border: none;
+        color: #ff5c5c;
+        cursor: pointer;
+    }
+    .comment-item .btn-danger:hover {
+        color: #ff0000;
     }
     .comment-item p {
-        margin-bottom: 5px;
+        margin: 0;
+    }
+    .comment-item .fas {
+        margin-right: 5px;
+    }
+    .comment-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 15px; /* 작성 날짜의 폰트 크기 줄이기 */
     }
     .details-header {
         display: flex;
@@ -65,20 +87,14 @@
         margin-right: 10px;
     }
 </style>
-
-
 <script>
 $(document).ready(function() {
     var postNo = ${certificationPost.postNo};  // JSP에서 postNo 값을 가져옵니다.
-    var userNo = 2; // JSP에서 userNo 값을 가져옵니다.
+    var userNo = ${user.userNo}; // JSP에서 세션의 userNo 값을 가져옵니다.
 
     $('.like-button').on('click', function() {
         var likeButton = $(this);
         var certificationPostLikeStatus = likeButton.hasClass('text-danger'); // 현재 좋아요 상태를 확인합니다.
-
-        console.log('postNo:', postNo);
-        console.log('userNo:', userNo);
-        console.log('certificationPostLikeStatus:', certificationPostLikeStatus);
 
         if (certificationPostLikeStatus) {
             // 이미 좋아요 상태인 경우, 좋아요를 취소합니다.
@@ -88,15 +104,12 @@ $(document).ready(function() {
                 contentType: 'application/json',
                 data: JSON.stringify({ postNo: postNo, userNo: userNo }),
                 success: function(response) {
-                    console.log('좋아요 취소 성공:', response);
                     likeButton.removeClass('text-danger').addClass('text-secondary');
                     var certificationPostLikeCount = parseInt(likeButton.next('p').text()) - 1;
                     likeButton.next('p').text(certificationPostLikeCount);
                 },
                 error: function(xhr, status, error) {
                     console.error('좋아요 취소 오류:', error);
-                    console.log('xhr:', xhr);
-                    console.log('status:', status);
                 }
             });
         } else {
@@ -107,63 +120,63 @@ $(document).ready(function() {
                 contentType: 'application/json',
                 data: JSON.stringify({ postNo: postNo, userNo: userNo }),
                 success: function(response) {
-                    console.log('좋아요 추가 성공:', response);
                     likeButton.removeClass('text-secondary').addClass('text-danger');
                     var certificationPostLikeCount = parseInt(likeButton.next('p').text()) + 1;
                     likeButton.next('p').text(certificationPostLikeCount);
                 },
                 error: function(xhr, status, error) {
                     console.error('좋아요 추가 오류:', error);
-                    console.log('xhr:', xhr);
-                    console.log('status:', status);
                 }
             });
         }
     });
- // 댓글 조회
-    function loadComments() {
-        console.log('Loading comments...');
-        $.ajax({
-            url: 'rest/getCertificationPostComment',
-            type: 'GET',
-            data: { postNo: postNo },
-            success: function(comments) {
-                console.log('Comments loaded:', comments);
-                var commentsSection = $('.comments-section');
-                commentsSection.find('.comment-item').remove();
-                $.each(comments, function(index, comment) {
-                    var commentItem = 
-                       ' <div class="comment-item">' +
-                            '<p><i class="fas fa-user"></i> 닉네임: &ensp;'+ comment.nickname+'</p>'+
-                           ' <p><i class="fas fa-comment"></i> 내용:' + comment.certificationPostCommentContents +'</p>' +
-                            '<p><i class="fas fa-clock"></i> 작성 날짜: ' + comment.certificationPostCommentCreationDate + '</p>'+
-                            '<button class="btn btn-danger btn-sm" data-comment-id="'+comment.certificationPostCommentNo+'"><i class="fa fa-trash"></i></button>'+
-                            '<hr/>'+
-                        '</div>'
-                   ;
-                    commentsSection.append(commentItem);
-                });
 
-                // 댓글 삭제 버튼 클릭 이벤트 바인딩
-                $('.btn-danger[data-comment-id]').on('click', function() {
-                    var commentId = $(this).data('comment-id');
-                    console.log('Delete button clicked for comment ID:', commentId);
-                    deleteComment(commentId);
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error('댓글 조회 오류:', xhr, status, error);
-            }
-        });
-    }
 
-              
+// 댓글 조회
+function loadComments() {
+    $.ajax({
+        url: 'rest/getCertificationPostComment',
+        type: 'GET',
+        data: { postNo: postNo },
+        success: function(comments) {
+            var commentsSection = $('.comments-section');
+            commentsSection.find('.comment-item').remove();
+            $.each(comments, function(index, comment) {
+                var isAuthor = comment.userNo == userNo;
+                var authorLabel = isAuthor ? ' <span class="badge badge-primary">(작성자)</span>' : '';
+                var deleteButton = isAuthor ? '<button class="btn btn-danger btn-sm" data-comment-id="'+comment.certificationPostCommentNo+'"><i class="fa fa-trash"></i></button>' : '';
+                var formattedDate = comment.certificationPostCommentCreationDate.split('T')[0];
+                var commentItem = 
+                    '<div class="comment-item">' +
+                        '<div class="comment-meta">' +
+                            '<p><i class="fas fa-user"></i> 닉네임 : ' + comment.nickname + authorLabel + '</p>' +
+                            '<span>' +
+                                '<span style="font-size: smaller;"><i class="fas fa-clock"></i> 작성 날짜 : ' + formattedDate + '</span>' +
+                                deleteButton +
+                            '</span>' +
+                        '</div>' +
+                        '<p><i class="fas fa-comment"></i> 댓글 : ' + comment.certificationPostCommentContents + '</p>' +
+                    '</div><hr/>';
+                commentsSection.append(commentItem);
+            });
+
+            // 댓글 삭제 버튼 클릭 이벤트 바인딩
+            $('.btn-danger[data-comment-id]').on('click', function() {
+                var commentId = $(this).data('comment-id');
+                deleteComment(commentId);
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('댓글 조회 오류:', xhr, status, error);
+        }
+    });
+}
+
 
     // 댓글 추가
     $('.comment-form').on('submit', function(event) {
         event.preventDefault();
         var newComment = $('#newComment').val().trim();
-        console.log('New comment submission:', newComment);
         if (newComment) {
             $.ajax({
                 url: 'rest/addCertificationPostComment',
@@ -171,7 +184,6 @@ $(document).ready(function() {
                 contentType: 'application/json',
                 data: JSON.stringify({ certificationPostNo: postNo, userNo: userNo, certificationPostCommentContents: newComment }),
                 success: function(response) {
-                    console.log('댓글 추가 성공:', response);
                     $('#newComment').val('');
                     loadComments();
                 },
@@ -185,22 +197,19 @@ $(document).ready(function() {
     });
 
     // 댓글 삭제
- function deleteComment(certificationPostCommentNo) {
-    console.log('Deleting comment ID:', certificationPostCommentNo);
-    $.ajax({
-        url: 'rest/deleteCertificationPostComment',
-        type: 'DELETE',
-        data: { certificationPostCommentNo: certificationPostCommentNo, userNo: userNo },
-        success: function(response) {
-            console.log('댓글 삭제 성공:', response);
-            loadComments();
-        },
-        error: function(xhr, status, error) {
-            console.error('댓글 삭제 오류:', xhr, status, error);
-        }
-    });
-}
-
+    function deleteComment(certificationPostCommentNo) {
+        $.ajax({
+            url: 'rest/deleteCertificationPostComment',
+            type: 'DELETE',
+            data: { certificationPostCommentNo: certificationPostCommentNo, userNo: userNo },
+            success: function(response) {
+                loadComments();
+            },
+            error: function(xhr, status, error) {
+                console.error('댓글 삭제 오류:', xhr, status, error);
+            }
+        });
+    }
 
     // 초기 댓글 로드
     loadComments();
@@ -208,13 +217,11 @@ $(document).ready(function() {
     // 게시글 삭제 버튼 클릭 시
     $('.btn-danger:not([data-comment-id])').on('click', function() {
         if (confirm('정말로 삭제하시겠습니까?')) {
-            console.log('Post delete confirmed for postNo:', postNo);
             $.ajax({
                 url: 'rest/updateCertificationPostDeleteFlag',
                 type: 'GET',
                 data: { postNo: postNo, userNo: userNo },
                 success: function(response) {
-                    console.log('게시글 삭제 성공:', response);
                     alert('게시글이 삭제되었습니다.');
                     window.location.href = 'listCertificationPost'; // 게시글 목록 페이지로 리디렉션
                 },
@@ -224,36 +231,29 @@ $(document).ready(function() {
             });
         }
     });
-});
-$(document).ready(function() {
+
     // 작성자 클릭 이벤트 설정
     $('.details-container').on('click', 'p.author-link', function() {
         var userNo = $(this).data('user-no'); // 작성자의 userNo 가져오기
-        console.log('Clicked author link for userNo:', userNo);
-        
-        // AJAX 요청 보내기
         $.ajax({
             type: 'GET',
             url: 'getProfile',
             data: { userNo: userNo },
             success: function(response) {
-                // 요청이 성공하면 여기에서 필요한 작업을 수행 (예: 페이지 이동 등)
-                console.log('Profile loaded successfully.');
-                // 예를 들어, 이동할 URL을 사용하여 페이지를 이동할 수 있습니다.
                 window.location.href = 'getProfile?userNo=' + userNo;
             },
             error: function(xhr, status, error) {
-                // 요청이 실패한 경우 여기에서 에러 처리
                 console.error('Error loading profile:', error);
             }
         });
     });
 });
-
-
 </script>
 </head>
 <body>
+<%
+    User user = (User) session.getAttribute("user");
+%>
 <header>
     <c:import url="../common/top.jsp"/>
 </header>
@@ -295,17 +295,13 @@ $(document).ready(function() {
                                 <i class="fa fa-heart like-button ${certificationPost.certificationPostLikeStatus == 0 ? 'text-secondary' : 'text-danger'}"></i>
                                 <p class="mb-0 ml-2">${certificationPost.certificationPostLikeCount}</p>
                             </div>
-                            
-                            <!--  유저 받아오ㄴ는법 머지user.userNo --> <!-- 일단 2 로 넣어둠 -->
-                                          <c:if test="${2 == certificationPost.userNo}">
+                            <c:if test="${user != null && user.userNo == certificationPost.userNo}">
                                 <form action="/certificationPost/updateCertificationPost" method="get">
                                     <input type="hidden" name="postNo" value="${certificationPost.postNo}"/>
                                     <button type="submit" class="btn btn-secondary"><i class="fa fa-edit"></i></button>
                                 </form>
                                 <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
-                           </c:if>
-                            
-                            
+                            </c:if>
                         </div>
                         <div class="hashtags mb-3">
                             <c:forEach var="hashtag" items="${hashtagList}">

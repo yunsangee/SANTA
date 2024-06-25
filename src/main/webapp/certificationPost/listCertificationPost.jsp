@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html class="fontawesome-i2svg-active fontawesome-i2svg-complete">
 <head>
@@ -8,14 +10,10 @@
     <title>Certification Post List</title>
     
 <style>
-
-.certification-post-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
 .certification-post {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
     overflow: hidden;
@@ -24,24 +22,77 @@
     transition: transform 0.2s;
     cursor: pointer;
 }
+
 .certification-post:hover {
     transform: scale(1.05);
 }
+
 .certification-post img {
     width: 100%;
-    height: auto;
+    height: 250px; /* 이미지 높이 고정 */
+    object-fit: cover; /* 이미지 비율을 유지하면서 고정된 크기에 맞춤 */
 }
-.certification-post .details {
+
+.details {
     padding: 15px;
 }
-.fixed-buttons {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.post-title-author {
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
+
+.post-title, .post-author, .post-mountain, .post-difficulty, .post-date {
+    margin: 0;
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis; /* 넘치는 텍스트 생략(...) 처리 */
+}
+
+.post-title {
+    font-size: 18px;
+    font-weight: bold;
+    max-width: 280px; /* 최대 너비 설정 */
+}
+
+.post-author {
+    font-size: 14px;
+    max-width: 280px; /* 최대 너비 설정 */
+}
+
+.post-likes p {
+    font-size: 14px;
+    color: #ffb524; /* 좋아요수 색상 변경 */
+    text-align: right;
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis; /* 넘치는 텍스트 생략(...) 처리 */
+    max-width: 100px; /* 최대 너비 설정 */
+}
+
+.certification-post p {
+    margin: 5px 0;
+}
+
+.certification-post .fa {
+    margin-right: 5px;
+}
+
+.certification-post-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+
 .btn-cp {
     border: 2px solid orange;
     background-color: white;
@@ -56,9 +107,11 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     transition: transform 0.2s;
 }
+
 .btn-cp:hover {
     transform: scale(1.1);
 }
+
 .btn-cp .fa {
     font-size: 24px;
 }
@@ -67,8 +120,8 @@
     display: flex;
     gap: 10px;
     align-items: center;
-    margin-top: 10px; /* 추가된 마진 */
-    margin-left: 0; /* 검색 폼과 라디오 버튼의 시작 위치 맞춤 */
+    margin-top: 10px;
+    margin-left: 0;
 }
 
 .radio-container input[type="radio"] {
@@ -76,37 +129,51 @@
 }
 
 .radio-container label {
-    padding: 5px 15px; /* 패딩 크기 조정 */
+    padding: 5px 15px;
     border: 2px solid #ccc;
     border-radius: 25px;
     cursor: pointer;
-    font-size: 14px; /* 폰트 크기 조정 */
-    color: #6c757d; /* 검색 폼과 동일한 색상 */
+    font-size: 14px;
+    color: #6c757d;
     transition: all 0.3s ease;
 }
 
 .radio-container input[type="radio"]:checked + label {
-    background-color: #81c408; /* 검색 버튼과 동일한 배경 색상 */
+    background-color: #81c408;
     color: white;
-    border-color: #81c408; /* 검색 버튼과 동일한 테두리 색상 */
+    border-color: #81c408;
 }
 
 .radio-container label:hover {
-    border-color: #81c408; /* 검색 버튼과 동일한 테두리 색상 */
-    color: #81c408; /* 검색 폼과 동일한 색상 */
+    border-color: #81c408;
+    color: #81c408;
 }
 
 #searchForm {
     display: flex;
     align-items: center;
-    margin-bottom: 20px; /* 검색 폼과 라디오 컨테이너 사이의 간격 */
-    margin-left: 0; /* 검색 폼과 라디오 버튼의 시작 위치 맞춤 */
-    margin-top: 20px; /* 헤더와의 간격 추가 */
+    margin-bottom: 20px;
+    margin-left: 0;
+    margin-top: 20px;
 }
 
 .header {
-    margin-bottom: 20px; /* 헤더와의 간격 추가 */
+    margin-bottom: 20px;
 }
+
+.post-title-author h4 {
+    margin-bottom: 10px; /* 간격 추가 */
+}
+
+.fixed-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 220px; /* 컨테이너에 가깝게 배치 */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 </style>
 
 
@@ -173,23 +240,35 @@
                 postElement.classList.add('certification-post');
                 postElement.dataset.postno = post.postNo;
                 const imageUrl = images[index] ? images[index] : 'default-image-url.png';
+
+                // 제목과 작성자 글자 수 제한
+                const shortTitle = post.title.length > 5 ? post.title.substring(0, 5) + '...' : post.title;
+               // const shortAuthor = post.nickName.length > 5 ? post.nickName.substring(0, 5) + '...' : post.nickName;
+
                 postElement.innerHTML = 
                     '<div class="fruite-img">' +
-                    '<img src="' + imageUrl + '" alt="Certification Post Image">' +
+                        '<img src="' + imageUrl + '" alt="Certification Post Image">' +
                     '</div>' +
                     '<div class="details">' +
-                    '<h4>' + post.postNo + '</h4>' +
-                    '<h4>' + post.title + '</h4>' +
-                    '<p>산명칭 : ' + post.certificationPostMountainName + '</p>' +
-                    '<p>Hiking Date: ' + post.certificationPostHikingDate + '</p>' +
-                    '<p>좋아요수: ' + post.certificationPostLikeCount + '</p>' +
-                    '<p>등산난이도: ' + 
-                        (post.certificationPostHikingDifficulty == 0 ? '어려움' : post.certificationPostHikingDifficulty == 1 ? '중간' : '쉬움') +
-                    '</p>' +
+                        '<div class="post-header">' +
+                            '<div class="post-title-author">' +
+                            '<h4 class="post-title"> ' + shortTitle + '</h4>' +
+                            '<h4 class="post-author" style="margin-top: 10px;"><i class="fas fa-user"></i> 작성자: ' + post.nickName + '</h4>' +
+   								  '</div>' +
+                            '<div class="post-likes">' +
+                                '<p><i class="fas fa-heart"></i>  ' + post.certificationPostLikeCount + '</p>' +
+                            '</div>' +
+                        '</div>' +
+                        '<p class="post-mountain"><i class="fas fa-mountain"></i> 산명칭: ' + post.certificationPostMountainName + '</p>' +
+                        '<p class="post-difficulty"><i class="fas fa-chart-line"></i> 등산난이도: ' + 
+                            (post.certificationPostHikingDifficulty == 0 ? '어려움' : post.certificationPostHikingDifficulty == 1 ? '중간' : '쉬움') +
+                        '</p>' +
+                        '<p class="post-date"><i class="far fa-calendar-alt"></i> 등산일자: ' + post.certificationPostHikingDate + '</p>' +
                     '</div>';
                 postContainer.appendChild(postElement);
             });
         }
+
 
         loadMorePosts();
 
@@ -201,10 +280,12 @@
         $(".top-button").click(function() {
             $('html, body').animate({scrollTop: 0}, 'slow');
         });
-
+        
+        var userNo = ${user.userNo};
+        
         $(".btn-certify-hiking").click(function() {
             alert('인증하기');
-            var userNo = 2; 
+       
             window.location.href = "/certificationPost/addCertificationPost?userNo=" + userNo;
         });
     });
@@ -238,41 +319,74 @@
                     </div>
                 </div>
 
-                <div class="certification-post-container">
-                    <c:forEach var="certificationPost" items="${certificationPost}" varStatus="status">
-                        <div class="certification-post" data-postno="${certificationPost.postNo}">
-                            <div class="fruite-img">
-                                <img src="${certificationPostImages[status.index]}" alt="Certification Post Image">
-                            </div>
-                            <div class="details"><h4>${certificationPost.postNo}</h4>
-                                <h4>${certificationPost.title}</h4>
-                                <p>산명칭 : ${certificationPost.certificationPostMountainName}</p>
-                                <p>Hiking Date: ${certificationPost.certificationPostHikingDate}</p>
-                                <p>좋아요수: ${certificationPost.certificationPostLikeCount}</p>
-                                <p>등산난이도 :
-                                    <c:choose>
-                                        <c:when test="${certificationPost.certificationPostHikingDifficulty == 0}">
-                                            어려움
-                                        </c:when>
-                                        <c:when test="${certificationPost.certificationPostHikingDifficulty == 1}">
-                                            중간
-                                        </c:when>
-                                        <c:when test="${certificationPost.certificationPostHikingDifficulty == 2}">
-                                            쉬움
-                                        </c:when>
-                                    </c:choose>
-                                </p>
-                            </div>
-                        </div>
-                    </c:forEach>
+             <div class="certification-post-container">
+    <c:forEach var="certificationPost" items="${certificationPost}" varStatus="status">
+        <div class="certification-post" data-postno="${certificationPost.postNo}">
+            <div class="fruite-img">
+                <img src="${certificationPostImages[status.index]}" alt="Certification Post Image">
+            </div>
+            <div class="details">
+                <div class="post-header">
+                    <div class="post-title-author">
+                        <h4 class="post-title"> 
+                            <i class="fas fa-heading"></i> 
+                            <c:choose>
+                                <c:when test="${fn:length(certificationPost.title) > 5}">
+                                    ${fn:substring(certificationPost.title, 0, 5)}...
+                                </c:when>
+                                <c:otherwise>
+                                    ${certificationPost.title}
+                                </c:otherwise>
+                            </c:choose>
+                        </h4>
+                        <h4 class="post-author" style="margin-top: 10px;">
+                            <i class="fas fa-user"></i> 
+                            작성자: 
+                            <c:choose>
+                                <c:when test="${fn:length(certificationPost.nickName) > 5}">
+                                    ${fn:substring(certificationPost.nickName, 0, 5)}...
+                                </c:when>
+                                <c:otherwise>
+                                    ${certificationPost.nickName}
+                                </c:otherwise>
+                            </c:choose>
+                        </h4>
+                    </div>
+                    <div class="post-likes">
+                        <p><i class="fas fa-heart"></i> 좋아요수: ${certificationPost.certificationPostLikeCount}</p>
+                    </div>
                 </div>
+                <p class="post-mountain"><i class="fas fa-mountain"></i> 산명칭: ${certificationPost.certificationPostMountainName}</p>
+                <p class="post-difficulty"><i class="fas fa-chart-line"></i> 등산난이도: 
+                    <c:choose>
+                        <c:when test="${certificationPost.certificationPostHikingDifficulty == 0}">
+                            어려움
+                        </c:when>
+                        <c:when test="${certificationPost.certificationPostHikingDifficulty == 1}">
+                            중간
+                        </c:when>
+                        <c:when test="${certificationPost.certificationPostHikingDifficulty == 2}">
+                            쉬움
+                        </c:when>
+                    </c:choose>
+                </p>
+                <p class="post-date"><i class="far fa-calendar-alt"></i> 등산일자: ${certificationPost.certificationPostHikingDate}</p>
             </div>
         </div>
+    </c:forEach>
+</div>
+
+
+                </div>
+            </div>
+    
     </main>
-    <div class="fixed-buttons">
-        <button class="btn-cp btn-certify-hiking"><i class="fa fa-mountain"></i></button>
-        <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
-    </div>
-    <footer><c:import url="../common/footer.jsp"/></footer>
+		<div class="fixed-buttons">
+		    <button class="btn-cp btn-certify-hiking"><i class="fa fa-mountain"></i></button>
+		    <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
+		</div>
+
+
+    <footer></footer>
 </body>
 </html>
