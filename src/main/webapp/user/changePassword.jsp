@@ -33,7 +33,7 @@
             color: #333;
             margin-top: 5px;
             margin-bottom: 40px;
-            font-size: 33.5px;
+            font-size: 30px;
         }
 
         .container p {
@@ -48,18 +48,16 @@
             align-items: center;
         }
 
-        .password, .email, .code, .phone {
+        .password {
             width: 30%;
             padding: 10px;
-         /*    margin-bottom: 10px;
-            margin-top: 30px; */
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
             align-items: center;
         }
         
-        .password:focus, .email:focus, .code:focus, .phone:focus {
+        .password:focus {
             border: 1px solid #81C408;
             outline: none;
             box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); 
@@ -117,21 +115,98 @@
         }
     </style>
     
-    <c:import url="../common/header.jsp"/>
-    
     <script>
         $(document).ready(function() {
-            $("#changePasswordForm").on("submit", function(e) {
-                var password = $("input[name='userPassword']").val();
-                var confirmPassword = $("input[name='checkPassword']").val();
+            // 현재 비밀번호 입력 칸에서 포커스 아웃될 때
+            $("input[name='currentPassword']").on("blur", function() {
+                var currentPassword = $(this).val();
+
+                $.ajax({
+                    url: '/user/rest/changePassword',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ currentPassword: currentPassword, action: 'checkCurrentPassword' }),
+                    success: function(response) {
+                        if (response.status === "incorrect") {
+                            $("#currentPasswordMessage").text(response.message).css("color", "red").show();
+                        } else if (response.status === "correct") {
+                            $("#currentPasswordMessage").text(response.message).css("color", "green").show();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $("#currentPasswordMessage").text("오류가 발생했습니다. 다시 시도해주세요.").css("color", "red").show();
+                    }
+                });
+            });
+
+            // 비밀번호 입력 칸에서 포커스 아웃될 때
+            $("input[name='userPassword']").on("blur", function() {
+                var password = $(this).val();
 
                 if (password.length < 10) {
-                    e.preventDefault();
-                    $("#passwordLengthMessage").text("비밀번호는 10자 이상이어야 합니다.").css("color", "red");
-                } else if (password !== confirmPassword) {
-                    e.preventDefault();
-                    $("#passwordMessage").text("비밀번호가 일치하지 않습니다. 다시 입력해주세요.").css("color", "red");
+                    $("#passwordLengthMessage").text("비밀번호를 10자 이상 입력해주세요.").css("color", "red").show();
+                } else {
+                    $("#passwordLengthMessage").text("").hide();
                 }
+            });
+
+            // 비밀번호 확인 입력 칸에서 포커스 아웃될 때
+            $("input[name='checkPassword']").on("blur", function() {
+                var password = $("input[name='userPassword']").val();
+                var confirmPassword = $(this).val();
+
+                $.ajax({
+                    url: '/user/rest/changePassword',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        userPassword: password,
+                        checkPassword: confirmPassword,
+                        action: 'checkPasswordMatch'
+                    }),
+                    success: function(response) {
+                        if (response.status === "equals") {
+                            $("#passwordMessage").text(response.message).css("color", "green").show();
+                        } else if (response.status === "notequals") {
+                            $("#passwordMessage").text(response.message).css("color", "red").show();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $("#passwordMessage").text("오류가 발생했습니다. 다시 시도해주세요.").css("color", "red").show();
+                    }
+                });
+            });
+
+            // 폼 제출 시 비밀번호 변경 요청
+            $("#changePasswordForm").on("submit", function(e) {
+                e.preventDefault();
+                var currentPassword = $("input[name='currentPassword']").val();
+                var userPassword = $("input[name='userPassword']").val();
+                var checkPassword = $("input[name='checkPassword']").val();
+                var userNo = $("#userNo").val(); // userNo 값을 가져옴
+
+                $.ajax({
+                    url: '/user/rest/changePassword',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        currentPassword: currentPassword,
+                        userPassword: userPassword,
+                        checkPassword: checkPassword,
+                        action: 'changePassword'
+                    }),
+                    success: function(response) {
+                        if (response.status === "equals") {
+                            alert(response.message);
+                            window.location.href = "/user/updateUser?userNo=" + userNo;
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert("오류가 발생했습니다. 다시 시도해주세요.");
+                    }
+                });
             });
         });
     </script>
@@ -139,16 +214,15 @@
 
 <body>
 <header>
-    <c:import url="../common/top.jsp"/>
 </header>
 
 <main class="container">
-    <h2>비밀번호 변경</h2> 
-    <p class="description">영문, 숫자를 포함한 10자 이상의 비밀번호를 입력해주세요.</p>
+    <h2>비밀번호 변경</h2>
     <form id="changePasswordForm" action="/user/changePassword" method="post">
         <div class="password-section">
             <label></label>
             <input type="password" class="password" name="currentPassword" placeholder="현재 비밀번호" required>
+            <div id="currentPasswordMessage" class="error-message"></div>
         </div>
         <div class="password-section">
             <label></label>
@@ -160,6 +234,9 @@
             <input type="password" class="password" name="checkPassword" placeholder="비밀번호 확인" autocomplete="new-password" required>
             <div id="passwordMessage" class="error-message"></div>
         </div>
+      
+    <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
+    <input type="hidden" id="userId" name="userId" value="${user.userId}">
         
         <button type="submit" class="submit">비밀번호 변경하기</button>
         
@@ -167,7 +244,6 @@
 </main>
 
 <footer>
-    <c:import url="../common/footer.jsp"/>
 </footer>
 
 </body>

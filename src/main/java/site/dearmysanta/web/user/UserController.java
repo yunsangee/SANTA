@@ -148,11 +148,17 @@ public class UserController {
 		    // 쿠키 설정
 		    Cookie cookie = new Cookie("userNo", ""+dbUser.getUserNo());
 		    cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+		    cookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+		    cookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+		    cookie.setSecure(false); // 
 		    response.addCookie(cookie);
 		    
 		    // 쿠키 설정
 		    Cookie nickNameCookie = new Cookie("nickName", dbUser.getNickName());
 		    nickNameCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+		    cookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+		    cookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+		    cookie.setSecure(false); // 
 		    response.addCookie(nickNameCookie);
 		    
 		    System.out.println("쿠키확인 닉네임 : " + nickNameCookie);
@@ -438,17 +444,23 @@ public class UserController {
 		    if (sessionUser.getUserNo() == dbUser.getUserNo()) {
 		        session.setAttribute("user", dbUser);
 		    }
-
-		    // 쿠키 설정
-		    Cookie nickNameCookie = new Cookie("nickName", dbUser.getNickName());
-		    nickNameCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
-		    response.addCookie(nickNameCookie);
 		    
 		    // 쿠키 설정
 		    Cookie cookie = new Cookie("userNo", ""+dbUser.getUserNo());
 		    cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+		    cookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+		    cookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+		    cookie.setSecure(false); // 
 		    response.addCookie(cookie);
 
+		    // 쿠키 설정
+		    Cookie nickNameCookie = new Cookie("nickName", dbUser.getNickName());
+		    nickNameCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+		    cookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+		    cookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+		    cookie.setSecure(false); // 
+		    response.addCookie(nickNameCookie);
+		  
 		    System.out.println("쿠키확인 닉네임 : " + nickNameCookie);
 		    
 		    System.out.println("쿠키확인 아이디 : " + cookie);
@@ -1142,5 +1154,39 @@ public class UserController {
 
 		    return "forward:/user/getQnA.jsp";
 		}
+		
+		@PostMapping(value = "changePassword")
+	    public String changePassword(@RequestParam String currentPassword,
+	                                 @RequestParam String userPassword,
+	                                 @RequestParam String checkPassword,
+	                                 HttpSession session, Model model) throws Exception {
+	        User sessionUser = (User) session.getAttribute("user");
+
+	        if (sessionUser == null) {
+	            model.addAttribute("error", "세션이 만료되었습니다. 다시 로그인 해주세요.");
+	            return "redirect:/user/login.jsp";
+	        }
+
+	        if (!sessionUser.getUserPassword().equals(currentPassword)) {
+	            model.addAttribute("error", "현재 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+	            return "redirect:/user/changePassword.jsp";
+	        }
+
+	        if (userPassword.length() < 10) {
+	            model.addAttribute("error", "비밀번호를 10자 이상 입력해주세요.");
+	            return "redirect:/user/changePassword.jsp";
+	        }
+
+	        if (!userPassword.equals(checkPassword)) {
+	            model.addAttribute("error", "비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+	            return "redirect:/user/changePassword.jsp";
+	        }
+
+	        sessionUser.setUserPassword(userPassword);
+	        userService.updateUser(sessionUser);
+	        session.setAttribute("user", sessionUser);
+	        model.addAttribute("message", "비밀번호가 성공적으로 변경되었습니다.");
+	        return "forward:/user/updateUser?userNo=" + sessionUser.getUserNo();
+	    }
 		
 }

@@ -432,5 +432,71 @@ public class UserRestController {
 	        return response;
 	            
 	    }
+	    
+	    ////////////////////////////////////////////////////////////////////////////
+	    @PostMapping(value = "rest/changePassword")
+	    public Map<String, String> changePassword(@RequestBody Map<String, String> request, HttpSession session) throws Exception {
+	        String action = request.get("action");
+	        String currentPassword = request.get("currentPassword");
+	        String userPassword = request.get("userPassword");
+	        String checkPassword = request.get("checkPassword");
+
+	        Map<String, String> response = new HashMap<>();
+	        User sessionUser = (User) session.getAttribute("user");
+
+	        if (sessionUser == null) {
+	            response.put("status", "error");
+	            response.put("message", "세션이 만료되었습니다. 다시 로그인 해주세요.");
+	            return response;
+	        }
+
+	        if ("checkCurrentPassword".equals(action)) {
+	            if (!sessionUser.getUserPassword().equals(currentPassword)) {
+	                response.put("status", "incorrect");
+	                response.put("message", "현재 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+	            } else {
+	                response.put("status", "correct");
+	                response.put("message", "현재 비밀번호가 일치합니다.");
+	            }
+	            return response;
+	        }
+
+	        if ("checkPasswordMatch".equals(action)) {
+	            if (userPassword.length() < 10) {
+	                response.put("status", "shortpassword");
+	                response.put("message", "비밀번호를 10자 이상 입력해주세요.");
+	            } else if (!userPassword.equals(checkPassword)) {
+	                response.put("status", "notequals");
+	                response.put("message", "비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+	            } else {
+	                response.put("status", "equals");
+	                response.put("message", "비밀번호가 일치합니다.");
+	            }
+	            return response;
+	        }
+
+	        if ("changePassword".equals(action)) {
+	            if (!sessionUser.getUserPassword().equals(currentPassword)) {
+	                response.put("status", "incorrectcurrent");
+	                response.put("message", "현재 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+	            } else if (userPassword.length() < 10) {
+	                response.put("status", "shortpassword");
+	                response.put("message", "비밀번호를 10자 이상 입력해주세요.");
+	            } else if (!userPassword.equals(checkPassword)) {
+	                response.put("status", "notequals");
+	                response.put("message", "비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+	            } else {
+	                sessionUser.setUserPassword(userPassword);
+	                userService.updateUser(sessionUser);
+	                response.put("status", "equals");
+	                response.put("message", "비밀번호가 성공적으로 변경되었습니다.");
+	            }
+	            return response;
+	        }
+
+	        response.put("status", "error");
+	        response.put("message", "알 수 없는 요청입니다.");
+	        return response;
+	    }
 }
 

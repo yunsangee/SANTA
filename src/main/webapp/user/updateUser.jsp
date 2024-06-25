@@ -286,6 +286,12 @@ $(document).ready(function() {
             $(".submit").prop("disabled", false);
         }
     });
+
+    // 사용자 ID 클릭 시 비밀번호 변경 팝업 창 열기
+    $(".text-link").click(function(event) {
+        event.preventDefault(); // 기본 동작 막기
+        window.open($(this).attr("href"), "비밀번호 변경", "width=500,height=600,scrollbars=yes,resizable=yes");
+    });
 });
 
 // 도로명 주소 콜백 함수
@@ -388,18 +394,9 @@ function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, en
     <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
     <input type="hidden" id="userId" name="userId" value="${user.userId}">
     
+    
 	<br>
 		
 	<div class="link-section">
             <button type="button" class="a submit" >수정 완료하기</button>
     </div>    
-	
-	</form>
-</main>
-
-<!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// --> 
-
-<footer></footer>
-
-</body>
-</html>
