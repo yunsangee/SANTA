@@ -34,7 +34,13 @@
 			
 			$('#hikingGuide').on('click',function(event){
 				event.preventDefault();
-				window.location.href = '/hikingguide';
+				
+				
+				let user = ${sessionScope.user != null ? sessionScope.user : 'null'};
+				
+				if(user !='null'){
+					window.location.href = '/hikingguide';
+				}
 			});
 			
 			$('#loginButton').on('click',function(event){
@@ -80,7 +86,7 @@
 		        });
 		        $('#mySchedule').on('click', function(event) {
 		        	event.preventDefault();
-		            window.location.href = '/user/getSchedule';
+		            window.location.href = '/user/getScheduleList';
 		        });
 		        $('#myHikingRecord').on('click', function(event) {
 		        	event.preventDefault();
@@ -88,7 +94,7 @@
 		        });
 		        $('#qna').on('click', function(event) {
 		        	event.preventDefault();
-		            window.location.href = '/user/getQna';
+		            window.location.href = '/user/getQnaList';
 		        });
 		        $('#logout').on('click', function(event) {
 		        	event.preventDefault();

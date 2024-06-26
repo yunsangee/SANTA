@@ -129,15 +129,18 @@
                 self.location = '/';
             }); */
             
-            $('#search').on('click',function(){
+            $('#search').on('click',function(event){
+            	event.preventDefault();
             	window.location.href = '/mountain/searchMountain';
             });
             
-            $('#searchBox').on('click',function(){
+            $('#searchBox').on('click',function(event){
+            	event.preventDefault();
             	window.location.href = '/mountain/searchMountain';
             });
             
-            $('#mapSearch').on('click',function(){
+            $('#mapSearch').on('click',function(event){
+            	event.preventDefault();
             	window.location.href = '/mountain/mapMountain';
             });
 
@@ -273,9 +276,7 @@
 
     overflow: hidden; /* 내용이 넘치는 경우를 대비하여 오버플로우를 숨김 */
     }
-    .swiper-slide .certification-post{
-    	margin-buttom:5px !important;
-    }
+
 
 .fixed-buttons {
     position: fixed;
@@ -319,7 +320,6 @@
     justify-content: center;
 }
 .certification-post {
-	margin-top:5px;
 	margin-buttom:5px;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -555,7 +555,7 @@
             		</div>
        		</div>
    
-            <div class="swiper2-container certification-swiper">
+            <div class="swiper2-container certification-swiper py-3">
                 <div class="swiper-wrapper">
                     <c:forEach var="certificationPost" items="${certificationPostList}" varStatus="status">
                         <c:if test="${status.index < 10}">

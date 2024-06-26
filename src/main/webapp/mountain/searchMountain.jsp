@@ -69,7 +69,7 @@
     		
     	});
     	$('#mapSearch').on('click',function(){
-        	window.location.href = '${javaServerIp}/mountain/mapMountain';
+        	window.location.href = '/mountain/mapMountain';
         });
     	
     	$('#search').on('click',function(){
