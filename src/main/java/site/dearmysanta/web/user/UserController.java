@@ -1,5 +1,6 @@
 package site.dearmysanta.web.user;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -90,6 +91,8 @@ public class UserController {
 		        model.addAttribute("error", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
 		        return "redirect:/user/addUser.jsp";
 		    }
+		    
+		    user.setProfileImage("profile1.png");
 			
 			userService.addUser(user);
 			
@@ -117,16 +120,21 @@ public class UserController {
 		}	
 
 		@PostMapping(value = "login")
-		public String login(@ModelAttribute User user, String userId, String userPassword, HttpSession session, Model model, Search search, HttpServletResponse response) throws Exception {
+		public String login(@ModelAttribute User user, HttpSession session, Model model, Search search, HttpServletResponse response) throws Exception {
 		    System.out.println("/user/login : POST");
 		    
+		    System.out.println("user : " +user);
+		    
+		    // userId 값이 제대로 들어오는지 확인
+		    System.out.println("Received userId: " + user.getUserId());
+		    
 		    // DB에서 사용자 정보 조회
-		    User dbUser = userService.getUserByUserId(user.getUserId());
+		    User dbUser =((List<User>)userService.getUserByUserId(user.getUserId())).get(0);
 		    
 		    System.out.println("확인 : " + dbUser);
 		    
 		    // 사용자가 존재하는지 확인
-		    if (dbUser == null || !dbUser.getUserPassword().equals(userPassword)) {
+		    if (dbUser == null || !dbUser.getUserPassword().equals(user.getUserPassword())) {
 		        model.addAttribute("loginError", "아이디 혹은 비밀번호가 잘못되었습니다. 다시 입력해주세요.");
 		        return "forward:/user/login.jsp";
 		    }
@@ -146,7 +154,12 @@ public class UserController {
 		    session.setAttribute("user", dbUser);	
 		    
 		    // 쿠키 설정
-		    Cookie cookie = new Cookie("userNo", ""+dbUser.getUserNo());
+		    
+		    String encodingUserNo = URLEncoder.encode(""+dbUser.getUserNo(), "UTF-8");
+		    String encodingNickName = URLEncoder.encode(""+dbUser.getNickName(), "UTF-8");
+		    String encodingProfile = URLEncoder.encode(dbUser.getProfileImage(), "UTF-8");
+		    
+		    Cookie cookie = new Cookie("userNo", encodingUserNo);
 		    cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
 		    cookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
 		    cookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
@@ -154,7 +167,7 @@ public class UserController {
 		    response.addCookie(cookie);
 		    
 		    // 쿠키 설정
-		    Cookie nickNameCookie = new Cookie("nickName", dbUser.getNickName());
+		    Cookie nickNameCookie = new Cookie("nickName", encodingNickName);
 		    nickNameCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
 		    nickNameCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
 		    nickNameCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
@@ -162,7 +175,7 @@ public class UserController {
 		    response.addCookie(nickNameCookie);
 		    
 		 // 쿠키 설정
-		    Cookie profileCookie = new Cookie("profile", dbUser.getProfileImage());
+		    Cookie profileCookie = new Cookie("profile", encodingProfile);
 		    profileCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
 		    profileCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
 		    profileCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)

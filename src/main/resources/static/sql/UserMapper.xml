@@ -55,7 +55,7 @@
         #{nickName, jdbcType=VARCHAR}, #{address, jdbcType=VARCHAR}, #{birthDate, jdbcType=DATE}, 
         #{phoneNumber, jdbcType=VARCHAR}, #{gender, jdbcType=DECIMAL}, #{hikingPurpose, jdbcType=DECIMAL}, 
         #{hikingDifficulty, jdbcType=DECIMAL}, #{hikingLevel, jdbcType=DECIMAL}, 0, 0, 0, SYSDATE, 
-        'profile1.png', #{detailAddress, jdbcType=VARCHAR}, 'badge1.png'
+        #{profileImage, jdbcType=VARCHAR}, #{detailAddress, jdbcType=VARCHAR}, 'badge1.png'
     )
 </insert>
 
@@ -190,7 +190,7 @@
     	user_id = #{userId} AND password = #{userPassword} 
 </select> 
 
-	<select id="getUserByUserId" parameterType="string" resultMap="userSelectMap">
+	<select id="getUserByUserId" parameterType="String" resultMap="userSelectMap">
         SELECT 
         	* 
         FROM 

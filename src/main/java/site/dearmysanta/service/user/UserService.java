@@ -98,7 +98,7 @@ public interface UserService {
 	
 	public int getMountainTotalCount(String mountainName) throws Exception;
 
-	public User getUserByUserId(String userId) throws Exception;
+	public List<User> getUserByUserId(String userId) throws Exception;
 	
 	public String getUserPassword(String userPassword) throws Exception;
 
