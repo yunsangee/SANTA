@@ -2,6 +2,8 @@ package site.dearmysanta.web.main;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,6 +18,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.dearmysanta.common.SantaLogger;
+import site.dearmysanta.domain.certificationPost.CertificationPost;
 import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.meeting.MeetingPostSearch;
 import site.dearmysanta.domain.user.User;
@@ -83,9 +86,7 @@ public class Main {
 		session.setAttribute("reactServerIp", reactServerIp);
 		
 		Search search = new Search();
-		if(search != null & search.getCurrentPage() == 0) {
-			search.setCurrentPage(1);
-		}
+		
 		
 		User user = (User)session.getAttribute("user");
 		
@@ -104,12 +105,31 @@ public class Main {
 		search.setPageUnit(pageUnit);
 		
 		MeetingPostSearch meetingPostSearch = new MeetingPostSearch();
+		meetingPostSearch.setCurrentPage(1);
+		meetingPostSearch.setPageSize(pageSize);
+		meetingPostSearch.setPageUnit(pageUnit);
 		
+		
+		List<CertificationPost> certificationPostList = (List<CertificationPost>) certificationPostService.getCertificationPostList(search).get("list");
+        System.out.println(" certificationPostList  " + certificationPostList );
+        // CertificationPost �̹��� URL ��������
+        List<String> certificationPostImages = new ArrayList<>();
+        for (CertificationPost certificationPost : certificationPostList) {
+            String fileName = certificationPost.getPostNo() + "_0_1"; // ù ��° ���� ���ϸ�
+            String imageURL = objectStorageService.getImageURL(fileName);
+            SantaLogger.makeLog("info", imageURL);
+            certificationPostImages.add(imageURL);
+        }
+		
+        if(search != null & search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
 		
 		session.setAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
 		session.setAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), user));
-//		model.addAttribute("meetingPostList", meetingService.getMeetingPostList(meetingPostSearch));
-//		model.addAttribute("certificationPostList",certificationPostService.getCertificationPostList(search));
+		session.setAttribute("meetingPostList", meetingService.getMeetingPostList(meetingPostSearch).get("meetingPosts"));
+		session.setAttribute("certificationPostList",certificationPostList);
+		session.setAttribute("certificationPostImages", certificationPostImages);
 		
 		
 		return "forward:/common/main.jsp";

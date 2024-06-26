@@ -1,6 +1,9 @@
 package site.dearmysanta.web.mountain;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.dearmysanta.common.SantaLogger;
@@ -53,7 +57,7 @@ public class MountainRestController {
 	@Autowired
 	CorrectionPostService correctionPostService;
 	
-	
+	private ObjectMapper objectMapper = new ObjectMapper();
 	
 	
 	public MountainRestController() {
@@ -195,6 +199,47 @@ public class MountainRestController {
 		return mountainService.getSearchKeywordList(1);
 	}
 	
+	@GetMapping("/rest/checkIsMountain")
+	public Map<String,Object> checkIsMountain(String mountainName, HttpSession session) throws JsonProcessingException {
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		int isMountain = mountainService.isMountain(mountainName);
+		MountainSearch mountainSearch = new MountainSearch();
+		User user = (User)session.getAttribute("user");
+		mountainSearch.setSearchKeyword(mountainName);
+		if(isMountain == 1) {
+			
+			map.put("isMountain", 1);
+			List<Mountain> list = mountainService.getMountainListByName(mountainSearch.getSearchKeyword());
+			List<String> weatherList = new ArrayList<>();
+			
+			List<String> jsonList = new ArrayList<>();
+			for (Mountain mt : list) {
+				SantaLogger.makeLog("info", mt.toString());
+
+				jsonList.add(objectMapper.writeValueAsString(mt));
+				weatherList.add(objectMapper.writeValueAsString(weatherService.getWeatherList(mt.getMountainLatitude(), mt.getMountainLongitude()).get(0)));	
+			}
+			
+			map.put("mountainList", jsonList);
+			map.put("weatherList", weatherList);
+		}else {
+			map.put("isMountain", 0);
+		}
+		
+		
+		if(user != null) {
+			if(isMountain == 1) {
+				mountainSearch.setSearchCondition(0);
+				mountainSearch.setUserNo(user.getUserNo());
+				mountainService.deleteSearchKeyword(mountainSearch);				
+				mountainService.addSearchKeyword(mountainSearch);
+			}
+		}
+		
+		return map;
+		
+	}
 	
 	
 	

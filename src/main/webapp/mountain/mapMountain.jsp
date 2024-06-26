@@ -30,14 +30,23 @@
 
 	$(function(){
 		
-		mountainList = ${mountainList != null ? mountainList : 'null'};
+		mountainList = ${mountainList != null || mountainList == "" ? mountainList : 'null'};
 		console.log('mountainList:' + mountainList);
 		
 		clearAll();
+		
+		if(mountainList == "" | mountainList == null | mountainList =='null'){
+			
+			$('#address').val('${searchKeyword}');
+			getAddressFromUserInput();
+		}else{
+		
 		getLocation();
 		
-		if(mountainList != null | mountainList != 'null'){
-			waitForMapAndProcess();
+			if(mountainList != null | mountainList != 'null'){
+				waitForMapAndProcess();
+			}
+		
 		}
 		
 	}); // jquery for call js
@@ -50,7 +59,7 @@
 	                getMountainMarker();
 	            }
 	        }
-	    }, 100); // Check every 100 milliseconds
+	    }, 30); // Check every 100 milliseconds
 	}
 	
 	
@@ -158,18 +167,50 @@
         }
     }
 	
-	function getMountainMarker(){
+	function getMountainMarker(inputMountainList, inputWeatherList){
 		
 		let mountainLocation;
 		let latitudes = [];
 		let longitudes = [];
+		let mountainList ;
+		let weatherList ; 
+		if(inputMountainList != null){
+			mountainList = (inputMountainList != null ? inputMountainList : 'null');
+			weatherList = (inputWeatherList != null ? inputWeatherList : 'null');
+			
+			mountainList = JSON.parse(mountainList);
+			weatherList = JSON.parse(weatherList);
+			console.log('search to get mountain marker');
+		
+			console.log('Input Mountain List:', mountainList);
+		    console.log('Input Weather List:', weatherList);
+		}else{
+			mountainList = ${mountainList != null ? mountainList : 'null'};
+			weatherList = ${weatherList != null ? weatherList : 'null'};
+			
+			mounainList = JSON.parse(JSON.stringify(mountainList));
+			//weatherList = JSON.parse(JSON.stringify(weatherList));
+			
+			latitudes.push(latitude);
+			longitudes.push(longitude); 
+			
+			
+			console.log('Else Block Mountain List:', mountainList);
+		    console.log('Else Block Weather List:', weatherList);
+		}
+		
+		
+		
 		$(mountainList).each(
 				function(index, mountain) {
 					//console.log(mountain);
-					mountain = JSON.parse(JSON.stringify(mountain));
+					
 					console.log('mountain:');
 					console.log(mountain);
-					console.log(mountain.mountainLatitude + ':'  + mountain.mountainLongitude);
+					console.log('Latitude Key Exists:', 'mountainLatitude' in mountain);
+				    console.log('Longitude Key Exists:', 'mountainLongitude' in mountain);
+					console.log('Latitude:', mountain.mountainLatitude);
+			        console.log('Longitude:', mountain.mountainLongitude);
 					
 					latitudes.push(mountain.mountainLatitude);
 					longitudes.push(mountain.mountainLongitude);
@@ -196,10 +237,18 @@
 				    console.log("no, lat, lon" ,mountainNoData,mountainLatitudeData,mountainLongitudeData )
 				    
 				    
-				    let weatherList = ${weatherList != null ? weatherList : 'null'};
+				    //let weatherList = ${weatherList != null ? weatherList : 'null'};
 				    
 				    if(weatherList != 'null'){
-				    let weather = weatherList[index];
+				    console.log(weatherList);
+				    let weather;
+				    
+				    if(weatherList.length > 1){
+				    	weather = weatherList[index];
+				    }else{
+				    	weather = weatherList;
+				    }
+				    console.log(weather);
 				    let weatherIcon = getWeatherIcon(weather.skyCondition);
 				    let sunriseIcon = '<i class="bi bi-sunrise icon" style="width:20px;height:20px;"></i>';
 	                let sunsetIcon ='<i class="bi bi-sunset icon" style="width:20px;height:20px;"></i>';
@@ -252,8 +301,7 @@
 		
 		
 		
- 		latitudes.push(latitude);
-		longitudes.push(longitude); 
+ 		
 		
 		const {center, bounds} = calculateCenterAndBounds(latitudes, longitudes);
 		
@@ -271,7 +319,11 @@
 	
 	
 	$(function() {
-		$('#search').on('click', function() {
+		$('#search').on('click', function(event) {
+			getAddressFromUserInput();
+		});
+		
+		$('#address').keypress(function(event){
 			getAddressFromUserInput();
 		});
 	}); // if user input the location
@@ -280,11 +332,76 @@
 	//
 
 	function getAddressFromUserInput() {
-		var userInput = $('#address').val();
+		var userInput = $('#address').val().trim();
 		clearAll();
-
+		
 		$.ajax({
-			url : 'http://127.0.0.1:8001/mountain/rest/searchKeywordToAddress',
+			url:'/mountain/rest/checkIsMountain?mountainName='+userInput,
+			type:'GET',
+			success : function(response){
+				console.log(response);
+/* 				console.log(response.mountain[0].mountainLatitude);
+				console.log(response.mountain[0].mountainLongitude); */
+				if(response.isMountain == 1){
+					console.log('isMountain == 1');
+					getMountainMarker(response.mountainList, response.weatherList);
+				}else{
+					$.ajax({
+						url : '/mountain/rest/searchKeywordToAddress',
+						type : 'GET',
+						dataType : 'text',
+						data : {
+							query : userInput
+						},
+						success : function(address) {
+							 console.log('user input to address success');
+								console.log(address);
+
+								naver.maps.Service.geocode({
+									query : address
+								}, function(status, response) {
+									if (status !== naver.maps.Service.Status.OK) {
+										return alert('Something wrong!');
+									}
+									console.log('geocode response:' + response);
+									console.log(response);
+
+									var result = response.v2.addresses[0];
+									console.log('geocode result:' + result);
+
+									var location = new naver.maps.LatLng(result.y, result.x);
+
+									if(map == null){
+										map = new naver.maps.Map('naverMap', {
+										});
+									}
+									
+									map.setCenter(location);
+									map.setZoom(12);
+									let searchMarker = new naver.maps.Marker({
+										position : location,
+										map : map
+									});
+
+									markers.push(searchMarker);
+								});
+							 
+						},
+						error : function(xhr, status, error) {
+							console.error('Error occurred while searching for the place:',
+									error);
+							alert('Error occurred while searching for the place.');
+						}
+					});
+				}
+			}
+			
+		});
+		
+		
+/* 
+		$.ajax({
+			url : '/mountain/rest/searchKeywordToAddress',
 			type : 'GET',
 			dataType : 'text',
 			data : {
@@ -323,7 +440,7 @@
 						error);
 				alert('Error occurred while searching for the place.');
 			}
-		});
+		}); */
 	}
 	
 	//

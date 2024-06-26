@@ -34,7 +34,13 @@
 			
 			$('#hikingGuide').on('click',function(event){
 				event.preventDefault();
-				window.location.href = '/hikingguide';
+				
+				
+				let user = '${sessionScope.user != null ? sessionScope.user : "null"}';
+				
+				if(user !='null'){
+					window.location.href = '/hikingguide';
+				}
 			});
 			
 			$('#loginButton').on('click',function(event){
@@ -80,19 +86,24 @@
 		        });
 		        $('#mySchedule').on('click', function(event) {
 		        	event.preventDefault();
-		            window.location.href = '/user/getSchedule';
+		            window.location.href = '/user/getScheduleList';
 		        });
 		        $('#myHikingRecord').on('click', function(event) {
 		        	event.preventDefault();
-		            window.location.href = '/hikingguide/hikingRecord';
+		            window.location.href = '/hikingguide/hikingRecord?userNo=${sessionScope.user.userNo}';
 		        });
 		        $('#qna').on('click', function(event) {
 		        	event.preventDefault();
-		            window.location.href = '/user/getQna';
+		            window.location.href = '/user/getQnaList';
 		        });
 		        $('#logout').on('click', function(event) {
 		        	event.preventDefault();
-		            window.location.href = '/user/logout';
+		        	
+		        	if('${session.user.userPassword}' == 'kakao'){
+		        		window.location.href = '/oauth/logout/kakao';
+		        	}else{
+		            	window.location.href = '/user/logout';
+		        	}
 		        });
              
              
@@ -414,10 +425,12 @@ $(document).ready(function(event) {
             console.log('전체알림:', isChecked);
             // AJAX 요청을 통해 서버에 업데이트
             
-            let userNo = ${sessionScope.user.userNo};
+            let userNo = ${sessionScope.user.userNo != null ? sessionScope.user.userNo : 'null' };
             let alarmSettingType = 0;
             
             console.log('userNo:' + userNo);
+            
+            if(userNo != 'null'){
             
             $.ajax({
             	url:'userEtc/rest/updateAlarmSetting?userNo=' + userNo +'&alarmSettingType='+alarmSettingType,
@@ -427,6 +440,7 @@ $(document).ready(function(event) {
         			location.reload();
         		}
             });
+            }
         });
 
         $('#flexSwitchCertificationPostAlert').on('click', function(event) {
@@ -434,7 +448,7 @@ $(document).ready(function(event) {
             console.log('인증 게시글 알림:', isChecked);
             // AJAX 요청을 통해 서버에 업데이트
             
-            let userNo = ${sessionScope.user.userNo};
+            let userNo = ${sessionScope.user.userNo != null ? sessionScope.user.userNo : 'null' };
             let alarmSettingType = 1;
             
             $.ajax({
@@ -452,7 +466,7 @@ $(document).ready(function(event) {
             console.log('모임 게시글 알림:', isChecked);
             // AJAX 요청을 통해 서버에 업데이트
             
-            let userNo = ${sessionScope.user.userNo};
+            let userNo = ${sessionScope.user.userNo != null ? sessionScope.user.userNo : 'null' };
             let alarmSettingType = 2;
             
             $.ajax({
@@ -470,7 +484,7 @@ $(document).ready(function(event) {
             console.log('등산 안내 알림:', isChecked);
             // AJAX 요청을 통해 서버에 업데이트
             
-            let userNo = ${sessionScope.user.userNo};
+            let userNo = ${sessionScope.user.userNo != null ? sessionScope.user.userNo : 'null' };
             let alarmSettingType = 3;
             
             $.ajax({

@@ -40,12 +40,25 @@
         });
         
         
-        $('#meetingPost').on('click', function(){
-        	window.location.href = '/meetingPost/getMeetingPostList';
+        $('.meetingPost').on('click', function(event){
+        	event.preventDefault();
+        	alert('meetingPost link');
+        	window.location.href = '/meeting/getMeetingPostList?searchCondition=0&searchKeyword=${mountain.mountainName}';
         });
         
-        $('#certificationPost').on('click',function(){
-        	window.location.href = '/certificationPost/listCertificationPost';
+        $('.certificationPost').on('click',function(event){
+        	event.preventDefault();
+        	alert('certificationPost link');
+        	window.location.href = '/certificationPost/listCertificationPost?searchCondition=2&searchKeyword=${mountain.mountainName}';
+        });
+        
+        $('.schedule').on('click',function(event){
+        	event.preventDefault();
+        	let user = ${sessionScope.user != null ? true : false};
+        	
+        	if(user){
+        		window.location.href='/user/getScheduleList';
+        	}
         });
         
         $('.bi-info-circle').on('click', function(){
@@ -199,7 +212,15 @@
 .far.fa-heart {
     color: gray; /* 좋아요가 눌리지 않은 경우의 색상 */
 }
+        .title{
+        	display:flex;
+			align-items: center;
+        }
         
+        .etc{
+    		padding-left:10px;
+        	justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -209,7 +230,7 @@
 	
 	
 
-	<main>
+	<main style="margin-top:110px;">
 		<div class="container mountain-info">
         <div class="row mountain-image-container">
             <div class="col-md-10">
@@ -220,9 +241,11 @@
         <div class="row mountain-description">
             <div class="col-md-12">
                  <div class="title"><h2>${mountain.mountainName} </h2>
+                 					
+                 					<div class='etc'>
                  					<i class="bi bi-info-circle"></i>
-                 					<div class='like'>
                                     <i class="${mountain.isLiked == 1 ? 'fas' : 'far'} fa-heart popular like-button" style="cursor: pointer;">${mountain.likeCount}</i>
+                                    </div>
                                     <input type="hidden" id="mountainNo" value="${mountain.mountainNo}"/>
                  </div>
     			 <div>위치: ${mountain.mountainLocation}</div>
@@ -230,6 +253,7 @@
     			 <div>좋아요: ${mountain.likeCount}</div>
             </div>
         </div>
+
        <div class="row weather-info">
             <h4>${mountain.mountainName} 날씨</h4>
             <div class="swiper-container">
@@ -265,22 +289,25 @@
         </div>
         
         <div class="today-mountain-stats">
-    <h4>오늘등산 통계</h4>
+    <h4>산타 통계</h4>
     <div class="stat-item">
         <i class="fas fa-users text-primary"></i>
         <span><strong>${meetingCount}</strong>개의  <strong>${mountain.mountainName}</strong> <strong>모임</strong>이  이루어졌어요!
-        	<a href="/meetingPost/getMeetingPostList?searchKeyword=${mountain.mountainName}" class="small-link" id="meetingPost">보러가기</a>
+        	<a href="#" class="small-link meetingPost">보러가기</a>
         </span>
     </div>
     <div class="stat-item">
         <i class="fas fa-pencil-alt text-warning"></i>
         <span><strong>${certificationCount}</strong>개의 <strong>${mountain.mountainName}</strong> <strong>등산 인증</strong> 후기가 있어요!
-        	 <a href="/certificationPost/listCertificationPost?searchKeyword=${mountain.mountainName}" class="small-link" id="certificationPost">보러가기</a>
+        	 <a href="#" class="small-link certificationPost">보러가기</a>
         </span>
     </div>
     <div class="stat-item">
         <i class="fas fa-calendar-alt text-danger"></i>
-        <span><strong>${scheduleCount}</strong>명의 <strong>산타</strong>가 <strong>${mountain.mountainName}</strong> 등산일정을 등록했어요!</span>
+        <span>
+        	<strong>${scheduleCount}</strong>명의 <strong>산타</strong>가 <strong>${mountain.mountainName}</strong> 등산일정을 등록했어요!
+        	<a href="#" class="small-link schedule">일정 등록하러 가기</a>
+        </span>
     </div>
 </div>
         
