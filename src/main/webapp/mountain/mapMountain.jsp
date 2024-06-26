@@ -243,6 +243,7 @@
 				    
 				    if(weatherList != 'null'){
 				    let weather = weatherList[index];
+				    console.log(weather);
 				    let weatherIcon = getWeatherIcon(weather.skyCondition);
 				    let sunriseIcon = '<i class="bi bi-sunrise icon" style="width:20px;height:20px;"></i>';
 	                let sunsetIcon ='<i class="bi bi-sunset icon" style="width:20px;height:20px;"></i>';
