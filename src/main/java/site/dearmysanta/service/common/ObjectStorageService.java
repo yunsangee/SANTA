@@ -1,6 +1,7 @@
 package site.dearmysanta.service.common;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.CopyObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
@@ -25,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import site.dearmysanta.common.SantaLogger;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -96,7 +99,7 @@ public class ObjectStorageService {
 
     private MultipartFile convertFileToMultipartFile(File file) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(file);
-        return new MockMultipartFile(file.getName(), file.getName(), "application/octet-stream", fileInputStream);
+        return new MockMultipartFile(file.getName()+".jpeg", file.getName()+".jpeg", "application/octet-stream", fileInputStream);
     }
     
     public void uploadListData(List<List<Double>> dataList, String fileName) throws IOException {
@@ -154,6 +157,43 @@ public class ObjectStorageService {
     
     public void deleteObjectFromStorage(String fileName) throws Exception {
         amazonS3.deleteObject(bucketName, fileName);
+    }
+    
+    
+    public int updateObjectStorageImage(List<String> fileNameList) throws Exception {
+    	
+    	String fullFileName = fileNameList.get(0);
+    	String fileName = fullFileName.substring(0, fullFileName.length()-1);
+    	
+    	List<Integer> list = new ArrayList<Integer>();
+    	
+    	for(String fn : fileNameList) {
+    		list.add(Integer.parseInt(fn.substring(fn.length()-1, fn.length())));
+    	}
+    	
+    	SantaLogger.makeLog("info", fileName + ":"+ list.toString());
+    	// 1,3,5
+    	
+    	int index = 1;
+    	int fnlSize = fileNameList.size();
+    	for(int i = 0; i < fnlSize; i++) {
+    		if(list.get(i) == index) {
+    			index ++;
+    		}else if(list.get(i) > index){
+    			SantaLogger.makeLog("info", list.get(i) + ":" + index +":"  + fileName+index);
+    			MultipartFile multiPartFile = this.downloadFile(bucketName, fileName+list.get(i));
+    			this.uploadFile(multiPartFile, fileName+index);
+    			index ++;
+    		}
+    	}
+    	
+    	for(int j = index; j < 6; j++ ) {
+    		this.deleteObjectFromStorage(fileName+j);
+    	}
+    	SantaLogger.makeLog("info", "index:"+index);
+    	return index;
+    	
+    	
     }
 
 }

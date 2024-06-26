@@ -1,6 +1,7 @@
 package site.dearmysanta.mountain;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -96,7 +97,7 @@ public class MountainApplicationTest {
 		
 	}
 	
-	@Test
+	//@Test
 	public void mountainApiTest() throws Exception {
 //		mountainService.getMountain("");
 		List<MountainTrail> list = mountainService.getMountainTrailListFromVWorld(1010,"관악산",  "41290107");
@@ -576,6 +577,18 @@ public class MountainApplicationTest {
 	//@Test
 	public void deleteTest() throws Exception {
 		objectStorageService.deleteObjectFromStorage("profile22.png");
+	}
+	
+	
+	@Test
+	public void deleteImageTest() throws Exception{
+		List<String> list = new ArrayList<String>();
+		list.add("42_1_2");
+		list.add("42_1_4");
+//		list.add("39_1_5");
+		
+		
+		objectStorageService.updateObjectStorageImage(list);
 	}
 	
 }

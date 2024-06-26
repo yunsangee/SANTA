@@ -98,7 +98,12 @@
 		        });
 		        $('#logout').on('click', function(event) {
 		        	event.preventDefault();
-		            window.location.href = '/user/logout';
+		        	
+		        	if('${session.user.userPassword}' == 'kakao'){
+		        		window.location.href = '/oauth/logout/kakao';
+		        	}else{
+		            	window.location.href = '/user/logout';
+		        	}
 		        });
              
              
