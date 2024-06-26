@@ -54,7 +54,7 @@
         
         $('.schedule').on('click',function(event){
         	event.preventDefault();
-        	let user = {sessionScope.user != null ? true : false};
+        	let user = ${sessionScope.user != null ? true : false};
         	
         	if(user){
         		window.location.href='/user/getScheduleList';
