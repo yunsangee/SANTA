@@ -70,7 +70,7 @@ import site.dearmysanta.service.user.UserService;
 	    
 	    if (userId == null) {
 	       
-	        throw new Exception("»ç¿ëÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù."); //  not exist UserId
+	        throw new Exception("ì‚¬ìš©ìë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."); //  not exist UserId
 	    
 	    } else {
 	   
@@ -88,7 +88,7 @@ import site.dearmysanta.service.user.UserService;
 		
 		if (userPassword == null) {
 			
-			throw new Exception("ºñ¹Ğ¹øÈ£¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+			throw new Exception("ë¹„ë°€ë²ˆí˜¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
 		
 		} else {
 		
@@ -237,7 +237,7 @@ import site.dearmysanta.service.user.UserService;
 //		
 //		if (userId == null) {
 //		       
-//		        throw new Exception("»ç¿ëÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù."); //  not exist UserId
+//		        throw new Exception("ì‚¬ìš©ìë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."); //  not exist UserId
 //		    
 //		    } else {
 //		   
@@ -246,10 +246,10 @@ import site.dearmysanta.service.user.UserService;
 //		    }
 //	}
 	public User login(String userId, String password) throws Exception {
-        // userId¿Í password¸¦ »ç¿ëÇÏ¿© »ç¿ëÀÚ¸¦ Á¶È¸
+        // userIdì™€ passwordë¥¼ ì‚¬ìš©í•˜ì—¬ ì‚¬ìš©ìë¥¼ ì¡°íšŒ
         //User user = userDao.login(userId, password);
         return userDao.login(userId, password);
-        // »ç¿ëÀÚ°¡ Á¸ÀçÇÏ¸é »ç¿ëÀÚ Á¤º¸ ¹İÈ¯, Á¸ÀçÇÏÁö ¾ÊÀ¸¸é null ¹İÈ¯
+        // ì‚¬ìš©ìê°€ ì¡´ì¬í•˜ë©´ ì‚¬ìš©ì ì •ë³´ ë°˜í™˜, ì¡´ì¬í•˜ì§€ ì•Šìœ¼ë©´ null ë°˜í™˜
         //return user;
     }
 
@@ -260,7 +260,7 @@ import site.dearmysanta.service.user.UserService;
 	    
 	    if (phone == null) {
 	       
-	        throw new Exception("»ç¿ëÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù."); //  not exist UserId
+	        throw new Exception("ì‚¬ìš©ìë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."); //  not exist UserId
 	    
 	    } else {
 	   
@@ -270,10 +270,11 @@ import site.dearmysanta.service.user.UserService;
 	}
 
 	@Override
-	public User getUserByUserId(String userId) throws Exception {
+	public List<User> getUserByUserId(String userId) throws Exception {
 		// TODO Auto-generated method stub
 		return userDao.getUserByUserId(userId);
 	}
+
 
 	@Override
 	public String getUserPassword(String userPassword) throws Exception {
