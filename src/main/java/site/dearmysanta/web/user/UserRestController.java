@@ -111,34 +111,34 @@ public class UserRestController {
         System.out.println("setUserPassword : POST");
         System.out.println("userId : " + user.getUserId());
 
-        // »ç¿ëÀÚÀÇ ¾ÆÀÌµğ·Î DB¿¡ ÀúÀåµÈ ½ÇÁ¦ ºñ¹Ğ¹øÈ£ °¡Á®¿À±â
+        // ì‚¬ìš©ìì˜ ì•„ì´ë””ë¡œ DBì— ì €ì¥ëœ ì‹¤ì œ ë¹„ë°€ë²ˆí˜¸ ê°€ì ¸ì˜¤ê¸°
         String currentPassword = (String) session.getAttribute("userPassword");
         
         System.out.println("currentPassword : " + currentPassword);
 
-        // »õ·Î¿î ºñ¹Ğ¹øÈ£
+        // ìƒˆë¡œìš´ ë¹„ë°€ë²ˆí˜¸
         String newPassword = user.getPasswordNew();
         System.out.println("newPassword : " + newPassword);
 
-        // ºñ¹Ğ¹øÈ£ È®ÀÎ¿ë ÀÔ·Â
+        // ë¹„ë°€ë²ˆí˜¸ í™•ì¸ìš© ì…ë ¥
         String confirmPassword = user.getCheckPassword();
         System.out.println("confirmPassword : " + confirmPassword);
 
-        // »õ·Î¿î ºñ¹Ğ¹øÈ£¿Í ºñ¹Ğ¹øÈ£ È®ÀÎÀÌ ÀÏÄ¡ÇÏ´ÂÁö È®ÀÎ
+        // ìƒˆë¡œìš´ ë¹„ë°€ë²ˆí˜¸ì™€ ë¹„ë°€ë²ˆí˜¸ í™•ì¸ì´ ì¼ì¹˜í•˜ëŠ”ì§€ í™•ì¸
         if (!newPassword.equals(confirmPassword)) {
-            return ResponseEntity.badRequest().body("ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
+            return ResponseEntity.badRequest().body("ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
         }
 
-        // »õ·Î¿î ºñ¹Ğ¹øÈ£¿Í ÇöÀç ºñ¹Ğ¹øÈ£°¡ °°ÀºÁö È®ÀÎ
+        // ìƒˆë¡œìš´ ë¹„ë°€ë²ˆí˜¸ì™€ í˜„ì¬ ë¹„ë°€ë²ˆí˜¸ê°€ ê°™ì€ì§€ í™•ì¸
         if (newPassword.equals(currentPassword)) {
-            return ResponseEntity.badRequest().body("±âÁ¸ ºñ¹Ğ¹øÈ£¿Í °°Àº ºñ¹Ğ¹øÈ£ÀÔ´Ï´Ù.");
+            return ResponseEntity.badRequest().body("ê¸°ì¡´ ë¹„ë°€ë²ˆí˜¸ì™€ ê°™ì€ ë¹„ë°€ë²ˆí˜¸ì…ë‹ˆë‹¤.");
         }
 
-        // º¯°æµÈ ºñ¹Ğ¹øÈ£¸¦ DB¿¡ ÀúÀå
+        // ë³€ê²½ëœ ë¹„ë°€ë²ˆí˜¸ë¥¼ DBì— ì €ì¥
         userService.setUserPassword(user.getUserId(), newPassword);
 
-        // º¯°æµÈ ºñ¹Ğ¹øÈ£¸¦ ¼º°øÀûÀ¸·Î Å¬¶óÀÌ¾ğÆ®¿¡°Ô ¾Ë¸²
-        return ResponseEntity.ok("ºñ¹Ğ¹øÈ£°¡ º¯°æµÇ¾ú½À´Ï´Ù.");
+        // ë³€ê²½ëœ ë¹„ë°€ë²ˆí˜¸ë¥¼ ì„±ê³µì ìœ¼ë¡œ í´ë¼ì´ì–¸íŠ¸ì—ê²Œ ì•Œë¦¼
+        return ResponseEntity.ok("ë¹„ë°€ë²ˆí˜¸ê°€ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.");
     }
 	
 	//
@@ -150,21 +150,21 @@ public class UserRestController {
         
 		System.out.println("updateUser : POST");
 
-        // ¾÷µ¥ÀÌÆ®ÇÏ·Á´Â »ç¿ëÀÚ ¹øÈ£ ¼³Á¤
-        Integer targetUserNo = user.getUserNo(); // Å¬¶óÀÌ¾ğÆ®¿¡¼­ Àü¼ÛÇÑ »ç¿ëÀÚ ¹øÈ£
+        // ì—…ë°ì´íŠ¸í•˜ë ¤ëŠ” ì‚¬ìš©ì ë²ˆí˜¸ ì„¤ì •
+        Integer targetUserNo = user.getUserNo(); // í´ë¼ì´ì–¸íŠ¸ì—ì„œ ì „ì†¡í•œ ì‚¬ìš©ì ë²ˆí˜¸
 
 //        if (targetUserNo == null) {
-//            return ResponseEntity.badRequest().body("{\"error\": \"»ç¿ëÀÚ ¹øÈ£°¡ Àü¼ÛµÇÁö ¾Ê¾Ò½À´Ï´Ù.\"}");
+//            return ResponseEntity.badRequest().body("{\"error\": \"ì‚¬ìš©ì ë²ˆí˜¸ê°€ ì „ì†¡ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.\"}");
 //        }
         
-        // DB¿¡¼­ ÇØ´ç »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+        // DBì—ì„œ í•´ë‹¹ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
         User dbUser = userService.getUser(targetUserNo);
 
 //        if (dbUser == null) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"»ç¿ëÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.\"}");
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"ì‚¬ìš©ìë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\"}");
 //        }
 
-        // »ç¿ëÀÚ Á¤º¸ ¾÷µ¥ÀÌÆ®
+        // ì‚¬ìš©ì ì •ë³´ ì—…ë°ì´íŠ¸
         dbUser.setNickName(user.getNickName());
         dbUser.setAddress(user.getAddress());
         dbUser.setPhoneNumber(user.getPhoneNumber());
@@ -173,9 +173,9 @@ public class UserRestController {
         dbUser.setHikingDifficulty(user.getHikingDifficulty());
         dbUser.setHikingLevel(user.getHikingLevel());
         dbUser.setIntroduceContent(user.getIntroduceContent());
-        // ÇÊ¿äÇÑ ´Ù¸¥ ÇÊµåµµ ¾÷µ¥ÀÌÆ®
+        // í•„ìš”í•œ ë‹¤ë¥¸ í•„ë“œë„ ì—…ë°ì´íŠ¸
 
-        // UserService¸¦ »ç¿ëÇÏ¿© »ç¿ëÀÚ Á¤º¸ ¾÷µ¥ÀÌÆ®
+        // UserServiceë¥¼ ì‚¬ìš©í•˜ì—¬ ì‚¬ìš©ì ì •ë³´ ì—…ë°ì´íŠ¸
         userService.updateUser(dbUser);
 
         System.out.println("updateUser : " + dbUser);
@@ -216,34 +216,34 @@ public class UserRestController {
 	            search.setCurrentPage(1);
 	        }
 
-	        int pageSize = this.pageSize; // ÆäÀÌÁö´ç Ç×¸ñ ¼ö
-		    int pageUnit = this.pageUnit; // ÆäÀÌÁö ³×ºñ°ÔÀÌ¼Ç¿¡ Ç¥½ÃÇÒ ÆäÀÌÁö ¼ö
+	        int pageSize = this.pageSize; // í˜ì´ì§€ë‹¹ í•­ëª© ìˆ˜
+		    int pageUnit = this.pageUnit; // í˜ì´ì§€ ë„¤ë¹„ê²Œì´ì…˜ì— í‘œì‹œí•  í˜ì´ì§€ ìˆ˜
 		    int currentPage = search.getCurrentPage();
 
-	        // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸ °¡Á®¿À±â
+	        // ì„¸ì…˜ì—ì„œ ë¡œê·¸ì¸í•œ ê´€ë¦¬ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 	        User admin = (User) session.getAttribute("user");
 
 	        System.out.println("admin login : " + admin);
 
-	        // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸°¡ ÀÖ´ÂÁö È®ÀÎ
+	        // ì„¸ì…˜ì— ë¡œê·¸ì¸í•œ ê´€ë¦¬ì ì •ë³´ê°€ ìˆëŠ”ì§€ í™•ì¸
 	        if (admin == null || admin.getRole() != 1) { // assuming 1 is for admin
-	            // °ü¸®ÀÚ°¡ ¾Æ´Ñ °æ¿ì ¿¡·¯ Ã³¸®
+	            // ê´€ë¦¬ìê°€ ì•„ë‹Œ ê²½ìš° ì—ëŸ¬ ì²˜ë¦¬
 	            Map<String, Object> error = new HashMap<>();
-	            error.put("error", "°ü¸®ÀÚ¸¸ Á¢±ÙÇÒ ¼ö ÀÖ½À´Ï´Ù.");
+	            error.put("error", "ê´€ë¦¬ìë§Œ ì ‘ê·¼í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.");
 	            return error;
 	        }
 
 	        try {
 	            List<User> userList = userService.getUserList(search);
-	            int totalCount = userList.size(); // ÃÑ »ç¿ëÀÚ ¼ö
-	            int totalPages = (int) Math.ceil((double) totalCount / pageSize); // ÃÑ ÆäÀÌÁö ¼ö °è»ê
+	            int totalCount = userList.size(); // ì´ ì‚¬ìš©ì ìˆ˜
+	            int totalPages = (int) Math.ceil((double) totalCount / pageSize); // ì´ í˜ì´ì§€ ìˆ˜ ê³„ì‚°
 
-	            // ÆäÀÌÂ¡ Ã³¸®¸¦ À§ÇÑ startRow¿Í endRow °è»ê
+	            // í˜ì´ì§• ì²˜ë¦¬ë¥¼ ìœ„í•œ startRowì™€ endRow ê³„ì‚°
 	            int startRow = (currentPage - 1) * pageSize;
 	            int endRow = Math.min(startRow + pageSize, totalCount);
 	            List<User> paginatedUserList = userList.subList(startRow, endRow);
 
-	            int currentPageCount = paginatedUserList.size(); // ÇöÀç ÆäÀÌÁö¿¡ Ç¥½ÃµÇ´Â È¸¿ø ¼ö
+	            int currentPageCount = paginatedUserList.size(); // í˜„ì¬ í˜ì´ì§€ì— í‘œì‹œë˜ëŠ” íšŒì› ìˆ˜
 
 	            Map<String, Object> result = new HashMap<>();
 	            result.put("userList", paginatedUserList);
@@ -254,9 +254,9 @@ public class UserRestController {
 
 	            return result;
 	        } catch (Exception e) {
-	            // ¿¹¿Ü Ã³¸®
+	            // ì˜ˆì™¸ ì²˜ë¦¬
 	            Map<String, Object> error = new HashMap<>();
-	            error.put("error", "»ç¿ëÀÚ ¸ñ·ÏÀ» °¡Á®¿À´Â Áß ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.");
+	            error.put("error", "ì‚¬ìš©ì ëª©ë¡ì„ ê°€ì ¸ì˜¤ëŠ” ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.");
 	            return error;
 	        }
 	    }
@@ -270,34 +270,34 @@ public class UserRestController {
 	            search.setCurrentPage(1);
 	        }
 
-	        int pageSize = this.pageSize; // ÆäÀÌÁö´ç Ç×¸ñ ¼ö
-	        int pageUnit = this.pageUnit; // ÆäÀÌÁö ³×ºñ°ÔÀÌ¼Ç¿¡ Ç¥½ÃÇÒ ÆäÀÌÁö ¼ö
+	        int pageSize = this.pageSize; // í˜ì´ì§€ë‹¹ í•­ëª© ìˆ˜
+	        int pageUnit = this.pageUnit; // í˜ì´ì§€ ë„¤ë¹„ê²Œì´ì…˜ì— í‘œì‹œí•  í˜ì´ì§€ ìˆ˜
 	        int currentPage = search.getCurrentPage();
 
-	        // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸ °¡Á®¿À±â
+	        // ì„¸ì…˜ì—ì„œ ë¡œê·¸ì¸í•œ ê´€ë¦¬ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 	        User admin = (User) session.getAttribute("user");
 
 	        System.out.println("admin login : " + admin);
 
-	        // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸°¡ ÀÖ´ÂÁö È®ÀÎ
+	        // ì„¸ì…˜ì— ë¡œê·¸ì¸í•œ ê´€ë¦¬ì ì •ë³´ê°€ ìˆëŠ”ì§€ í™•ì¸
 	        if (admin == null || admin.getRole() != 1) { // assuming 1 is for admin
-	            // °ü¸®ÀÚ°¡ ¾Æ´Ñ °æ¿ì ¿¡·¯ Ã³¸®
+	            // ê´€ë¦¬ìê°€ ì•„ë‹Œ ê²½ìš° ì—ëŸ¬ ì²˜ë¦¬
 	            Map<String, Object> error = new HashMap<>();
-	            error.put("error", "°ü¸®ÀÚ¸¸ Á¢±ÙÇÒ ¼ö ÀÖ½À´Ï´Ù.");
+	            error.put("error", "ê´€ë¦¬ìë§Œ ì ‘ê·¼í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.");
 	            return error;
 	        }
 
 	        try {
 	            List<User> userList = userService.withdrawUserList(search);
-	            int totalCount = userList.size(); // ÃÑ »ç¿ëÀÚ ¼ö
-	            int totalPages = (int) Math.ceil((double) totalCount / pageSize); // ÃÑ ÆäÀÌÁö ¼ö °è»ê
+	            int totalCount = userList.size(); // ì´ ì‚¬ìš©ì ìˆ˜
+	            int totalPages = (int) Math.ceil((double) totalCount / pageSize); // ì´ í˜ì´ì§€ ìˆ˜ ê³„ì‚°
 
-	            // ÆäÀÌÂ¡ Ã³¸®¸¦ À§ÇÑ startRow¿Í endRow °è»ê
+	            // í˜ì´ì§• ì²˜ë¦¬ë¥¼ ìœ„í•œ startRowì™€ endRow ê³„ì‚°
 	            int startRow = (currentPage - 1) * pageSize;
 	            int endRow = Math.min(startRow + pageSize, totalCount);
 	            List<User> paginatedUserList = userList.subList(startRow, endRow);
 
-	            int currentPageCount = paginatedUserList.size(); // ÇöÀç ÆäÀÌÁö¿¡ Ç¥½ÃµÇ´Â È¸¿ø ¼ö
+	            int currentPageCount = paginatedUserList.size(); // í˜„ì¬ í˜ì´ì§€ì— í‘œì‹œë˜ëŠ” íšŒì› ìˆ˜
 
 	            Map<String, Object> result = new HashMap<>();
 	            result.put("userList", paginatedUserList);
@@ -308,9 +308,9 @@ public class UserRestController {
 
 	            return result;
 	        } catch (Exception e) {
-	            // ¿¹¿Ü Ã³¸®
+	            // ì˜ˆì™¸ ì²˜ë¦¬
 	            Map<String, Object> error = new HashMap<>();
-	            error.put("error", "»ç¿ëÀÚ ¸ñ·ÏÀ» °¡Á®¿À´Â Áß ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.");
+	            error.put("error", "ì‚¬ìš©ì ëª©ë¡ì„ ê°€ì ¸ì˜¤ëŠ” ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.");
 	            return error;
 	        }
 	    }
@@ -323,10 +323,10 @@ public class UserRestController {
 	    public @ResponseBody Map<String, Object> getQnAList(@ModelAttribute Search search, HttpSession session) throws Exception {
 	        System.out.println("getQnAList : GET");
 
-	        // ¼¼¼Ç¿¡¼­ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+	        // ì„¸ì…˜ì—ì„œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 	        User user = (User) session.getAttribute("user");
 
-	        // ÇöÀç ÆäÀÌÁö¿Í ½ÃÀÛ ÀÎµ¦½º °è»ê
+	        // í˜„ì¬ í˜ì´ì§€ì™€ ì‹œì‘ ì¸ë±ìŠ¤ ê³„ì‚°
 	        int currentPage = (search.getCurrentPage() == 0) ? 1 : search.getCurrentPage();
 	        int startIndex = (currentPage - 1) * pageSize;
 	        int endIndex = currentPage * pageSize;
@@ -339,14 +339,14 @@ public class UserRestController {
 	            Math.min(endIndex, totalCount)
 	        );
 	        
-	        // ÀüÃ¼ Ç×¸ñ ¼ö ¹× ÆäÀÌÁö ¼ö °è»ê
+	        // ì „ì²´ í•­ëª© ìˆ˜ ë° í˜ì´ì§€ ìˆ˜ ê³„ì‚°
 	        int totalPages = (int) Math.ceil((double) totalCount / pageSize);
 	        
 	        System.out.println("Search : "+search);
 	        
 	        System.out.println("QNAList_restcontroller : "+qnaList);
 	        
-	        // ÀÀ´ä µ¥ÀÌÅÍ ÁØºñ
+	        // ì‘ë‹µ ë°ì´í„° ì¤€ë¹„
 	        Map<String, Object> response = new HashMap<>();
 	        response.put("qnaList", qnaList);
 	        response.put("totalCount", totalCount);
@@ -357,7 +357,7 @@ public class UserRestController {
 	        return response;
 	    }
 	    
-	    ////////////////////////////// ¾ÆÀÌµğ Áßº¹È®ÀÎ //////////////////////////////////
+	    ////////////////////////////// ì•„ì´ë”” ì¤‘ë³µí™•ì¸ //////////////////////////////////
 	    
 	    @GetMapping("rest/checkDuplicationId")
 	    public Map<String, String> checkDuplicationId(@RequestParam String userId) {
@@ -366,20 +366,20 @@ public class UserRestController {
 	            String duplicationId = userService.checkDuplicationId(userId);
 	            if (duplicationId != null) {
 	                response.put("status", "duplicated");
-	                response.put("message", "Áßº¹µÈ ¾ÆÀÌµğÀÔ´Ï´Ù.");
+	                response.put("message", "ì¤‘ë³µëœ ì•„ì´ë””ì…ë‹ˆë‹¤.");
 	            } else {
 	                response.put("status", "available");
-	                response.put("message", "»ç¿ë °¡´ÉÇÑ ¾ÆÀÌµğÀÔ´Ï´Ù.");
+	                response.put("message", "ì‚¬ìš© ê°€ëŠ¥í•œ ì•„ì´ë””ì…ë‹ˆë‹¤.");
 	            }
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            response.put("status", "error");
-	            response.put("message", "¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.");
+	            response.put("message", "ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.");
 	        }
 	        return response;
 	    }
 
-	    /////////////////////////////// ´Ğ³×ÀÓ Áßº¹È®ÀÎ //////////////////////////////
+	    /////////////////////////////// ë‹‰ë„¤ì„ ì¤‘ë³µí™•ì¸ //////////////////////////////
 	    
 	    @GetMapping("rest/checkDuplicationNickName")
 	    public Map<String, String> checkDuplicationNickName(@RequestParam String nickName) {
@@ -388,20 +388,20 @@ public class UserRestController {
 	            String duplicationNickName = userService.checkDuplicationNickName(nickName);
 	            if (duplicationNickName != null) {
 	                response.put("status", "duplicated");
-	                response.put("message", "Áßº¹µÈ ´Ğ³×ÀÓÀÔ´Ï´Ù.");
+	                response.put("message", "ì¤‘ë³µëœ ë‹‰ë„¤ì„ì…ë‹ˆë‹¤.");
 	            } else {
 	                response.put("status", "available");
-	                response.put("message", "»ç¿ë °¡´ÉÇÑ ´Ğ³×ÀÓÀÔ´Ï´Ù.");
+	                response.put("message", "ì‚¬ìš© ê°€ëŠ¥í•œ ë‹‰ë„¤ì„ì…ë‹ˆë‹¤.");
 	            }
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            response.put("status", "error");
-	            response.put("message", "¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.");
+	            response.put("message", "ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.");
 	        }
 	        return response;
 	    }
 	    
-	    ////////////////////////////// È¸¿ø°¡ÀÔ ºñ¹Ğ¹øÈ£ È®ÀÎ //////////////////////////////
+	    ////////////////////////////// íšŒì›ê°€ì… ë¹„ë°€ë²ˆí˜¸ í™•ì¸ //////////////////////////////
 	    @PostMapping(value="rest/addUserPassword")
 	    public Map<String, String> addUserPassword(@RequestBody Map<String, String> request) throws Exception {
 	        
@@ -416,18 +416,18 @@ public class UserRestController {
 	        try {
 	        	if (userPassword.length() < 10) {
 	                response.put("status", "shortpassword");
-	                response.put("message", "ºñ¹Ğ¹øÈ£¸¦ 10ÀÚ ÀÌ»ó ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+	                response.put("message", "ë¹„ë°€ë²ˆí˜¸ë¥¼ 10ì ì´ìƒ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 	            } else if (!userPassword.equals(checkPassword)) {
 	                response.put("status", "notequals");
-	                response.put("message", "ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+	                response.put("message", "ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 	            } else {
 	                response.put("status", "equals");
-	                response.put("message", "ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÕ´Ï´Ù.");
+	                response.put("message", "ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•©ë‹ˆë‹¤.");
 	            }
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            response.put("status", "error");
-	            response.put("message", "¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.");
+	            response.put("message", "ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.");
 	        }
 	        return response;
 	            
@@ -446,17 +446,17 @@ public class UserRestController {
 
 	        if (sessionUser == null) {
 	            response.put("status", "error");
-	            response.put("message", "¼¼¼ÇÀÌ ¸¸·áµÇ¾ú½À´Ï´Ù. ´Ù½Ã ·Î±×ÀÎ ÇØÁÖ¼¼¿ä.");
+	            response.put("message", "ì„¸ì…˜ì´ ë§Œë£Œë˜ì—ˆìŠµë‹ˆë‹¤. ë‹¤ì‹œ ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”.");
 	            return response;
 	        }
 
 	        if ("checkCurrentPassword".equals(action)) {
 	            if (!sessionUser.getUserPassword().equals(currentPassword)) {
 	                response.put("status", "incorrect");
-	                response.put("message", "ÇöÀç ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+	                response.put("message", "í˜„ì¬ ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 	            } else {
 	                response.put("status", "correct");
-	                response.put("message", "ÇöÀç ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÕ´Ï´Ù.");
+	                response.put("message", "í˜„ì¬ ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•©ë‹ˆë‹¤.");
 	            }
 	            return response;
 	        }
@@ -464,13 +464,13 @@ public class UserRestController {
 	        if ("checkPasswordMatch".equals(action)) {
 	            if (userPassword.length() < 10) {
 	                response.put("status", "shortpassword");
-	                response.put("message", "ºñ¹Ğ¹øÈ£¸¦ 10ÀÚ ÀÌ»ó ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+	                response.put("message", "ë¹„ë°€ë²ˆí˜¸ë¥¼ 10ì ì´ìƒ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 	            } else if (!userPassword.equals(checkPassword)) {
 	                response.put("status", "notequals");
-	                response.put("message", "ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+	                response.put("message", "ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 	            } else {
 	                response.put("status", "equals");
-	                response.put("message", "ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÕ´Ï´Ù.");
+	                response.put("message", "ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•©ë‹ˆë‹¤.");
 	            }
 	            return response;
 	        }
@@ -478,24 +478,24 @@ public class UserRestController {
 	        if ("changePassword".equals(action)) {
 	            if (!sessionUser.getUserPassword().equals(currentPassword)) {
 	                response.put("status", "incorrectcurrent");
-	                response.put("message", "ÇöÀç ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+	                response.put("message", "í˜„ì¬ ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 	            } else if (userPassword.length() < 10) {
 	                response.put("status", "shortpassword");
-	                response.put("message", "ºñ¹Ğ¹øÈ£¸¦ 10ÀÚ ÀÌ»ó ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+	                response.put("message", "ë¹„ë°€ë²ˆí˜¸ë¥¼ 10ì ì´ìƒ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 	            } else if (!userPassword.equals(checkPassword)) {
 	                response.put("status", "notequals");
-	                response.put("message", "ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+	                response.put("message", "ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 	            } else {
 	                sessionUser.setUserPassword(userPassword);
 	                userService.updateUser(sessionUser);
 	                response.put("status", "equals");
-	                response.put("message", "ºñ¹Ğ¹øÈ£°¡ ¼º°øÀûÀ¸·Î º¯°æµÇ¾ú½À´Ï´Ù.");
+	                response.put("message", "ë¹„ë°€ë²ˆí˜¸ê°€ ì„±ê³µì ìœ¼ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.");
 	            }
 	            return response;
 	        }
 
 	        response.put("status", "error");
-	        response.put("message", "¾Ë ¼ö ¾ø´Â ¿äÃ»ÀÔ´Ï´Ù.");
+	        response.put("message", "ì•Œ ìˆ˜ ì—†ëŠ” ìš”ì²­ì…ë‹ˆë‹¤.");
 	        return response;
 	    }
 	    

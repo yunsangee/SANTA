@@ -37,7 +37,7 @@ public class OAuthController {
     private MountainService mountainService;
 
     /**
-     * Ä«Ä«¿À callback
+     * ì¹´ì¹´ì˜¤ callback
      * [GET] /oauth/kakao/callback
      */
     @GetMapping("/kakao")
@@ -48,7 +48,7 @@ public class OAuthController {
     	    try {
     	        user = oauthService.CreateKakaoUser(access_token);
 
-    	        // ¼¼¼Ç¿¡ »ç¿ëÀÚ Á¤º¸ ÀúÀå
+    	        // ì„¸ì…˜ì— ì‚¬ìš©ì ì •ë³´ ì €ì¥
     	        if (user != null) {
     	            session.setAttribute("user", user);
     	            
@@ -57,7 +57,7 @@ public class OAuthController {
     	        
     	        } else {
     	            ModelAndView modelAndView = new ModelAndView("error");
-    	            modelAndView.addObject("errorMessage", "»ç¿ëÀÚ Á¤º¸°¡ ¾ø½À´Ï´Ù.");
+    	            modelAndView.addObject("errorMessage", "ì‚¬ìš©ì ì •ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.");
     	            return modelAndView;
     	        }
 
@@ -75,7 +75,7 @@ public class OAuthController {
     //////////////////////////////////////////////////////////////////////////////////
 //    @GetMapping("/oauth/kakao")
 //    public void kakaoLogin(HttpServletResponse response) throws IOException {
-//        // »õ·Î¿î ·Î±×ÀÎ ¿äÃ» ½ÃÀÛ
+//        // ìƒˆë¡œìš´ ë¡œê·¸ì¸ ìš”ì²­ ì‹œì‘
 //        response.sendRedirect("https://kauth.kakao.com/oauth/authorize?client_id=53ae98941fff9e24b11901e9a79432d9&redirect_uri=http://localhost:8001/oauth/kakao&response_type=code");
 //    }
     
@@ -85,7 +85,7 @@ public class OAuthController {
         String accessToken = (String) request.getSession().getAttribute("accessToken"); // Replace with actual token retrieval logic
         if (accessToken != null) {
             oauthService.kakaoLogout(accessToken);
-            request.getSession().invalidate(); // ¼¼¼Ç ¹«È¿È­
+            request.getSession().invalidate(); // ì„¸ì…˜ ë¬´íš¨í™”
         }
         response.setStatus(HttpServletResponse.SC_OK);
     }
