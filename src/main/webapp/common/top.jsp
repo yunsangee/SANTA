@@ -11,6 +11,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script>
     	$(function(event){
+    		
+    		$('#Home').on('click',function(event){
+    			event.preventDefault();
+    			window.location.href ='/';
+    		});
 
     		$('#logoName').on('click',function(event){
     			event.preventDefault();
@@ -99,7 +104,7 @@
 		        $('#logout').on('click', function(event) {
 		        	event.preventDefault();
 		        	
-		        	if('${session.user.userPassword}' == 'kakao'){
+		        	if('${sessionScope.user.userPassword}' == 'kakao'){
 		        		window.location.href = '/oauth/logout/kakao';
 		        	}else{
 		            	window.location.href = '/user/logout';
