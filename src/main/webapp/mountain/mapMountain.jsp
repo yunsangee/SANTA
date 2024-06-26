@@ -36,8 +36,6 @@
 		clearAll();
 		
 		if(mountainList == "" | mountainList == null | mountainList =='null'){
-			map = new naver.maps.Map('naverMap', {
-			});
 			
 			$('#address').val('${searchKeyword}');
 			getAddressFromUserInput();
@@ -321,7 +319,11 @@
 	
 	
 	$(function() {
-		$('#search').on('click', function() {
+		$('#search').on('click', function(event) {
+			getAddressFromUserInput();
+		});
+		
+		$('#address').keypress(function(event){
 			getAddressFromUserInput();
 		});
 	}); // if user input the location
@@ -369,6 +371,11 @@
 
 									var location = new naver.maps.LatLng(result.y, result.x);
 
+									if(map == null){
+										map = new naver.maps.Map('naverMap', {
+										});
+									}
+									
 									map.setCenter(location);
 									map.setZoom(12);
 									let searchMarker = new naver.maps.Marker({
