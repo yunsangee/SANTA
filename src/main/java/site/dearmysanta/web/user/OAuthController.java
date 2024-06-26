@@ -1,6 +1,8 @@
 package site.dearmysanta.web.user;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -43,14 +45,17 @@ public class OAuthController {
 	/**
      * 카카오 callback
      * [GET] /oauth/kakao/callback
+	 * @throws UnsupportedEncodingException 
      */
     @GetMapping("/kakao")
-    public ModelAndView kakaoCallback(@RequestParam String code, HttpSession session, RedirectAttributes redirectAttributes, HttpServletResponse response) {
+    public ModelAndView kakaoCallback(@RequestParam String code, HttpSession session, RedirectAttributes redirectAttributes, HttpServletResponse response) throws UnsupportedEncodingException {
         String access_token = oauthService.getKakaoAccessToken(code);
         
         session.setAttribute("accessToken", access_token);
         
         User user = null;
+        
+        int isKakao = 0;
 
         try {
         	user = oauthService.CreateKakaoUser(access_token);
@@ -78,13 +83,19 @@ public class OAuthController {
             		
             		session.setAttribute("user", checkUser);
             		
-            		return new ModelAndView("forward:/common/main.jsp");
+            		user = checkUser;
+            		
+            		isKakao = 1;
+            		
+            		
             		
             	} else {
             		
             	System.out.println("existing2:");
                 throw new RuntimeException("가입된 이메일입니다.");
             	}
+            	
+            	
             	
             }  else if(existingUsers.size() == 0) {
             		userService.addUser(user);
@@ -100,7 +111,11 @@ public class OAuthController {
        
 	    
 	    // 쿠키 설정
-	    Cookie cookie = new Cookie("userNo", ""+user.getUserNo());
+        String encodingUserNo = URLEncoder.encode(""+user.getUserNo(), "UTF-8");
+	    String encodingNickName = URLEncoder.encode(""+user.getNickName(), "UTF-8");
+	    String encodingProfile = URLEncoder.encode(user.getProfileImage(), "UTF-8");
+	    
+	    Cookie cookie = new Cookie("userNo", encodingUserNo);
 	    cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
 	    cookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
 	    cookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
@@ -108,7 +123,7 @@ public class OAuthController {
 	    response.addCookie(cookie);
 	    
 	    // 쿠키 설정
-	    Cookie nickNameCookie = new Cookie("nickName", user.getNickName());
+	    Cookie nickNameCookie = new Cookie("nickName", encodingNickName);
 	    nickNameCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
 	    nickNameCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
 	    nickNameCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
@@ -116,7 +131,7 @@ public class OAuthController {
 	    response.addCookie(nickNameCookie);
 	    
 	 // 쿠키 설정
-	    Cookie profileCookie = new Cookie("profile", user.getProfileImage());
+	    Cookie profileCookie = new Cookie("profile", encodingProfile);
 	    profileCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
 	    profileCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
 	    profileCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
@@ -130,7 +145,11 @@ public class OAuthController {
 	    System.out.println("쿠키 프로필 사진 : " + profileCookie);
         
         
-        return new ModelAndView("forward:/user/addInfo.jsp");
+	    if(isKakao == 1) {
+	    	return new ModelAndView("forward:/common/main.jsp");
+	    }else {
+	    	return new ModelAndView("forward:/user/addInfo.jsp");
+	    }
     }
 
 	//////////////////////////////////////////////////////////////////////////////////

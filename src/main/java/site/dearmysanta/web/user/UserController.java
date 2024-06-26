@@ -1,5 +1,6 @@
 package site.dearmysanta.web.user;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -153,7 +154,12 @@ public class UserController {
 		    session.setAttribute("user", dbUser);	
 		    
 		    // 쿠키 설정
-		    Cookie cookie = new Cookie("userNo", ""+dbUser.getUserNo());
+		    
+		    String encodingUserNo = URLEncoder.encode(""+dbUser.getUserNo(), "UTF-8");
+		    String encodingNickName = URLEncoder.encode(""+dbUser.getNickName(), "UTF-8");
+		    String encodingProfile = URLEncoder.encode(dbUser.getProfileImage(), "UTF-8");
+		    
+		    Cookie cookie = new Cookie("userNo", encodingUserNo);
 		    cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
 		    cookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
 		    cookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
@@ -161,7 +167,7 @@ public class UserController {
 		    response.addCookie(cookie);
 		    
 		    // 쿠키 설정
-		    Cookie nickNameCookie = new Cookie("nickName", dbUser.getNickName());
+		    Cookie nickNameCookie = new Cookie("nickName", encodingNickName);
 		    nickNameCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
 		    nickNameCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
 		    nickNameCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
@@ -169,7 +175,7 @@ public class UserController {
 		    response.addCookie(nickNameCookie);
 		    
 		 // 쿠키 설정
-		    Cookie profileCookie = new Cookie("profile", dbUser.getProfileImage());
+		    Cookie profileCookie = new Cookie("profile", encodingProfile);
 		    profileCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
 		    profileCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
 		    profileCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
