@@ -1,6 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<%@ page import="site.dearmysanta.domain.user.User" %>
+
+<%
+    // 세션에 user 객체가 없으면 생성하여 설정합니다.
+    if (session.getAttribute("user") == null) {
+        User user = new User();
+        user.setUserNo(1);  // userNo 값을 임의로 설정합니다.
+        user.setNickName("재호짱");
+        session.setAttribute("user", user);
+    }
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,8 +26,8 @@
     	
         var socket = io("https://www.dearmysanta.site/chattingserver");
         
-        var userNo = "${userNo}";
-        var userNickname = "${nickname}";
+        var userNo = "${sessionScope.user.userNo}";
+        var userNickname = "${sessionScope.user.nickname}";
         var roomNo = "${roomNo}";
 
         var initialSpaces = "                           ";

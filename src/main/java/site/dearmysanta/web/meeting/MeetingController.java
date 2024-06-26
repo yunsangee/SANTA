@@ -64,10 +64,19 @@ public class MeetingController {
 	}
 	
 	@GetMapping(value = "getMeetingPost")
-	public String getMeetingPost(@RequestParam int postNo, Model model) throws Exception {
+	public String getMeetingPost(@RequestParam int postNo, HttpSession session, Model model) throws Exception {
 		
-//		int userNo = ((User)session.getAttribute("user")).getUserNo();
-		int userNo = 1;
+		User user = (User) session.getAttribute("user");
+
+		int userNo;
+		
+		if (user != null) {
+		    userNo = user.getUserNo();
+		} else {
+		    userNo = 1;
+		    System.out.println("session에서 값 못받아와서 임의로 userNo 1 박힘");
+		}
+		
 		int postType = 1;
 		
 		Map<String, Object> map = meetingService.getMeetingPostAll(postNo, userNo);
@@ -107,11 +116,19 @@ public class MeetingController {
 	}
 	
 	@PostMapping(value = "addMeetingPost") // userNo to Session
-	public String addMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost) throws Exception {
+	public String addMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost, HttpSession session) throws Exception {
 		
-//		int userNo = ((User)session.getAttribute("user")).getUserNo();
+		User user = (User) session.getAttribute("user");
+
+		int userNo;
+		if (user != null) {
+		    userNo = user.getUserNo();
+		} else {
+		    userNo = 1;
+		    System.out.println("session에서 값 못받아와서 임의로 userNo 1 박힘");
+		}
 		
-		int userNo = 1;
+
 		
 		meetingPost.setUserNo(userNo);
 		
@@ -241,14 +258,23 @@ public class MeetingController {
 	
 	@RequestMapping(value = "getMeetingPostList") // currentPage
 	public String getMeetingPostList(@ModelAttribute("meetingPostSearch") MeetingPostSearch meetingPostSearch, 
-			Model model) throws Exception {
+			HttpSession session, Model model) throws Exception {
 		
 		System.out.println("/meeting/getMeetingPostList : GET/Post");
 		System.out.println("meetingPostSearch ===== "+meetingPostSearch);
 		
-//		int userNo = ((User)session.getAttribute("user")).getUserNo();
-//		meetingPostSearch.setUserNo(userNo);
-		int userNo = 1;
+		User user = (User) session.getAttribute("user");
+
+		int userNo;
+		
+		if (user != null) {
+		    userNo = user.getUserNo();
+		} else {
+		    userNo = 1;
+		    System.out.println("session에서 값 못받아와서 임의로 userNo 1 박힘");
+		}
+		
+		meetingPostSearch.setUserNo(userNo);
 		
 		if(meetingPostSearch.getCurrentPage() ==0 ){
 			meetingPostSearch.setCurrentPage(1);
