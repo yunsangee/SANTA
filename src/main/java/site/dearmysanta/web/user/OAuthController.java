@@ -140,7 +140,7 @@ public class OAuthController {
 //        response.sendRedirect("https://kauth.kakao.com/oauth/authorize?client_id=53ae98941fff9e24b11901e9a79432d9&redirect_uri=http://localhost:8001/oauth/kakao&response_type=code");
 //    }
 
-	@GetMapping("/logout/kakao")
+	@PostMapping("/logout/kakao")
 	@ResponseBody
 	public ModelAndView kakaoLogout(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
 		
