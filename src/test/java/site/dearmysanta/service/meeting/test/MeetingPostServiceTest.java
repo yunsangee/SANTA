@@ -3,6 +3,7 @@ package site.dearmysanta.service.meeting.test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -100,12 +101,14 @@ public class MeetingPostServiceTest {
 //	@Test
 	public void testUpdateMeetingPost() throws Exception {
 		
+		List<String> imageURL = new ArrayList<>();
+		
 		MeetingPost meetingPost = meetingService.getMeetingPost(2);
 		
 		SantaLogger.makeLog("info", meetingPost.toString());
 		
 		meetingPost.setContents("Hiking is Shit");
-		meetingService.updateMeetingPost(meetingPost);
+		meetingService.updateMeetingPost(meetingPost, imageURL);
 		
 		SantaLogger.makeLog("info", meetingPost.toString());		
 		
@@ -251,7 +254,7 @@ public class MeetingPostServiceTest {
 			SantaLogger.makeLog("info", meetingParticipationList1.get(i).toString());
 		}
 	    
-	    meetingService.deleteMeetingParticipation(10);
+	    meetingService.deleteMeetingParticipation(meetingParticipationList1.get(0));
 	    
 	    List<MeetingParticipation> meetingParticipationList2 = meetingService.getMeetingParticipationList(4);
 	    SantaLogger.makeLog("info", "meeting participation list size: " + meetingParticipationList2.size());

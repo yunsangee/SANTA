@@ -54,7 +54,7 @@ public interface MeetingDAO {
 	
 	public void insertMeetingParticipation(MeetingParticipation meetingParticipation) throws Exception;
 	
-	public void deleteMeetingParticipation(int participationNo) throws Exception;
+	public void deleteMeetingParticipation(MeetingParticipation meetingParticipation) throws Exception;
 	
 	public void updateMeetingParticipationStatus(int participationNo) throws Exception;
 	
