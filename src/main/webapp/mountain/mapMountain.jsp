@@ -191,7 +191,7 @@
 			weatherList = ${weatherList != null ? weatherList : 'null'};
 			
 			mounainList = JSON.parse(JSON.stringify(mountainList));
-			weatherList = JSON.parse(JSON.stringify(weatherList));
+			//weatherList = JSON.parse(JSON.stringify(weatherList));
 			
 			latitudes.push(latitude);
 			longitudes.push(longitude); 
@@ -239,10 +239,17 @@
 				    console.log("no, lat, lon" ,mountainNoData,mountainLatitudeData,mountainLongitudeData )
 				    
 				    
-				    let weatherList = ${weatherList != null ? weatherList : 'null'};
+				    //let weatherList = ${weatherList != null ? weatherList : 'null'};
 				    
 				    if(weatherList != 'null'){
-				    let weather = weatherList[index];
+				    console.log(weatherList);
+				    let weather;
+				    
+				    if(weatherList.length > 1){
+				    	weather = weatherList[index];
+				    }else{
+				    	weather = weatherList;
+				    }
 				    console.log(weather);
 				    let weatherIcon = getWeatherIcon(weather.skyCondition);
 				    let sunriseIcon = '<i class="bi bi-sunrise icon" style="width:20px;height:20px;"></i>';
