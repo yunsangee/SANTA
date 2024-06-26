@@ -142,6 +142,11 @@
                 alert("기존 비밀번호와 같은 비밀번호입니다.");
                 return;
             }
+            
+            if(userPassword == "kakao"){
+            	alert("소셜 로그인 회원은 비밀번호를 변경하실 수 없습니다.");
+            	return;
+            }
 
             fetch('rest/setUserPassword', {
                 method: 'POST',
