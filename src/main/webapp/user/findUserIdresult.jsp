@@ -13,14 +13,16 @@
     <style>
         body {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 80vh;
+            height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
         }
 
         main.container {
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -41,18 +43,31 @@
             margin-top: 30px;
             margin-bottom: 20px;
         }
+        
+           main.container strong {
+            color: #333;
+            font-size: 19px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
 
         main.container .link {
             display: inline-block;
-            font-size: 12px;
+            font-size: 13px;
             text-align: center;
-            margin-top: 10px;
+            margin-top: 50px;
             color: #333;
             text-decoration: none;
+            justify-content: center;
         }
 
         main.container .link:hover {
             text-decoration: underline;
+        }
+
+        footer {
+            width: 100%;
+           /*  text-align: center; */
         }
     </style>
   
@@ -69,7 +84,8 @@
     <h2>아이디 찾기 결과</h2>
     <c:choose>
         <c:when test="${not empty sessionScope.userId}">
-            <p>회원님의 아이디는: <strong>${sessionScope.userId}</strong> 입니다.</p>
+            <p>산타님의 아이디는
+            <strong>"${sessionScope.userId}"</strong> 입니다.</p>
         </c:when>
         <c:otherwise>
             <p>입력하신 정보와 일치하는 아이디가 없습니다.</p>
@@ -77,13 +93,15 @@
     </c:choose>
     
     <div>
-        <a href="/user/findUserPassword.jsp" class="link">비밀번호 찾기</a>
-        <br>
+        <a href="/user/findUserPassword.jsp" class="link">비밀번호 찾기</a>&emsp;&emsp;&emsp;
+        &emsp;
+       <!--  <br> -->
         <a href="/user/login.jsp" class="link">로그인 페이지로 이동</a>
     </div>
 </main>
 
 <footer>
+    <c:import url="../common/footer.jsp"/>
 </footer>
 
 </body>

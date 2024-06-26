@@ -20,7 +20,7 @@
         body {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+          /*   justify-content: space-between; */
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
@@ -31,36 +31,54 @@
         }
 
         main {
-            margin-top: 235px; /* Adjust this value as needed to avoid overlap */
-            margin-bottom: 215px;
+        	flex: 1;
+            margin-top: 280px; /* Adjust this value as needed to avoid overlap */
+         /*    margin-bottom: 215px; */
             padding: 20px;
             text-align: center;
             justify-content: center;
             align-items: center;
-            width: 90%;
-            max-width: 500px;
+            /* width: 90%;
+            max-width: 500px; */
         }
 
         .container h2 {
             color: #333;
             margin-top: 5px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+           /*  text-align: center; */
         }
 
         .container p {
             color: #999999;
             font-size: 13px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            /* text-align: center; */
         }
 
-        .passwordNew,
+        .passwordNew  {
+            width: 30%; 
+           /*  width: 21.8% */;
+            padding: 10px;
+            margin-bottom: 10px;
+            margin-top: 30px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            align-items: center;
+            /* margin-right: 77px; */
+        }
+        
         .checkPassword {
-            width: 30%;
+            width: 30%; 
+           /*  width: 21.8% */;
             padding: 10px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
+            align-items: center;
+            /* margin-right: 77px; */
         }
 
         .passwordNew:focus,
@@ -81,6 +99,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            /* margin-left:-70px; */
         }
 
         .submit:hover {
@@ -97,6 +116,7 @@
 
         footer {
             width: 100%;
+              margin-bottom:-249px;
         }
     </style>
 

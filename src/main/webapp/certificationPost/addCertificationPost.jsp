@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
@@ -7,7 +6,7 @@
     <c:import url="../common/header.jsp"/>
     <title>Certification Post</title>
  
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         $(document).ready(function() {
             // 파일 선택 시 파일 개수 제한
@@ -40,12 +39,17 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <h2 class="text-center">Add Certification Post</h2>
+                
+                <!-- 세션에서 user 객체를 가져와서 JSTL 변수로 설정 -->
+                <c:set var="user" value="${sessionScope.user}" />
+
+                <!-- 유저 정보 출력 -->
+                <c:if test="${user != null}">
+                    <p>Logged in as: ${user.userName} (${user.userId})</p>
+                </c:if>
+
                 <form id="certificationForm" action="/certificationPost/addCertificationPost" method="post" enctype="multipart/form-data">
                     <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="userNo">User No<sup>*</sup></label>
-                            <input type="text" class="form-control" id="userNo" name="userNo" maxlength="20" required>
-                        </div>
                         <div class="form-group col-md-6">
                             <label for="title">Title<sup>*</sup></label>
                             <input type="text" class="form-control" id="title" name="title" maxlength="50" required>
@@ -74,7 +78,7 @@
                         <div class="form-group col-md-4">
                             <label for="ascentTimeHours">Ascent Time<sup>*</sup></label>
                             <div class="d-flex">
-                                <input type="number" class="form-control mr-2" id="ascentTimeHours" name="ascentTimeHours"min=0 max=12 placeholder="시간" required>
+                                <input type="number" class="form-control mr-2" id="ascentTimeHours" name="ascentTimeHours" min=0 max=12 placeholder="시간" required>
                                 <input type="number" class="form-control" id="ascentTimeMinutes" name="ascentTimeMinutes" min=0 max=59 placeholder="분" required>
                             </div>
                         </div>
