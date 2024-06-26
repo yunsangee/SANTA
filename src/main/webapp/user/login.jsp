@@ -171,7 +171,7 @@ input[type="password"]:focus {
             },
             error: function(xhr, status, error) {
                 console.error("Logout failed:", error);
-                //window.location.href = "https://kauth.kakao.com/oauth/authorize?client_id=53ae98941fff9e24b11901e9a79432d9&redirect_uri=https://www.dearmysanta.site/oauth/kakao&response_type=code"; 
+                window.location.href = "https://kauth.kakao.com/oauth/authorize?client_id=53ae98941fff9e24b11901e9a79432d9&redirect_uri=https://www.dearmysanta.site/oauth/kakao&response_type=code"; 
             }
         });
     }
