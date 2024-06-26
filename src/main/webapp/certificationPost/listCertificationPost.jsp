@@ -227,6 +227,9 @@ $(document).ready(function() {
                     appendPostsToPage(data.list, data.certificationPostImages);
                     page++;
                 } else {
+                    if (page === 0) {
+                        showNoResultsMessage();
+                    }
                     console.log('No more posts to load.');
                 }
             },
@@ -235,6 +238,22 @@ $(document).ready(function() {
             }
         });
     }
+    function showNoResultsMessage() {
+        $('.certification-post-container').html(
+        		   '<div class="no-results" style="text-align: center; padding: 20px; margin-top: 150px;">' +
+                   '<h4>검색결과가 없습니다!</h4>' +
+                   '<div class="action-buttons" style="margin-top: 20px;">' +
+                       '<span class="btn-return-to-list" style="font-size: 18px; color: #ffb524; cursor: pointer;">' +
+                           '<i class="fas fa-arrow-circle-left"></i>  리스트로 돌아가기' +
+                       '</span>' +
+                   '</div>' +
+               '</div>'
+     );
+    }
+
+    $(document).on('click', '.btn-return-to-list', function() {
+        window.location.href = '/certificationPost/listCertificationPost'; // 리스트 페이지로 이동
+    });
 
     $('#searchForm').submit(function(event) {
         event.preventDefault();
@@ -303,7 +322,8 @@ $(document).ready(function() {
     });
    
     $(".btn-certify-hiking").click(function() {
-        alert('인증하기'); var userNo = ${user.userNo}
+        alert('인증하기'); 
+        var userNo = ${user.userNo}
         window.location.href = "/certificationPost/addCertificationPost?userNo=" + userNo;
     });
 });
