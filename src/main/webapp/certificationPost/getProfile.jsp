@@ -7,53 +7,72 @@
     <c:import url="../common/header.jsp"/>
     <title>Profile</title>
     <style>
-        main {
-            margin-top: 160px;
-            padding: 0 20px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: 30px; /* MAIN 아래에 공백 추가 */
-        }
+     html, body {
+    height: 100%;
+    margin: 0;
+}
 
-        footer {
-            background-color: #f1f1f1;
-            padding: 10px 0;
-            text-align: center;
-            margin-top: 50px; /* FOOTER 위에 공백 추가 */
-        }
-    
-        body {
-            font-family: Arial, sans-serif;
-        }
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
-        .profile-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 20px;
-            border-bottom: 1px solid #ccc;
-            font-size: 0.9em;
-        }
-        .profile-image {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            margin-right: 20px;
-        }
-        .profile-details {
-            flex-grow: 1;
-        }
-        .profile-details p {
-            margin: 5px 0;
-        }
-        
-        .follow-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-top: 10px;
-        }
+header, footer {
+    flex-shrink: 0;
+}
+
+main {
+    flex-grow: 1;
+    margin-top: 160px;
+    padding: 0 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px; /* MAIN 아래에 공백 추가 */
+}
+
+footer {
+    background-color: #f1f1f1;
+    padding: 10px 0;
+    text-align: center;
+    margin-top: 50px; /* FOOTER 위에 공백 추가 */
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.profile-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+    font-size: 0.9em;
+}
+
+.profile-image {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.profile-details {
+    flex-grow: 1;
+}
+
+.profile-details p {
+    margin: 5px 0;
+}
+
+.follow-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+}
 
 /* 팔로우 버튼 기본 스타일 */
 .follow-button {
@@ -83,50 +102,56 @@
     font-size: 1.0em; /* 아이콘 크기 조정 */
 }
 
+.tab-menu {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    border-bottom: 1px solid #ccc;
+}
 
-        .tab-menu {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
-            border-bottom: 1px solid #ccc;
-        }
-        .tab-menu a {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-            padding: 10px;
-        }
-        .tab-menu a.active {
-            border-bottom: 2px solid black;
-        }
-        .posts-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .post-preview {
-            flex: 0 1 calc(33.333% - 20px); /* 3 columns with 20px gap */
-            box-sizing: border-box;
-            height: 250px; /* Adjust height */
-            border: 1px solid #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-size: 0.9em;
-        }
-        .post-preview img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: cover;
-        }
+.tab-menu a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.tab-menu a.active {
+    border-bottom: 2px solid black;
+}
+
+.posts-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.post-preview {
+    flex: 0 1 calc(33.333% - 20px); /* 3 columns with 20px gap */
+    box-sizing: border-box;
+    height: 250px; /* Adjust height */
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.post-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
     </style>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script>
     $(document).ready(function() {
         var userNo = ${infouser.userNo}; // JSP에서 userNo 값을 가져옴
+        var loggedInUserNo = ${sessionScope.user.userNo}; // JSP에서 로그인된 사용자 번호를 가져옴
         var isFollowing = ${isFollowing}; // 서버에서 팔로우 상태를 받아옴
-        var followerUserNo = 1; // 예시로 설정한 팔로워 사용자 번호
+        var followerUserNo = loggedInUserNo; // 팔로워 사용자 번호는 로그인된 사용자 번호와 동일
 
         // 팔로우 버튼 텍스트 설정
         updateFollowButtonText(isFollowing);
@@ -150,7 +175,7 @@
             });
         });
 
-     // 팔로우 버튼 텍스트 및 스타일 업데이트 함수
+        // 팔로우 버튼 텍스트 및 스타일 업데이트 함수
         function updateFollowButtonText(isFollowing) {
             var button = $('.follow-button');
             if (isFollowing) {
@@ -160,18 +185,21 @@
             }
         }
 
-
         // 팔로워 수 업데이트 함수
         function updateFollowerCount(followerCount) {
             $('#followerCount').html('<i class="fas fa-user"></i>&ensp;<strong>팔로워 :</strong> ' + followerCount);
         }
-    
+
         // 클릭 시 Follower Count의 경로로 이동하는 이벤트 핸들러
         $('#followerCount').click(function() {
-            window.location.href = "/certificationPost/listFollower?userNo=" + userNo;
+            if (userNo === loggedInUserNo) {
+                window.location.href = "/certificationPost/listFollower?userNo=" + userNo;
+            }
         });
         $('#followingCount').click(function() {
-            window.location.href = "/certificationPost/listFollowing?userNo=" + userNo;
+            if (userNo === loggedInUserNo) {
+                window.location.href = "/certificationPost/listFollowing?userNo=" + userNo;
+            }
         });
 
         // 내 인증 탭을 클릭했을 때 호출되는 함수
@@ -263,19 +291,17 @@
     <main>
         <div class="container">
             <div class="profile-container">
-                <img class="profile-image" src="${infouser.profileImage}" alt="Profile Image"/>
+                <img class="profile-image" src="${sessionScope.user.profileImage}" alt="Profile Image"/> <!-- 프로필사진 -->
                 <div class="profile-details">
                     <p><strong>닉네임:</strong> ${infouser.nickName} <i class="fas fa-flag"></i></p><!-- 뱃지이미지 들어가야함 -->
-                    <p><strong>한줄소개:</strong>${infouser.introduceContent}</p>
-                 <div class="follow-info">
-					    <p id="followingCount"><i class="fas fa-user"></i>&ensp;<strong>팔로잉 :</strong> ${followingCount}</p>
-					    <span class="separator">•</span>
-					    <p id="followerCount"><i class="fas fa-user"></i>&ensp;<strong>팔로워 :</strong> ${followerCount}</p>
-					    <c:if test="${loggedInUserNo != infouser.userNo}"> <!-- 유저로그인정보 받아와야함 -->
-					        <button class="follow-button btn btn-secondary">팔로우하기</button>
-					    </c:if>
-					</div>
-
+                    <p><strong>한줄소개:</strong>${infouser.introduceContent}</p>      
+                    <div class="follow-info">
+                        <p id="followingCount" class="${sessionScope.user.userNo != infouser.userNo ? 'disabled' : ''}"><i class="fas fa-user"></i>&ensp;<strong>팔로잉 :</strong> ${followingCount}</p>
+                        <span class="separator">•</span>
+                        <p id="followerCount" class="${sessionScope.user.userNo != infouser.userNo ? 'disabled' : ''}"><i class="fas fa-user"></i>&ensp;<strong>팔로워 :</strong> ${followerCount}</p>
+                        <c:if test="${sessionScope.user.userNo != infouser.userNo}">
+                            <button class="follow-button btn btn-secondary">팔로우하기</button>
+                        </c:if>
                     </div>
                 </div>
             </div>

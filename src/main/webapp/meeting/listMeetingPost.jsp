@@ -15,14 +15,13 @@
 	        $("#searchForm").attr("method" , "POST").attr("action", "/meeting/getMeetingPostList").submit();
 	    }
 		
-
-	
 	    function goToPage(pageNumber) {
 	        var form = document.getElementById('searchForm');
 	        var currentPageInput = document.getElementById('currentPage');
 	        currentPageInput.value = pageNumber;
 	        form.submit();
 	    }
+	    
     
 	    $(function() {
 	
@@ -36,16 +35,19 @@
 	        
 	        
 	        $('#titleOption').click(function() {
+	        	event.preventDefault();
                 $('#searchCondition').val(0);
                 $('#dropdownMenuButton').text('제목');
             });
 
             $('#contentOption').click(function() {
+            	event.preventDefault();
                 $('#searchCondition').val(1);
                 $('#dropdownMenuButton').text('내용');
             });
 
             $('#nicknameOption').click(function() {
+            	event.preventDefault();
                 $('#searchCondition').val(2);
                 $('#dropdownMenuButton').text('닉네임');
             });
@@ -85,6 +87,28 @@
                 fncGetList(1);
             });
             
+            $('#writePostButton').click(function() {
+            	self.location = "/meeting/addMeetingPost";
+            })
+            
+            $("div.previous").on("click", function() {
+				
+				if ($(this).attr("class") == "previous disabled") {
+					return;
+				} else {
+					fncGetList(${ resultPage.beginUnitPage-1});
+				}
+			})
+			
+			$("div.next").on("click", function() {
+				
+				if ($(this).attr("class") == "next disabled") {
+					return;
+				} else {
+					fncGetList(${resultPage.endUnitPage+1})
+				}
+			})
+            
             
 	    });
 	    
@@ -105,6 +129,17 @@
             color: white;
         }
         .pagination a:hover:not(.active) {background-color: #ddd;}
+        
+        .active> a {
+        	background-color: #81c408 !important;
+        }
+        
+        .disabled {
+		    pointer-events: none;
+		    cursor: not-allowed;
+		    opacity: 0.5;
+		}
+		
     </style>
     
 </head>
@@ -118,7 +153,7 @@
     	
     	<div class="container-fluid py-5">
     		<div class="container py-5">
-    			<div class="row g-4 mb-5">
+    			<div class="row g-4 mb-2">
     			
 	    			<form id="searchForm">
 	    			
@@ -242,21 +277,72 @@
 		    		</div> <!-- table-responsive -->
 		    		
 		    	</div> <!-- row g-4 mb-5 -->
+		    	
+		    	<div class="row g-4 mb-5">
+		    		<div class="d-flex justify-content-end">
+		    			<button class="btn btn-primary py-2 px-4 text-white" id="writePostButton">글쓰기</button>
+		    		</div>
+		    	</div> <!-- row g-4 mb-5 -->
+		    	
+		    	<div class="row g-4">
+		    		<div class="pagination d-flex justify-content-center">
+		    		
+		    			<c:if test="${ resultPage.currentPage <= resultPage.pageUnit }">
+					 		<div class="previous disabled">
+						</c:if>
+						<c:if test="${ resultPage.currentPage > resultPage.pageUnit }">
+							<div class="previous">
+						</c:if>
+								<a href="#" aria-label="Previous" class="rounded">
+							        <span aria-hidden="true">
+							        	&laquo;
+							        </span>
+							    </a>
+						    </div>
+		    			
+		    			<c:forEach var="i"  begin="${resultPage.beginUnitPage}" end="${resultPage.endUnitPage}" step="1">
+				
+							<c:if test="${ resultPage.currentPage == i }">
+								<!--  현재 page 가르킬경우 : active -->
+							    <div class="active">
+							    	<a href="javascript:fncGetList('${ i }');" class="rounded">
+							    		${ i }
+							    		<span class="sr-only">
+							    			(current)
+							    		</span>
+							    	</a>
+							    </div>
+							</c:if>	
+							
+							<c:if test="${ resultPage.currentPage != i}">	
+								<div>
+									<a href="javascript:fncGetList('${ i }');" class="rounded">
+										${ i }
+									</a>
+								</div>
+							</c:if>
+							
+						</c:forEach>
+						
+						<c:if test="${ resultPage.endUnitPage >= resultPage.maxPage }">
+					  		<div class="next disabled">
+						</c:if>
+						<c:if test="${ resultPage.endUnitPage < resultPage.maxPage }">
+							<div class ="next">
+						</c:if>
+					    		<a href="#" aria-label="Next" class="rounded">
+					        		<span aria-hidden="true">
+					        			&raquo;
+					        		</span>
+					    		</a>
+					    	</div>
+						</div>
+		    			
+		    		</div>
+		    	</div>
+		    	
 	    	</div> <!-- container py-5 -->
 	    </div> <!-- container-fluid py-5 -->
-	
-	
-	    <div class="pagination">
-	        <c:if test="${resultPage.maxPage > 1}">
-	            <c:forEach begin="1" end="${resultPage.maxPage}" var="i">
-	                <a href="javascript:fncGetList(${i})" class="${resultPage.currentPage == i ? 'active' : ''}">${i}</a>
-	            </c:forEach>
-	        </c:if>
-	    </div>
-	
-	    <form action="/meeting/addMeetingPost" method="get">
-	        <button type="submit">글쓰기</button>
-	    </form>
     
     </main>
     <footer><c:import url="../common/footer.jsp"/></footer>

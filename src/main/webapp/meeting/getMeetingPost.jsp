@@ -25,6 +25,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script type = "text/javascript">
+    	
+    	var userNo = "${sessionScope.user.userNo}";
+    
 	    $(function() {
 	    	
 	    	$('#deletePostButton').on('click', function() {
@@ -49,7 +52,7 @@
 
 	            $.ajax({
 	            	
-	                url: 'http://127.0.0.1:8001/meeting/rest/updateMeetingPostLikeStatus',
+	                url: '/meeting/rest/updateMeetingPostLikeStatus',
 	                type: 'GET',
 	                dataType: 'text',
 	                data: {
@@ -99,7 +102,7 @@
 
 	            $.ajax({
 	            	
-	                url: 'http://127.0.0.1:8001/meeting/rest/updateMeetingPostRecruitmentStatus',
+	                url: '/meeting/rest/updateMeetingPostRecruitmentStatus',
 	                type: 'GET',
 	                dataType: 'text',
 	                data: {
@@ -137,42 +140,158 @@
 	            });
 	        });
 	    	
-	    	$('.add-participation-button').on('click', function() {
+	    	$(document).on('click', '.update-recruitment-status-end', function() {
+	    	    var $this = $(this);  // 현재 클릭된 요소를 $this 변수에 저장
+	    	    var postNo = $this.data('post-no');  // 데이터 속성을 사용하여 postNo를 가져옴
+
+	    	    $.ajax({
+	    	        url: '/meeting/rest/updateMeetingPostRecruitmentStatusToEnd',
+	    	        type: 'GET',
+	    	        dataType: 'text',
+	    	        data: {
+	    	            postNo: postNo,
+	    	        },
+	    	        success: function(response, textStatus, xhr) {
+	    	            console.log('Response:', response); // 응답 출력
+	    	            console.log('Status:', xhr.status); // 상태 코드 출력
+
+	    	            // 상태 코드가 200인 경우 성공으로 간주
+	    	            if (xhr.status === 200) {
+	    	                console.log('Recruitment status updated to end successfully');
+
+	    	                // 버튼을 "종료됨" 버튼으로 변경
+	    	                $('#updatePostButton').replaceWith('<button class="btn btn-primary border-0 rounded text-white end">종료됨</button>');
+
+	    	                // "모집 마감하기" 및 "모임 종료하기" 버튼 제거
+	    	                $('.update-recruitment-status').remove();
+	    	                $('.update-recruitment-status-end').remove();
+	    	            } else {
+	    	                console.log('Failed to update recruitment status');
+	    	            }
+	    	        },
+	    	        error: function(xhr, status, error) {
+	    	            console.error('AJAX Error:', status, error);
+	    	        }
+	    	    });
+	    	});
+	    	
+	    	$(document).on('click', '.add-participation-button', function() {
 	    		
-	            var $this = $(this);
-	            var postNo = $this.data('post-no');
-	            var userNo = $this.data('user-no');
+	    		var $this = $(this);
+	    	    var postNo = $this.data('post-no');
+	    	    var userNo = $this.data('user-no');
 
-	            $.ajax({
-	            	
-	                url: 'http://127.0.0.1:8001/meeting/rest/addMeetingParticipation',
-	                type: 'GET',
-	                dataType: 'json',
-	                data: {
-	                	
-	                    postNo: postNo,
-	                    userNo: userNo,
-	                    participationStatus: 0,
-	                    participationRole: 1
-	                },
-	                success: function(response, textStatus, xhr) {
-	                	
-	                    console.log('Response:', response);
-	                    console.log('Status:', xhr.status);
+	    	    $.ajax({
+	    	    	
+	    	        url: '/meeting/rest/addMeetingParticipation',
+	    	        type: 'GET',
+	    	        dataType: 'text',
+	    	        data: {
+	    	        	
+	    	            postNo: postNo,
+	    	            userNo: userNo,
+	    	            participationStatus: 0,
+	    	            participationRole: 1
+	    	        },
+	    	        success: function(response, textStatus, xhr) {
+	    	        	
+	    	            console.log('Response:', response);
+	    	            console.log('Status:', xhr.status);
 
-	                    if (xhr.status === 200) {
-	                    	
-	                        console.log('Participation added successfully');
-	                    } else {
-	                    	
-	                        console.log('Failed to add participation');
-	                    }
-	                },
-	                error: function(xhr, status, error) {
-	                	
-	                    console.error('AJAX Error:', status, error);
-	                }
-	            });
+	    	            if (xhr.status === 200) {
+	    	            	
+	    	                console.log('Participation added successfully');
+
+	    	                // 버튼을 "신청 취소하기" 버튼으로 변경
+	    	                $this.replaceWith('<button class="btn btn-primary border-0 rounded text-white px-4 py-3 delete-participation-button" data-post-no="' + postNo + '" data-user-no="' + userNo + '">신청 취소하기</button>');
+	    	            } else {
+	    	            	
+	    	                console.log('Failed to add participation');
+	    	            }
+	    	        },
+	    	        error: function(xhr, status, error) {
+	    	        	
+	    	            console.error('AJAX Error:', status, error);
+	    	        }
+	    	    });
+	        });
+	    	
+	    	$(document).on('click', '.delete-participation-button', function() {
+	    		
+				var $this = $(this);
+			    var postNo = $this.data('post-no');
+			    var userNo = $this.data('user-no');
+
+			    $.ajax({
+			    	
+			        url: '/meeting/rest/deleteMeetingParticipation',
+			        type: 'GET',
+			        dataType: 'text',
+			        data: {
+			        	
+			            postNo: postNo,
+			            userNo: userNo
+			        },
+			        success: function(response, textStatus, xhr) {
+			        	
+			            console.log('Response:', response);
+			            console.log('Status:', xhr.status);
+
+			            if (xhr.status === 200) {
+			            	
+			                console.log('Participation deleted successfully');
+
+			                // 버튼을 "신청하기" 버튼으로 변경
+			                $this.replaceWith('<button class="btn btn-primary border-0 rounded text-white px-4 py-3 add-participation-button" data-post-no="' + postNo + '" data-user-no="' + userNo + '">신청하기</button>');
+			            } else {
+			            	
+			                console.log('Failed to delete participation');
+			            }
+			        },
+			        error: function(xhr, status, error) {
+			        	
+			            console.error('AJAX Error:', status, error);
+			        }
+			    });
+	        });
+	    	
+			$(document).on('click', '.withdraw-button', function() {
+	    		
+				var $this = $(this);
+			    var postNo = $this.data('post-no');
+			    var userNo = $this.data('user-no');
+
+			    $.ajax({
+			    	
+			        url: '/meeting/rest/updateMeetingParticipationWithdrawStatus',
+			        type: 'GET',
+			        dataType: 'text',
+			        data: {
+			        	
+			            postNo: postNo,
+			            userNo: userNo
+			        },
+			        success: function(response, textStatus, xhr) {
+			        	
+			            console.log('Response:', response);
+			            console.log('Status:', xhr.status);
+
+			            if (xhr.status === 200) {
+			            	
+			                console.log('Participation deleted successfully');
+
+			                // 버튼을 "신청하기" 버튼으로 변경
+			                $this.replaceWith('<button class="btn btn-primary border-0 rounded text-white px-4 py-3 add-participation-button" data-post-no="' + postNo + '" data-user-no="' + userNo + '">신청하기</button>');
+			            } else {
+			            	
+			                console.log('Failed to delete participation');
+			            }
+			        },
+			        error: function(xhr, status, error) {
+			        	
+			            console.error('AJAX Error:', status, error);
+			        }
+			    });
 	        });
 	    	
 	    	$(document).on('click', '.update-participation-button', function() {
@@ -183,12 +302,10 @@
 	    	    var userNo = $this.data('user-no');
 	    	    
 	    	    console.log('Participation No:', participationNo);
-	    	    console.log('Post No:', postNo);
-	    	    console.log('User No:', userNo);
-
+	    	    
 	    	    $.ajax({
 	    	    	
-	    	        url: 'http://127.0.0.1:8001/meeting/rest/updateMeetingParticipationStatus',
+	    	        url: '/meeting/rest/updateMeetingParticipationStatus',
 	    	        type: 'GET',
 	    	        dataType: 'json',
 	    	        data: {
@@ -220,16 +337,18 @@
 	    	$('.reject-participation-button').on('click', function() {
 	    		
 	            var $this = $(this);
-	            var participationNo = $this.data('participation-no');
+	            var postNo = $this.data('post-no');
+	    	    var userNo = $this.data('user-no');
 
 	            $.ajax({
 	            	
-	                url: 'http://127.0.0.1:8001/meeting/rest/deleteMeetingParticipation',
+	                url: '/meeting/rest/deleteMeetingParticipation',
 	                type: 'GET',
 	                dataType: 'text',
 	                data: {
 	                	
-	                    participationNo: participationNo
+	                	postNo: postNo,
+	    	            userNo: userNo
 	                },
 	                success: function(response, textStatus, xhr) {
 	                	
@@ -260,7 +379,7 @@
 
 	    	    $.ajax({
 	    	    	
-	    	        url: 'http://127.0.0.1:8001/meeting/rest/updateMeetingParticipationWithdrawStatus',
+	    	        url: '/meeting/rest/updateMeetingParticipationWithdrawStatus',
 	    	        type: 'GET',
 	    	        dataType: 'text',
 	    	        data: {
@@ -304,7 +423,7 @@
 
 	    	        $.ajax({
 	    	        	
-	    	            url: 'http://127.0.0.1:8001/meeting/rest/addMeetingPostComment',
+	    	            url: '/meeting/rest/addMeetingPostComment',
 	    	            type: 'POST',
 	    	            contentType: 'application/json',
 	    	            dataType: 'json',
@@ -323,35 +442,32 @@
 	    	                    console.log('Comment added successfully');
 
 	    	                    // 날짜 포맷팅
-	    	                    var formattedDate = new Intl.DateTimeFormat('ko-KR', {
-	    	                    	
-	    	                        year: 'numeric',
-	    	                        month: '2-digit',
-	    	                        day: '2-digit',
-	    	                        hour: '2-digit',
-	    	                        minute: '2-digit'
-	    	                    }).format(new Date(response.meetingPostCommentCreationDate));
+	    	                    var date = new Date(response.meetingPostCommentCreationDate);
 
-	    	                    var newCommentHtml = '<tr><td colspan="3" class="p-0">' +
-	    	                        '<div class="d-flex align-items-center justify-content-between" style="border-bottom: 1px solid #ddd;">' +
-	    	                        '<div class="d-flex align-items-center" style="min-width: 200px; border-right: 1px solid #ddd; padding: 10px;">' +
-	    	                        '<div class="d-flex align-items-center">' +
-	    	                        '<img src="' + response.profileImage + '" alt="Image" class="me-2" style="width: 40px; height: 40px; border-radius: 50%;">' +
-	    	                        '<p class="mb-0">' + response.nickname + '</p>' +
-	    	                        '</div>' +
-	    	                        '<c:if test="${sessionScope.user.userNo == response.userNo}">' +
-	    	                        '<button class="btn p-0" style="line-height: 0;"><i class="bi bi-x" style="font-size: 24px; color: red;"></i></button>' +
-	    	                        '</c:if>' +
-	    	                        '</div>' +
-	    	                        '<div class="d-flex align-items-center flex-grow-1" style="border-right: 1px solid #ddd; padding: 10px;">' +
-	    	                        '<p class="mb-0">' + response.meetingPostCommentContents + '</p>' +
-	    	                        '</div>' +
-	    	                        '<div class="d-flex align-items-center" style="min-width: 150px; padding: 10px;">' +
-	    	                        '<p class="mb-0">' + formattedDate + '</p>' +
-	    	                        '</div>' +
-	    	                        '</div></td></tr>';
+								var formattedDate = date.getFullYear() + '-' +
+								    ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+								    ('0' + date.getDate()).slice(-2) + ' ' +
+								    ('0' + date.getHours()).slice(-2) + ':' +
+								    ('0' + date.getMinutes()).slice(-2);
 
-	    	                    $('.table-responsive tbody').append(newCommentHtml);
+								    var newCommentHtml = '<tr><td colspan="3" class="p-0">' +
+			                        '<div class="d-flex align-items-center justify-content-between" style="border-bottom: 1px solid #ddd;">' +
+			                        '<div class="d-flex align-items-center justify-content-between" style="min-width: 200px; border-right: 1px solid #ddd; padding: 10px;">' +
+			                        '<div class="d-flex align-items-center">' +
+			                        '<img src="' + response.profileImage + '" alt="Image" class="me-2" style="width: 40px; height: 40px; border-radius: 50%;">' +
+			                        '<p class="mb-0">' + response.nickname + '</p>' +
+			                        '</div>' +
+			                        (userNo == response.userNo ? '<button class="btn p-0 delete-comment-button" data-comment-no="' + response.meetingPostCommentNo + '" style="line-height: 0;"><i class="bi bi-x" style="font-size: 24px; color: red;"></i></button>' : '') +
+			                        '</div>' +
+			                        '<div class="d-flex align-items-center flex-grow-1" style="border-right: 1px solid #ddd; padding: 10px;">' +
+			                        '<p class="mb-0">' + response.meetingPostCommentContents + '</p>' +
+			                        '</div>' +
+			                        '<div class="d-flex align-items-center" style="min-width: 150px; padding: 10px;">' +
+			                        '<p class="mb-0">' + formattedDate + '</p>' +
+			                        '</div>' +
+			                        '</div></td></tr>';
+
+	    	                    $('.comment-table tbody').append(newCommentHtml);
 	    	                    $('.comment-box').val(''); // 댓글 입력 창 비우기
 	    	                } else {
 	    	                	
@@ -375,7 +491,7 @@
 
 	            $.ajax({
 	            	
-	                url: 'http://127.0.0.1:8001/meeting/rest/deleteMeetingPostComment',
+	                url: '/meeting/rest/deleteMeetingPostComment',
 	                type: 'GET',
 	                dataType: 'text',
 	                data: {
@@ -541,6 +657,11 @@
     				
     					<%-- 게시글 작성자가 아닌 경우 --%>
 					    <c:if test="${sessionScope.user.userNo != meetingPost.userNo}">
+					    	
+					    	<!-- sessionScope.user.userNo 값 출력 -->
+						    <c:out value="${sessionScope.user.userNo}" />
+						    <!-- meetingPost.userNo 값 출력 -->
+						    <c:out value="${meetingPost.userNo}" />
 					    
 					        <c:choose>
 					            <c:when test="${meetingPost.recruitmentStatus != 2}">
@@ -553,14 +674,16 @@
 					                    </c:when>
 					                    <c:when test="${isMember == 1}">
 					                        <%-- 게시글 작성자가 아니고 모임 끝 상태가 아니며 isMember가 1인 경우 --%>
-					                        <button class="btn btn-primary border-0 rounded text-white px-4 py-3">신청 취소하기</button>
+					                        <button class="btn btn-primary border-0 rounded text-white px-4 py-3 delete-participation-button"
+					                        data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}">신청 취소하기</button>
 					                    </c:when>
 					                </c:choose>
 					                
 					            </c:when>
 					            <c:when test="${isMember == 2}">
 					                <%-- 게시글 작성자가 아니고 isMember가 2인 경우 --%>
-					                <button class="btn btn-primary border-0 rounded text-white px-4 py-3">모임 탈퇴하기</button>
+					                <button class="btn btn-primary border-0 rounded text-white px-4 py-3 withdraw-button" 
+					                data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}">모임 탈퇴하기</button>
 					            </c:when>
 					        </c:choose>
 					        
@@ -568,19 +691,25 @@
 					
 					    <%-- 게시글 작성자인 경우 --%>
 					    <c:if test="${sessionScope.user.userNo == meetingPost.userNo}">
+					    	<!-- sessionScope.user.userNo 값 출력 -->
+						    <c:out value="${sessionScope.user.userNo}" />
+						    <!-- meetingPost.userNo 값 출력 -->
+						    <c:out value="${meetingPost.userNo}" />
 					    
 					        <c:choose>
 					            <c:when test="${meetingPost.recruitmentStatus == 0}">
 					                <%-- 게시글 작성자이며 모집 상태가 0인 경우 --%>
 					                <button class="btn btn-primary border-0 rounded text-white me-1 px-4 py-3 update-recruitment-status"
             							data-post-no="${meetingPost.postNo}" data-current-status="0">모집 마감하기</button>
-					                <button class="btn btn-primary border-0 rounded text-white px-4 py-3">모임 종료하기</button>
+					                <button class="btn btn-primary border-0 rounded text-white px-4 py-3 update-recruitment-status-end"
+					                	data-post-no="${meetingPost.postNo}">모임 종료하기</button>
 					            </c:when>
 					            <c:when test="${meetingPost.recruitmentStatus == 1}">
 					                <%-- 게시글 작성자이며 모집 상태가 1인 경우 --%>
 					                <button class="btn btn-primary border-0 rounded text-white me-1 px-4 py-3 update-recruitment-status"
             							data-post-no="${meetingPost.postNo}" data-current-status="1">모집 마감 취소하기</button>
-					                <button class="btn btn-primary border-0 rounded text-white px-4 py-3">모임 종료하기</button>
+					                <button class="btn btn-primary border-0 rounded text-white px-4 py-3 update-recruitment-status-end"
+					                	data-post-no="${meetingPost.postNo}">모임 종료하기</button>
 					            </c:when>
 					            <%-- 모집 상태가 2인 경우 아무 버튼도 표시되지 않음 --%>
 					        </c:choose>
@@ -594,45 +723,62 @@
 				<button class="btn btn-primary py-2 px-4 text-white">모임원들</button>
 				        
     			<div class="row g-4 mb-5">
-    				<div class="table-responsive">
+    				<div class="table-responsive participation-table">
 		    			<table class="table border-top">
 		    				<thead>
 		    				
 		    				</thead>
 		    				<tbody>
 		    					<c:forEach var="participation" items="${meetingParticipations}">
-								    <tr>
-								        <td class="pb-3 pt-3">
-								        
-								            <div class="d-flex justify-content-between align-items-center w-100">
-								            
-								                <div class="d-flex align-items-center">
-								                    <img src="${participation.profileImage}" alt="Image" class="me-2" style="width: 40px; height: 40px; border-radius: 50%;">
-								                    <p class="mb-0">${participation.nickname}</p>
-								                </div>
-								                
-								                <div class="d-flex align-items-center">
-								                    <c:if test="${sessionScope.user.userNo == meetingPost.userNo}">
-								                        <c:if test="${participation.userNo != sessionScope.user.userNo}">
-								                            <c:if test="${participation.participationStatus == 0}">
-								                                <button class='btn p-0 update-participation-button' data-participation-no="${participation.participationNo}" 
-								                                data-post-no="${meetingPost.postNo}" data-user-no="${participation.userNo}" style="line-height: 0;"><i class='bi bi-check' style='font-size: 32px; color: green;'></i>
-								                                <button class='btn p-0 reject-participation-button' data-participation-no="${participation.participationNo}" 
-								                                style="line-height: 0;"><i class='bi bi-x' style='font-size: 32px; color: red;'></i>
-								                            </c:if>
-								                            <c:if test="${participation.participationRole == 2}">
-								                                <button class="btn btn-primary border-0 rounded text-white forced-withdraw-button"data-post-no="${meetingPost.postNo}" 
-								                                data-user-no="${participation.userNo}">내보내기</button>
-								                            </c:if>
-								                        </c:if>
-								                    </c:if>
-								                </div>
-								                
-								            </div>
-								            
-								        </td>
-								    </tr>
-								</c:forEach>
+					                <c:choose>
+					                    
+					                    <c:when test="${sessionScope.user.userNo == meetingPost.userNo}">
+					                        <tr>
+					                            <td class="pb-3 pt-3">
+					                                <div class="d-flex justify-content-between align-items-center w-100">
+					                                    <div class="d-flex align-items-center">
+					                                        <img src="${participation.profileImage}" alt="Image" class="me-2" style="width: 40px; height: 40px; border-radius: 50%;">
+					                                        <p class="mb-0">${participation.nickname}</p>
+					                                    </div>
+					                                    <div class="d-flex align-items-center">
+					                                        <c:if test="${participation.userNo != sessionScope.user.userNo}">
+					                                            <c:if test="${participation.participationStatus == 0}">
+					                                                <button class='btn p-0 update-participation-button' data-participation-no="${participation.participationNo}" 
+					                                                data-post-no="${meetingPost.postNo}" data-user-no="${participation.userNo}" style="line-height: 0;">
+					                                                    <i class='bi bi-check' style='font-size: 32px; color: green;'></i>
+					                                                </button>
+					                                                <button class='btn p-0 reject-participation-button' data-post-no="${meetingPost.postNo}" data-user-no="${participation.userNo}" 
+					                                                style="line-height: 0;">
+					                                                    <i class='bi bi-x' style='font-size: 32px; color: red;'></i>
+					                                                </button>
+					                                            </c:if>
+					                                            <c:if test="${participation.participationRole == 2}">
+					                                                <button class="btn btn-primary border-0 rounded text-white forced-withdraw-button" data-post-no="${meetingPost.postNo}" 
+					                                                data-user-no="${participation.userNo}">내보내기</button>
+					                                            </c:if>
+					                                        </c:if>
+					                                    </div>
+					                                </div>
+					                            </td>
+					                        </tr>
+					                    </c:when>
+					                    
+					                    <c:otherwise>
+					                        <c:if test="${participation.participationStatus != 0}">
+					                            <tr>
+					                                <td class="pb-3 pt-3">
+					                                    <div class="d-flex justify-content-between align-items-center w-100">
+					                                        <div class="d-flex align-items-center">
+					                                            <img src="${participation.profileImage}" alt="Image" class="me-2" style="width: 40px; height: 40px; border-radius: 50%;">
+					                                            <p class="mb-0">${participation.nickname}</p>
+					                                        </div>
+					                                    </div>
+					                                </td>
+					                            </tr>
+					                        </c:if>
+					                    </c:otherwise>
+					                </c:choose>
+					            </c:forEach>
 
 		    				</tbody>
 		    			</table>
@@ -653,7 +799,7 @@
     			<button class="btn btn-primary py-2 px-4 text-white">댓글 (${meetingPost.meetingPostCommentCount})</button>
     			
     			<div class="row g-4 mb-5">
-    				<div class="table-responsive">
+    				<div class="table-responsive comment-table">
 		    			<table class="table border-top">
 		    				<thead>
 		    				
@@ -693,19 +839,6 @@
     			
     		</div>
     	</div>
-
-	    
-	    <!-- Update Meeting Post Button -->
-	    <form action="/meeting/updateMeetingPost" method="get">
-	        <input type="hidden" name="postNo" value="${meetingPost.postNo}"/>
-	        <button type="submit">Update Meeting Post</button>
-	    </form>
-	
-	    <!-- Delete Meeting Post Button -->
-	    <form action="/meeting/deleteMeetingPost" method="get" style="margin-top: 20px;">
-	        <input type="hidden" name="postNo" value="${meetingPost.postNo}"/>
-	        <button type="submit">Delete Meeting Post</button>
-	    </form>
     
     </main>
     <footer><c:import url="../common/footer.jsp"/></footer>

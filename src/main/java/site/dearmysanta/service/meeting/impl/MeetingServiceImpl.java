@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -72,8 +73,28 @@ public class MeetingServiceImpl implements MeetingService {
 //		meetingDAO.insertPostImage(meetingPost);
 //	}
 	
-	public void updateMeetingPost(MeetingPost meetingPost) throws Exception {
+	public void updateMeetingPost(MeetingPost meetingPost, List<String> updateImageURL) throws Exception {
 		
+		String appointedDetailDeparture = meetingPost.getAppointedDetailDeparture();		
+		String appointedDeparture = meetingPost.getAppointedDeparture()+ "/" +appointedDetailDeparture;
+		
+		int appendImageCount = 0;
+		
+		meetingPost.setAppointedDeparture(appointedDeparture);
+		
+		if (meetingPost.getMeetingPostImage() != null) {
+	        List<MultipartFile> images = meetingPost.getMeetingPostImage().stream()
+	            .filter(image -> !image.isEmpty())
+	            .collect(Collectors.toList());
+	        
+	        appendImageCount = images.size();
+		}
+
+		
+		System.out.println("새로들어갈 imageCount : "+ (updateImageURL.size() + appendImageCount));
+		
+		meetingPost.setMeetingPostImageCount(updateImageURL.size() + appendImageCount);
+        
 		meetingDAO.updateMeetingPost(meetingPost);
 	}
 	
@@ -229,9 +250,9 @@ public class MeetingServiceImpl implements MeetingService {
 		return participationNo;
 	}
 	
-	public void deleteMeetingParticipation(int participationNo) throws Exception {
+	public void deleteMeetingParticipation(MeetingParticipation meetingParticipation) throws Exception {
 		
-		meetingDAO.deleteMeetingParticipation(participationNo);
+		meetingDAO.deleteMeetingParticipation(meetingParticipation);
 	}
 	
 	public void updateMeetingParticipationStatus(int participationNo) throws Exception {

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -64,16 +65,16 @@ public class CertificationPostRestController {
     @PostMapping(value = "rest/listCertificationPost")
     public Map<String, Object> listCertificationPost(
         @RequestBody Search search) throws Exception {
-        
+    	System.out.println("search" +search ) ;
         if (search == null) {
-            search = new Search(); // ±âº» °Ë»ö Á¶°Ç ¼³Á¤ ¶Ç´Â Ã³¸®
+            search = new Search(); // ê¸°ë³¸ ê²€ìƒ‰ ì¡°ê±´ ì„¤ì • ë˜ëŠ” ì²˜ë¦¬
         }
         
         if (search.getSearchKeyword() == null) {
-            search.setSearchKeyword(""); // °Ë»ö¾î°¡ nullÀÎ °æ¿ì ºó ¹®ÀÚ¿­·Î ¼³Á¤
+            search.setSearchKeyword(""); // ê²€ìƒ‰ì–´ê°€ nullì¸ ê²½ìš° ë¹ˆ ë¬¸ìì—´ë¡œ ì„¤ì •
         }
 
-        // ÆäÀÌÁö³×ÀÌ¼Ç ÆÄ¶ó¹ÌÅÍ ¼³Á¤
+        // í˜ì´ì§€ë„¤ì´ì…˜ íŒŒë¼ë¯¸í„° ì„¤ì •
         int currentPage = search.getCurrentPage();
         int pageSize = search.getPageSize();
         search.setCurrentPage(currentPage);
@@ -83,12 +84,12 @@ public class CertificationPostRestController {
         List<CertificationPost> certificationPostList = (List<CertificationPost>) result.get("list");
         List<String> certificationPostImages = new ArrayList<>();
         for (CertificationPost certificationPost : certificationPostList) {
-            String fileName = certificationPost.getPostNo() + "_0_1"; // Ã¹ ¹øÂ° »çÁø ÆÄÀÏ¸í
+            String fileName = certificationPost.getPostNo() + "_0_1"; // ì²« ë²ˆì§¸ ì‚¬ì§„ íŒŒì¼ëª…
             String imageURL = objectStorageService.getImageURL(fileName);
             certificationPostImages.add(imageURL);
         }
-
-        // Å¬¶óÀÌ¾ğÆ®·Î Àü¼ÛÇÒ °á°ú¿¡ ÀÌ¹ÌÁö URL Ãß°¡
+        System.out.println("rest certificationPostList  " + certificationPostList );
+        // í´ë¼ì´ì–¸íŠ¸ë¡œ ì „ì†¡í•  ê²°ê³¼ì— ì´ë¯¸ì§€ URL ì¶”ê°€
         result.put("certificationPostImages", certificationPostImages);
 
         return result;
@@ -104,12 +105,12 @@ public class CertificationPostRestController {
     public Map<String, Object> listMyCertificationPost(@RequestParam int userNo) throws Exception {
         List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
         
-        System.out.println("³» ÀÎÁõ °Ô½Ã¹°: " + myCertificationPost);
+        System.out.println("ë‚´ ì¸ì¦ ê²Œì‹œë¬¼: " + myCertificationPost);
         
         int postType = 0;
         List<String> certificationPostImages = new ArrayList<>();
         for (CertificationPost certificationPost : myCertificationPost) {
-            String fileName = certificationPost.getPostNo() + "_" + postType + "_1"; // Ã¹ ¹øÂ° »çÁø ÆÄÀÏ¸í
+            String fileName = certificationPost.getPostNo() + "_" + postType + "_1"; // ì²« ë²ˆì§¸ ì‚¬ì§„ íŒŒì¼ëª…
             String imageURL = objectStorageService.getImageURL(fileName);
             certificationPostImages.add(imageURL);
         }
@@ -118,7 +119,7 @@ public class CertificationPostRestController {
         response.put("certificationPostList", myCertificationPost);
         response.put("certificationPostImages", certificationPostImages);
         
-        System.out.println("ÀÌ¹ÌÁö: " + certificationPostImages);
+        System.out.println("ì´ë¯¸ì§€: " + certificationPostImages);
         
         return response;
     }
@@ -144,16 +145,16 @@ public class CertificationPostRestController {
 
         return result;
     }
-    
+
     @PostMapping(value = "rest/getCertificationPostLikeList")
     public Map<String, Object> getCertificationPostLikeList(@RequestParam int userNo) throws Exception {
         List<CertificationPost> getCertificationPostLikeList = certificationPostService.getCertificationPostLikeList(userNo);
-        System.out.println("ÁÁ¾Æ¿äÇÑ °Ô½Ã¹°: " + getCertificationPostLikeList);
+        System.out.println("ì¢‹ì•„ìš”í•œ ê²Œì‹œë¬¼: " + getCertificationPostLikeList);
 
         int postType = 0;
         List<String> certificationPostImages = new ArrayList<>();
         for (CertificationPost certificationPost : getCertificationPostLikeList) {
-            String fileName = certificationPost.getPostNo() + "_" + postType + "_1"; // Ã¹ ¹øÂ° »çÁø ÆÄÀÏ¸í
+            String fileName = certificationPost.getPostNo() + "_" + postType + "_1"; // ì²« ë²ˆì§¸ ì‚¬ì§„ íŒŒì¼ëª…
             String imageURL = objectStorageService.getImageURL(fileName);
             certificationPostImages.add(imageURL);
         }
@@ -162,7 +163,7 @@ public class CertificationPostRestController {
         response.put("certificationPostList", getCertificationPostLikeList);
         response.put("certificationPostImages", certificationPostImages);
 
-        System.out.println("ÀÌ¹ÌÁö" + certificationPostImages);
+        System.out.println("ì´ë¯¸ì§€" + certificationPostImages);
 
         return response;
     }
@@ -191,50 +192,42 @@ public class CertificationPostRestController {
 }
 
     @GetMapping(value="rest/getCertificationPost")
-    public String getCertificationPost(@RequestParam int postNo,  Model model) throws Exception {
-    	int userNo = 1;
-    	int postType = 0;
-    	 Map<String, Object> map = certificationPostService.getCertificationPost(postNo, userNo);
-    	 List<CertificationPostComment> certificationPostComment = certificationPostService.getCertificationPostCommentList(postNo);
-    	// List<MeetingPost> unCertifiedMeetingPosts = meetingService.getUnCertifiedMeetingPost(userNo);
-    	 //meetingService.updateMeetingPostCertifiedStatus(postNo);
-    	 CertificationPost certificationPost = (CertificationPost)map.get("certificationPost");
- 		
-    	 List<String> certificationPostImages = new ArrayList<>();
-         int imageCount = certificationPost.getCertificationPostImageCount();
-          System.out.println("imageCount==="+imageCount);
-         for (int i = 0; i < imageCount; i++) {
-        	 String fileName = postNo+ "_" +postType+ "_" +(i+1);
-             String imageURL = objectStorageService.getImageURL(fileName);
-             certificationPostImages.add(imageURL);
-         }
-       
- 		// model.addAttribute("unCertifiedMeetingPosts", map.get("unCertifiedMeetingPosts"));
-    	 model.addAttribute("certificationPost", map.get("certificationPost"));
-    	 model.addAttribute("certificationPostComments", certificationPostComment);
-       model.addAttribute("hashtagList", map.get("hashtagList"));
-      model.addAttribute("certificationPostImages", certificationPostImages);
-      // model.addAttribute("certificationPostType", certificationPostType);
+    public String getCertificationPost(@RequestParam int postNo, Model model, HttpSession session) throws Exception {
+        // ì„¸ì…˜ì—ì„œ ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            // ë¡œê·¸ì¸ì´ ë˜ì–´ ìˆì§€ ì•Šì€ ê²½ìš° ì²˜ë¦¬
+            return "redirect:/user/login"; // ë¡œê·¸ì¸ í˜ì´ì§€ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
+        }
 
-    	
-         System.out.println("ÀÌ°Å¸ÂÁö"+certificationPostComment);
-         
-         return "forward:/certificationPost/getCertificationPost.jsp";
- 					  
-    	 
+        int userNo = user.getUserNo(); // ë¡œê·¸ì¸í•œ ì‚¬ìš©ìì˜ ìœ ì €ë²ˆí˜¸
+
+        int postType = 0;
+        Map<String, Object> map = certificationPostService.getCertificationPost(postNo, userNo);
+        List<CertificationPostComment> certificationPostComment = certificationPostService.getCertificationPostCommentList(postNo);
+
+        CertificationPost certificationPost = (CertificationPost) map.get("certificationPost");
+
+        List<String> certificationPostImages = new ArrayList<>();
+        int imageCount = certificationPost.getCertificationPostImageCount();
+        System.out.println("imageCount===" + imageCount);
+        for (int i = 0; i < imageCount; i++) {
+            String fileName = postNo + "_" + postType + "_" + (i + 1);
+            String imageURL = objectStorageService.getImageURL(fileName);
+            certificationPostImages.add(imageURL);
+        }
+
+        model.addAttribute("certificationPost", map.get("certificationPost"));
+        model.addAttribute("certificationPostComments", certificationPostComment);
+        model.addAttribute("hashtagList", map.get("hashtagList"));
+        model.addAttribute("certificationPostImages", certificationPostImages);
+
+        System.out.println("ì´ê±°ë§ì§€" + certificationPostComment);
+
+        return "forward:/certificationPost/getCertificationPost.jsp";
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
 	//like
     @PostMapping(value="rest/addCertificationPostLike")
     public void addCertificationPostLike(@RequestBody Like like) throws Exception {
