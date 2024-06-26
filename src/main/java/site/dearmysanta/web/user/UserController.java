@@ -161,9 +161,19 @@ public class UserController {
 		    nickNameCookie.setSecure(false); // 
 		    response.addCookie(nickNameCookie);
 		    
+		 // 쿠키 설정
+		    Cookie profileCookie = new Cookie("profile", dbUser.getProfileImage());
+		    profileCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+		    profileCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+		    profileCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+		    profileCookie.setSecure(false); // 
+		    response.addCookie(profileCookie);
+		    
 		    System.out.println("쿠키확인 닉네임 : " + nickNameCookie);
 		    
-		    System.out.println("쿠키확인 아이디 : " + cookie);
+		    System.out.println("쿠키확인 userNo : " + cookie);
+		    
+		    System.out.println("쿠키 프로필 사진 : " + profileCookie);
 		    
 		    return "redirect:/common/main.jsp";
 		}
@@ -460,10 +470,20 @@ public class UserController {
 		    nickNameCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
 		    nickNameCookie.setSecure(false); // 
 		    response.addCookie(nickNameCookie);
+		    
+			 // 쿠키 설정
+		    Cookie profileCookie = new Cookie("profile", dbUser.getProfileImage());
+		    profileCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+		    profileCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+		    profileCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+		    profileCookie.setSecure(false); // 
+		    response.addCookie(profileCookie);
 		  
 		    System.out.println("쿠키확인 닉네임 : " + nickNameCookie);
 		    
 		    System.out.println("쿠키확인 아이디 : " + cookie);
+		    
+		    System.out.println("쿠키확인 프로필 : " +profileCookie);
 		    
 		    System.out.println("updateUser : " + dbUser);
 
@@ -1155,6 +1175,10 @@ public class UserController {
 		    return "forward:/user/getQnA.jsp";
 		}
 		
+		//
+		//
+		//
+		
 		@PostMapping(value = "changePassword")
 	    public String changePassword(@RequestParam String currentPassword,
 	                                 @RequestParam String userPassword,
@@ -1188,5 +1212,30 @@ public class UserController {
 	        model.addAttribute("message", "비밀번호가 성공적으로 변경되었습니다.");
 	        return "forward:/user/updateUser?userNo=" + sessionUser.getUserNo();
 	    }
+		
+		//
+		//
+		//
+		
+		@PostMapping(value="changePhoneNumber")
+		public String changePhoneNumber(@RequestParam("phoneNumber") String phoneNumber,
+                														HttpSession session, Model model) throws Exception {
+		
+			User sessionUser = (User) session.getAttribute("user");
+		
+			if (sessionUser == null) {
+			model.addAttribute("error", "세션이 만료되었습니다. 다시 로그인 해주세요.");
+			return "redirect:/user/login.jsp";
+			}
+			
+			// 전화번호 변경
+			sessionUser.setPhoneNumber(phoneNumber);
+			userService.updateUser(sessionUser);
+			session.setAttribute("user", sessionUser);
+			
+			model.addAttribute("message", "휴대폰 번호가 성공적으로 변경되었습니다.");
+			
+			return "redirect:/user/updateUser?userNo=" + sessionUser.getUserNo();
+		}
 		
 }

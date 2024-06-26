@@ -140,7 +140,7 @@
 		<set>
 		    nickname = #{nickName, jdbcType=VARCHAR},
 		    address = #{address, jdbcType=VARCHAR},
-		    phone_Number = #{phoneNumber, jdbcType=VARCHAR},
+		    phone_number = #{phoneNumber, jdbcType=VARCHAR},
 		    profile_image = #{profileImage, jdbcType=VARCHAR},
 		    hiking_purpose = #{hikingPurpose, jdbcType=DECIMAL},
 		    hiking_difficulty = #{hikingDifficulty, jdbcType=DECIMAL},

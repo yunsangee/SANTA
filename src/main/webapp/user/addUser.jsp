@@ -64,10 +64,13 @@ $(function() {
     });
     
 //////////////////////////////// 닉네임 중복 체크 ////////////////////
-    $("input[name='nickName']").on("blur", function() {
-        var nick = $(this).val();
-        if (nick) {
-            $.ajax({
+       $("input[name='nickName']").on("blur", function() {
+                var nick = $(this).val();
+                if (nick.length >= 10) {
+                    $("#nickMessage").text("10글자 미만의 닉네임을 작성해주세요.").css("color", "red");
+                    $(".submit").prop("disabled", true);
+                } else if (nick) {
+                	$.ajax({
                 url: '/user/rest/checkDuplicationNickName',
                 type: 'GET',
                 data: { nickName: nick },
@@ -84,6 +87,7 @@ $(function() {
                     $("#nickMessage").text("오류가 발생했습니다.").css("color", "red");
                 }
             });
+                	
         }
     });
     

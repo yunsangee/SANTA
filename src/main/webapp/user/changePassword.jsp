@@ -6,10 +6,10 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>비밀번호를 변경하시나요?!</title>
+    <title>비밀번호 변경</title>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.min.js"></script>
 
     <style>
         body {
@@ -107,13 +107,10 @@
                 margin: 5px 0;
             }
         }
-
-
     </style>
     
     <script>
         $(document).ready(function() {
-            // 현재 비밀번호 입력 칸에서 포커스 아웃될 때
             $("input[name='currentPassword']").on("blur", function() {
                 var currentPassword = $(this).val();
 
@@ -135,7 +132,6 @@
                 });
             });
 
-            // 비밀번호 입력 칸에서 포커스 아웃될 때
             $("input[name='userPassword']").on("blur", function() {
                 var password = $(this).val();
 
@@ -146,7 +142,6 @@
                 }
             });
 
-            // 비밀번호 확인 입력 칸에서 포커스 아웃될 때
             $("input[name='checkPassword']").on("blur", function() {
                 var password = $("input[name='userPassword']").val();
                 var confirmPassword = $(this).val();
@@ -173,13 +168,12 @@
                 });
             });
 
-            // 폼 제출 시 비밀번호 변경 요청
             $("#changePasswordForm").on("submit", function(e) {
                 e.preventDefault();
                 var currentPassword = $("input[name='currentPassword']").val();
                 var userPassword = $("input[name='userPassword']").val();
                 var checkPassword = $("input[name='checkPassword']").val();
-                var userNo = $("#userNo").val(); // userNo 값을 가져옴
+                var userNo = $("#userNo").val();
 
                 $.ajax({
                     url: '/user/rest/changePassword',
@@ -194,7 +188,8 @@
                     success: function(response) {
                         if (response.status === "equals") {
                             alert(response.message);
-                            window.location.href = "/user/updateUser?userNo=" + userNo;
+                            window.opener.location.reload(); // 부모 창 새로고침
+                            window.close(); // 팝업 창 닫기
                         } else {
                             alert(response.message);
                         }
@@ -231,8 +226,8 @@
             <div id="passwordMessage" class="error-message"></div>
         </div>
       
-    <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
-    <input type="hidden" id="userId" name="userId" value="${user.userId}">
+        <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
+        <input type="hidden" id="userId" name="userId" value="${user.userId}">
         
         <button type="submit" class="submit">비밀번호 변경하기</button>
         

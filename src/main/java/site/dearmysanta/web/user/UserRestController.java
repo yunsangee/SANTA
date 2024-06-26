@@ -498,5 +498,9 @@ public class UserRestController {
 	        response.put("message", "알 수 없는 요청입니다.");
 	        return response;
 	    }
+	    
+	    //////////////////////////////////////////////////////////////////
+	    
+	    
 }
 
