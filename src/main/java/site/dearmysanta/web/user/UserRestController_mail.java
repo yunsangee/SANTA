@@ -36,10 +36,10 @@ public class UserRestController_mail {
         boolean isVerified = mailService.checkAuth(email, code);
         if (isVerified) {
             SantaLogger.makeLog("info", "Email verified: " + email);
-            return "ÀÎÁõµÇ¾ú½À´Ï´Ù.";
+            return "ì¸ì¦ë˜ì—ˆìŠµë‹ˆë‹¤.";
         } else {
             SantaLogger.makeLog("info", "Email verification failed for: " + email);
-            return "ÀÎÁõ¹øÈ£ È®ÀÎ¿¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù. ´Ù½Ã ½ÃµµÇØÁÖ¼¼¿ä.";
+            return "ì¸ì¦ë²ˆí˜¸ í™•ì¸ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì‹œë„í•´ì£¼ì„¸ìš”.";
         }
     }
 }
