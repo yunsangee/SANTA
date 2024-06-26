@@ -104,7 +104,7 @@
 		        $('#logout').on('click', function(event) {
 		        	event.preventDefault();
 		        	
-		        	if('${session.user.userPassword}' == 'kakao'){
+		        	if('${sessionScope.user.userPassword}' == 'kakao'){
 		        		window.location.href = '/oauth/logout/kakao';
 		        	}else{
 		            	window.location.href = '/user/logout';
