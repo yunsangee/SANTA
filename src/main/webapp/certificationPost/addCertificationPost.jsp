@@ -22,7 +22,7 @@
             var hashtagCount = 1;
             $('#addHashtag').click(function() {
                 if (hashtagCount < 5) {
-                    $('#additionalHashtags').append('<input type="text" class="form-control" name="certificationPostHashtagContents" maxlength="20">');
+                    $('#additionalHashtags').append('<input type="text" class="form-control" name="certificationPostHashtagContents" maxlength="10">');
                     hashtagCount++;
                 } else {
                     alert("최대 5개의 해시태그만 가능합니다.");
@@ -45,7 +45,7 @@
 
                 <!-- 유저 정보 출력 -->
                 <c:if test="${user != null}">
-                    <p>Logged in as: ${user.userName} (${user.userId})</p>
+                    <p>확인용Logged in as: ${user.userName} (${user.userId})</p>
                 </c:if>
 
                 <form id="certificationForm" action="/certificationPost/addCertificationPost" method="post" enctype="multipart/form-data">
@@ -96,7 +96,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="certificationPostHashtagContents">HASHTAG<sup>*</sup> <small>(최대 5개)</small></label>
-                        <input type="text" class="form-control" id="certificationPostHashtagContents" name="certificationPostHashtagContents" maxlength="20">
+                        <input type="text" class="form-control" id="certificationPostHashtagContents" name="certificationPostHashtagContents" maxlength="10">
                         <button type="button" id="addHashtag">+</button>
                     </div>
                     <div id="additionalHashtags"></div>

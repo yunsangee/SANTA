@@ -83,6 +83,7 @@
             cp.cp_no,
              cp.user_no,
              u.nickname,
+             u.profile_image
              cp.cp_type,
              cp.cp_title,
              cp.cp_contents,

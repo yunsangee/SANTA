@@ -277,7 +277,7 @@ $(document).ready(function() {
                 <div class="details-container">
                     <div class="details-header">
                         <p class="author-link" data-user-no="${certificationPost.userNo}">
-                            <i class="fas fa-user"></i> 작성자: ${certificationPost.nickName}
+                            <i class="fas fa-user"></i> ${certificationPost.profileImage} ${certificationPost.nickName} 
                         </p>
                         <p><i class="fas fa-calendar-alt"></i> 작성 일자: ${certificationPost.postDate}</p>
                         <div class="d-flex align-items-center">
@@ -329,8 +329,9 @@ $(document).ready(function() {
                         </c:choose>
                     </p>
                 </div>
-                <hr><br>
-                <div class="comments-section">
+          
+                  <p class="mb-3"><i class="fas fa-calendar-day"></i> 글내용 : &ensp;${certificationPost.contents}</p>     <hr><br>
+                <div class="comments-section"> 
                     <h3><i class="fas fa-comments"></i> 댓글작성하기</h3>
                                         <form class="comment-form">
                         <textarea class="form-control" id="newComment" rows="3" placeholder="댓글을 입력해주세요. (최대 100자)" maxlength="100"></textarea>

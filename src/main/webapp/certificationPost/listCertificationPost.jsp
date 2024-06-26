@@ -168,10 +168,35 @@
 .fixed-buttons {
     position: fixed;
     bottom: 20px;
-    right: 220px; /* 컨테이너에 가깝게 배치 */
+    right: 220px; /* 큰 화면에서는 컨테이너에 가깝게 배치 */
     display: flex;
     flex-direction: column;
     gap: 10px;
+    transition: right 0.3s ease;
+}
+
+@media (max-width: 1200px) {
+    .fixed-buttons {
+        right: 180px; /* 중간 화면에서는 위치 조정 */
+    }
+}
+
+@media (max-width: 992px) {
+    .fixed-buttons {
+        right: 140px; /* 작은 화면에서는 위치 조정 */
+    }
+}
+
+@media (max-width: 768px) {
+    .fixed-buttons {
+        right: 200px; /* 태블릿 화면에서는 위치 조정 */
+    }
+}
+
+@media (max-width: 576px) {
+    .fixed-buttons {
+        right: 30px; /* 모바일 화면에서는 위치 조정 */
+    }
 }
 
 </style>
@@ -259,7 +284,7 @@
                                 '<p><i class="fas fa-heart"></i>  ' + post.certificationPostLikeCount + '</p>' +
                             '</div>' +
                         '</div>' +
-                        '<p class="post-mountain"><i class="fas fa-mountain"></i> 산명칭: ' + post.certificationPostMountainName + '</p>' +
+                        '<p class="post-mountain"><i class="fas fa-mountain"></i>  ' + post.certificationPostMountainName + '</p>' +
                         '<p class="post-difficulty"><i class="fas fa-chart-line"></i> 등산난이도: ' + 
                             (post.certificationPostHikingDifficulty == 0 ? '어려움' : post.certificationPostHikingDifficulty == 1 ? '중간' : '쉬움') +
                         '</p>' +
@@ -381,10 +406,10 @@
             </div>
     
     </main>
-		<div class="fixed-buttons">
-		    <button class="btn-cp btn-certify-hiking"><i class="fa fa-mountain"></i></button>
-		    <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
-		</div>
+        <div class="fixed-buttons">
+            <button class="btn-cp btn-certify-hiking"><i class="fa fa-mountain"></i></button>
+            <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
+        </div>
 
 
     <footer></footer>
