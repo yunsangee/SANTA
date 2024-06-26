@@ -19,7 +19,7 @@ public interface MeetingService {
 	
 //	public void addPostImage(MeetingPost meetingPost) throws Exception;
 	
-	public void updateMeetingPost(MeetingPost meetingPost) throws Exception;
+	public void updateMeetingPost(MeetingPost meetingPost, List<String> updateImageURL) throws Exception;
 	
 //	public void updatePostImage(MeetingPost meetingPost) throws Exception;
 	
@@ -33,7 +33,7 @@ public interface MeetingService {
 	
 	public int addMeetingParticipation(MeetingParticipation meetingParticipation) throws Exception;
 	
-	public void deleteMeetingParticipation(int participationNo) throws Exception;
+	public void deleteMeetingParticipation(MeetingParticipation meetingParticipation) throws Exception;
 	
 	public void updateMeetingParticipationStatus(int participationNo) throws Exception;
 	

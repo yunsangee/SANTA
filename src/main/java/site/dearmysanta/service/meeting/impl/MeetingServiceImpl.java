@@ -72,8 +72,15 @@ public class MeetingServiceImpl implements MeetingService {
 //		meetingDAO.insertPostImage(meetingPost);
 //	}
 	
-	public void updateMeetingPost(MeetingPost meetingPost) throws Exception {
+	public void updateMeetingPost(MeetingPost meetingPost, List<String> updateImageURL) throws Exception {
 		
+		String appointedDetailDeparture = meetingPost.getAppointedDetailDeparture();		
+		String appointedDeparture = meetingPost.getAppointedDeparture()+ "/" +appointedDetailDeparture;
+		
+		meetingPost.setAppointedDeparture(appointedDeparture);
+		
+		meetingPost.setMeetingPostImageCount(updateImageURL.size() + meetingPost.getMeetingPostImage().size());
+        
 		meetingDAO.updateMeetingPost(meetingPost);
 	}
 	
@@ -229,9 +236,9 @@ public class MeetingServiceImpl implements MeetingService {
 		return participationNo;
 	}
 	
-	public void deleteMeetingParticipation(int participationNo) throws Exception {
+	public void deleteMeetingParticipation(MeetingParticipation meetingParticipation) throws Exception {
 		
-		meetingDAO.deleteMeetingParticipation(participationNo);
+		meetingDAO.deleteMeetingParticipation(meetingParticipation);
 	}
 	
 	public void updateMeetingParticipationStatus(int participationNo) throws Exception {

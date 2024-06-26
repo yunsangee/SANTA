@@ -1,6 +1,6 @@
 package site.dearmysanta.web.meeting;
 
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -123,7 +123,8 @@ public class MeetingController {
 		int postType = 1;
 		String appointedHikingMountain = meetingPost.getAppointedHikingMountain();
 		
-		//mountainService.addMountainStatistics(appointedHikingMountain, 1);
+		
+		mountainService.addMountainStatistics(appointedHikingMountain, 1);
 		
 		chattingService.createChattingRoom(postNo);
 		
@@ -153,20 +154,53 @@ public class MeetingController {
 	@GetMapping(value = "updateMeetingPost")
 	public String updateMeetingPost(@RequestParam int postNo, Model model) throws Exception {
 		
+		int postType = 1;
+		
 		MeetingPost meetingPost = meetingService.getMeetingPost(postNo);
 		
-		DateTimeFormatter formatterUntilDay = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		List<String> meetingPostImages = new ArrayList<>();
+		int imageCount = meetingPost.getMeetingPostImageCount();
+		
+		for (int i = 0; i < imageCount; i++) {
+            String fileName = postNo+ "_" +postType+ "_" +(i+1);
+            String imageURL = objectStorageService.getImageURL(fileName);
+            meetingPostImages.add(imageURL);
+        }
 		
 		
+        SimpleDateFormat formatterUntilDay = new SimpleDateFormat("yyyy-MM-dd");
+
+        String formattedRecruitmentDeadline = formatterUntilDay.format(meetingPost.getRecruitmentDeadline());
+        String formattedAppointedHikingDate = formatterUntilDay.format(meetingPost.getAppointedHikingDate());
+        
+        model.addAttribute("formattedRecruitmentDeadline", formattedRecruitmentDeadline);
+        model.addAttribute("formattedAppointedHikingDate", formattedAppointedHikingDate);
+        model.addAttribute("meetingPostImages", meetingPostImages);
 		model.addAttribute(meetingPost);
 		
 		return "forward:/meeting/updateMeetingPost.jsp";
 	}
 	
 	@PostMapping(value = "updateMeetingPost")
-	public String updateMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost) throws Exception {
+	public String updateMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost, @RequestParam("updateImageURL") List<String> updateImageURL) throws Exception {
 		
-		meetingService.updateMeetingPost(meetingPost);	
+		meetingService.updateMeetingPost(meetingPost, updateImageURL);
+		
+		System.out.println("updateImageUrl 확인==="+updateImageURL);
+		
+		List<String> fileNames = new ArrayList<>();
+		
+		for (String imageURL : updateImageURL) {
+			
+			int lastIndex = imageURL.lastIndexOf("/");
+			String fileName = imageURL.substring(lastIndex + 1);
+			
+			System.out.println(fileName);
+			
+			fileNames.add(fileName);
+		}
+		
+		System.out.println("정한이한테 보낼 최종 파일이름들 : "+fileNames);
 		
 		return "redirect:/meeting/getMeetingPost?postNo=" + meetingPost.getPostNo();
 	}
