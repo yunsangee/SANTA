@@ -65,7 +65,7 @@ public class CertificationPostRestController {
     @PostMapping(value = "rest/listCertificationPost")
     public Map<String, Object> listCertificationPost(
         @RequestBody Search search) throws Exception {
-        
+    	System.out.println("search" +search ) ;
         if (search == null) {
             search = new Search(); // 기본 검색 조건 설정 또는 처리
         }
@@ -88,7 +88,7 @@ public class CertificationPostRestController {
             String imageURL = objectStorageService.getImageURL(fileName);
             certificationPostImages.add(imageURL);
         }
-
+        System.out.println("rest certificationPostList  " + certificationPostList );
         // 클라이언트로 전송할 결과에 이미지 URL 추가
         result.put("certificationPostImages", certificationPostImages);
 

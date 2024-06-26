@@ -144,7 +144,8 @@ public class CertificationPostController {
                 certificationPostService.addHashtag(postNo, hashtagContent);
             }
         }
-
+        
+        mountainService.addMountainStatistics(certificationPost.getCertificationPostMountainName(), 1);
         return "redirect:/certificationPost/getCertificationPost?postNo=" + postNo;
     }
 

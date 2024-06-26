@@ -301,9 +301,9 @@ $(document).ready(function() {
     $(".top-button").click(function() {
         $('html, body').animate({scrollTop: 0}, 'slow');
     });
-    var userNo = ${user.userNo};
+   
     $(".btn-certify-hiking").click(function() {
-        alert('인증하기');
+        alert('인증하기'); var userNo = ${user.userNo}
         window.location.href = "/certificationPost/addCertificationPost?userNo=" + userNo;
     });
 });

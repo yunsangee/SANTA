@@ -93,20 +93,16 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 
     @Override
     public Map<String, Object> getCertificationPostList(Search search) throws Exception {
-        // ���� ����Ʈ ����� �����ɴϴ�.
+    
         List<CertificationPost> list = certificationPostDao.getCertificationPostList(search);
 
-        // �� ���� ����Ʈ�� ���� �ؽ��±� �� ���ƿ� ���� �߰��մϴ�.
+      
         for (CertificationPost post : list) {
-            // �ؽ��±� ��������
-           
-
-            // ���ƿ� �� ��������
+  
             int likeCount = certificationPostDao.getCertificationPostLikeCount(post.getPostNo());
-            post.setCertificationPostLikeCount(likeCount); // ���� ����Ʈ ��ü�� ���ƿ� ���� �����մϴ�.
+            post.setCertificationPostLikeCount(likeCount); 
         }
 
-        // ����� �ʿ� �ֽ��ϴ�.
         Map<String, Object> map = new HashMap<>();
         map.put("list", list);
 

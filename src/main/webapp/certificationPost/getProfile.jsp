@@ -7,53 +7,72 @@
     <c:import url="../common/header.jsp"/>
     <title>Profile</title>
     <style>
-        main {
-            margin-top: 160px;
-            padding: 0 20px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: 30px; /* MAIN 아래에 공백 추가 */
-        }
+     html, body {
+    height: 100%;
+    margin: 0;
+}
 
-        footer {
-            background-color: #f1f1f1;
-            padding: 10px 0;
-            text-align: center;
-            margin-top: 50px; /* FOOTER 위에 공백 추가 */
-        }
-    
-        body {
-            font-family: Arial, sans-serif;
-        }
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
-        .profile-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 20px;
-            border-bottom: 1px solid #ccc;
-            font-size: 0.9em;
-        }
-        .profile-image {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            margin-right: 20px;
-        }
-        .profile-details {
-            flex-grow: 1;
-        }
-        .profile-details p {
-            margin: 5px 0;
-        }
-        
-        .follow-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-top: 10px;
-        }
+header, footer {
+    flex-shrink: 0;
+}
+
+main {
+    flex-grow: 1;
+    margin-top: 160px;
+    padding: 0 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px; /* MAIN 아래에 공백 추가 */
+}
+
+footer {
+    background-color: #f1f1f1;
+    padding: 10px 0;
+    text-align: center;
+    margin-top: 50px; /* FOOTER 위에 공백 추가 */
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.profile-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+    font-size: 0.9em;
+}
+
+.profile-image {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.profile-details {
+    flex-grow: 1;
+}
+
+.profile-details p {
+    margin: 5px 0;
+}
+
+.follow-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+}
 
 /* 팔로우 버튼 기본 스타일 */
 .follow-button {
@@ -83,43 +102,48 @@
     font-size: 1.0em; /* 아이콘 크기 조정 */
 }
 
+.tab-menu {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    border-bottom: 1px solid #ccc;
+}
 
-        .tab-menu {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
-            border-bottom: 1px solid #ccc;
-        }
-        .tab-menu a {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-            padding: 10px;
-        }
-        .tab-menu a.active {
-            border-bottom: 2px solid black;
-        }
-        .posts-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .post-preview {
-            flex: 0 1 calc(33.333% - 20px); /* 3 columns with 20px gap */
-            box-sizing: border-box;
-            height: 250px; /* Adjust height */
-            border: 1px solid #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-size: 0.9em;
-        }
-        .post-preview img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: cover;
-        }
+.tab-menu a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.tab-menu a.active {
+    border-bottom: 2px solid black;
+}
+
+.posts-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.post-preview {
+    flex: 0 1 calc(33.333% - 20px); /* 3 columns with 20px gap */
+    box-sizing: border-box;
+    height: 250px; /* Adjust height */
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.post-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
     </style>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script>
