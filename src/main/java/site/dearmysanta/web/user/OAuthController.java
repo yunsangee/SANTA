@@ -48,6 +48,8 @@ public class OAuthController {
     public ModelAndView kakaoCallback(@RequestParam String code, HttpSession session, RedirectAttributes redirectAttributes, HttpServletResponse response) {
         String access_token = oauthService.getKakaoAccessToken(code);
         
+        session.setAttribute("accessToken", access_token);
+        
         User user = null;
 
         try {
@@ -138,7 +140,7 @@ public class OAuthController {
 //        response.sendRedirect("https://kauth.kakao.com/oauth/authorize?client_id=53ae98941fff9e24b11901e9a79432d9&redirect_uri=http://localhost:8001/oauth/kakao&response_type=code");
 //    }
 
-	@PostMapping("/logout/kakao")
+	@GetMapping("/logout/kakao")
 	@ResponseBody
 	public void kakaoLogout(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
 		
