@@ -12,165 +12,189 @@
     <meta charset="UTF-8">
     <title>${user.nickName}님 산타 탈퇴</title>
     
- <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
    
- <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->  
+    <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->  
   
-<style>
-main {
-    /* font-family: Arial, sans-serif; */
-    padding: 20px;
-}
-        
-h2 {
-    font-family: Arial, sans-serif;
-    font-size: 24px;
-    color: #333;
-    margin-left: 50px;
-}
-
-li {
-    font-family: Arial, sans-serif;
-    margin-left: 40px;
-}
-
-.container {
-    max-width: 500px;
-    margin: 0 auto;
-    margin-top: 30px;
-    padding: 20px;
-}
-
-.container label {
-    font-weight: bold;
-    display: block;
-}
-
-.container select {
-    width: 500px;
-    padding: 10px;
-    margin-top: 10px;
-    /* margin-bottom: 10px; */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-left: 50px;
-}
-
-.container textarea {
-    width: 500px;
-    padding: 10px;
-   /*  margin-top: 5px; */
-    /* margin-bottom: 10px; */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-left: 50px;
-}
-
-.container input[type="checkbox"] {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-left: 50px;
-}
-
-button, a.button {
-    width: 400px;
-    padding: 15px;
-    font-size: 16px;
-    margin-top: 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    border-radius: 5px;
-    cursor: pointer;
-    box-sizing: border-box;
-}
-
-.a {  
-	margin-top : 40px; 
-    background-color: white;
-    color: #81C408;
-    border: 1px solid #81C408;
-}
-
-.a:hover {
-    background-color: #DEFBA7; 
-}
-
-/* .cancel {
-    background-color: #5bc0de;
-    color: white;        
-}
-
-.cancel:hover {
-    background-color: #31b0d5;
-} */
-
-.checkbox-label {
-	margin-top: 30px;
-    display: flex;
-    align-items: center;
-}
-
-.checkbox-label2 {
-	 display: flex;
-    align-items: center;
-}
-
-.checkbox-label input, .checkbox-label2 input {
-    margin-right: 10px;
-}
-
-.link-section {
-    text-align: center;
-    margin-top: 40px;
-}
-
-span {
-    color: #EB001F;
-    font-weight: bold;
-}
-</style>
-  
- <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// --> 
- 
-<script>
-function toggleWithdrawContent() {
-    var withdrawReason = document.getElementById("withdrawReason");
-    var withdrawContentDiv = document.getElementById("withdrawContentDiv");
-    var withdrawContent = document.getElementById("withdrawContent");
-    if (withdrawReason.value == "4") {
-        withdrawContentDiv.style.display = "block";
-        withdrawContent.required = true;
-    } else {
-        withdrawContentDiv.style.display = "none";
-        withdrawContent.required = false;
-        withdrawContent.value = ""; // reset the value
+    <style>
+    main {
+        /* font-family: Arial, sans-serif; */
+        padding: 20px;
+        padding-top: 140px; /* 헤더 높이만큼 패딩을 추가하여 내용이 헤더 아래로 오게 합니다. */
     }
-}
+            
+    .container h2 {
+        font-family: Arial, sans-serif;
+        font-size: 35px;
+        color: #333;
+        margin-left: 50px;
+        margin-top : 215px;
+    }
 
-function validateForm() {
-    var withdrawReason = document.getElementById("withdrawReason");
-    var withdrawContent = document.getElementById("withdrawContent");
-    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    for (var i = 0; i < checkboxes.length; i++) {
-        if (!checkboxes[i].checked) {
-            alert("모든 확인 사항에 동의해주세요.");
-            checkboxes[i].focus();
-            return false;
+    li {
+        font-family: Arial, sans-serif;
+        margin-left: 40px;
+    }
+
+    .container {
+        max-width: 500px;
+        margin: 0 auto;
+        margin-top: 30px;
+        padding: 20px;
+    }
+
+    .container label {
+        font-weight: bold;
+        display: block;
+    }
+
+    .container select {
+        width: 500px;
+        padding: 10px;
+        margin-top: 10px;
+        /* margin-bottom: 10px; */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-left: 50px;
+    }
+
+    .container textarea {
+        width: 500px;
+        padding: 10px;
+       /*  margin-top: 5px; */
+        /* margin-bottom: 10px; */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-left: 50px;
+    }
+
+    .container input[type="checkbox"] {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-left: 50px;
+    }
+
+    button, a.button {
+        width: 400px;
+        padding: 15px;
+        font-size: 16px;
+        margin-top: 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 5px;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+
+    .a {  
+        margin-top : 40px; 
+        background-color: white;
+        color: #81C408;
+        border: 1px solid #81C408;
+    }
+
+    .a:hover {
+        background-color: #DEFBA7; 
+    }
+
+    /* .cancel {
+        background-color: #5bc0de;
+        color: white;        
+    }
+
+    .cancel:hover {
+        background-color: #31b0d5;
+    } */
+
+    .checkbox-label {
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+    }
+
+    .checkbox-label2 {
+        display: flex;
+        align-items: center;
+    }
+
+    .checkbox-label input, .checkbox-label2 input {
+        margin-right: 10px;
+    }
+
+    .link-section {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    span {
+        color: #EB001F;
+        font-weight: bold;
+    }
+
+    header {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        /* background-color: white;  *//* 헤더 배경색을 설정하여 내용이 겹치지 않도록 합니다. */
+    }
+    
+    footer {
+        margin-top:160px;
+    }
+
+    </style>
+  
+    <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// --> 
+ 
+    <script>
+    function toggleWithdrawContent() {
+        var withdrawReason = document.getElementById("withdrawReason");
+        var withdrawContentDiv = document.getElementById("withdrawContentDiv");
+        var withdrawContent = document.getElementById("withdrawContent");
+        if (withdrawReason.value == "4") {
+            withdrawContentDiv.style.display = "block";
+            withdrawContent.required = true;
+        } else {
+            withdrawContentDiv.style.display = "none";
+            withdrawContent.required = false;
+            withdrawContent.value = ""; // reset the value
         }
     }
-    if (withdrawReason.value == "4" && withdrawContent.value.trim() === "") {
-        alert("기타 사유를 적어주세요.");
-        withdrawContent.focus();
-        return false;
+
+    function validateForm() {
+        var withdrawReason = document.getElementById("withdrawReason");
+        var withdrawContent = document.getElementById("withdrawContent");
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (!checkboxes[i].checked) {
+                alert("모든 확인 사항에 동의해주세요.");
+                checkboxes[i].focus();
+                return false;
+            }
+        }
+        if (withdrawReason.value == "4" && withdrawContent.value.trim() === "") {
+            alert("기타 사유를 적어주세요.");
+            withdrawContent.focus();
+            return false;
+        }
+        return true;
     }
-    return true;
-}
-</script>
+
+    function handleSubmit(event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+        if (validateForm()) {
+            alert("탈퇴 완료되었습니다.");
+            event.target.submit(); // 폼 제출
+        }
+    }
+    </script>
     
-<c:import url="../common/header.jsp"/>   
+    <c:import url="../common/header.jsp"/>   
 </head>
 
 <!--  ////////////////////////////////////////////// body ///////////////////////////////////////////////// -->
@@ -194,7 +218,7 @@ function validateForm() {
         <li>탈퇴시 <span>7일간 재가입 불가능</span> 합니다.</li>
     </ul>
 
-    <form action="/user/deleteUser" method="post" onsubmit="return validateForm()">
+    <form action="/user/deleteUser" method="post" onsubmit="handleSubmit(event)">
         <div class="Reason-section">
             <label for="withdrawReason"></label>
             <select id="withdrawReason" name="withdrawReason" onchange="toggleWithdrawContent()" required>
@@ -234,7 +258,9 @@ function validateForm() {
     
  <!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// -->
  
-<footer></footer> 
+<footer>
+    <c:import url="../common/footer.jsp"/>
+</footer> 
  
 </body>
 </html>

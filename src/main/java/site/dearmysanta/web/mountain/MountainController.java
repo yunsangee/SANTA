@@ -196,7 +196,7 @@ public class MountainController {
 		SantaLogger.makeLog("info", "mountainSearch:" + mountainSearch.toString());
 		if (mountainSearch.getSearchKeyword() != null) {
 
-			if (mountainSearch.getSearchCondition() == 0 & session.getAttribute("user") != null) { // if condition is mountain
+			if (session.getAttribute("user") != null) { // if condition is mountain
 				mountainService.deleteSearchKeyword(mountainSearch);				
 				mountainService.addSearchKeyword(mountainSearch);
 			}
@@ -216,6 +216,8 @@ public class MountainController {
 			model.addAttribute("weatherList", weatherList);
 
 		}
+		model.addAttribute("searchKeyword", mountainSearch.getSearchKeyword());
+		
 
 		return "forward:/mountain/mapMountain.jsp";
 	}

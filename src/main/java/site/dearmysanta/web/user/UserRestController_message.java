@@ -40,7 +40,7 @@ public class UserRestController_message {
 		Message message = new Message();
 		message.setFrom("01095740310");
 		message.setTo(messageInfo.getPhoneNumber());
-		message.setText("¾È³çÇÏ¼¼¿ä " + messageInfo.getUserName() + "´Ô\n [" + randomNumber + "] \n °ªÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä."); 
+		message.setText("ì•ˆë…•í•˜ì„¸ìš” " + messageInfo.getUserName() + "ë‹˜\n [" + randomNumber + "] \n ê°’ì„ ì…ë ¥í•´ì£¼ì„¸ìš”."); 
 		
 		SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
 		

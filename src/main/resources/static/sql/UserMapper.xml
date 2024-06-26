@@ -138,15 +138,16 @@
 	<update id = "updateUser" 	parameterType = "site.dearmysanta.domain.user.User" > 
 		UPDATE users
 		<set>
-		    nickname = #{nickName},
+		    nickname = #{nickName, jdbcType=VARCHAR},
 		    address = #{address, jdbcType=VARCHAR},
-		    phone_Number = #{phoneNumber, jdbcType=VARCHAR},
+		    phone_number = #{phoneNumber, jdbcType=VARCHAR},
 		    profile_image = #{profileImage, jdbcType=VARCHAR},
 		    hiking_purpose = #{hikingPurpose, jdbcType=DECIMAL},
 		    hiking_difficulty = #{hikingDifficulty, jdbcType=DECIMAL},
 		    hiking_level = #{hikingLevel, jdbcType=DECIMAL},
 		    introduce_content = #{introduceContent, jdbcType = VARCHAR},
-		    detail_address=#{detailAddress, jdbcType = VARCHAR}
+		    detail_address=#{detailAddress, jdbcType = VARCHAR},
+		    password=#{userPassword, jdbcType=VARCHAR}
 		</set>
 		WHERE user_no = #{userNo}
 	</update>
