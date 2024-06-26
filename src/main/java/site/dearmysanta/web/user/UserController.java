@@ -90,6 +90,8 @@ public class UserController {
 		        model.addAttribute("error", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
 		        return "redirect:/user/addUser.jsp";
 		    }
+		    
+		    user.setProfileImage("profile1.png");
 			
 			userService.addUser(user);
 			
@@ -117,16 +119,21 @@ public class UserController {
 		}	
 
 		@PostMapping(value = "login")
-		public String login(@ModelAttribute User user, String userId, String userPassword, HttpSession session, Model model, Search search, HttpServletResponse response) throws Exception {
+		public String login(@ModelAttribute User user, HttpSession session, Model model, Search search, HttpServletResponse response) throws Exception {
 		    System.out.println("/user/login : POST");
 		    
+		    System.out.println("user : " +user);
+		    
+		    // userId 값이 제대로 들어오는지 확인
+		    System.out.println("Received userId: " + user.getUserId());
+		    
 		    // DB에서 사용자 정보 조회
-		    User dbUser = userService.getUserByUserId(user.getUserId());
+		    User dbUser =((List<User>)userService.getUserByUserId(user.getUserId())).get(0);
 		    
 		    System.out.println("확인 : " + dbUser);
 		    
 		    // 사용자가 존재하는지 확인
-		    if (dbUser == null || !dbUser.getUserPassword().equals(userPassword)) {
+		    if (dbUser == null || !dbUser.getUserPassword().equals(user.getUserPassword())) {
 		        model.addAttribute("loginError", "아이디 혹은 비밀번호가 잘못되었습니다. 다시 입력해주세요.");
 		        return "forward:/user/login.jsp";
 		    }
