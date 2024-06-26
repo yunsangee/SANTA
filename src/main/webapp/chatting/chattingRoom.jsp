@@ -12,7 +12,7 @@
     <script type="text/javascript">
     $(function() {
     	
-        var socket = io("https://www.dearmysanta.site/chatting");
+        var socket = io("https://www.dearmysanta.site/chattingserver");
         
         var userNo = "${userNo}";
         var userNickname = "${nickname}";

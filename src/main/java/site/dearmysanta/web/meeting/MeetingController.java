@@ -64,10 +64,7 @@ public class MeetingController {
 	}
 	
 	@GetMapping(value = "getMeetingPost")
-	public String getMeetingPost(@RequestParam int postNo, Model model
-//			, HttpSession session 이런식으로 controller에서 session쓴다고 선언해서 userNo 박는게 좋은지
-//			jsp에서 session 써서 여기로 파라미터로 userNo 넘기는게 좋은지 ????
-			) throws Exception {
+	public String getMeetingPost(@RequestParam int postNo, Model model) throws Exception {
 		
 //		int userNo = ((User)session.getAttribute("user")).getUserNo();
 		int userNo = 1;
@@ -184,9 +181,14 @@ public class MeetingController {
 	@PostMapping(value = "updateMeetingPost")
 	public String updateMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost, @RequestParam("updateImageURL") List<String> updateImageURL) throws Exception {
 		
+		System.out.println("meetingPostImage 뭐찍히나 확인"+meetingPost);
+		System.out.println("updateImageUrl 확인==="+updateImageURL);
+		
+		int postNo = meetingPost.getPostNo();
+		int postType = 1;
+		
 		meetingService.updateMeetingPost(meetingPost, updateImageURL);
 		
-		System.out.println("updateImageUrl 확인==="+updateImageURL);
 		
 		List<String> fileNames = new ArrayList<>();
 		
@@ -200,7 +202,31 @@ public class MeetingController {
 			fileNames.add(fileName);
 		}
 		
-		System.out.println("정한이한테 보낼 최종 파일이름들 : "+fileNames);
+		
+		System.out.println("정렬시킬 이미지이름들 : "+fileNames);
+		
+		int appendImageStartIndex = objectStorageService.updateObjectStorageImage(fileNames);
+		
+		if (meetingPost.getMeetingPostImage() != null) {
+	        List<MultipartFile> images = meetingPost.getMeetingPostImage().stream()
+	            .filter(image -> !image.isEmpty())
+	            .collect(Collectors.toList());
+			
+            int imageCount = images.size();
+            System.out.println("imageCount : "+imageCount);
+            
+            for (int i = 0; i < imageCount; i++) {
+            	
+                MultipartFile image = images.get(i);
+                String fileName = postNo+ "_" +postType+ "_" +(appendImageStartIndex);
+                
+                System.out.println("fileName : "+fileName);
+                
+                objectStorageService.uploadFile(image, fileName);
+                
+                appendImageStartIndex += 1;
+            }
+		}
 		
 		return "redirect:/meeting/getMeetingPost?postNo=" + meetingPost.getPostNo();
 	}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -77,9 +78,22 @@ public class MeetingServiceImpl implements MeetingService {
 		String appointedDetailDeparture = meetingPost.getAppointedDetailDeparture();		
 		String appointedDeparture = meetingPost.getAppointedDeparture()+ "/" +appointedDetailDeparture;
 		
+		int appendImageCount = 0;
+		
 		meetingPost.setAppointedDeparture(appointedDeparture);
 		
-		meetingPost.setMeetingPostImageCount(updateImageURL.size() + meetingPost.getMeetingPostImage().size());
+		if (meetingPost.getMeetingPostImage() != null) {
+	        List<MultipartFile> images = meetingPost.getMeetingPostImage().stream()
+	            .filter(image -> !image.isEmpty())
+	            .collect(Collectors.toList());
+	        
+	        appendImageCount = images.size();
+		}
+
+		
+		System.out.println("새로들어갈 imageCount : "+ (updateImageURL.size() + appendImageCount));
+		
+		meetingPost.setMeetingPostImageCount(updateImageURL.size() + appendImageCount);
         
 		meetingDAO.updateMeetingPost(meetingPost);
 	}
