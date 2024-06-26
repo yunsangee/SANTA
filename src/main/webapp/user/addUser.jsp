@@ -36,7 +36,6 @@ $(function() {
         $("#" + $(this).data("target")).prop("checked", true);
     });
 
-
 //////////////////////////////// 이메일 중복 체크 ////////////////////
     $("input[name='userId']").on("blur", function() {
         var email = $(this).val();
@@ -65,10 +64,13 @@ $(function() {
     });
     
 //////////////////////////////// 닉네임 중복 체크 ////////////////////
-    $("input[name='nickName']").on("blur", function() {
-        var nick = $(this).val();
-        if (nick) {
-            $.ajax({
+       $("input[name='nickName']").on("blur", function() {
+                var nick = $(this).val();
+                if (nick.length >= 10) {
+                    $("#nickMessage").text("10글자 미만의 닉네임을 작성해주세요.").css("color", "red");
+                    $(".submit").prop("disabled", true);
+                } else if (nick) {
+                	$.ajax({
                 url: '/user/rest/checkDuplicationNickName',
                 type: 'GET',
                 data: { nickName: nick },
@@ -77,17 +79,15 @@ $(function() {
                     var status = response.status;
                     if (status === "duplicated") {
                         $("#nickMessage").text("중복된 닉네임입니다.").css("color", "red");
-                        /* $(".email-verify-btn").prop("disabled", true); */
                     } else if (status === "available") {
                         $("#nickMessage").text("사용 가능한 닉네임입니다.").css("color", "green");
-                        /* $(".email-verify-btn").prop("disabled", false); */
                     }
                 },
                 error: function(xhr, status, error) {
                     $("#nickMessage").text("오류가 발생했습니다.").css("color", "red");
-                    /* $(".email-verify-btn").prop("disabled", true); */
                 }
             });
+                	
         }
     });
     
@@ -104,7 +104,7 @@ $(function() {
                     if ($("#emailVerificationSection").length === 0) {
                         $(".email-section").append(
                             '<div id="emailVerificationSection">' +
-                            '<label>인증번호</label>' +
+                            '<label></label>' +
                             '<input type="text" id="emailVerificationCode" name="emailVerificationCode" placeholder="인증번호를 입력하세요" required>' +
                             '<button type="button" class="email-verify-check-btn">인증번호 확인</button>' +
                             '</div>'
@@ -159,7 +159,7 @@ $(function() {
                     if ($("#phoneVerificationSection").length === 0) {
                         $(".phone-section").append(
                             '<div id="phoneVerificationSection">' +
-                            '<label>휴대폰 인증번호</label>' +
+                            '<label></label>' +
                             '<input type="text" id="phoneVerificationCode" name="phoneVerificationCode" placeholder="휴대폰 인증번호를 입력하세요" required>' +
                             '<button type="button" class="phone-verify-check-btn">인증번호 확인</button>' +
                             '</div>'
@@ -213,7 +213,7 @@ function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, en
 }
 
 
-//////////////////////////////// 비밀번호 길이 ////////////////////
+//////////////////////////////// 비밀번호 길이 및 성별 확인 ////////////////////
  $(function() { 
     // 비밀번호 입력 칸에서 포커스 아웃될 때
     $("input[name='userPassword']").on("blur", function() {
@@ -261,6 +261,8 @@ function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, en
         var isValid = true;
         var isEmailVerified = $("#isEmailVerified").val() === "true";
         var isPhoneVerified = $("#isPhoneVerified").val() === "true";
+        var password = $("input[name='userPassword']").val();
+        var isGenderSelected = $("input[name='gender']:checked").length > 0;
 
      // 모든 필드가 유효한지 확인
         $("#signupForm").find("input[required], select[required]").each(function() {
@@ -279,6 +281,12 @@ function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, en
         } else if (!isPhoneVerified) {
             e.preventDefault();
             alert("휴대폰 인증을 완료해주세요.");
+        } else if (password.length < 10) {
+            e.preventDefault();
+            alert("비밀번호는 10자 이상이어야 합니다.");
+        } else if (!isGenderSelected) {
+            e.preventDefault();
+            alert("성별을 선택해주세요.");
         } else {
             alert("산타 가입을 환영합니다.");
         }
@@ -291,16 +299,31 @@ function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, en
 <style>
 html, body {
     /* height: 100%; */
+    width: 100%;
     margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: white; /* 배경색 설정 */
+    padding-top: 50px; /* 상단 여백 추가 */
+    padding-bottom: 50px; /* 하단 여백 추가 */
 }
 
 h2 {
     margin-bottom: 20px;
     font-size: 17px;
+}
+
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+   /*  border-bottom: 1px solid #ccc; */
 }
 
 input[type="text"], input[type="password"], input[type="date"], input[type="email"], select {
@@ -349,6 +372,24 @@ select:focus {
     background-color: #DEFBA7; 
 }
 
+.email-verify-check-btn, .phone-verify-check-btn {
+    width: auto;
+    padding: 10px;
+    font-size: 14px;
+    background-color: white;
+    color: #81C408;
+    border: 1px solid #81C408;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
+    margin-left: 0px;
+    margin-top:-3px;
+}
+
+.email-verify-check-btn:hover, .phone-verify-check-btn:hover {
+    background-color: #DEFBA7; 
+}
+
 .signup-btn {
     width: 100%;
     padding: 15px;
@@ -369,7 +410,7 @@ select:focus {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    width: 320px; /* 고정된 너비 설정 */
+    width: 340px; /* 고정된 너비 설정 */
 }
 
 label {
@@ -457,9 +498,58 @@ label {
 }
 
 .hidden-radio {
-    display: none;
+    display: block; /* 숨겨진 라디오 버튼을 표시 */
+    height: 0;
+    width: 0;
+    opacity: 0;
 }
 
+.error-message {
+    color: red;
+    font-size: 13px;
+    margin-top: -1px;
+    margin-bottom: 10px;
+    text-align: left;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.success-message {
+    color: green;
+    font-size: 16px;
+    margin-top: -1px;
+    margin-bottom: 10px;
+    text-align: left;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+        
+.header-logo {
+    display: flex;
+    margin-left: 80px;
+    margin-top: 50px;
+}
+
+.header-logo img {
+    height: 40px;
+    margin-right: 3px;
+    margin-top: -2px;
+}
+
+.header-logo span {
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    margin-top: 0px; 
+}
+
+.header-logo a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
 </style>
 
 </head>
@@ -471,6 +561,12 @@ label {
 <!--  ////////////////////////////////////////////// header ///////////////////////////////////////////////// -->
 
 <header>
+	<div class="header-logo">      
+		<a href="/common/main.jsp">
+          <img src="/image/산타 로고.png" alt="Logo">
+        <span>SANTA</span>
+        </a>
+    </div>
 </header>
 
 <!--  ////////////////////////////////////////////// main ///////////////////////////////////////////////// -->
@@ -502,7 +598,7 @@ label {
         <label>이메일</label>
         <div class="email-input">
             <input type="text" name="userId" placeholder="이메일" required>
-            <div id="emailMessage"></div>
+            <div id="emailMessage" class="error-message"></div>
         </div>
         <button type="button" class="email-verify-btn">이메일 인증하기</button>
         <input type="hidden" id="isEmailVerified" value="false">
@@ -511,19 +607,19 @@ label {
     <div class="password-section">
         <label>비밀번호</label> 
         <p class="description">영문, 숫자를 포함한 10자 이상의 비밀번호를 입력해주세요.</p>
-        <input type="password" name="userPassword" placeholder="비밀번호 입력" required>
+        <input type="password" name="userPassword" placeholder="비밀번호 입력" autocomplete="new-password" required>
          <div id="passwordLengthMessage"></div> 
     </div>
     <div class="password-section">
         <label>비밀번호 확인</label>
-        <input type="password" name="checkPassword" placeholder="비밀번호 확인" required>
-       <div id="passwordMessage"></div>
+        <input type="password" name="checkPassword" placeholder="비밀번호 확인" autocomplete="new-password" required>
+       <div id="passwordMessage" class="error-message"></div>
     </div>
     
     <div class="nickname-section">
         <label>닉네임</label>
         <input type="text" name="nickName" placeholder="닉네임 (최대 10자)" required>
-       	<div id="nickMessage"></div>
+       	<div id="nickMessage" class="error-message"></div>
     </div>
     
     <div class="birthday-section">
@@ -554,7 +650,7 @@ label {
     <div class="gender-section" >
         <div class="gender-button" data-target="genderFemale">여자</div>
         <div class="gender-button" data-target="genderMale">남자</div>
-        <input type="radio" id="genderFemale" name="gender" value="0" class="hidden-radio" required >
+        <input type="radio" id="genderFemale" name="gender" value="0" class="hidden-radio" required>
         <input type="radio" id="genderMale" name="gender" value="1" class="hidden-radio" required>
     </div>
     

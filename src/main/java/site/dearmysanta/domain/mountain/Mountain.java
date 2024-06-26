@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class Mountain {
     private int certifiedPostCount; // certified post count
     private int calandarRegisteredCount; // calendar registered count
     private int meetingPostCount; // meeting post count
+    private Date date;
     private List<String> mountainLocationList;
     private List<MountainTrail> mountainTrail; // list of mountain trails
 

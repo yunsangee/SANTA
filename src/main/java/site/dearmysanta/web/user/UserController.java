@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,7 @@ import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.correctionpost.CorrectionPostService;
 import site.dearmysanta.service.mountain.MountainService;
 import site.dearmysanta.service.user.UserService;
+import site.dearmysanta.service.user.etc.UserEtcService;
 
 @Controller
 @RequestMapping("/user/*")
@@ -45,6 +48,9 @@ public class UserController {
 	
 	@Autowired
 	MountainService mountainService;
+	
+	@Autowired
+	UserEtcService userEtcService; 
 	
 	@Value("${pageSize}")
 	private int pageSize;
@@ -74,14 +80,14 @@ public class UserController {
 		    
 		    System.out.println("addPassword : " +addPassword);
 		    
-		    // »õ·Î¿î ºñ¹Ğ¹øÈ£ È®ÀÎ¿ë ºñ¹Ğ¹øÈ£
-		    String checkPassword = user.getCheckPassword(); // »ç¿ëÀÚ°¡ ÀÔ·ÂÇÑ »õ·Î¿î ºñ¹Ğ¹øÈ£ È®ÀÎ¿ë
+		    // ìƒˆë¡œìš´ ë¹„ë°€ë²ˆí˜¸ í™•ì¸ìš© ë¹„ë°€ë²ˆí˜¸
+		    String checkPassword = user.getCheckPassword(); // ì‚¬ìš©ìê°€ ì…ë ¥í•œ ìƒˆë¡œìš´ ë¹„ë°€ë²ˆí˜¸ í™•ì¸ìš©
 		    
 		    System.out.println("checkPassword : " +checkPassword);
 		    
 		    if (!addPassword.equals(checkPassword)) {
-		        // »õ·Î¿î ºñ¹Ğ¹øÈ£¿Í ºñ¹Ğ¹øÈ£ È®ÀÎÀÌ ÀÏÄ¡ÇÏÁö ¾Ê´Â °æ¿ì
-		        model.addAttribute("error", "ºñ¹Ğ¹øÈ£¿Í ºñ¹Ğ¹øÈ£ È®ÀÎÀÌ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
+		        // ìƒˆë¡œìš´ ë¹„ë°€ë²ˆí˜¸ì™€ ë¹„ë°€ë²ˆí˜¸ í™•ì¸ì´ ì¼ì¹˜í•˜ì§€ ì•ŠëŠ” ê²½ìš°
+		        model.addAttribute("error", "ë¹„ë°€ë²ˆí˜¸ì™€ ë¹„ë°€ë²ˆí˜¸ í™•ì¸ì´ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
 		        return "redirect:/user/addUser.jsp";
 		    }
 			
@@ -111,41 +117,65 @@ public class UserController {
 		}	
 
 		@PostMapping(value = "login")
-		public String login(@ModelAttribute User user, String userId, String userPassword, HttpSession session, Model model, Search search) throws Exception {
+		public String login(@ModelAttribute User user, String userId, String userPassword, HttpSession session, Model model, Search search, HttpServletResponse response) throws Exception {
 		    System.out.println("/user/login : POST");
 		    
-		    // DB¿¡¼­ »ç¿ëÀÚ Á¤º¸ Á¶È¸
+		    // DBì—ì„œ ì‚¬ìš©ì ì •ë³´ ì¡°íšŒ
 		    User dbUser = userService.getUserByUserId(user.getUserId());
 		    
-		    System.out.println("È®ÀÎ : " + dbUser);
+		    System.out.println("í™•ì¸ : " + dbUser);
 		    
-		    // »ç¿ëÀÚ°¡ Á¸ÀçÇÏ´ÂÁö È®ÀÎ
+		    // ì‚¬ìš©ìê°€ ì¡´ì¬í•˜ëŠ”ì§€ í™•ì¸
 		    if (dbUser == null || !dbUser.getUserPassword().equals(userPassword)) {
-		        model.addAttribute("loginError", "¾ÆÀÌµğ È¤Àº ºñ¹Ğ¹øÈ£°¡ Àß¸øµÇ¾ú½À´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+		        model.addAttribute("loginError", "ì•„ì´ë”” í˜¹ì€ ë¹„ë°€ë²ˆí˜¸ê°€ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 		        return "forward:/user/login.jsp";
 		    }
 		    
 		    System.out.println("dbUser : " + dbUser);
 		    
-		    // Å»ÅğÀÏ½Ã°¡ nullÀÎÁö È®ÀÎ
+		    // íƒˆí‡´ì¼ì‹œê°€ nullì¸ì§€ í™•ì¸
 		    if (dbUser.getWithdrawDate() != null) {
-		        model.addAttribute("withdrawError", "Å»ÅğÇÑ »êÅ¸´ÔÀÔ´Ï´Ù.");
+		        model.addAttribute("withdrawError", "íƒˆí‡´í•œ ì‚°íƒ€ë‹˜ì…ë‹ˆë‹¤.");
 		        return "forward:/user/login.jsp";
 		    }	
-		        
-//		        session.setAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
-//				session.setAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), user));
-			    
-		    	if(dbUser.getProfileImage() != null&&!dbUser.getProfileImage().contains("ncloudstorage") ) {
-		    		dbUser.setProfileImage(objectStorageService.getImageURL(dbUser.getProfileImage()));
-					}	
-		    	
-		    	session.setAttribute("user", dbUser);	
-		    	
-		    	System.out.println("È®ÀÎ : " + dbUser);
-		    	
-		        return "forward:/common/main.jsp";
-		        
+		    
+		    if(dbUser.getProfileImage() != null && !dbUser.getProfileImage().contains("ncloudstorage")) {
+		        dbUser.setProfileImage(objectStorageService.getImageURL(dbUser.getProfileImage()));
+		    }
+		    
+		    session.setAttribute("user", dbUser);	
+		    
+		    // ì¿ í‚¤ ì„¤ì •
+		    Cookie cookie = new Cookie("userNo", ""+dbUser.getUserNo());
+		    cookie.setMaxAge(60 * 60 * 24 * 7); // ì¿ í‚¤ ìœ íš¨ê¸°ê°„ 7ì¼ë¡œ ì„¤ì •
+		    cookie.setPath("/"); // ì• í”Œë¦¬ì¼€ì´ì…˜ì˜ ëª¨ë“  ê²½ë¡œì— ëŒ€í•´ ìœ íš¨
+		    cookie.setHttpOnly(false); // í´ë¼ì´ì–¸íŠ¸ ì¸¡ì—ì„œë„ ì ‘ê·¼ ê°€ëŠ¥í•˜ë„ë¡ ì„¤ì • (ë³´ì•ˆ í•„ìš” ì‹œ true)
+		    cookie.setSecure(false); // 
+		    response.addCookie(cookie);
+		    
+		    // ì¿ í‚¤ ì„¤ì •
+		    Cookie nickNameCookie = new Cookie("nickName", dbUser.getNickName());
+		    nickNameCookie.setMaxAge(60 * 60 * 24 * 7); // ì¿ í‚¤ ìœ íš¨ê¸°ê°„ 7ì¼ë¡œ ì„¤ì •
+		    nickNameCookie.setPath("/"); // ì• í”Œë¦¬ì¼€ì´ì…˜ì˜ ëª¨ë“  ê²½ë¡œì— ëŒ€í•´ ìœ íš¨
+		    nickNameCookie.setHttpOnly(false); // í´ë¼ì´ì–¸íŠ¸ ì¸¡ì—ì„œë„ ì ‘ê·¼ ê°€ëŠ¥í•˜ë„ë¡ ì„¤ì • (ë³´ì•ˆ í•„ìš” ì‹œ true)
+		    nickNameCookie.setSecure(false); // 
+		    response.addCookie(nickNameCookie);
+		    
+		 // ì¿ í‚¤ ì„¤ì •
+		    Cookie profileCookie = new Cookie("profile", dbUser.getProfileImage());
+		    profileCookie.setMaxAge(60 * 60 * 24 * 7); // ì¿ í‚¤ ìœ íš¨ê¸°ê°„ 7ì¼ë¡œ ì„¤ì •
+		    profileCookie.setPath("/"); // ì• í”Œë¦¬ì¼€ì´ì…˜ì˜ ëª¨ë“  ê²½ë¡œì— ëŒ€í•´ ìœ íš¨
+		    profileCookie.setHttpOnly(false); // í´ë¼ì´ì–¸íŠ¸ ì¸¡ì—ì„œë„ ì ‘ê·¼ ê°€ëŠ¥í•˜ë„ë¡ ì„¤ì • (ë³´ì•ˆ í•„ìš” ì‹œ true)
+		    profileCookie.setSecure(false); // 
+		    response.addCookie(profileCookie);
+		    
+		    System.out.println("ì¿ í‚¤í™•ì¸ ë‹‰ë„¤ì„ : " + nickNameCookie);
+		    
+		    System.out.println("ì¿ í‚¤í™•ì¸ userNo : " + cookie);
+		    
+		    System.out.println("ì¿ í‚¤ í”„ë¡œí•„ ì‚¬ì§„ : " + profileCookie);
+		    
+		    return "redirect:/common/main.jsp";
 		}
 
 		
@@ -160,7 +190,7 @@ public class UserController {
 			
 			session.invalidate();
 			
-			return "redirect:/main.jsp";
+			return "redirect:/common/main.jsp";
 		}
 		
 		//
@@ -182,7 +212,7 @@ public class UserController {
 	            request.getSession().setAttribute("userId", userId);
 	            return "redirect:/user/findUserIdresult.jsp";
 	        } else {
-	            model.addAttribute("errorMessage", "ÀÌ¸§°ú ÀüÈ­¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
+	            model.addAttribute("errorMessage", "ì´ë¦„ê³¼ ì „í™”ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
 	            return "redirect:/user/findUserIdresult.jsp";
 	        }
 	    }
@@ -205,7 +235,7 @@ public class UserController {
 		        request.getSession().setAttribute("userId", user.getUserId());
 		        return "forward:/user/setUserPassword.jsp";
 		    } else {
-		        model.addAttribute("errorMessage", "¾ÆÀÌµğ¿Í ÀüÈ­¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
+		        model.addAttribute("errorMessage", "ì•„ì´ë””ì™€ ì „í™”ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
 		        return "redirect:/user/findUserPassword.jsp";
 		    }
 		}
@@ -232,38 +262,38 @@ public class UserController {
 			
 			System.out.println("userId : " +user.getUserId());
 
-		    // »ç¿ëÀÚÀÇ ¾ÆÀÌµğ¿Í ÀüÈ­¹øÈ£·Î ÇöÀç ºñ¹Ğ¹øÈ£ °¡Á®¿À±â
+		    // ì‚¬ìš©ìì˜ ì•„ì´ë””ì™€ ì „í™”ë²ˆí˜¸ë¡œ í˜„ì¬ ë¹„ë°€ë²ˆí˜¸ ê°€ì ¸ì˜¤ê¸°
 		    String currentPassword = user.getUserPassword();
 		    
 		    //System.out.println("find : " +findAttribute);
 		    System.out.println("password : " +currentPassword);
 
-		    // »õ·Î¿î ºñ¹Ğ¹øÈ£ È®ÀÎ
-		    String newPassword = user.getPasswordNew(); // »ç¿ëÀÚ°¡ ÀÔ·ÂÇÑ »õ·Î¿î ºñ¹Ğ¹øÈ£
+		    // ìƒˆë¡œìš´ ë¹„ë°€ë²ˆí˜¸ í™•ì¸
+		    String newPassword = user.getPasswordNew(); // ì‚¬ìš©ìê°€ ì…ë ¥í•œ ìƒˆë¡œìš´ ë¹„ë°€ë²ˆí˜¸
 		    
 		    System.out.println("newPassword : " +newPassword);
 		    
-		    // »õ·Î¿î ºñ¹Ğ¹øÈ£ È®ÀÎ¿ë ºñ¹Ğ¹øÈ£
-		    String confirmPassword = user.getCheckPassword(); // »ç¿ëÀÚ°¡ ÀÔ·ÂÇÑ »õ·Î¿î ºñ¹Ğ¹øÈ£ È®ÀÎ¿ë
+		    // ìƒˆë¡œìš´ ë¹„ë°€ë²ˆí˜¸ í™•ì¸ìš© ë¹„ë°€ë²ˆí˜¸
+		    String confirmPassword = user.getCheckPassword(); // ì‚¬ìš©ìê°€ ì…ë ¥í•œ ìƒˆë¡œìš´ ë¹„ë°€ë²ˆí˜¸ í™•ì¸ìš©
 		    
 		    System.out.println("confirmPassword : " +confirmPassword);
 		    
 		    if (!newPassword.equals(confirmPassword)) {
-		        // »õ·Î¿î ºñ¹Ğ¹øÈ£¿Í ºñ¹Ğ¹øÈ£ È®ÀÎÀÌ ÀÏÄ¡ÇÏÁö ¾Ê´Â °æ¿ì
-		        model.addAttribute("error", "ºñ¹Ğ¹øÈ£¿Í ºñ¹Ğ¹øÈ£ È®ÀÎÀÌ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
+		        // ìƒˆë¡œìš´ ë¹„ë°€ë²ˆí˜¸ì™€ ë¹„ë°€ë²ˆí˜¸ í™•ì¸ì´ ì¼ì¹˜í•˜ì§€ ì•ŠëŠ” ê²½ìš°
+		        model.addAttribute("error", "ë¹„ë°€ë²ˆí˜¸ì™€ ë¹„ë°€ë²ˆí˜¸ í™•ì¸ì´ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
 		        return "redirect:/user/setUserPassword.jsp";
 		    }
 
 		    if (newPassword.equals(currentPassword)) {
-		        // »õ·Î¿î ºñ¹Ğ¹øÈ£°¡ ÇöÀç ºñ¹Ğ¹øÈ£¿Í °°Àº °æ¿ì
-		        model.addAttribute("error", "»õ·Î¿î ºñ¹Ğ¹øÈ£´Â ÇöÀç ºñ¹Ğ¹øÈ£¿Í ´Ş¶ó¾ß ÇÕ´Ï´Ù.");
+		        // ìƒˆë¡œìš´ ë¹„ë°€ë²ˆí˜¸ê°€ í˜„ì¬ ë¹„ë°€ë²ˆí˜¸ì™€ ê°™ì€ ê²½ìš°
+		        model.addAttribute("error", "ìƒˆë¡œìš´ ë¹„ë°€ë²ˆí˜¸ëŠ” í˜„ì¬ ë¹„ë°€ë²ˆí˜¸ì™€ ë‹¬ë¼ì•¼ í•©ë‹ˆë‹¤.");
 		        return "redirect:/user/setUserPassword.jsp";
 		    }
 
-		    // º¯°æµÈ ºñ¹Ğ¹øÈ£¸¦ ÀúÀåÇÏ°Å³ª Ã³¸®ÇÏ´Â ·ÎÁ÷ Ãß°¡
+		    // ë³€ê²½ëœ ë¹„ë°€ë²ˆí˜¸ë¥¼ ì €ì¥í•˜ê±°ë‚˜ ì²˜ë¦¬í•˜ëŠ” ë¡œì§ ì¶”ê°€
 		    userService.setUserPassword(user.getUserId(), newPassword);
 		    
-		    // º¯°æµÈ ºñ¹Ğ¹øÈ£¸¦ ºä·Î Àü´Ş
+		    // ë³€ê²½ëœ ë¹„ë°€ë²ˆí˜¸ë¥¼ ë·°ë¡œ ì „ë‹¬
 		    model.addAttribute("userPassword", newPassword);
 		    
 		    System.out.println("newPassword2 : " +newPassword);
@@ -283,7 +313,7 @@ public class UserController {
 //			System.out.println("getUser : GET");
 //			//Business Logic
 //			User user = userService.getUser(userId);
-//			// Model °ú View ¿¬°á
+//			// Model ê³¼ View ì—°ê²°
 //			model.addAttribute("user", user);
 //			
 //			return "forward:/user/getUser.jsp";
@@ -300,16 +330,16 @@ public class UserController {
 		    User user = null;
 
 		    if (userNo!=null) {
-		        // ¿äÃ» ¸Å°³º¯¼ö·Î ¹ŞÀº userNo°¡ ÀÖ´Â °æ¿ì
+		        // ìš”ì²­ ë§¤ê°œë³€ìˆ˜ë¡œ ë°›ì€ userNoê°€ ìˆëŠ” ê²½ìš°
 		        user = userService.getUser(userNo);
 		        System.out.println("getUser: userNo from request parameter = " + userNo);
 		    } else if (sessionUser != null) {
-		        // ¼¼¼Ç¿¡¼­ ÇöÀç ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		        // ì„¸ì…˜ì—ì„œ í˜„ì¬ ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		        user = userService.getUser(sessionUser.getUserNo());
 		        System.out.println("getUser: sessionUser = " + sessionUser.getUserNo());
 		    } else {
 		        System.out.println("getUser: No userNo provided and no sessionUser");
-		        model.addAttribute("error", "»ç¿ëÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+		        model.addAttribute("error", "ì‚¬ìš©ìë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
 		        return "redirect:/user/login.jsp";
 		    }
 		    
@@ -323,7 +353,7 @@ public class UserController {
 			
 			user.setProfileImage(profileImage);
 
-		    // »ç¿ëÀÚ Á¤º¸ ¸ğµ¨¿¡ Ãß°¡
+		    // ì‚¬ìš©ì ì •ë³´ ëª¨ë¸ì— ì¶”ê°€
 		    model.addAttribute("user", user);
 
 		    return "forward:/user/getUser.jsp";
@@ -357,7 +387,7 @@ public class UserController {
 			System.out.println("updateUser : GET");
 			//Business Logic
 			User user = userService.getUser(userNo);
-			// Model °ú View ¿¬°á
+			// Model ê³¼ View ì—°ê²°
 			
 			String profileImage = objectStorageService.getImageURL(user.getUserId());
 			
@@ -372,67 +402,94 @@ public class UserController {
 		
 		
 		@PostMapping(value = "updateUser")
-		public String updateUser(@ModelAttribute User user, @RequestParam(required = false) Integer userNo, Model model, HttpSession session) throws Exception {
+		public String updateUser(@ModelAttribute User user, @RequestParam(required = false) Integer userNo, Model model, HttpSession session, HttpServletResponse response) throws Exception {
 		    System.out.println("updateUser : POST");
-		  
-		    if ( user.getImage() != null) {  
-		    	objectStorageService.uploadFile(user.getImage(), user.getUserId());
-		     }
-		    
-		    // ¼¼¼Ç¿¡¼­ ÇöÀç ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+
+		    if (user.getImage() != null) {
+		        objectStorageService.uploadFile(user.getImage(), user.getUserId());
+		    }
+
+		    // ì„¸ì…˜ì—ì„œ í˜„ì¬ ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		    User sessionUser = (User) session.getAttribute("user");
 
-		    // ¼¼¼Ç »ç¿ëÀÚ Á¤º¸ ·Î±× Ãâ·Â
+		    // ì„¸ì…˜ ì‚¬ìš©ì ì •ë³´ ë¡œê·¸ ì¶œë ¥
 		    if (sessionUser != null) {
 		        System.out.println("updateUser: sessionUser = " + sessionUser.getUserId());
 		    } else {
 		        System.out.println("updateUser: sessionUser is null");
 		    }
 
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸°¡ ÀÖ´ÂÁö È®ÀÎ
+		    // ì„¸ì…˜ì— ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ê°€ ìˆëŠ”ì§€ í™•ì¸
 		    if (sessionUser == null) {
-		        // ·Î±×ÀÎÇÏÁö ¾ÊÀº °æ¿ì ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®
-		        model.addAttribute("error", "·Î±×ÀÎÀÌ ÇÊ¿äÇÕ´Ï´Ù.");
+		        // ë¡œê·¸ì¸í•˜ì§€ ì•Šì€ ê²½ìš° ë¡œê·¸ì¸ í˜ì´ì§€ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
+		        model.addAttribute("error", "ë¡œê·¸ì¸ì´ í•„ìš”í•©ë‹ˆë‹¤.");
 		        return "redirect:/user/login.jsp";
 		    }
 
-		    // ¾÷µ¥ÀÌÆ®ÇÏ·Á´Â »ç¿ëÀÚ ¹øÈ£ ¼³Á¤
+		    // ì—…ë°ì´íŠ¸í•˜ë ¤ëŠ” ì‚¬ìš©ì ë²ˆí˜¸ ì„¤ì •
 		    int targetUserNo = (userNo != null) ? userNo : sessionUser.getUserNo();
 
-		    // DB¿¡¼­ ÃÖ½Å »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // DBì—ì„œ ìµœì‹  ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		    User dbUser = userService.getUser(targetUserNo);
 
 		    if (dbUser == null) {
-		        model.addAttribute("error", "»ç¿ëÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+		        model.addAttribute("error", "ì‚¬ìš©ìë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
 		        return "redirect:/user/updateUser.jsp";
 		    }
 
-		    // »ç¿ëÀÚ Á¤º¸ ¾÷µ¥ÀÌÆ®;
+		    // ì‚¬ìš©ì ì •ë³´ ì—…ë°ì´íŠ¸
 		    dbUser.setNickName(user.getNickName());
 		    dbUser.setAddress(user.getAddress());
 		    dbUser.setDetailAddress(user.getDetailAddress());
 		    dbUser.setPhoneNumber(user.getPhoneNumber());
-			/* dbUser.setProfileImage(user.getProfileImage()); */
 		    dbUser.setHikingPurpose(user.getHikingPurpose());
 		    dbUser.setHikingDifficulty(user.getHikingDifficulty());
 		    dbUser.setHikingLevel(user.getHikingLevel());
 		    dbUser.setIntroduceContent(user.getIntroduceContent());
-		    // ÇÊ¿äÇÑ ´Ù¸¥ ÇÊµåµµ ¾÷µ¥ÀÌÆ®
+		    // í•„ìš”í•œ ë‹¤ë¥¸ í•„ë“œë„ ì—…ë°ì´íŠ¸
 
 		    userService.updateUser(dbUser);
 
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ »ç¿ëÀÚ¿Í ¾÷µ¥ÀÌÆ®ÇÑ »ç¿ëÀÚ°¡ µ¿ÀÏÇÑ °æ¿ì, ¼¼¼Ç Á¤º¸¸¦ ¾÷µ¥ÀÌÆ®
+		    // ì„¸ì…˜ì— ë¡œê·¸ì¸í•œ ì‚¬ìš©ìì™€ ì—…ë°ì´íŠ¸í•œ ì‚¬ìš©ìê°€ ë™ì¼í•œ ê²½ìš°, ì„¸ì…˜ ì •ë³´ë¥¼ ì—…ë°ì´íŠ¸
 		    if (sessionUser.getUserNo() == dbUser.getUserNo()) {
 		        session.setAttribute("user", dbUser);
 		    }
+		    
+		    // ì¿ í‚¤ ì„¤ì •
+		    Cookie cookie = new Cookie("userNo", ""+dbUser.getUserNo());
+		    cookie.setMaxAge(60 * 60 * 24 * 7); // ì¿ í‚¤ ìœ íš¨ê¸°ê°„ 7ì¼ë¡œ ì„¤ì •
+		    cookie.setPath("/"); // ì• í”Œë¦¬ì¼€ì´ì…˜ì˜ ëª¨ë“  ê²½ë¡œì— ëŒ€í•´ ìœ íš¨
+		    cookie.setHttpOnly(false); // í´ë¼ì´ì–¸íŠ¸ ì¸¡ì—ì„œë„ ì ‘ê·¼ ê°€ëŠ¥í•˜ë„ë¡ ì„¤ì • (ë³´ì•ˆ í•„ìš” ì‹œ true)
+		    cookie.setSecure(false); // 
+		    response.addCookie(cookie);
 
+		    // ì¿ í‚¤ ì„¤ì •
+		    Cookie nickNameCookie = new Cookie("nickName", dbUser.getNickName());
+		    nickNameCookie.setMaxAge(60 * 60 * 24 * 7); // ì¿ í‚¤ ìœ íš¨ê¸°ê°„ 7ì¼ë¡œ ì„¤ì •
+		    nickNameCookie.setPath("/"); // ì• í”Œë¦¬ì¼€ì´ì…˜ì˜ ëª¨ë“  ê²½ë¡œì— ëŒ€í•´ ìœ íš¨
+		    nickNameCookie.setHttpOnly(false); // í´ë¼ì´ì–¸íŠ¸ ì¸¡ì—ì„œë„ ì ‘ê·¼ ê°€ëŠ¥í•˜ë„ë¡ ì„¤ì • (ë³´ì•ˆ í•„ìš” ì‹œ true)
+		    nickNameCookie.setSecure(false); // 
+		    response.addCookie(nickNameCookie);
+		    
+			 // ì¿ í‚¤ ì„¤ì •
+		    Cookie profileCookie = new Cookie("profile", dbUser.getProfileImage());
+		    profileCookie.setMaxAge(60 * 60 * 24 * 7); // ì¿ í‚¤ ìœ íš¨ê¸°ê°„ 7ì¼ë¡œ ì„¤ì •
+		    profileCookie.setPath("/"); // ì• í”Œë¦¬ì¼€ì´ì…˜ì˜ ëª¨ë“  ê²½ë¡œì— ëŒ€í•´ ìœ íš¨
+		    profileCookie.setHttpOnly(false); // í´ë¼ì´ì–¸íŠ¸ ì¸¡ì—ì„œë„ ì ‘ê·¼ ê°€ëŠ¥í•˜ë„ë¡ ì„¤ì • (ë³´ì•ˆ í•„ìš” ì‹œ true)
+		    profileCookie.setSecure(false); // 
+		    response.addCookie(profileCookie);
+		  
+		    System.out.println("ì¿ í‚¤í™•ì¸ ë‹‰ë„¤ì„ : " + nickNameCookie);
+		    
+		    System.out.println("ì¿ í‚¤í™•ì¸ ì•„ì´ë”” : " + cookie);
+		    
+		    System.out.println("ì¿ í‚¤í™•ì¸ í”„ë¡œí•„ : " +profileCookie);
+		    
 		    System.out.println("updateUser : " + dbUser);
 
-		    // ¾÷µ¥ÀÌÆ® ¼º°ø ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®
+		    // ì—…ë°ì´íŠ¸ ì„±ê³µ í˜ì´ì§€ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
 		    return "redirect:/user/getUser?userNo=" + dbUser.getUserNo();
 		}
-
-
 		
 		//
 		// deleteUser
@@ -444,7 +501,7 @@ public class UserController {
 			System.out.println("deleteUser : GET");
 			//Business Logic
 			User user = userService.getUser(userNo);
-			// Model °ú View ¿¬°á
+			// Model ê³¼ View ì—°ê²°
 			model.addAttribute("user", user);
 			
 			return "forward:/user/deleteUser.jsp";
@@ -455,35 +512,35 @@ public class UserController {
 		    
 		    System.out.println("deleteUser : POST");
 		    
-		    // ¼¼¼Ç¿¡¼­ ÇöÀç ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ì„¸ì…˜ì—ì„œ í˜„ì¬ ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		    User sessionUser = (User) session.getAttribute("user");
 
-		    // ¼¼¼Ç »ç¿ëÀÚ Á¤º¸ ·Î±× Ãâ·Â
+		    // ì„¸ì…˜ ì‚¬ìš©ì ì •ë³´ ë¡œê·¸ ì¶œë ¥
 		    if (sessionUser != null) {
 		        System.out.println("deleteUser: sessionUser = " + sessionUser.getUserId());
 		    } else {
 		        System.out.println("deleteUser: sessionUser is null");
 		    }
 
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸°¡ ÀÖ´ÂÁö È®ÀÎ
+		    // ì„¸ì…˜ì— ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ê°€ ìˆëŠ”ì§€ í™•ì¸
 		    if (sessionUser == null) {
-		        // ·Î±×ÀÎÇÏÁö ¾ÊÀº °æ¿ì ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®
-		        model.addAttribute("error", "·Î±×ÀÎÀÌ ÇÊ¿äÇÕ´Ï´Ù.");
+		        // ë¡œê·¸ì¸í•˜ì§€ ì•Šì€ ê²½ìš° ë¡œê·¸ì¸ í˜ì´ì§€ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
+		        model.addAttribute("error", "ë¡œê·¸ì¸ì´ í•„ìš”í•©ë‹ˆë‹¤.");
 		        return "redirect:/user/login.jsp";
 		    }
 
-		    // ¾÷µ¥ÀÌÆ®ÇÏ·Á´Â »ç¿ëÀÚ ¹øÈ£ ¼³Á¤
+		    // ì—…ë°ì´íŠ¸í•˜ë ¤ëŠ” ì‚¬ìš©ì ë²ˆí˜¸ ì„¤ì •
 		    int targetUserNo = (userNo != null) ? userNo : sessionUser.getUserNo();
 
-		    // DB¿¡¼­ ÃÖ½Å »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // DBì—ì„œ ìµœì‹  ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		    User dbUser = userService.getUser(targetUserNo);
 
 		    if (dbUser == null) {
-		        model.addAttribute("error", "»ç¿ëÀÚ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+		        model.addAttribute("error", "ì‚¬ìš©ìë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
 		        return "redirect:/user/updateUser.jsp";
 		    }
 
-		    // »ç¿ëÀÚ Á¤º¸ ¾÷µ¥ÀÌÆ®
+		    // ì‚¬ìš©ì ì •ë³´ ì—…ë°ì´íŠ¸
 		    dbUser.setWithdrawReason(user.getWithdrawReason());
 		    dbUser.setWithdrawContent(user.getWithdrawContent());    
 		    //userService.updateUser(dbUser);
@@ -492,14 +549,14 @@ public class UserController {
 		    
 		    User dbUser2 = userService.getUser(targetUserNo);
 
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ »ç¿ëÀÚ¿Í ¾÷µ¥ÀÌÆ®ÇÑ »ç¿ëÀÚ°¡ µ¿ÀÏÇÑ °æ¿ì, ¼¼¼Ç Á¤º¸¸¦ ¹«È¿È­
+		    // ì„¸ì…˜ì— ë¡œê·¸ì¸í•œ ì‚¬ìš©ìì™€ ì—…ë°ì´íŠ¸í•œ ì‚¬ìš©ìê°€ ë™ì¼í•œ ê²½ìš°, ì„¸ì…˜ ì •ë³´ë¥¼ ë¬´íš¨í™”
 		    if (sessionUser.getUserNo() == dbUser2.getUserNo()) {
-		        session.invalidate(); // ¼¼¼Ç ¹«È¿È­
+		        session.invalidate(); // ì„¸ì…˜ ë¬´íš¨í™”
 		    }
 
 		    System.out.println("deleteUser : " + dbUser2);
 
-		    // Å»Åğ ¼º°ø ÈÄ ¸ŞÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®
+		    // íƒˆí‡´ ì„±ê³µ í›„ ë©”ì¸ í˜ì´ì§€ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
 		    return "redirect:/common/main.jsp";
 		    
 		   // return "redirect:/user/getUser?userNo=" + dbUser.getUserNo();
@@ -517,19 +574,19 @@ public class UserController {
 		        search.setCurrentPage(1);
 		    }
 
-		    int pageSize = this.pageSize; // ÆäÀÌÁö´ç Ç×¸ñ ¼ö
-		    int pageUnit = this.pageUnit; // ÆäÀÌÁö ³×ºñ°ÔÀÌ¼Ç¿¡ Ç¥½ÃÇÒ ÆäÀÌÁö ¼ö
+		    int pageSize = this.pageSize; // í˜ì´ì§€ë‹¹ í•­ëª© ìˆ˜
+		    int pageUnit = this.pageUnit; // í˜ì´ì§€ ë„¤ë¹„ê²Œì´ì…˜ì— í‘œì‹œí•  í˜ì´ì§€ ìˆ˜
 		    int currentPage = search.getCurrentPage();
 
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ì„¸ì…˜ì—ì„œ ë¡œê·¸ì¸í•œ ê´€ë¦¬ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		    User admin = (User) session.getAttribute("user");
 
 		    System.out.println("admin login : " + admin);
 
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸°¡ ÀÖ´ÂÁö È®ÀÎ
+		    // ì„¸ì…˜ì— ë¡œê·¸ì¸í•œ ê´€ë¦¬ì ì •ë³´ê°€ ìˆëŠ”ì§€ í™•ì¸
 		    if (admin.getRole() == 0) {
-		        // °ü¸®ÀÚ°¡ ¾Æ´Ñ °æ¿ì ¿¡·¯ Ã³¸®
-		        model.addAttribute("error", "°ü¸®ÀÚ¸¸ Á¢±ÙÇÒ ¼ö ÀÖ½À´Ï´Ù.");
+		        // ê´€ë¦¬ìê°€ ì•„ë‹Œ ê²½ìš° ì—ëŸ¬ ì²˜ë¦¬
+		        model.addAttribute("error", "ê´€ë¦¬ìë§Œ ì ‘ê·¼í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.");
 		        return "redirect:/user/login.jsp";
 		    }
 
@@ -537,15 +594,15 @@ public class UserController {
 
 		    System.out.println("userList : " + userList);
 
-		    int totalCount = userList.size(); // ÃÑ »ç¿ëÀÚ ¼ö
-		    int totalPages = (int) Math.ceil((double) totalCount / pageSize); // ÃÑ ÆäÀÌÁö ¼ö °è»ê
+		    int totalCount = userList.size(); // ì´ ì‚¬ìš©ì ìˆ˜
+		    int totalPages = (int) Math.ceil((double) totalCount / pageSize); // ì´ í˜ì´ì§€ ìˆ˜ ê³„ì‚°
 
-		    // ÆäÀÌÂ¡ Ã³¸®¸¦ À§ÇÑ startRow¿Í endRow °è»ê
+		    // í˜ì´ì§• ì²˜ë¦¬ë¥¼ ìœ„í•œ startRowì™€ endRow ê³„ì‚°
 		    int startRow = (currentPage - 1) * pageSize;
 		    int endRow = Math.min(startRow + pageSize, totalCount);
 		    List<User> paginatedUserList = userList.subList(startRow, endRow);
 
-		    int currentPageCount = paginatedUserList.size(); // ÇöÀç ÆäÀÌÁö¿¡ Ç¥½ÃµÇ´Â È¸¿ø ¼ö
+		    int currentPageCount = paginatedUserList.size(); // í˜„ì¬ í˜ì´ì§€ì— í‘œì‹œë˜ëŠ” íšŒì› ìˆ˜
 
 		    model.addAttribute("userList", paginatedUserList);
 		    model.addAttribute("search", search);
@@ -570,19 +627,19 @@ public class UserController {
 		        search.setCurrentPage(1);
 		    }
 
-		    int pageSize = this.pageSize; // ÆäÀÌÁö´ç Ç×¸ñ ¼ö
-		    int pageUnit = this.pageUnit; // ÆäÀÌÁö ³×ºñ°ÔÀÌ¼Ç¿¡ Ç¥½ÃÇÒ ÆäÀÌÁö ¼ö
+		    int pageSize = this.pageSize; // í˜ì´ì§€ë‹¹ í•­ëª© ìˆ˜
+		    int pageUnit = this.pageUnit; // í˜ì´ì§€ ë„¤ë¹„ê²Œì´ì…˜ì— í‘œì‹œí•  í˜ì´ì§€ ìˆ˜
 		    int currentPage = search.getCurrentPage();
 
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ì„¸ì…˜ì—ì„œ ë¡œê·¸ì¸í•œ ê´€ë¦¬ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		    User admin = (User) session.getAttribute("user");
 
 		    System.out.println("admin login : " + admin);
 
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸°¡ ÀÖ´ÂÁö È®ÀÎ
+		    // ì„¸ì…˜ì— ë¡œê·¸ì¸í•œ ê´€ë¦¬ì ì •ë³´ê°€ ìˆëŠ”ì§€ í™•ì¸
 		    if (admin.getRole() == 0) {
-		        // °ü¸®ÀÚ°¡ ¾Æ´Ñ °æ¿ì ¿¡·¯ Ã³¸®
-		        model.addAttribute("error", "°ü¸®ÀÚ¸¸ Á¢±ÙÇÒ ¼ö ÀÖ½À´Ï´Ù.");
+		        // ê´€ë¦¬ìê°€ ì•„ë‹Œ ê²½ìš° ì—ëŸ¬ ì²˜ë¦¬
+		        model.addAttribute("error", "ê´€ë¦¬ìë§Œ ì ‘ê·¼í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.");
 		        return "redirect:/user/login.jsp";
 		    }
 
@@ -590,15 +647,15 @@ public class UserController {
 
 		    System.out.println("userList : " + userList);
 
-		    int totalCount = userList.size(); // ÃÑ »ç¿ëÀÚ ¼ö
-		    int totalPages = (int) Math.ceil((double) totalCount / pageSize); // ÃÑ ÆäÀÌÁö ¼ö °è»ê
+		    int totalCount = userList.size(); // ì´ ì‚¬ìš©ì ìˆ˜
+		    int totalPages = (int) Math.ceil((double) totalCount / pageSize); // ì´ í˜ì´ì§€ ìˆ˜ ê³„ì‚°
 
-		    // ÆäÀÌÂ¡ Ã³¸®¸¦ À§ÇÑ startRow¿Í endRow °è»ê
+		    // í˜ì´ì§• ì²˜ë¦¬ë¥¼ ìœ„í•œ startRowì™€ endRow ê³„ì‚°
 		    int startRow = (currentPage - 1) * pageSize;
 		    int endRow = Math.min(startRow + pageSize, totalCount);
 		    List<User> paginatedUserList = userList.subList(startRow, endRow);
 
-		    int currentPageCount = paginatedUserList.size(); // ÇöÀç ÆäÀÌÁö¿¡ Ç¥½ÃµÇ´Â È¸¿ø ¼ö
+		    int currentPageCount = paginatedUserList.size(); // í˜„ì¬ í˜ì´ì§€ì— í‘œì‹œë˜ëŠ” íšŒì› ìˆ˜
 
 		    model.addAttribute("userList", paginatedUserList);
 		    model.addAttribute("search", search);
@@ -632,7 +689,7 @@ public class UserController {
 		public String addQnA(@RequestParam(required = false) Integer postNo, @RequestParam(required = false) Integer userNo, HttpSession session, Model model) throws Exception {
 		    System.out.println("addQnA : GET");
 		    
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ì„¸ì…˜ì—ì„œ ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		    User sessionUser = (User) session.getAttribute("user");
 		    
 		    System.out.println("user : " +sessionUser);
@@ -642,22 +699,22 @@ public class UserController {
 		    QNA qna = userService.getQnA(postNo, userNo);
 
 //		    if (user == null) {
-//		        // ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸°¡ ¾ø´Â °æ¿ì ¿À·ù Ã³¸®
-//		        model.addAttribute("error", "·Î±×ÀÎ Á¤º¸¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
-//		        return "redirect:/login"; // ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ® ¶Ç´Â ´Ù¸¥ Ã³¸®
+//		        // ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ê°€ ì—†ëŠ” ê²½ìš° ì˜¤ë¥˜ ì²˜ë¦¬
+//		        model.addAttribute("error", "ë¡œê·¸ì¸ ì •ë³´ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+//		        return "redirect:/login"; // ë¡œê·¸ì¸ í˜ì´ì§€ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸ ë˜ëŠ” ë‹¤ë¥¸ ì²˜ë¦¬
 //		    }
 
 		    if (postNo != null && qna.getPostNo() == postNo) {
-		        // °Ô½Ã¹° ¹øÈ£·Î Á¶È¸ÇÏ´Â °æ¿ì
+		        // ê²Œì‹œë¬¼ ë²ˆí˜¸ë¡œ ì¡°íšŒí•˜ëŠ” ê²½ìš°
 		        model.addAttribute("qna", qna);
 		        return "forward:/user/getQnA.jsp";
 		    } else if (userNo != null && qna.getUserNo() == userNo) {
-		        // »ç¿ëÀÚ ¹øÈ£·Î Á¶È¸ÇÏ´Â °æ¿ì
+		        // ì‚¬ìš©ì ë²ˆí˜¸ë¡œ ì¡°íšŒí•˜ëŠ” ê²½ìš°
 		        model.addAttribute("qna", qna);
 		        return "forward:/user/getQnA.jsp";
 		    } else {
-		        // Àß¸øµÈ ¿äÃ» Ã³¸®
-		        model.addAttribute("error", "¿Ã¹Ù¸¥ ¿äÃ»ÀÌ ¾Æ´Õ´Ï´Ù.");
+		        // ì˜ëª»ëœ ìš”ì²­ ì²˜ë¦¬
+		        model.addAttribute("error", "ì˜¬ë°”ë¥¸ ìš”ì²­ì´ ì•„ë‹™ë‹ˆë‹¤.");
 		    }
 		    
 		    if (sessionUser.getRole()==1) {
@@ -684,21 +741,21 @@ public class UserController {
 		    
 			System.out.println("addQnA : POST");
 
-		    // ¼¼¼Ç¿¡¼­ ÇöÀç ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ì„¸ì…˜ì—ì„œ í˜„ì¬ ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		    User sessionUser = (User) session.getAttribute("user");
 
 		    if (sessionUser == null) {
-		        // ·Î±×ÀÎÇÏÁö ¾ÊÀº °æ¿ì ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®
-		        model.addAttribute("error", "·Î±×ÀÎÀÌ ÇÊ¿äÇÕ´Ï´Ù.");
+		        // ë¡œê·¸ì¸í•˜ì§€ ì•Šì€ ê²½ìš° ë¡œê·¸ì¸ í˜ì´ì§€ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
+		        model.addAttribute("error", "ë¡œê·¸ì¸ì´ í•„ìš”í•©ë‹ˆë‹¤.");
 		        return "redirect:/user/login.jsp";
 		    }
 		    
-		    // QNA °´Ã¼¿¡ »ç¿ëÀÚ Á¤º¸ ¼³Á¤
+		    // QNA ê°ì²´ì— ì‚¬ìš©ì ì •ë³´ ì„¤ì •
 		    qna.setUserNo(sessionUser.getUserNo());
 		    qna.setNickName(sessionUser.getNickName());
 		    qna.setProfileImage(sessionUser.getProfileImage());
 
-		    // QNA Ãß°¡
+		    // QNA ì¶”ê°€
 		    userService.addQnA(qna);
 		    
 		    session.setAttribute("qna", qna);		    
@@ -721,22 +778,22 @@ public class UserController {
 		    
 		    System.out.println("getQnA : GET");
 
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ì„¸ì…˜ì—ì„œ ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		    User sessionUser = (User) session.getAttribute("user");
 		    
 		    System.out.println("user : " + sessionUser);
 		    
 		    if (sessionUser == null) {
-		        // ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸°¡ ¾ø´Â °æ¿ì ¿À·ù Ã³¸®
-		        model.addAttribute("error", "·Î±×ÀÎ Á¤º¸¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
-		        return "redirect:/login"; // ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ® ¶Ç´Â ´Ù¸¥ Ã³¸®
+		        // ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ê°€ ì—†ëŠ” ê²½ìš° ì˜¤ë¥˜ ì²˜ë¦¬
+		        model.addAttribute("error", "ë¡œê·¸ì¸ ì •ë³´ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+		        return "redirect:/login"; // ë¡œê·¸ì¸ í˜ì´ì§€ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸ ë˜ëŠ” ë‹¤ë¥¸ ì²˜ë¦¬
 		    }
 
 		    QNA qna = userService.getQnA(postNo, userNo);
 
 		    if (qna == null) {
-		        // QNA Á¤º¸°¡ ¾ø´Â °æ¿ì ¿À·ù Ã³¸®
-		        model.addAttribute("error", "QNA Á¤º¸¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+		        // QNA ì •ë³´ê°€ ì—†ëŠ” ê²½ìš° ì˜¤ë¥˜ ì²˜ë¦¬
+		        model.addAttribute("error", "QNA ì •ë³´ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
 		        return "redirect:/user/addQnA.jsp";
 		    }
 
@@ -766,7 +823,7 @@ public class UserController {
 			// Business Logic
 		    QNA qna = userService.getQnA(postNo, userNo);
 		    
-		    // Model °ú View ¿¬°á
+		    // Model ê³¼ View ì—°ê²°
 		   model.addAttribute("qna", qna);
 		    
 		   return "forward:/user/addAdminAnswer.jsp";
@@ -779,25 +836,25 @@ public class UserController {
 		    System.out.println("postNo : " +qna.getPostNo());
 		    System.out.println("userNo : " +qna.getUserNo());	    
 		    
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ì„¸ì…˜ì—ì„œ ë¡œê·¸ì¸í•œ ê´€ë¦¬ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		    User admin = (User) session.getAttribute("user");
 		    
 		    System.out.println("admin login : " +admin);
 		    
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸°¡ ÀÖ´ÂÁö È®ÀÎ
+		    // ì„¸ì…˜ì— ë¡œê·¸ì¸í•œ ê´€ë¦¬ì ì •ë³´ê°€ ìˆëŠ”ì§€ í™•ì¸
 		    if (admin.getRole() == 0) {
-		        // °ü¸®ÀÚ°¡ ¾Æ´Ñ °æ¿ì ¿¡·¯ Ã³¸®
-		        model.addAttribute("error", "°ü¸®ÀÚ¸¸ Á¢±ÙÇÒ ¼ö ÀÖ½À´Ï´Ù.");
+		        // ê´€ë¦¬ìê°€ ì•„ë‹Œ ê²½ìš° ì—ëŸ¬ ì²˜ë¦¬
+		        model.addAttribute("error", "ê´€ë¦¬ìë§Œ ì ‘ê·¼í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.");
 		        return "redirect:/admin/login.jsp";
 		    }
 		    
-		    // QNA Á¤º¸ Á¶È¸
+		    // QNA ì •ë³´ ì¡°íšŒ
 		    QNA dbqna = userService.getQnA(qna.getPostNo(), qna.getUserNo());
 		    
-		    // °ü¸®ÀÚ ´äº¯ Ãß°¡
+		    // ê´€ë¦¬ì ë‹µë³€ ì¶”ê°€
 		    dbqna.setAdminAnswer(qna.getAdminAnswer());
 
-		    // QNA ¾÷µ¥ÀÌÆ®
+		    // QNA ì—…ë°ì´íŠ¸
 		    userService.addAdminAnswer(dbqna);
 		    
 		    model.addAttribute("qna", dbqna);
@@ -815,7 +872,7 @@ public class UserController {
 		 public String getQnAList(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
 	        System.out.println("getQnAList : GET");
 
-	        // ¼¼¼Ç¿¡¼­ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+	        // ì„¸ì…˜ì—ì„œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 	        User user = (User) session.getAttribute("user");
 	        
 	        if (user.getRole()==1) {
@@ -824,7 +881,7 @@ public class UserController {
 		    	
 		    }
 
-	        // ÇöÀç ÆäÀÌÁö¿Í ½ÃÀÛ ÀÎµ¦½º °è»ê
+	        // í˜„ì¬ í˜ì´ì§€ì™€ ì‹œì‘ ì¸ë±ìŠ¤ ê³„ì‚°
 	        int currentPage = (search.getCurrentPage() == 0) ? 1 : search.getCurrentPage();
 	        int startIndex = (currentPage - 1) * pageSize;
 	        int endIndex = currentPage * pageSize;
@@ -832,18 +889,18 @@ public class UserController {
 	        List<QNA> allQnaList = userService.getQnAList(search);
 	        int totalCount = allQnaList.size();
 
-	        // ÇÊ¿äÇÑ ÆäÀÌÁöÀÇ µ¥ÀÌÅÍ¸¸ ÃßÃâ
+	        // í•„ìš”í•œ í˜ì´ì§€ì˜ ë°ì´í„°ë§Œ ì¶”ì¶œ
 	        List<QNA> qnaList = allQnaList.subList(
 	            Math.min(startIndex, totalCount), 
 	            Math.min(endIndex, totalCount)
 	        );
 	     
-	        // ÀüÃ¼ Ç×¸ñ ¼ö ¹× ÆäÀÌÁö ¼ö °è»ê
+	        // ì „ì²´ í•­ëª© ìˆ˜ ë° í˜ì´ì§€ ìˆ˜ ê³„ì‚°
 	        int totalPages = (int) Math.ceil((double) totalCount / pageSize);
 	        
 	        System.out.println("QNAList_controller : "+qnaList);
 
-	        // ¸ğµ¨¿¡ µ¥ÀÌÅÍ Ãß°¡
+	        // ëª¨ë¸ì— ë°ì´í„° ì¶”ê°€
 	        model.addAttribute("qnaList", qnaList);
 	        model.addAttribute("totalCount", totalCount);
 	        model.addAttribute("totalPages", totalPages);
@@ -876,19 +933,19 @@ public class UserController {
 		    
 			System.out.println("addSchedule : POST");
 			schedule.setScheduleDate(schedule.getStringDate());
-		    // ¼¼¼Ç¿¡¼­ ÇöÀç ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ì„¸ì…˜ì—ì„œ í˜„ì¬ ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		    User sessionUser = (User) session.getAttribute("user");
 
 		    if (sessionUser == null) {
-		        // ·Î±×ÀÎÇÏÁö ¾ÊÀº °æ¿ì ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®
-		        model.addAttribute("error", "·Î±×ÀÎÀÌ ÇÊ¿äÇÕ´Ï´Ù.");
+		        // ë¡œê·¸ì¸í•˜ì§€ ì•Šì€ ê²½ìš° ë¡œê·¸ì¸ í˜ì´ì§€ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
+		        model.addAttribute("error", "ë¡œê·¸ì¸ì´ í•„ìš”í•©ë‹ˆë‹¤.");
 		        return "redirect:/user/login.jsp";
 		    }
 
-		    // SCHEDULE °´Ã¼¿¡ »ç¿ëÀÚ Á¤º¸ ¼³Á¤
+		    // SCHEDULE ê°ì²´ì— ì‚¬ìš©ì ì •ë³´ ì„¤ì •
 		    schedule.setUserNo(sessionUser.getUserNo());
 
-		    // SCHEDULE Ãß°¡
+		    // SCHEDULE ì¶”ê°€
 		    userService.addSchedule(schedule);
 		    Search search = new Search();
 		    List<Schedule> scheduleList = userService.getScheduleList(sessionUser.getUserNo(), search);
@@ -898,7 +955,7 @@ public class UserController {
 		    	  scheduleJson.add(objectMapper.writeValueAsString(sd));
 		    }
 		    
-		    // ¸ğµ¨¿¡ ½ºÄÉÁÙ ¸ñ·Ï Ãß°¡
+		    // ëª¨ë¸ì— ìŠ¤ì¼€ì¤„ ëª©ë¡ ì¶”ê°€
 		    model.addAttribute("scheduleList", scheduleJson);
 
 		    return "forward:/user/month-view.jsp";
@@ -909,30 +966,30 @@ public class UserController {
 		    
 			System.out.println("getSchedule : GET");
 
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ì„¸ì…˜ì—ì„œ ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		    User user = (User) session.getAttribute("user");
 
 		    Schedule schedule = userService.getSchedule(postNo, userNo);
 
 //		    if (user == null) {
-//		        // ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸°¡ ¾ø´Â °æ¿ì ¿À·ù Ã³¸®
-//		        model.addAttribute("error", "·Î±×ÀÎ Á¤º¸¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
-//		        return "redirect:/login"; // ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ® ¶Ç´Â ´Ù¸¥ Ã³¸®
+//		        // ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ê°€ ì—†ëŠ” ê²½ìš° ì˜¤ë¥˜ ì²˜ë¦¬
+//		        model.addAttribute("error", "ë¡œê·¸ì¸ ì •ë³´ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+//		        return "redirect:/login"; // ë¡œê·¸ì¸ í˜ì´ì§€ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸ ë˜ëŠ” ë‹¤ë¥¸ ì²˜ë¦¬
 //		    }
 
 		    if (schedule == null) {
-		        // Schedule Á¤º¸°¡ ¾ø´Â °æ¿ì ¿À·ù Ã³¸®
-		        model.addAttribute("error", "Schedule Á¤º¸¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+		        // Schedule ì •ë³´ê°€ ì—†ëŠ” ê²½ìš° ì˜¤ë¥˜ ì²˜ë¦¬
+		        model.addAttribute("error", "Schedule ì •ë³´ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
 		        return "redirect:/user/addSchedule.jsp";
 		    }
 
 		    if (userNo != null && schedule.getUserNo() == userNo) {
-		        // »ç¿ëÀÚ ¹øÈ£·Î Á¶È¸ÇÏ´Â °æ¿ì
+		        // ì‚¬ìš©ì ë²ˆí˜¸ë¡œ ì¡°íšŒí•˜ëŠ” ê²½ìš°
 		        model.addAttribute("schedule", schedule);
 		        return "forward:/user/getSchedule.jsp";
 		    } else {
-		        // Àß¸øµÈ ¿äÃ» Ã³¸®
-		        model.addAttribute("error", "¿Ã¹Ù¸¥ ¿äÃ»ÀÌ ¾Æ´Õ´Ï´Ù.");
+		        // ì˜ëª»ëœ ìš”ì²­ ì²˜ë¦¬
+		        model.addAttribute("error", "ì˜¬ë°”ë¥¸ ìš”ì²­ì´ ì•„ë‹™ë‹ˆë‹¤.");
 		        return "redirect:/user/addSchedule.jsp";
 		    }
 		    
@@ -946,7 +1003,7 @@ public class UserController {
 			// Business Logic
 		    Schedule schedule = userService.getSchedule(postNo, userNo);
 		    
-		    // Model °ú View ¿¬°á
+		    // Model ê³¼ View ì—°ê²°
 		   model.addAttribute("schedule", schedule);
 		    
 		   return "forward:/user/updateSchedule.jsp";
@@ -960,24 +1017,24 @@ public class UserController {
 		    System.out.println("postNo : " +schedule.getPostNo());
 		    System.out.println("userNo : " +schedule.getUserNo());	    
 		    
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ì„¸ì…˜ì—ì„œ ë¡œê·¸ì¸í•œ ê´€ë¦¬ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		    User sessionUser = (User) session.getAttribute("user");
 		    
 		    System.out.println("sessionUser : " +sessionUser);
 		    
 		    if (sessionUser == null) {
-		        // ·Î±×ÀÎÇÏÁö ¾ÊÀº °æ¿ì ·Î±×ÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®
-		        model.addAttribute("error", "·Î±×ÀÎÀÌ ÇÊ¿äÇÕ´Ï´Ù.");
+		        // ë¡œê·¸ì¸í•˜ì§€ ì•Šì€ ê²½ìš° ë¡œê·¸ì¸ í˜ì´ì§€ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
+		        model.addAttribute("error", "ë¡œê·¸ì¸ì´ í•„ìš”í•©ë‹ˆë‹¤.");
 		        return "redirect:/user/login.jsp";
 		    }
 		    
-		    // Schedule Á¤º¸ Á¶È¸
+		    // Schedule ì •ë³´ ì¡°íšŒ
 		    Schedule dbschedule = userService.getSchedule(schedule.getPostNo(), schedule.getUserNo());
 		    
-		 // SCHEDULE °´Ã¼¿¡ »ç¿ëÀÚ Á¤º¸ ¼³Á¤
+		 // SCHEDULE ê°ì²´ì— ì‚¬ìš©ì ì •ë³´ ì„¤ì •
 		    schedule.setUserNo(sessionUser.getUserNo());
 		    
-		    // ¾÷µ¥ÀÌÆ®
+		    // ì—…ë°ì´íŠ¸
 		    dbschedule.setTitle(schedule.getTitle());
 		    dbschedule.setMountainName(schedule.getMountainName());
 		    dbschedule.setHikingTotalTime(schedule.getHikingTotalTime());
@@ -987,7 +1044,7 @@ public class UserController {
 		    dbschedule.setTransportation(schedule.getTransportation());
 		    dbschedule.setContents(schedule.getContents());
 		    
-		    // Schedule ¾÷µ¥ÀÌÆ®
+		    // Schedule ì—…ë°ì´íŠ¸
 		    userService.updateSchedule(dbschedule);
 		    
 		    model.addAttribute("schedule", dbschedule);
@@ -1017,7 +1074,7 @@ public class UserController {
 ////			search.setPageSize(pageSize);
 ////			search.setPageUnit(pageUnit);
 //		    
-//		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+//		    // ì„¸ì…˜ì—ì„œ ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 //		    User user = (User) session.getAttribute("user");
 //			
 //			List<Schedule> scheduleList = userService.getScheduleList(search);
@@ -1033,32 +1090,32 @@ public class UserController {
 		public String getScheduleList(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
 		    System.out.println("getScheduleList : GET");
 
-		    // search ÃÊ±âÈ­
+		    // search ì´ˆê¸°í™”
 		    if (search != null && search.getCurrentPage() == 0) {
 		        search.setCurrentPage(1);
 		    }
 
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ì„¸ì…˜ì—ì„œ ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		    User user = (User) session.getAttribute("user");
 		    
 		    if (user == null) {
-		        model.addAttribute("error", "·Î±×ÀÎÀÌ ÇÊ¿äÇÕ´Ï´Ù.");
+		        model.addAttribute("error", "ë¡œê·¸ì¸ì´ í•„ìš”í•©ë‹ˆë‹¤.");
 		        return "redirect:/user/login.jsp";
 		    }
 
-		    // ·Î±×ÀÎÇÑ »ç¿ëÀÚÀÇ ID¸¦ ±â¹İÀ¸·Î ½ºÄÉÁÙ ¸ñ·Ï °¡Á®¿À±â
+		    // ë¡œê·¸ì¸í•œ ì‚¬ìš©ìì˜ IDë¥¼ ê¸°ë°˜ìœ¼ë¡œ ìŠ¤ì¼€ì¤„ ëª©ë¡ ê°€ì ¸ì˜¤ê¸°
 		    List<Schedule> scheduleList = userService.getScheduleList(user.getUserNo(), search);
 		    
 		    System.out.println("scheduleList : " + scheduleList);
 		    
-		    // Schedule °´Ã¼¸¦ JSON Çü½ÄÀ¸·Î º¯È¯ÇÏ¿© ¸ğµ¨¿¡ Ãß°¡
+		    // Schedule ê°ì²´ë¥¼ JSON í˜•ì‹ìœ¼ë¡œ ë³€í™˜í•˜ì—¬ ëª¨ë¸ì— ì¶”ê°€
 		    ObjectMapper objectMapper = new ObjectMapper();
 		    List<String> scheduleJson = new ArrayList<>();
 		    for(Schedule schedule : scheduleList) {
 		        scheduleJson.add(objectMapper.writeValueAsString(schedule));
 		    }
 		    
-		    // ¸ğµ¨¿¡ ½ºÄÉÁÙ ¸ñ·Ï Ãß°¡
+		    // ëª¨ë¸ì— ìŠ¤ì¼€ì¤„ ëª©ë¡ ì¶”ê°€
 		    model.addAttribute("scheduleList", scheduleJson);
 		    
 		    return "forward:/user/month-view.jsp";
@@ -1077,7 +1134,7 @@ public class UserController {
 			// Business Logic
 		    QNA qna = userService.getQnA(postNo, userNo);
 		    
-		    // Model °ú View ¿¬°á
+		    // Model ê³¼ View ì—°ê²°
 		   model.addAttribute("qna", qna);
 		    
 		   return "forward:/user/updateAnswerQnA.jsp";
@@ -1090,25 +1147,25 @@ public class UserController {
 		    System.out.println("postNo : " +qna.getPostNo());
 		    System.out.println("userNo : " +qna.getUserNo());	    
 		    
-		    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸ °¡Á®¿À±â
+		    // ì„¸ì…˜ì—ì„œ ë¡œê·¸ì¸í•œ ê´€ë¦¬ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 		    User admin = (User) session.getAttribute("user");
 		    
 		    System.out.println("admin login : " +admin);
 		    
-		    // ¼¼¼Ç¿¡ ·Î±×ÀÎÇÑ °ü¸®ÀÚ Á¤º¸°¡ ÀÖ´ÂÁö È®ÀÎ
+		    // ì„¸ì…˜ì— ë¡œê·¸ì¸í•œ ê´€ë¦¬ì ì •ë³´ê°€ ìˆëŠ”ì§€ í™•ì¸
 		    if (admin.getRole() == 0) {
-		        // °ü¸®ÀÚ°¡ ¾Æ´Ñ °æ¿ì ¿¡·¯ Ã³¸®
-		        model.addAttribute("error", "°ü¸®ÀÚ¸¸ Á¢±ÙÇÒ ¼ö ÀÖ½À´Ï´Ù.");
+		        // ê´€ë¦¬ìê°€ ì•„ë‹Œ ê²½ìš° ì—ëŸ¬ ì²˜ë¦¬
+		        model.addAttribute("error", "ê´€ë¦¬ìë§Œ ì ‘ê·¼í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.");
 		        return "redirect:/admin/login.jsp";
 		    }
 		    
-		    // QNA Á¤º¸ Á¶È¸
+		    // QNA ì •ë³´ ì¡°íšŒ
 		    QNA dbqna = userService.getQnA(qna.getPostNo(), qna.getUserNo());
 		    
-		    // °ü¸®ÀÚ ´äº¯ Ãß°¡
+		    // ê´€ë¦¬ì ë‹µë³€ ì¶”ê°€
 		    dbqna.setAdminAnswer(qna.getAdminAnswer());
 
-		    // QNA ¾÷µ¥ÀÌÆ®
+		    // QNA ì—…ë°ì´íŠ¸
 		    userService.addAdminAnswer(dbqna);
 		    
 		    model.addAttribute("qna", dbqna);
@@ -1116,6 +1173,69 @@ public class UserController {
 		    System.out.println("updateAnswer : " + dbqna);
 
 		    return "forward:/user/getQnA.jsp";
+		}
+		
+		//
+		//
+		//
+		
+		@PostMapping(value = "changePassword")
+	    public String changePassword(@RequestParam String currentPassword,
+	                                 @RequestParam String userPassword,
+	                                 @RequestParam String checkPassword,
+	                                 HttpSession session, Model model) throws Exception {
+	        User sessionUser = (User) session.getAttribute("user");
+
+	        if (sessionUser == null) {
+	            model.addAttribute("error", "ì„¸ì…˜ì´ ë§Œë£Œë˜ì—ˆìŠµë‹ˆë‹¤. ë‹¤ì‹œ ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”.");
+	            return "redirect:/user/login.jsp";
+	        }
+
+	        if (!sessionUser.getUserPassword().equals(currentPassword)) {
+	            model.addAttribute("error", "í˜„ì¬ ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+	            return "redirect:/user/changePassword.jsp";
+	        }
+
+	        if (userPassword.length() < 10) {
+	            model.addAttribute("error", "ë¹„ë°€ë²ˆí˜¸ë¥¼ 10ì ì´ìƒ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+	            return "redirect:/user/changePassword.jsp";
+	        }
+
+	        if (!userPassword.equals(checkPassword)) {
+	            model.addAttribute("error", "ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+	            return "redirect:/user/changePassword.jsp";
+	        }
+
+	        sessionUser.setUserPassword(userPassword);
+	        userService.updateUser(sessionUser);
+	        session.setAttribute("user", sessionUser);
+	        model.addAttribute("message", "ë¹„ë°€ë²ˆí˜¸ê°€ ì„±ê³µì ìœ¼ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.");
+	        return "forward:/user/updateUser?userNo=" + sessionUser.getUserNo();
+	    }
+		
+		//
+		//
+		//
+		
+		@PostMapping(value="changePhoneNumber")
+		public String changePhoneNumber(@RequestParam("phoneNumber") String phoneNumber,
+                														HttpSession session, Model model) throws Exception {
+		
+			User sessionUser = (User) session.getAttribute("user");
+		
+			if (sessionUser == null) {
+			model.addAttribute("error", "ì„¸ì…˜ì´ ë§Œë£Œë˜ì—ˆìŠµë‹ˆë‹¤. ë‹¤ì‹œ ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”.");
+			return "redirect:/user/login.jsp";
+			}
+			
+			// ì „í™”ë²ˆí˜¸ ë³€ê²½
+			sessionUser.setPhoneNumber(phoneNumber);
+			userService.updateUser(sessionUser);
+			session.setAttribute("user", sessionUser);
+			
+			model.addAttribute("message", "íœ´ëŒ€í° ë²ˆí˜¸ê°€ ì„±ê³µì ìœ¼ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.");
+			
+			return "redirect:/user/updateUser?userNo=" + sessionUser.getUserNo();
 		}
 		
 }

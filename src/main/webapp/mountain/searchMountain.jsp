@@ -69,10 +69,11 @@
     		
     	});
     	$('#mapSearch').on('click',function(){
-        	window.location.href = '${javaServerIp}/mountain/mapMountain';
+        	window.location.href = '/mountain/mapMountain';
         });
     	
-    	$('#search').on('click',function(){
+    	
+    	$('#search').on('click',function(event){
     		const form = $('<form>', {
 	            action: '/mountain/mapMountain',
 	            method: 'POST'
@@ -88,6 +89,30 @@
 
 	        // 폼을 body에 추가하고 제출
 	        form.appendTo('body').submit();
+    	});
+    	
+    	$('#searchBox').keypress(function(event){
+    		if (event.which == 13) {
+            	console.log('Enter key pressed'); // Debugging
+                event.preventDefault();
+            	
+                const form = $('<form>', {
+    	            action: '/mountain/mapMountain',
+    	            method: 'POST'
+    	        });
+
+    	        // mountainSearch 객체의 각 데이터를 폼의 hidden input 필드로 추가
+    	    
+    	            $('<input>').attr({
+    	                type: 'hidden',
+    	                name: 'searchKeyword',
+    	                value: $('#searchBox').val().trim()
+    	            }).appendTo(form);
+
+    	        // 폼을 body에 추가하고 제출
+    	        form.appendTo('body').submit();
+                
+            }
     	});
     	
     	

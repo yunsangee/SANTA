@@ -139,7 +139,24 @@ public class MountainController {
 		search.setPageSize(pageSize);
 		search.setPageUnit(pageUnit);
 		
-		model.addAttribute("mountainList", mountainService.getMountainLikeList( search));
+		List<Mountain> list = mountainService.getMountainLikeList(search);
+		
+		
+		int totalCount = list.size(); // 총 사용자 수
+	    int totalPages = (int) Math.ceil((double) correctionPostService.getCorrectionPostTotalCount(search) / pageSize); // 총 페이지 수 계산
+	    totalPages = (totalPages == 0 ? 1 : totalPages);
+	    int currentPage = search.getCurrentPage();
+	   
+
+	    int currentPageCount = pageSize; // 현재 페이지에 표시되는 회원 수
+	    
+
+	    model.addAttribute("mountainList", mountainService.getMountainLikeList( search));
+	    model.addAttribute("search", search);
+	    model.addAttribute("currentPage", currentPage);
+	    model.addAttribute("totalPages", totalPages);
+	    model.addAttribute("totalCount", totalCount);
+	    model.addAttribute("currentPageCount", currentPageCount);
 		
 		return "forward:/mountain/getMountainLikeList.jsp";
 	}//o
@@ -179,7 +196,7 @@ public class MountainController {
 		SantaLogger.makeLog("info", "mountainSearch:" + mountainSearch.toString());
 		if (mountainSearch.getSearchKeyword() != null) {
 
-			if (mountainSearch.getSearchCondition() == 0 & session.getAttribute("user") != null) { // if condition is mountain
+			if (session.getAttribute("user") != null) { // if condition is mountain
 				mountainService.deleteSearchKeyword(mountainSearch);				
 				mountainService.addSearchKeyword(mountainSearch);
 			}
@@ -199,6 +216,8 @@ public class MountainController {
 			model.addAttribute("weatherList", weatherList);
 
 		}
+		model.addAttribute("searchKeyword", mountainSearch.getSearchKeyword());
+		
 
 		return "forward:/mountain/mapMountain.jsp";
 	}

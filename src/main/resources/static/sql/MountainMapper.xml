@@ -40,6 +40,8 @@
 			column="MOUNTAIN_TRAIL_COUNT" />
 		<result property="mountainViewCount"
 			column="MOUNTAIN_VIEW_COUNT" />
+			
+		<result property="date" column="LIKE_DATE"/>
 		<association property="mountainTrail"
 			resultMap="MountainTrailResultMap" />
 	</resultMap>
@@ -269,13 +271,28 @@
 
 		SELECT * FROM
 		(
-		SELECT m.*, ROWNUM as ROW_SEQ FROM LIKES l, MOUNTAIN m
+		SELECT m.*, l.like_date like_date, ROWNUM as ROW_SEQ FROM LIKES l, MOUNTAIN m
 		WHERE l.post_type=2 AND l.USER_NO = #{userNo} AND l.post_no =
 		m.MOUNTAIN_NO AND ROWNUM <![CDATA[<=]]>
 		#{currentPage} * #{pageSize}
+		<choose>
+            <when test="searchCondition == 0 and searchKeyword != null and searchKeyword != ''">
+                AND m.MOUNTAIN_NAME LIKE '%' || #{searchKeyword} || '%'
+            </when>
+            
+            <when test="searchCondition == 1 and searchKeyword != null and searchKeyword != ''">
+                AND m.MOUNTAIN_LOCATION LIKE '%' || #{searchKeyword} || '%'
+            </when>
+        </choose>
+		
 		)
 		WHERE ROW_SEQ BETWEEN ((#{currentPage} - 1) * #{pageSize} + 1) AND
 		#{currentPage} * #{pageSize}
+	</select>
+	
+	<select id="getTotalMountainLikeListCount" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM mountain_like
+		WHERE user_no = {userNo} and post_type=2
 	</select>
 
 

@@ -1,6 +1,7 @@
 package site.dearmysanta.mountain;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -21,6 +22,7 @@ import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.correctionPost.CorrectionPost;
 import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
+import site.dearmysanta.domain.mountain.MountainTrail;
 import site.dearmysanta.domain.mountain.Statistics;
 import site.dearmysanta.domain.mountain.Weather;
 import site.dearmysanta.domain.user.User;
@@ -97,7 +99,8 @@ public class MountainApplicationTest {
 	
 	//@Test
 	public void mountainApiTest() throws Exception {
-		mountainService.getMountain("관악산");
+//		mountainService.getMountain("");
+		List<MountainTrail> list = mountainService.getMountainTrailListFromVWorld(1010,"관악산",  "41290107");
 	}
 //	
 //	@Test
@@ -571,9 +574,21 @@ public class MountainApplicationTest {
 		
 	}
 	
-	@Test
+	//@Test
 	public void deleteTest() throws Exception {
 		objectStorageService.deleteObjectFromStorage("profile22.png");
+	}
+	
+	
+	@Test
+	public void deleteImageTest() throws Exception{
+		List<String> list = new ArrayList<String>();
+		list.add("42_1_2");
+		list.add("42_1_4");
+//		list.add("39_1_5");
+		
+		
+		objectStorageService.updateObjectStorageImage(list);
 	}
 	
 }
