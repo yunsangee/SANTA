@@ -142,7 +142,7 @@ public class OAuthController {
 
 	@GetMapping("/logout/kakao")
 	@ResponseBody
-	public void kakaoLogout(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+	public ModelAndView kakaoLogout(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
 		
 		User sessionUser = (User) session.getAttribute("user");
 		
@@ -153,9 +153,14 @@ public class OAuthController {
 		if (accessToken != null) {
 			oauthService.kakaoLogout(accessToken);
 			request.getSession().invalidate(); // 세션 무효화
+			return new ModelAndView("redirect:/common/main.jsp");
 		}
 		response.setStatus(HttpServletResponse.SC_OK);
+	
+		return new ModelAndView("redirect:/common/main.jsp");
 	}
+	
+	
 
 //    @GetMapping("/naver")
 //    public ModelAndView naverCallback(@RequestParam)
