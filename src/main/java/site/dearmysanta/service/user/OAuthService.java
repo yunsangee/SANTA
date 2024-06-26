@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
@@ -39,26 +41,26 @@ public class OAuthService{
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            //POST ¿äÃ»À» À§ÇØ ±âº»°ªÀÌ falseÀÎ setDoOutputÀ» true·Î
+            //POST ìš”ì²­ì„ ìœ„í•´ ê¸°ë³¸ê°’ì´ falseì¸ setDoOutputì„ trueë¡œ
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
 
-            //POST ¿äÃ»¿¡ ÇÊ¿ä·Î ¿ä±¸ÇÏ´Â ÆÄ¶ó¹ÌÅÍ ½ºÆ®¸²À» ÅëÇØ Àü¼Û
+            //POST ìš”ì²­ì— í•„ìš”ë¡œ ìš”êµ¬í•˜ëŠ” íŒŒë¼ë¯¸í„° ìŠ¤íŠ¸ë¦¼ì„ í†µí•´ ì „ì†¡
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
-//            sb.append("&client_id=af43c655326aaa2ca97588ce636e1e29"); // TODO REST_API_KEY ÀÔ·Â
-            sb.append("&client_id=53ae98941fff9e24b11901e9a79432d9"); // TODO REST_API_KEY ÀÔ·Â
-            sb.append("&redirect_uri=http://localhost:8001/oauth/kakao"); // TODO ÀÎ°¡ÄÚµå ¹ŞÀº redirect_uri ÀÔ·Â
+//            sb.append("&client_id=af43c655326aaa2ca97588ce636e1e29"); // TODO REST_API_KEY ì…ë ¥
+            sb.append("&client_id=53ae98941fff9e24b11901e9a79432d9"); // TODO REST_API_KEY ì…ë ¥
+            sb.append("&redirect_uri=http://localhost:8001/oauth/kakao"); // TODO ì¸ê°€ì½”ë“œ ë°›ì€ redirect_uri ì…ë ¥
             sb.append("&code=" + code);
             bw.write(sb.toString());
             bw.flush();
 
-            //°á°ú ÄÚµå°¡ 200ÀÌ¶ó¸é ¼º°ø
+            //ê²°ê³¼ ì½”ë“œê°€ 200ì´ë¼ë©´ ì„±ê³µ
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode : " + responseCode);
 
-            //¿äÃ»À» ÅëÇØ ¾òÀº JSONÅ¸ÀÔÀÇ Response ¸Ş¼¼Áö ÀĞ¾î¿À±â
+            //ìš”ì²­ì„ í†µí•´ ì–»ì€ JSONíƒ€ì…ì˜ Response ë©”ì„¸ì§€ ì½ì–´ì˜¤ê¸°
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = "";
             String result = "";
@@ -68,7 +70,7 @@ public class OAuthService{
             }
             System.out.println("response body : " + result);
 
-            //Gson ¶óÀÌºê·¯¸®¿¡ Æ÷ÇÔµÈ Å¬·¡½º·Î JSONÆÄ½Ì °´Ã¼ »ı¼º
+            //Gson ë¼ì´ë¸ŒëŸ¬ë¦¬ì— í¬í•¨ëœ í´ë˜ìŠ¤ë¡œ JSONíŒŒì‹± ê°ì²´ ìƒì„±
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
 
@@ -87,26 +89,28 @@ public class OAuthService{
         return access_Token;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     public User CreateKakaoUser(String token) throws Exception {
     	
     	String reqURL = "https://kapi.kakao.com/v2/user/me";
     	
     	User user = null;
 
-        //access_tokenÀ» ÀÌ¿ëÇÏ¿© »ç¿ëÀÚ Á¤º¸ Á¶È¸
+        //access_tokenì„ ì´ìš©í•˜ì—¬ ì‚¬ìš©ì ì •ë³´ ì¡°íšŒ
         try {
            URL url = new URL(reqURL);
            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
            conn.setRequestMethod("POST");
            conn.setDoOutput(true);
-           conn.setRequestProperty("Authorization", "Bearer " + token); //Àü¼ÛÇÒ header ÀÛ¼º, access_tokenÀü¼Û
+           conn.setRequestProperty("Authorization", "Bearer " + token); //ì „ì†¡í•  header ì‘ì„±, access_tokenì „ì†¡
 
-           //°á°ú ÄÚµå°¡ 200ÀÌ¶ó¸é ¼º°ø
+           //ê²°ê³¼ ì½”ë“œê°€ 200ì´ë¼ë©´ ì„±ê³µ
            int responseCode = conn.getResponseCode();
            System.out.println("responseCode : " + responseCode);
 
-           //¿äÃ»À» ÅëÇØ ¾òÀº JSONÅ¸ÀÔÀÇ Response ¸Ş¼¼Áö ÀĞ¾î¿À±â
+           //ìš”ì²­ì„ í†µí•´ ì–»ì€ JSONíƒ€ì…ì˜ Response ë©”ì„¸ì§€ ì½ì–´ì˜¤ê¸°
            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
            StringBuilder result = new StringBuilder();
            String line;
@@ -115,7 +119,7 @@ public class OAuthService{
            }
            System.out.println("response body : " + result);
 
-           //Gson ¶óÀÌºê·¯¸®·Î JSONÆÄ½Ì
+           //Gson ë¼ì´ë¸ŒëŸ¬ë¦¬ë¡œ JSONíŒŒì‹±
            JsonParser parser = new JsonParser();
            JsonElement element = parser.parse(result.toString());
 
@@ -135,13 +139,21 @@ public class OAuthService{
            String name = getStringFromJson(kakaoAccount, "name");
            String profileImage = element.getAsJsonObject().get("properties").getAsJsonObject().get("profile_image").getAsString();
            String genderStr = kakaoAccount.getAsJsonObject().get("gender").getAsString();
-           int gender = convertGenderStringToInt(genderStr); // ¼ºº°À» int·Î º¯È¯
+           int gender = convertGenderStringToInt(genderStr); // ì„±ë³„ì„ intë¡œ ë³€í™˜
            String birthyear = kakaoAccount.getAsJsonObject().get("birthyear").getAsString();
            String birthday = kakaoAccount.getAsJsonObject().get("birthday").getAsString();
            String birthDate = convertBirthDate(birthyear, birthday);
            String phoneNumber = kakaoAccount.getAsJsonObject().get("phone_number").getAsString();
+           String nickname = element.getAsJsonObject().get("properties").getAsJsonObject().get("nickname").getAsString();
 
            phoneNumber = convertPhoneNumber(phoneNumber);
+           
+        // ë””í´íŠ¸ ë¹„ë°€ë²ˆí˜¸ ì„¤ì • (ì˜ˆ: "default_password")
+           String userPassword ="kakao"; // ì´ˆê¸°ê°’ì„ nullë¡œ ì„¤ì •í•˜ê±°ë‚˜ ë‹¤ë¥¸ ë¡œì§ì„ í†µí•´ ê°’ì„ ê°€ì ¸ì˜¬ ìˆ˜ ìˆìŠµë‹ˆë‹¤.
+          
+        // ì„ì˜ì˜ ì£¼ì†Œ ì •ë³´ ì¶”ê°€ (ì‹¤ì œ ì£¼ì†Œ ì •ë³´ë¥¼ ê°€ì ¸ì˜¤ëŠ” ë°©ë²•ì´ í•„ìš”)
+           String address = "kakaoAddress"; // ê¸°ë³¸ ì£¼ì†Œ ê°’ ì„¤ì •
+           String detailAddress = "kakaoAddressDetail"; // ê¸°ë³¸ ìƒì„¸ ì£¼ì†Œ ê°’ ì„¤ì •
            
            System.out.println("id : " + id);
            System.out.println("email : " + email);
@@ -154,17 +166,25 @@ public class OAuthService{
            user.setUserName(name);
            user.setProfileImage(profileImage);
            user.setGender(gender);
-           user.setBirthDate(birthyear + "-" + birthday);
+           user.setBirthDate(birthDate);
            user.setPhoneNumber(phoneNumber);
+           user.setUserPassword(userPassword);
+           user.setNickName(nickname);
+           user.setAddress(address);
+           user.setDetailAddress(detailAddress);
            
-           // »ç¿ëÀÚ Á¤º¸ ÀúÀå
-           userService.addUser(user);
+           // ì‚¬ìš©ì ì •ë³´ ì €ì¥
+//           userService.addUser(user);
            
            br.close();
 
         } catch (IOException e) {
+        	System.out.println("existing4:");
             throw new Exception("Error while creating Kakao user", e);
-        }
+        } catch (Exception e) {
+        	System.out.println("existing7:");
+            throw new Exception("Error while creating Kakao user", e);
+        } 
         
         return user;
      }
@@ -180,7 +200,7 @@ public class OAuthService{
             return 1;
         } 
         else {
-            return 0; // ¾Ë ¼ö ¾ø´Â °æ¿ì 0À¸·Î ¼³Á¤
+            return 0; // ì•Œ ìˆ˜ ì—†ëŠ” ê²½ìš° 0ìœ¼ë¡œ ì„¤ì •
         }
     }
     
@@ -192,10 +212,20 @@ public class OAuthService{
     }
     
     private String convertBirthDate(String birthyear, String birthday) {
-        return birthyear + "-" + birthday.substring(0, 2) + "-" + birthday.substring(2);
+        // ë‚ ì§œ í˜•ì‹ìœ¼ë¡œ ë³€í™˜
+        String formattedBirthDate = birthyear + "-" + birthday.substring(0, 2) + "-" + birthday.substring(2);
+        
+        // ë‚ ì§œê°€ ìœ íš¨í•œì§€ í™•ì¸
+        try {
+            LocalDate date = LocalDate.parse(formattedBirthDate);
+            return date.toString(); // ìœ íš¨í•œ ë‚ ì§œë©´ ë°˜í™˜
+        } catch (DateTimeParseException e) {
+            // ìœ íš¨í•˜ì§€ ì•Šì€ ë‚ ì§œë©´ ê¸°ë³¸ ê°’ ë°˜í™˜ (ì˜ˆ: "0000-00-00")
+            return "0000-00-00";
+        }
     }
     
-    ///////////////////////////////// ·Î±×¾Æ¿ô /////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////// ë¡œê·¸ì•„ì›ƒ /////////////////////////////////////////////////////////////////////////////////
     
     
     public void kakaoLogout(String accessToken) {
