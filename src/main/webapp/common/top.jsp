@@ -36,7 +36,7 @@
 				event.preventDefault();
 				
 				
-				let user = ${sessionScope.user != null ? sessionScope.user : 'null'};
+				let user = '${sessionScope.user != null ? sessionScope.user : "null"}';
 				
 				if(user !='null'){
 					window.location.href = '/hikingguide';
