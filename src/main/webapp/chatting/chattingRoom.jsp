@@ -21,6 +21,7 @@
     <c:import url="../common/header.jsp"/>
     
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    
     <script type="text/javascript">
     $(function() {
     	
