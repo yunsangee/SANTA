@@ -33,7 +33,7 @@ public interface MountainService {
 	
 	public List<Mountain> getMountainListByAddress(String address) throws IOException;// include wish list
 	
-	public List<Mountain> getMountainListByName(String mountainName); 
+	public List<Mountain> getMountainListByName(int userNo, String mountainName); 
 	
 	public void updateMountain(Mountain mountain);   //이거할 때, correction_post status update
 	

@@ -235,6 +235,7 @@
 				    let mountainImageData = mountain.mountainImage;
 				    let mountainAltitudeData = mountain.mountainAltitude;
 				    let likeCountData = mountain.likeCount;
+				    let isLiked = mountain.isLiked;
 					
 					
 				    console.log("no, lat, lon" ,mountainNoData,mountainLatitudeData,mountainLongitudeData )
@@ -266,7 +267,7 @@
 				        '</div>' +
 				        '<div>위치: ' + mountainLocationData + '</div>' +
 				        '<div>높이: ' + mountainAltitudeData + 'm</div>' +
-				        '<div>좋아요: ' + likeCountData + '</div>' +
+				        '<div>좋아요: <i class="' + (isLiked ? 'fas' : 'far') + ' fa-heart like-button" data-mountain-no="' + mountainNoData + '" style="cursor: pointer;"></i> <span class="like-count">' + likeCountData + '</span></div>' +
 				        (weather && weatherIcon && weather.temperature ? '<div><img src="' + weatherIcon + '" class="weather-icon" style="width:20px;height:20px;"> ' + weather.temperature + '°C</div>' : '') +
 				        (weather && weather.precipitation ? '<div>강수: ' + weather.precipitation + '</div>' : '') +
 				        (weather && weather.precipitationProbability ? '<div>강수 확률: ' + weather.precipitationProbability + '%</div>' : '') +
@@ -292,16 +293,58 @@
 	                        infoWindow.close();
 	                    } else {
 	                        infoWindow.open(map, mountainMarker);
-	                    }
-	                });
+	                    } 
+	                    setTimeout(function() { // Ensure the DOM is updated before attaching the handler
+	                        $('.like-button').off('click').on('click', function() {
+	                            const userNo = "${sessionScope.user != null ? sessionScope.user.userNo : 'null'}";
+	                            if (userNo === 'null') {
+	                                alert("로그인 후 이용 가능합니다.");
+	                                return;
+	                            }
+
+	                            const clickedElement = $(this);
+	                            const mountainNo = clickedElement.data('mountain-no');
+	                            const isLiked = clickedElement.hasClass('fas');
+	                            const url = isLiked ? "/mountain/rest/deleteMountainLike" : "/mountain/rest/addMountainLike";
+	                            
+	                            console.log('event Listener:' + mountainNo);
+	                            
+	                            const mountainLike = {
+	                                postNo: mountainNo,
+	                                userNo: parseInt("${sessionScope.user.userNo}")
+	                            };
+
+	                            $.ajax({
+	                                url: url + "?index="+'-1'+"&isPop="+0,
+	                                type: "POST",
+	                                contentType: "application/json",
+	                                dataType: "json",
+	                                data: JSON.stringify(mountainLike),
+	                                success: function(response) {
+	                                	console.log(response);
+	                                    clickedElement.toggleClass('fas far');
+	                                    clickedElement.siblings('.like-count').text(response);
+	                                },
+	                                error: function(xhr, status, error) {
+	                                    console.error("Error:", error);
+	                                }
+	                            });
+	                        });
+	                    }, 200); 
+	                    
+	                }); 
+	                 
 
 
 					markers.push(mountainMarker);
 					infoWindows.push(infoWindow);  //지우는거 1 안나오는거 2 날씨 연동 3
 					
+				   
 				    }
 				});
 		
+        
+
 		
 		
  		
@@ -506,6 +549,14 @@
         }
         .weather-icon {
             background-color: transparent;
+        }
+        
+        .fas.fa-heart {
+            color: red; /* 좋아요가 눌린 경우의 색상 */
+        }
+
+        .far.fa-heart {
+            color: gray; /* 좋아요가 눌리지 않은 경우의 색상 */
         }
 
 </style>

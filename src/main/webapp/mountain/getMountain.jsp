@@ -72,7 +72,7 @@
         $(document).on('click', '.like-button', function() {
         	
         	let user = "${sessionScope.user != null ? sessionScope.user : 'null'}";
-        	console.log("mountainNo:" + $(this).parent().find('input:hidden[id="mountainNo"]').val());
+        	console.log("mountainNo:" + $(this).parent().parent().find('input:hidden[id="mountainNo"]').val());
         	let clickedElement = $(this)
         	
         	
@@ -88,7 +88,7 @@
             	const mountainLike = {
             			
             			postNo: $('#mountainNo').val(),
-
+						userNo: parseInt(${sessionScope.user.userNo})
             			
             	}
             	
