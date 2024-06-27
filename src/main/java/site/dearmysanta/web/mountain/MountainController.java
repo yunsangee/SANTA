@@ -194,6 +194,16 @@ public class MountainController {
 		//
 		System.out.println("mountainSearch!");
 		SantaLogger.makeLog("info", "mountainSearch:" + mountainSearch.toString());
+		
+		
+		User user = (User)session.getAttribute("user");
+		
+		if(user==null) {
+			user = new User();
+			user.setUserNo(-1);
+		}
+		
+		
 		if (mountainSearch.getSearchKeyword() != null) {
 
 			if (session.getAttribute("user") != null) { // if condition is mountain
@@ -201,7 +211,7 @@ public class MountainController {
 				mountainService.addSearchKeyword(mountainSearch);
 			}
 
-			List<Mountain> list = mountainService.getMountainListByName(mountainSearch.getSearchKeyword());
+			List<Mountain> list = mountainService.getMountainListByName(user.getUserNo(),mountainSearch.getSearchKeyword());
 			List<String> weatherList = new ArrayList<>();
 			
 			List<String> jsonList = new ArrayList<>();

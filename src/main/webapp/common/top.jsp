@@ -11,6 +11,24 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script>
     	$(document).ready(function(){
+    		
+    		var currentUrl = window.location.pathname;
+    	    console.log("현재 URL:", currentUrl);
+
+    	    // 현재 URL의 마지막 요소를 가져옴
+    	    var pathParts = currentUrl.split('/');
+    	    var startPathPart = pathParts[1];
+    	    console.log("첫번째 URL 요소:", startPathPart);
+    	    
+    	    if(startPathPart ==""){
+    	    	startPathPart = "home";
+    	    }
+
+    	    // 클래스 이름과 ID를 사용하여 요소를 찾고 active 클래스를 추가
+    	    $('.nav-link').removeClass('active');
+    	    $('.' + startPathPart).addClass('active');
+
+    	    
     	$(function(event){
     		
     		$('#Home').on('click',function(event){
@@ -120,6 +138,7 @@
 		            	window.location.href = '/user/logout';
 		        	}
 		        });
+
              
              
              
@@ -214,34 +233,42 @@
         
         }
         
+        .logo {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
+        
+        
     </style>
 
 </head>
 
 <body>
 <div class="container-fluid fixed-top">
-    <div class="container px-0">
+    <div class="container px-3">
         <nav class="navbar navbar-light bg-white navbar-expand-xl">
-            <h1 id="logoName" class="text-primary display-6">SANTA</h1>
+            <button type="button" class="logo"><h1 id="logoName" class="text-primary display-6">SANTA</h1></button>
             <button class="navbar-toggler py-2 px-3" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="fa fa-bars text-primary"></span>
             </button>
             <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                 <div class="navbar-nav mx-auto">
                     <c:if test="${empty sessionScope.user or sessionScope.user.role == 0 }">
-                        <a href="#" id="Home" class="nav-item nav-link active">홈</a>
-                        <a href="#" id="mountain" class="nav-item nav-link">산</a>
-                        <a href="#" id="certificationPost" class="nav-item nav-link">인증게시판</a>
-                        <a href="#" id="meetingPost" class="nav-item nav-link">모임게시판</a>
-                        <a href="#" id="chatting" class="nav-item nav-link">모임 채팅</a>
-                        <a href="#" id="hikingGuide" class="nav-item nav-link">등산안내</a>
+                        <a href="#" id="Home" class="nav-item nav-link home active">홈</a>
+                        <a href="#" id="mountain" class="nav-item nav-link mountain">산</a>
+                        <a href="#" id="certificationPost" class="nav-item nav-link certificationPost">인증게시판</a>
+                        <a href="#" id="meetingPost" class="nav-item nav-link meeting">모임게시판</a>
+                        <a href="#" id="chatting" class="nav-item nav-link chatting">모임 채팅</a>
+                        <a href="#" id="hikingGuide" class="nav-item nav-link hikingGuide">등산안내</a>
                         
                     </c:if>
                     <c:if test="${not empty sessionScope.user and sessionScope.user.role == 1 }">
-                        <a href="#" id="Home" class="nav-item nav-link active">홈</a>
-                        <a href="#" id="getUserList" class="nav-item nav-link">회원목록조회</a>
-                        <a href="#" id="statistics" class="nav-item nav-link">통계</a>
-                        <a href="#" id="correctionPost" class="nav-item nav-link">정정제보</a>
+                        <a href="#" id="Home" class="nav-item nav-link home active">홈</a>
+                        <a href="#" id="getUserList" class="nav-item nav-link userList">회원목록조회</a>
+                        <a href="#" id="statistics" class="nav-item nav-link statistics">통계</a>
+                        <a href="#" id="correctionPost" class="nav-item nav-link correctionPost">정정제보</a>
                     </c:if>
                 </div>
                 <div class="d-flex m-3 me-0" >
@@ -254,7 +281,7 @@
                                  <div class="dropdown-header">
                                     <img src="${sessionScope.user.profileImage}" alt="User Image"/>
                                     <div class="info">
-                                        <div class="name">${sessionScope.user.userName}</div>
+                                        <div class="name">${sessionScope.user.nickName}</div>
                                         <div class="email">${sessionScope.user.userId}</div>
                                     </div>
                                     <i class="fas fa-cog setting-icon" id="settingsIcon"></i>

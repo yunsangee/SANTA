@@ -467,7 +467,7 @@ public class MountainServiceImpl implements MountainService {
 	}
 	
 	
-	public List<Mountain> getMountainListByAddress(String address) throws IOException{ // by address 
+	public List<Mountain> getMountainListByAddress( String address) throws IOException{ // by address 
 		
 		
 		
@@ -480,7 +480,6 @@ public class MountainServiceImpl implements MountainService {
 			for(int j = 0; j<mountainTrail.size();j++) {
 				mountainTrail.get(j).setMountainTrailCoordinates(objectStorageService.downloadListData(bucketname,list.get(i).getMountainTrail().get(j).getCoordinatesUrl()));
 			}
-			
 		
 		}
 		
@@ -494,8 +493,22 @@ public class MountainServiceImpl implements MountainService {
 		
 	}
 	
-	public List<Mountain> getMountainListByName(String mountainName){
-		return mountainDao.getMountainListByName(mountainName);
+	public List<Mountain> getMountainListByName(int userNo, String mountainName){
+		
+		List<Mountain> list = mountainDao.getMountainListByName(mountainName);
+		
+		
+		for(Mountain mountain : list) {
+
+		mountain.setLikeCount(mountainDao.getTotalMountainLikeCount(mountain.getMountainNo()));
+		
+		if(userNo != -1) {
+			SantaLogger.makeLog("info", "mountainNo & userNo" + mountain.getMountainNo()+ " "+userNo);
+			mountain.setIsLiked(mountainDao.isLiked(mountain.getMountainNo(), userNo));
+		}
+		}
+		
+		return list;
 	}
 	
 	public void updateMountain(Mountain mountain) {
@@ -518,7 +531,7 @@ public class MountainServiceImpl implements MountainService {
 		int maxSize = 10;
 		for(int i = 0; i <  maxSize  ; i ++) {
 			
-			Mountain mountain = this.getMountainListByName(mountainNames.get(i)).get(0);
+			Mountain mountain = this.getMountainListByName(search.getUserNo() ,mountainNames.get(i)).get(0);
 			mountain.setLikeCount(mountainDao.getTotalMountainLikeCount(mountain.getMountainNo()));
 			
 			if(search.getUserNo() != -1) {

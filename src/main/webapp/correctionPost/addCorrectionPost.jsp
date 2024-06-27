@@ -18,11 +18,8 @@
 					mountainName : $("#mountainName").val(),
 					contents: $("#contents").val()
 				};
+
 				
-				alert(data.contents);
-				alert(data.userNo);
-				alert(data.mountainNo);
-				alert(data.mountainName);
 			 	alert('/correctionPost/rest/addCorrectionPost');
 				let url = '/correctionPost/rest/addCorrectionPost';
 				$.ajax({
@@ -32,6 +29,7 @@
 		            success: function(response) {
 		                alert('Mountain updated successfully');
 		                console.log(response);
+		                window.close();
 		            },
 		            error: function(jqXHR, textStatus, errorThrown) {
 		                console.error('Error:', textStatus, errorThrown);
@@ -40,7 +38,7 @@
 		            }
 		        });
 			 	
-				window.close(); 
+			/* 	window.close();  */
 				
 			});
 		});

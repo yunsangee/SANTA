@@ -144,12 +144,18 @@
             	window.location.href = '/mountain/mapMountain';
             });
 
-            $('.fa-external-link-alt').on('click',function(){
+            $('.fa-external-link-alt , .mountainName').on('click',function(){
             	console.log($($(this).parent()).text());
             	var h4Value = $($(this).parent()).text().trim();
             	console.log(h4Value);
             	
             	window.location.href = "/mountain/mapMountain?searchCondition=0&searchKeyword=" + h4Value;
+            });
+            
+            $('.mountainImage').on('click', function(){
+            	let mountainName = $(this).parent().parent().children().find('h4').text().trim();
+            	console.log(mountainName);
+            	window.location.href = "/mountain/mapMountain?searchCondition=0&searchKeyword=" + mountainName;
             });
             
             $(".top-button").click(function() {
@@ -166,6 +172,18 @@
 				event.preventDefault();
 				window.location.href = '/certificationPost/listCertificationPost';
             });
+			
+			 $(document).on('click', '.certification-post', function() {
+			        var postNo = $(this).children().find('.certificationPostNo').text().trim();
+			        console.log(postNo);
+			        window.location.href = "/certificationPost/getCertificationPost?postNo=" + postNo;
+			 });
+			 
+			 $(".postNickName").on("click", function(){
+				let userNo = $(this).parent().find('input[name="userNo"]').val();
+				console.log(userNo);
+				window.location.href="/certificationPost/getProfile?userNo="+userNo;
+			 });
            
 
             // Like button toggle
@@ -393,11 +411,11 @@
                     <div class="swiper-slide">
                         <div class="popular-testimonial-item img-border-radius rounded p-4">
                             <div class=" rounded">
-                                <img src="${mountain.mountainImage}" class="img-fluid rounded" style="width: 250px; height: 150px;" alt="">
+                                <img src="${mountain.mountainImage}" class="img-fluid rounded mountainImage" style="width: 250px; height: 150px;" alt="">
                             </div>
                             <div class="ms-3 d-block" style="flex-grow: 1;">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h4 class="text-dark mb-0">${mountain.mountainName}</h4>
+                                    <h4 class="text-dark mb-0 mountainName">${mountain.mountainName}</h4>
                                     <i class="fas fa-external-link-alt"></i>
                                 </div>
                                 <p class="m-0 pb-3" style="font-size: 0.75em;">${mountain.mountainLocation}</p>
@@ -441,11 +459,11 @@
                     <div class="swiper-slide">
                         <div class="custom-testimonial-item img-border-radius rounded p-4">
                             <div class="rounded">
-                                <img src="${mountain.mountainImage}" class="img-fluid rounded" style="width: 250px; height: 150px;" alt="">
+                                <img src="${mountain.mountainImage}" class="img-fluid rounded mountainImage" style="width: 250px; height: 150px;" alt="">
                             </div>
                             <div class="ms-3 d-block" style="flex-grow: 1;">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h4 class="text-dark mb-0">${mountain.mountainName}</h4>
+                                    <h4 class="text-dark mb-0 mountainName">${mountain.mountainName}</h4>
                                     <i class="fas fa-external-link-alt"></i>
                                 </div>
                                 <p class="m-0 pb-3" style="font-size: 0.75em;">${mountain.mountainLocation}</p>
@@ -477,7 +495,7 @@
 	<div class="container-fluid py-5 meetingPostr">
     		<div class="container py-5">
     			<div class="table-header text-center">
-            			<h4 class="text-primary">인기산 목록</h4>
+            			<h4 class="text-primary">모임 모집  목록</h4>
             			
             			<div class="moreMeetingPost">
             			더보기
@@ -506,7 +524,10 @@
                 <p class="mb-4 mt-4">${post.postNo}</p>
             </td>
             <td>
-                <p class="mb-4 mt-4">${post.nickName}</p>
+                <p class="mb-4 mt-4 postNickName"> <a href="#">${post.nickName}</a>
+                	<input type="hidden" name="userNo" value="${post.userNo}"/>
+                </p>
+                
             </td>
             <td>
                 <p class="mb-4 mt-4">
@@ -514,7 +535,7 @@
                 </p>
             </td>
             <td>
-                <p class="mb-4 mt-4">
+                <p class="mb-4 mt-4 link">
                     <c:choose>
                         <c:when test="${post.recruitmentStatus == 0}">
                             모집중
@@ -564,7 +585,7 @@
                                     <img src="${certificationPostImages[status.index]}" alt="Certification Post Image">
                                 </div>
                                 <div class="details">
-                                    <h4>${certificationPost.postNo}</h4>
+                                    <h4 class='certificationPostNo'>${certificationPost.postNo}</h4>
                                     <h4>${certificationPost.title}</h4>
                                     <p>산명칭 : ${certificationPost.certificationPostMountainName}</p>
                                     <p>Hiking Date: ${certificationPost.certificationPostHikingDate}</p>

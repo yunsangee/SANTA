@@ -9,7 +9,13 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <c:import url="../common/header.jsp"/>
     <script>
+    if ( window.history.replaceState ) {
+		  window.history.replaceState( null, null, window.location.href );
+		}
     $(document).ready(function(){
+    	
+    	
+    	
     	$('.btn-search-keyword').on('click',function(){
     		console.log($(this).text());
     		//console.log($($(this).parent()).find('button').val());
@@ -63,6 +69,12 @@
 	                name: 'searchKeyword',
 	                value: $(this).text().trim()
 	            }).appendTo(form);
+	        
+	            $('<input>').attr({
+	                type: 'hidden',
+	                name: 'userNo',
+	                value: ${sessionScope.user != null ? sessionScope.user.userNo : -1},
+	            }).appendTo(form);
 
 	        // 폼을 body에 추가하고 제출
 	        form.appendTo('body').submit();
@@ -87,6 +99,11 @@
 	                value: $('#searchBox').val().trim()
 	            }).appendTo(form);
 
+	            $('<input>').attr({
+	                type: 'hidden',
+	                name: 'userNo',
+	                value: ${sessionScope.user != null ? sessionScope.user.userNo : -1},
+	            }).appendTo(form);
 	        // 폼을 body에 추가하고 제출
 	        form.appendTo('body').submit();
     	});
@@ -107,6 +124,12 @@
     	                type: 'hidden',
     	                name: 'searchKeyword',
     	                value: $('#searchBox').val().trim()
+    	            }).appendTo(form);
+    	        
+    	            $('<input>').attr({
+    	                type: 'hidden',
+    	                name: 'userNo',
+    	                value: ${sessionScope.user != null ? sessionScope.user.userNo : -1},
     	            }).appendTo(form);
 
     	        // 폼을 body에 추가하고 제출
