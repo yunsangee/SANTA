@@ -8,13 +8,16 @@
     <title>Chatting Room List</title>
     <c:import url="../common/header.jsp"/>
     
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     
     <script type="text/javascript">
 		
 		$(function () {
 			
-			var socket = io("https://www.dearmysanta.site/chattingserver");
+			const socket = io("https://www.dearmysanta.site", {
+			    path: '/chattingserver',
+			    transports: ['websocket']
+			});
 			
 			socket.on('lastMessage', function(data) {
                 var roomElement = $('#chattingRoom-' +data.roomNo);

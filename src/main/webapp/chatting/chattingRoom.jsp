@@ -20,15 +20,18 @@
     <title>Chatting Room</title>
     <c:import url="../common/header.jsp"/>
     
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     
     <script type="text/javascript">
     $(function() {
     	
-        var socket = io("https://www.dearmysanta.site/chattingserver");
+    	const socket = io("https://www.dearmysanta.site", {
+    	    path: '/chattingserver',
+    	    transports: ['websocket']
+    	});
         
         var userNo = "${sessionScope.user.userNo}";
-        var userNickname = "${sessionScope.user.nickname}";
+        var userNickname = "${sessionScope.user.nickName}";
         var roomNo = "${roomNo}";
 
         var initialSpaces = "                           ";

@@ -123,6 +123,7 @@ public class MeetingController {
 		int userNo;
 		if (user != null) {
 		    userNo = user.getUserNo();
+		    System.out.println("session에서 userNo 잘 받아옴" + userNo);
 		} else {
 		    userNo = 1;
 		    System.out.println("session에서 값 못받아와서 임의로 userNo 1 박힘");
@@ -131,6 +132,8 @@ public class MeetingController {
 
 		
 		meetingPost.setUserNo(userNo);
+		
+		System.out.println("Post/addMeetingPost/meetingPost 값 확인"+meetingPost);
 		
 		
 		int postNo = meetingService.addMeetingPost(meetingPost);

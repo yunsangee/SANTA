@@ -203,8 +203,8 @@ input[type="password"]:focus {
     </div>
     <div>
         <input type="password" id="userPassword" name="userPassword" placeholder="비밀번호" required>
-        <c:if test="${not empty loginError}">
-            <div class="error-message">${loginError}</div>
+        <c:if test="${not empty passwordError}">
+            <div class="error-message">${passwordError}</div>
         </c:if>
     </div>
     
