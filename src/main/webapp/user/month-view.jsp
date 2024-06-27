@@ -55,7 +55,7 @@
     	id:schedule.postNo,
         title: schedule.title,
         start: schedule.scheduleDate, // 스케줄의 시작 날짜
-		url:"http://127.0.0.1:8001/user/getSchedule?postNo="+schedule.postNo + "&userNo="+schedule.userNo
+		url:"https://dearmysanta.site/user/getSchedule?postNo="+schedule.postNo + "&userNo="+schedule.userNo
         
         // 필요한 다른 속성들 추가
       });

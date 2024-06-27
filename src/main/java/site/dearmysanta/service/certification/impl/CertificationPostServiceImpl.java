@@ -41,9 +41,9 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 	@Override
     public void addCertificationPost(CertificationPost certificationPost) {
         if (certificationPost.getCertificationPostImage() == null || certificationPost.getCertificationPostImage().isEmpty()) {
-            throw new IllegalArgumentException("ÀÌ¹ÌÁö´Â ÃÖ¼Ò ÇÑ °³ ÀÌ»ó Æ÷ÇÔµÇ¾î¾ß ÇÕ´Ï´Ù.");
+            throw new IllegalArgumentException("ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¼ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Ì»ï¿½ ï¿½ï¿½ï¿½ÔµÇ¾ï¿½ï¿½ ï¿½Õ´Ï´ï¿½.");
         } else {
-            // ÀÌ¹ÌÁöÀÇ °³¼ö¸¦ ¼³Á¤
+            // ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             certificationPost.setCertificationPostImageCount(certificationPost.getCertificationPostImage().size());
         }
         certificationPostDao.addCertificationPost(certificationPost);
@@ -65,13 +65,13 @@ public class CertificationPostServiceImpl implements CertificationPostService {
     	
     	
     	 List<String> hashtagList = certificationPostDao.getHashtag(postNo);
-    	 System.out.println("¿©±âhashtagList" + hashtagList);
+    	 System.out.println("hashtagList" + hashtagList);
     	List<CertificationPostComment> certificationPostCommentList = certificationPostDao.getCertificationPostCommentList(postNo);
     	Map<String, Object> map = new HashMap<String, Object>();
 		map.put("certificationPost", certificationPost);
 		
 		map.put("certificationPostCommentList", certificationPostCommentList);
-		System.out.println("´ñ±Û"+postNo+userNo+certificationPostCommentList);
+		System.out.println("ëŒ“ê¸€"+postNo+userNo+certificationPostCommentList);
 		map.put("hashtagList", hashtagList);
     	return map;
     }
@@ -81,7 +81,7 @@ public class CertificationPostServiceImpl implements CertificationPostService {
     public void updateCertificationPost(CertificationPost certificationPost) throws Exception {
       
         List<String> hashtagList = certificationPostDao.getHashtag(certificationPost.getPostNo());
-        System.out.println("ÇØ½ÃÅÂ±× ¸®½ºÆ®: " + hashtagList);
+        System.out.println("ï¿½Ø½ï¿½ï¿½Â±ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®: " + hashtagList);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("hashtagList", hashtagList);
       
@@ -93,20 +93,16 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 
     @Override
     public Map<String, Object> getCertificationPostList(Search search) throws Exception {
-        // ÀÎÁõ Æ÷½ºÆ® ¸ñ·ÏÀ» °¡Á®¿É´Ï´Ù.
+    
         List<CertificationPost> list = certificationPostDao.getCertificationPostList(search);
 
-        // °¢ ÀÎÁõ Æ÷½ºÆ®¿¡ ´ëÇØ ÇØ½ÃÅÂ±× ¹× ÁÁ¾Æ¿ä ¼ö¸¦ Ãß°¡ÇÕ´Ï´Ù.
+      
         for (CertificationPost post : list) {
-            // ÇØ½ÃÅÂ±× °¡Á®¿À±â
-           
-
-            // ÁÁ¾Æ¿ä ¼ö °¡Á®¿À±â
+  
             int likeCount = certificationPostDao.getCertificationPostLikeCount(post.getPostNo());
-            post.setCertificationPostLikeCount(likeCount); // ÀÎÁõ Æ÷½ºÆ® °´Ã¼¿¡ ÁÁ¾Æ¿ä ¼ö¸¦ ¼³Á¤ÇÕ´Ï´Ù.
+            post.setCertificationPostLikeCount(likeCount); 
         }
 
-        // °á°ú¸¦ ¸Ê¿¡ ³Ö½À´Ï´Ù.
         Map<String, Object> map = new HashMap<>();
         map.put("list", list);
 
@@ -215,6 +211,7 @@ public class CertificationPostServiceImpl implements CertificationPostService {
 	}
 
 
+	
 
 	}
 

@@ -44,9 +44,9 @@ public class MeetingRestController {
 	}
 	
 	@GetMapping(value = "rest/deleteMeetingParticipation")
-	public void deleteMeetingParticipation(@RequestParam int participationNo) throws Exception {
+	public void deleteMeetingParticipation(@ModelAttribute MeetingParticipation meetingParticipation) throws Exception {
 		
-		meetingService.deleteMeetingParticipation(participationNo);
+		meetingService.deleteMeetingParticipation(meetingParticipation);
 	}
 	
 	@GetMapping(value = "rest/updateMeetingParticipationStatus")
@@ -98,14 +98,6 @@ public class MeetingRestController {
 	
 	@GetMapping(value = "rest/updateMeetingPostRecruitmentStatus")
 	public void updateMeetingPostRecruitmentStatus(@ModelAttribute MeetingPost meetingPost) throws Exception {
-		
-		if (meetingPost.getRecruitmentStatus() == 0) {
-			meetingPost.setRecruitmentStatus(1);
-		} else {
-			meetingPost.setRecruitmentStatus(0);
-		}
-		
-		System.out.println("자 확인해보자!!!!!!"+meetingPost);
 		
 		meetingService.updateMeetingPostRecruitmentStatus(meetingPost);
 	}

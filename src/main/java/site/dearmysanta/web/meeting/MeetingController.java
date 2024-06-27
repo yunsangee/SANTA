@@ -1,6 +1,6 @@
 package site.dearmysanta.web.meeting;
 
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -64,13 +64,19 @@ public class MeetingController {
 	}
 	
 	@GetMapping(value = "getMeetingPost")
-	public String getMeetingPost(@RequestParam int postNo, Model model
-//			, HttpSession session 이런식으로 controller에서 session쓴다고 선언해서 userNo 박는게 좋은지
-//			jsp에서 session 써서 여기로 파라미터로 userNo 넘기는게 좋은지 ????
-			) throws Exception {
+	public String getMeetingPost(@RequestParam int postNo, HttpSession session, Model model) throws Exception {
 		
-//		int userNo = ((User)session.getAttribute("user")).getUserNo();
-		int userNo = 1;
+		User user = (User) session.getAttribute("user");
+
+		int userNo;
+		
+		if (user != null) {
+		    userNo = user.getUserNo();
+		} else {
+		    userNo = 1;
+		    System.out.println("session에서 값 못받아와서 임의로 userNo 1 박힘");
+		}
+		
 		int postType = 1;
 		
 		Map<String, Object> map = meetingService.getMeetingPostAll(postNo, userNo);
@@ -110,11 +116,19 @@ public class MeetingController {
 	}
 	
 	@PostMapping(value = "addMeetingPost") // userNo to Session
-	public String addMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost) throws Exception {
+	public String addMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost, HttpSession session) throws Exception {
 		
-//		int userNo = ((User)session.getAttribute("user")).getUserNo();
+		User user = (User) session.getAttribute("user");
+
+		int userNo;
+		if (user != null) {
+		    userNo = user.getUserNo();
+		} else {
+		    userNo = 1;
+		    System.out.println("session에서 값 못받아와서 임의로 userNo 1 박힘");
+		}
 		
-		int userNo = 1;
+
 		
 		meetingPost.setUserNo(userNo);
 		
@@ -123,7 +137,8 @@ public class MeetingController {
 		int postType = 1;
 		String appointedHikingMountain = meetingPost.getAppointedHikingMountain();
 		
-		//mountainService.addMountainStatistics(appointedHikingMountain, 1);
+		
+		mountainService.addMountainStatistics(appointedHikingMountain, 1);
 		
 		chattingService.createChattingRoom(postNo);
 		
@@ -153,20 +168,82 @@ public class MeetingController {
 	@GetMapping(value = "updateMeetingPost")
 	public String updateMeetingPost(@RequestParam int postNo, Model model) throws Exception {
 		
+		int postType = 1;
+		
 		MeetingPost meetingPost = meetingService.getMeetingPost(postNo);
 		
-		DateTimeFormatter formatterUntilDay = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		List<String> meetingPostImages = new ArrayList<>();
+		int imageCount = meetingPost.getMeetingPostImageCount();
+		
+		for (int i = 0; i < imageCount; i++) {
+            String fileName = postNo+ "_" +postType+ "_" +(i+1);
+            String imageURL = objectStorageService.getImageURL(fileName);
+            meetingPostImages.add(imageURL);
+        }
 		
 		
+        SimpleDateFormat formatterUntilDay = new SimpleDateFormat("yyyy-MM-dd");
+
+        String formattedRecruitmentDeadline = formatterUntilDay.format(meetingPost.getRecruitmentDeadline());
+        String formattedAppointedHikingDate = formatterUntilDay.format(meetingPost.getAppointedHikingDate());
+        
+        model.addAttribute("formattedRecruitmentDeadline", formattedRecruitmentDeadline);
+        model.addAttribute("formattedAppointedHikingDate", formattedAppointedHikingDate);
+        model.addAttribute("meetingPostImages", meetingPostImages);
 		model.addAttribute(meetingPost);
 		
 		return "forward:/meeting/updateMeetingPost.jsp";
 	}
 	
 	@PostMapping(value = "updateMeetingPost")
-	public String updateMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost) throws Exception {
+	public String updateMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost, @RequestParam("updateImageURL") List<String> updateImageURL) throws Exception {
 		
-		meetingService.updateMeetingPost(meetingPost);	
+		System.out.println("meetingPostImage 뭐찍히나 확인"+meetingPost);
+		System.out.println("updateImageUrl 확인==="+updateImageURL);
+		
+		int postNo = meetingPost.getPostNo();
+		int postType = 1;
+		
+		meetingService.updateMeetingPost(meetingPost, updateImageURL);
+		
+		
+		List<String> fileNames = new ArrayList<>();
+		
+		for (String imageURL : updateImageURL) {
+			
+			int lastIndex = imageURL.lastIndexOf("/");
+			String fileName = imageURL.substring(lastIndex + 1);
+			
+			System.out.println(fileName);
+			
+			fileNames.add(fileName);
+		}
+		
+		
+		System.out.println("정렬시킬 이미지이름들 : "+fileNames);
+		
+		int appendImageStartIndex = objectStorageService.updateObjectStorageImage(fileNames);
+		
+		if (meetingPost.getMeetingPostImage() != null) {
+	        List<MultipartFile> images = meetingPost.getMeetingPostImage().stream()
+	            .filter(image -> !image.isEmpty())
+	            .collect(Collectors.toList());
+			
+            int imageCount = images.size();
+            System.out.println("imageCount : "+imageCount);
+            
+            for (int i = 0; i < imageCount; i++) {
+            	
+                MultipartFile image = images.get(i);
+                String fileName = postNo+ "_" +postType+ "_" +(appendImageStartIndex);
+                
+                System.out.println("fileName : "+fileName);
+                
+                objectStorageService.uploadFile(image, fileName);
+                
+                appendImageStartIndex += 1;
+            }
+		}
 		
 		return "redirect:/meeting/getMeetingPost?postNo=" + meetingPost.getPostNo();
 	}
@@ -181,14 +258,23 @@ public class MeetingController {
 	
 	@RequestMapping(value = "getMeetingPostList") // currentPage
 	public String getMeetingPostList(@ModelAttribute("meetingPostSearch") MeetingPostSearch meetingPostSearch, 
-			Model model) throws Exception {
+			HttpSession session, Model model) throws Exception {
 		
 		System.out.println("/meeting/getMeetingPostList : GET/Post");
 		System.out.println("meetingPostSearch ===== "+meetingPostSearch);
 		
-//		int userNo = ((User)session.getAttribute("user")).getUserNo();
-//		meetingPostSearch.setUserNo(userNo);
-		int userNo = 1;
+		User user = (User) session.getAttribute("user");
+
+		int userNo;
+		
+		if (user != null) {
+		    userNo = user.getUserNo();
+		} else {
+		    userNo = 1;
+		    System.out.println("session에서 값 못받아와서 임의로 userNo 1 박힘");
+		}
+		
+		meetingPostSearch.setUserNo(userNo);
 		
 		if(meetingPostSearch.getCurrentPage() ==0 ){
 			meetingPostSearch.setCurrentPage(1);

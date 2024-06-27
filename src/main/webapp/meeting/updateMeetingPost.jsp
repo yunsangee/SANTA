@@ -13,6 +13,23 @@
     <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
     
     <script type = "text/javascript">
+    
+	    function fncUpdateMeetingPost() {
+	        var isValid = true;
+	        $('form input[required], form textarea[required]').each(function() {
+	            if ($(this).val() === '') {
+	                isValid = false;
+	                $(this).css('border', '2px solid red');
+	            } else {
+	                $(this).css('border', '');
+	            }
+	        });
+	        if (isValid) {
+	            $("form").attr("method", "POST").attr("action", "/meeting/updateMeetingPost").submit();
+	        } else {
+	            alert('모든 필수 입력란을 채워주세요.');
+	        }
+	    }
     	
     	$(function() {
     		
@@ -23,6 +40,17 @@
     	    $("#appointedHikingDate").datepicker({
     	        dateFormat: "yy-mm-dd"
     	    });
+    	    
+    	    $("button:contains('수정')").on('click', function() {
+		    	fncUpdateMeetingPost();
+		    })
+		    
+		    $(document).on('click', '.delete-image-button', function() {
+		        var $this = $(this);
+		        var $imageContainer = $this.closest('.image-div');  // 가장 가까운 .image-container를 찾음
+
+		        $imageContainer.remove();  // .image-container를 삭제
+		    });
     		
     	})
     
@@ -48,6 +76,8 @@
 			<div class="container-fluid py-5">
 	    		<div class="container py-5">
 	    			<div class="row mb-5">
+	    			
+	    				<input type="hidden" id="postNo" name="postNo" value="${meetingPost.postNo}">
 	    			
 	    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">작성자</div>
     					<div class="col-md-9 border align-items-center text-start py-3">${meetingPost.nickName}</div>
@@ -75,55 +105,65 @@
 	    				</div>
 	    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">모집 마감일</div>
 	    				<div class="col-md-2 border align-items-center text-center py-2">
-	    					<input type="text" class="form-control" id="recruitmentDeadline" name="recruitmentDeadline" placeholder="날짜 선택" value="${meetingPost.recruitmentDeadline}" required>
+	    					<input type="text" class="form-control" id="recruitmentDeadline" name="recruitmentDeadline" placeholder="날짜 선택" value="${formattedRecruitmentDeadline}" required>
 	    				</div>
 	    				
 	    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">출발 예정지</div>
     					<div class="col-md-9 border align-items-center text-start py-2">
     						<div class="d-flex">
 					            <div class="col-md-4 pe-2">
-						            <input type="text" class="form-control" id="appointedDeparture" name="appointedDeparture" placeholder="주소" required>
+						            <input type="text" class="form-control" id="appointedDeparture" name="appointedDeparture" placeholder="주소" value="${meetingPost.appointedDeparture}" required>
 						        </div>
 						        <div class="col-md-8 ps-2">
-						            <input type="text" class="form-control" id="appointedDetailDeparture" name="appointedDetailDeparture" placeholder="상세주소" required>
+						            <input type="text" class="form-control" id="appointedDetailDeparture" name="appointedDetailDeparture" placeholder="상세주소" value="${meetingPost.appointedDetailDeparture}" required>
 						        </div>
 					        </div>
     					</div>
     					
     					<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">등산 예정 산</div>
 	    				<div class="col-md-5 border align-items-center text-start py-2">
-	    					<input type="text" class="form-control" name="appointedHikingMountain" placeholder="ex) 관악산" required>
+	    					<input type="text" class="form-control" name="appointedHikingMountain" placeholder="ex) 관악산" value="${meetingPost.appointedHikingMountain}" required>
 	    				</div>
 	    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">등산 예정 일자</div>
 	    				<div class="col-md-2 border align-items-center text-center py-2">
-	    					<input type="text" class="form-control" id="appointedHikingDate" name="appointedHikingDate" placeholder="날짜 선택" required>
+	    					<input type="text" class="form-control" id="appointedHikingDate" name="appointedHikingDate" placeholder="날짜 선택" value="${formattedAppointedHikingDate}" required>
 	    				</div>
 	    				
 	    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">최대 인원</div>
 	    				<div class="col-md-2 border align-items-center text-center py-2">
 	    					<div class="d-flex align-items-center">
-		    					<input type="number" class="form-control me-2" name="maximumPersonnel" value="5" min="2" max="15" step="1">
+		    					<input type="number" class="form-control me-2" name="maximumPersonnel" value="${meetingPost.maximumPersonnel}" min="2" max="15" step="1">
 	    						<span>명</span>
     						</div>
 	    				</div>
 	    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 희망 성별</div>
 	    				<div class="col-md-2 border align-items-center text-center py-2">
 	    					<select class="form-control" name="participationGender">
-						        <option value="0">여성</option>
-						        <option value="1">남성</option>
-						        <option value="2">상관없음</option>
+						        <option value="0" ${meetingPost.participationGender == 0 ? 'selected' : ''}>여자</option>
+						        <option value="1" ${meetingPost.participationGender == 1 ? 'selected' : ''}>남자</option>
+						        <option value="2" ${meetingPost.participationGender == 2 ? 'selected' : ''}>상관없음</option>
 						    </select>
 	    				</div>
 	    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 희망 연령대</div>
 	    				<div class="col-md-2 border align-items-center text-center py-2">
-	    					<input type="text" class="form-control" name="participationAge" placeholder="희망 연령대를 입력하세요">
+	    					<input type="text" class="form-control" name="participationAge" placeholder="희망 연령대를 입력하세요" value="${meetingPost.participationAge}">
 	    				</div>
 	    				
 	    				<div class="col-md-2 border bg-light d-flex align-items-center justify-content-center title" id="contents">
 						    내용
 						</div>
 						<div class="col-md-10 border py-2">
-						    <textarea class="form-control mb-2" name="contents" rows="10" placeholder="내용을 입력하세요." style="height: 200px;" required></textarea>
+							<c:forEach var="image" items="${meetingPostImages}">
+						        <div class="position-relative d-inline-block image-div">
+						            <img src="${image}" alt="Image" class="img-fluid" />
+						            <button class="btn p-0 delete-image-button position-absolute top-0 end-0" style="line-height: 0;">
+						                <i class="bi bi-x" style="font-size: 32px; color: red;"></i>
+						            </button>
+						            <input type="hidden" id="updateImageURL" name="updateImageURL" value="${image}"/>
+						        </div>
+						    </c:forEach>
+						
+						    <textarea class="form-control mb-2" name="contents" rows="10" placeholder="내용을 입력하세요." style="height: 200px;" required>${meetingPost.contents}</textarea>
 						    <input type="file" id="meetingPostImage" name="meetingPostImage" multiple/><br/>
 						</div>
 						
