@@ -228,12 +228,12 @@ public class MountainController {
 		LocalDate today = LocalDate.now().minusDays(7);
 
         // 날짜를 "YYYY-MM-DD" 형식으로 포맷
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedDate = today.format(formatter);
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//        String formattedDate = today.format(formatter);
 
-        SantaLogger.makeLog("info", mountainService.getStatisticsDaily(formattedDate).toString());
+        SantaLogger.makeLog("info", mountainService.getStatisticsDaily().toString());
         SantaLogger.makeLog("info", mountainService.getStatisticsWeekly().toString());
-		model.addAttribute("dailyStats", objectMapper.writeValueAsString(mountainService.getStatisticsDaily(formattedDate)));
+		model.addAttribute("dailyStats", objectMapper.writeValueAsString(mountainService.getStatisticsDaily()));
 		model.addAttribute("weeklyStats", objectMapper.writeValueAsString(mountainService.getStatisticsWeekly()));
 
 		return "forward:/mountain/getStatistics.jsp";

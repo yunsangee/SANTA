@@ -12,7 +12,7 @@
 
 <c:import url="../common/header.jsp"/>
 <script>
-	$(function(){
+	$(document).ready(function(){
 		$("button:contains('update')").on('click',function(){
 			
 			console.log("#form"+ ($(this).parent()).find("input:hidden[id='crpNo']").val());
@@ -88,7 +88,7 @@
 	        });
 		
 		
-		$("#delete").on('click',function(){
+		$(".delete").on('click',function(){
 				const data  = {
 					postNo : parseInt(($(this).parent()).find("input:hidden[id='crpNo']").val()),
 					userNo : parseInt(($(this).parent()).find("input:hidden[id='userNo']").val())
@@ -98,7 +98,7 @@
 				console.log(data.userNo);
 				
 				$.ajax({
-					url:"http://${javaServerIp}/correctionPost/rest/deleteCorrectionPost",
+					url:"/correctionPost/rest/deleteCorrectionPost",
 					method: "POST",
 					contentType:"application/json",
 					//dataType: "json",
@@ -117,7 +117,7 @@
 				});
 		});
 		
-		$("#update").on('click',function(e){
+		$(".update").on('click',function(e){
 			
 			let mountainNo = parseInt(($(this).parent()).find("input:hidden[id='mountainNo']").val());
 			let crpNo = parseInt(($(this).parent()).find("input:hidden[id='crpNo']").val());
@@ -297,8 +297,8 @@
                     <input type="hidden" id="userNo" name="userNo" value="${correctionPost.userNo}"/>
                     <input type="hidden" id="crpNo" name="crpNo" value="${correctionPost.postNo}"/>
                     <input type="hidden" id="mountainNo" name="mountainNo" value="${correctionPost.mountainNo}"/>
-                    <button id="update" type="button">Update</button>
-                    <button id="delete" type="button">Delete</button>
+                    <button id="update" class="update" type="button">Update</button>
+                    <button id="delete" class="delete" type="button">Delete</button>
                 </form>
             </td>
         </tr>

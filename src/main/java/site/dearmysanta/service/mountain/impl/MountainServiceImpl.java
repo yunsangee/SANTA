@@ -660,8 +660,8 @@ public class MountainServiceImpl implements MountainService {
 		return mountainDao.getStatisticsWeekly(); 
 	}
 
-	public List<Statistics> getStatisticsDaily(String date){
-		return mountainDao.getStatisticsDaily(date);
+	public List<Statistics> getStatisticsDaily(){
+		return mountainDao.getStatisticsDaily();
 	}
 	
 	public List<String> getStatisticsMountainNameList(int which){

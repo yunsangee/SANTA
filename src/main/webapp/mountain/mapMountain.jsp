@@ -36,9 +36,12 @@
 		clearAll();
 		
 		if(mountainList == "" | mountainList == null | mountainList =='null'){
-			
-			$('#address').val('${searchKeyword}');
-			getAddressFromUserInput();
+			if('${searchKeyword}' == ''){
+				getLocation();
+			}else{
+				$('#address').val('${searchKeyword}');
+				getAddressFromUserInput();
+			}
 		}else{
 		
 		getLocation();
@@ -306,7 +309,7 @@
 		const {center, bounds} = calculateCenterAndBounds(latitudes, longitudes);
 		
 		map.fitBounds(bounds);
-		map.setZoom((map.getZoom() > 15 ? 15 : map.getZoom()));
+		map.setZoom((map.getZoom() > 15 ? 15 : map.getZoom() < 8 ? map.getZoom() : map.getZoom()-1));
 		
 		markers.forEach(function(marker){
 			if(marker != null){
