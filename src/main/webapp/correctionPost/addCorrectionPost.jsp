@@ -10,37 +10,37 @@
 
 	<script>
 		$(document).ready(function(){
-			$("#inputButton").on("click",function(){
+			$("#inputButton").on("click",function(event){
+				event.preventDefault();
 				const data  = {
 					userNo : parseInt($("#userNo").val()),
 					mountainNo : parseInt($("#mountainNo").val()),
 					mountainName : $("#mountainName").val(),
 					contents: $("#contents").val()
-				}
+				};
 				
 				alert(data.contents);
 				alert(data.userNo);
 				alert(data.mountainNo);
 				alert(data.mountainName);
-			 	alert('http://${javaServerIp}/correctionPost/rest/addCorrectionPost');
-				let url = 'http://${javaServerIp}/correctionPost/rest/addCorrectionPost';
-				
-			 	$.ajax({
-			 	    url: url,
-			 	    type: "POST",
-			 	    dataType: "json",
-			 	    data: JSON.stringify(data),
-			 	    success: function(response) {
-			 	        alert('Mountain updated successfully');
-			 	        console.log(response);
-			 	    },
-			 	    error: function(jqXHR, textStatus, errorThrown) {
-			 	        console.error('Error:', textStatus, errorThrown);
-			 	        alert('Failed to update mountain');
-			 	    }
-			 	});
-				
-				window.close();
+			 	alert('/correctionPost/rest/addCorrectionPost');
+				let url = '/correctionPost/rest/addCorrectionPost';
+				$.ajax({
+		            url: url,
+		            method: "GET",
+		            data: data, // data 객체를 쿼리 파라미터로 전송
+		            success: function(response) {
+		                alert('Mountain updated successfully');
+		                console.log(response);
+		            },
+		            error: function(jqXHR, textStatus, errorThrown) {
+		                console.error('Error:', textStatus, errorThrown);
+		                alert('Error:', textStatus, errorThrown);    
+		                alert('Failed to update mountain');
+		            }
+		        });
+			 	
+				window.close(); 
 				
 			});
 		});

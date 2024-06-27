@@ -85,7 +85,7 @@ public interface MountainService {
 	
 	public List<Statistics> getStatisticsWeekly();
 
-	public List<Statistics> getStatisticsDaily(String date);
+	public List<Statistics> getStatisticsDaily();
 	
 	public List<String> getStatisticsMountainNameList(int which);
 	

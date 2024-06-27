@@ -9,7 +9,6 @@
     <c:import url="../common/header.jsp"/>
     
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
     
     <script type = "text/javascript">
@@ -154,6 +153,7 @@
 						</div>
 						<div class="col-md-10 border py-2">
 							<c:forEach var="image" items="${meetingPostImages}">
+							
 						        <div class="position-relative d-inline-block image-div">
 						            <img src="${image}" alt="Image" class="img-fluid" />
 						            <button class="btn p-0 delete-image-button position-absolute top-0 end-0" style="line-height: 0;">
@@ -161,6 +161,14 @@
 						            </button>
 						            <input type="hidden" id="updateImageURL" name="updateImageURL" value="${image}"/>
 						        </div>
+						        <div class="position-relative d-inline-block image-div">
+						            <img src="${image}" alt="Image" class="img-fluid" />
+						            <button class="btn p-0 delete-image-button position-absolute top-0 end-0" style="line-height: 0;">
+						                <i class="bi bi-x" style="font-size: 32px; color: red;"></i>
+						            </button>
+						            <input type="hidden" id="updateImageURL" name="updateImageURL" value="${image}"/>
+						        </div>
+						        
 						    </c:forEach>
 						
 						    <textarea class="form-control mb-2" name="contents" rows="10" placeholder="내용을 입력하세요." style="height: 200px;" required>${meetingPost.contents}</textarea>

@@ -369,7 +369,7 @@
 				POST_COUNT = POST_COUNT + 1
 			</when>
 		</choose>
-		WHERE MOUNTAIN_NAME = #{mountainName} AND search_date = TRUNC(SYSDATE)
+		WHERE MOUNTAIN_NAME = #{mountainName} AND search_date = TO_DATE(SYSDATE,'DD-MM-YY')
 	</update>
 
 
@@ -378,7 +378,7 @@
 		SELECT COUNT(*)
 		FROM STATISTICS
 		WHERE
-		MOUNTAIN_NAME = #{value} AND search_date = TRUNC(SYSDATE)
+		MOUNTAIN_NAME = #{value} AND search_date = TO_DATE(SYSDATE,'DD-MM-YY')
 	</select>
 
 	<select id="getStatisticsWeekly" parameterType="map"
@@ -414,7 +414,7 @@
 			SUMVAL
         FROM (
 		SELECT MOUNTAIN_NAME, SEARCH_COUNT, POST_COUNT, (SEARCH_COUNT + POST_COUNT) AS SUMVAL FROM STATISTICS
-		WHERE SEARCH_DATE = TO_DATE(#{value},'YYYY-MM-DD')
+		WHERE SEARCH_DATE = TO_DATE(SYSDATE,'DD-MM-YY')
 		)
 		
 		 

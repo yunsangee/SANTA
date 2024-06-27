@@ -119,6 +119,8 @@
             </div>
         </div>
     </main>
-    <footer></footer>
+  <footer>
+        <c:import url="../common/footer.jsp"/>
+    </footer>
 </body>
 </html>
