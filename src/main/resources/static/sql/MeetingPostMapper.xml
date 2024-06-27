@@ -129,7 +129,7 @@
 	    FROM (
 	        SELECT inner_table.*, ROWNUM AS row_seq 
 	        FROM (
-	            SELECT mp.mp_no, mp.mp_title, mp.recruitment_status, mp.mp_creation_date, u.nickname, u.profile_image
+	            SELECT mp.mp_no, mp.mp_title, mp.userNo, mp.recruitment_status, mp.mp_creation_date, u.nickname, u.profile_image
 	            FROM meeting_post mp
 	            JOIN users u ON mp.user_no = u.user_no
 	            <if test="meetingPostListSearchCondition != null">

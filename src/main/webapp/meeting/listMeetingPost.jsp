@@ -251,7 +251,9 @@
 					                    	<p class="mb-4 mt-4">${post.postNo}</p>
 					                    </td>
 					                    <td>
-					                    	<p class="mb-4 mt-4">${post.nickName}</p>
+					                    	<p class="mb-4 mt-4">
+					                    		<a href="/certificationPost/getProfile?userNo=${post.userNo}">${post.nickName}</a>
+					                    	</p>
 					                    </td>
 					                    <td>
 					                    	<p class="mb-4 mt-4">
