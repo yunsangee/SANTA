@@ -120,7 +120,7 @@ public class UserController {
 		}	
 
 		@PostMapping(value = "login")
-		public String login(@ModelAttribute User user, HttpSession session, Model model, Search search, HttpServletResponse response) throws Exception {
+		public String login(@ModelAttribute User user, HttpSession session, Model model, HttpServletResponse response) throws Exception {
 		    System.out.println("/user/login : POST");
 		    
 		    System.out.println("user : " +user);
@@ -153,9 +153,7 @@ public class UserController {
 		        
 		    session.setAttribute("user", dbUser);	
 		    
-		    session.setAttribute("alarmMessageList",userEtcService.getAlarmMessageList(user.getUserNo()));
-			session.setAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
-			session.setAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), user));
+		    
 		    
 		    // 쿠키 설정
 		    
@@ -192,7 +190,7 @@ public class UserController {
 		    
 		    System.out.println("쿠키 프로필 사진 : " + profileCookie);
 		    
-		    return "redirect:/common/main.jsp";
+		    return "redirect:/";
 		}
 
 		
