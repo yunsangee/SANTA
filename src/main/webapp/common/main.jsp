@@ -483,7 +483,7 @@
 	<div class="container-fluid py-5 meetingPostr">
     		<div class="container py-5">
     			<div class="table-header text-center">
-            			<h4 class="text-primary">인기산 목록</h4>
+            			<h4 class="text-primary">모임 모집  목록</h4>
             			
             			<div class="moreMeetingPost">
             			더보기
