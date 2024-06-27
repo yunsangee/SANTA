@@ -133,9 +133,14 @@ public class UserController {
 		    
 		    System.out.println("확인 : " + dbUser);
 		    
+		    if(dbUser == null || !dbUser.getUserId().equals(user.getUserId())) {
+		    	model.addAttribute("idError", "아이디 혹은 비밀번호가 잘못되었습니다. 다시 입력해주세요.");
+		    	return "forward:/user/login.jsp";
+		    }
+		    
 		    // 사용자가 존재하는지 확인
 		    if (dbUser == null || !dbUser.getUserPassword().equals(user.getUserPassword())) {
-		        model.addAttribute("loginError", "아이디 혹은 비밀번호가 잘못되었습니다. 다시 입력해주세요.");
+		        model.addAttribute("passwordError", "아이디 혹은 비밀번호가 잘못되었습니다. 다시 입력해주세요.");
 		        return "forward:/user/login.jsp";
 		    }
 		    
@@ -152,9 +157,7 @@ public class UserController {
 		    }
 		        
 		    session.setAttribute("user", dbUser);	
-		    
-		    
-		    
+		    	   
 		    // 쿠키 설정
 		    
 		    String encodingUserNo = URLEncoder.encode(""+dbUser.getUserNo(), "UTF-8");
@@ -205,7 +208,7 @@ public class UserController {
 			
 			session.invalidate();
 			
-			return "redirect:/common/main.jsp";
+			return "forward:/common/main.jsp";
 		}
 		
 		//
