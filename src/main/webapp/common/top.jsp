@@ -80,11 +80,11 @@
 		        });
 		        $('#myMeetingPost').on('click', function(event) {
 		        	event.preventDefault();
-		            window.location.href = 'meeting/getMeetingPostList?userNo=${sessionScope.user.userNo}';
+		            window.location.href = '/meeting/getMeetingPostList?userNo=${sessionScope.user.userNo}';
 		        });
 		        $('#myCertificationPost').on('click', function(event) {
 		        	event.preventDefault();
-		            window.location.href = 'certificationPost/listMyCertificationPost?userNo=${sessionScope.user.userNo}';
+		            window.location.href = '/certificationPost/listMyCertificationPost?userNo=${sessionScope.user.userNo}';
 		        });
 		        $('#myMountainLike').on('click', function(event) {
 		        	event.preventDefault();
@@ -378,8 +378,14 @@ $(document).ready(function(event) {
     $(document).on('click', function(event) {
     	event.stopPropagation();
         if (!$(event.target).closest('.dropdown').length) {
+        	
             $('.dropdown-menu').removeClass('show');
-            closeAlarmSetting();
+            
+            if(!$('.dropdown-menu').hasClass('show')){
+            	var modal = document.getElementById('settingsModal');
+            	modal.style.display='none';
+              }
+            
         }
     });
     
@@ -413,10 +419,10 @@ $(document).ready(function(event) {
             closeAlarmSetting();
         }); */
         
-        $('.setting-icon').on('click',function(){
+        $('.setting-icon').on('click',function(event){
 			event.preventDefault();
             
-            var modal = $("#settingsModal");
+            /* var modal = $("#settingsModal");
             var icon = $(this);
             
             // 아이콘의 위치와 크기를 가져와서 모달의 위치를 설정
@@ -426,9 +432,9 @@ $(document).ready(function(event) {
             modal.css({
                 top: iconOffset.top + iconHeight + "px",
                 left: iconOffset.left + "px"
-            });
+            }); */
             
-            modal.toggle();
+            closeAlarmSetting();
         });
         
         $('.form-switch').on('click', function(event){
@@ -443,7 +449,7 @@ $(document).ready(function(event) {
             } else {
                 modal.style.display = 'none';
             }
-        }
+        } 
         
         
         $('#flexSwitchAllAlert').on('click', function(event) {
