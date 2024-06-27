@@ -98,13 +98,14 @@
                             <c:forEach var="follower" items="${followerList}">
                                 <tr>
                                     <td style="vertical-align: middle; padding-right: 10px;">
-                                        <img src="${follower.profileImage}" alt="Profile Image" class="profile-img">
+                                       <img src="${sessionScope.user.profileImage}" class="profile">
                                     </td>
                                     <td style="vertical-align: middle; padding-right: 10px;">
                                         <p class="mb-0 clickable" data-userno="${follower.userNo}">${follower.nickName}</p>
                                     </td>
                                     <td style="vertical-align: middle; padding-right: 10px;">
-                                        <img src="${follower.badgeImage}" alt="Badge Image" class="badge-img">
+                                    <p >배지이미지들어와야함</p>
+                                       <!--<img src="${follower.badgeImage}" alt="Badge Image" class="badge-img">  --> 
                                     </td>
                                 </tr>
                                 <tr>

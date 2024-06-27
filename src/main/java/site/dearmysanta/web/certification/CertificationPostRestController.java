@@ -125,7 +125,14 @@ public class CertificationPostRestController {
     }
 
     @GetMapping(value="rest/getProfile")
-    public Map<String, Object> getProfile(@RequestParam int userNo) throws Exception {
+    public String getProfile(@RequestParam int userNo, HttpSession session, Model model) throws Exception {
+        User sessionUser = (User) session.getAttribute("user");
+
+        if (sessionUser == null) {
+            // 세션에 유저 정보가 없으면 로그인 페이지로 리디렉션하거나 에러 메시지를 보여줍니다.
+            return "redirect:/login"; // 로그인 페이지로 리디렉션
+        }
+
         Map<String, Object> result = new HashMap<>();
 
         User user = userService.getUser(userNo);
@@ -143,8 +150,14 @@ public class CertificationPostRestController {
         System.out.println("getCertificationPostLikeList: " + getCertificationPostLikeList);
         result.put("getCertificationPostLikeList", getCertificationPostLikeList);
 
-        return result;
+        // isFollowing 값을 가져와서 model에 추가
+        int isFollowing = userEtcService.isFollowing(sessionUser.getUserNo(), userNo); // 팔로우 상태를 가져옴
+        result.put("isFollowing", isFollowing);
+
+        model.addAllAttributes(result);
+        return "forward:/certificationPost/getProfile.jsp";
     }
+
 
     @PostMapping(value = "rest/getCertificationPostLikeList")
     public Map<String, Object> getCertificationPostLikeList(@RequestParam int userNo) throws Exception {

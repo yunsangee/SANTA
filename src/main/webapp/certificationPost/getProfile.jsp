@@ -148,10 +148,14 @@ body {
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script>
     $(document).ready(function() {
-        var userNo = ${infouser.userNo}; // JSP에서 userNo 값을 가져옴
-        var loggedInUserNo = ${sessionScope.user.userNo}; // JSP에서 로그인된 사용자 번호를 가져옴
-        var isFollowing = ${isFollowing}; // 서버에서 팔로우 상태를 받아옴
+        var userNo = "${infouser.userNo}"; // JSP에서 userNo 값을 가져옴
+        var loggedInUserNo = "${sessionScope.user.userNo}"; // JSP에서 로그인된 사용자 번호를 가져옴
+        var isFollowing = "${isFollowing}"; // 서버에서 팔로우 상태를 받아옴
         var followerUserNo = loggedInUserNo; // 팔로워 사용자 번호는 로그인된 사용자 번호와 동일
+
+        console.log("User No: " + userNo);
+        console.log("Logged In User No: " + loggedInUserNo);
+        console.log("Is Following: " + isFollowing);
 
         // 팔로우 버튼 텍스트 설정
         updateFollowButtonText(isFollowing);

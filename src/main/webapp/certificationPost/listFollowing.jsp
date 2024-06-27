@@ -96,9 +96,9 @@
     </style>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script>
-    $(document).ready(function(){
-        const followerUserNo = 1;  // !!!!!유저번호 임의로 지정해둠!!!!!
-      
+    $(document).ready(function() {
+        const followerUserNo = ${sessionScope.user.userNo}; // 세션에서 로그인된 사용자 번호를 가져옴
+
         $(document).on('click', 'p.clickable', function() {
             var userNo = $(this).closest('tr').attr('id').replace('row-', ''); // 클릭된 닉네임의 부모 tr의 id에서 userNo 추출
 
@@ -109,9 +109,10 @@
             window.location.href = "/certificationPost/getProfile?userNo=" + userNo;
         });
 
-        $(document).on('click', 'button.delete-follow', function(){
+        $(document).on('click', 'button.delete-follow', function() {
             const followingUserNo = $(this).data("following-id");
 
+            // 디버깅 로그 추가
             console.log("Follower User No:", followerUserNo);
             console.log("Following User No:", followingUserNo);
 
@@ -189,6 +190,7 @@
         // 초기 팔로잉 목록 로드
         getFollowingList(followerUserNo);
     });
+
     </script>
 </head>
 <body>
@@ -205,14 +207,16 @@
                             <c:forEach var="following" items="${followingList}">
                                 <tr id="row-${following.userNo}">
                                     <td style="vertical-align: middle; padding-right: 10px;">
-                                        <img src="${following.profileImage}" alt="Profile Image" class="profile-img">
+                                        <img src="${sessionScope.user.profileImage}"  alt="Profile Image" class="profile-img">
                                     </td>
                                     <td style="vertical-align: middle; padding-right: 10px;">
                                         <p class="mb-0 clickable" data-userNo="${following.userNo}">${following.nickName}</p>
                                     </td>
                                     <td style="vertical-align: middle; padding-right: 10px;">
-                                        <img src="${following.badgeImage}" alt="Badge Image" class="badge-img">
-                                    </td>
+                                     
+                                      <p >배지이미지들어와야함</p>
+                                       <!-- <img src="${following.badgeImage}" alt="Badge Image" class="badge-img">
+                                    -->  </td>
                                     <td style="vertical-align: middle;">
                                         <button 
                                             class="delete-follow follow-button btn btn-secondary" 
