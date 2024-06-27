@@ -61,7 +61,6 @@
         WHERE 
             crp.USER_NO = u.USER_NO 
             AND crp.MOUNTAIN_NO = m.MOUNTAIN_NO 
-            AND crp.crp_status = 0
         <choose>
             <when test="searchCondition == 0 and searchKeyword != null and searchKeyword != ''">
                 AND m.MOUNTAIN_NAME LIKE '%' || #{searchKeyword} || '%'

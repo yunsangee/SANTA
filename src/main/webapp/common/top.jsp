@@ -281,7 +281,7 @@
                                  <div class="dropdown-header">
                                     <img src="${sessionScope.user.profileImage}" alt="User Image"/>
                                     <div class="info">
-                                        <div class="name">${sessionScope.user.userName}</div>
+                                        <div class="name">${sessionScope.user.nickName}</div>
                                         <div class="email">${sessionScope.user.userId}</div>
                                     </div>
                                     <i class="fas fa-cog setting-icon" id="settingsIcon"></i>

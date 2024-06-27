@@ -9,6 +9,12 @@
 
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=xpk093fqk1&submodules=geocoder"></script>
 <script type="text/javascript">
+	if ( window.history.replaceState ) {
+	  window.history.replaceState( null, null, window.location.href );
+	}
+	
+	
+	
 	let latitude;
 	let longitude;
     let map;
@@ -19,7 +25,7 @@
     
     var customIcon = {
             content: `
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="36" viewBox="0 0 24 36" fill="#7FFF00">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="36" viewBox="0 0 24 36" fill="#ff0000">
                     <path d="M12 0C5.37 0 0 5.37 0 12c0 6.63 12 24 12 24s12-17.37 12-24C24 5.37 18.63 0 12 0zm0 18a6 6 0 110-12 6 6 0 010 12z"/>
                 </svg>
             `,
@@ -557,6 +563,9 @@
 
         .far.fa-heart {
             color: gray; /* 좋아요가 눌리지 않은 경우의 색상 */
+        }
+        .custom-marker {
+            background: none; /* 배경을 투명하게 설정 */
         }
 
 </style>
