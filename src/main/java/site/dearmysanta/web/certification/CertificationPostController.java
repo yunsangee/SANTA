@@ -3,6 +3,7 @@ package site.dearmysanta.web.certification;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
@@ -154,15 +155,19 @@ public class CertificationPostController {
 
     @GetMapping(value = "updateCertificationPost")
     public String updateCertificationPost(@RequestParam int postNo, Model model, HttpSession session) throws Exception {
-        System.out.println("postNo: " + postNo);
+       
+    	  User user = (User) session.getAttribute("user");
+          if (user != null) {
+              model.addAttribute("user", user);
+          }
+
+    	System.out.println("postNo: " + postNo);
 
         CertificationPost certificationPost = certificationPostService.getCertificationPost(postNo);
         List<String> hashtagList = certificationPostService.getHashtag(postNo);
 
         System.out.println("hashtagList: " + hashtagList);
 
-        model.addAttribute("certificationPost", certificationPost);
-        model.addAttribute("hashtagList", hashtagList);
 
         String[] totalTimeParts = certificationPost.getCertificationPostTotalTime().split(" ");
         String[] ascentTimeParts = certificationPost.getCertificationPostAscentTime().split(" ");
@@ -184,19 +189,16 @@ public class CertificationPostController {
             certificationPostImages.add(imageURL);
         }
         model.addAttribute("certificationPostImages", certificationPostImages);
-
+        model.addAttribute("certificationPost", certificationPost);
+        model.addAttribute("hashtagList", hashtagList);
         // 사용자 세션에서 user 정보 가져오기
-        User user = (User) session.getAttribute("user");
-        if (user != null) {
-            model.addAttribute("user", user);
-        }
-
+      
         return "forward:/certificationPost/updateCertificationPost.jsp";
     }
 
     @PostMapping(value = "updateCertificationPost")
     public String updateCertificationPost(
-                                          @ModelAttribute CertificationPost certificationPost,
+                                          @ModelAttribute("certificationPost") CertificationPost certificationPost,
                                           @RequestParam int totalTimeHours,
                                           @RequestParam int totalTimeMinutes,
                                           @RequestParam int ascentTimeHours,
@@ -208,7 +210,16 @@ public class CertificationPostController {
                                           @RequestParam(value = "newHashtags", required = false) String[] newHashtags,
                                           @RequestParam(value = "deleteHashtagNos", required = false) int[] deleteHashtagNos,
                                           Model model,
-                                          HttpSession session) throws Exception {
+                                          HttpSession session,
+                                          @RequestParam(value = "updateImageURL", required = false) List<String> updateImageURL) throws Exception {
+
+        if (certificationPost == null) {
+            throw new NullPointerException("certificationPost is null");
+        }
+
+        if (updateImageURL == null) {
+            updateImageURL = new ArrayList<>();
+        }
 
         String totalTime = totalTimeHours + "시간 " + totalTimeMinutes + "분";
         String ascentTime = ascentTimeHours + "시간 " + ascentTimeMinutes + "분";
@@ -218,7 +229,13 @@ public class CertificationPostController {
         certificationPost.setCertificationPostAscentTime(ascentTime);
         certificationPost.setCertificationPostDescentTime(descentTime);
 
-        certificationPostService.updateCertificationPost(certificationPost);
+        System.out.println("여기다" + certificationPost);
+        System.out.println("updateImageUrl 확인===" + updateImageURL);
+
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            model.addAttribute("user", user);
+        }
 
         if (deleteHashtagNos != null) {
             for (int hashtagNo : deleteHashtagNos) {
@@ -242,10 +259,37 @@ public class CertificationPostController {
             }
         }
 
-        // 사용자 세션에서 user 정보 가져오기
-        User user = (User) session.getAttribute("user");
-        if (user != null) {
-            model.addAttribute("user", user);
+        int postNo = certificationPost.getPostNo();
+        int postType = 0;
+
+        certificationPostService.updateCertificationPost(certificationPost, updateImageURL);
+
+        List<String> fileNames = new ArrayList<>();
+
+        for (String imageURL : updateImageURL) {
+            int lastIndex = imageURL.lastIndexOf("/");
+            String fileName = imageURL.substring(lastIndex + 1);
+            System.out.println("파일이름" + fileName);
+            fileNames.add(fileName);
+        }
+
+        int appendImageStartIndex = objectStorageService.updateObjectStorageImage(fileNames);
+
+        if (certificationPost.getCertificationPostImage() != null) {
+            List<MultipartFile> images = certificationPost.getCertificationPostImage().stream()
+                .filter(image -> !image.isEmpty())
+                .collect(Collectors.toList());
+
+            int imageCount = images.size();
+            System.out.println("imageCount : " + imageCount);
+
+            for (int i = 0; i < imageCount; i++) {
+                MultipartFile image = images.get(i);
+                String fileName = postNo + "_" + postType + "_" + (appendImageStartIndex);
+                System.out.println("fileName : " + fileName);
+                objectStorageService.uploadFile(image, fileName);
+                appendImageStartIndex += 1;
+            }
         }
 
         return "redirect:/certificationPost/getCertificationPost?postNo=" + certificationPost.getPostNo();
@@ -313,6 +357,8 @@ public class CertificationPostController {
         model.addAttribute("hashtagList", map.get("hashtagList"));
         model.addAttribute("certificationPostImages", certificationPostImages);
 
+		System.out.println("������������"+certificationPostImages);
+				
         System.out.println("이거맞지" + certificationPostCommentList);
 
         return "forward:/certificationPost/getCertificationPost.jsp";
@@ -347,7 +393,16 @@ public class CertificationPostController {
     
 
     @GetMapping(value="getProfile")
-    public String getProfile(@RequestParam int userNo, Model model) throws Exception {
+    public String getProfile(@RequestParam int userNo, HttpSession session, Model model) throws Exception {
+        User sessionUser = (User) session.getAttribute("user");
+
+        if (sessionUser == null) {
+            // 세션에 유저 정보가 없으면 로그인 페이지로 리디렉션
+            return "redirect:/login";
+        }
+
+        int followerNo = sessionUser.getUserNo(); // 로그인된 사용자의 번호
+
         User user = userService.getUser(userNo);
         System.out.println("User Info: " + user);
         model.addAttribute("infouser", user);
@@ -359,9 +414,6 @@ public class CertificationPostController {
         int followingCount = userEtcService.getFollowingCount(userNo);
         System.out.println("Following Count: " + followingCount);
         model.addAttribute("followingCount", followingCount);
-
-        // 임의로 설정한 followerNo (로그인한 사용자의 번호라고 가정)
-        int followerNo = 1; // 예시로 1번 유저를 설정
 
         int isFollowing = userEtcService.isFollowing(followerNo, userNo);
         model.addAttribute("isFollowing", isFollowing);
@@ -384,7 +436,6 @@ public class CertificationPostController {
         }
 
         model.addAttribute("certificationPostImages", certificationPostImages);
-
         System.out.println("이미지" + certificationPostImages);
 
         return "forward:/certificationPost/getProfile.jsp";

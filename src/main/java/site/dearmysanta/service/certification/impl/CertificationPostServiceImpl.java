@@ -3,12 +3,13 @@ package site.dearmysanta.service.certification.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
 
 import site.dearmysanta.domain.certificationPost.CertificationPost;
 import site.dearmysanta.domain.certificationPost.CertificationPostComment;
@@ -78,15 +79,35 @@ public class CertificationPostServiceImpl implements CertificationPostService {
   
   
     @Override
-    public void updateCertificationPost(CertificationPost certificationPost) throws Exception {
-      
+    public void updateCertificationPost(CertificationPost certificationPost, List<String> updateImageURL) throws Exception {
+        // 해시태그를 가져오고 콘솔에 출력합니다.
         List<String> hashtagList = certificationPostDao.getHashtag(certificationPost.getPostNo());
-        System.out.println("�ؽ��±� ����Ʈ: " + hashtagList);
+        System.out.println("해시태그 확인: " + hashtagList);
+        
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("hashtagList", hashtagList);
-      
 
+        // appendImageCount를 초기화합니다.
+        int appendImageCount = 0;
+
+        // certificationPost에 이미지가 있는지 확인하고, 비어있지 않은 이미지를 필터링합니다.
+        if (certificationPost.getCertificationPostImage() != null) {
+            List<MultipartFile> images = certificationPost.getCertificationPostImage().stream()
+                .filter(image -> !image.isEmpty())
+                .collect(Collectors.toList());
+            
+            // 필터링된 이미지 리스트의 크기를 appendImageCount에 저장합니다.
+            appendImageCount = images.size();
+            System.out.println("필터링된 이미지 수: " + appendImageCount);  // 디버깅용 출력
+        }
+        
+        // updateImageURL 리스트의 크기와 appendImageCount의 합을 구하여 certificationPost 객체의 이미지 개수를 설정합니다.
+        certificationPost.setCertificationPostImageCount(updateImageURL.size() + appendImageCount);
+        System.out.println("최종 이미지 개수: " + certificationPost.getCertificationPostImageCount());  // 디버깅용 출력
+        
+        // certificationPost를 업데이트합니다.
         certificationPostDao.updateCertificationPost(certificationPost);
+        System.out.println("업데이트 완료: " + certificationPost);  // 디버깅용 출력
     }
 
     

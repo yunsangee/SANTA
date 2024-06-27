@@ -11,81 +11,105 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
-        .carousel-item img {
-            width: 100%;
-            height: 500px; /* 원하는 높이로 조정 */
-            object-fit: cover; /* 이미지를 잘라서 채움 */
-        }
-        .details-container {
-            margin-top: 20px;
-            position: relative;
-        }
-        .details-container p {
-            margin-bottom: 10px;
-        }
-        .comments-section {
-            margin-top: 40px;
-        }
-        .comment-item {
-            position: relative;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-        .comment-item .btn-danger {
-            background: none;
-            border: none;
-            color: #ff5c5c;
-            cursor: pointer;
-        }
-        .comment-item .btn-danger:hover {
-            color: #ff0000;
-        }
-        .comment-item p {
-            margin: 0;
-        }
-        .comment-item .fas {
-            margin-right: 5px;
-        }
-        .comment-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 15px; /* 작성 날짜의 폰트 크기 줄이기 */
-        }
-        .details-header {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            position: absolute;
-            top: 0;
-            right: 0;
-        }
-        .details-header p, .details-header .btn, .details-header i {
-            margin-left: 10px;
-        }
-        .like-button {
-            font-size: 24px; /* 버튼 크기 조정 */
-            cursor: pointer;
-        }
-        .comment-form {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            margin-top: 20px;
-        }
-        .comment-form textarea {
-            flex-grow: 1;
-            margin-right: 10px;
-        }
-        .inline-info span {
-            margin-right: 20px; /* span 사이에 간격을 줍니다 */
-        }
-        .hashtag {
-            display: inline-block;
-            margin-right: 10px;
-        }
+     .carousel-item img {
+    width: 100%;
+    height: 500px; /* 원하는 높이로 조정 */
+    object-fit: cover; /* 이미지를 잘라서 채움 */
+}
+.details-container {
+    margin-top: 20px;
+    position: relative;
+}
+.details-container p {
+    margin-bottom: 10px;
+}
+.comments-section {
+    margin-top: 40px;
+}
+.comment-item {
+    position: relative;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.comment-item .btn-danger {
+    background: none;
+    border: none;
+    color: #ff5c5c;
+    cursor: pointer;
+}
+.comment-item .btn-danger:hover {
+    color: #ff0000;
+}
+.comment-item p {
+    margin: 0;
+}
+.comment-item .fas {
+    margin-right: 5px;
+}
+.comment-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px; /* 작성 날짜의 폰트 크기 줄이기 */
+}
+.details-header {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+    position: relative;
+    margin-bottom: 10px; /* 아래에 여백 추가 */
+    gap: 10px; /* 요소 사이 간격 추가 */
+}
+
+
+.details-header .like-container {
+    display: flex;
+    align-items: center; /* 수직 가운데 정렬 */
+    gap: 5px; /* 하트 버튼과 카운트 사이 간격을 살짝 추가 */
+}
+
+
+.details-header p, .details-header .btn, .details-header i {
+    margin-left: 0; /* 왼쪽 여백 제거 */
+    margin-top: 0; /* 위쪽 여백 제거 */
+}
+
+.hashtags {
+    display: flex;
+    flex-wrap: wrap; /* 여러 줄로 감싸기 */
+    gap: 10px; /* 해시태그 간격 */
+    margin-bottom: 10px; /* 아래 여백 추가 */
+}
+
+.hashtag {
+    display: flex;
+    align-items: center; /* 수직 정렬 */
+    padding: 5px 10px; /* 여백 추가 */
+    background-color: #f1f1f1; /* 배경색 추가 */
+    border-radius: 5px; /* 모서리 둥글게 */
+}
+
+.like-button {
+    font-size: 24px; /* 버튼 크기 조정 */
+    cursor: pointer;
+}
+.comment-form {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+}
+.comment-form textarea {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+.inline-info span {
+    margin-right: 20px; /* span 사이에 간격을 줍니다 */
+}
+
+   
     </style>
     <script>
     $(document).ready(function() {
@@ -288,61 +312,62 @@
                         <span class="sr-only">Next</span>
                     </a>
                 </div>
-                <div class="details-container">
-                    <div class="details-header">
-                        <p class="author-link" data-user-no="${certificationPost.userNo}">
-                            <i class="fas fa-user"></i> ${certificationPost.profileImage} ${certificationPost.nickName} 
-                        </p>
-                        <p><i class="fas fa-calendar-alt"></i> 작성 일자: ${certificationPost.postDate}</p>
-                        <div class="d-flex align-items-center">
-                            <i class="fa fa-heart like-button ${certificationPost.certificationPostLikeStatus == 0 ? 'text-secondary' : 'text-danger'}"></i>
-                            <p class="mb-0 ml-2">${certificationPost.certificationPostLikeCount}</p>
-                        </div>
-                        <c:if test="${user != null && user.userNo == certificationPost.userNo}">
-                            <form action="/certificationPost/updateCertificationPost" method="get">
-                                <input type="hidden" name="postNo" value="${certificationPost.postNo}"/>
-                                <button type="submit" class="btn btn-secondary"><i class="fa fa-edit"></i></button>
-                            </form>
-                            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
-                        </c:if>
-                    </div>
-                    <div class="hashtags mb-3">
-                        <c:forEach var="hashtag" items="${hashtagList}">
-                            <span class="hashtag"><i class="fas fa-hashtag"></i> ${hashtag.certificationPostHashtagContents}</span>
-                        </c:forEach>
-                    </div>
-                    <h4 class="fw-bold mb-3">${certificationPost.title}</h4>
-                    <hr>
-                    <div class="inline-info mb-3">
-                        <span><i class="fas fa-mountain"></i> 산이름:&ensp; ${certificationPost.certificationPostMountainName}</span>
-                        <span><i class="fas fa-route"></i> 등산경로:&ensp; ${certificationPost.certificationPostHikingTrail}</span>
-                    </div>
-                    <div class="inline-info mb-3">
-                        <span><i class="fas fa-hourglass-start"></i> 총소요시간:&ensp; ${certificationPost.certificationPostTotalTime}</span>
-                        <span><i class="fas fa-arrow-up"></i> 상행시간: &ensp;${certificationPost.certificationPostAscentTime}</span>
-                        <span><i class="fas fa-arrow-down"></i> 하행시간: &ensp; ${certificationPost.certificationPostDescentTime}</span>
-                    </div>
-                    <p class="mb-3"><i class="fas fa-calendar-day"></i> 등산 일자: &ensp;${certificationPost.certificationPostHikingDate}</p>
-                    <p class="mb-3"><i class="fas fa-car"></i> 교통수단: &ensp;
-                        <c:choose>
-                            <c:when test="${certificationPost.certificationPostTransportation == 0}">도보</c:when>
-                            <c:when test="${certificationPost.certificationPostTransportation == 1}">자전거</c:when>
-                            <c:when test="${certificationPost.certificationPostTransportation == 2}">버스</c:when>
-                            <c:when test="${certificationPost.certificationPostTransportation == 3}">자동차</c:when>
-                            <c:when test="${certificationPost.certificationPostTransportation == 4}">지하철</c:when>
-                            <c:when test="${certificationPost.certificationPostTransportation == 5}">기차</c:when>
-                            <c:otherwise>Unknown</c:otherwise>
-                        </c:choose>
-                    </p>
-                    <p class="mb-3"><i class="fas fa-chart-line"></i> 등산 난이도: &ensp;
-                        <c:choose>
-                            <c:when test="${certificationPost.certificationPostHikingDifficulty == 0}">어려움</c:when>
-                            <c:when test="${certificationPost.certificationPostHikingDifficulty == 1}">중간</c:when>
-                            <c:when test="${certificationPost.certificationPostHikingDifficulty == 2}">쉬움</c:when>
-                            <c:otherwise>Unknown</c:otherwise>
-                        </c:choose>
-                    </p>
-                </div>
+        <div class="details-container">
+    <div class="details-header">
+        <p class="author-link" data-user-no="${certificationPost.userNo}">
+            <img class="profile-image" src="${sessionScope.user.profileImage}" alt="Profile Image"/> ${certificationPost.nickName}
+        </p>
+        <p><i class="fas fa-calendar-alt"></i> 작성 일자: ${certificationPost.postDate}</p>
+        <div class="like-container">
+            <i class="fa fa-heart like-button ${certificationPost.certificationPostLikeStatus == 0 ? 'text-secondary' : 'text-danger'}"></i>
+            <p class="mb-0 ml-2">${certificationPost.certificationPostLikeCount}</p>
+        </div>
+        <c:if test="${user != null && user.userNo == certificationPost.userNo}">
+            <form action="/certificationPost/updateCertificationPost" method="get">
+                <input type="hidden" name="postNo" value="${certificationPost.postNo}"/>
+                <button type="submit" class="btn btn-secondary"><i class="fa fa-edit"></i></button>
+            </form>
+            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+        </c:if>
+    </div>
+    <div class="hashtags mb-3">
+        <c:forEach var="hashtag" items="${hashtagList}">
+            <span class="hashtag"><i class="fas fa-hashtag"></i> ${hashtag.certificationPostHashtagContents}</span>
+        </c:forEach>
+    </div>
+    <h4 class="fw-bold mb-3">${certificationPost.title}</h4>
+    <hr>
+    <div class="inline-info mb-3">
+        <span><i class="fas fa-mountain"></i> 산이름:&ensp; ${certificationPost.certificationPostMountainName}</span>
+        <span><i class="fas fa-route"></i> 등산경로:&ensp; ${certificationPost.certificationPostHikingTrail}</span>
+    </div>
+    <div class="inline-info mb-3">
+        <span><i class="fas fa-hourglass-start"></i> 총소요시간:&ensp; ${certificationPost.certificationPostTotalTime}</span>
+        <span><i class="fas fa-arrow-up"></i> 상행시간: &ensp;${certificationPost.certificationPostAscentTime}</span>
+        <span><i class="fas fa-arrow-down"></i> 하행시간: &ensp; ${certificationPost.certificationPostDescentTime}</span>
+    </div>
+    <p class="mb-3"><i class="fas fa-calendar-day"></i> 등산 일자: &ensp;${certificationPost.certificationPostHikingDate}</p>
+    <p class="mb-3"><i class="fas fa-car"></i> 교통수단: &ensp;
+        <c:choose>
+            <c:when test="${certificationPost.certificationPostTransportation == 0}">도보</c:when>
+            <c:when test="${certificationPost.certificationPostTransportation == 1}">자전거</c:when>
+            <c:when test="${certificationPost.certificationPostTransportation == 2}">버스</c:when>
+            <c:when test="${certificationPost.certificationPostTransportation == 3}">자동차</c:when>
+            <c:when test="${certificationPost.certificationPostTransportation == 4}">지하철</c:when>
+            <c:when test="${certificationPost.certificationPostTransportation == 5}">기차</c:when>
+            <c:otherwise>Unknown</c:otherwise>
+        </c:choose>
+    </p>
+    <p class="mb-3"><i class="fas fa-chart-line"></i> 등산 난이도: &ensp;
+        <c:choose>
+            <c:when test="${certificationPost.certificationPostHikingDifficulty == 0}">어려움</c:when>
+            <c:when test="${certificationPost.certificationPostHikingDifficulty == 1}">중간</c:when>
+            <c:when test="${certificationPost.certificationPostHikingDifficulty == 2}">쉬움</c:when>
+            <c:otherwise>Unknown</c:otherwise>
+        </c:choose>
+    </p>
+</div>
+
           
                 <p class="mb-3"><i class="fas fa-calendar-day"></i> 글내용 : &ensp;${certificationPost.contents}</p>     <hr><br>
                 <div class="comments-section"> 

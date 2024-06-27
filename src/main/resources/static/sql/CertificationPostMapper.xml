@@ -121,6 +121,7 @@
 		SET
 		    cp_title = #{title},
 		    cp_contents = #{contents},
+		    cp_image_count = #{certificationPostImageCount},
 		    cp_mountain_name = #{certificationPostMountainName},
 		    cp_hiking_trail = #{certificationPostHikingTrail},
 		    cp_total_time = #{certificationPostTotalTime},
