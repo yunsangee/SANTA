@@ -8,10 +8,10 @@
 <!--  ////////////////////////////////////////////// head ///////////////////////////////////////////////// -->
 
 <head>
-    <c:import url="../common/header.jsp"/>
+   
     <title>User List</title>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+ <!--    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 
 <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
 
@@ -113,6 +113,8 @@
     }
 
 </style>
+
+ <c:import url="../common/header.jsp"/>
 
 <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
 
@@ -308,6 +310,8 @@
 
 <!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// -->
     
-    <footer></footer>
+    <footer>
+    	<c:import url="../common/footer.jsp"/>
+    </footer>
 </body>
 </html>

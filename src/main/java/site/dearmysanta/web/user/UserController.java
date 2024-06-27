@@ -150,8 +150,12 @@ public class UserController {
 		    if(dbUser.getProfileImage() != null && !dbUser.getProfileImage().contains("ncloudstorage")) {
 		        dbUser.setProfileImage(objectStorageService.getImageURL(dbUser.getProfileImage()));
 		    }
-		    
+		        
 		    session.setAttribute("user", dbUser);	
+		    
+		    session.setAttribute("alarmMessageList",userEtcService.getAlarmMessageList(user.getUserNo()));
+			session.setAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
+			session.setAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), user));
 		    
 		    // 쿠키 설정
 		    
