@@ -22,8 +22,6 @@
     <title>모임 게시글 상세조회</title>
     <c:import url="../common/header.jsp"/>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    
     <script type = "text/javascript">
     	
     	var userNo = "${sessionScope.user.userNo}";
