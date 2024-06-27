@@ -144,12 +144,18 @@
             	window.location.href = '/mountain/mapMountain';
             });
 
-            $('.fa-external-link-alt').on('click',function(){
+            $('.fa-external-link-alt , .mountainName').on('click',function(){
             	console.log($($(this).parent()).text());
             	var h4Value = $($(this).parent()).text().trim();
             	console.log(h4Value);
             	
             	window.location.href = "/mountain/mapMountain?searchCondition=0&searchKeyword=" + h4Value;
+            });
+            
+            $('.mountainImage').on('click', function(){
+            	let mountainName = $(this).parent().parent().children().find('h4').text().trim();
+            	console.log(mountainName);
+            	window.location.href = "/mountain/mapMountain?searchCondition=0&searchKeyword=" + mountainName;
             });
             
             $(".top-button").click(function() {
@@ -393,11 +399,11 @@
                     <div class="swiper-slide">
                         <div class="popular-testimonial-item img-border-radius rounded p-4">
                             <div class=" rounded">
-                                <img src="${mountain.mountainImage}" class="img-fluid rounded" style="width: 250px; height: 150px;" alt="">
+                                <img src="${mountain.mountainImage}" class="img-fluid rounded mountainImage" style="width: 250px; height: 150px;" alt="">
                             </div>
                             <div class="ms-3 d-block" style="flex-grow: 1;">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h4 class="text-dark mb-0">${mountain.mountainName}</h4>
+                                    <h4 class="text-dark mb-0 mountainName">${mountain.mountainName}</h4>
                                     <i class="fas fa-external-link-alt"></i>
                                 </div>
                                 <p class="m-0 pb-3" style="font-size: 0.75em;">${mountain.mountainLocation}</p>
@@ -441,11 +447,11 @@
                     <div class="swiper-slide">
                         <div class="custom-testimonial-item img-border-radius rounded p-4">
                             <div class="rounded">
-                                <img src="${mountain.mountainImage}" class="img-fluid rounded" style="width: 250px; height: 150px;" alt="">
+                                <img src="${mountain.mountainImage}" class="img-fluid rounded mountainImage" style="width: 250px; height: 150px;" alt="">
                             </div>
                             <div class="ms-3 d-block" style="flex-grow: 1;">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h4 class="text-dark mb-0">${mountain.mountainName}</h4>
+                                    <h4 class="text-dark mb-0 mountainName">${mountain.mountainName}</h4>
                                     <i class="fas fa-external-link-alt"></i>
                                 </div>
                                 <p class="m-0 pb-3" style="font-size: 0.75em;">${mountain.mountainLocation}</p>
