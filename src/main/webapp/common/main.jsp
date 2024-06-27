@@ -172,6 +172,18 @@
 				event.preventDefault();
 				window.location.href = '/certificationPost/listCertificationPost';
             });
+			
+			 $(document).on('click', '.certification-post', function() {
+			        var postNo = $(this).children().find('.certificationPostNo').text().trim();
+			        console.log(postNo);
+			        window.location.href = "/certificationPost/getCertificationPost?postNo=" + postNo;
+			 });
+			 
+			 $(".postNickName").on("click", function(){
+				let userNo = $(this).parent().find('input[name="userNo"]').val();
+				console.log(userNo);
+				window.location.href="/certificationPost/getProfile?userNo="+userNo;
+			 });
            
 
             // Like button toggle
@@ -512,7 +524,10 @@
                 <p class="mb-4 mt-4">${post.postNo}</p>
             </td>
             <td>
-                <p class="mb-4 mt-4">${post.nickName}</p>
+                <p class="mb-4 mt-4 postNickName"> <a href="#">${post.nickName}</a>
+                	<input type="hidden" name="userNo" value="${post.userNo}"/>
+                </p>
+                
             </td>
             <td>
                 <p class="mb-4 mt-4">
@@ -520,7 +535,7 @@
                 </p>
             </td>
             <td>
-                <p class="mb-4 mt-4">
+                <p class="mb-4 mt-4 link">
                     <c:choose>
                         <c:when test="${post.recruitmentStatus == 0}">
                             모집중
@@ -570,7 +585,7 @@
                                     <img src="${certificationPostImages[status.index]}" alt="Certification Post Image">
                                 </div>
                                 <div class="details">
-                                    <h4>${certificationPost.postNo}</h4>
+                                    <h4 class='certificationPostNo'>${certificationPost.postNo}</h4>
                                     <h4>${certificationPost.title}</h4>
                                     <p>산명칭 : ${certificationPost.certificationPostMountainName}</p>
                                     <p>Hiking Date: ${certificationPost.certificationPostHikingDate}</p>
