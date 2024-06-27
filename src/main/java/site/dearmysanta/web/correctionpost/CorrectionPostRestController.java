@@ -2,6 +2,7 @@ package site.dearmysanta.web.correctionpost;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +24,12 @@ public class CorrectionPostRestController {
 		SantaLogger.makeLog("info", this.getClass().toString());
 	}
 	
-	@PostMapping("rest/addCorrectionPost")
-	public void addCorrectionPost(@RequestBody CorrectionPost correctionPost) {
+	@GetMapping("rest/addCorrectionPost")
+	public String addCorrectionPost(@ModelAttribute CorrectionPost correctionPost) {
 		SantaLogger.makeLog("info", "addCorrectionPost");
 		SantaLogger.makeLog("info", correctionPost.toString());
 		correctionPostSerivce.addCorrectionPost(correctionPost);
+		return "success";
 	}
 	
 	
