@@ -25,7 +25,9 @@
     <script type="text/javascript">
     $(function() {
     	
-        var socket = io("https://www.dearmysanta.site/chattingserver");
+    	const socket = io("https://www.dearmysanta.site", {
+    	    path: '/chattingserver'
+    	});
         
         var userNo = "${sessionScope.user.userNo}";
         var userNickname = "${sessionScope.user.nickname}";
