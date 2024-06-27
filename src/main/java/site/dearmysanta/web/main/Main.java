@@ -93,7 +93,7 @@ public class Main {
 		if(user != null) {
 			search.setUserNo(user.getUserNo());
 			
-			if(!user.getProfileImage().contains("ncloudstorage")) {
+			if(user.getProfileImage() != null &   !user.getProfileImage().contains("ncloudstorage")) { // 이쪽 null check 필요 
 				user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
 			}
 			session.setAttribute("alarmMessageList",userEtcService.getAlarmMessageList(user.getUserNo()));
