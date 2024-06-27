@@ -14,7 +14,9 @@
 		
 		$(function () {
 			
-			var socket = io("https://www.dearmysanta.site/chattingserver");
+			const socket = io("https://www.dearmysanta.site", {
+			    path: '/chattingserver'
+			});
 			
 			socket.on('lastMessage', function(data) {
                 var roomElement = $('#chattingRoom-' +data.roomNo);
