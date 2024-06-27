@@ -122,7 +122,7 @@
             }
 
             $.ajax({
-                url: "http://127.0.0.1:8001/userEtc/rest/deleteFollow",
+                url: "/userEtc/rest/deleteFollow",
                 method: "GET",
                 data: {
                     followerUserNo: followerUserNo,
@@ -141,7 +141,7 @@
 
         function getFollowingList(userNo) {
             $.ajax({
-                url: "http://127.0.0.1:8001/userEtc/rest/getFollowingList",
+                url: "/userEtc/rest/getFollowingList",
                 method: "GET",
                 data: { userNo: userNo },
                 success: function(followingList) {

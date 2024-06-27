@@ -30,7 +30,7 @@ import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.user.UserService;
 import site.dearmysanta.service.user.etc.UserEtcService;
 
-@CrossOrigin(origins = "https://www.dearmysanta.site")
+
 @RestController
 @RequestMapping("/certificationPost/*")
 
