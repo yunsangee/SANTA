@@ -133,6 +133,7 @@
     </style>
 </head>
 <body>
+
     <div class="container">
         <h2>QNA 답변 작성</h2>
         <div class="profile-header">

@@ -14,6 +14,24 @@
 <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
 
     <style>
+    
+            body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        } 
+
+         main {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            margin-top:400; 
+        }
+        
       /*  .pagination-container {
             display: flex;
             justify-content: space-between;
@@ -105,6 +123,11 @@
 
         .btn-write:hover {
             background-color: #578906;
+        }
+        
+            footer {
+        	width: 100%;
+        	 margin-bottom:-249px;
         }
         
     </style>
@@ -264,6 +287,8 @@
 
 <!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// -->
 
-<footer></footer>
+<footer>
+	<c:import url="../common/footer.jsp"/>
+</footer>
 </body>
 </html>

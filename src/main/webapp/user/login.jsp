@@ -166,8 +166,8 @@ input[type="password"]:focus {
             url: '/oauth/logout/kakao',
             type: 'GET',
             success: function() {
-              /*   window.location.href = "https://kauth.kakao.com/oauth/authorize?client_id=53ae98941fff9e24b11901e9a79432d9&redirect_uri=http://localhost:8001/oauth/kakao&response_type=code"; */
-           		 window.location.href = "https://kauth.kakao.com/oauth/authorize?client_id=53ae98941fff9e24b11901e9a79432d9&redirect_uri=https://www.dearmysanta.site/oauth/kakao&response_type=code"; 
+                 /* window.location.href = "https://kauth.kakao.com/oauth/authorize?client_id=53ae98941fff9e24b11901e9a79432d9&redirect_uri=http://localhost:8001/oauth/kakao&response_type=code";  */
+           		 window.location.href = "https://kauth.kakao.com/oauth/authorize?client_id=53ae98941fff9e24b11901e9a79432d9&redirect_uri=https://www.dearmysanta.site/oauth/kakao&response_type=code";  
             },
             error: function(xhr, status, error) {
                 console.error("Logout failed:", error);
@@ -203,8 +203,8 @@ input[type="password"]:focus {
     </div>
     <div>
         <input type="password" id="userPassword" name="userPassword" placeholder="비밀번호" required>
-        <c:if test="${not empty loginError}">
-            <div class="error-message">${loginError}</div>
+        <c:if test="${not empty passwordError}">
+            <div class="error-message">${passwordError}</div>
         </c:if>
     </div>
     

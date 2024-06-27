@@ -112,7 +112,6 @@ public class Main {
 		
 		List<CertificationPost> certificationPostList = (List<CertificationPost>) certificationPostService.getCertificationPostList(search).get("list");
         System.out.println(" certificationPostList  " + certificationPostList );
-        // CertificationPost �̹��� URL ��������
         List<String> certificationPostImages = new ArrayList<>();
         for (CertificationPost certificationPost : certificationPostList) {
             String fileName = certificationPost.getPostNo() + "_0_1"; // ù ��° ���� ���ϸ�

@@ -38,6 +38,15 @@
 				window.location.href = '/meeting/getMeetingPostList';
 			});
 			
+			$('#chatting').on('click',function(event){
+				event.preventDefault();
+				let user = '${sessionScope.user != null ? sessionScope.user : "null"}';
+				
+				if(user != 'null'){
+					window.location.href = '/chatting/getChattingRoomList';
+				}
+			});
+			
 			$('#hikingGuide').on('click',function(event){
 				event.preventDefault();
 				
@@ -80,11 +89,11 @@
 		        });
 		        $('#myMeetingPost').on('click', function(event) {
 		        	event.preventDefault();
-		            window.location.href = 'meeting/getMeetingPostList?userNo=${sessionScope.user.userNo}';
+		            window.location.href = '/meeting/getMeetingPostList?userNo=${sessionScope.user.userNo}';
 		        });
 		        $('#myCertificationPost').on('click', function(event) {
 		        	event.preventDefault();
-		            window.location.href = 'certificationPost/listMyCertificationPost?userNo=${sessionScope.user.userNo}';
+		            window.location.href = '/certificationPost/listMyCertificationPost?userNo=${sessionScope.user.userNo}';
 		        });
 		        $('#myMountainLike').on('click', function(event) {
 		        	event.preventDefault();
@@ -100,7 +109,7 @@
 		        });
 		        $('#qna').on('click', function(event) {
 		        	event.preventDefault();
-		            window.location.href = '/user/getQnaList';
+		            window.location.href = '/user/getQnAList';
 		        });
 		        $('#logout').on('click', function(event) {
 		        	event.preventDefault();
@@ -224,7 +233,9 @@
                         <a href="#" id="mountain" class="nav-item nav-link">산</a>
                         <a href="#" id="certificationPost" class="nav-item nav-link">인증게시판</a>
                         <a href="#" id="meetingPost" class="nav-item nav-link">모임게시판</a>
+                        <a href="#" id="chatting" class="nav-item nav-link">모임 채팅</a>
                         <a href="#" id="hikingGuide" class="nav-item nav-link">등산안내</a>
+                        
                     </c:if>
                     <c:if test="${not empty sessionScope.user and sessionScope.user.role == 1 }">
                         <a href="#" id="Home" class="nav-item nav-link active">홈</a>
@@ -378,8 +389,14 @@ $(document).ready(function(event) {
     $(document).on('click', function(event) {
     	event.stopPropagation();
         if (!$(event.target).closest('.dropdown').length) {
+        	
             $('.dropdown-menu').removeClass('show');
-            closeAlarmSetting();
+            
+            if(!$('.dropdown-menu').hasClass('show')){
+            	var modal = document.getElementById('settingsModal');
+            	modal.style.display='none';
+              }
+            
         }
     });
     
@@ -413,10 +430,10 @@ $(document).ready(function(event) {
             closeAlarmSetting();
         }); */
         
-        $('.setting-icon').on('click',function(){
+        $('.setting-icon').on('click',function(event){
 			event.preventDefault();
             
-            var modal = $("#settingsModal");
+            /* var modal = $("#settingsModal");
             var icon = $(this);
             
             // 아이콘의 위치와 크기를 가져와서 모달의 위치를 설정
@@ -426,9 +443,9 @@ $(document).ready(function(event) {
             modal.css({
                 top: iconOffset.top + iconHeight + "px",
                 left: iconOffset.left + "px"
-            });
+            }); */
             
-            modal.toggle();
+            closeAlarmSetting();
         });
         
         $('.form-switch').on('click', function(event){
@@ -443,7 +460,7 @@ $(document).ready(function(event) {
             } else {
                 modal.style.display = 'none';
             }
-        }
+        } 
         
         
         $('#flexSwitchAllAlert').on('click', function(event) {
