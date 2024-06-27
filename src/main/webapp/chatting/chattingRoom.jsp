@@ -31,7 +31,7 @@
     	});
         
         var userNo = "${sessionScope.user.userNo}";
-        var userNickname = "${sessionScope.user.nickname}";
+        var userNickname = "${sessionScope.user.nickName}";
         var roomNo = "${roomNo}";
 
         var initialSpaces = "                           ";
