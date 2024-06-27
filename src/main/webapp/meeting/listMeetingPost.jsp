@@ -33,6 +33,12 @@
                 fncGetList(1); // 아이콘 클릭 시 fncGetList(1) 호출
             });
 	        
+	        $('#searchKeyword').keydown(function(event) {
+	            if (event.key === "Enter") {
+	                event.preventDefault();
+	                $('#searchButton').click(); // 엔터 키를 누르면 searchButton 클릭
+	            }
+	        });
 	        
 	        $('#titleOption').click(function() {
 	        	event.preventDefault();

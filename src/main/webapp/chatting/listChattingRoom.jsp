@@ -15,7 +15,8 @@
 		$(function () {
 			
 			const socket = io("https://www.dearmysanta.site", {
-			    path: '/chattingserver'
+			    path: '/chattingserver',
+			    transports: ['websocket']
 			});
 			
 			socket.on('lastMessage', function(data) {

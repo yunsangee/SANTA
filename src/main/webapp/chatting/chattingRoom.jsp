@@ -26,7 +26,8 @@
     $(function() {
     	
     	const socket = io("https://www.dearmysanta.site", {
-    	    path: '/chattingserver'
+    	    path: '/chattingserver',
+    	    transports: ['websocket']
     	});
         
         var userNo = "${sessionScope.user.userNo}";
