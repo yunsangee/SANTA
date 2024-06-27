@@ -109,7 +109,7 @@
 		        });
 		        $('#qna').on('click', function(event) {
 		        	event.preventDefault();
-		            window.location.href = '/user/getQnaList';
+		            window.location.href = '/user/getQnAList';
 		        });
 		        $('#logout').on('click', function(event) {
 		        	event.preventDefault();
