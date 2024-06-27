@@ -245,19 +245,19 @@
         SELECT cp.*, u.nickname, ROW_NUMBER() OVER (
             ORDER BY 
             <choose>
-                <when test="sortCondition == 3"> <!-- 좋아요 많은순 -->
+                  <when test="sortCondition == 1"> <!-- 최신순 -->
+                    cp.cp_creation_date DESC
+                </when>
+             <when test="sortCondition == 2"> <!-- 좋아요 많은순 -->
                     NVL(cp.cp_like_count, 0) DESC
                 </when>
-                <when test="sortCondition == 4">
-                    NVL(cp.cp_like_count, 0) ASC
-                </when>
-                <when test="sortCondition == 5"> <!-- 난이도 높은순 -->
+                <when test="sortCondition == 3"> <!-- 난이도 높은순 -->
                     cp.cp_difficulty ASC
                 </when>
-                <when test="sortCondition == 6">
+                <when test="sortCondition == 4"> <!-- 난이도 낮은순 -->
                     cp.cp_difficulty DESC
                 </when>
-                <otherwise>
+                <otherwise> <!-- 최신순 -->
                     cp.cp_creation_date DESC
                 </otherwise>
             </choose>
@@ -279,7 +279,6 @@
     )
     WHERE row_num BETWEEN #{currentPage} * #{pageSize} + 1 AND (#{currentPage} + 1) * #{pageSize}
 </select>
-
 
 
 

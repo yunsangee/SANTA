@@ -165,7 +165,7 @@
                             <img src="${image}" class="img-thumbnail" style="max-width: 150px; margin-right: 10px;">
                         </c:forEach>
                     </div>
-                    <input type="file" class="form-control-file" id="certificationPostImage" name="certificationPostImage" multiple maxlength="5" required>
+                    <input type="file" class="form-control-file" id="certificationPostImage" name="certificationPostImage" multiple maxlength="5" >
                 </div>
                 <div class="d-flex justify-content-center mt-4">
                     <button type="submit" class="btn btn-primary btn-lg mx-2">수정 완료</button>

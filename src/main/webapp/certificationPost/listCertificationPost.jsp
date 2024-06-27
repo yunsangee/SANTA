@@ -168,128 +168,166 @@
 .fixed-buttons {
     position: fixed;
     bottom: 20px;
-    right: 220px; /* 컨테이너에 가깝게 배치 */
+    right: 220px; /* 큰 화면에서는 컨테이너에 가깝게 배치 */
     display: flex;
     flex-direction: column;
     gap: 10px;
+    transition: right 0.3s ease;
+}
+
+@media (max-width: 1200px) {
+    .fixed-buttons {
+        right: 200px; /* 중간 화면에서는 위치 조정 */
+    }
+}
+
+@media (max-width: 992px) {
+    .fixed-buttons {
+        right: 140px; /* 작은 화면에서는 위치 조정 */
+    }
+}
+
+@media (max-width: 768px) {
+    .fixed-buttons {
+        right: 200px; /* 태블릿 화면에서는 위치 조정 */
+    }
+}
+
+@media (max-width: 576px) {
+    .fixed-buttons {
+        right: 30px; /* 모바일 화면에서는 위치 조정 */
+    }
 }
 
 </style>
 
+ <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
+<script>
+$(document).ready(function() {
+    let page = 0;
+    const size = 10;
 
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-
-    <script>
-    $(document).ready(function() {
-        let page = 0;
-        const size = 10;
-
-        function loadMorePosts() {
-            console.log('Loading more posts. Page:', page);
-            $.ajax({
-                url: 'rest/listCertificationPost',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    searchKeyword: $('#searchInput').val(),
-                    searchCondition: $('#searchCondition').val(),
-                    sortCondition: $('input[name="sortCondition"]:checked').val(),
-                    currentPage: page,
-                    pageSize: size
-                }),
-                success: function(data) {
-                    console.log('Received data:', data);
-                    if (data && data.list && data.list.length > 0) {
-                        appendPostsToPage(data.list, data.certificationPostImages);
-                        page++;
-                    } else {
-                        console.log('No more posts to load.');
+    function loadMorePosts() {
+        console.log('Loading more posts. Page:', page);
+        $.ajax({
+            url: 'rest/listCertificationPost',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                searchKeyword: $('#searchInput').val(),
+                searchCondition: $('#searchCondition').val(),
+                sortCondition: $('input[name="sortCondition"]:checked').val(),
+                currentPage: page,
+                pageSize: size
+            }),
+            success: function(data) {
+                console.log('Received data:', data);
+                if (data && data.list && data.list.length > 0) {
+                    appendPostsToPage(data.list, data.certificationPostImages);
+                    page++;
+                } else {
+                    if (page === 0) {
+                        showNoResultsMessage();
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching posts:', error);
+                    console.log('No more posts to load.');
                 }
-            });
-        }
-
-        $('#searchForm').submit(function(event) {
-            event.preventDefault();
-            page = 0;
-            $('.certification-post-container').empty();
-            loadMorePosts();
-        });
-
-        $('input[name="sortCondition"]').change(function() {
-            page = 0;
-            $('.certification-post-container').empty();
-            loadMorePosts();
-        });
-
-        window.addEventListener('scroll', () => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-                loadMorePosts();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching posts:', error);
             }
         });
+    }
+    function showNoResultsMessage() {
+        $('.certification-post-container').html(
+        		   '<div class="no-results" style="text-align: center; padding: 20px; margin-top: 150px;">' +
+                   '<h4>검색결과가 없습니다!</h4>' +
+                   '<div class="action-buttons" style="margin-top: 20px;">' +
+                       '<span class="btn-return-to-list" style="font-size: 18px; color: #ffb524; cursor: pointer;">' +
+                           '<i class="fas fa-arrow-circle-left"></i>  리스트로 돌아가기' +
+                       '</span>' +
+                   '</div>' +
+               '</div>'
+     );
+    }
 
-        function appendPostsToPage(posts, images) {
-            console.log('Appending posts to page:', posts);
-            const postContainer = document.querySelector('.certification-post-container');
-            posts.forEach((post, index) => {
-                const postElement = document.createElement('div');
-                postElement.classList.add('certification-post');
-                postElement.dataset.postno = post.postNo;
-                const imageUrl = images[index] ? images[index] : 'default-image-url.png';
-
-                // 제목과 작성자 글자 수 제한
-                const shortTitle = post.title.length > 5 ? post.title.substring(0, 5) + '...' : post.title;
-               // const shortAuthor = post.nickName.length > 5 ? post.nickName.substring(0, 5) + '...' : post.nickName;
-
-                postElement.innerHTML = 
-                    '<div class="fruite-img">' +
-                        '<img src="' + imageUrl + '" alt="Certification Post Image">' +
-                    '</div>' +
-                    '<div class="details">' +
-                        '<div class="post-header">' +
-                            '<div class="post-title-author">' +
-                            '<h4 class="post-title"> ' + shortTitle + '</h4>' +
-                            '<h4 class="post-author" style="margin-top: 10px;"><i class="fas fa-user"></i> 작성자: ' + post.nickName + '</h4>' +
-   								  '</div>' +
-                            '<div class="post-likes">' +
-                                '<p><i class="fas fa-heart"></i>  ' + post.certificationPostLikeCount + '</p>' +
-                            '</div>' +
-                        '</div>' +
-                        '<p class="post-mountain"><i class="fas fa-mountain"></i> 산명칭: ' + post.certificationPostMountainName + '</p>' +
-                        '<p class="post-difficulty"><i class="fas fa-chart-line"></i> 등산난이도: ' + 
-                            (post.certificationPostHikingDifficulty == 0 ? '어려움' : post.certificationPostHikingDifficulty == 1 ? '중간' : '쉬움') +
-                        '</p>' +
-                        '<p class="post-date"><i class="far fa-calendar-alt"></i> 등산일자: ' + post.certificationPostHikingDate + '</p>' +
-                    '</div>';
-                postContainer.appendChild(postElement);
-            });
-        }
-
-
-        loadMorePosts();
-
-        $(document).on('click', '.certification-post', function() {
-            var postNo = $(this).data("postno");
-            window.location.href = "/certificationPost/getCertificationPost?postNo=" + postNo;
-        });
-
-        $(".top-button").click(function() {
-            $('html, body').animate({scrollTop: 0}, 'slow');
-        });
-        
-        var userNo = ${user.userNo};
-        
-        $(".btn-certify-hiking").click(function() {
-            alert('인증하기');
-       
-            window.location.href = "/certificationPost/addCertificationPost?userNo=" + userNo;
-        });
+    $(document).on('click', '.btn-return-to-list', function() {
+        window.location.href = '/certificationPost/listCertificationPost'; // 리스트 페이지로 이동
     });
-    </script>
+
+    $('#searchForm').submit(function(event) {
+        event.preventDefault();
+        page = 0;
+        $('.certification-post-container').empty();
+        loadMorePosts();
+    });
+
+    $('input[name="sortCondition"]').change(function() {
+        page = 0;
+        $('.certification-post-container').empty();
+        loadMorePosts();
+    });
+
+    window.addEventListener('scroll', () => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+            loadMorePosts();
+        }
+    });
+
+    function appendPostsToPage(posts, images) {
+        console.log('Appending posts to page:', posts);
+        const postContainer = document.querySelector('.certification-post-container');
+        posts.forEach((post, index) => {
+            const postElement = document.createElement('div');
+            postElement.classList.add('certification-post');
+            postElement.dataset.postno = post.postNo;
+            const imageUrl = images[index] ? images[index] : 'default-image-url.png';
+
+            // 제목과 작성자 글자 수 제한
+            const shortTitle = post.title.length > 5 ? post.title.substring(0, 8) + '...' : post.title;
+
+            postElement.innerHTML = 
+                '<div class="fruite-img">' +
+                    '<img src="' + imageUrl + '" alt="Certification Post Image">' +
+                '</div>' +
+                '<div class="details">' +
+                    '<div class="post-header">' +
+                        '<div class="post-title-author">' +
+                        '<h4 class="post-title"> ' + shortTitle + '</h4>' +
+                        '<h4 class="post-author" style="margin-top: 10px;"><i class="fas fa-user"></i> 작성자: ' + post.nickName + '</h4>' +
+                        '</div>' +
+                        '<div class="post-likes">' +
+                            '<p><i class="fas fa-heart"></i>  ' + post.certificationPostLikeCount + '</p>' +
+                        '</div>' +
+                    '</div>' +
+                    '<p class="post-mountain"><i class="fas fa-mountain"></i>  ' + post.certificationPostMountainName + '</p>' +
+                    '<p class="post-difficulty"><i class="fas fa-chart-line"></i> 등산난이도: ' + 
+                        (post.certificationPostHikingDifficulty == 0 ? '어려움' : post.certificationPostHikingDifficulty == 1 ? '중간' : '쉬움') +
+                    '</p>' +
+                    '<p class="post-date"><i class="far fa-calendar-alt"></i> 등산일자: ' + post.certificationPostHikingDate + '</p>' +
+                '</div>';
+            postContainer.appendChild(postElement);
+        });
+    }
+
+    loadMorePosts();
+
+    $(document).on('click', '.certification-post', function() {
+        var postNo = $(this).data("postno");
+        window.location.href = "/certificationPost/getCertificationPost?postNo=" + postNo;
+    });
+
+    $(".top-button").click(function() {
+        $('html, body').animate({scrollTop: 0}, 'slow');
+    });
+   
+    $(".btn-certify-hiking").click(function() {
+        alert('인증하기'); 
+        var userNo = ${user.userNo}
+        window.location.href = "/certificationPost/addCertificationPost?userNo=" + userNo;
+    });
+});
+</script>
 </head>
 <body>
     <header><c:import url="../common/top.jsp"/></header>
@@ -305,88 +343,85 @@
                         </select> 
                         
                         <input type="text" id="searchInput" name="searchKeyword" value="" placeholder="Search" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 300px; height: 45px;">
-                        <button type="submit" class="btn btn-primary border-2 border-secondary rounded-pill text-white search-button" style="height: 45px;">검색</button>
-                    </form>
+                        <button type="submit" class="btn btn-primary border-2 border-secondary rounded-pill text-white search-button" style="height: 45px;">
+					    <i class="fas fa-search"></i>
+					</button>
+					     </form>
                     <div class="radio-container">
-                        <input type="radio" id="likeDesc" name="sortCondition" value="3" ${ !empty search.sortCondition && search.sortCondition==3 ? "checked" : "" }>
-                        <label for="likeDesc">좋아요 많은 순</label>
-                        <input type="radio" id="likeAsc" name="sortCondition" value="4" ${ !empty search.sortCondition && search.sortCondition==4 ? "checked" : "" }>
-                        <label for="likeAsc">좋아요 적은 순</label>
-                        <input type="radio" id="difficultyDesc" name="sortCondition" value="5" ${ !empty search.sortCondition && search.sortCondition==5 ? "checked" : "" }>
-                        <label for="difficultyDesc">난이도 높은 순</label>
-                        <input type="radio" id="difficultyAsc" name="sortCondition" value="6" ${ !empty search.sortCondition && search.sortCondition==6 ? "checked" : "" }>
-                        <label for="difficultyAsc">난이도 낮은 순</label>
+                        <input type="radio" id="latest" name="sortCondition" value="1" checked>
+                        <label for="latest">최신순</label>
+                        <input type="radio" id="likeDesc" name="sortCondition" value="2" ${ !empty search.sortCondition && search.sortCondition==2 ? "checked" : "" }>
+                        <label for="likeDesc">인기순</label>
+                        <input type="radio" id="difficultyDesc" name="sortCondition" value="3" ${ !empty search.sortCondition && search.sortCondition==3 ? "checked" : "" }>
+                        <label for="difficultyDesc">등산 난이도 높은 순</label>
+                        <input type="radio" id="difficultyAsc" name="sortCondition" value="4" ${ !empty search.sortCondition && search.sortCondition==4 ? "checked" : "" }>
+                        <label for="difficultyAsc">등산 난이도 낮은 순</label>
                     </div>
                 </div>
 
-             <div class="certification-post-container">
-    <c:forEach var="certificationPost" items="${certificationPost}" varStatus="status">
-        <div class="certification-post" data-postno="${certificationPost.postNo}">
-            <div class="fruite-img">
-                <img src="${certificationPostImages[status.index]}" alt="Certification Post Image">
-            </div>
-            <div class="details">
-                <div class="post-header">
-                    <div class="post-title-author">
-                        <h4 class="post-title"> 
-                            <i class="fas fa-heading"></i> 
-                            <c:choose>
-                                <c:when test="${fn:length(certificationPost.title) > 5}">
-                                    ${fn:substring(certificationPost.title, 0, 5)}...
-                                </c:when>
-                                <c:otherwise>
-                                    ${certificationPost.title}
-                                </c:otherwise>
-                            </c:choose>
-                        </h4>
-                        <h4 class="post-author" style="margin-top: 10px;">
-                            <i class="fas fa-user"></i> 
-                            작성자: 
-                            <c:choose>
-                                <c:when test="${fn:length(certificationPost.nickName) > 5}">
-                                    ${fn:substring(certificationPost.nickName, 0, 5)}...
-                                </c:when>
-                                <c:otherwise>
-                                    ${certificationPost.nickName}
-                                </c:otherwise>
-                            </c:choose>
-                        </h4>
-                    </div>
-                    <div class="post-likes">
-                        <p><i class="fas fa-heart"></i> 좋아요수: ${certificationPost.certificationPostLikeCount}</p>
-                    </div>
+                <div class="certification-post-container">
+                    <c:forEach var="certificationPost" items="${certificationPost}" varStatus="status">
+                        <div class="certification-post" data-postno="${certificationPost.postNo}">
+                            <div class="fruite-img">
+                                <img src="${certificationPostImages[status.index]}" alt="Certification Post Image">
+                            </div>
+                            <div class="details">
+                                <div class="post-header">
+                                    <div class="post-title-author">
+                                        <h4 class="post-title"> 
+                                            <i class="fas fa-heading"></i> 
+                                            <c:choose>
+                                                <c:when test="${fn:length(certificationPost.title) > 8}">
+                                                    ${fn:substring(certificationPost.title, 0, 8)}...
+                                                </c:when>
+                                                <c:otherwise>
+                                                    ${certificationPost.title}
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </h4>
+                                        <h4 class="post-author" style="margin-top: 10px;">
+                                            <i class="fas fa-user"></i> 
+                                            작성자: 
+                                            <c:choose>
+                                                <c:when test="${fn:length(certificationPost.nickName) > 5}">
+                                                    ${fn:substring(certificationPost.nickName, 0, 5)}...
+                                                </c:when>
+                                                <c:otherwise>
+                                                    ${certificationPost.nickName}
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </h4>
+                                    </div>
+                                    <div class="post-likes">
+                                        <p><i class="fas fa-heart"></i> 좋아요수: ${certificationPost.certificationPostLikeCount}</p>
+                                    </div>
+                                </div>
+                                <p class="post-mountain"><i class="fas fa-mountain"></i> 산명칭: ${certificationPost.certificationPostMountainName}</p>
+                                <p class="post-difficulty"><i class="fas fa-chart-line"></i> 등산난이도: 
+                                    <c:choose>
+                                        <c:when test="${certificationPost.certificationPostHikingDifficulty == 0}">
+                                            어려움
+                                        </c:when>
+                                        <c:when test="${certificationPost.certificationPostHikingDifficulty == 1}">
+                                            중간
+                                        </c:when>
+                                        <c:when test="${certificationPost.certificationPostHikingDifficulty == 2}">
+                                            쉬움
+                                        </c:when>
+                                    </c:choose>
+                                </p>
+                                <p class="post-date"><i class="far fa-calendar-alt"></i> 등산일자: ${certificationPost.certificationPostHikingDate}</p>
+                            </div>
+                        </div>
+                    </c:forEach>
                 </div>
-                <p class="post-mountain"><i class="fas fa-mountain"></i> 산명칭: ${certificationPost.certificationPostMountainName}</p>
-                <p class="post-difficulty"><i class="fas fa-chart-line"></i> 등산난이도: 
-                    <c:choose>
-                        <c:when test="${certificationPost.certificationPostHikingDifficulty == 0}">
-                            어려움
-                        </c:when>
-                        <c:when test="${certificationPost.certificationPostHikingDifficulty == 1}">
-                            중간
-                        </c:when>
-                        <c:when test="${certificationPost.certificationPostHikingDifficulty == 2}">
-                            쉬움
-                        </c:when>
-                    </c:choose>
-                </p>
-                <p class="post-date"><i class="far fa-calendar-alt"></i> 등산일자: ${certificationPost.certificationPostHikingDate}</p>
             </div>
         </div>
-    </c:forEach>
-</div>
-
-
-                </div>
-            </div>
-    
     </main>
-		<div class="fixed-buttons">
-		    <button class="btn-cp btn-certify-hiking"><i class="fa fa-mountain"></i></button>
-		    <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
-		</div>
-
-
+    <div class="fixed-buttons">
+        <button class="btn-cp btn-certify-hiking"><i class="fa fa-mountain"></i></button>
+        <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
+    </div>
     <footer></footer>
 </body>
 </html>

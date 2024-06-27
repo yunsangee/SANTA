@@ -86,7 +86,7 @@ public interface MountainDao {
 	
 	public List<Statistics> getStatisticsWeekly();
 
-	public List<Statistics> getStatisticsDaily(String date);
+	public List<Statistics> getStatisticsDaily();
 	//
 	//
 	//

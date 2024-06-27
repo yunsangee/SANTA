@@ -10,6 +10,7 @@
     <title>Fruitables - Free Bootstrap 5 eCommerce Website Template</title>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script>
+    	$(document).ready(function(){
     	$(function(event){
     		
     		$('#Home').on('click',function(event){
@@ -113,6 +114,7 @@
              
              
              
+    	});
     	});
     </script>
     
@@ -377,6 +379,7 @@ $(document).ready(function(event) {
     	event.stopPropagation();
         if (!$(event.target).closest('.dropdown').length) {
             $('.dropdown-menu').removeClass('show');
+            closeAlarmSetting();
         }
     });
     
@@ -406,8 +409,26 @@ $(document).ready(function(event) {
             });
         });
         
-        document.getElementById('settingsIcon').addEventListener('click', function () {
+      /*   document.getElementsByClassName('setting-icon').addEventListener('click', function () {
             closeAlarmSetting();
+        }); */
+        
+        $('.setting-icon').on('click',function(){
+			event.preventDefault();
+            
+            var modal = $("#settingsModal");
+            var icon = $(this);
+            
+            // 아이콘의 위치와 크기를 가져와서 모달의 위치를 설정
+            var iconOffset = icon.offset();
+            var iconHeight = icon.outerHeight();
+            
+            modal.css({
+                top: iconOffset.top + iconHeight + "px",
+                left: iconOffset.left + "px"
+            });
+            
+            modal.toggle();
         });
         
         $('.form-switch').on('click', function(event){

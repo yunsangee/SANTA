@@ -52,7 +52,7 @@ public class OAuthService{
 //            sb.append("&client_id=af43c655326aaa2ca97588ce636e1e29"); // TODO REST_API_KEY 입력
             sb.append("&client_id=53ae98941fff9e24b11901e9a79432d9"); // TODO REST_API_KEY 입력
             //sb.append("&redirect_uri=http://localhost:8001/oauth/kakao"); // TODO 인가코드 받은 redirect_uri 입력     
-            sb.append("&redirect_uri=https://www.dearmysanta.site"); // TODO 인가코드 받은 redirect_uri 입력     
+            sb.append("&redirect_uri=https://www.dearmysanta.site/oauth/kakao"); // TODO 인가코드 받은 redirect_uri 입력     
             sb.append("&code=" + code);
             bw.write(sb.toString());
             bw.flush();
