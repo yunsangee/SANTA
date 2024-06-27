@@ -120,7 +120,7 @@ public class UserController {
 		}	
 
 		@PostMapping(value = "login")
-		public String login(@ModelAttribute User user, HttpSession session, Model model, Search search, HttpServletResponse response) throws Exception {
+		public String login(@ModelAttribute User user, HttpSession session, Model model, HttpServletResponse response) throws Exception {
 		    System.out.println("/user/login : POST");
 		    
 		    System.out.println("user : " +user);
@@ -150,8 +150,10 @@ public class UserController {
 		    if(dbUser.getProfileImage() != null && !dbUser.getProfileImage().contains("ncloudstorage")) {
 		        dbUser.setProfileImage(objectStorageService.getImageURL(dbUser.getProfileImage()));
 		    }
-		    
+		        
 		    session.setAttribute("user", dbUser);	
+		    
+		    
 		    
 		    // 쿠키 설정
 		    
@@ -188,7 +190,7 @@ public class UserController {
 		    
 		    System.out.println("쿠키 프로필 사진 : " + profileCookie);
 		    
-		    return "redirect:/common/main.jsp";
+		    return "redirect:/";
 		}
 
 		

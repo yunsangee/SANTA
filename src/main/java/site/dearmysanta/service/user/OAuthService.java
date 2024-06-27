@@ -234,7 +234,7 @@ public class OAuthService{
         try {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
+            conn.setRequestMethod("GET");
             conn.setRequestProperty("Authorization", "Bearer " + accessToken);
 
             int responseCode = conn.getResponseCode();
