@@ -300,4 +300,8 @@ import site.dearmysanta.service.user.UserService;
 		return userDao.getQnATotalCount(search);
 	}
 	
+	public String getUserName(String userId) {
+		return userDao.getUserName(userId);
+	}
+	
 }

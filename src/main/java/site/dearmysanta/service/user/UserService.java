@@ -102,6 +102,9 @@ public interface UserService {
 	
 	public String getUserPassword(String userPassword) throws Exception;
 
+	
+	
+	public String getUserName(String userId);
 
 	
 	

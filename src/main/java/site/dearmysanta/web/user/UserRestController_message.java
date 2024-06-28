@@ -3,6 +3,7 @@ package site.dearmysanta.web.user;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import site.dearmysanta.domain.message.MessageInfo;
+import site.dearmysanta.service.user.UserService;
 import site.dearmysanta.common.MakeRandomNumber;
 
 @RestController
@@ -25,6 +27,9 @@ public class UserRestController_message {
 	
 	final DefaultMessageService messageService;
 	public static Map<String,Integer> map;
+	
+	@Autowired
+	private UserService userService;
 	
 	public UserRestController_message() {
 	//private UserRestController() {
@@ -37,10 +42,13 @@ public class UserRestController_message {
 		
 		int randomNumber = MakeRandomNumber.makeRandomNumber();
 		
+		
+		String userName = userService.getUserName(messageInfo.getUserId());
+		
 		Message message = new Message();
 		message.setFrom("01095740310");
 		message.setTo(messageInfo.getPhoneNumber());
-		message.setText("안녕하세요 " + messageInfo.getUserName() + "님\n [" + randomNumber + "] \n 값을 입력해주세요."); 
+		message.setText("안녕하세요 " + userName + "님\n [" + randomNumber + "] \n 값을 입력해주세요."); 
 		
 		SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
 		

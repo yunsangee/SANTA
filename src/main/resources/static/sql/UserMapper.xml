@@ -272,6 +272,13 @@
         </choose>
     </where>
 </select>
+
+	<select id="getUserName" parameterType="String" resultType="String">
+		SELECT NAME FROM USERS WHERE USER_ID = #{userId}
+	
+	</select>
+
+	
 	
 	
 	<!-- <select id="findUserPhoneNumber" 	parameterType="String" 	resultType="site.dearmysanta.domain.user.User">
