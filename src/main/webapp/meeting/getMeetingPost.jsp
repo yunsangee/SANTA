@@ -305,7 +305,7 @@
 	    	    	
 	    	        url: '/meeting/rest/updateMeetingParticipationStatus',
 	    	        type: 'GET',
-	    	        dataType: 'json',
+	    	        dataType: 'text',
 	    	        data: {
 	    	        	
 	    	            participationNo: participationNo
