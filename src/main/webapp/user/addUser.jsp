@@ -24,10 +24,11 @@
 //////////////////////////////// 생년월일 달력 ////////////////////
 $(function() {
     $("#birthDate").datepicker({
-    	changeMonth: true,
+        changeMonth: true,
         changeYear: true,
-        yearRange: "1945:+0"
+        maxDate: new Date() // 현재 날짜를 최대 선택 가능 날짜로 설정
     });
+
 
 //////////////////////////////// 성별 ////////////////////
     $(".gender-button").click(function() {
@@ -66,7 +67,7 @@ $(function() {
 //////////////////////////////// 닉네임 중복 체크 ////////////////////
        $("input[name='nickName']").on("blur", function() {
                 var nick = $(this).val();
-                if (nick.length >= 10) {
+                if (nick.length > 10) {
                     $("#nickMessage").text("10글자 미만의 닉네임을 작성해주세요.").css("color", "red");
                     $(".submit").prop("disabled", true);
                 } else if (nick) {
@@ -292,6 +293,9 @@ function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, en
         }
     });
  });
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+ 
 </script>
 
 <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
@@ -504,7 +508,7 @@ label {
     opacity: 0;
 }
 
-.error-message {
+.error-message, .nickNameError {
     color: red;
     font-size: 13px;
     margin-top: -1px;
@@ -606,7 +610,8 @@ label {
 
     <div class="password-section">
         <label>비밀번호</label> 
-        <p class="description">영문, 숫자를 포함한 10자 이상의 비밀번호를 입력해주세요.</p>
+        <p class="description">
+			영문, 숫자, 특수문자를 포함하여 10자~15자 사이의 비밀번호를 입력해주세요.</p>
         <input type="password" name="userPassword" placeholder="비밀번호 입력" autocomplete="new-password" required>
          <div id="passwordLengthMessage"></div> 
     </div>
@@ -619,9 +624,12 @@ label {
     <div class="nickname-section">
         <label>닉네임</label>
         <input type="text" name="nickName" placeholder="닉네임 (최대 10자)" required>
-       	<div id="nickMessage" class="error-message"></div>
+       	<div id="nickMessage" class="error-message"></div>   
+       	<c:if test = "${not empty nickNameError}">
+        	<div class = "nickNameError">${nickNameError}</div>
+        </c:if>
     </div>
-    
+
     <div class="birthday-section">
         <label>생년월일</label>
         <input type="text" id="birthDate" name="birthDate" placeholder="생년월일" required>

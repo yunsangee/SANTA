@@ -46,7 +46,7 @@ public class UserRestController {
 	
 	@PostMapping(value="rest/addUser")
 	public User addUser(@RequestBody User user) throws Exception {
-        
+	
 		System.out.println("addUser : POST");
         
 		userService.addUser(user);

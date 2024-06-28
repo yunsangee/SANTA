@@ -92,6 +92,16 @@ public class UserController {
 		        return "redirect:/user/addUser.jsp";
 		    }
 		    
+		    // 닉네임 검증
+		    
+		    String nickName = user.getNickName();
+
+		 // 닉네임이 한글, 영어, 숫자만 포함하는지 확인
+		    if (!nickName.matches("^[가-힣a-zA-Z0-9]+$")) {
+		        model.addAttribute("nickNameError", "닉네임은 한글, 영어, 숫자만 포함할 수 있습니다.");
+		       return "forward:/user/addUser.jsp";
+		    }
+		    
 		    user.setProfileImage("profile1.png");
 			
 			userService.addUser(user);
@@ -129,18 +139,21 @@ public class UserController {
 		    System.out.println("Received userId: " + user.getUserId());
 		    
 		    // DB에서 사용자 정보 조회
-		    User dbUser =((List<User>)userService.getUserByUserId(user.getUserId())).get(0);
+//		    User dbUser =((List<User>)userService.getUserByUserId(user.getUserId())).get(0);
+
+		    List<User> users = userService.getUserByUserId(user.getUserId());
 		    
-		    System.out.println("확인 : " + dbUser);
-		    
-		    if(dbUser == null || !dbUser.getUserId().equals(user.getUserId())) {
-		    	model.addAttribute("idError", "아이디 혹은 비밀번호가 잘못되었습니다. 다시 입력해주세요.");
+		    if (users == null || users.isEmpty()) {
+		    	model.addAttribute("loginError", "아이디 혹은 비밀번호가 잘못되었습니다. 다시 입력해주세요.");
 		    	return "forward:/user/login.jsp";
 		    }
 		    
+		    User dbUser = users.get(0);
+		        System.out.println("확인 : " + dbUser);
+		    
 		    // 사용자가 존재하는지 확인
 		    if (dbUser == null || !dbUser.getUserPassword().equals(user.getUserPassword())) {
-		        model.addAttribute("passwordError", "아이디 혹은 비밀번호가 잘못되었습니다. 다시 입력해주세요.");
+		        model.addAttribute("loginError", "아이디 혹은 비밀번호가 잘못되었습니다. 다시 입력해주세요.");
 		        return "forward:/user/login.jsp";
 		    }
 		    
@@ -422,20 +435,18 @@ public class UserController {
 		@PostMapping(value = "updateUser")
 		public String updateUser(@ModelAttribute User user, @RequestParam(required = false) Integer userNo, Model model, HttpSession session, HttpServletResponse response) throws Exception {
 		    System.out.println("updateUser : POST");
-
-		    if (user.getImage() != null) {
-		        objectStorageService.uploadFile(user.getImage(), user.getUserId());
-		    }
-
+		    
 		    // 세션에서 현재 로그인한 사용자 정보 가져오기
 		    User sessionUser = (User) session.getAttribute("user");
-
+    
 		    // 세션 사용자 정보 로그 출력
 		    if (sessionUser != null) {
 		        System.out.println("updateUser: sessionUser = " + sessionUser.getUserId());
 		    } else {
 		        System.out.println("updateUser: sessionUser is null");
 		    }
+		    
+		    System.out.println("sessionUser 확인 : " +sessionUser);
 
 		    // 세션에 로그인한 사용자 정보가 있는지 확인
 		    if (sessionUser == null) {
@@ -446,6 +457,8 @@ public class UserController {
 
 		    // 업데이트하려는 사용자 번호 설정
 		    int targetUserNo = (userNo != null) ? userNo : sessionUser.getUserNo();
+		    
+		    System.out.println("targetUserNo : " +targetUserNo);
 
 		    // DB에서 최신 사용자 정보 가져오기
 		    User dbUser = userService.getUser(targetUserNo);
@@ -464,9 +477,18 @@ public class UserController {
 		    dbUser.setHikingDifficulty(user.getHikingDifficulty());
 		    dbUser.setHikingLevel(user.getHikingLevel());
 		    dbUser.setIntroduceContent(user.getIntroduceContent());
+//		    dbUser.setProfileImage(user.getProfileImage());
 		    // 필요한 다른 필드도 업데이트
+		    
+		    if (user.getImage() != null) {
+		        objectStorageService.uploadFile(user.getImage(), user.getUserId());
+		    }
+		    
+		    System.out.println("user확인 : " +user.getImage());
 
 		    userService.updateUser(dbUser);
+		    
+		    System.out.println("마지막 dbUser : " +dbUser);
 
 		    // 세션에 로그인한 사용자와 업데이트한 사용자가 동일한 경우, 세션 정보를 업데이트
 		    if (sessionUser.getUserNo() == dbUser.getUserNo()) {
@@ -506,7 +528,7 @@ public class UserController {
 		    System.out.println("updateUser : " + dbUser);
 
 		    // 업데이트 성공 페이지로 리다이렉트
-		    return "redirect:/user/getUser?userNo=" + dbUser.getUserNo();
+		    return "redirect:/user/getUser.jsp";
 		}
 		
 		//

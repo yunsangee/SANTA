@@ -21,9 +21,9 @@ public interface CertificationPostService {
 	
 	public CertificationPost getCertificationPost(int postNo) throws Exception;
 	
-	public void updateCertificationPost(CertificationPost certificationPost) throws Exception;
+	public void updateCertificationPost(CertificationPost certificationPost, List<String> updateImageURL) throws Exception;
 	
-	public void updateCertificationPostDeleteFlag(int postNo) throws Exception; //»èÁ¦
+	public void updateCertificationPostDeleteFlag(int postNo) throws Exception; //ï¿½ï¿½ï¿½ï¿½
 
 	public Map<String, Object> getCertificationPostList(Search search) throws Exception;
 	

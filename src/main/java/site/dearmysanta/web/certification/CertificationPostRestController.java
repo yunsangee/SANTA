@@ -194,6 +194,7 @@ public class CertificationPostRestController {
     public void addCertificationPostComment(@RequestBody CertificationPostComment certificationPostComment)throws Exception {
     
     	certificationPostService.addCertificationPostComment(certificationPostComment);
+    	
     
 }
 
