@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,7 +58,8 @@
     	id:schedule.postNo,
         title: schedule.title,
         start: schedule.scheduleDate, // 스케줄의 시작 날짜
-		url:"https://dearmysanta.site/user/getSchedule?postNo="+schedule.postNo + "&userNo="+schedule.userNo
+	/* 	url:"https://dearmysanta.site/user/getSchedule?postNo="+schedule.postNo + "&userNo="+schedule.userNo */
+		url:"https://localhost:8001//user/getSchedule?postNo="+schedule.postNo + "&userNo="+schedule.userNo
         
         // 필요한 다른 속성들 추가
       });
@@ -70,14 +74,26 @@
     padding: 0;
     font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
     font-size: 14px;
+    justify-content: center;
+    align-items: center;
+    margin-top:100px;
+    margin-left:200px;
   }
-  /* #calendar {
+  #calendar {
     max-width: 1100px;
+    margin-top:200px;
     margin: 0 auto;
-  } */
+  } 
 </style>
+
+<c:import url="../common/header.jsp"/>
 </head>
 <body>
   <div id='calendar'></div>
+  
+  <header>
+  	<c:import url="../common/top.jsp"/>
+  </header>
+  
 </body>
 </html>
