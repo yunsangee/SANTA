@@ -266,8 +266,8 @@
                     </c:if>
                     <c:if test="${not empty sessionScope.user and sessionScope.user.role == 1 }">
                         <a href="#" id="Home" class="nav-item nav-link home active">홈</a>
-                        <a href="#" id="getUserList" class="nav-item nav-link userList">회원목록조회</a>
-                        <a href="#" id="statistics" class="nav-item nav-link statistics">통계</a>
+                        <a href="#" id="getUserList" class="nav-item nav-link user">회원목록조회</a>
+                        <a href="#" id="statistics" class="nav-item nav-link mountain">통계</a>
                         <a href="#" id="correctionPost" class="nav-item nav-link correctionPost">정정제보</a>
                     </c:if>
                 </div>
