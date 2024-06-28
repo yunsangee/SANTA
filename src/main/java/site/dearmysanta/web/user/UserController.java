@@ -480,9 +480,9 @@ public class UserController {
 //		    dbUser.setProfileImage(user.getProfileImage());
 		    // 필요한 다른 필드도 업데이트
 		    
-		    if (user.getImage() != null) {
-		        objectStorageService.uploadFile(user.getImage(), user.getUserId());
-		    }
+//		    if (user.getImage() != null) {
+//		        objectStorageService.uploadFile(user.getImage(), user.getUserId());
+//		    }
 		    
 		    System.out.println("user확인 : " +user.getImage());
 
