@@ -190,7 +190,7 @@ public class CertificationPostController {
         }
         model.addAttribute("certificationPostImages", certificationPostImages);
         model.addAttribute("certificationPost", certificationPost);
-        model.addAttribute("hashtagList", hashtagList);
+        model.addAttribute("hashtagList", hashtagList); 
         // 사용자 세션에서 user 정보 가져오기
       
         return "forward:/certificationPost/updateCertificationPost.jsp";
@@ -237,12 +237,15 @@ public class CertificationPostController {
             model.addAttribute("user", user);
         }
 
+        // 삭제할 해시태그를 폼 제출 시 처리
+        List<Integer> hashtagsToDelete = new ArrayList<>();
         if (deleteHashtagNos != null) {
             for (int hashtagNo : deleteHashtagNos) {
-                certificationPostService.deleteHashtag(hashtagNo);
+                hashtagsToDelete.add(hashtagNo);
             }
         }
 
+        // 해시태그 업데이트 로직
         if (existingHashtags != null && existingHashtagNos != null) {
             for (int i = 0; i < existingHashtags.length; i++) {
                 if (!existingHashtags[i].isEmpty()) {
@@ -275,6 +278,12 @@ public class CertificationPostController {
 
         int appendImageStartIndex = objectStorageService.updateObjectStorageImage(fileNames);
 
+        List<String> list = new ArrayList<String>();
+        
+        for(int i = 1; i < appendImageStartIndex; i++) {
+        	list.add(postNo + "_" + postType + "_" +i);
+        }
+        
         if (certificationPost.getCertificationPostImage() != null) {
             List<MultipartFile> images = certificationPost.getCertificationPostImage().stream()
                 .filter(image -> !image.isEmpty())
@@ -286,11 +295,18 @@ public class CertificationPostController {
             for (int i = 0; i < imageCount; i++) {
                 MultipartFile image = images.get(i);
                 String fileName = postNo + "_" + postType + "_" + (appendImageStartIndex);
+                list.add(fileName);
                 System.out.println("fileName : " + fileName);
                 objectStorageService.uploadFile(image, fileName);
                 appendImageStartIndex += 1;
             }
         }
+        // 폼 제출 시에만 삭제 처리
+        for (int hashtagNo : hashtagsToDelete) {
+            certificationPostService.deleteHashtag(hashtagNo);
+        }
+        
+        model.addAttribute("certificationPostImages", list);
 
         return "redirect:/certificationPost/getCertificationPost?postNo=" + certificationPost.getPostNo();
     }
@@ -398,7 +414,7 @@ public class CertificationPostController {
 
         if (sessionUser == null) {
             // 세션에 유저 정보가 없으면 로그인 페이지로 리디렉션
-            return "redirect:/login";
+            return "redirect:/user/login";
         }
 
         int followerNo = sessionUser.getUserNo(); // 로그인된 사용자의 번호

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page import="site.dearmysanta.domain.user.User" %>
 <!DOCTYPE html>
@@ -109,6 +110,21 @@
     margin-right: 20px; /* span 사이에 간격을 줍니다 */
 }
 
+   .profile-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.author-link {
+    display: flex;
+    align-items: center;
+}
+
+.author-link img {
+    margin-right: 10px;
+}
    
     </style>
     <script>
@@ -370,6 +386,7 @@
 
           
                 <p class="mb-3"><i class="fas fa-calendar-day"></i> 글내용 : &ensp;${certificationPost.contents}</p>     <hr><br>
+                
                 <div class="comments-section"> 
                     <h3><i class="fas fa-comments"></i> 댓글작성하기</h3>
                     <form class="comment-form">
