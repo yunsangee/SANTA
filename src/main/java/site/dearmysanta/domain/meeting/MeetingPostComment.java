@@ -1,11 +1,12 @@
 package site.dearmysanta.domain.meeting;
 
-import java.util.Date;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
+
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 

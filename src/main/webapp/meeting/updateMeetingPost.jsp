@@ -161,13 +161,6 @@
 						            </button>
 						            <input type="hidden" id="updateImageURL" name="updateImageURL" value="${image}"/>
 						        </div>
-						        <div class="position-relative d-inline-block image-div">
-						            <img src="${image}" alt="Image" class="img-fluid" />
-						            <button class="btn p-0 delete-image-button position-absolute top-0 end-0" style="line-height: 0;">
-						                <i class="bi bi-x" style="font-size: 32px; color: red;"></i>
-						            </button>
-						            <input type="hidden" id="updateImageURL" name="updateImageURL" value="${image}"/>
-						        </div>
 						        
 						    </c:forEach>
 						

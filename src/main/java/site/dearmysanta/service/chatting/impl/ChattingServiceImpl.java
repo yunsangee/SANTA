@@ -20,7 +20,7 @@ public class ChattingServiceImpl implements ChattingService {
 	
 //	@Value("${nodejsServerUrl}")
 //	private String nodeJsServerUrl;
-	private String nodeJsServerUrl = "https://www.dearmysanta.site/chattingserver";
+	private String nodeJsServerUrl = "https://www.dearmysanta.site";
 	
 	@Autowired
 	@Qualifier("chattingDAO")
