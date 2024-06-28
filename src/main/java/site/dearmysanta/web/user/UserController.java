@@ -221,7 +221,7 @@ public class UserController {
 			
 			session.invalidate();
 			
-			return "forward:/common/main.jsp";
+			return "forward:/";
 		}
 		
 		//

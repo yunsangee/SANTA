@@ -159,7 +159,19 @@ input[type="password"]:focus {
         <c:if test="${not empty withdrawError}">
             alert("${withdrawError}");
         </c:if>
+        
+        $('#userPassword').keypress(function(event){
+        	
+        	if(event.which ==13){
+        		event.preventDefault();
+  /*       		alert('enter'); */
+        		$('form').submit();
+        	}
+        });
     });
+    
+    
+    
 
     function logoutAndRedirect() {
         $.ajax({

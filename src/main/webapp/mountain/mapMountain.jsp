@@ -376,7 +376,9 @@
 		});
 		
 		$('#address').keypress(function(event){
-			getAddressFromUserInput();
+			if(event.which==13){
+				getAddressFromUserInput();
+			}
 		});
 	}); // if user input the location
 	//
