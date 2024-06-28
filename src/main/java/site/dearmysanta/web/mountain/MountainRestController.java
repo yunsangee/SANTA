@@ -100,6 +100,7 @@ public class MountainRestController {
 	@PostMapping("rest/addMountainLike")
 	public int addMountainLike(@RequestBody Like like, @RequestParam int index, int isPop ,HttpSession session) {
 		//SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like.getPostNo()));
+		SantaLogger.makeLog("info", like.toString());
 		mountainService.addMountainLike(like);
 		SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like.getPostNo()));
 		Object obj;
@@ -131,6 +132,7 @@ public class MountainRestController {
 	@PostMapping("rest/deleteMountainLike")
 	public int deleteMountainLike(@RequestBody Like like, @RequestParam int index, int isPop, HttpSession session) {
 		//SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like.getPostNo()));
+		SantaLogger.makeLog("info", like.toString());
 		mountainService.deleteMountainLike(like);
 		//SantaLogger.makeLog("info", ""+ mountainService.getTotalMountainLikeCount(like.getPostNo()));
 		
@@ -207,10 +209,18 @@ public class MountainRestController {
 		MountainSearch mountainSearch = new MountainSearch();
 		User user = (User)session.getAttribute("user");
 		mountainSearch.setSearchKeyword(mountainName);
+		
+		if(user == null) {
+			user = new User();
+			user.setUserNo(-1);
+		}
+		
+		
+		
 		if(isMountain == 1) {
 			
 			map.put("isMountain", 1);
-			List<Mountain> list = mountainService.getMountainListByName(mountainSearch.getSearchKeyword());
+			List<Mountain> list = mountainService.getMountainListByName(user.getUserNo(), mountainSearch.getSearchKeyword());
 			List<String> weatherList = new ArrayList<>();
 			
 			List<String> jsonList = new ArrayList<>();

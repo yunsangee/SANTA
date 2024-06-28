@@ -266,6 +266,7 @@
                                 <th scope="col">User NickName.</th>
                                 <th scope="col">Contents</th>
                                 <th scope="col">Claim Date</th>
+                               	<th scope="col">Is Checked</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -297,7 +298,9 @@
                     <input type="hidden" id="userNo" name="userNo" value="${correctionPost.userNo}"/>
                     <input type="hidden" id="crpNo" name="crpNo" value="${correctionPost.postNo}"/>
                     <input type="hidden" id="mountainNo" name="mountainNo" value="${correctionPost.mountainNo}"/>
-                    <button id="update" class="update" type="button">Update</button>
+                    <c:if test="${correctionPost.status == 0}">
+                   	 	<button id="update" class="update" type="button">Update</button>
+                   	 </c:if>
                     <button id="delete" class="delete" type="button">Delete</button>
                 </form>
             </td>

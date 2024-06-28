@@ -300,16 +300,16 @@ public class MountainApplicationTest {
 		}
 		SantaLogger.makeLog("info","=====================");
 		
-		list = mountainService.getMountainListByName("Geumjeongsan");
-		for(Mountain mt : list) {
-			SantaLogger.makeLog("info",mt.toString());
-		}
-		SantaLogger.makeLog("info","=====================");
-		
-		mountain.setMountainTrailCount(77);
-		mountainService.updateMountain(mountain);
-//		SantaLogger.makeLog("info",mountainService.getMountain(mountain.getMountainNo()).toString());
-		SantaLogger.makeLog("info","=====================");
+//		list = mountainService.getMountainListByName("Geumjeongsan");
+//		for(Mountain mt : list) {
+//			SantaLogger.makeLog("info",mt.toString());
+//		}
+//		SantaLogger.makeLog("info","=====================");
+//		
+//		mountain.setMountainTrailCount(77);
+//		mountainService.updateMountain(mountain);
+////		SantaLogger.makeLog("info",mountainService.getMountain(mountain.getMountainNo()).toString());
+//		SantaLogger.makeLog("info","=====================");
 		
 		mountainService.updateMountainViewCount(mountain.getMountainNo());
 //		SantaLogger.makeLog("info",mountainService.getMountain(mountain.getMountainNo()).toString());
