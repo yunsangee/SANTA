@@ -169,6 +169,9 @@ button, a.button {
     border-bottom: 1px solid #ccc;
     margin: 20px 0;
 }
+        .default-value {
+            color: lightgray;
+        }
 
 </style>
 
@@ -206,7 +209,9 @@ button, a.button {
         <p>${user.birthDate}</p>
         <p>${user.phoneNumber}</p>
         <p>${user.address}</p>
-        <p>${user.detailAddress}</p>
+         <p class="detailAddress">
+        	${user.detailAddress == null || user.detailAddress == "" ? '<span class="default-value">상세주소</span>' : user.detailAddress}
+    	</p>
         <p> 
             <c:choose>
                 <c:when test="${user.gender == 0}">
@@ -217,7 +222,9 @@ button, a.button {
                 </c:when>
             </c:choose>
         </p>
-        <p>${user.introduceContent}</p>
+        <p class="introduceContent">
+        	${user.introduceContent == null || user.introduceContent == "" ? '<span class="default-value">자기소개 글</span>' : user.introduceContent}
+    	</p>
         
         <div class="line"></div>
         

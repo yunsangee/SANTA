@@ -917,7 +917,7 @@ public class UserController {
 		@GetMapping(value="getQnAList")
 		 public String getQnAList(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
 	        System.out.println("getQnAList : GET");
-
+	        System.out.println("Search:" + search);
 	        // 세션에서 사용자 정보 가져오기
 	        User user = (User) session.getAttribute("user");
 	        
@@ -952,6 +952,7 @@ public class UserController {
 	        model.addAttribute("totalPages", totalPages);
 	        model.addAttribute("currentPage", currentPage);
 	        model.addAttribute("currentPageCount", qnaList.size());
+	        model.addAttribute("search",search);
 
 	        return "forward:/user/getQnAList.jsp";
 	    }
