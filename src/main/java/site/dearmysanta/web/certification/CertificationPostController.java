@@ -308,7 +308,7 @@ public class CertificationPostController {
         
         model.addAttribute("certificationPostImages", list);
 
-        return "forward:/certificationPost/getCertificationPost?postNo=" + certificationPost.getPostNo();
+        return "redirect:/certificationPost/getCertificationPost?postNo=" + certificationPost.getPostNo();
     }
 
 
