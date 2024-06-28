@@ -644,13 +644,16 @@ public class UserController {
 
 		    int currentPageCount = paginatedUserList.size(); // 현재 페이지에 표시되는 회원 수
 
+		    System.out.println("currentPage:" + currentPage);
 		    model.addAttribute("userList", paginatedUserList);
 		    model.addAttribute("search", search);
 		    model.addAttribute("currentPage", currentPage);
+		    model.addAttribute("pageSize",pageSize);
 		    model.addAttribute("totalPages", totalPages);
 		    model.addAttribute("totalCount", totalCount);
 		    model.addAttribute("currentPageCount", currentPageCount);
-
+		    
+		    session.setAttribute("whichUserList", 0);
 		    return "forward:/user/getUserList.jsp";
 		}
 
@@ -700,9 +703,12 @@ public class UserController {
 		    model.addAttribute("userList", paginatedUserList);
 		    model.addAttribute("search", search);
 		    model.addAttribute("currentPage", currentPage);
+		    model.addAttribute("pageSize",pageSize);
 		    model.addAttribute("totalPages", totalPages);
 		    model.addAttribute("totalCount", totalCount);
 		    model.addAttribute("currentPageCount", currentPageCount);
+		    
+		    session.setAttribute("whichUserList", 1);
 
 		    return "forward:/user/getUserList.jsp";
 		}
