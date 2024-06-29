@@ -304,4 +304,8 @@ import site.dearmysanta.service.user.UserService;
 		return userDao.getUserName(userId);
 	}
 	
+	public void updateBadgeImage(String badgeImage, int userNo) {
+		userDao.updateBadgeImage(badgeImage, userNo);
+	}
+	
 }

@@ -105,6 +105,8 @@ public interface UserService {
 	
 	
 	public String getUserName(String userId);
+	
+	public void updateBadgeImage(String badgeImage, int userNo);
 
 	
 	

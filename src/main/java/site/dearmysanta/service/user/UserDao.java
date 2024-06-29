@@ -102,5 +102,6 @@ import site.dearmysanta.domain.user.User;
 		public String getUserPassword(String userPassword) throws Exception;
 		
 		public String getUserName(String userId);
+		public void updateBadgeImage(String badgeImage, int userNo);
 		
 }
