@@ -95,10 +95,7 @@ public class MeetingController {
             meetingPostImages.add(imageURL);
         }
 		
-		List<MeetingParticipation> meetingParticipation = (List<MeetingParticipation>)map.get("meetingParticipations");
-		
-		System.out.println("사진사진사진"+meetingPostImages);
-				
+		System.out.println("사진사진사진"+meetingPostImages);			
 		
 		model.addAttribute("meetingPost", meetingPost);
 		model.addAttribute("meetingParticipations", map.get("meetingParticipations"));

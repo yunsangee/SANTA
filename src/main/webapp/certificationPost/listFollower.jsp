@@ -46,17 +46,19 @@
             padding: 10px;
         }
 
-        .profile-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
+		      .profile-image {
+		    width: 50px;
+		    height: 50px;
+		    border-radius: 50%;
+		    object-fit: cover;
+		}
+		
+		.badge-img {
+		    width: 24px;
+		    height: 24px;
+		    object-fit: cover;
+		}
 
-        .badge-img {
-            width: 24px;
-            height: 24px;
-        }
 
         /* 닉네임 스타일 */
         .clickable {
@@ -98,7 +100,7 @@
                             <c:forEach var="follower" items="${followerList}">
                                 <tr>
                                     <td style="vertical-align: middle; padding-right: 10px;">
-                                       <img src="${sessionScope.user.profileImage}" class="profile">
+                                        <img class="profile-image" src="${sessionScope.user.profileImage}" alt="Profile Image"/>
                                     </td>
                                     <td style="vertical-align: middle; padding-right: 10px;">
                                         <p class="mb-0 clickable" data-userno="${follower.userNo}">${follower.nickName}</p>

@@ -52,9 +52,15 @@
     
     	$(function() {
     		
-		    $("#recruitmentDeadline").datepicker({
-		        dateFormat: "yy-mm-dd"
-		    });
+    		$("#recruitmentDeadline").datepicker({
+                dateFormat: "yy-mm-dd",
+                minDate: 0, // 오늘 이후 날짜만 선택 가능
+                onSelect: function(selectedDate) {
+                    var minDate = $(this).datepicker('getDate');
+                    minDate.setDate(minDate.getDate() + 1); // 선택된 날짜의 다음날로 설정
+                    $("#appointedHikingDate").datepicker("option", "minDate", minDate);
+                }
+            });
 		    
 		    $("#appointedDeparture").on('click', function() {
 		    	window.open("/user/address.jsp", "pop", "width=570, height=420, scrollbars=yes, resizable=yes");
@@ -134,7 +140,7 @@
 	    				</div>
 	    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">모집 마감일</div>
 	    				<div class="col-md-2 border align-items-center text-center py-2">
-	    					<input type="text" class="form-control" id="recruitmentDeadline" name="recruitmentDeadline" placeholder="날짜 선택" required>
+	    					<input type="text" class="form-control" id="recruitmentDeadline" name="recruitmentDeadline" placeholder="날짜 선택" autocomplete="off" required>
 	    				</div>
 	    				
 	    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">출발 예정지</div>
@@ -155,7 +161,7 @@
 	    				</div>
 	    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">등산 예정 일자</div>
 	    				<div class="col-md-2 border align-items-center text-center py-2">
-	    					<input type="text" class="form-control" id="appointedHikingDate" name="appointedHikingDate" placeholder="날짜 선택" required>
+	    					<input type="text" class="form-control" id="appointedHikingDate" name="appointedHikingDate" placeholder="날짜 선택" autocomplete="off" required>
 	    				</div>
 	    				
 	    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">최대 인원</div>
