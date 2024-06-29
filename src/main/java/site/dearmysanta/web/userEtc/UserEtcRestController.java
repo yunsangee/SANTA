@@ -109,6 +109,8 @@ public class UserEtcRestController {
 		map.put("meetingPostCount", userEtcService.getMeetingCount(userNo));
 		map.put("certificationPostCount", userEtcService.getCertificationCount(userNo));
 		
+		
+		SantaLogger.makeLog("info",map.toString()+" :::::::");
 		return map;
 	}
 	
