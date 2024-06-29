@@ -1,6 +1,8 @@
 package site.dearmysanta.web.userEtc;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -96,6 +98,18 @@ public class UserEtcRestController {
 		return userEtcService.getUserSettings(user);
 	}//o
 	
+	
+	@GetMapping(value="rest/getCount")
+	public Map<String,Integer> getCount(HttpSession session) throws Exception{
+		Map<String,Integer> map = new HashMap<String,Integer>();
+		
+		
+		int userNo = ((User)session.getAttribute("user")).getUserNo();
+		map.put("meetingPostCount", userEtcService.getMeetingCount(userNo));
+		map.put("certificationPostCount", userEtcService.getCertificationCount(userNo));
+		
+		return map;
+	}
 	
 
 }
