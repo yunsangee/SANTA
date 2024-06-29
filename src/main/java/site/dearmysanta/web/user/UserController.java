@@ -168,6 +168,10 @@ public class UserController {
 		    if(dbUser.getProfileImage() != null && !dbUser.getProfileImage().contains("ncloudstorage")) {
 		        dbUser.setProfileImage(objectStorageService.getImageURL(dbUser.getProfileImage()));
 		    }
+		    
+		    if(dbUser.getBadgeImage() != null && !dbUser.getBadgeImage().contains("ncloudstorage")) {
+		    	dbUser.setBadgeImage(objectStorageService.getImageURL(dbUser.getBadgeImage()));
+		    }
 		        
 		    session.setAttribute("user", dbUser);	
 		    	   
@@ -383,6 +387,10 @@ public class UserController {
 		    String profileImage = objectStorageService.getImageURL(user.getUserId());
 			
 			user.setProfileImage(profileImage);
+			
+			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
+				user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+		    }
 
 		    // 사용자 정보 모델에 추가
 		    model.addAttribute("user", user);
