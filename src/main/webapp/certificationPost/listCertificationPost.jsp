@@ -10,6 +10,45 @@
     <title>Certification Post List</title>
     
 <style>
+.btn-with-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.btn-with-tooltip .tooltip {
+    visibility: hidden;
+    background-color: #333; /* 툴팁 배경색 변경 */
+    color: #fff; /* 툴팁 텍스트 색상 변경 */
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 15px; /* 툴팁 크기 증가 */
+    position: absolute;
+    z-index: 1;
+    bottom: 150%; /* 툴팁 위치 조정 */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+    font-size: 16px; /* 툴팁 텍스트 크기 증가 */
+}
+
+.btn-with-tooltip .tooltip-arrow {
+    position: absolute;
+    top: 100%; /* 화살표 위치 */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px; /* 화살표 크기 증가 */
+    border-style: solid;
+    border-color: #333 transparent transparent transparent; /* 화살표 색상 변경 */
+}
+
+.btn-with-tooltip:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+
 .certification-post {
     display: flex;
     flex-direction: column;
@@ -419,9 +458,13 @@ $(document).ready(function() {
         </div>
     </main>
     <div class="fixed-buttons">
+    <div class="btn-with-tooltip">
+        <div class="tooltip">인증하러가기!<div class="tooltip-arrow"></div></div>
         <button class="btn-cp btn-certify-hiking"><i class="fa fa-mountain"></i></button>
-        <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
     </div>
+    <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
+</div>
+
     <footer></footer>
 </body>
 </html>
