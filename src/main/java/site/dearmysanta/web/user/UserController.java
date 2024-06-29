@@ -180,6 +180,7 @@ public class UserController {
 		    String encodingUserNo = URLEncoder.encode(""+dbUser.getUserNo(), "UTF-8");
 		    String encodingNickName = URLEncoder.encode(""+dbUser.getNickName(), "UTF-8");
 		    String encodingProfile = URLEncoder.encode(dbUser.getProfileImage(), "UTF-8");
+		    String encodingUserId =  URLEncoder.encode(dbUser.getUserId(), "UTF-8");
 		    
 		    Cookie cookie = new Cookie("userNo", encodingUserNo);
 		    cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
@@ -203,6 +204,13 @@ public class UserController {
 		    profileCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
 		    profileCookie.setSecure(false); // 
 		    response.addCookie(profileCookie);
+		    
+		    Cookie idCookie = new Cookie("userId", encodingUserId);
+		    profileCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+		    profileCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+		    profileCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+		    profileCookie.setSecure(false); // 
+		    response.addCookie(idCookie);
 		    
 		    System.out.println("쿠키확인 닉네임 : " + nickNameCookie);
 		    
