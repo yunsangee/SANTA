@@ -11,8 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import site.dearmysanta.domain.alarmMessage.AlarmMessage;
 import site.dearmysanta.domain.certificationPost.CertificationPost;
 import site.dearmysanta.domain.user.User;
+import site.dearmysanta.service.user.UserService;
 import site.dearmysanta.service.user.etc.UserEtcDao;
 import site.dearmysanta.service.user.etc.UserEtcService;
+import site.dearmysanta.service.user.impl.UserServiceImpl;
 
 @Service
 @Transactional
@@ -22,6 +24,10 @@ import site.dearmysanta.service.user.etc.UserEtcService;
 	@Autowired
 	@Qualifier("userEtcDao")
 	private UserEtcDao userEtcDao;
+	
+	
+	@Autowired
+	private UserServiceImpl userSerivceImpl;
 
 	@Override
 	public int getCertificationCount(int userNo) throws Exception {
@@ -41,12 +47,50 @@ import site.dearmysanta.service.user.etc.UserEtcService;
 		// TODO Auto-generated method stub
 		userEtcDao.updateCertificationCount(userNo,type);
 		
+		
+		int sumVal = userEtcDao.getCertificationCount(userNo) + userEtcDao.getMeetingCount(userNo);
+		
+		if(sumVal == 200) {
+			userSerivceImpl.updateBadgeImage("badge2.png", userNo);
+		}else if(sumVal==300) {
+			userSerivceImpl.updateBadgeImage("badge3.png", userNo);
+		}else if(sumVal==400) {
+			userSerivceImpl.updateBadgeImage("badge4.png", userNo);
+		}else if(sumVal==500) {
+			userSerivceImpl.updateBadgeImage("badge5.png", userNo);
+		}
+		else if(sumVal==600) {
+			userSerivceImpl.updateBadgeImage("badge6.png", userNo);
+		}
+		else if(sumVal==700) {
+			userSerivceImpl.updateBadgeImage("badge7.png", userNo);
+		}
+		
 	} //directly use
 
 	@Override
 	public void updateMeetingCount(int userNo,int type) throws Exception {
 		// TODO Auto-generated method stub
 		userEtcDao.updateMeetingCount(userNo,type);
+		
+
+		int sumVal = userEtcDao.getCertificationCount(userNo) + userEtcDao.getMeetingCount(userNo);
+		
+		if(sumVal == 200) {
+			userSerivceImpl.updateBadgeImage("badge2.png", userNo);
+		}else if(sumVal==300) {
+			userSerivceImpl.updateBadgeImage("badge3.png", userNo);
+		}else if(sumVal==400) {
+			userSerivceImpl.updateBadgeImage("badge4.png", userNo);
+		}else if(sumVal==500) {
+			userSerivceImpl.updateBadgeImage("badge5.png", userNo);
+		}
+		else if(sumVal==600) {
+			userSerivceImpl.updateBadgeImage("badge6.png", userNo);
+		}
+		else if(sumVal==700) {
+			userSerivceImpl.updateBadgeImage("badge7.png", userNo);
+		}
 		
 	} //directly use
 

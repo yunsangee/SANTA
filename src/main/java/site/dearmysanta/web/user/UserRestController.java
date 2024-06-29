@@ -1,5 +1,6 @@
 package site.dearmysanta.web.user;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -20,6 +22,7 @@ import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.user.QNA;
 import site.dearmysanta.domain.user.User;
+import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.user.UserService;
 
 
@@ -30,6 +33,9 @@ public class UserRestController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ObjectStorageService objectStorageService;
 	
 	@Value("${pageSize}")
 	private int pageSize;
@@ -501,6 +507,18 @@ public class UserRestController {
 	    
 	    //////////////////////////////////////////////////////////////////
 	    
-	    
+	    @PostMapping("rest/updateProfile")
+	    public String updateProfile(@ModelAttribute User user, HttpSession session) throws IOException {
+	    	User sessionUser = (User)session.getAttribute("user");
+	    	
+	    	if(user.getImage() != null) {
+	    		objectStorageService.uploadFile(user.getImage(), sessionUser.getUserId());
+	    	}
+	    	sessionUser.setProfileImage(objectStorageService.getImageURL(sessionUser.getUserId()));
+	    	
+	    	session.setAttribute("user", sessionUser);
+	    	
+	    	return sessionUser.getProfileImage();
+	    }
 }
 

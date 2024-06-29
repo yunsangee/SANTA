@@ -300,4 +300,12 @@ import site.dearmysanta.service.user.UserService;
 		return userDao.getQnATotalCount(search);
 	}
 	
+	public String getUserName(String userId) {
+		return userDao.getUserName(userId);
+	}
+	
+	public void updateBadgeImage(String badgeImage, int userNo) {
+		userDao.updateBadgeImage(badgeImage, userNo);
+	}
+	
 }

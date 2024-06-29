@@ -58,7 +58,7 @@
 		SELECT cp_count FROM USERS WHERE USER_NO = #{value}
 	</select>
 	
-	<select id="getMettingCount" parameterType="int" resultType="int">
+	<select id="getMeetingCount" parameterType="int" resultType="int">
 		SELECT mp_count FROM USERS WHERE USER_NO = #{value}
 	</select>
 	

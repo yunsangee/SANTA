@@ -272,6 +272,21 @@
         </choose>
     </where>
 </select>
+
+	<select id="getUserName" parameterType="String" resultType="String">
+		SELECT NAME FROM USERS WHERE USER_ID = #{userId}
+	
+	</select>
+	
+	<update id="updateBadgeImage" parameterType="map">
+		UPDATE USERS
+		SET
+			badge_image=#{badgeImage}
+		WHERE user_no = #{userNo}
+	
+	</update>
+
+	
 	
 	
 	<!-- <select id="findUserPhoneNumber" 	parameterType="String" 	resultType="site.dearmysanta.domain.user.User">

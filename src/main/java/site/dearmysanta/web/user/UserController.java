@@ -168,6 +168,10 @@ public class UserController {
 		    if(dbUser.getProfileImage() != null && !dbUser.getProfileImage().contains("ncloudstorage")) {
 		        dbUser.setProfileImage(objectStorageService.getImageURL(dbUser.getProfileImage()));
 		    }
+		    
+		    if(dbUser.getBadgeImage() != null && !dbUser.getBadgeImage().contains("ncloudstorage")) {
+		    	dbUser.setBadgeImage(objectStorageService.getImageURL(dbUser.getBadgeImage()));
+		    }
 		        
 		    session.setAttribute("user", dbUser);	
 		    	   
@@ -176,6 +180,7 @@ public class UserController {
 		    String encodingUserNo = URLEncoder.encode(""+dbUser.getUserNo(), "UTF-8");
 		    String encodingNickName = URLEncoder.encode(""+dbUser.getNickName(), "UTF-8");
 		    String encodingProfile = URLEncoder.encode(dbUser.getProfileImage(), "UTF-8");
+		    String encodingUserId =  URLEncoder.encode(dbUser.getUserId(), "UTF-8");
 		    
 		    Cookie cookie = new Cookie("userNo", encodingUserNo);
 		    cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
@@ -200,6 +205,13 @@ public class UserController {
 		    profileCookie.setSecure(false); // 
 		    response.addCookie(profileCookie);
 		    
+		    Cookie idCookie = new Cookie("userId", encodingUserId);
+		    profileCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+		    profileCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+		    profileCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+		    profileCookie.setSecure(false); // 
+		    response.addCookie(idCookie);
+		    
 		    System.out.println("쿠키확인 닉네임 : " + nickNameCookie);
 		    
 		    System.out.println("쿠키확인 userNo : " + cookie);
@@ -221,7 +233,7 @@ public class UserController {
 			
 			session.invalidate();
 			
-			return "forward:/common/main.jsp";
+			return "forward:/";
 		}
 		
 		//
@@ -383,6 +395,10 @@ public class UserController {
 		    String profileImage = objectStorageService.getImageURL(user.getUserId());
 			
 			user.setProfileImage(profileImage);
+			
+			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
+				user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+		    }
 
 		    // 사용자 정보 모델에 추가
 		    model.addAttribute("user", user);
@@ -480,9 +496,9 @@ public class UserController {
 //		    dbUser.setProfileImage(user.getProfileImage());
 		    // 필요한 다른 필드도 업데이트
 		    
-		    if (user.getImage() != null) {
-		        objectStorageService.uploadFile(user.getImage(), user.getUserId());
-		    }
+//		    if (user.getImage() != null) {
+//		        objectStorageService.uploadFile(user.getImage(), user.getUserId());
+//		    }
 		    
 		    System.out.println("user확인 : " +user.getImage());
 
@@ -644,13 +660,16 @@ public class UserController {
 
 		    int currentPageCount = paginatedUserList.size(); // 현재 페이지에 표시되는 회원 수
 
+		    System.out.println("currentPage:" + currentPage);
 		    model.addAttribute("userList", paginatedUserList);
 		    model.addAttribute("search", search);
 		    model.addAttribute("currentPage", currentPage);
+		    model.addAttribute("pageSize",pageSize);
 		    model.addAttribute("totalPages", totalPages);
 		    model.addAttribute("totalCount", totalCount);
 		    model.addAttribute("currentPageCount", currentPageCount);
-
+		    
+		    session.setAttribute("whichUserList", 0);
 		    return "forward:/user/getUserList.jsp";
 		}
 
@@ -700,9 +719,12 @@ public class UserController {
 		    model.addAttribute("userList", paginatedUserList);
 		    model.addAttribute("search", search);
 		    model.addAttribute("currentPage", currentPage);
+		    model.addAttribute("pageSize",pageSize);
 		    model.addAttribute("totalPages", totalPages);
 		    model.addAttribute("totalCount", totalCount);
 		    model.addAttribute("currentPageCount", currentPageCount);
+		    
+		    session.setAttribute("whichUserList", 1);
 
 		    return "forward:/user/getUserList.jsp";
 		}
@@ -911,7 +933,7 @@ public class UserController {
 		@GetMapping(value="getQnAList")
 		 public String getQnAList(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
 	        System.out.println("getQnAList : GET");
-
+	        System.out.println("Search:" + search);
 	        // 세션에서 사용자 정보 가져오기
 	        User user = (User) session.getAttribute("user");
 	        
@@ -946,6 +968,7 @@ public class UserController {
 	        model.addAttribute("totalPages", totalPages);
 	        model.addAttribute("currentPage", currentPage);
 	        model.addAttribute("currentPageCount", qnaList.size());
+	        model.addAttribute("search",search);
 
 	        return "forward:/user/getQnAList.jsp";
 	    }

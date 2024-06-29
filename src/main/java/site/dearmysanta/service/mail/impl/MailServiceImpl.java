@@ -45,13 +45,13 @@ public class MailServiceImpl implements MailService{
 		makeRandomNumber(receiverEmail);
 		System.out.println("confirm : ");
 		String setFrom = "ljh71506@gmail.com";
-		String title =  "È¸¿ø °¡ÀÔ ÀÎÁõ ÀÌ¸ŞÀÏÀÔ´Ï´Ù.";
+		String title =  "íšŒì› ê°€ì… ì¸ì¦ ì´ë©”ì¼ì…ë‹ˆë‹¤.";
 		String content = 
-				"SANTA¸¦ ¹æ¹®ÇØÁÖ¼Å¼­ °¨»çÇÕ´Ï´Ù." + 
+				"SANTAë¥¼ ë°©ë¬¸í•´ì£¼ì…”ì„œ ê°ì‚¬í•©ë‹ˆë‹¤." + 
                 "<br><br>" + 
-			    "ÀÎÁõ ¹øÈ£´Â " + map.get(receiverEmail) + "ÀÔ´Ï´Ù." + 
+			    "ì¸ì¦ ë²ˆí˜¸ëŠ” " + map.get(receiverEmail) + "ì…ë‹ˆë‹¤." + 
 			    "<br>" + 
-			    "ÇØ´ç ÀÎÁõ¹øÈ£¸¦ ÀÎÁõ¹øÈ£ È®ÀÎ¶õ¿¡ ±âÀÔÇÏ¿© ÁÖ¼¼¿ä.";
+			    "í•´ë‹¹ ì¸ì¦ë²ˆí˜¸ë¥¼ ì¸ì¦ë²ˆí˜¸ í™•ì¸ë€ì— ê¸°ì…í•˜ì—¬ ì£¼ì„¸ìš”.";
 		
 		MimeMessage message = mailSender.createMimeMessage();
 		
