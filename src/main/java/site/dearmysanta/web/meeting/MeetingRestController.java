@@ -114,7 +114,7 @@ public class MeetingRestController {
             MeetingParticipation meetingParticipation = meetingParticipationList.get(i);
             int userNo = meetingParticipation.getUserNo();
             
-            userEtcService.updateMeetingCount(userNo, 1);
+            userEtcService.updateMeetingCount(userNo, 0);
             
         }
 		

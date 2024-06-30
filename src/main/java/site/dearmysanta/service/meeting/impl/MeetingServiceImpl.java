@@ -47,10 +47,15 @@ public class MeetingServiceImpl implements MeetingService {
 		
 		meetingPost.setAppointedDeparture(appointedDeparture);
 		
-		if (meetingPost.getMeetingPostImage() != null && !meetingPost.getMeetingPostImage().isEmpty()) {
-            
-            meetingPost.setMeetingPostImageCount(meetingPost.getMeetingPostImage().size());
-        }
+		
+		if (meetingPost.getMeetingPostImage() != null) {
+		    List<MultipartFile> images = meetingPost.getMeetingPostImage().stream()
+		        .filter(image -> !image.isEmpty())
+		        .collect(Collectors.toList());
+		    
+		    meetingPost.setMeetingPostImageCount(images.size());
+		}
+		
 		
 		meetingDAO.insertMeetingPost(meetingPost);
 		
