@@ -21,6 +21,7 @@ import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.user.QNA;
+import site.dearmysanta.domain.user.Schedule;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.user.UserService;
@@ -520,5 +521,40 @@ public class UserRestController {
 	    	
 	    	return sessionUser.getProfileImage();
 	    }
+	    
+	    
+	    @GetMapping(value = "rest/getSchedule")
+		public boolean getSchedule(@RequestParam(required = false) Integer postNo, @RequestParam(required = false) Integer userNo, HttpSession session, Model model) throws Exception {
+		    
+			System.out.println("getSchedule : GET");
+
+		    // 세션에서 로그인한 사용자 정보 가져오기
+		    User user = (User) session.getAttribute("user");
+
+		    Schedule schedule = userService.getSchedule(postNo, userNo);
+
+//		    if (user == null) {
+//		        // 로그인한 사용자 정보가 없는 경우 오류 처리
+//		        model.addAttribute("error", "로그인 정보를 찾을 수 없습니다.");
+//		        return "redirect:/login"; // 로그인 페이지로 리다이렉트 또는 다른 처리
+//		    }
+
+		    if (schedule == null) {
+		        // Schedule 정보가 없는 경우 오류 처리
+		        model.addAttribute("error", "Schedule 정보를 찾을 수 없습니다.");
+		        return false;
+		    }
+
+		    if (userNo != null && schedule.getUserNo() == userNo) {
+		        // 사용자 번호로 조회하는 경우
+		    	session.setAttribute("schedule", schedule);
+		        return true;
+		    } else {
+		        // 잘못된 요청 처리
+		        model.addAttribute("error", "올바른 요청이 아닙니다.");
+		        return false;
+		    }
+		    
+		}
 }
 

@@ -451,47 +451,42 @@
                 TOTAL_SEARCH_COUNT DESC
             </if>
     )
-    WHERE ROWNUM <![CDATA[<=]]> 20
 </select>
 
+   <!--  WHERE ROWNUM <![CDATA[<=]]> 20 -->
 
 
-	<select id="getCustomMountainList" parameterType="map"
-		resultMap="MountainResultMap">
-		
-		SELECT * FROM (
-		SELECT MOUNTAIN.* , ROWNUM AS ROW_SEQ
-		FROM MOUNTAIN
-		<!-- WHERE MOUNTAIN_LOCATION LIKE '%' || #{user.address} || '%' -->
-		<!-- <choose>
-			<when test="user.hikingDifficulty == 0">
-				AND MOUNTAIN_ALTITUDE <![CDATA[>=]]>
-				700
-			</when>
-			<when test="user.hikingDifficulty == 1">
-				AND MOUNTAIN_ALTITUDE BETWEEN 500 AND 700
-			</when>
-			<when test="user.hikingDifficulty == 2">
-				AND MOUNTAIN_ALTITUDE <![CDATA[<=]]>
-				500
-			</when>
-		</choose> -->
-<!-- 		AND LOWER(MOUNTAIN_NAME) IN -->
-		WHERE MOUNTAIN_NAME IN
-		<foreach item="item" index="index" collection="mountainNames"
-			open="(" separator="," close=")">
-			#{item}
-		</foreach>
-		ORDER BY
-		CASE
-		<foreach item="item" index="index" collection="mountainNames">
-			WHEN LOWER(MOUNTAIN_NAME) = #{item} THEN ${index}
-		</foreach>
-		END
+	<select id="getCustomMountainList" parameterType="map" resultMap="MountainResultMap">
+    SELECT * FROM (
+        SELECT MOUNTAIN.*, ROWNUM AS ROW_SEQ
+        FROM MOUNTAIN
+        WHERE MOUNTAIN_NAME IN
+        <foreach item="item" index="index" collection="mountainNames" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        <choose>
+            <when test="user.hikingDifficulty == 0">
+                AND MOUNTAIN_ALTITUDE <![CDATA[>=]]> 1000
+            </when>
+            <when test="user.hikingDifficulty == 1">
+                AND MOUNTAIN_ALTITUDE BETWEEN 600 AND 999
+            </when>
+            <when test="user.hikingDifficulty == 2">
+                AND MOUNTAIN_ALTITUDE <![CDATA[<=]]> 599
+            </when>
+            <otherwise>
+                AND MOUNTAIN_ALTITUDE <![CDATA[<=]]> 3000
+            </otherwise>
+        </choose>
+        ORDER BY
+        CASE
+        <foreach item="item" index="index" collection="mountainNames">
+            WHEN LOWER(MOUNTAIN_NAME) = LOWER(#{item}) THEN #{index}
+        </foreach>
+        END
+    ) WHERE ROW_SEQ <![CDATA[<=]]> 10
+</select>
 
-	) WHERE ROW_SEQ <![CDATA[<=]]> 10
-
-	</select>
 	
 	
 	

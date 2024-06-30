@@ -16,6 +16,7 @@
     	    console.log("현재 URL:", currentUrl);
 
     	    // 현재 URL의 마지막 요소를 가져옴
+    	    if(${sessionScope.user != null  && sessionScope.user.userNo != 0}){
     	    var pathParts = currentUrl.split('/');
     	    var startPathPart = pathParts[1];
     	    console.log("첫번째 URL 요소:", startPathPart);
@@ -28,6 +29,20 @@
     	    $('.nav-link').removeClass('active');
     	    $('.' + startPathPart).addClass('active');
 
+    	    }else  if(${sessionScope.user != null  && sessionScope.user.userNo == 0}){
+    	    	var pathParts = currentUrl.split('/');
+        	    var startPathPart = pathParts[1] + pathParts[2];
+        	    console.log("첫번째 URL 요소:", startPathPart);
+        	    
+        	    if(startPathPart ==""){
+        	    	startPathPart = "home";
+        	    }
+
+        	    // 클래스 이름과 ID를 사용하여 요소를 찾고 active 클래스를 추가
+        	    $('.nav-link').removeClass('active');
+        	    $('.' + startPathPart).addClass('active');
+
+    	    }
     	    
     	$(function(event){
     		
@@ -266,9 +281,9 @@
                     </c:if>
                     <c:if test="${not empty sessionScope.user and sessionScope.user.role == 1 }">
                         <a href="#" id="Home" class="nav-item nav-link home active">홈</a>
-                        <a href="#" id="getUserList" class="nav-item nav-link user">회원목록조회</a>
-                        <a href="#" id="statistics" class="nav-item nav-link mountain">통계</a>
-                        <a href="#" id="correctionPost" class="nav-item nav-link correctionPost">정정제보</a>
+                        <a href="#" id="getUserList" class="nav-item nav-link usergetUserList">회원목록조회</a>
+                        <a href="#" id="statistics" class="nav-item nav-link mountaingetStatistics">통계</a>
+                        <a href="#" id="correctionPost" class="nav-item nav-link correctionPostgetCorrectionPostList">정정제보</a>
                     </c:if>
                 </div>
                 <div class="d-flex m-3 me-0" >

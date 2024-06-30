@@ -20,6 +20,7 @@ import net.nurigo.sdk.message.service.DefaultMessageService;
 import site.dearmysanta.domain.message.MessageInfo;
 import site.dearmysanta.service.user.UserService;
 import site.dearmysanta.common.MakeRandomNumber;
+import site.dearmysanta.common.SantaLogger;
 
 @RestController
 @RequestMapping("/message/*")
@@ -42,13 +43,31 @@ public class UserRestController_message {
 		
 		int randomNumber = MakeRandomNumber.makeRandomNumber();
 		
+		String userId = messageInfo.getUserId();
+		String userName = messageInfo.getUserName();
+		String mmsUserName;
+		SantaLogger.makeLog("info", userId + " " + userName);
+		if(userId != null) {
+			SantaLogger.makeLog("info", "mms get by id");
+			mmsUserName = userService.getUserName(userId.trim(),messageInfo.getPhoneNumber().trim());
+		}else if (userName != null){
+			SantaLogger.makeLog("info", "mms get by name");
+			mmsUserName = userService.getUserNameByName(userName.trim(),messageInfo.getPhoneNumber().trim());
+		}else {
+			return false;
+		}
 		
-		String userName = userService.getUserName(messageInfo.getUserId());
+		if(mmsUserName == null) {
+			return false;
+		}
+		
+		
+		
 		
 		Message message = new Message();
 		message.setFrom("01095740310");
 		message.setTo(messageInfo.getPhoneNumber());
-		message.setText("안녕하세요 " + userName + "님\n [" + randomNumber + "] \n 값을 입력해주세요."); 
+		message.setText("안녕하세요 " + mmsUserName + "님\n [" + randomNumber + "] \n 값을 입력해주세요."); 
 		
 		SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
 		

@@ -29,20 +29,76 @@
           var clickedDate = info.dateStr; // Get the clicked date in YYYY-MM-DD format
           var events = calendar.getEvents(); // Get all events from the calendar
           var eventExists = false;
+          console.log('Checking event:', info); // 디버깅용 로그
+          console.log('Event start:', info.startStr); // 디버깅용 로그
+          console.log('Clicked date:', clickedDate); // 디버깅용 로그
+          
+          console.log('calendarClicked')
 
-          events.forEach(function(event) {
-            // Check if there is an event on the clicked date
-            if (event.startStr === clickedDate) {
-              eventExists = true;
-              window.location.href = '/user/getSchedule.jsp?scheduleId=' + event.id +"&userNo=${schedule.userNo}"; // Redirect to the schedule details page
-              return;
+        events.forEach(function(event) {
+                var eventDate = event.startStr.split('T')[0]; // 이벤트 시작 날짜에서 시간 부분을 제거
+                console.log('Checking event:', event); // 디버깅용 로그
+                console.log('Event start:', eventDate); // 디버깅용 로그
+
+                // Check if there is an event on the clicked date
+                if (eventDate === clickedDate) {
+                    eventExists = true;
+                    console.log('Event found:', event); // 디버깅용 로그
+
+                    var popup = $.ajax({
+                        url: '/user/rest/getSchedule?postNo=' + event.id + '&userNo=' + event.extendedProps.userNo,
+                        type: 'GET',
+                        success: function(response) {
+                            console.log('AJAX response:', response); // 디버깅용 로그
+                            if (response === true) {
+                                var popup = window.open('/user/getSchedule.jsp', '일정조회', 'width=600,height=900');
+                                var popupChecker = setInterval(function() {
+                                    if (popup.closed) {
+                                        clearInterval(popupChecker);
+                                        location.reload();
+                                    }
+                                }, 500);
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.error('AJAX request failed:', textStatus, errorThrown); // 오류 로그
+                        }
+                    });
+
+                    return;
+                }
+            });
+
+            if (!eventExists) {
+                console.log('No event on clicked date:', clickedDate); // 디버깅용 로그
+                // If no event exists on the clicked date, redirect to the schedule register page
+                var popup = window.open('/user/addSchedule.jsp?date=' + clickedDate, '일정등록', 'width=600,height=900');
+                var popupChecker = setInterval(function() {
+                    if (popup.closed) {
+                        clearInterval(popupChecker);
+                        location.reload();
+                    }
+                }, 500);
             }
+      },
+      eventClick: function(info) {
+          console.log('Event clicked:', info.event); // 디버깅용 로그
+
+          $.ajax({
+              url: '/user/rest/getSchedule?postNo=' + info.event.id + '&userNo=' + info.event.extendedProps.userNo,
+              type: 'GET',
+              success: function(response) {
+                  console.log('AJAX response:', response); // 디버깅용 로그
+                  if (response === true) {
+                      window.open('/user/getSchedule.jsp', '일정조회', 'width=600,height=900');
+                  }
+              },
+              error: function(jqXHR, textStatus, errorThrown) {
+                  console.error('AJAX request failed:', textStatus, errorThrown); // 오류 로그
+              }
           });
 
-          if (!eventExists) {
-            // If no event exists on the clicked date, redirect to the schedule register page
-            window.location.href = '/user/addSchedule.jsp?date=' + clickedDate;
-          }
+          info.jsEvent.preventDefault(); // prevents the browser from navigating to the link
       }
     
     
@@ -58,7 +114,10 @@
     	id:schedule.postNo,
         title: schedule.title,
         start: schedule.scheduleDate, // 스케줄의 시작 날짜
-	 	url:"https://dearmysanta.site/user/getSchedule?postNo="+schedule.postNo + "&userNo="+schedule.userNo 
+        extendedProps: {
+            userNo: schedule.userNo
+        }
+	 	//url:"/user/getSchedule?postNo="+schedule.postNo + "&userNo="+schedule.userNo 
 		/* url:"https://localhost:8001//user/getSchedule?postNo="+schedule.postNo + "&userNo="+schedule.userNo
          */
         // 필요한 다른 속성들 추가
@@ -89,11 +148,15 @@
 <c:import url="../common/header.jsp"/>
 </head>
 <body>
-  <div id='calendar'></div>
+  
   
   <header>
   	<c:import url="../common/top.jsp"/>
   </header>
+  
+  <main style="margin-top:100px;">
+  	<div id='calendar'></div>
+  </main>
   
 </body>
 </html>

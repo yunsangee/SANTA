@@ -11,9 +11,6 @@
 <head>
 <meta charset="UTF-8">
 <title>${user.nickName}님 정보입니다.</title>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
 
 <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
 
@@ -172,6 +169,11 @@ button, a.button {
         .default-value {
             color: lightgray;
         }
+        
+        .badgeImage{
+        	width:24px;
+        	height:24px;
+        }
 
 </style>
 
@@ -197,7 +199,7 @@ button, a.button {
             <img src="${sessionScope.user.profileImage}" class="profile">
         </div>
         <div class="profile-info">
-            <p>${user.badgeImage} 인증 ${user.certificationCount}회, 모임 ${user.meetingCount}회</p>
+            <p><img src="${user.badgeImage}" class="badgeImage"> 인증 ${user.certificationCount}회, 모임 ${user.meetingCount}회</p>
             <p>${user.userId}</p>
         </div>
     </div>
