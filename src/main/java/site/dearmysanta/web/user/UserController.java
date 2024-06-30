@@ -456,13 +456,21 @@ public class UserController {
 		public String updateUser(@ModelAttribute User user, @RequestParam(required = false) Integer userNo, Model model, HttpSession session, HttpServletResponse response) throws Exception {
 		    System.out.println("updateUser : POST");
 		    
+		    
+		    int toSession = 1;
 		    // 세션에서 현재 로그인한 사용자 정보 가져오기
 		    User sessionUser = (User) session.getAttribute("user");
     
 		    // 세션 사용자 정보 로그 출력
 		    if (sessionUser != null) {
-		        System.out.println("updateUser: sessionUser = " + sessionUser.getUserId());
-		    } else {
+		    	if(sessionUser.getUserNo() == 0) {
+		    		sessionUser = userService.getUser(user.getUserNo());
+		    		toSession = 0;
+		    	}else {
+		    	
+		    		System.out.println("updateUser: sessionUser = " + sessionUser.getUserId());
+		    	}
+		    }else {
 		        System.out.println("updateUser: sessionUser is null");
 		    }
 		    
@@ -510,7 +518,7 @@ public class UserController {
 		    
 		    System.out.println("마지막 dbUser : " +dbUser);
 
-		    
+		    if (sessionUser.getUserNo() == dbUser.getUserNo() && toSession == 1) {
 
 			String profileImage = objectStorageService.getImageURL(dbUser.getUserId());
 			
@@ -522,9 +530,9 @@ public class UserController {
 			
 			
 		    // 세션에 로그인한 사용자와 업데이트한 사용자가 동일한 경우, 세션 정보를 업데이트
-		    if (sessionUser.getUserNo() == dbUser.getUserNo()) {
+		  
 		        session.setAttribute("user", dbUser);
-		    }
+		   
 		    
 		    String encodingUserNo = URLEncoder.encode(""+dbUser.getUserNo(), "UTF-8");
 		    String encodingNickName = URLEncoder.encode(""+dbUser.getNickName(), "UTF-8");
@@ -562,9 +570,14 @@ public class UserController {
 		    System.out.println("쿠키확인 프로필 : " +profileCookie);
 		    
 		    System.out.println("updateUser : " + dbUser);
-
+		    }
 		    // 업데이트 성공 페이지로 리다이렉트
-		    return "redirect:/user/getUser.jsp";
+		    
+		    if(toSession == 1) {
+		    	return "redirect:/user/getUser.jsp";
+		    }else {
+		    	return "redirect:/user/getUserList";
+		    }
 		}
 		
 		//
@@ -1041,7 +1054,7 @@ public class UserController {
 		    // 모델에 스케줄 목록 추가
 		    model.addAttribute("scheduleList", scheduleJson);
 
-		    return "forward:/user/month-view.jsp";
+		    return "forward:/user/scheduleSuccess.jsp";
 		}
 		
 		@GetMapping(value = "getSchedule")
@@ -1137,7 +1150,7 @@ public class UserController {
 		    //return "forward:/user/getSchedule.jsp";
 		    
 		    //"redirect:/user/getSchedule?userNo=" + dbUser.getUserNo();
-		    return "redirect:/user/getSchedule?postNo=" + dbschedule.getPostNo() + "&userNo=" + dbschedule.getUserNo();
+		    return "forward:/user/scheduleSuccess.jsp";
 
 		}
 		

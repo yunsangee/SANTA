@@ -103,7 +103,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" style="margin-top: 150px;">
         <h2></h2>
         <form action="/user/updateSchedule" method="post">
             <div class="form-group">
@@ -157,7 +157,7 @@
             <div class="form-group">
                 <button type="button" onclick="location.href='/user/updateSchedule?postNo=${schedule.postNo}&userNo=${schedule.userNo}'">수정하기</button>
                <!--  <button type="button" class="cancel-button" onclick="history.back()">뒤로</button> -->
-                <a href="/user/getScheduleList" class="list-button">목록으로</a>
+                <a href="/user/getScheduleList" class="list-button" onclick="window.close()">목록으로</a>
             </div>
         </form>
     </div>

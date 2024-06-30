@@ -178,9 +178,17 @@
                 <input type="text" id="mountainName" name="mountainName" value="${schedule.mountainName}" required>
             </div>
             <div class="form-group inline-group">
-                <input type="text" id="hikingTotalTime" name="hikingTotalTime" value="${schedule.hikingTotalTime}" required>
-                <input type="text" id="hikingAscentTime" name="hikingAscentTime" value="${schedule.hikingAscentTime}" required>
-                <input type="text" id="hikingDescentTime" name="hikingDescentTime" value="${schedule.hikingDescentTime}" required>
+            	<label for="hikingTotalTime">총 소요시간</label>
+                <input type="text" id="hikingTotalTime" name="hikingTotalTime" placeholder="총 소요시간" >
+            </div>
+            <div class="form-group inline-group">
+            	<label for="hikingTotalTime">상행시간</label>
+                <input type="text" id="hikingAscentTime" name="hikingAscentTime" placeholder="상행시간" >
+
+            </div>
+            <div class="form-group inline-group">
+            	<label for="mountainName">하행시간</label>
+                <input type="text" id="hikingDescentTime" name="hikingDescentTime" placeholder="하행시간" >
             </div>
             <div class="form-group">
                 <label>등산 난이도</label>
@@ -189,9 +197,9 @@
                     <div class="button" data-target="difficulty1" onclick="toggleButton(this)">보통</div>
                     <div class="button" data-target="difficulty2" onclick="toggleButton(this)">쉬움</div>
                 </div>
-                <input type="radio" id="difficulty0" name="hikingDifficulty" value="0" class="hidden-radio" ${schedule.hikingDifficulty == 0 ? 'checked' : ''} required>
-                <input type="radio" id="difficulty1" name="hikingDifficulty" value="1" class="hidden-radio" ${schedule.hikingDifficulty == 1 ? 'checked' : ''} required>
-                <input type="radio" id="difficulty2" name="hikingDifficulty" value="2" class="hidden-radio" ${schedule.hikingDifficulty == 2 ? 'checked' : ''} required>
+                <input type="radio" id="difficulty0" name="hikingDifficulty" value="0" class="hidden-radio" ${schedule.hikingDifficulty == 0 ? 'checked' : ''} >
+                <input type="radio" id="difficulty1" name="hikingDifficulty" value="1" class="hidden-radio" ${schedule.hikingDifficulty == 1 ? 'checked' : ''} >
+                <input type="radio" id="difficulty2" name="hikingDifficulty" value="2" class="hidden-radio" ${schedule.hikingDifficulty == 2 ? 'checked' : ''} >
             </div>
             <div class="form-group">
                 <label>교통수단</label>
@@ -212,7 +220,7 @@
             </div>
             <div class="form-group">
                 <label for="contents">내용</label>
-                <textarea id="contents" name="contents" rows="10" placeholder="내용을 입력하세요" required>${schedule.contents}</textarea>
+                <textarea id="contents" name="contents" rows="10" placeholder="내용을 입력하세요" >${schedule.contents}</textarea>
             </div>
             <div class="form-group">
                 <button type="submit">일정 수정하기</button>
