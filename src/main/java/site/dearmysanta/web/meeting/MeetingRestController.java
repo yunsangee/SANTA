@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +18,20 @@ import site.dearmysanta.domain.common.Like;
 import site.dearmysanta.domain.meeting.MeetingParticipation;
 import site.dearmysanta.domain.meeting.MeetingPost;
 import site.dearmysanta.domain.meeting.MeetingPostComment;
+import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.meeting.MeetingService;
 import site.dearmysanta.service.user.etc.UserEtcService;
 
 @RestController
 @RequestMapping("/meeting/*")
 public class MeetingRestController {
+	
+	@Value("${bucketName}")
+	private String bucketName;
+	
+	@Autowired
+	@Qualifier("objectStorageService")
+	private ObjectStorageService objectStorageService;
 	
 	@Autowired
 	@Qualifier("meetingService")
@@ -62,7 +71,11 @@ public class MeetingRestController {
 		
 		int meetingPostCommentNo = meetingService.addMeetingPostComment(meetingPostComment);
 		
-		return meetingService.getMeetingPostComment(meetingPostCommentNo);
+		MeetingPostComment comment = meetingService.getMeetingPostComment(meetingPostCommentNo);
+		
+		comment.setProfileImage(objectStorageService.getImageURL(comment.getProfileImage()));
+		
+		return comment;
 	}
 	
 	@GetMapping(value = "rest/deleteMeetingPostComment")

@@ -539,6 +539,11 @@
     		background-color: #000000 !important;
     	}
     	
+    	.small-image {
+		    width: 20px;
+		    height: auto;
+		}
+    	
     	
         
     }
@@ -612,7 +617,9 @@
     				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">제목</div>
     				<div class="col-md-5 border align-items-center text-start py-3">${meetingPost.title}</div>
     				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 가능 등급</div>
-    				<div class="col-md-2 border align-items-center text-center py-3">${meetingPost.participationGrade}(이미지) 이상</div>
+    				<div class="col-md-2 border align-items-center text-center py-3">
+    					<img src="${badgeImage}" alt="${meetingPost.participationGrade}번 이미지" class="small-image"/>
+    				</div>
     				
     				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">모임 명</div>
     				<div class="col-md-5 border align-items-center text-start py-3">${meetingPost.meetingName}</div>

@@ -85,6 +85,10 @@ public class MeetingController {
 		MeetingPost meetingPost = (MeetingPost)map.get("meetingPost");
 		System.out.println("meetingPost==="+meetingPost);
 		
+		String badgeName = "badge" + meetingPost.getParticipationGrade() + ".png";
+		String badgeImage = objectStorageService.getImageURL(badgeName);
+				
+		
 		List<String> meetingPostImages = new ArrayList<>();
 		int imageCount = meetingPost.getMeetingPostImageCount();
 		
@@ -120,12 +124,25 @@ public class MeetingController {
 		model.addAttribute("meetingPostComments", meetingPostComments);
 		model.addAttribute("meetingPostImages", meetingPostImages);
 		model.addAttribute("isMember", map.get("isMember"));
+		model.addAttribute("badgeImage", badgeImage);
 		
 		return "forward:/meeting/getMeetingPost.jsp";
 	}
 	
 	@GetMapping(value = "addMeetingPost")
-	public String addMeetingPost() throws Exception {
+	public String addMeetingPost(Model model) throws Exception {
+		
+		List<String> badgeImages = new ArrayList<>();
+		
+		for (int i=1; i<8; i++) {
+			
+			String badgeName = "badge" + i + ".png";
+			String imageURL = objectStorageService.getImageURL(badgeName);
+			
+			badgeImages.add(imageURL);
+		}
+		
+		model.addAttribute("badgeImages", badgeImages);
 		
 		return "forward:/meeting/addMeetingPost.jsp";
 	}
@@ -208,7 +225,7 @@ public class MeetingController {
         model.addAttribute("formattedRecruitmentDeadline", formattedRecruitmentDeadline);
         model.addAttribute("formattedAppointedHikingDate", formattedAppointedHikingDate);
         model.addAttribute("meetingPostImages", meetingPostImages);
-		model.addAttribute(meetingPost);
+		model.addAttribute("meetingPost", meetingPost);
 		
 		return "forward:/meeting/updateMeetingPost.jsp";
 	}
