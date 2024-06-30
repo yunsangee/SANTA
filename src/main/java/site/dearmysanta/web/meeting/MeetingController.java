@@ -87,6 +87,8 @@ public class MeetingController {
 		List<String> meetingPostImages = new ArrayList<>();
 		int imageCount = meetingPost.getMeetingPostImageCount();
 		
+		System.out.println("여기서 imageCount 몇찍히나 확인??(debug) : "+imageCount);
+		
 //		System.out.println("imageCount==="+imageCount);
 		
 		for (int i = 0; i < imageCount; i++) {

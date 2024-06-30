@@ -107,6 +107,7 @@ public class MeetingServiceImpl implements MeetingService {
 		
 		int isMember = 0;
 		
+		//db에서 meetingPost(게시글만) 가져옴.
 		MeetingPost meetingPost = meetingDAO.getMeetingPost(postNo);
 		System.out.println(meetingPost);
 		
@@ -125,6 +126,13 @@ public class MeetingServiceImpl implements MeetingService {
 		meetingPost.setMeetingPostLikeStatus(likeStatus);
 		meetingPost.setMeetingPostLikeCount(likeCount);
 		meetingPost.setMeetingPostCommentCount(commentCount);
+		
+		// 위에까지 게시글
+		
+		// 자 mapper에서 모임원리스트, 댓글리스트 어떻게 가져오나 확인하자
+		// 모임원리스트는 유저테이블에서 프로필이미지, 닉네임 가져오네
+		// 댓글리스트도 마찬가지로 유저테이블에서 프로필이미지, 닉네임이네?
+		// 결론 : get은 건들 필요 없을 것 같고, add를 어떤식으로 하는지 보자.
 		
 		List<MeetingParticipation> meetingParticipations = meetingDAO.getMeetingParticipationList(postNo);
 		List<MeetingPostComment> meetingPostComments = meetingDAO.getMeetingPostCommentList(postNo);
