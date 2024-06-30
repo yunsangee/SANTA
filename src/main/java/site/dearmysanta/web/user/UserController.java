@@ -206,10 +206,10 @@ public class UserController {
 		    response.addCookie(profileCookie);
 		    
 		    Cookie idCookie = new Cookie("userId", encodingUserId);
-		    profileCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
-		    profileCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
-		    profileCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
-		    profileCookie.setSecure(false); // 
+		    idCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+		    idCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+		    idCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+		    idCookie.setSecure(false); // 
 		    response.addCookie(idCookie);
 		    
 		    System.out.println("쿠키확인 닉네임 : " + nickNameCookie);
