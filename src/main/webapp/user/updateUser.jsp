@@ -302,7 +302,7 @@
                         		 
                         		 $('.profile').attr("src",response);
                         		 profileImage = profileValue;
-                        		 
+
                         		 clearInterval(intervalId);  // 조건이 만족되면 주기적인 확인 중지
                         	 },
                         	 error:function(jqXHR, textStatus, errorThrown) {
