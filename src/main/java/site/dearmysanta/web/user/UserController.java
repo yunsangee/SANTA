@@ -440,6 +440,10 @@ public class UserController {
 			
 			user.setProfileImage(profileImage);
 			
+			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
+				user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+		    }
+			
 			System.out.println("user :" +user);
 			
 			model.addAttribute("user", user);	
@@ -506,6 +510,17 @@ public class UserController {
 		    
 		    System.out.println("마지막 dbUser : " +dbUser);
 
+		    
+
+			String profileImage = objectStorageService.getImageURL(dbUser.getUserId());
+			
+			dbUser.setProfileImage(profileImage);
+			
+			if(dbUser.getBadgeImage() != null && !dbUser.getBadgeImage().contains("ncloudstorage")) {
+				dbUser.setBadgeImage(objectStorageService.getImageURL(dbUser.getBadgeImage()));
+		    }
+			
+			
 		    // 세션에 로그인한 사용자와 업데이트한 사용자가 동일한 경우, 세션 정보를 업데이트
 		    if (sessionUser.getUserNo() == dbUser.getUserNo()) {
 		        session.setAttribute("user", dbUser);

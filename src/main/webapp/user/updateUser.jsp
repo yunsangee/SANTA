@@ -251,6 +251,12 @@
         .file-input{
         	display:none;
         }
+        
+        
+        .badgeImage{
+        	width:24px;
+        	height:24px;
+        }
 
         
     </style>
@@ -258,6 +264,7 @@
     <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
 
     <script>
+    	let profileImage = '';
         $(document).ready(function() {
             $(".submit").click(function() { 
                 if ($("#profile").val() != "") {
@@ -274,7 +281,8 @@
                  $('#profile').click();
                  let intervalId = setInterval(function() {
                      var profileValue = $('#profile').val();
-                     if (profileValue) {
+                     
+                     if (profileValue != profileImage) {
                          console.log('Profile value is set:', profileValue);
                          
                          
@@ -293,7 +301,7 @@
                         		 console.log(response);
                         		 
                         		 $('.profile').attr("src",response);
-                        		 
+                        		 profileImage = profileValue;
                         		 
                         		 clearInterval(intervalId);  // 조건이 만족되면 주기적인 확인 중지
                         	 },
@@ -307,7 +315,7 @@
                      } else {
                          console.log('Profile value is not set');
                      }
-                 }, 3000); // 3000 밀리초 = 3초
+                 }, 1000); // 3000 밀리초 = 3초
             });
 
             // 주소 클릭 시 도로명 주소 창 열기
@@ -398,7 +406,7 @@
                 <!-- ✏️ -->
             </div>
             <div class="profile-info">
-                <p>${user.badgeImage} 인증 ${user.certificationCount}회, 모임 ${user.meetingCount}회</p>
+                <p><img src="${user.badgeImage}" class="badgeImage"> 인증 ${user.certificationCount}회, 모임 ${user.meetingCount}회</p>
                 <a href="/user/changePassword.jsp" class="text-link">${user.userId}✏️</a> 
                 <!--  <button type="button" ><input type="file" id="profile" name="image" value=""></button> -->
             </div>
