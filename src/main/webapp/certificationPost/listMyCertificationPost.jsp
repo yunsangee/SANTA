@@ -46,28 +46,68 @@
         });
     </script>
     
-    <style>
-        .table th, .table td {
-            text-align: center;
-            vertical-align: middle;
-        }
-        .btn-action {
-            font-size: 18px;
-            border: none;
-            background: none;
-            cursor: pointer;
-        }
-        .btn-action:hover {
-            color: #007bff;
-        }
-        .table-responsive {
-            margin-top: 20px;
-        }
-        .pagination {
-            justify-content: center;
-            margin-top: 20px;
-        }
-    </style>
+  <style>
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    main {
+        flex: 1;
+    }
+
+    .table th, .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .btn-action {
+        font-size: 18px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .btn-action:hover {
+        color:#81C408;
+    }
+
+    .table-responsive {
+        margin-top: 20px;
+    }
+
+    .no-data-message {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .no-posts-message {
+        font-size: 1.2em;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .no-posts-link {
+        display: inline-block;
+        background-color: transparent;
+        color: #f0ad4e;
+        text-decoration: none;
+        font-size: 1em;
+        margin-top: 10px;
+        transition: color 0.3s;
+    }
+
+    .no-posts-link i {
+        margin-right: 5px;
+    }
+
+    .no-posts-link:hover {
+        color: #81C408;
+    }
+</style>
+
 </head>
 <body>
     <header>
@@ -84,32 +124,46 @@
                                 <th scope="col">산명칭</th>
                                 <th scope="col">글제목</th>
                                 <th scope="col">작성일자</th>
-                                <th scope="col">액션</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <c:choose>
                                 <c:when test="${not empty sessionScope.user}">
-                                    <c:forEach var="certificationPost" items="${myCertificationPost}" varStatus="status">
-                                        <tr data-postno="${certificationPost.postNo}">
-                                            <th scope="row">${status.index + 1}</th>
-                                            <td>${certificationPost.certificationPostMountainName}</td>
-                                            <td>${certificationPost.title}</td>
-                                            <td>${certificationPost.postDate}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary btn-sm edit-btn" data-postno="${certificationPost.postNo}" title="수정">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-danger btn-sm delete-btn" data-postno="${certificationPost.postNo}" title="삭제">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
+                                    <c:choose>
+                                        <c:when test="${not empty myCertificationPost}">
+                                            <c:forEach var="certificationPost" items="${myCertificationPost}" varStatus="status">
+                                                <tr data-postno="${certificationPost.postNo}">
+                                                    <th scope="row">${status.index + 1}</th>
+                                                    <td>${certificationPost.certificationPostMountainName}</td>
+                                                    <td>${certificationPost.title}</td>
+                                                    <td>${certificationPost.postDate}</td>
+                                                   <td>
+												    <button type="button" class="btn btn-action edit-btn" data-postno="${certificationPost.postNo}" title="수정">
+												        <i class="fas fa-edit"></i>
+												    </button>
+												    <button type="button" class="btn btn-action delete-btn" data-postno="${certificationPost.postNo}" title="삭제">
+												        <i class="fas fa-trash-alt"></i>
+												    </button>
+												</td>
+											</tr>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <tr><br>
+											     <tr>
+											    <td colspan="5" class="text-center no-data-message">
+											       <br><br><br><br> <p class="no-posts-message"><Strong>아직 작성한 인증게시글이 없습니다!<Strong></p>
+											        <a href="/certificationPost/addCertificationPost" class="no-posts-link"><i class="fas fa-pencil-alt"></i>인증게시글 작성하러 가기!</a>
+											    </td>
+											</tr>
+ 
+                                        </c:otherwise>
+                                    </c:choose>
                                 </c:when>
                                 <c:otherwise>
                                     <tr>
-                                        <td colspan="6" class="text-center">
+                                        <td colspan="5" class="text-center">
                                             <p class="mb-0 mt-4">로그인 후 이용부탁드립니다.</p>
                                         </td>
                                     </tr>
@@ -117,16 +171,7 @@
                             </c:choose>
                         </tbody>
                     </table>
-                    <!-- 페이징 네비게이션 추가 -->
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination">
-                            <c:forEach var="i" begin="1" end="${totalPages}">
-                                <li class="page-item ${currentPage == i ? 'active' : ''}">
-                                    <a class="page-link" href="?userNo=${sessionScope.user.userNo}&page=${i}">${i}</a>
-                                </li>
-                            </c:forEach>
-                        </ul>
-                    </nav>
+                
                 </div>
             </div>
         </div>

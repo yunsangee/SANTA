@@ -361,7 +361,7 @@ $(document).ready(function() {
     });
    
     $(".btn-certify-hiking").click(function() {
-        alert('인증하기'); 
+       
         var userNo = ${user.userNo}
         window.location.href = "/certificationPost/addCertificationPost?userNo=" + userNo;
     });

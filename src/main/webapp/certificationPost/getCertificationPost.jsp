@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page import="site.dearmysanta.domain.user.User" %>
 <!DOCTYPE html>
@@ -11,135 +10,246 @@
     <title>Certification Post Detail Page</title>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <style>
-     .carousel-item img {
-    width: 100%;
-    height: 500px; /* 원하는 높이로 조정 */
-    object-fit: cover; /* 이미지를 잘라서 채움 */
-}
-.details-container {
-    margin-top: 20px;
-    position: relative;
-}
-.details-container p {
-    margin-bottom: 10px;
-}
-.comments-section {
-    margin-top: 40px;
-}
-.comment-item {
-    position: relative;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-.comment-item .btn-danger {
+    
+       main {
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        header {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+    
+        .main-image {
+            width: 100%;
+            height: 500px;
+           object-fit: contain;
+            margin-bottom: 20px;
+        }
+        .thumbnail-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .thumbnail {
+            cursor: pointer;
+            width: 100px;
+            height: auto;
+            border: 2px solid transparent;
+            transition: border-color 0.3s;
+        }
+        .thumbnail.active {
+            border-color: #007bff;
+        }
+        .details-container {
+            margin-top: 20px;
+            position: relative;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .details-container p {
+            margin-bottom: 10px;
+        }
+        .btn-icon {
     background: none;
     border: none;
-    color: #ff5c5c;
     cursor: pointer;
-}
-.comment-item .btn-danger:hover {
-    color: #ff0000;
-}
-.comment-item p {
-    margin: 0;
-}
-.comment-item .fas {
-    margin-right: 5px;
-}
-.comment-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 15px; /* 작성 날짜의 폰트 크기 줄이기 */
-}
-.details-header {
-    display: flex;
-    justify-content: flex-end; /* 오른쪽 정렬 */
-    align-items: center; /* 수직 가운데 정렬 */
-    position: relative;
-    margin-bottom: 10px; /* 아래에 여백 추가 */
-    gap: 10px; /* 요소 사이 간격 추가 */
+    font-size: 22px;
+    color: #81c408;
+    transition: color 0.3s;
 }
 
+.btn-icon:hover {
+    color: #ffb524;
+}
+        
+        .comments-section {
+            margin-top: 40px;
+        }
+        .comment-item {
+            position: relative;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .comment-item .btn-danger {
+            background: none;
+            border: none;
+            color: #ff5c5c;
+            cursor: pointer;
+        }
+        .comment-item .btn-danger:hover {
+            color: #ff0000;
+        }
+        .comment-item p {
+            margin: 0;
+        }
+        .comment-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+        }
+        .details-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            position: relative;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+        .details-header .like-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .details-header p, .details-header .btn, .details-header i {
+            margin-left: 0;
+            margin-top: 0;
+        }
+        .details-container h4.fw-bold {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #81C408;
+            padding-bottom: 10px;
+        }
+        .hashtags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+        .hashtag {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+        }
+        .post-content {
+            margin-top: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+        .like-button {
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .text-yellow {
+            color: #ffb524;
+        }
 
-.details-header .like-container {
-    display: flex;
-    align-items: center; /* 수직 가운데 정렬 */
-    gap: 5px; /* 하트 버튼과 카운트 사이 간격을 살짝 추가 */
-}
-
-
-.details-header p, .details-header .btn, .details-header i {
-    margin-left: 0; /* 왼쪽 여백 제거 */
-    margin-top: 0; /* 위쪽 여백 제거 */
-}
-
-.hashtags {
-    display: flex;
-    flex-wrap: wrap; /* 여러 줄로 감싸기 */
-    gap: 10px; /* 해시태그 간격 */
-    margin-bottom: 10px; /* 아래 여백 추가 */
-}
-
-.hashtag {
-    display: flex;
-    align-items: center; /* 수직 정렬 */
-    padding: 5px 10px; /* 여백 추가 */
-    background-color: #f1f1f1; /* 배경색 추가 */
-    border-radius: 5px; /* 모서리 둥글게 */
-}
-
-.like-button {
-    font-size: 24px; /* 버튼 크기 조정 */
-    cursor: pointer;
-}
-.comment-form {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-top: 20px;
-}
-.comment-form textarea {
-    flex-grow: 1;
-    margin-right: 10px;
-}
-.inline-info span {
-    margin-right: 20px; /* span 사이에 간격을 줍니다 */
-}
-
-   .profile-image {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    vertical-align: middle;
-}
-
-.author-link {
-    display: flex;
-    align-items: center;
-}
-
-.author-link img {
-    margin-right: 10px;
-}
-   
+        .text-yellow-outline {
+            color: #ffb524;
+            -webkit-text-stroke: 2px #ffb524 ;
+            color: transparent;
+        }
+        .comment-form {
+            display: flex;
+            align-items: center;
+        }
+        .comment-form textarea {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        .comment-form button {
+            background-color: #81C408;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .comment-form button:hover {
+            background-color: #ffb524;
+        }
+        .comment-form i {
+            font-size: 16px;
+        }
+        .inline-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+        .inline-info span {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+        .profile-image {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+        .author-link {
+            display: flex;
+            align-items: center;
+        }
+        .author-link img {
+            margin-right: 10px;
+        }
+        .info-block {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .info-block .inline-info span {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .info-block .inline-info span i {
+            color: #81C408;
+        }
+        .details-container .post-content {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333;
+            margin-top: 20px;
+        }
     </style>
     <script>
     $(document).ready(function() {
-        var postNo = ${certificationPost.postNo};  // JSP에서 postNo 값을 가져옵니다.
-        var userNo = ${user.userNo}; // JSP에서 세션의 userNo 값을 가져옵니다.
+        var postNo = ${certificationPost.postNo};
+        var userNo = ${user.userNo};
 
-        // 좋아요 상태 확인 및 초기화
+        $('.thumbnail').on('click', function() {
+            var mainImage = $('#mainImage');
+            var clickedImage = $(this).attr('src');
+            mainImage.attr('src', clickedImage);
+            $('.thumbnail').removeClass('active');
+            $(this).addClass('active');
+        });
+
+        // 좋아요 상태 초기화 및 설정
         function initializeLikeButton() {
             var likeStatus = ${certificationPost.certificationPostLikeStatus};
             var likeCount = ${certificationPost.certificationPostLikeCount};
             if (likeStatus > 0) {
-                $('.like-button').removeClass('text-secondary').addClass('text-danger');
+                $('.like-button').removeClass('text-yellow-outline').addClass('text-yellow');
             } else {
-                $('.like-button').removeClass('text-danger').addClass('text-secondary');
+                $('.like-button').removeClass('text-yellow').addClass('text-yellow-outline');
             }
             $('.like-button').next('p').text(likeCount);
         }
@@ -148,7 +258,7 @@
 
         $('.like-button').on('click', function() {
             var likeButton = $(this);
-            var certificationPostLikeStatus = likeButton.hasClass('text-danger');
+            var certificationPostLikeStatus = likeButton.hasClass('text-yellow');
 
             if (certificationPostLikeStatus) {
                 // 좋아요 취소
@@ -158,7 +268,7 @@
                     contentType: 'application/json',
                     data: JSON.stringify({ postNo: postNo, userNo: userNo }),
                     success: function(response) {
-                        likeButton.removeClass('text-danger').addClass('text-secondary');
+                        likeButton.removeClass('text-yellow').addClass('text-yellow-outline');
                         var certificationPostLikeCount = parseInt(likeButton.next('p').text()) - 1;
                         likeButton.next('p').text(certificationPostLikeCount);
                     },
@@ -174,7 +284,7 @@
                     contentType: 'application/json',
                     data: JSON.stringify({ postNo: postNo, userNo: userNo }),
                     success: function(response) {
-                        likeButton.removeClass('text-secondary').addClass('text-danger');
+                        likeButton.removeClass('text-yellow-outline').addClass('text-yellow');
                         var certificationPostLikeCount = parseInt(likeButton.next('p').text()) + 1;
                         likeButton.next('p').text(certificationPostLikeCount);
                     },
@@ -193,7 +303,7 @@
                 data: { postNo: postNo },
                 success: function(comments) {
                     var commentsList = $('.comments-list');
-                    commentsList.empty(); // 기존 댓글을 비웁니다.
+                    commentsList.empty();
                     $.each(comments, function(index, comment) {
                         var isAuthor = comment.userNo == userNo;
                         var authorLabel = isAuthor ? ' <span class="badge badge-primary">(작성자)</span>' : '';
@@ -202,7 +312,7 @@
                         var commentItem = 
                             '<div class="comment-item" style="margin-bottom: 10px;">' +
                                 '<div class="comment-meta">' +
-                                    '<p><i class="fas fa-user"></i> 닉네임 : ' + comment.nickname + authorLabel + '</p>' +
+                                    '<p><a href="getProfile?userNo=' + comment.userNo + '" class="author-link"><i class="fas fa-user"></i> 닉네임 : ' + comment.nickname + authorLabel + '</a></p>' +
                                     '<span>' +
                                         '<span style="font-size: smaller;"><i class="fas fa-clock"></i> 작성 날짜 : ' + formattedDate + '</span>' +
                                         deleteButton +
@@ -227,10 +337,20 @@
             });
         }
 
-
         // 댓글 추가
         $('.comment-form').on('submit', function(event) {
             event.preventDefault();
+            submitComment();
+        });
+
+        $('#newComment').on('keydown', function(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                submitComment();
+            }
+        });
+
+        function submitComment() {
             var newComment = $('#newComment').val().trim();
             if (newComment) {
                 $.ajax({
@@ -249,7 +369,7 @@
             } else {
                 alert('댓글을 입력해주세요.');
             }
-        });
+        }
 
         // 댓글 삭제
         function deleteComment(certificationPostCommentNo) {
@@ -293,106 +413,89 @@
             window.location.href = 'getProfile?userNo=' + authorUserNo;
         });
     });
-    </script>
+</script>
+    
 </head>
 <body>
-<%
-    User user = (User) session.getAttribute("user");
-%>
 <header>
     <c:import url="../common/top.jsp"/>
 </header>
 <main class="container my-5">
     <div class="container py-5">
-        <div class="row justify-content-center g-4 mb-5">
+        <div class="row justify-content-center g-4 mb-5 main-container">
             <div class="col-lg-8 col-xl-9">
-                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <c:forEach var="image" items="${certificationPostImages}" varStatus="status">
-                            <li data-target="#carouselExampleIndicators" data-slide-to="${status.index}" class="${status.index == 0 ? 'active' : ''}"></li>
-                        </c:forEach>
-                    </ol>
-                    <div class="carousel-inner">
-                        <c:forEach var="image" items="${certificationPostImages}" varStatus="status">
-                            <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
-                                <img src="${image}" class="d-block w-100" alt="Image">
-                            </div>
-                        </c:forEach>
-                    </div>
-                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
+                <img id="mainImage" src="${certificationPostImages[0]}" class="main-image" alt="Main Image">
+                <div class="thumbnail-container">
+                    <c:forEach var="image" items="${certificationPostImages}" varStatus="status">
+                        <img src="${image}" class="thumbnail ${status.index == 0 ? 'active' : ''}" data-index="${status.index}" alt="Thumbnail">
+                    </c:forEach>
                 </div>
-        <div class="details-container">
-    <div class="details-header">
-        <p class="author-link" data-user-no="${certificationPost.userNo}">
-            <img class="profile-image" src="${sessionScope.user.profileImage}" alt="Profile Image"/> ${certificationPost.nickName}
-        </p>
-        <p><i class="fas fa-calendar-alt"></i> 작성 일자: ${certificationPost.postDate}</p>
-        <div class="like-container">
-            <i class="fa fa-heart like-button ${certificationPost.certificationPostLikeStatus == 0 ? 'text-secondary' : 'text-danger'}"></i>
-            <p class="mb-0 ml-2">${certificationPost.certificationPostLikeCount}</p>
-        </div>
-        <c:if test="${user != null && user.userNo == certificationPost.userNo}">
-            <form action="/certificationPost/updateCertificationPost" method="get">
-                <input type="hidden" name="postNo" value="${certificationPost.postNo}"/>
-                <button type="submit" class="btn btn-secondary"><i class="fa fa-edit"></i></button>
-            </form>
-            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
-        </c:if>
+                <div class="details-container">
+              <div class="details-header">
+    <a href="getProfile?userNo=${certificationPost.userNo}" class="author-link">
+        <img class="profile-image" src="${sessionScope.user.profileImage}" alt="Profile Image"/> ${certificationPost.nickName}
+    </a>
+    <p><i class="fas fa-calendar-alt"></i> 작성 일자: ${certificationPost.postDate}</p>
+    <div class="like-container">
+        <i class="fa fa-heart like-button ${certificationPost.certificationPostLikeStatus == 0 ? 'text-yellow-outline' : 'text-yellow'}"></i>
+        <p class="mb-0 ml-2">${certificationPost.certificationPostLikeCount}</p>
     </div>
-    <div class="hashtags mb-3">
-        <c:forEach var="hashtag" items="${hashtagList}">
-            <span class="hashtag"><i class="fas fa-hashtag"></i> ${hashtag.certificationPostHashtagContents}</span>
-        </c:forEach>
-    </div>
-    <h4 class="fw-bold mb-3">${certificationPost.title}</h4>
-    <hr>
-    <div class="inline-info mb-3">
-        <span><i class="fas fa-mountain"></i> 산이름:&ensp; ${certificationPost.certificationPostMountainName}</span>
-        <span><i class="fas fa-route"></i> 등산경로:&ensp; ${certificationPost.certificationPostHikingTrail}</span>
-    </div>
-    <div class="inline-info mb-3">
-        <span><i class="fas fa-hourglass-start"></i> 총소요시간:&ensp; ${certificationPost.certificationPostTotalTime}</span>
-        <span><i class="fas fa-arrow-up"></i> 상행시간: &ensp;${certificationPost.certificationPostAscentTime}</span>
-        <span><i class="fas fa-arrow-down"></i> 하행시간: &ensp; ${certificationPost.certificationPostDescentTime}</span>
-    </div>
-    <p class="mb-3"><i class="fas fa-calendar-day"></i> 등산 일자: &ensp;${certificationPost.certificationPostHikingDate}</p>
-    <p class="mb-3"><i class="fas fa-car"></i> 교통수단: &ensp;
-        <c:choose>
-            <c:when test="${certificationPost.certificationPostTransportation == 0}">도보</c:when>
-            <c:when test="${certificationPost.certificationPostTransportation == 1}">자전거</c:when>
-            <c:when test="${certificationPost.certificationPostTransportation == 2}">버스</c:when>
-            <c:when test="${certificationPost.certificationPostTransportation == 3}">자동차</c:when>
-            <c:when test="${certificationPost.certificationPostTransportation == 4}">지하철</c:when>
-            <c:when test="${certificationPost.certificationPostTransportation == 5}">기차</c:when>
-            <c:otherwise>Unknown</c:otherwise>
-        </c:choose>
-    </p>
-    <p class="mb-3"><i class="fas fa-chart-line"></i> 등산 난이도: &ensp;
-        <c:choose>
-            <c:when test="${certificationPost.certificationPostHikingDifficulty == 0}">어려움</c:when>
-            <c:when test="${certificationPost.certificationPostHikingDifficulty == 1}">중간</c:when>
-            <c:when test="${certificationPost.certificationPostHikingDifficulty == 2}">쉬움</c:when>
-            <c:otherwise>Unknown</c:otherwise>
-        </c:choose>
-    </p>
+    <c:if test="${user != null && user.userNo == certificationPost.userNo}">
+        <form action="/certificationPost/updateCertificationPost" method="get" style="display: inline;">
+            <input type="hidden" name="postNo" value="${certificationPost.postNo}"/>
+            <button type="submit" class="btn-icon"><i class="fas fa-pencil-alt"></i></button>
+        </form>
+        <button class="btn-icon"><i class="fas fa-trash-alt"></i></button>
+    </c:if>
 </div>
 
-          
-                <p class="mb-3"><i class="fas fa-calendar-day"></i> 글내용 : &ensp;${certificationPost.contents}</p>     <hr><br>
-                
-                <div class="comments-section"> 
+
+                    <div class="hashtags mb-3">
+                        <c:forEach var="hashtag" items="${hashtagList}">
+                            <span class="hashtag"><i class="fas fa-hashtag"></i> ${hashtag.certificationPostHashtagContents}</span>
+                        </c:forEach>
+                    </div>
+                    <h4 class="fw-bold mb-3">${certificationPost.title}</h4>
+                    <p class="post-content"><i class="fas fa-file-alt"></i> 글내용: &ensp;${certificationPost.contents}</p>
+                    <hr>
+                    <div class="info-block">
+                        <div class="inline-info mb-3">
+                            <span><i class="fas fa-mountain"></i> 산이름:&ensp; ${certificationPost.certificationPostMountainName}</span>
+                            <span><i class="fas fa-route"></i> 등산경로:&ensp; ${certificationPost.certificationPostHikingTrail}</span>
+                        </div>
+                        <div class="inline-info mb-3">
+                            <span><i class="fas fa-hourglass-start"></i> 총소요시간:&ensp; ${certificationPost.certificationPostTotalTime}</span>
+                            <span><i class="fas fa-arrow-up"></i> 상행시간: &ensp;${certificationPost.certificationPostAscentTime}</span>
+                            <span><i class="fas fa-arrow-down"></i> 하행시간: &ensp; ${certificationPost.certificationPostDescentTime}</span>
+                        </div>
+                        <p class="mb-3"><i class="fas fa-calendar-day"></i> 등산 일자: &ensp;${certificationPost.certificationPostHikingDate}</p>
+                        <p class="mb-3"><i class="fas fa-car"></i> 교통수단: &ensp;
+                            <c:choose>
+                                <c:when test="${certificationPost.certificationPostTransportation == 0}">도보</c:when>
+                                <c:when test="${certificationPost.certificationPostTransportation == 1}">자전거</c:when>
+                                <c:when test="${certificationPost.certificationPostTransportation == 2}">버스</c:when>
+                                <c:when test="${certificationPost.certificationPostTransportation == 3}">자동차</c:when>
+                                <c:when test="${certificationPost.certificationPostTransportation == 4}">지하철</c:when>
+                                <c:when test="${certificationPost.certificationPostTransportation == 5}">기차</c:when>
+                            </c:choose>
+                        </p>
+                        <p class="mb-3"><i class="fas fa-chart-line"></i> 등산 난이도: &ensp;
+                            <c:choose>
+                                <c:when test="${certificationPost.certificationPostHikingDifficulty == 0}">어려움</c:when>
+                                <c:when test="${certificationPost.certificationPostHikingDifficulty == 1}">중간</c:when>
+                                <c:when test="${certificationPost.certificationPostHikingDifficulty == 2}">쉬움</c:when>
+                            </c:choose>
+                        </p>
+                    </div>
+                </div>
+                <br><hr><br>
+                <div class="comments-section">
                     <h3><i class="fas fa-comments"></i> 댓글작성하기</h3>
                     <form class="comment-form">
                         <textarea class="form-control" id="newComment" rows="3" placeholder="댓글을 입력해주세요. (최대 100자)" maxlength="100"></textarea>
-                        <button type="submit" class="btn btn-primary">등록</button>
+                        <button type="submit" class="btn btn-custom"><i class="fas fa-pencil-alt"></i></button>
                     </form>
+                    <br><hr><br>
                     <div class="comments-list" style="margin-top: 20px;">
                         <!-- 댓글 내용이 여기에 쌓입니다 -->
                     </div>
@@ -404,5 +507,6 @@
 <footer>
     <c:import url="../common/footer.jsp"/>
 </footer>
+
 </body>
 </html>

@@ -7,146 +7,226 @@
     <c:import url="../common/header.jsp"/>
     <title>Profile</title>
     <style>
-     html, body {
-    height: 100%;
-    margin: 0;
-}
+    html, body {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
 
-.wrapper {
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    header, footer {
+        flex-shrink: 0;
+    }
+
+      .main-container {
+            min-height: 80vh; /* 화면 높이의 80%를 최소 높이로 설정 */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+    main {
+        flex-grow: 1;
+        margin-top: 160px;
+        padding: 0 20px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 30px;
+    }
+
+    footer {
+        background-color: #f1f1f1;
+        padding: 10px 0;
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .profile-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 20px;
+        border-bottom: 1px solid #ccc;
+        font-size: 1em;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+    }
+
+    .profile-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-right: 20px;
+        border: 2px solid #ddd;
+    }
+
+    .profile-details {
+        flex-grow: 1;
+    }
+
+    .profile-details p {
+        margin: 5px 0;
+    }
+
+    .follow-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .follow-button {
+        margin-left: 20px;
+        font-size: 0.9em;
+        cursor: pointer;
+        background-color: #ffcc00;
+        color: black;
+        border: 2px solid #ffcc00;
+        padding: 10px 20px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: background-color 0.3s, color 0.3s, border 0.3s;
+    }
+
+    .follow-button.following {
+        background-color: white;
+        color: #ffcc00;
+        border: 2px solid #ffcc00;
+    }
+
+    .follow-button .bi {
+        font-size: 1.2em;
+    }
+
+    .tab-menu {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+        border-bottom: 2px solid #ccc;
+    }
+
+    .tab-menu a {
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+        padding: 10px;
+        transition: color 0.3s, border-bottom 0.3s;
+    }
+
+    .tab-menu a.active {
+        border-bottom: 3px solid  #81c408;
+        color: #81c408;
+    }
+
+    .posts-container-wrapper {
+        position: relative;
+    }
+
+    .posts-container {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 20px;
+        padding: 10px 0;
+        scrollbar-width: none;
+    }
+
+    .post-preview {
+        flex: 0 0 auto;
+        width: 250px;
+        height: 250px;
+        border: 1px solid #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 1em;
+        background-color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .post-preview img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s;
+    }
+
+    .post-preview:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .post-preview:hover img {
+        transform: scale(1.1);
+    }
+
+    .posts-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .scroll-overlay {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 50px;
+        background: rgba(255, 255, 255, 0.7);
+        z-index: 1;
+        cursor: pointer;
+        transition: background 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+    }
+
+    .posts-container-wrapper:hover .scroll-overlay {
+        opacity: 1;
+    }
+
+    .scroll-overlay.left {
+        left: 0;
+    }
+
+    .scroll-overlay.right {
+        right: 0;
+    }
+
+    .scroll-arrow {
+        font-size: 2em;
+        color: #888;
+        transition: color 0.3s;
+    }
+
+    .scroll-overlay:hover .scroll-arrow {
+        color: #555;
+    }
+    
+.no-posts-message {
     display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-header, footer {
-    flex-shrink: 0;
-}
-
-main {
-    flex-grow: 1;
-    margin-top: 160px;
-    padding: 0 20px;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 30px; /* MAIN 아래에 공백 추가 */
-}
-
-footer {
-    background-color: #f1f1f1;
-    padding: 10px 0;
-    text-align: center;
-    margin-top: 50px; /* FOOTER 위에 공백 추가 */
-}
-
-body {
-    font-family: Arial, sans-serif;
-}
-
-.profile-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    padding: 20px;
-    border-bottom: 1px solid #ccc;
-    font-size: 0.9em;
-}
-
-.profile-image {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    margin-right: 20px;
-}
-
-.profile-details {
-    flex-grow: 1;
-}
-
-.profile-details p {
-    margin: 5px 0;
-}
-
-.follow-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-top: 10px;
-}
-
-/* 팔로우 버튼 기본 스타일 */
-.follow-button {
-    margin-left: 20px;
-    font-size: 0.8em; /* 글자 크기 감소 */
-    cursor: pointer; /* 커서 모양 변경 */
-    background-color: #ffcc00; /* 기본 배경색 */
-    color: black; /* 글자색 */
-    border: 2px solid #ffcc00; /* 테두리 색상 */
-    padding: 8px 16px; /* 패딩 감소 */
-    border-radius: 20px; /* 둥근 테두리 */
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: background-color 0.3s, color 0.3s, border 0.3s; /* 애니메이션 */
-}
-
-/* 팔로잉 상태 스타일 */
-.follow-button.following {
-    background-color: white; /* 팔로잉 상태 배경색 */
-    color: #ffcc00; /* 팔로잉 상태 글자색 */
-    border: 2px solid #ffcc00; /* 팔로잉 상태 테두리 */
-}
-
-/* 아이콘 스타일 */
-.follow-button .bi {
-    font-size: 1.0em; /* 아이콘 크기 조정 */
-}
-
-.tab-menu {
-    display: flex;
-    justify-content: space-around;
-    margin: 20px 0;
-    border-bottom: 1px solid #ccc;
-}
-
-.tab-menu a {
-    text-decoration: none;
-    color: black;
-    font-weight: bold;
-    padding: 10px;
-}
-
-.tab-menu a.active {
-    border-bottom: 2px solid black;
-}
-
-.posts-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.post-preview {
-    flex: 0 1 calc(33.333% - 20px); /* 3 columns with 20px gap */
-    box-sizing: border-box;
-    height: 250px; /* Adjust height */
-    border: 1px solid #ccc;
-    display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    height: 250px; /* Adjust this value if your container height is different */
     text-align: center;
-    font-size: 0.9em;
+    color: #666;
+    font-size: 1.2em;
+    width: 100%;
 }
 
-.post-preview img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: cover;
-}
+</style>
 
-    </style>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-   <script>
+<script>
 $(document).ready(function() {
     var userNo = "${infouser.userNo}"; // JSP에서 userNo 값을 가져옴
     var loggedInUserNo = "${sessionScope.user.userNo}"; // JSP에서 로그인된 사용자 번호를 가져옴
@@ -232,7 +312,6 @@ $(document).ready(function() {
         window.location.href = "/certificationPost/getCertificationPost?postNo=" + postNo;
     });
 
-    // AJAX를 통해 내 인증 게시물을 로드하는 함수
     function loadMyCertifications() {
         $.ajax({
             url: '/certificationPost/rest/listMyCertificationPost',
@@ -250,7 +329,7 @@ $(document).ready(function() {
                         );
                     });
                 } else {
-                    $('#my-posts-container').append('<p>인증 게시물이 없습니다.</p>');
+                    $('#my-posts-container').append('<div class="no-posts-message">${infouser.nickName} 산타가 작성한 인증 게시글이 아직 없습니다.</div>');
                 }
             },
             error: function(xhr, status, error) {
@@ -277,17 +356,53 @@ $(document).ready(function() {
                         );
                     });
                 } else {
-                    $('#like-posts-container').append('<p>좋아요한 게시물이 없습니다.<br>더 많은 게시물을 찾아보세요.</p>');
+                    $('#like-posts-container').append('<div class="no-posts-message">좋아요한 게시글이 없습니다.<br>더 많은 게시글을 찾아보세요.</div>');
                 }
             },
             error: function(xhr, status, error) {
-                console.error("좋아요한 게시물 로드 중 에러 발생:", xhr, status, error);
+                console.error("좋아요한 게시글 로드 중 에러 발생:", xhr, status, error);
             }
         });
     }
+
+
+    // 마우스 오버 시 스크롤 이동
+    var scrollAmount = 10; // 스크롤 이동량 설정 (값을 조정하여 속도 변경 가능)
+    var scrollInterval;
+
+    function startScrolling(container, direction) {
+        scrollInterval = setInterval(function() {
+            container.scrollLeft(container.scrollLeft() + (direction * scrollAmount));
+        }, 10); // 10ms마다 스크롤 이동
+    }
+
+    $('.posts-container-wrapper').on('mousemove', function(e) {
+        var container = $(this).find('.posts-container');
+        var containerOffset = container.offset();
+        var mouseX = e.pageX - containerOffset.left;
+
+        clearInterval(scrollInterval); // 기존 스크롤 인터벌 정지
+
+        if (mouseX < container.width() / 3) {
+            startScrolling(container, -1); // 왼쪽으로 스크롤
+            $(this).find('.scroll-overlay.left').css('opacity', '1'); // 왼쪽 오버레이 표시
+            $(this).find('.scroll-overlay.right').css('opacity', '0'); // 오른쪽 오버레이 숨김
+        } else if (mouseX > container.width() * 2 / 3) {
+            startScrolling(container, 1); // 오른쪽으로 스크롤
+            $(this).find('.scroll-overlay.right').css('opacity', '1'); // 오른쪽 오버레이 표시
+            $(this).find('.scroll-overlay.left').css('opacity', '0'); // 왼쪽 오버레이 숨김
+        } else {
+            clearInterval(scrollInterval); // 중앙에 있으면 스크롤 정지
+            $(this).find('.scroll-overlay').css('opacity', '0'); // 양쪽 오버레이 숨김
+        }
+    });
+
+    $('.posts-container-wrapper').on('mouseleave', function() {
+        clearInterval(scrollInterval); // 마우스가 떠나면 스크롤 정지
+        $(this).find('.scroll-overlay').css('opacity', '0'); // 양쪽 오버레이 숨김
+    });
 });
 </script>
-
 </head>
 <body>
     <header>
@@ -312,21 +427,36 @@ $(document).ready(function() {
             </div>
             <div class="tab-menu">
                 <a href="#" id="my-certifications-tab" class="active"><strong>${infouser.nickName}</strong> 산타의 인증</a>
-                <a href="#" id="liked-posts-tab"><strong>${infouser.nickName}</strong> 산타가 좋아요한 게시글</a>
+                <a href="#" id="liked-posts-tab"><strong>${infouser.nickName}</strong> 산타의 좋아요</a>
             </div>
-            <div id="my-posts-container" class="posts-container">
+            <div class="posts-container-wrapper">
+                <div class="scroll-overlay left"><span class="scroll-arrow">&lt;</span></div>
+                <div id="my-posts-container" class="posts-container">
+                    <c:choose>
+            <c:when test="${not empty myCertificationPost}">
                 <c:forEach var="certificationPost" items="${myCertificationPost}" varStatus="status">
                     <div class="post-preview" data-postNo="${certificationPost.postNo}">
                         <img src="${certificationPostImages[status.index]}" alt="Certification Post Image">
                     </div>
                 </c:forEach>
+            </c:when>
+            <c:otherwise>
+                <div class="no-posts-message">${infouser.nickName} 산타가 작성한 인증 게시글이 아직 없습니다.</div>
+            </c:otherwise>
+        </c:choose>
+                </div>
+                <div class="scroll-overlay right"><span class="scroll-arrow">&gt;</span></div>
             </div>
-            <div id="like-posts-container" class="posts-container" style="display: none;">
-                <c:forEach var="certificationPost" items="${myLikeCertificationPost}" varStatus="status">
-                    <div class="post-preview" data-postNo="${certificationPost.postNo}">
-                        <img src="${certificationPostImages[status.index]}" alt="Certification Post Image">
-                    </div>
-                </c:forEach>
+            <div class="posts-container-wrapper">
+                <div class="scroll-overlay left"><span class="scroll-arrow">&lt;</span></div>
+                <div id="like-posts-container" class="posts-container" style="display: none;">
+                    <c:forEach var="certificationPost" items="${myLikeCertificationPost}" varStatus="status">
+                        <div class="post-preview" data-postNo="${certificationPost.postNo}">
+                            <img src="${certificationPostImages[status.index]}" alt="Certification Post Image">
+                        </div>
+                    </c:forEach>
+                </div>
+                <div class="scroll-overlay right"><span class="scroll-arrow">&gt;</span></div>
             </div>
         </div>
     </main>

@@ -113,7 +113,7 @@
     <!-- 사진만보여줘야하는데 일단 글제목보여주기 -->
 <select id="getMyCertificationPostList" resultMap="CertificationPostSelectMap"  parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
 
-      select * from certification_post where user_no =#{userNo} AND cp_type = 0 AND cp_deleted_flag = 0
+      select * from certification_post where user_no =#{userNo} AND cp_type = 0 AND cp_deleted_flag = 0  ORDER BY cp_creation_date DESC
  </select>
     
     <update id="updateCertificationPost" parameterType="site.dearmysanta.domain.certificationPost.CertificationPost">
@@ -195,12 +195,16 @@
 	<select id="getCertificationPostLikeList"
 		parameterType="site.dearmysanta.domain.common.Like"
 		resultMap="CertificationPostSelectMap">
-		SELECT c.*
+
+    SELECT c.*
     FROM LIKES l
     JOIN certification_post c ON l.POST_NO = c.cp_no
     WHERE l.POST_TYPE = 0 AND CP_DELETED_FLAG=0
       AND l.USER_NO = #{userNo}
-	</select>
+    ORDER BY l.LIKE_DATE DESC
+</select>
+
+	
 	
 	<select id="getCertificationPostLikeStatus" parameterType="map" resultType="int">
         SELECT COUNT(*)

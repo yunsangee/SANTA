@@ -138,6 +138,11 @@ public class CertificationPostController {
 
                 int userNo = certificationPost.getUserNo();
                 userEtcService.updateCertificationCount(userNo, 0);
+             
+                int cnt = userEtcService.getCertificationCount(userNo);
+                		User user2 = (User)session.getAttribute("user");
+                		user2.setCertificationCount(cnt);
+                		session.setAttribute("user", user2);
             }
         }
 
@@ -307,7 +312,10 @@ public class CertificationPostController {
         }
         
         model.addAttribute("certificationPostImages", list);
+       
 
+     
+        
         return "redirect:/certificationPost/getCertificationPost?postNo=" + certificationPost.getPostNo();
     }
 
