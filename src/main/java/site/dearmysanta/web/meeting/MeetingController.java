@@ -80,10 +80,13 @@ public class MeetingController {
 		
 		int postType = 1;
 		
+		System.out.println("postNo1===========================:"+postNo);
+		
 		Map<String, Object> map = meetingService.getMeetingPostAll(postNo, userNo);
 		
 		MeetingPost meetingPost = (MeetingPost)map.get("meetingPost");
 		System.out.println("meetingPost==="+meetingPost);
+		System.out.println("postNo2===========================:"+meetingPost.getPostNo());
 		
 		List<String> meetingPostImages = new ArrayList<>();
 		int imageCount = meetingPost.getMeetingPostImageCount();
