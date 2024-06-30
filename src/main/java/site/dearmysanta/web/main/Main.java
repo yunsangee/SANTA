@@ -21,6 +21,7 @@ import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.certificationPost.CertificationPost;
 import site.dearmysanta.domain.common.Search;
 import site.dearmysanta.domain.meeting.MeetingPostSearch;
+import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.certification.CertificationPostService;
 import site.dearmysanta.service.common.ObjectStorageService;
@@ -100,6 +101,8 @@ public class Main {
 			
 		}else {
 			search.setUserNo(-1);
+			user = new User();
+			user.setHikingDifficulty(-1);
 		}
 		search.setPageSize(pageSize);
 		search.setPageUnit(pageUnit);
@@ -123,7 +126,9 @@ public class Main {
         if(search != null & search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
 		}
-		
+
+        
+        
 		session.setAttribute("popularMountainList", mountainService.getPopularMountainList(mountainService.getStatisticsMountainNameList(1),search));
 		session.setAttribute("customMountainList", mountainService.getCustomMountainList(mountainService.getStatisticsMountainNameList(1), user));
 		session.setAttribute("meetingPostList", meetingService.getMeetingPostList(meetingPostSearch).get("meetingPosts"));
