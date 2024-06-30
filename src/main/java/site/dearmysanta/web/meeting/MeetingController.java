@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import site.dearmysanta.domain.common.Page;
 import site.dearmysanta.domain.meeting.MeetingParticipation;
 import site.dearmysanta.domain.meeting.MeetingPost;
+import site.dearmysanta.domain.meeting.MeetingPostComment;
 import site.dearmysanta.domain.meeting.MeetingPostSearch;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.chatting.ChattingService;
@@ -97,11 +98,26 @@ public class MeetingController {
             meetingPostImages.add(imageURL);
         }
 		
-		System.out.println("사진사진사진"+meetingPostImages);			
+		System.out.println("사진사진사진"+meetingPostImages);		
+		
+		
+		List<MeetingParticipation> meetingParticipations = (List<MeetingParticipation>) map.get("meetingParticipations");
+		
+		for (MeetingParticipation participation : meetingParticipations) {
+			
+            participation.setProfileImage(objectStorageService.getImageURL(participation.getProfileImage()));
+        }
+		
+		List<MeetingPostComment> meetingPostComments = (List<MeetingPostComment>) map.get("meetingPostComments");
+		
+		for (MeetingPostComment comment : meetingPostComments) {
+			
+            comment.setProfileImage(objectStorageService.getImageURL(comment.getProfileImage()));
+        }
 		
 		model.addAttribute("meetingPost", meetingPost);
-		model.addAttribute("meetingParticipations", map.get("meetingParticipations"));
-		model.addAttribute("meetingPostComments", map.get("meetingPostComments"));
+		model.addAttribute("meetingParticipations", meetingParticipations);
+		model.addAttribute("meetingPostComments", meetingPostComments);
 		model.addAttribute("meetingPostImages", meetingPostImages);
 		model.addAttribute("isMember", map.get("isMember"));
 		
