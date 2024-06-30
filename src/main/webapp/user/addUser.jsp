@@ -46,7 +46,7 @@ $(function() {
         console.log("isKorean:" + isKorean);
 
         if (!isKorean) {
-        	$("#userNameMessage").text("이름은 한글만 입력 가능합니다.").css("color", "red").show();
+        	$("#userNameMessage").text("이름 형식에 맞지 않습니다.").css("color", "red").show();
         } else if (userName.length > 20) {
         	$("#userNameMessage").text("이름은 20자 이하로 입력해주세요.").css("color", "red").show();
         } else {
