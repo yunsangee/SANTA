@@ -24,7 +24,7 @@
 //////////////////////////////// 생년월일 달력 ////////////////////
 
 let nameFormat = false;
-let passwordKorean = false;
+let duplicateNickname = false;
 
 let passwordFormat = false;
 
@@ -109,6 +109,7 @@ $(function() {
                         $("#nickMessage").text("중복된 닉네임입니다.").css("color", "red");
                     } else if (status === "available") {
                         $("#nickMessage").text("사용 가능한 닉네임입니다.").css("color", "green");
+                        duplicateNickname = true;
                     }
                 },
                 error: function(xhr, status, error) {
@@ -337,7 +338,10 @@ function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, en
         else if (!isGenderSelected) {
             e.preventDefault();
             alert("성별을 선택해주세요.");
-        } else {
+        } else if(!duplicateNickname){
+        	e.preventDefault();
+            alert("중복된 닉네임입니다.");
+        }else {
             alert("산타 가입을 환영합니다.");
         }
     });

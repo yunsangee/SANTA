@@ -21,6 +21,7 @@ import site.dearmysanta.domain.user.User;
 public class MessageInfo {
 	
 	private String userId;
+	private String userName;
 	private String phoneNumber;
 	private int validationNumber;
 	

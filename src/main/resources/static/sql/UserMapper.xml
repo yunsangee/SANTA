@@ -273,10 +273,16 @@
     </where>
 </select>
 
-	<select id="getUserName" parameterType="String" resultType="String">
-		SELECT NAME FROM USERS WHERE USER_ID = #{userId}
+	<select id="getUserName" parameterType="map" resultType="String">
+		SELECT NAME FROM USERS WHERE USER_ID = #{userId} AND phone_number=#{phoneNumber}
 	
 	</select>
+	
+	
+	<select id="getUserNameByName" parameterType="map" resultType="String">
+		SELECT NAME FROM USERS WHERE name = #{userName} AND phone_number=#{phoneNumber}
+	</select>
+	
 	
 	<update id="updateBadgeImage" parameterType="map">
 		UPDATE USERS
