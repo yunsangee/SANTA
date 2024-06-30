@@ -11,9 +11,9 @@
 
 <meta charset="UTF-8">
 <title>로그인</title>
+<c:import url="../common/header.jsp"/>
 
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
   <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 
@@ -159,7 +159,19 @@ input[type="password"]:focus {
         <c:if test="${not empty withdrawError}">
             alert("${withdrawError}");
         </c:if>
+        
+        $('#userPassword').keypress(function(event){
+        	
+        	if(event.which ==13){
+        		event.preventDefault();
+  /*       		alert('enter'); */
+        		$('form').submit();
+        	}
+        });
     });
+    
+    
+    
 
     function logoutAndRedirect() {
         $.ajax({
@@ -216,6 +228,7 @@ input[type="password"]:focus {
     </div>
     
     <div class="links">
+    	<a href="/user/findUserId.jsp">아이디 찾기</a>&nbsp;&nbsp;&nbsp;&nbsp&nbsp&nbsp
         <a href="/user/findUserPassword.jsp">비밀번호 찾기</a>&nbsp;&nbsp;&nbsp;&nbsp&nbsp&nbsp
         &nbsp&nbsp<a href="/user/addUser.jsp">회원가입</a>
     </div>

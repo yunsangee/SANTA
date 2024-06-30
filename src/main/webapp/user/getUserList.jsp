@@ -121,24 +121,13 @@
 <script>
     $(document).ready(function() {
         // AJAX로 검색 요청을 처리
-        $('#searchForm').submit(function(event) {
-            event.preventDefault(); // 폼 제출 기본 동작 방지
-            var url = $(this).attr('action');
-            $.ajax({
-                url: url,
-                type: 'GET',
-                data: $(this).serialize(),
-                success: function(data) {
-                    var tableSelector = url.includes('withdrawUserList') ? '#withdrawUserTable' : '#userTable';
-                    updateTable(data, tableSelector);
-                }
-            });
-        });
 
         // Enter key를 눌렀을 때 검색 요청을 처리
         $('.search-input').keypress(function(event) {
             if (event.which == 13) { // Enter key code
+            	$('#curretPage').val(1);
                 $(this).closest('form').submit();
+            	
                 event.preventDefault(); // 기본 Enter key 동작 방지
             }
         });
@@ -151,33 +140,6 @@
             $('#searchForm').submit();
         });
 
-        function updateTable(data, tableSelector) {
-            var userTable = $(tableSelector);
-            userTable.empty();
-            var users = data.userList;
-            $.each(users, function(index, user) {
-                userTable.append(
-                    '<tr data-userid="' + user.userId + '">' +
-                        '<th scope="row"><div class="d-flex align-items-center"><p class="mb-0 mt-4">' + (index + 1) + '</p></div></th>' +
-                        '<td><p class="mb-0 mt-4"><a href="/user/getUser?userNo=' + user.userNo + '" style="text-decoration: none; color: inherit;">' + user.userName + '</a></p></td>' +
-                        '<td><p class="mb-0 mt-4"><a href="/user/getUser?userNo=' + user.userNo + '" style="text-decoration: none; color: inherit;">' + user.userId + '</a></p></td>' +
-                        '<td><p class="mb-0 mt-4">' + user.nickName + '</p></td>' +
-                        '<td><p class="mb-0 mt-4">' + user.creationDate + '</p></td>' +
-                        '<td><p class="mb-0 mt-4">' + (user.withdrawDate ? user.withdrawDate : '') + '</p></td>' +
-                    '</tr>'
-                );
-            });
-
-            var pagination = $('.pagination');
-            pagination.empty();
-            for (var i = 1; i <= data.totalPages; i++) {
-                pagination.append(
-                    '<a href="javascript:void(0);" data-page="' + i + '" class="btn-custom ' + (i == data.currentPage ? 'active' : '') + '">' + i + '</a>'
-                );
-            }
-
-            $('#totalUsers').text('Total Users: ' + data.totalCount + ', Users on This Page: ' + data.currentPageCount);
-        }
     });
 </script>
 
@@ -201,7 +163,7 @@
                 <div class="tabs-container">
                     <div class="tabs">
                         <c:choose>
-                            <c:when test="${fn:contains(pageContext.request.requestURI, '/getUserList')}">
+                            <c:when test="${sessionScope.whichUserList == 0}">
                                 <div class="tab active" onclick="window.location.href='/user/getUserList'">회원목록</div>
                                 <div class="tab" onclick="window.location.href='/user/withdrawUserList'">탈퇴회원 목록</div>
                             </c:when>
@@ -212,7 +174,7 @@
                         </c:choose>
                     </div>
                     <div class="search-container">
-                        <form id="searchForm" action="${fn:contains(pageContext.request.requestURI, '/getUserList') ? '/user/rest/getUserList' : '/user/rest/withdrawUserList'}" method="get" style="display: flex; align-items: center;">
+                        <form id="searchForm" action="${sessionScope.whichUserList == 0 ? '/user/getUserList' : '/user/withdrawUserList'}" method="get" style="display: flex; align-items: center;">
                             <select name="searchCondition" class="dropdown-custom">
                                 <option value="0" ${search.searchCondition == 0 ? 'selected' : ''}>User ID</option>
                                 <option value="1" ${search.searchCondition == 1 ? 'selected' : ''}>Nickname</option>
@@ -240,7 +202,7 @@
                                 <tr data-userid="${user.userId}">
                                     <th scope="row">
                                         <div class="d-flex align-items-center">
-                                            <p class="mb-0 mt-4">${status.index + 1}</p>
+                                            <p class="mb-0 mt-4">${(currentPage-1)*pageSize +status.index + 1}</p>
                                         </div>
                                     </th>
                                     <td>
