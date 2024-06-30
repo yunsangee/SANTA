@@ -24,7 +24,7 @@
     padding: 8px 15px; /* 툴팁 크기 증가 */
     position: absolute;
     z-index: 1;
-    bottom: 150%; /* 툴팁 위치 조정 */
+    bottom: 120%; /* 툴팁 위치 조정 */
     left: 50%;
     transform: translateX(-50%);
     opacity: 0;
@@ -333,17 +333,17 @@ $(document).ready(function() {
                     '<div class="post-header">' +
                         '<div class="post-title-author">' +
                         '<h4 class="post-title"> ' + shortTitle + '</h4>' +
-                        '<h4 class="post-author" style="margin-top: 10px;"><i class="fas fa-user"></i> 작성자: ' + post.nickName + '</h4>' +
+                        '<h4 class="post-author" style="margin-top: 10px;"><i class="fas fa-user"></i> 작성자 : ' + post.nickName + '</h4>' +
                         '</div>' +
                         '<div class="post-likes">' +
                             '<p><i class="fas fa-heart"></i>  ' + post.certificationPostLikeCount + '</p>' +
                         '</div>' +
                     '</div>' +
-                    '<p class="post-mountain"><i class="fas fa-mountain"></i>  ' + post.certificationPostMountainName + '</p>' +
-                    '<p class="post-difficulty"><i class="fas fa-chart-line"></i> 등산난이도: ' + 
+                    '<p class="post-mountain"><i class="fas fa-mountain"></i>  산 이름 : ' + post.certificationPostMountainName + '</p>' +
+                    '<p class="post-difficulty"><i class="fas fa-chart-line"></i> 등산 난이도 : ' + 
                         (post.certificationPostHikingDifficulty == 0 ? '어려움' : post.certificationPostHikingDifficulty == 1 ? '중간' : '쉬움') +
                     '</p>' +
-                    '<p class="post-date"><i class="far fa-calendar-alt"></i> 등산일자: ' + post.certificationPostHikingDate + '</p>' +
+                    '<p class="post-date"><i class="far fa-calendar-alt"></i> 등산 일자 : ' + post.certificationPostHikingDate + '</p>' +
                 '</div>';
             postContainer.appendChild(postElement);
         });
@@ -432,11 +432,11 @@ $(document).ready(function() {
                                         </h4>
                                     </div>
                                     <div class="post-likes">
-                                        <p><i class="fas fa-heart"></i> 좋아요수: ${certificationPost.certificationPostLikeCount}</p>
+                                        <p><i class="fas fa-heart"></i> 좋아요수 : ${certificationPost.certificationPostLikeCount}</p>
                                     </div>
                                 </div>
-                                <p class="post-mountain"><i class="fas fa-mountain"></i> 산명칭: ${certificationPost.certificationPostMountainName}</p>
-                                <p class="post-difficulty"><i class="fas fa-chart-line"></i> 등산난이도: 
+                                <p class="post-mountain"><i class="fas fa-mountain"></i> 산 이름 : ${certificationPost.certificationPostMountainName}</p>
+                                <p class="post-difficulty"><i class="fas fa-chart-line"></i> 등산 난이도 : 
                                     <c:choose>
                                         <c:when test="${certificationPost.certificationPostHikingDifficulty == 0}">
                                             어려움
@@ -449,7 +449,7 @@ $(document).ready(function() {
                                         </c:when>
                                     </c:choose>
                                 </p>
-                                <p class="post-date"><i class="far fa-calendar-alt"></i> 등산일자: ${certificationPost.certificationPostHikingDate}</p>
+                                <p class="post-date"><i class="far fa-calendar-alt"></i> 등산 일자 : ${certificationPost.certificationPostHikingDate}</p>
                             </div>
                         </div>
                     </c:forEach>

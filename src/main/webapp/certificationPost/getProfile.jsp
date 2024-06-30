@@ -69,6 +69,13 @@
     .profile-details {
         flex-grow: 1;
     }
+    .profile-details .badge-img {
+    width: 30px; /* 이미지 크기를 닉네임 크기와 유사하게 조정 */
+    height: 30px;
+    margin-left: 10px; /* 닉네임과의 간격 조정 */
+    vertical-align: middle; /* 닉네임과 수직으로 맞춤 */
+}
+    
 
     .profile-details p {
         margin: 5px 0;
@@ -413,7 +420,7 @@ $(document).ready(function() {
             <div class="profile-container">
                 <img class="profile-image" src="${sessionScope.user.profileImage}" alt="Profile Image"/> <!-- 프로필사진 -->
                 <div class="profile-details">
-                    <p><strong>닉네임:</strong> ${infouser.nickName} <i class="fas fa-flag"></i></p><!-- 뱃지이미지 들어가야함 -->
+                    <p><strong>닉네임:</strong> ${infouser.nickName} <img src="${user.badgeImage}" class="badge-img"> </p><!-- 뱃지이미지 들어가야함 -->
                     <p><strong>한줄소개:</strong>${infouser.introduceContent}</p>      
                     <div class="follow-info">
                         <p id="followingCount" class="${sessionScope.user.userNo != infouser.userNo ? 'disabled' : ''}"><i class="fas fa-user"></i>&ensp;<strong>팔로잉 :</strong> ${followingCount}</p>

@@ -241,6 +241,8 @@
         	users u ON c.user_no = u.user_no
     	WHERE 
         	c.post_no = #{postNo} AND c.post_type = 0
+        	 ORDER BY
+        c.comment_creation_date DESC
 	</select>
 
 <!-- search -->

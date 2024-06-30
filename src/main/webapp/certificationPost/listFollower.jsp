@@ -8,8 +8,7 @@
     <title>팔로워목록</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
     <style>
-    
-         main {
+        main {
             padding: 20px;
             padding-top: 80px;
         }
@@ -21,6 +20,7 @@
             left: 0;
             z-index: 1000;
         }
+
         .table-container {
             max-width: 800px;
             margin: 0 auto;
@@ -59,7 +59,7 @@
             padding: 10px;
         }
 
-        .profile-image {
+        .profile-img {
             width: 50px;
             height: 50px;
             border-radius: 50%;
@@ -137,11 +137,10 @@
                                                 <p class="mb-0 clickable" data-userno="${follower.userNo}">${follower.nickName}</p>
                                             </td>
                                             <td style="vertical-align: middle; padding-right: 10px;">
-                                                <p>배지이미지들어와야함</p>
+                                                <img src="${user.badgeImage}" class="badge-img"> 
                                                 <!--<img src="${follower.badgeImage}" alt="Badge Image" class="badge-img">-->
                                             </td>
                                         </tr>
-                                      
                                     </c:forEach>
                                 </c:when>
                                 <c:otherwise>

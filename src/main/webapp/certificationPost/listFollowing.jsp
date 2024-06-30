@@ -249,7 +249,7 @@
                                 <p class="mb-0 clickable" data-userNo="${following.userNo}">${following.nickName}</p>
                             </td>
                             <td style="vertical-align: middle; padding-right: 10px;">
-                                <p>배지이미지들어와야함</p>
+                               <img src="${user.badgeImage}" class="badge-img">
                                 <!-- <img src="${following.badgeImage}" alt="Badge Image" class="badge-img"> -->
                             </td>
                             <td style="vertical-align: middle;">

@@ -44,7 +44,7 @@
         }
 
         .add-hashtag-btn:hover {
-            background-color: #218838;
+            background-color:  #ffb524;
         }
 
         .remove-hashtag {
@@ -133,7 +133,7 @@
 
 .upload-container i {
     font-size: 24px;
-    color: #81c408
+    color: #81c408;
 }
 
 .upload-container p {
@@ -161,6 +161,7 @@
         width: 200px; /* 가로 길이 설정 */
         display: block; /* 추가 */
         margin: 20px auto; /* 중앙 정렬을 위해 수정 */
+        font-size: 1.2em; 
     }
      
          
@@ -298,7 +299,7 @@
                         <input type="text" class="form-control" id="title" name="title" maxlength="50" required>
                     </div>
                     <div class="form-group">
-                        <label for="contents">내용<sup>*</sup></label>
+                        <label for="contents">이렇게 다녀왔어요!<sup>*</sup></label>
                         <textarea class="form-control" id="contents" name="contents" maxlength="1000" rows="5" required></textarea>
                         <div class="char-counter"><span id="charCount">0</span>/1000</div>
                     </div>
@@ -307,7 +308,7 @@
                         <input type="text" class="form-control" id="certificationPostMountainName" name="certificationPostMountainName" maxlength="20" required>
                     </div>
                     <div class="form-group">
-                        <label for="certificationPostHikingTrail">등산로<sup>*</sup></label>
+                        <label for="certificationPostHikingTrail">등산 경로<sup>*</sup></label>
                         <input type="text" class="form-control" id="certificationPostHikingTrail" name="certificationPostHikingTrail" maxlength="20" required>
                     </div>
                     <div class="form-row">
@@ -401,7 +402,7 @@
                         <div id="fileList" class="custom-file-list"></div>
                         <div id="imagePreview" class="preview-container"></div>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">작성완료!</button>
+                    <button type="submit" class="btn btn-primary btn-block ">작성 완료!</button>
                
                 </form>
             </div>
