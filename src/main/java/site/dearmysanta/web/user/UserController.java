@@ -393,9 +393,13 @@ public class UserController {
 		    	
 		    }
 		    
-		    String profileImage = objectStorageService.getImageURL(user.getUserId());
-			
-			user.setProfileImage(profileImage);
+		    if(user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")&& !user.getProfileImage().contains("kakaocdn")) {
+		    	user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+		    }
+		    
+//		    String profileImage = objectStorageService.getImageURL(user.getUserId());
+//			
+//			user.setProfileImage(profileImage);
 			
 			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
 				user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
@@ -437,9 +441,9 @@ public class UserController {
 			User user = userService.getUser(userNo);
 			// Model 과 View 연결
 			
-			String profileImage = objectStorageService.getImageURL(user.getUserId());
-			
-			user.setProfileImage(profileImage);
+			  if(user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")&& !user.getProfileImage().contains("kakaocdn")) {
+			    	user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+			    }
 			
 			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
 				user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
@@ -521,9 +525,9 @@ public class UserController {
 
 		    if (sessionUser.getUserNo() == dbUser.getUserNo() && toSession == 1) {
 
-			String profileImage = objectStorageService.getImageURL(dbUser.getUserId());
-			
-			dbUser.setProfileImage(profileImage);
+		    	  if(dbUser.getProfileImage() != null && !dbUser.getProfileImage().contains("ncloudstorage")&& !dbUser.getProfileImage().contains("kakaocdn")) {
+		    		  dbUser.setProfileImage(objectStorageService.getImageURL(dbUser.getProfileImage()));
+				    }
 			
 			if(dbUser.getBadgeImage() != null && !dbUser.getBadgeImage().contains("ncloudstorage")) {
 				dbUser.setBadgeImage(objectStorageService.getImageURL(dbUser.getBadgeImage()));
