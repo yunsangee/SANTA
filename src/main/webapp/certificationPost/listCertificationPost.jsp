@@ -465,6 +465,6 @@ $(document).ready(function() {
     <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
 </div>
 
-    <footer></footer>
+<footer><c:import url="../common/footer.jsp"/></footer>
 </body>
 </html>
