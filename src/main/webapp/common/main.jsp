@@ -787,7 +787,7 @@
     <div class="container py-5">
     	<div class="row g-4 mb-5">
     		<div class="table-header text-center">
-            	<!-- <h4 class="text-primary">인증 게시글 목록</h4> -->
+            	<h4 class="text-primary">인증 게시글 목록</h4>
             	<h4 class="popular">현재 인증 소식📣</h4>
             			<a class="info2" style="margin-left:-1175px; margin-top:83px;">등산 완료 자랑하기. 구경하러 갈까요?</a>
             	<div class="moreCertificationPost" style="margin-top:80px">
