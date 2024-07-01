@@ -421,15 +421,24 @@ public class CertificationPostController {
     //팔로워리스트 
     @RequestMapping(value="listFollower")
     public String listFollower(@RequestParam int userNo, Model model) throws Exception {
-    	List<User> followerList = userEtcService.getFollowerList(userNo);
+        List<User> followerList = userEtcService.getFollowerList(userNo);
+        
+        // 이미지 URL 설정
+        for (User user : followerList) {
+            if (user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")) {
+                user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+            }
+            if (user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
+                user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+            }
+        }
+        
         model.addAttribute("followerList", followerList);
         System.out.println("팔로워리스트보기:" + followerList);
         
-        
-        
-        
-    return "forward:/certificationPost/listFollower.jsp";
-}
+        return "forward:/certificationPost/listFollower.jsp";
+    }
+
 
     //팔로잉리스트
     @RequestMapping(value="listFollowing")

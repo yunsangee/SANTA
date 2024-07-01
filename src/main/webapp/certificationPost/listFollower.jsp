@@ -149,6 +149,7 @@
                                             </td>
                                             <td style="vertical-align: middle; padding-right: 10px;">
                                                 <img src="${follower.badgeImage}" class="badge-img"> 
+                                                
                                             </td>
                                               <td style="vertical-align: middle; padding-right: 10px;">
                                                 산타님이 팔로잉 중입니다.

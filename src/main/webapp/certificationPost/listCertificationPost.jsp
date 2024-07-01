@@ -107,6 +107,7 @@
     max-width: 280px; /* 최대 너비 설정 */
     display: flex;
     align-items: center; /* 이미지와 텍스트를 수직으로 정렬 */
+  
 }
 
 .certification-post .details .post-author .profile-image {
@@ -124,13 +125,17 @@
 
 
 .post-likes p {
-    font-size: 14px;
+    font-size: 15px;
     color: #ffb524; /* 좋아요수 색상 변경 */
     text-align: right;
     white-space: nowrap; /* 텍스트 줄바꿈 방지 */
     overflow: hidden; /* 넘치는 텍스트 숨김 */
     text-overflow: ellipsis; /* 넘치는 텍스트 생략(...) 처리 */
     max-width: 100px; /* 최대 너비 설정 */
+
+}
+.certification-post .post-likes {
+    margin-top: -70px !important; /* 좀 더 큰 값으로 조정 */
 }
 
 .certification-post p {
@@ -217,7 +222,10 @@
 }
 
 .post-title-author h4 {
-    margin-bottom: 10px; /* 간격 추가 */
+    margin-bottom: 20px; /* 간격 추가 */
+}
+.certification-post .post-author {
+    margin-top: -15px !important;
 }
 
 .fixed-buttons {
