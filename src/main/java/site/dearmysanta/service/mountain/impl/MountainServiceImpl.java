@@ -558,7 +558,7 @@ public class MountainServiceImpl implements MountainService {
 		
 		
 		int maxSize = 10;
-		for(int i = 0; i <  maxSize  ; i ++) {
+		for(int i = 0; i < list.size()  ; i ++) {
 			Mountain mountain = list.get(i);
 			mountain.setLikeCount(mountainDao.getTotalMountainLikeCount(mountain.getMountainNo()));
 			

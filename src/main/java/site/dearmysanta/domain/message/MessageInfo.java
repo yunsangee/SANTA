@@ -1,34 +1,29 @@
 package site.dearmysanta.domain.message;
 
+import java.sql.Date;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import site.dearmysanta.domain.user.User;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class MessageInfo {
 	
+	private String userId;
 	private String userName;
 	private String phoneNumber;
 	private int validationNumber;
 	
-	public String getUserName() {
-		return userName;
-	}
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-	public void setPhoneNumber(String phone) {
-		this.phoneNumber = phone;
-	}
-	
-	
-	public int getValidationNumber() {
-		return validationNumber;
-	}
-	public void setValidationNumber(int validationNumber) {
-		this.validationNumber = validationNumber;
-	}
-	@Override
-	public String toString() {
-		return "Message [userName=" + userName + ", phoneNumber=" + phoneNumber + "]";
-	}
 	
 }

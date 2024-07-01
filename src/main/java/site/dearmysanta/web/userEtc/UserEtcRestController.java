@@ -1,10 +1,13 @@
 package site.dearmysanta.web.userEtc;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -96,6 +99,20 @@ public class UserEtcRestController {
 		return userEtcService.getUserSettings(user);
 	}//o
 	
+	@CrossOrigin(origins = "http://dearmysanta.site")
+	@GetMapping(value="rest/getCount")
+	public Map<String,Integer> getCount(HttpSession session) throws Exception{
+		Map<String,Integer> map = new HashMap<String,Integer>();
+		
+		
+		int userNo = ((User)session.getAttribute("user")).getUserNo();
+		map.put("meetingPostCount", userEtcService.getMeetingCount(userNo));
+		map.put("certificationPostCount", userEtcService.getCertificationCount(userNo));
+		
+		
+		SantaLogger.makeLog("info",map.toString()+" :::::::");
+		return map;
+	}
 	
 
 }

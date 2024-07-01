@@ -168,6 +168,10 @@ public class UserController {
 		    if(dbUser.getProfileImage() != null && !dbUser.getProfileImage().contains("ncloudstorage")) {
 		        dbUser.setProfileImage(objectStorageService.getImageURL(dbUser.getProfileImage()));
 		    }
+		    
+		    if(dbUser.getBadgeImage() != null && !dbUser.getBadgeImage().contains("ncloudstorage")) {
+		    	dbUser.setBadgeImage(objectStorageService.getImageURL(dbUser.getBadgeImage()));
+		    }
 		        
 		    session.setAttribute("user", dbUser);	
 		    	   
@@ -176,6 +180,7 @@ public class UserController {
 		    String encodingUserNo = URLEncoder.encode(""+dbUser.getUserNo(), "UTF-8");
 		    String encodingNickName = URLEncoder.encode(""+dbUser.getNickName(), "UTF-8");
 		    String encodingProfile = URLEncoder.encode(dbUser.getProfileImage(), "UTF-8");
+		    String encodingUserId =  URLEncoder.encode(dbUser.getUserId(), "UTF-8");
 		    
 		    Cookie cookie = new Cookie("userNo", encodingUserNo);
 		    cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
@@ -200,6 +205,13 @@ public class UserController {
 		    profileCookie.setSecure(false); // 
 		    response.addCookie(profileCookie);
 		    
+		    Cookie idCookie = new Cookie("userId", encodingUserId);
+		    idCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+		    idCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+		    idCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+		    idCookie.setSecure(false); // 
+		    response.addCookie(idCookie);
+		    
 		    System.out.println("쿠키확인 닉네임 : " + nickNameCookie);
 		    
 		    System.out.println("쿠키확인 userNo : " + cookie);
@@ -221,7 +233,7 @@ public class UserController {
 			
 			session.invalidate();
 			
-			return "forward:/common/main.jsp";
+			return "forward:/";
 		}
 		
 		//
@@ -383,6 +395,10 @@ public class UserController {
 		    String profileImage = objectStorageService.getImageURL(user.getUserId());
 			
 			user.setProfileImage(profileImage);
+			
+			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
+				user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+		    }
 
 		    // 사용자 정보 모델에 추가
 		    model.addAttribute("user", user);
@@ -424,6 +440,10 @@ public class UserController {
 			
 			user.setProfileImage(profileImage);
 			
+			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
+				user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+		    }
+			
 			System.out.println("user :" +user);
 			
 			model.addAttribute("user", user);	
@@ -436,13 +456,21 @@ public class UserController {
 		public String updateUser(@ModelAttribute User user, @RequestParam(required = false) Integer userNo, Model model, HttpSession session, HttpServletResponse response) throws Exception {
 		    System.out.println("updateUser : POST");
 		    
+		    
+		    int toSession = 1;
 		    // 세션에서 현재 로그인한 사용자 정보 가져오기
 		    User sessionUser = (User) session.getAttribute("user");
     
 		    // 세션 사용자 정보 로그 출력
 		    if (sessionUser != null) {
-		        System.out.println("updateUser: sessionUser = " + sessionUser.getUserId());
-		    } else {
+		    	if(sessionUser.getUserNo() == 0) {
+		    		sessionUser = userService.getUser(user.getUserNo());
+		    		toSession = 0;
+		    	}else {
+		    	
+		    		System.out.println("updateUser: sessionUser = " + sessionUser.getUserId());
+		    	}
+		    }else {
 		        System.out.println("updateUser: sessionUser is null");
 		    }
 		    
@@ -477,12 +505,12 @@ public class UserController {
 		    dbUser.setHikingDifficulty(user.getHikingDifficulty());
 		    dbUser.setHikingLevel(user.getHikingLevel());
 		    dbUser.setIntroduceContent(user.getIntroduceContent());
-//		    dbUser.setProfileImage(user.getProfileImage());
+		    dbUser.setProfileImage(user.getUserId());
 		    // 필요한 다른 필드도 업데이트
 		    
-		    if (user.getImage() != null) {
-		        objectStorageService.uploadFile(user.getImage(), user.getUserId());
-		    }
+//		    if (user.getImage() != null) {
+//		        objectStorageService.uploadFile(user.getImage(), user.getUserId());
+//		    }
 		    
 		    System.out.println("user확인 : " +user.getImage());
 
@@ -490,13 +518,29 @@ public class UserController {
 		    
 		    System.out.println("마지막 dbUser : " +dbUser);
 
-		    // 세션에 로그인한 사용자와 업데이트한 사용자가 동일한 경우, 세션 정보를 업데이트
-		    if (sessionUser.getUserNo() == dbUser.getUserNo()) {
-		        session.setAttribute("user", dbUser);
+		    if (sessionUser.getUserNo() == dbUser.getUserNo() && toSession == 1) {
+
+			String profileImage = objectStorageService.getImageURL(dbUser.getUserId());
+			
+			dbUser.setProfileImage(profileImage);
+			
+			if(dbUser.getBadgeImage() != null && !dbUser.getBadgeImage().contains("ncloudstorage")) {
+				dbUser.setBadgeImage(objectStorageService.getImageURL(dbUser.getBadgeImage()));
 		    }
+			
+			
+		    // 세션에 로그인한 사용자와 업데이트한 사용자가 동일한 경우, 세션 정보를 업데이트
+		  
+		        session.setAttribute("user", dbUser);
+		   
+		    
+		    String encodingUserNo = URLEncoder.encode(""+dbUser.getUserNo(), "UTF-8");
+		    String encodingNickName = URLEncoder.encode(""+dbUser.getNickName(), "UTF-8");
+		    String encodingProfile = URLEncoder.encode(dbUser.getProfileImage(), "UTF-8");
+		    
 		    
 		    // 쿠키 설정
-		    Cookie cookie = new Cookie("userNo", ""+dbUser.getUserNo());
+		    Cookie cookie = new Cookie("userNo", encodingUserNo);
 		    cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
 		    cookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
 		    cookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
@@ -504,7 +548,7 @@ public class UserController {
 		    response.addCookie(cookie);
 
 		    // 쿠키 설정
-		    Cookie nickNameCookie = new Cookie("nickName", dbUser.getNickName());
+		    Cookie nickNameCookie = new Cookie("nickName", encodingNickName);
 		    nickNameCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
 		    nickNameCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
 		    nickNameCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
@@ -512,7 +556,7 @@ public class UserController {
 		    response.addCookie(nickNameCookie);
 		    
 			 // 쿠키 설정
-		    Cookie profileCookie = new Cookie("profile", dbUser.getProfileImage());
+		    Cookie profileCookie = new Cookie("profile", encodingProfile);
 		    profileCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
 		    profileCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
 		    profileCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
@@ -526,9 +570,14 @@ public class UserController {
 		    System.out.println("쿠키확인 프로필 : " +profileCookie);
 		    
 		    System.out.println("updateUser : " + dbUser);
-
+		    }
 		    // 업데이트 성공 페이지로 리다이렉트
-		    return "redirect:/user/getUser.jsp";
+		    
+		    if(toSession == 1) {
+		    	return "redirect:/user/getUser.jsp";
+		    }else {
+		    	return "redirect:/user/getUserList";
+		    }
 		}
 		
 		//
@@ -644,13 +693,16 @@ public class UserController {
 
 		    int currentPageCount = paginatedUserList.size(); // 현재 페이지에 표시되는 회원 수
 
+		    System.out.println("currentPage:" + currentPage);
 		    model.addAttribute("userList", paginatedUserList);
 		    model.addAttribute("search", search);
 		    model.addAttribute("currentPage", currentPage);
+		    model.addAttribute("pageSize",pageSize);
 		    model.addAttribute("totalPages", totalPages);
 		    model.addAttribute("totalCount", totalCount);
 		    model.addAttribute("currentPageCount", currentPageCount);
-
+		    
+		    session.setAttribute("whichUserList", 0);
 		    return "forward:/user/getUserList.jsp";
 		}
 
@@ -700,9 +752,12 @@ public class UserController {
 		    model.addAttribute("userList", paginatedUserList);
 		    model.addAttribute("search", search);
 		    model.addAttribute("currentPage", currentPage);
+		    model.addAttribute("pageSize",pageSize);
 		    model.addAttribute("totalPages", totalPages);
 		    model.addAttribute("totalCount", totalCount);
 		    model.addAttribute("currentPageCount", currentPageCount);
+		    
+		    session.setAttribute("whichUserList", 1);
 
 		    return "forward:/user/getUserList.jsp";
 		}
@@ -911,7 +966,7 @@ public class UserController {
 		@GetMapping(value="getQnAList")
 		 public String getQnAList(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
 	        System.out.println("getQnAList : GET");
-
+	        System.out.println("Search:" + search);
 	        // 세션에서 사용자 정보 가져오기
 	        User user = (User) session.getAttribute("user");
 	        
@@ -946,6 +1001,7 @@ public class UserController {
 	        model.addAttribute("totalPages", totalPages);
 	        model.addAttribute("currentPage", currentPage);
 	        model.addAttribute("currentPageCount", qnaList.size());
+	        model.addAttribute("search",search);
 
 	        return "forward:/user/getQnAList.jsp";
 	    }
@@ -998,7 +1054,7 @@ public class UserController {
 		    // 모델에 스케줄 목록 추가
 		    model.addAttribute("scheduleList", scheduleJson);
 
-		    return "forward:/user/month-view.jsp";
+		    return "forward:/user/scheduleSuccess.jsp";
 		}
 		
 		@GetMapping(value = "getSchedule")
@@ -1094,7 +1150,7 @@ public class UserController {
 		    //return "forward:/user/getSchedule.jsp";
 		    
 		    //"redirect:/user/getSchedule?userNo=" + dbUser.getUserNo();
-		    return "redirect:/user/getSchedule?postNo=" + dbschedule.getPostNo() + "&userNo=" + dbschedule.getUserNo();
+		    return "forward:/user/scheduleSuccess.jsp";
 
 		}
 		

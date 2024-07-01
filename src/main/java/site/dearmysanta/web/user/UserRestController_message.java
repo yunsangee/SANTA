@@ -3,6 +3,7 @@ package site.dearmysanta.web.user;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,9 @@ import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import site.dearmysanta.domain.message.MessageInfo;
+import site.dearmysanta.service.user.UserService;
 import site.dearmysanta.common.MakeRandomNumber;
+import site.dearmysanta.common.SantaLogger;
 
 @RestController
 @RequestMapping("/message/*")
@@ -25,6 +28,9 @@ public class UserRestController_message {
 	
 	final DefaultMessageService messageService;
 	public static Map<String,Integer> map;
+	
+	@Autowired
+	private UserService userService;
 	
 	public UserRestController_message() {
 	//private UserRestController() {
@@ -37,10 +43,31 @@ public class UserRestController_message {
 		
 		int randomNumber = MakeRandomNumber.makeRandomNumber();
 		
+		String userId = messageInfo.getUserId();
+		String userName = messageInfo.getUserName();
+		String mmsUserName;
+		SantaLogger.makeLog("info", userId + " " + userName);
+		if(userId != null) {
+			SantaLogger.makeLog("info", "mms get by id");
+			mmsUserName = userService.getUserName(userId.trim(),messageInfo.getPhoneNumber().trim());
+		}else if (userName != null){
+			SantaLogger.makeLog("info", "mms get by name");
+			mmsUserName = userService.getUserNameByName(userName.trim(),messageInfo.getPhoneNumber().trim());
+		}else {
+			return false;
+		}
+		
+		if(mmsUserName == null) {
+			return false;
+		}
+		
+		
+		
+		
 		Message message = new Message();
 		message.setFrom("01095740310");
 		message.setTo(messageInfo.getPhoneNumber());
-		message.setText("안녕하세요 " + messageInfo.getUserName() + "님\n [" + randomNumber + "] \n 값을 입력해주세요."); 
+		message.setText("안녕하세요 " + mmsUserName + "님\n [" + randomNumber + "] \n 값을 입력해주세요."); 
 		
 		SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
 		

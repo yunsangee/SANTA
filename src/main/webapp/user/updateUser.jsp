@@ -247,6 +247,16 @@
         	color : grey;
         	text-decoration: underline;
         }
+        
+        .file-input{
+        	display:none;
+        }
+        
+        
+        .badgeImage{
+        	width:24px;
+        	height:24px;
+        }
 
         
     </style>
@@ -254,15 +264,58 @@
     <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
 
     <script>
+    	let profileImage = '';
         $(document).ready(function() {
-            $(".submit").click(function() {
-                console.log("click");
+            $(".submit").click(function() { 
                 if ($("#profile").val() != "") {
                     $("form").attr("enctype", "multipart/form-data").submit();
                 } else {
                     $("#profile").remove();
                     $("form").submit();
                 }
+            });
+            
+            $('.pencil').on("click", function(){
+            	 console.log("click");
+                 
+                 $('#profile').click();
+                 let intervalId = setInterval(function() {
+                     var profileValue = $('#profile').val();
+                     
+                     if (profileValue != profileImage) {
+                         console.log('Profile value is set:', profileValue);
+                         
+                         
+                         let formData = new FormData();
+                         formData.append("image",$('#profile')[0].files[0]);
+                         
+                         
+                         $.ajax({
+                        	 url:'/user/rest/updateProfile',
+                        	 type: 'POST',
+                        	 data: formData,
+                        	 processData: false,  // 기본적으로 처리하지 않도록 설정
+                             contentType: false,
+                        	 success: function(response){
+                        		 console.log('success');
+                        		 console.log(response);
+                        		 
+                        		 $('.profile').attr("src",response);
+                        		 profileImage = profileValue;
+
+                        		 clearInterval(intervalId);  // 조건이 만족되면 주기적인 확인 중지
+                        	 },
+                        	 error:function(jqXHR, textStatus, errorThrown) {
+                                 console.error('File upload failed:', textStatus, errorThrown);
+                             }
+                         });
+                         
+                         
+                        
+                     } else {
+                         console.log('Profile value is not set');
+                     }
+                 }, 1000); // 3000 밀리초 = 3초
             });
 
             // 주소 클릭 시 도로명 주소 창 열기
@@ -348,11 +401,12 @@
         <div class="profile-header">
             <div class="profile-container">
                 <img src="${sessionScope.user.profileImage}" class="profile">
-                <a class="pencil">📷</a>
+                <a class="pencil">📷 </a>
+                <input type="file" id="profile" class="file-input"/>
                 <!-- ✏️ -->
             </div>
             <div class="profile-info">
-                <p>${user.badgeImage} 인증 ${user.certificationCount}회, 모임 ${user.meetingCount}회</p>
+                <p><img src="${user.badgeImage}" class="badgeImage"> 인증 ${user.certificationCount}회, 모임 ${user.meetingCount}회</p>
                 <a href="/user/changePassword.jsp" class="text-link">${user.userId}✏️</a> 
                 <!--  <button type="button" ><input type="file" id="profile" name="image" value=""></button> -->
             </div>
@@ -377,7 +431,7 @@
                     </c:when>
                 </c:choose>
             </p> <!-- Gender는 수정 불가 -->
-            <textarea class="update" name="introduceContent">${user.introduceContent}</textarea>
+            <textarea class="update" name="introduceContent" placeholder="자기소개">${user.introduceContent}</textarea>
             
             <div class="line"></div>
             

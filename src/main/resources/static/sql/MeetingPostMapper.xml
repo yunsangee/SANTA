@@ -409,12 +409,14 @@
         	user_no, 
         	post_no, 
         	comment_contents, 
+        	comment_creation_date,
         	post_type
         ) VALUES (
         	seq_comment_no.CURRVAL, 
         	#{userNo}, 
         	#{meetingPostNo}, 
         	#{meetingPostCommentContents}, 
+        	SYSDATE,
         	1
         )
     </insert>

@@ -8,7 +8,6 @@
 <head>
     <meta charset="UTF-8">
     <title>산타가 궁금해요!</title>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
@@ -138,26 +137,15 @@
     
     <script>
     $(document).ready(function() {
-        $('#searchForm').submit(function(event) {
-            event.preventDefault();
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'GET',
-                dataType: 'json',
-                data: $(this).serialize(),
-                success: function(data) {
-                    updateTable(data);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error:', status, error);
-                }
-            });
-        });
 
         $('.search-input').keypress(function(event) {
-            if (event.which == 13) {
+        	
+            if (event.which == 13) { // Enter key code
+            	event.preventDefault();
+            	$('#curretPage').val(1);
                 $(this).closest('form').submit();
-                event.preventDefault();
+            	
+                 // 기본 Enter key 동작 방지
             }
         });
 
@@ -167,44 +155,6 @@
             $('#searchForm').submit();
         });
 
-        function updateTable(data) {
-            var qnaTable = $('#qnaTable');
-            qnaTable.empty();
-            $.each(data.qnaList, function(index, qna) {
-                qnaTable.append(
-                    '<tr>' +
-                    '<td>' + (index + 1) + '</td>' +
-                    '<td>' + getCategory(qna.qnaPostCategory) + '</td>' +
-                    '<td><a href="/user/getQnA?qnaNo=' + qna.qnaNo + '">' + qna.title + '</a></td>' +
-                    '<td>' + qna.nickName + '</td>' +
-                    '<td>' + qna.postDate + '</td>' +
-                    '<td>' + (qna.answerState === 0 ? '답변 대기' : '답변 완료') + '</td>' +
-                    '</tr>'
-                );
-            });
-
-            var pagination = $('.pagination');
-            pagination.empty();
-            for (var i = 1; i <= data.totalPages; i++) {
-                pagination.append(
-                    '<a href="javascript:void(0);" data-page="' + i + '" class="btn-custom ' + (i === data.currentPage ? 'active' : '') + '">' + i + '</a>'
-                );
-            }
-
-            $('#totalQna').text('Total Posts: ' + data.totalCount + ', Posts on This Page: ' + data.currentPageCount);
-        }
-
-        function getCategory(category) {
-            switch (category) {
-                case 0: return '계정';
-                case 1: return '일정';
-                case 2: return '인증';
-                case 3: return '모임';
-                case 4: return '등산기록';
-                case 5: return '산 검색';
-                default: return '';
-            }
-        }
     });
     </script>
     
@@ -226,13 +176,13 @@
     <div class="container-fluid py-5">
         <div class="container py-5">
             <div class="search-container">
-                <form id="searchForm" action="/user/rest/getQnAList" method="get" style="display: flex; align-items: center;">
+                <form id="searchForm" action="/user/getQnAList" method="get" style="display: flex; align-items: center;">
                     <select name="searchCondition" class="dropdown-custom">
                         <option value="0">Title</option>
                         <option value="1">NickName</option>
                     </select>
-                    <input type="text" name="searchKeyword" class="form-control search-input" placeholder="Search by keyword">
-                    <input type="hidden" id="currentPage" name="currentPage" value="1">
+                    <input type="text" class="search-input" name="searchKeyword" placeholder="Search" value="${search != null && search.searchKeyword != null ? search.searchKeyword : '' }">
+                    <input type="hidden" id="currentPage" name="currentPage" value="1"/>
                 </form>
             </div>
             

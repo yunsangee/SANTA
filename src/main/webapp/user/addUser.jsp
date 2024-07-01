@@ -22,11 +22,38 @@
 
 <script>
 //////////////////////////////// 생년월일 달력 ////////////////////
+
+let nameFormat = false;
+let duplicateNickname = false;
+
+let passwordFormat = false;
+
 $(function() {
     $("#birthDate").datepicker({
         changeMonth: true,
         changeYear: true,
-        maxDate: new Date() // 현재 날짜를 최대 선택 가능 날짜로 설정
+        maxDate: new Date(), // 현재 날짜를 최대 선택 가능 날짜로 설정
+    	yearRange: "1900:" + new Date().getFullYear()
+    });
+    
+    $("input[name='userName']").on("blur", function() {
+    	var userName = $(this).val();
+    	console.log('userName');
+
+        // 한글인지 확인하는 정규 표현식
+        var isKorean = /^[가-힣]+$/.test(userName);
+        
+        console.log("isKorean:" + isKorean);
+
+        if (!isKorean) {
+        	$("#userNameMessage").text("이름 형식에 맞지 않습니다.").css("color", "red").show();
+        } else if (userName.length > 20) {
+        	$("#userNameMessage").text("이름은 20자 이하로 입력해주세요.").css("color", "red").show();
+        } else {
+        	$("#userNameMessage").text("").hide();
+        	nameFormat = true;
+        }
+    	
     });
 
 
@@ -82,6 +109,7 @@ $(function() {
                         $("#nickMessage").text("중복된 닉네임입니다.").css("color", "red");
                     } else if (status === "available") {
                         $("#nickMessage").text("사용 가능한 닉네임입니다.").css("color", "green");
+                        duplicateNickname = true;
                     }
                 },
                 error: function(xhr, status, error) {
@@ -217,13 +245,28 @@ function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, en
 //////////////////////////////// 비밀번호 길이 및 성별 확인 ////////////////////
  $(function() { 
     // 비밀번호 입력 칸에서 포커스 아웃될 때
+  
     $("input[name='userPassword']").on("blur", function() {
         var password = $(this).val();
-
+		console.log(password.length);
         if (password.length < 10) {
             $("#passwordLengthMessage").text("비밀번호를 10자 이상 입력해주세요.").css("color", "red").show();
+        }else if(password.length > 15){
+        	$("#passwordLengthMessage").text("비밀번호를 15자 이하 입력해주세요.").css("color", "red").show();	
         } else {
-            $("#passwordLengthMessage").text("").hide();
+        	
+        	var hasLetter = /[a-zA-Z]/.test(password);
+            var hasNumber = /[0-9]/.test(password);
+            var hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+            if (!hasLetter || !hasNumber || !hasSpecialChar) {
+            	$("#passwordLengthMessage").text("비밀번호에는 영문, 숫자, 특수문자가 포함되어야 합니다.").css("color", "red").show();
+            } else {
+            	$("#passwordLengthMessage").text("").hide();
+            	passwordFormat = true;
+            }
+        	
+            
         }
     });
 
@@ -285,10 +328,20 @@ function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, en
         } else if (password.length < 10) {
             e.preventDefault();
             alert("비밀번호는 10자 이상이어야 합니다.");
-        } else if (!isGenderSelected) {
+        } else if (password.length > 15){
+        	e.preventDefault();
+            alert("비밀번호는 15자 이하이어야 합니다.");
+        }else if(passwordFormat == false){
+        	e.preventDefault();
+            alert("비밀번호에는 영문, 숫자, 특수문자가 포함되어야 합니다.");
+        }
+        else if (!isGenderSelected) {
             e.preventDefault();
             alert("성별을 선택해주세요.");
-        } else {
+        } else if(!duplicateNickname){
+        	e.preventDefault();
+            alert("중복된 닉네임입니다.");
+        }else {
             alert("산타 가입을 환영합니다.");
         }
     });
@@ -596,6 +649,7 @@ label {
     <div class="name-section">
         <label>이름</label>
         <input type="text" name="userName" placeholder="이름" required>
+        <div id="userNameMessage" class="error-message"></div>
     </div>
 
     <div class="email-section">
