@@ -324,7 +324,7 @@
 	                    JOIN meeting_participation mpp ON mp.mp_no = mpp.mp_no
 	                    <where>
 	                        mp.mp_deleted_flag = 0
-	                        AND mpp.user_no = #{userNo} AND mpp.participation_status = 1 AND mpp.participation_role = 2
+	                        AND mpp.user_no = #{userNo} AND (mpp.participation_role = 0 OR mpp.participation_role = 2)
 	                        <if test="searchCondition != null">
 	                            <choose>
 	                                <when test="searchCondition == 0 and searchKeyword != '' and searchKeyword != null">

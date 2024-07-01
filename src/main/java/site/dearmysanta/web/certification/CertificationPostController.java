@@ -444,6 +444,14 @@ public class CertificationPostController {
 
         User user = userService.getUser(userNo);
         System.out.println("User Info: " + user);
+        if (user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")) {
+            user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+        }
+        if (user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
+            user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+        }
+        
+        
         model.addAttribute("infouser", user);
 
         int followerCount = userEtcService.getFollowerCount(userNo);
@@ -474,17 +482,8 @@ public class CertificationPostController {
             String imageURL = objectStorageService.getImageURL(fileName);
             certificationPostImages.add(imageURL);
 
-            // 프로필 이미지 URL 설정
-            if (certificationPost.getProfileImage() != null && !certificationPost.getProfileImage().contains("ncloudstorage")) {
-                certificationPost.setProfileImage(objectStorageService.getImageURL(certificationPost.getProfileImage()));
-            }
-
-            // 배지 이미지 URL 설정
-            if (certificationPost.getBadgeImage() != null && !certificationPost.getBadgeImage().contains("ncloudstorage")) {
-                certificationPost.setBadgeImage(objectStorageService.getImageURL(certificationPost.getBadgeImage()));
-            }
+        
         }
-
         model.addAttribute("certificationPostImages", certificationPostImages);
         System.out.println("이미지" + certificationPostImages);
 
@@ -492,9 +491,8 @@ public class CertificationPostController {
     }
 
 
-        
     }
-    
+
 
 
     

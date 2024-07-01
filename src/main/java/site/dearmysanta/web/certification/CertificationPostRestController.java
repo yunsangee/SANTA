@@ -137,6 +137,13 @@ public class CertificationPostRestController {
         Map<String, Object> result = new HashMap<>();
 
         User user = userService.getUser(userNo);
+        if (user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")) {
+            user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+        }
+        if (user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
+            user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+        }
+        
         System.out.println("User Info: " + user);
         result.put("infouser", user);
 

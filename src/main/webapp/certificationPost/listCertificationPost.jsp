@@ -381,7 +381,7 @@ $(document).ready(function() {
                             <option value="2" ${ !empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>산명칭</option>
                         </select> 
                         
-                        <input type="text" id="searchInput" name="searchKeyword" value='${ !empty search.searchCondition?searchKeyword:""  }' placeholder="Search" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 300px; height: 45px;">
+                        <input type="text" id="searchInput" name="searchKeyword" value='${ !empty search.searchCondition? search.searchKeyword:""  }' placeholder="Search" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 300px; height: 45px;">
                         <button type="submit" class="btn btn-primary border-2 border-secondary rounded-pill text-white search-button" style="height: 45px;">
 					    <i class="fas fa-search"></i>
 					</button>
