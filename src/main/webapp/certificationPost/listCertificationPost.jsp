@@ -108,22 +108,28 @@
     align-items: center; /* 이미지와 텍스트를 수직으로 정렬 */
 }
 
+
+
+
 .profile-image {
-    width: 20px; /* 프로필 이미지 크기 */
-    height: 20px; /* 프로필 이미지 크기 */
+    width: 10px; /* 프로필 이미지 크기 */
+    height: 10px; /* 프로필 이미지 크기 */
     border-radius: 50%;
-    margin-right: 5px; /* 이미지와 텍스트 간격 */
+    margin-right: 2px; /* 이미지와 텍스트 간격 */
 }
 
 .nickname {
-    margin-right: 5px; /* 닉네임과 배지 이미지 간격 */
+    font-size: 12px; /* 닉네임 글자 크기 */
+    margin-right: 2px; /* 닉네임과 배지 이미지 간격 */
 }
 
 .badge-img {
-    width: 20px; /* 배지 이미지 크기 */
-    height: 20px; /* 배지 이미지 크기 */
-    margin-left: 5px; /* 텍스트와 배지 이미지 간격 */
+    width: 10px; /* 배지 이미지 크기 */
+    height: 10px; /* 배지 이미지 크기 */
+    margin-left: 2px; /* 텍스트와 배지 이미지 간격 */
 }
+
+
 
 .post-likes p {
     font-size: 14px;

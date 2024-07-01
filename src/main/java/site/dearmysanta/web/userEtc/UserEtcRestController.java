@@ -55,9 +55,9 @@ public class UserEtcRestController {
 	
 	@GetMapping(value="rest/getFollowerList")
 	public List<User> getFollowerList(@RequestParam int userNo) {
-	    List<User> followers = userEtcService.getFollowerList(userNo);
+	    List<User> follower = userEtcService.getFollowerList(userNo);
 	    
-	    for (User user : followers) {
+	    for (User user : follower) {
 	        if (user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")) {
 	            user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
 	        }
@@ -66,7 +66,7 @@ public class UserEtcRestController {
 	        }
 	    }
 	    
-	    return followers;
+	    return follower;
 	}
 
 	
