@@ -418,9 +418,9 @@ $(document).ready(function() {
     <main>
         <div class="container">
             <div class="profile-container">
-                 <img class="profile-image" src="${certificationPost.profileImage}" alt="Profile Image"/> <!-- 프로필사진 -->
+                 <img class="profile-image" src="${infouser.profileImage}" alt="Profile Image"/> <!-- 프로필사진 -->
                 <div class="profile-details">
-                    <p><strong>닉네임:</strong> ${infouser.nickName} <img src="${certificationPost.badgeImage}" class="badge-img">
+                    <p><strong>닉네임:</strong> ${infouser.nickName} <img src="${infouser.badgeImage}" class="badge-img">
                       </p><!-- 뱃지이미지 들어가야함 -->
                     <p><strong>한줄소개:</strong>${infouser.introduceContent}</p>      
                     <div class="follow-info">
