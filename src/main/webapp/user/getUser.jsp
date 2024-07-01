@@ -196,7 +196,7 @@ button, a.button {
     <div class="profile-header">
         <div class="profile-image">
             <!-- 프로필 이미지가 들어갈 자리 -->
-            <img src="${requestScope.user.profileImage}" class="profile">
+            <img src="${user.profileImage}" class="profile">
         </div>
         <div class="profile-info">
             <p><img src="${user.badgeImage}" class="badgeImage"> 인증 ${user.certificationCount}회, 모임 ${user.meetingCount}회</p>

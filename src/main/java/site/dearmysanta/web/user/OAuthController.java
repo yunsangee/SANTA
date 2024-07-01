@@ -130,7 +130,7 @@ public class OAuthController {
 	    System.out.println("쿠키 프로필 사진 : " + profileCookie);
         
         
-        return new ModelAndView("forward:/user/addInfo.jsp");
+        return new ModelAndView("forward:/");
     }
 
 	//////////////////////////////////////////////////////////////////////////////////
