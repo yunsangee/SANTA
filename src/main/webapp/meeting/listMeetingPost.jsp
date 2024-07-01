@@ -232,6 +232,8 @@
 	    				</div>
 	    				
 	    			</form>
+	    			
+	    			
     				
 		    		<div class="table-responsive">
 		    			<table class="table">
@@ -245,10 +247,14 @@
 		    					</tr>
 		    				</thead>
 		    				<tbody>
-		    					<c:forEach var="post" items="${meetingPosts}">
+		    				
+		    				<c:set var="itemsPerPage" value="${resultPage.pageSize}"/>
+							<c:set var="currentPage" value="${resultPage.currentPage}"/>
+		    				
+		    					<c:forEach var="post" items="${meetingPosts}" varStatus="status">
 					                <tr>
 					                    <td>
-					                    	<p class="mb-4 mt-4">${post.postNo}</p>
+					                    	<p class="mb-4 mt-4">${status.index + 1 + (currentPage - 1) * itemsPerPage}</p>
 					                    </td>
 					                    <td>
 					                    	<p class="mb-4 mt-4">

@@ -43,7 +43,7 @@
         $('.meetingPost').on('click', function(event){
         	event.preventDefault();
         	alert('meetingPost link');
-        	window.location.href = '/meeting/getMeetingPostList?meetingPostListSearchCondition=1&searchKeyword=${mountain.mountainName}';
+        	window.location.href = '/meeting/getMeetingPostList?meetingPostListSearchCondition=5&searchKeyword=${mountain.mountainName}';
         });
         
         $('.certificationPost').on('click',function(event){
