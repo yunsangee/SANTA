@@ -397,7 +397,7 @@ public class UserController {
 			
 			user.setProfileImage(profileImage);
 			
-			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
+			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
 				user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
 		    }
 
@@ -441,7 +441,7 @@ public class UserController {
 			
 			user.setProfileImage(profileImage);
 			
-			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
+			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
 				user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
 		    }
 			
