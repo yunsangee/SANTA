@@ -377,9 +377,13 @@ public class CertificationPostController {
         }
  
      
-     // 2. certificationPost 객체의 ProfileImage URL을 objectStorageService를 이용하여 설정합니다.
-     certificationPost.setProfileImage(objectStorageService.getImageURL(certificationPost.getProfileImage()));
-
+        if(certificationPost.getProfileImage() != null && !certificationPost.getProfileImage().contains("ncloudstorage")) {
+        	certificationPost.setProfileImage(objectStorageService.getImageURL(certificationPost.getProfileImage()));
+	    }
+	    
+	    if(certificationPost.getBadgeImage() != null && !certificationPost.getBadgeImage().contains("ncloudstorage")) {
+	    	certificationPost.setBadgeImage(objectStorageService.getImageURL(certificationPost.getBadgeImage()));
+	    }
      //
 
         System.out.println("댓글" + postNo + userNo + certificationPostCommentList);

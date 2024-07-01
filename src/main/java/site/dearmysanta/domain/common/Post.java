@@ -33,6 +33,7 @@ public class Post {
 	private String contents; // post contents
 	
 	private Date postDate; // post upload time
+	private String badgeImage;
 	
 	//getter setter
 	
