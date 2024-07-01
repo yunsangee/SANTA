@@ -104,7 +104,32 @@
 .post-author {
     font-size: 14px;
     max-width: 280px; /* 최대 너비 설정 */
+    display: flex;
+    align-items: center; /* 이미지와 텍스트를 수직으로 정렬 */
 }
+
+
+
+
+.profile-image {
+    width: 10px; /* 프로필 이미지 크기 */
+    height: 10px; /* 프로필 이미지 크기 */
+    border-radius: 50%;
+    margin-right: 2px; /* 이미지와 텍스트 간격 */
+}
+
+.nickname {
+    font-size: 12px; /* 닉네임 글자 크기 */
+    margin-right: 2px; /* 닉네임과 배지 이미지 간격 */
+}
+
+.badge-img {
+    width: 10px; /* 배지 이미지 크기 */
+    height: 10px; /* 배지 이미지 크기 */
+    margin-left: 2px; /* 텍스트와 배지 이미지 간격 */
+}
+
+
 
 .post-likes p {
     font-size: 14px;
@@ -332,8 +357,12 @@ $(document).ready(function() {
                 '<div class="details">' +
                     '<div class="post-header">' +
                         '<div class="post-title-author">' +
-                        '<h4 class="post-title"> ' + shortTitle + '</h4>' +
-                        '<h4 class="post-author" style="margin-top: 10px;"><i class="fas fa-user"></i> 작성자 : ' + post.nickName + '</h4>' +
+                            '<h4 class="post-title"> ' + shortTitle + '</h4>' +
+                            '<h4 class="post-author" style="margin-top: 10px;">' +
+                                '<img class="profile-image" src="' + post.profileImage + '" alt="Profile Image"/> ' +
+                                post.nickName +
+                                '<img src="' + post.badgeImage + '" class="badge-img">' +
+                            '</h4>' +
                         '</div>' +
                         '<div class="post-likes">' +
                             '<p><i class="fas fa-heart"></i>  ' + post.certificationPostLikeCount + '</p>' +
@@ -346,6 +375,7 @@ $(document).ready(function() {
                     '<p class="post-date"><i class="far fa-calendar-alt"></i> 등산 일자 : ' + post.certificationPostHikingDate + '</p>' +
                 '</div>';
             postContainer.appendChild(postElement);
+
         });
     }
 
@@ -381,7 +411,7 @@ $(document).ready(function() {
                             <option value="2" ${ !empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>산명칭</option>
                         </select> 
                         
-                        <input type="text" id="searchInput" name="searchKeyword" value='${ !empty search.searchCondition?searchKeyword:""  }' placeholder="Search" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 300px; height: 45px;">
+                        <input type="text" id="searchInput" name="searchKeyword" value='${ !empty search.searchCondition? search.searchKeyword:""  }' placeholder="Search" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 300px; height: 45px;">
                         <button type="submit" class="btn btn-primary border-2 border-secondary rounded-pill text-white search-button" style="height: 45px;">
 					    <i class="fas fa-search"></i>
 					</button>
@@ -418,18 +448,12 @@ $(document).ready(function() {
                                                 </c:otherwise>
                                             </c:choose>
                                         </h4>
-                                        <h4 class="post-author" style="margin-top: 10px;">
-                                            <i class="fas fa-user"></i> 
-                                            작성자: 
-                                            <c:choose>
-                                                <c:when test="${fn:length(certificationPost.nickName) > 5}">
-                                                    ${fn:substring(certificationPost.nickName, 0, 5)}...
-                                                </c:when>
-                                                <c:otherwise>
-                                                    ${certificationPost.nickName}
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </h4>
+                                      <h4 class="post-author" style="margin-top: 10px;">
+    <img class="profile-image" src="${certificationPost.profileImage}" alt="Profile Image"/>
+    <span class="nickname">${certificationPost.nickName}</span>
+    <img src="${certificationPost.badgeImage}" class="badge-img">
+</h4>
+
                                     </div>
                                     <div class="post-likes">
                                         <p><i class="fas fa-heart"></i> 좋아요수 : ${certificationPost.certificationPostLikeCount}</p>
@@ -465,6 +489,6 @@ $(document).ready(function() {
     <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
 </div>
 
-    <footer></footer>
+<footer><c:import url="../common/footer.jsp"/></footer>
 </body>
 </html>

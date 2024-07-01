@@ -323,29 +323,39 @@ public class CertificationPostController {
 
     @GetMapping(value = "listCertificationPost")
     public String listCertificationPost(@ModelAttribute Search search, Model model) throws Exception {
-	
-
-    	System.out.println("search" +search ) ;
+        System.out.println("search" + search);
         // CertificationPost 목록 및 관련 데이터 가져오기
         Map<String, Object> result = certificationPostService.getCertificationPostList(search);
         List<CertificationPost> certificationPostList = (List<CertificationPost>) result.get("list");
-        System.out.println(" certificationPostList  " + certificationPostList );
+        System.out.println("certificationPostList  " + certificationPostList);
+
         // CertificationPost 이미지 URL 가져오기
         List<String> certificationPostImages = new ArrayList<>();
         for (CertificationPost certificationPost : certificationPostList) {
             String fileName = certificationPost.getPostNo() + "_0_1"; // 첫 번째 사진 파일명
             String imageURL = objectStorageService.getImageURL(fileName);
             certificationPostImages.add(imageURL);
+
+            // 프로필 이미지 URL 설정
+            if (certificationPost.getProfileImage() != null && !certificationPost.getProfileImage().contains("ncloudstorage")) {
+                certificationPost.setProfileImage(objectStorageService.getImageURL(certificationPost.getProfileImage()));
+            }
+
+            // 배지 이미지 URL 설정
+            if (certificationPost.getBadgeImage() != null && !certificationPost.getBadgeImage().contains("ncloudstorage")) {
+                certificationPost.setBadgeImage(objectStorageService.getImageURL(certificationPost.getBadgeImage()));
+            }
         }
 
         // 모델에 데이터 추가
         model.addAttribute("certificationPost", certificationPostList); // CertificationPost 목록
         model.addAttribute("hashtagList", result.get("hashtagList")); // 해시태그 목록
         model.addAttribute("certificationPostImages", certificationPostImages); // CertificationPost 이미지 URL 목록
-        model.addAttribute("search", search); 
+        model.addAttribute("search", search);
 
         return "forward:/certificationPost/listCertificationPost.jsp"; // JSP 페이지로 포워딩
     }
+
 
 
 	
@@ -444,6 +454,14 @@ public class CertificationPostController {
 
         User user = userService.getUser(userNo);
         System.out.println("User Info: " + user);
+        if (user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")) {
+            user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+        }
+        if (user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
+            user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+        }
+        
+        
         model.addAttribute("infouser", user);
 
         int followerCount = userEtcService.getFollowerCount(userNo);
@@ -474,17 +492,8 @@ public class CertificationPostController {
             String imageURL = objectStorageService.getImageURL(fileName);
             certificationPostImages.add(imageURL);
 
-            // 프로필 이미지 URL 설정
-            if (certificationPost.getProfileImage() != null && !certificationPost.getProfileImage().contains("ncloudstorage")) {
-                certificationPost.setProfileImage(objectStorageService.getImageURL(certificationPost.getProfileImage()));
-            }
-
-            // 배지 이미지 URL 설정
-            if (certificationPost.getBadgeImage() != null && !certificationPost.getBadgeImage().contains("ncloudstorage")) {
-                certificationPost.setBadgeImage(objectStorageService.getImageURL(certificationPost.getBadgeImage()));
-            }
+        
         }
-
         model.addAttribute("certificationPostImages", certificationPostImages);
         System.out.println("이미지" + certificationPostImages);
 
@@ -492,9 +501,8 @@ public class CertificationPostController {
     }
 
 
-        
     }
-    
+
 
 
     

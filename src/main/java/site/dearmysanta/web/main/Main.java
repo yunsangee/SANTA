@@ -94,7 +94,7 @@ public class Main {
 		if(user != null) {
 			search.setUserNo(user.getUserNo());
 			
-			if(user.getProfileImage() != null &   !user.getProfileImage().contains("ncloudstorage")) { // 이쪽 null check 필요 
+			if(user.getProfileImage() != null &   !user.getProfileImage().contains("ncloudstorage")&   !user.getProfileImage().contains("kakaocdn")) { // 이쪽 null check 필요 
 				user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
 			}
 			session.setAttribute("alarmMessageList",userEtcService.getAlarmMessageList(user.getUserNo()));
@@ -135,6 +135,8 @@ public class Main {
 		session.setAttribute("meetingPostList", meetingService.getMeetingPostList(meetingPostSearch).get("meetingPosts"));
 		session.setAttribute("certificationPostList",certificationPostList);
 		session.setAttribute("certificationPostImages", certificationPostImages);
+		session.setAttribute("alarmMessageList", userEtcService.getAlarmMessageList(user.getUserNo()));
+		
 		
 		
 		return "forward:/common/main.jsp";

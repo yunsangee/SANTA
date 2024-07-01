@@ -194,31 +194,31 @@
             if (followingList.length === 0) {
                 tbody.append('<tr><td colspan="4"><div class="no-followings">팔로잉중인 회원이 없습니다!</div></td></tr>');
             } else {
-                followingList.forEach(following => {
-                    const row = 
-                        '<tr id="row-' + following.userNo + '">' +
-                            '<td style="vertical-align: middle; padding-right: 10px;">' +
-                                '<img src="' + following.profileImage + '" alt="Profile Image" class="profile-img">' +
-                            '</td>' +
-                            '<td style="vertical-align: middle; padding-right: 10px;">' +
-                                '<p class="mb-0 clickable">' + following.nickName + '</p>' +
-                            '</td>' +
-                            '<td style="vertical-align: middle; padding-right: 10px;">' +
-                                '<img src="' + following.badgeImage + '" alt="Badge Image" class="badge-img">' +
-                            '</td>' +
-                            '<td style="vertical-align: middle;">' +
-                                '<button ' +
-                                    'class="delete-follow follow-button btn btn-secondary" ' +
-                                    'data-following-id="' + following.userNo + '">' +
-                                    '<i class="bi bi-person-dash"></i> 팔로잉취소' +
-                                '</button>' +
-                            '</td>' +
-                        '</tr>' +
-                      
-                        '</tr>';
-                    tbody.append(row);
-                });
+            	followingList.forEach(following => {
+            	    const row = 
+            	        '<tr id="row-' + following.userNo + '">' +
+            	            '<td style="vertical-align: middle; padding-right: 10px;">' +
+            	                '<img src="' + following.profileImage + '" alt="Profile Image" class="profile-img">' +
+            	            '</td>' +
+            	            '<td style="vertical-align: middle; padding-right: 10px;">' +
+            	                '<p class="mb-0 clickable" data-userno="' + following.userNo + '">' + following.nickName + '</p>' +
+            	            '</td>' +
+            	            '<td style="vertical-align: middle; padding-right: 10px;">' +
+            	                '<img src="' + following.badgeImage + '" alt="Badge Image" class="badge-img">' +
+            	            '</td>' +
+            	            '<td style="vertical-align: middle;">' +
+            	                '<button ' +
+            	                    'class="delete-follow follow-button btn btn-secondary" ' +
+            	                    'data-following-id="' + following.userNo + '">' +
+            	                    '<i class="bi bi-person-dash"></i> 팔로잉취소' +
+            	                '</button>' +
+            	            '</td>' +
+            	        '</tr>';
+            	    tbody.append(row);
+            	});
+
             }
+
         }
 
         // 초기 팔로잉 목록 로드
@@ -240,26 +240,25 @@
         <tbody>
             <c:choose>
                 <c:when test="${not empty followingList}">
-                    <c:forEach var="following" items="${followingList}">
-                        <tr id="row-${following.userNo}">
-                            <td style="vertical-align: middle; padding-right: 10px;">
-                                <img src="${sessionScope.user.profileImage}" alt="Profile Image" class="profile-img">
-                            </td>
-                            <td style="vertical-align: middle; padding-right: 10px;">
-                                <p class="mb-0 clickable" data-userNo="${following.userNo}">${following.nickName}</p>
-                            </td>
-                            <td style="vertical-align: middle; padding-right: 10px;">
-                               <img src="${user.badgeImage}" class="badge-img">
-                                <!-- <img src="${following.badgeImage}" alt="Badge Image" class="badge-img"> -->
-                            </td>
-                            <td style="vertical-align: middle;">
-                                <button class="delete-follow follow-button btn btn-secondary" data-following-id="${following.userNo}">
-                                    <i class="bi bi-person-dash"></i> 팔로잉취소
-                                </button>
-                            </td>
-                        </tr>
-                      
-                    </c:forEach>
+                   <c:forEach var="following" items="${followingList}">
+    <tr id="row-${following.userNo}">
+        <td style="vertical-align: middle; padding-right: 10px;">
+            <img src="${following.profileImage}" alt="Profile Image" class="profile-img">
+        </td>
+        <td style="vertical-align: middle; padding-right: 10px;">
+            <p class="mb-0 clickable" data-userno="${following.userNo}">${following.nickName}</p>
+        </td>
+        <td style="vertical-align: middle; padding-right: 10px;">
+            <img src="${following.badgeImage}" alt="Badge Image" class="badge-img">
+        </td>
+        <td style="vertical-align: middle;">
+            <button class="delete-follow follow-button btn btn-secondary" data-following-id="${following.userNo}">
+                <i class="bi bi-person-dash"></i> 팔로잉취소
+            </button>
+        </td>
+    </tr>
+</c:forEach>
+
                 </c:when>
                 <c:otherwise>
                     <tr>

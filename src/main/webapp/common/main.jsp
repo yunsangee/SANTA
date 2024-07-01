@@ -176,7 +176,7 @@
             });
 			
 			 $(document).on('click', '.certification-post', function() {
-			        var postNo = $(this).children().find('.certificationPostNo').text().trim();
+			        var postNo = $('.certificationPostNo').val();
 			        console.log(postNo);
 			        window.location.href = "/certificationPost/getCertificationPost?postNo=" + postNo;
 			 });
@@ -787,7 +787,6 @@
     <div class="container py-5">
     	<div class="row g-4 mb-5">
     		<div class="table-header text-center">
-            	<!-- <h4 class="text-primary">인증 게시글 목록</h4> -->
             	<h4 class="popular">현재 인증 소식📣</h4>
             			<a class="info2" style="margin-left:-1175px; margin-top:83px;">등산 완료 자랑하기. 구경하러 갈까요?</a>
             	<div class="moreCertificationPost" style="margin-top:80px">
@@ -805,7 +804,8 @@
                                     <img src="${certificationPostImages[status.index]}" alt="Certification Post Image">
                                 </div>
                                 <div class="details">
-<%--                                     <h4 class='certificationPostNo'>${certificationPost.postNo}</h4> --%>
+									<%-- <h4 class='certificationPostNo'>${certificationPost.postNo}</h4>  --%>
+									<input type="hidden" class="certificationPostNo" value="${certificationPost.postNo}"/>
                                     <h4>${certificationPost.title}</h4>
                                     <p>산명칭 : ${certificationPost.certificationPostMountainName}</p>
                                     <p>Hiking Date: ${certificationPost.certificationPostHikingDate}</p>
