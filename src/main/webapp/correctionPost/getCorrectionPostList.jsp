@@ -299,9 +299,9 @@
                     <input type="hidden" id="crpNo" name="crpNo" value="${correctionPost.postNo}"/>
                     <input type="hidden" id="mountainNo" name="mountainNo" value="${correctionPost.mountainNo}"/>
                     <c:if test="${correctionPost.status == 0}">
-                   	 	<button id="update" class="update" type="button">Update</button>
+                   	 	<button id="update" class="update btn border border-secondary rounded-pill px-2 text-primary" type="button">수정</button>
                    	 </c:if>
-                    <button id="delete" class="delete" type="button">Delete</button>
+                    <button id="delete" class="delete btn border border-secondary rounded-pill px-2 text-primary" type="button">삭제</button>
                 </form>
             </td>
         </tr>
