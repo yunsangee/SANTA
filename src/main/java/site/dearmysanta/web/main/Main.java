@@ -135,6 +135,8 @@ public class Main {
 		session.setAttribute("meetingPostList", meetingService.getMeetingPostList(meetingPostSearch).get("meetingPosts"));
 		session.setAttribute("certificationPostList",certificationPostList);
 		session.setAttribute("certificationPostImages", certificationPostImages);
+		session.setAttribute("alarmMessageList", userEtcService.getAlarmMessageList(user.getUserNo()));
+		
 		
 		
 		return "forward:/common/main.jsp";
