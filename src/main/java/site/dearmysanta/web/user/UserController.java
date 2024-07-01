@@ -376,6 +376,7 @@ public class UserController {
 		        // 요청 매개변수로 받은 userNo가 있는 경우
 		        user = userService.getUser(userNo);
 		        System.out.println("getUser: userNo from request parameter = " + userNo);
+		        System.out.println("getUser: user from request parameter = " + user);
 		    } else if (sessionUser != null) {
 		        // 세션에서 현재 로그인한 사용자 정보 가져오기
 		        user = userService.getUser(sessionUser.getUserNo());
@@ -395,12 +396,12 @@ public class UserController {
 		    if(user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")&& !user.getProfileImage().contains("kakaocdn")) {
 		    	user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
 		    }
-
+		    
 //		    String profileImage = objectStorageService.getImageURL(user.getUserId());
 //			
 //			user.setProfileImage(profileImage);
 			
-			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
+			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
 				user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
 		    }
 
@@ -440,11 +441,11 @@ public class UserController {
 			User user = userService.getUser(userNo);
 			// Model 과 View 연결
 			
-			 if(user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")&& !user.getProfileImage().contains("kakaocdn")) {
+			  if(user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")&& !user.getProfileImage().contains("kakaocdn")) {
 			    	user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
 			    }
 			
-			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
+			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
 				user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
 		    }
 			

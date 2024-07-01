@@ -13,7 +13,9 @@
         <result property="title" column="cp_title" jdbcType="VARCHAR"/>
         <result property="contents" column="cp_contents" jdbcType="VARCHAR"/>
         <result property="postDate" column="cp_creation_date" jdbcType="DATE"/>
-
+     <result property="profileImage" 					column="profile_image" 			jdbcType="VARCHAR"/>
+    <result property = "badgeImage"	column = "badge_image"	jdbcType = "VARCHAR"/>
+    
         <result property="certificationPostMountainName" column="cp_mountain_name" jdbcType="VARCHAR"/>
         <result property="certificationPostHikingTrail" column="cp_hiking_trail" jdbcType="VARCHAR"/>
         <result property="certificationPostTotalTime" column="cp_total_time" jdbcType="VARCHAR"/>
@@ -83,6 +85,8 @@
             cp.cp_no,
              cp.user_no,
              u.nickname,
+              u.profile_image,
+              u.badge_image,
              cp.cp_type,
              cp.cp_title,
              cp.cp_contents,

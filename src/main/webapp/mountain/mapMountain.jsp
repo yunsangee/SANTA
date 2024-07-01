@@ -68,7 +68,7 @@
 	                getMountainMarker();
 	            }
 	        }
-	    }, 30); // Check every 100 milliseconds
+	    }, 10); // Check every 100 milliseconds
 	}
 	
 	

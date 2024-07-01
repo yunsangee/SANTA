@@ -486,7 +486,7 @@
                 <div class="details-container">
                     <div class="details-header">
                         <a href="getProfile?userNo=${certificationPost.userNo}" class="author-link">
-                            <img class="profile-image" src="${sessionScope.user.profileImage}" alt="Profile Image"/> ${certificationPost.nickName} <img src="${user.badgeImage}" class="badge-img">
+                            <img class="profile-image" src="${certificationPost.profileImage}" alt="Profile Image"/> ${certificationPost.nickName} <img src="${certificationPost.badgeImage}" class="badge-img">
                         </a>
                         <p><i class="fas fa-calendar-alt"></i> 작성 일자: ${certificationPost.postDate}</p>
                         <div class="like-container">
