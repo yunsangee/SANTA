@@ -8,7 +8,7 @@
     <c:import url="../common/header.jsp"/>
     <meta charset="UTF-8">
     <title>Certification Post List</title>
-    
+     <link rel="stylesheet" href="path/to/your/css/file.css">
 <style>
 .btn-with-tooltip {
     position: relative;
@@ -47,7 +47,6 @@
     visibility: visible;
     opacity: 1;
 }
-
 
 .certification-post {
     display: flex;
@@ -102,33 +101,24 @@
 }
 
 .post-author {
-    font-size: 14px;
+    font-size: 14px; /* 닉네임 글자 크기 */
     max-width: 280px; /* 최대 너비 설정 */
     display: flex;
     align-items: center; /* 이미지와 텍스트를 수직으로 정렬 */
 }
 
-
-
-
-.profile-image {
-    width: 10px; /* 프로필 이미지 크기 */
-    height: 10px; /* 프로필 이미지 크기 */
-    border-radius: 50%;
-    margin-right: 2px; /* 이미지와 텍스트 간격 */
+.certification-post .details .post-author .profile-image {
+    width: 40px; /* Adjusted width to match text size */
+    height: 40px; /* Adjusted height to match text size */
+    border-radius: 50%; /* Keep the image circular */
+    margin-right: 5px; /* Adjust spacing between the image and the text */
 }
 
-.nickname {
-    font-size: 12px; /* 닉네임 글자 크기 */
-    margin-right: 2px; /* 닉네임과 배지 이미지 간격 */
+.certification-post .details .post-author .badge-img {
+    width: 14px; /* Adjusted width to match text size */
+    height: 14px; /* Adjusted height to match text size */
+    margin-left: 5px; /* Adjust spacing between the text and the badge image */
 }
-
-.badge-img {
-    width: 10px; /* 배지 이미지 크기 */
-    height: 10px; /* 배지 이미지 크기 */
-    margin-left: 2px; /* 텍스트와 배지 이미지 간격 */
-}
-
 
 
 .post-likes p {
@@ -155,7 +145,6 @@
     gap: 20px;
     justify-content: center;
 }
-
 
 .btn-cp {
     border: 2px solid orange;
@@ -448,12 +437,11 @@ $(document).ready(function() {
                                                 </c:otherwise>
                                             </c:choose>
                                         </h4>
-                                      <h4 class="post-author" style="margin-top: 10px;">
-    <img class="profile-image" src="${certificationPost.profileImage}" alt="Profile Image"/>
-    <span class="nickname">${certificationPost.nickName}</span>
-    <img src="${certificationPost.badgeImage}" class="badge-img">
-</h4>
-
+                                        <h4 class="post-author" style="margin-top: 10px;">
+                                            <img class="profile-image" src="${certificationPost.profileImage}" alt="Profile Image"/>
+                                            <span class="nickname">${certificationPost.nickName}</span>
+                                            <img src="${certificationPost.badgeImage}" class="badge-img">
+                                        </h4>
                                     </div>
                                     <div class="post-likes">
                                         <p><i class="fas fa-heart"></i> 좋아요수 : ${certificationPost.certificationPostLikeCount}</p>
@@ -482,13 +470,13 @@ $(document).ready(function() {
         </div>
     </main>
     <div class="fixed-buttons">
-    <div class="btn-with-tooltip">
-        <div class="tooltip">인증하러가기!<div class="tooltip-arrow"></div></div>
-        <button class="btn-cp btn-certify-hiking"><i class="fa fa-mountain"></i></button>
+        <div class="btn-with-tooltip">
+            <div class="tooltip">인증하러가기!<div class="tooltip-arrow"></div></div>
+            <button class="btn-cp btn-certify-hiking"><i class="fa fa-mountain"></i></button>
+        </div>
+        <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
     </div>
-    <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
-</div>
 
-<footer><c:import url="../common/footer.jsp"/></footer>
+    <footer><c:import url="../common/footer.jsp"/></footer>
 </body>
 </html>

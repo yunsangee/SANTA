@@ -100,20 +100,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
     </style>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script>
-    $(document).ready(function(){
-        $(document).on('click', 'p.clickable', function() {
-            var userNo = $(this).data('userno'); // 클릭된 닉네임의 userNo 추출
-
-            // 클릭된 유저 번호를 콘솔에 출력
-            console.log('Clicked user number:', userNo);
-
-            // 페이지 이동
-            window.location.href = "/certificationPost/getProfile?userNo=" + userNo;
-        });
-    });
-    </script>
 </head>
 <body>
     <header>
@@ -131,18 +117,15 @@
                                     <c:forEach var="follower" items="${followerList}">
                                         <tr>
                                             <td style="vertical-align: middle; padding-right: 10px;"> 
-                                               <!--  <i class="fas fa-user profile-icon"></i>-->
-                                    <img src="${follower.profileImage}" alt="Profile Image" class="profile-img">
-                                            <!--     <img src="${sessionScope.user.profileImage}" alt="Profile Image" class="profile-img"> -->
+                                               <img src="<c:url value='${follower.profileImage}' />" alt="Profile Image" class="profile-img">
+
                                             </td>
                                             <td style="vertical-align: middle; padding-right: 10px;">
                                                 <p class="mb-0 clickable" data-userno="${follower.userNo}">${follower.nickName}</p>
                                             </td>
                                             <td style="vertical-align: middle; padding-right: 10px;">
-                                          <!--     <i class="fas fa-flag badge-icon"></i>-->
-                                            
-                                               <img src="${follower.badgeImage}" class="badge-img"> 
-                                                <!--<img src="${follower.badgeImage}" alt="Badge Image" class="badge-img">-->
+                                              <img src="<c:url value='${follower.badgeImage}' />" class="badge-img">
+
                                             </td>
                                         </tr>
                                     </c:forEach>
