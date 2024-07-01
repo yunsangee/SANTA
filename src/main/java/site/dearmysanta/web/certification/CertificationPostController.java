@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import site.dearmysanta.domain.certificationPost.CertificationPost;
 import site.dearmysanta.domain.certificationPost.CertificationPostComment;
 import site.dearmysanta.domain.common.Search;
+import site.dearmysanta.domain.meeting.MeetingParticipation;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.certification.CertificationPostService;
 import site.dearmysanta.service.common.ObjectStorageService;
@@ -374,6 +375,12 @@ public class CertificationPostController {
             String imageURL = objectStorageService.getImageURL(fileName);
             certificationPostImages.add(imageURL);
         }
+ 
+     
+     // 2. certificationPost 객체의 ProfileImage URL을 objectStorageService를 이용하여 설정합니다.
+     certificationPost.setProfileImage(objectStorageService.getImageURL(certificationPost.getProfileImage()));
+
+     //
 
         System.out.println("댓글" + postNo + userNo + certificationPostCommentList);
         model.addAttribute("certificationPost", map.get("certificationPost"));
