@@ -158,26 +158,7 @@
             	window.location.href = "/mountain/mapMountain?searchCondition=0&searchKeyword=" + mountainName;
             });
             
-            /////////////////
-            
-            $('.popular-testimonial-item').on('click', function(){
-		    let mountainName = $(this).find('h4.mountainName').text().trim();
-		    console.log(mountainName);
-		
-		    // 산 이름을 검색 키워드로 사용하여 새로운 URL로 리디렉션합니다.
-		    window.location.href = "/mountain/mapMountain?searchCondition=0&searchKeyword=" + encodeURIComponent(mountainName);
-			});
-			
-            
-            
-            $('.custom-testimonial-item').on('click', function(){
-    		    let mountainName = $(this).find('h4.mountainName').text().trim();
-    		    console.log(mountainName);
-    		
-    		    // 산 이름을 검색 키워드로 사용하여 새로운 URL로 리디렉션합니다.
-    		    window.location.href = "/mountain/mapMountain?searchCondition=0&searchKeyword=" + encodeURIComponent(mountainName);
-    			});
-            ////////////////
+         
             
             $(".top-button").click(function() {
                 $('html, body').animate({scrollTop: 0}, 'slow');
@@ -251,13 +232,12 @@
         }
         
         .fas.fa-heart {
-    color: red; /* 좋아요가 눌린 경우의 색상 */
-    margin-top:60px;
+    color: red; 
+
 }
 
 .far.fa-heart {
-    color: gray; /* 좋아요가 눌리지 않은 경우의 색상 */
-    margin-top:60px;
+    color: gray; 
 }
 
         .popular-testimonial-item{
@@ -613,14 +593,14 @@
                                      <i class="fas fa-star" style="margin-right: 0px; margin-top:2px; margin-top:20px;"></i>
                                  </div> 
                                     
-                                    <i class="fas fa-external-lstyle=" flex-grow: 1;"ink-alt"></i>
+                                    <i class="fas fa-external-lstyle=" ></i>
                                     <!-- <i class="fas fa-external-link-alt" style="margin-top:-8px;"></i> -->
                                 </div>
                                 
                                 <p class="Location" >${mountain.mountainLocation}</p>
                                 
                                  <p class="m-0 pb-3">
-                                    <i class="${mountain.isLiked == 1 ? 'fas' : 'far'} fa-heart popular like-button post-${mountain.mountainNo}" style="cursor: pointer;">${mountain.likeCount}</i>
+                                    <i class="${mountain.isLiked == 1 ? 'fas' : 'far'} fa-heart popular like-button post-${mountain.mountainNo}" style="cursor: pointer; margin-top:60px;">${mountain.likeCount}</i>
                                     <input type="hidden" id="mountainNo" value="${mountain.mountainNo}"/>
                                     <input type="hidden" id="mountainIndex" value="${index.index}"/>
                                 </p>
@@ -697,7 +677,7 @@
                                 
                                 <%-- <p class="m-0 pb-3">${mountain.mountainAltitude}m</p> --%>
                                 <p class="m-0 pb-3">
-                                    <i class="${mountain.isLiked == 1 ? 'fas' : 'far'} fa-heart custom like-button post-${mountain.mountainNo}" style="cursor: pointer; margin-left:5px;">${mountain.likeCount}</i>
+                                    <i class="${mountain.isLiked == 1 ? 'fas' : 'far'} fa-heart custom like-button post-${mountain.mountainNo}" style="cursor: pointer; margin-left:5px; margin-top:60px;">${mountain.likeCount}</i>
                                     <input type="hidden" id="mountainNo" value="${mountain.mountainNo}"/>
                                     <input type="hidden" id="mountainIndex" value="${index.index}"/>
                                 </p>
@@ -825,7 +805,7 @@
                                     <img src="${certificationPostImages[status.index]}" alt="Certification Post Image">
                                 </div>
                                 <div class="details">
-                                    <h4 class='certificationPostNo'>${certificationPost.postNo}</h4>
+<%--                                     <h4 class='certificationPostNo'>${certificationPost.postNo}</h4> --%>
                                     <h4>${certificationPost.title}</h4>
                                     <p>산명칭 : ${certificationPost.certificationPostMountainName}</p>
                                     <p>Hiking Date: ${certificationPost.certificationPostHikingDate}</p>

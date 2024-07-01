@@ -65,7 +65,7 @@
 	<select id="getUser" parameterType="int" resultMap="userSelectMap">
 	    SELECT 
 	    	user_no, user_id, name, password, nickname, address, birth_date, phone_number, gender, profile_image, creation_date,
-	    hiking_purpose, hiking_difficulty, hiking_level, withdraw_date, withdraw_reason, withdraw_content, role,
+	    hiking_purpose, hiking_difficulty, hiking_level, withdraw_date, NVL(withdraw_reason, -1) AS withdraw_reason, withdraw_content, role,
 	    badge_image, cp_count, mp_count, introduce_content, search_record_setting, all_alert_setting,
 	    cp_setting,mp_setting, hg_setting, time_alert_setting, location_over_setting, destination_setting,
 	    sunset_setting, time_setting, detail_address

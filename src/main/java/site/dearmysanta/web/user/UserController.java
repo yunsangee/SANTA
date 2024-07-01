@@ -376,6 +376,7 @@ public class UserController {
 		        // 요청 매개변수로 받은 userNo가 있는 경우
 		        user = userService.getUser(userNo);
 		        System.out.println("getUser: userNo from request parameter = " + userNo);
+		        System.out.println("getUser: user from request parameter = " + user);
 		    } else if (sessionUser != null) {
 		        // 세션에서 현재 로그인한 사용자 정보 가져오기
 		        user = userService.getUser(sessionUser.getUserNo());
