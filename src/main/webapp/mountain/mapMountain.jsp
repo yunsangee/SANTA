@@ -214,12 +214,12 @@
 				function(index, mountain) {
 					//console.log(mountain);
 					
-					console.log('mountain:');
+					/* console.log('mountain:');
 					console.log(mountain);
 					console.log('Latitude Key Exists:', 'mountainLatitude' in mountain);
 				    console.log('Longitude Key Exists:', 'mountainLongitude' in mountain);
 					console.log('Latitude:', mountain.mountainLatitude);
-			        console.log('Longitude:', mountain.mountainLongitude);
+			        console.log('Longitude:', mountain.mountainLongitude); */
 					
 					latitudes.push(mountain.mountainLatitude);
 					longitudes.push(mountain.mountainLongitude);
@@ -233,6 +233,7 @@
 						icon: customIcon
 					});
 					
+					let mountainImage = mountain.mountainImage;
 					let mountainNoData = mountain.mountainNo;
 					let mountainNameData = mountain.mountainName;
 				    let mountainLatitudeData = mountain.mountainLatitude;
@@ -266,31 +267,60 @@
 				    console.log(weather);
 					
 
-				    let infoWindowContent = 
-				        '<div class="info-window">' +
-				        '<div class="title">' + mountainNameData + 
-				        '<a href="/mountain/getMountain?mountainNo=' + mountainNoData + '&lat=' + mountainLatitudeData + '&lon=' + mountainLongitudeData + '" class="link">상세보기</a>' +
-				        '</div>' +
-				        '<div>위치: ' + mountainLocationData + '</div>' +
-				        '<div>높이: ' + mountainAltitudeData + 'm</div>' +
-				        '<div>좋아요: <i class="' + (isLiked ? 'fas' : 'far') + ' fa-heart like-button" data-mountain-no="' + mountainNoData + '" style="cursor: pointer;"></i> <span class="like-count">' + likeCountData + '</span></div>' +
-				        (weather && weatherIcon && weather.temperature ? '<div><img src="' + weatherIcon + '" class="weather-icon" style="width:20px;height:20px;"> ' + weather.temperature + '°C</div>' : '') +
-				        (weather && weather.precipitation ? '<div>강수: ' + weather.precipitation + '</div>' : '') +
-				        (weather && weather.precipitationProbability ? '<div>강수 확률: ' + weather.precipitationProbability + '%</div>' : '') +
-				        (weather && weather.sunriseTime ? '<div>' + sunriseIcon + ' 일출: ' + weather.sunriseTime.trim() + '</div>' : '') +
-				        (weather && weather.sunsetTime ? '<div>' + sunsetIcon + ' 일몰: ' + weather.sunsetTime.trim() + '</div>' : '') +
-				        '</div>';
+				    /* let infoWindowContent = 
+				    	    '<div class="card info-window" style="width: 25rem;">' +
+				    	    '<img src="'+mountainImage+'" class="card-img-top" style="height:150px; clip-path: inset(0px 0px 5px 0px);" alt="mountainImage">'+
+				    	    '<div class="card-body">' +
+				    	    '<div class="title">'+
+				    	    '<h5 class="card-title">' + mountainNameData + '</h5>' +
+				    	    '<a href="/mountain/getMountain?mountainNo=' + mountainNoData + '&lat=' + mountainLatitudeData + '&lon=' + mountainLongitudeData + '" class="link">상세보기</a>' +
+				    	    '</div>'+
+				    	    '<p class="card-text"><i class="fas fa-map-marker-alt"></i>' + mountainLocationData + '</p>' +
+				    	    '<p class="card-text"><a>🏔️</a>' + mountainAltitudeData + 'm</p>' +
+				    	    '<p class="card-text"><i class="' + (isLiked ? 'fas' : 'far') + ' fa-heart like-button" data-mountain-no="' + mountainNoData + '" style="cursor: pointer;"></i> <span class="like-count">' + likeCountData + '</span></p>' +
+				    	    (weather && weatherIcon && weather.temperature ? '<p class="card-text"><img src="' + weatherIcon + '" class="weather-icon" style="width:20px;height:20px;"> ' + weather.temperature + '°C</p>' : '') +
+				    	    (weather && weather.precipitation ? '<p class="card-text">강수: ' + weather.precipitation + '</p>' : '') +
+				    	    (weather && weather.precipitationProbability ? '<p class="card-text">강수 확률: ' + weather.precipitationProbability + '%</p>' : '') +
+				    	    (weather && weather.sunriseTime || weather && weather.sunsetTime ? '<p class="card-text">' + 
+				    	            (weather && weather.sunriseTime ? '<span>' + sunriseIcon + ' 일출: ' + weather.sunriseTime.trim() + '</span>' : '') + 
+				    	            (weather && weather.sunsetTime ? ' | <span>' + sunsetIcon + ' 일몰: ' + weather.sunsetTime.trim() + '</span>' : '') + 
+				    	            '</p>' : '') +
+				    	    '</div>' +
+				    	    '</div>';  */
+				    	    
+				    	    let infoWindowContent = 
+				    	        '<div class="card info-window" style="width: 25rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-family: Arial, sans-serif; text-align: center; padding-top: 20px; border: 2px solid #ddd;">' +
+				    	        '<div style="position: relative; margin-bottom: 10px;">' +
+				    	        '<div style="width: 150px; height: 150px; border-radius: 50%; overflow: hidden; margin: 0 auto; border: 3px solid #90EE90; position: relative;">' +
+				    	        '<img src="'+mountainImage+'" style="width: 100%; height: 150px; object-fit: cover; transform: translateY(10px);" alt="mountainImage">' +
+				    	        '</div>' +
+				    	        '</div>' +
+				    	        '<div style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">' +
+				    	        '<h5 class="card-title" style="margin: 0; font-size: 1.5em; margin-right: auto;">' + mountainNameData + '</h5>' +
+				    	        '<a href="/mountain/getMountain?mountainNo=' + mountainNoData + '&lat=' + mountainLatitudeData + '&lon=' + mountainLongitudeData + '" class="link" style="color: #00A3FF; text-decoration: none; font-weight: bold;">상세보기</a>' +
+				    	        '</div>' +
+				    	        '<p class="card-text" style="color: #555; font-size: 0.9em; margin-top: 5px; margin-bottom: 10px;">' + mountainLocationData + '</p>' +
+				    	        '<hr style="border: 0; height: 1px; background: #ddd; margin: 10px 0;">' +
+				    	        '<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 0.9em; color: #555;">' +
+				    	        (weather && weather.temperature ? '<div style="display: flex; align-items: center;"><i class="fas fa-thermometer-half"></i> ' + weather.temperature + '°C</div>' : '') +
+				    	        '<div style="display: flex; align-items: center;"><i class="fas fa-cloud-rain"></i> 강수: ' + (weather && weather.precipitation ? weather.precipitation : 0) + '</div>' +
+				    	        '<div style="display: flex; align-items: center;"><i class="fas fa-umbrella"></i> 강수 확률: ' + (weather && weather.precipitationProbability ? weather.precipitationProbability : 0) + '%</div>' +
+				    	        (weather && weather.sunriseTime ? '<div style="display: flex; align-items: center;">' + sunriseIcon + ' 일출: ' + weather.sunriseTime.trim() + '</div>' : '') +
+				    	        (weather && weather.sunsetTime ? '<div style="display: flex; align-items: center;">' + sunsetIcon + ' 일몰: ' + weather.sunsetTime.trim() + '</div>' : '') +
+				    	        '</div>' +
+				    	        '</div>';
 
+				    	        /* clip-path: inset(0px 0px 10px 0px); */
+				    	    
 	                console.log('infoWindowContent:', infoWindowContent);
 
 	                let infoWindow = new naver.maps.InfoWindow({
 	                    content: infoWindowContent,
-	                    backgroundColor: "#fff",
-	                    borderColor: "#333",
-	                    borderWidth: 1,
+	                    backgroundColor: "rgba(0,0,0,0)", // 배경색을 투명하게 설정하여 기본 테두리를 제거
+	                    borderColor: "rgba(0,0,0,0)", // 테두리를 투명하게 설정
 	                    anchorSize: new naver.maps.Size(10, 10),
 	                    anchorSkew: true,
-	                    anchorColor: "#fff",
+	                    anchorColor: "rgba(0,0,0,0)", // 앵커 색상을 투명하게 설정
 	                    pixelOffset: new naver.maps.Point(10, -10)
 	                });
 
@@ -534,18 +564,18 @@
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
- 		.info-window {
+ 		/* .info-window {
             width: 220px;
             max-width: 220px;
             font-size: 14px;
             line-height: 1.5;
-            overflow: hidden; /* 내용이 넘칠 경우 숨김 */
+            overflow: hidden; 
         }
         .info-window img {
             width: 100%;
             height: auto;
-            max-height: 100px; /* 최대 높이 설정 */
-            object-fit: cover; /* 이미지가 잘리지 않고 창에 맞도록 설정 */
+            max-height: 100px; 
+            object-fit: cover; 
         }
         .info-window .title {
             font-weight: bold;
@@ -559,17 +589,32 @@
             background-color: transparent;
         }
         
-        .fas.fa-heart {
-            color: red; /* 좋아요가 눌린 경우의 색상 */
+        .custom-marker {
+            background: none; 
+        }
+        
+        .title{
+        	display: flex; 
+			justify-content: space-between; 
+			align-items: center;
+        }
+ */
+ 
+ .info-window {
+            width: 220px;
+            max-width: 220px;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow: hidden; 
+        }
+ 
+ .fas.fa-heart {
+            color: red; 
         }
 
         .far.fa-heart {
-            color: gray; /* 좋아요가 눌리지 않은 경우의 색상 */
+            color: gray; 
         }
-        .custom-marker {
-            background: none; /* 배경을 투명하게 설정 */
-        }
-
 </style>
 
 
