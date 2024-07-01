@@ -160,23 +160,21 @@
             
             /////////////////
             
-            $('.popular-testimonial-item').on('click', function(){
+         /*    $('.popular-testimonial-item').on('click', function(){
 		    let mountainName = $(this).find('h4.mountainName').text().trim();
 		    console.log(mountainName);
 		
-		    // 산 이름을 검색 키워드로 사용하여 새로운 URL로 리디렉션합니다.
 		    window.location.href = "/mountain/mapMountain?searchCondition=0&searchKeyword=" + encodeURIComponent(mountainName);
-			});
+			}); */
 			
             
             
-            $('.custom-testimonial-item').on('click', function(){
+         /*    $('.custom-testimonial-item').on('click', function(){
     		    let mountainName = $(this).find('h4.mountainName').text().trim();
     		    console.log(mountainName);
     		
-    		    // 산 이름을 검색 키워드로 사용하여 새로운 URL로 리디렉션합니다.
     		    window.location.href = "/mountain/mapMountain?searchCondition=0&searchKeyword=" + encodeURIComponent(mountainName);
-    			});
+    			}); */
             ////////////////
             
             $(".top-button").click(function() {
@@ -404,7 +402,7 @@
 }
 
 .info {
-	margin-top:40px;
+/* 	margin-top:40px; */
 	color : #8B8A7E;
 	font-size: 14px;
 	font-weight: 550;
