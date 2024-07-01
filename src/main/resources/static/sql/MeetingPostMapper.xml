@@ -573,7 +573,7 @@
 		JOIN
 			meeting_participation mpp ON mp.mp_no = mpp.mp_no
 		WHERE
-			mpp.user_no = ${userNo} AND (mpp.participation_role = 0 OR mpp.participation_role = 2)
+			mpp.user_no = #{userNo} AND mpp.withdraw_flag = 0 AND (mpp.participation_role = 0 OR mpp.participation_role = 2)
 	</select>
 	
 	
