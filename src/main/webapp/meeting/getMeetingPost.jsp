@@ -547,12 +547,29 @@
 		.fa-heart {
 			cursor: pointer;
 		}
-    	
-    	
-        
-    }
-    	
-    
+		
+		.post-image {
+	        width: 200px; /* 고정된 가로 크기 */
+	        height: 200px; /* 고정된 세로 크기 */
+	        object-fit: cover; /* 이미지의 비율을 유지하면서 자르기 */
+	        margin: 10px;
+	        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+	        border-radius: 8px;
+	    }
+	    .image-gallery {
+	        display: flex;
+	        flex-wrap: wrap;
+	        gap: 10px;
+	    }
+	    .image-gallery img {
+	        flex: 1 1 calc(50% - 10px);
+	        cursor: pointer;
+	        transition: transform 0.2s ease-in-out;
+	    }
+	    .image-gallery img:hover {
+	        transform: scale(1.05);
+	    }
+	    
     </style>
     
 </head>
@@ -652,7 +669,7 @@
     				<div class="col-md-2 border bg-light align-items-center title contents d-flex justify-content-center">내용</div>
     				<div class="col-md-10 border align-items-center text-start contents">
     					<c:forEach var="image" items="${meetingPostImages}">
-					        <img src="${image}" alt="Image" />
+					        <img src="${image}" alt="Image" class="post-image"/>
 					    </c:forEach>
     					${meetingPost.contents}
     				</div>
@@ -779,7 +796,7 @@
 					                                    <div class="d-flex justify-content-between align-items-center w-100">
 					                                        <div class="d-flex align-items-center">
 					                                            <img src="${participation.profileImage}" alt="Image" class="me-2" style="width: 40px; height: 40px; border-radius: 50%;">
-					                                            <p class="mb-0">${participation.nickname}</p>
+					                                            <p class="mb-0"><a href="/certificationPost/getProfile?userNo=${participation.userNo}">${participation.nickname}</a></p>
 					                                        </div>
 					                                    </div>
 					                                </td>
