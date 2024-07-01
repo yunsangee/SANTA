@@ -47,35 +47,46 @@
             border: none;
         }
 
-        .table tbody tr {
+		   .table tbody tr {
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex; /* Add flex display for table rows */
+            align-items: center; /* Align items vertically centered */
+            justify-content: space-between; /* Distribute space between items */
         }
 
-        .table tbody tr td {
-            border-top: none;
-            border-bottom: none;
-            padding: 10px;
-        }
+		.table tbody tr td {
+		
+		    border-top: none;
+		    border-bottom: none;
+		    padding: 10px;
+		    flex: 1; /* Make all columns take equal space */
+		    text-align: center; /* Center-align text in cells */
+		    white-space: nowrap; /* Prevent text from breaking into multiple lines */
+		}
+
 
         .profile-img {
             width: 50px;
             height: 50px;
             border-radius: 50%;
             object-fit: cover;
+            margin-right: 10px; /* Add margin for spacing */
         }
 
         .badge-img {
             width: 24px;
             height: 24px;
             object-fit: cover;
+            margin-left: 10px; /* Add margin for spacing */
         }
 
         /* 닉네임 스타일 */
         .clickable {
             color: #81C408; /* 연두색 */
             text-decoration: none; /* 밑줄 제거 */
+            font-size: 16px; /* Increase font size */
         }
 
         .clickable:hover {
@@ -131,18 +142,16 @@
                                     <c:forEach var="follower" items="${followerList}">
                                         <tr>
                                             <td style="vertical-align: middle; padding-right: 10px;"> 
-                                               <!--  <i class="fas fa-user profile-icon"></i>-->
-                                    <img src="${follower.profileImage}" alt="Profile Image" class="profile-img">
-                                            <!--     <img src="${sessionScope.user.profileImage}" alt="Profile Image" class="profile-img"> -->
+                                                <img src="${follower.profileImage}" alt="Profile Image" class="profile-img">
                                             </td>
                                             <td style="vertical-align: middle; padding-right: 10px;">
                                                 <p class="mb-0 clickable" data-userno="${follower.userNo}">${follower.nickName}</p>
                                             </td>
                                             <td style="vertical-align: middle; padding-right: 10px;">
-                                          <!--     <i class="fas fa-flag badge-icon"></i>-->
-                                            
-                                               <img src="${follower.badgeImage}" class="badge-img"> 
-                                                <!--<img src="${follower.badgeImage}" alt="Badge Image" class="badge-img">-->
+                                                <img src="${follower.badgeImage}" class="badge-img"> 
+                                            </td>
+                                              <td style="vertical-align: middle; padding-right: 10px;">
+                                                산타님이 팔로잉 중입니다.
                                             </td>
                                         </tr>
                                     </c:forEach>
