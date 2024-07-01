@@ -120,7 +120,7 @@
             text-align: left; /* 글씨 왼쪽 정렬 */
         }
 
-        button, a.button {
+        button, a.button, .link-section a {
             width: 400px;
             padding: 15px;
             font-size: 16px;
@@ -247,22 +247,91 @@
         	color : grey;
         	text-decoration: underline;
         }
-
         
+        .file-input{
+        	display:none;
+        }
+        
+        
+        .badgeImage{
+        	width:24px;
+        	height:24px;
+        }
+
+        label {
+    display: block;
+    margin-bottom: 5px;
+}
+     
+     h6 {
+     	margin-bottom:30px;
+     	 align-items: center;
+     }   
+     
+      .survey-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* 선택적으로 가운데 정렬을 원할 경우 center로 변경 */
+            gap: 10px; /* 각 요소 간의 간격을 설정 */
+            width: 400px; /* 원하는 너비를 설정 */
+        }
     </style>
 
     <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
 
     <script>
+    	let profileImage = '';
         $(document).ready(function() {
-            $(".submit").click(function() {
-                console.log("click");
+            $(".submit").click(function() { 
                 if ($("#profile").val() != "") {
                     $("form").attr("enctype", "multipart/form-data").submit();
                 } else {
                     $("#profile").remove();
                     $("form").submit();
                 }
+            });
+            
+            $('.pencil').on("click", function(){
+            	 console.log("click");
+                 
+                 $('#profile').click();
+                 let intervalId = setInterval(function() {
+                     var profileValue = $('#profile').val();
+                     
+                     if (profileValue != profileImage) {
+                         console.log('Profile value is set:', profileValue);
+                         
+                         
+                         let formData = new FormData();
+                         formData.append("image",$('#profile')[0].files[0]);
+                         
+                         
+                         $.ajax({
+                        	 url:'/user/rest/updateProfile',
+                        	 type: 'POST',
+                        	 data: formData,
+                        	 processData: false,  // 기본적으로 처리하지 않도록 설정
+                             contentType: false,
+                        	 success: function(response){
+                        		 console.log('success');
+                        		 console.log(response);
+                        		 
+                        		 $('.profile').attr("src",response);
+                        		 profileImage = profileValue;
+
+                        		 clearInterval(intervalId);  // 조건이 만족되면 주기적인 확인 중지
+                        	 },
+                        	 error:function(jqXHR, textStatus, errorThrown) {
+                                 console.error('File upload failed:', textStatus, errorThrown);
+                             }
+                         });
+                         
+                         
+                        
+                     } else {
+                         console.log('Profile value is not set');
+                     }
+                 }, 1000); // 3000 밀리초 = 3초
             });
 
             // 주소 클릭 시 도로명 주소 창 열기
@@ -345,19 +414,22 @@
 
 <main class="container">
     <form action="/user/updateUser" method="post" >
-        <div class="profile-header">
+     <%--    <div class="profile-header">
             <div class="profile-container">
                 <img src="${sessionScope.user.profileImage}" class="profile">
-                <a class="pencil">📷</a>
+                <a class="pencil">📷 </a>
+                <input type="file" id="profile" class="file-input"/>
                 <!-- ✏️ -->
             </div>
             <div class="profile-info">
-                <p>${user.badgeImage} 인증 ${user.certificationCount}회, 모임 ${user.meetingCount}회</p>
+                <p><img src="${user.badgeImage}" class="badgeImage"> 인증 ${user.certificationCount}회, 모임 ${user.meetingCount}회</p>
                 <a href="/user/changePassword.jsp" class="text-link">${user.userId}✏️</a> 
                 <!--  <button type="button" ><input type="file" id="profile" name="image" value=""></button> -->
             </div>
-        </div>
-
+        </div> --%>
+		
+		<h6>산타에 가입해 주셔서 감사합니다. <br> 더욱 편리한 사용을 위해 추가 정보를 입력해주세요.</h6>
+		
         <div class="detail-section">
             <input type="text" class="update" name="nickName" value="${user.nickName}" required>
             <div id="nickMessage" class="error-message"></div>
@@ -377,29 +449,33 @@
                     </c:when>
                 </c:choose>
             </p> <!-- Gender는 수정 불가 -->
-            <textarea class="update" name="introduceContent">${user.introduceContent}</textarea>
-            
+            <%-- <textarea class="update" name="introduceContent" placeholder="자기소개">${user.introduceContent}</textarea>
+             --%>
             <div class="line"></div>
             
-            <label class="survey-label">설문조사</label>
-            
-            <select name="hikingPurpose">
-                <option value="0" ${user.hikingPurpose == 0 ? 'selected' : ''}>취미</option>
-                <option value="1" ${user.hikingPurpose == 1 ? 'selected' : ''}>운동</option>
-                <option value="2" ${user.hikingPurpose == 2 ? 'selected' : ''}>친목</option>
-            </select>
-            <select name="hikingDifficulty">
-                <option value="0" ${user.hikingDifficulty == 0 ? 'selected' : ''}>어려움</option>
-                <option value="1" ${user.hikingDifficulty == 1 ? 'selected' : ''}>보통</option>
-                <option value="2" ${user.hikingDifficulty == 2 ? 'selected' : ''}>쉬움</option>
-            </select>
-            <select name="hikingLevel">
-                <option value="0" ${user.hikingLevel == 0 ? 'selected' : ''}>경험없음</option>
-                <option value="1" ${user.hikingLevel == 1 ? 'selected' : ''}>1년에 1~2회 이상</option>
-                <option value="2" ${user.hikingLevel == 2 ? 'selected' : ''}>1년에 5회 이상</option>
-                <option value="3" ${user.hikingLevel == 3 ? 'selected' : ''}>한 달에 1~2회 이상</option>
-                <option value="4" ${user.hikingLevel == 4 ? 'selected' : ''}>한 달에 5회 이상</option>
-            </select>
+            <div class="survey-section">
+        <label>설문조사</label>
+        <select name="hikingPurpose" required>
+            <option value="" disabled selected>등산 목적을 선택하세요</option>
+            <option value="0">취미</option>
+            <option value="1">운동</option>
+            <option value="2">친목</option>
+        </select>
+        <select name="hikingDifficulty" required>
+            <option value="" disabled selected>선호 난이도를 선택하세요</option>
+            <option value="0">어려움</option>
+            <option value="1">보통</option>
+            <option value="2">쉬움</option>
+        </select>
+        <select name="hikingLevel" required>
+            <option value="" disabled selected>등산 경험도를 선택하세요</option>
+            <option value="0">경험없음</option>
+            <option value="1">1년에 1~2회 이상</option>
+            <option value="2">1년에 5회 이상</option>
+            <option value="3">한 달에 1~2회 이상</option>
+            <option value="4">한 달에 5회 이상</option>
+        </select>
+    </div>
             
             <c:if test="${admin != null}">
                 <input type="text" class="read-only" value="${user.creationDate}" readonly>
@@ -426,11 +502,11 @@
         <!-- <br> -->
             
         <div class="link-section">
-            <button type="button" class="a submit">수정 완료하기</button>
+            <a href="/common/main.jsp" class="a submit">정보 등록하기</a>
         </div>    
 
 	<div class="back-section">
-		<a href="/user/getUser">뒤로</a>
+		<a href="/common/main.jsp">홈 화면으로</a>
 	</div>
 
     </form>
@@ -438,9 +514,7 @@
 
 <!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// --> 
 
-<footer>
-	<c:import url="../common/footer.jsp"/>
-</footer>
+<footer></footer>
 
 </body>
 </html>

@@ -51,8 +51,8 @@ public class OAuthService{
             sb.append("grant_type=authorization_code");
 //            sb.append("&client_id=af43c655326aaa2ca97588ce636e1e29"); // TODO REST_API_KEY 입력
             sb.append("&client_id=53ae98941fff9e24b11901e9a79432d9"); // TODO REST_API_KEY 입력
-            //sb.append("&redirect_uri=http://localhost:8001/oauth/kakao"); // TODO 인가코드 받은 redirect_uri 입력     
-            sb.append("&redirect_uri=https://www.dearmysanta.site/oauth/kakao"); // TODO 인가코드 받은 redirect_uri 입력     
+            sb.append("&redirect_uri=http://localhost:8001/oauth/kakao"); // TODO 인가코드 받은 redirect_uri 입력     
+            //sb.append("&redirect_uri=https://www.dearmysanta.site/oauth/kakao"); // TODO 인가코드 받은 redirect_uri 입력     
             sb.append("&code=" + code);
             bw.write(sb.toString());
             bw.flush();
@@ -153,8 +153,8 @@ public class OAuthService{
            String userPassword ="kakao"; // 초기값을 null로 설정하거나 다른 로직을 통해 값을 가져올 수 있습니다.
           
         // 임의의 주소 정보 추가 (실제 주소 정보를 가져오는 방법이 필요)
-           String address = "kakaoAddress"; // 기본 주소 값 설정
-           String detailAddress = "kakaoAddressDetail"; // 기본 상세 주소 값 설정
+           String address = "주소를 입력해주세요"; // 기본 주소 값 설정
+           String detailAddress = "주소를 입력해주세요"; // 기본 상세 주소 값 설정
            
            System.out.println("id : " + id);
            System.out.println("email : " + email);

@@ -253,7 +253,7 @@
 <!---->
 <select id="getCertificationPostList" resultMap="CertificationPostSelectMap" parameterType="site.dearmysanta.domain.common.Search">
     SELECT * FROM (
-        SELECT cp.*, u.nickname, ROW_NUMBER() OVER (
+        SELECT cp.*, u.nickname, u.profile_image, u.badge_image, ROW_NUMBER() OVER (
             ORDER BY 
             <choose>
                   <when test="sortCondition == 1"> <!-- 최신순 -->
