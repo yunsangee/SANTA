@@ -805,7 +805,7 @@
                                     <img src="${certificationPostImages[status.index]}" alt="Certification Post Image">
                                 </div>
                                 <div class="details">
-<%--                                     <h4 class='certificationPostNo'>${certificationPost.postNo}</h4> --%>
+									<h4 class='certificationPostNo'>${certificationPost.postNo}</h4> 
                                     <h4>${certificationPost.title}</h4>
                                     <p>산명칭 : ${certificationPost.certificationPostMountainName}</p>
                                     <p>Hiking Date: ${certificationPost.certificationPostHikingDate}</p>
