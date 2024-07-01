@@ -158,6 +158,27 @@
             	window.location.href = "/mountain/mapMountain?searchCondition=0&searchKeyword=" + mountainName;
             });
             
+            /////////////////
+            
+            $('.popular-testimonial-item').on('click', function(){
+		    let mountainName = $(this).find('h4.mountainName').text().trim();
+		    console.log(mountainName);
+		
+		    // 산 이름을 검색 키워드로 사용하여 새로운 URL로 리디렉션합니다.
+		    window.location.href = "/mountain/mapMountain?searchCondition=0&searchKeyword=" + encodeURIComponent(mountainName);
+			});
+			
+            
+            
+            $('.custom-testimonial-item').on('click', function(){
+    		    let mountainName = $(this).find('h4.mountainName').text().trim();
+    		    console.log(mountainName);
+    		
+    		    // 산 이름을 검색 키워드로 사용하여 새로운 URL로 리디렉션합니다.
+    		    window.location.href = "/mountain/mapMountain?searchCondition=0&searchKeyword=" + encodeURIComponent(mountainName);
+    			});
+            ////////////////
+            
             $(".top-button").click(function() {
                 $('html, body').animate({scrollTop: 0}, 'slow');
             });
@@ -231,10 +252,12 @@
         
         .fas.fa-heart {
     color: red; /* 좋아요가 눌린 경우의 색상 */
+    margin-top:60px;
 }
 
 .far.fa-heart {
     color: gray; /* 좋아요가 눌리지 않은 경우의 색상 */
+    margin-top:60px;
 }
 
         .popular-testimonial-item{
@@ -246,10 +269,11 @@
             min-width: 150px;
             height:300px;
             flex: 1;
-            display:flex;
+           display:flex; 
             position:relative;
-        
         }
+        
+
         
         .custom-testimonial-item{
         	text-align: left;
@@ -278,12 +302,12 @@
         }
         
         .swiper-container {
-    border: 1px solid #ddd;
+    border: 1px solid #ddd; 
     border-radius: 5px;
     margin: 15px;
     width: 100%; /* 전체 너비로 설정 */
-
     overflow: hidden; /* 내용이 넘치는 경우를 대비하여 오버플로우를 숨김 */
+    height: 340px; 
     }
     .swiper2-container {
     border: 1px solid #ddd;
@@ -379,6 +403,156 @@
 
 }
 
+.info {
+	margin-top:40px;
+	color : #8B8A7E;
+	font-size: 14px;
+	font-weight: 550;
+	margin-left:5px;
+}
+
+.info2 {
+	margin-top:40px;
+	color : #8B8A7E;
+	font-size: 14px;
+	font-weight: 550;
+	margin-left:5px;
+}
+
+.info2:hover {
+	 color: #8B8A7E;
+}
+
+.text-primary {
+	margin-bottom:-2px;
+	margin-left:5px;
+	/* margin-top:30px; */
+}
+
+.popular {
+	margin-bottom:0px;
+	margin-left:5px;
+	margin-top:30px;
+}
+
+.searchBox {
+	flex: 1; 
+	padding: 10px; 
+	border: none; 
+	outline: none; 
+	border: 1px solid #ccc; 
+	border-radius: 35px; 
+	padding: 10px;
+	margin-left:20px;
+}
+
+.search {
+	background: none; 
+	border: none; 
+	cursor: pointer;
+	margin-left: -40px;
+}
+
+.search-container {
+	positon:relative;
+	width:80%;
+	display: flex; 
+	justify-content: center; 
+	align-items: center;
+	margin-left:165px;
+	margin-top: 10px; 
+	margin-bottom: 100px;
+}
+
+/* .line {
+    border-bottom: 1px solid #ccc;
+    margin: 20px 0;
+} */
+
+.search-top {
+	font-size:30px;
+	font-weight: bold;
+	color : white;
+	margin-left:95px;
+	margin-top:120px;
+	margin-bottom:10px;
+}
+
+.top {
+	width:100%;
+	background-color : #81C408;
+}
+
+.search-top:hover {
+            color: #81C408; /* 마우스를 올렸을 때 색상을 동일하게 유지 */
+        }
+        
+.hiking {
+	width:10%;
+	margin-left:480px;
+	margin-top:-170px;
+}
+
+.mountainName {
+	margin-top:35px;
+}
+
+.Location {
+	font-size:12px;
+	margin-top:-2px;
+	position: fixed;
+	margin-right: 18px;
+}
+
+.Altitude {
+	margin-top:-17px;
+	margin-bottom:1px;
+	margin-left:3px;
+}
+
+.count {
+	margin-top:0px;
+	font-size:17px;
+	margin-left:3px;
+}
+
+.popular-testimonial-item:hover {
+  	border: 1px solid #81C408; /* 클릭 시 테두리 두께와 색상 설정 */
+    outline: none; /* 기본 포커스 효과 제거 */
+    box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); /* 선택적으로 포커스 시 그림자 효과 추가 */
+    cursor: pointer;
+}
+
+.custom-testimonial-item:hover {
+	border: 1px solid #81C408; /* 클릭 시 테두리 두께와 색상 설정 */
+    outline: none; /* 기본 포커스 효과 제거 */
+    box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); /* 선택적으로 포커스 시 그림자 효과 추가 */
+    cursor: pointer;
+}
+
+     .no {
+        padding: 1rem 3.5rem !important; /* 상하 1rem, 좌우 3.5rem */
+    }
+    .author {
+        padding: 1rem 3.5rem !important; /* 상하 1rem, 좌우 3.5rem */
+    }
+    .title {
+        padding: 1rem 3.5rem 1rem 6.5rem !important; /* 상하 1rem, 좌 3.5rem, 우 6.5rem */
+    }
+    .status {
+        padding: 1rem  !important; /* 상하 1rem, 좌우 3.5rem */
+        text-align: left; /* 텍스트를 왼쪽 정렬 */
+    }
+    .date {
+        padding: 1rem !important;
+        margin-left: 0rem; /* 좌측 간격을 줄임 */
+    } 
+    
+   .table p {
+        white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 설정 */
+        overflow: hidden; /* 넘치는 텍스트를 숨김 */
+        text-overflow: ellipsis; /* 넘치는 텍스트에 말줄임표 추가 */
+    }
     </style>
 </head>
 
@@ -393,17 +567,30 @@
 <div class="container-fluid testimonial first-container" >
     <div class="container py-5">
     <div class="row g-4 mb-5">
-        <div class="search-container" style="display: flex; justify-content: center; align-items: center; margin-top: 30px; margin-bottom: 20px;">
-            <input id="searchBox" type="text" placeholder="검색" style="flex: 1; padding: 10px; border: none; outline: none; border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
-            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" style="background: none; border: none; cursor: pointer; margin-left: 10px;">
+    <div class="top">
+    
+            <div class="search-top">
+				<a class="search-top">이번주엔</a>
+				<br>
+				<a class="search-top">어디로 등산가볼까?</a>
+			</div>
+			
+			<img class="hiking" src="/image/hiking.png">
+
+        <div class="search-container">
+            <input class="searchBox" id="searchBox" type="text" placeholder="어느 산으로 가볼까요?" >
+            <button class="search" >
                 <i class="fas fa-search text-primary" id="search"></i>
             </button>
-            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white" style="background: none; border: none; cursor: pointer; margin-left: 1px;">
+            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white" style="background: none; border: none; cursor: pointer; margin-left: 15px;">
                 <i class="fas fa-map text-primary" id="mapSearch"></i>
             </button>
-        </div>
+        </div>   
+       </div>
+        
         <div class="testimonial-header text-left" style="margin-top:10px;">
-            <h4 class="text-primary">인기산 목록</h4>
+            <h4 class="popular">인기있는 산</h4>
+            <a class="info">많은 산타님들이 검색했어요!</a>
         </div>
         <div class="swiper-container popular-swiper-container">
             <div class="swiper-wrapper">
@@ -411,25 +598,50 @@
                     <div class="swiper-slide">
                         <div class="popular-testimonial-item img-border-radius rounded p-4">
                             <div class=" rounded">
-                                <img src="${mountain.mountainImage}" class="img-fluid rounded mountainImage" style="width: 250px; height: 150px;" alt="">
+                                <img src="${mountain.mountainImage}" class="img-fluid rounded mountainImage" style="width: 250px; height: 250px;" alt="">     
                             </div>
-                            <div class="ms-3 d-block" style="flex-grow: 1;">
+                            
+                            <div class="ms-3 d-block" >
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h4 class="text-dark mb-0 mountainName">${mountain.mountainName}</h4>
-                                    <i class="fas fa-external-link-alt"></i>
+                                    <h4 class="mountainName" >${mountain.mountainName}</h4> 
+                                    
+                                    <div class="d-flex pe-5"> 
+                                     <i class="fas fa-star text-primary" style="margin-right: -4px; margin-top:20px; margin-left:10px;"></i>
+                                     <i class="fas fa-star text-primary" style="margin-right: -4px; margin-top:20px;"> </i>
+                                     <i class="fas fa-star text-primary" style="margin-right: -4px; margin-top:20px;"></i>
+                                     <i class="fas fa-star text-primary" style="margin-right: 1px; margin-top:20px;"></i>
+                                     <i class="fas fa-star" style="margin-right: 0px; margin-top:2px; margin-top:20px;"></i>
+                                 </div> 
+                                    
+                                    <i class="fas fa-external-lstyle=" flex-grow: 1;"ink-alt"></i>
+                                    <!-- <i class="fas fa-external-link-alt" style="margin-top:-8px;"></i> -->
                                 </div>
-                                <p class="m-0 pb-3" style="font-size: 0.75em;">${mountain.mountainLocation}</p>
-                                <p class="m-0 pb-3">${mountain.mountainAltitude}</p>
-                                <p class="m-0 pb-3">
+                                
+                                <p class="Location" >${mountain.mountainLocation}</p>
+                                
+                                 <p class="m-0 pb-3">
                                     <i class="${mountain.isLiked == 1 ? 'fas' : 'far'} fa-heart popular like-button post-${mountain.mountainNo}" style="cursor: pointer;">${mountain.likeCount}</i>
                                     <input type="hidden" id="mountainNo" value="${mountain.mountainNo}"/>
                                     <input type="hidden" id="mountainIndex" value="${index.index}"/>
                                 </p>
-                                <p class="m-0 pb-3">${mountain.mountainViewCount}</p>
-                                <div class="d-flex pe-5">
-                                    <i class="fas fa-star text-primary"></i> <i class="fas fa-star text-primary"></i> <i class="fas fa-star text-primary"></i> <i class="fas fa-star text-primary"></i> <i class="fas fa-star"></i>
-                                </div>
+                                
+                                <p class="Altitude"><a>🏔️</a>${mountain.mountainAltitude}m</p>
+                                <p class="count">👀${mountain.mountainViewCount}</p>
+                               <%-- <p class="m-0 pb-3">
+                                    <i class="${mountain.isLiked == 1 ? 'fas' : 'far'} fa-heart popular like-button post-${mountain.mountainNo}" style="cursor: pointer;">${mountain.likeCount}</i>
+                                    <input type="hidden" id="mountainNo" value="${mountain.mountainNo}"/>
+                                    <input type="hidden" id="mountainIndex" value="${index.index}"/>
+                                </p> --%>
+                                <%-- <p class="m-0 pb-3">${mountain.mountainViewCount}</p> --%>
+                                <!-- <div class="d-flex pe-5"> 
+                                     <i class="fas fa-star text-primary" style="margin-right: -4px;"></i>
+                                     <i class="fas fa-star text-primary" style="margin-right: -4px;"> </i>
+                                     <i class="fas fa-star text-primary" style="margin-right: -4px;"></i>
+                                     <i class="fas fa-star text-primary" style="margin-right: 1px; "></i>
+                                     <i class="fas fa-star" style="margin-right: 0px; margin-top:2px;"></i>
+                                 </div>  -->
                             </div>
+                            
                         </div>
                     </div>
                 </c:forEach>
@@ -444,12 +656,15 @@
     </div>
 </div>
 
+<!-- ////////////////////////////////// 사용자 맞춤 산 검색 ////////////////////////////// -->
+
 <!-- Second Carousel -->
-			<div class="container-fluid testimonial section-container">
+			<div class="container-fluid testimonial section-container" style="margin-top:-50px;">
     <div class="container py-5">
 
         <div class="testimonial-header text-left">
-            <h4 class="text-primary">사용자 맞춤 산 목록</h4>
+            <h4 class="popular">산타님 맞춤 산</h4>
+            <a class="info">산타님을 위한 산 목록입니다!</a>
         </div>
         <div style="height:20px;"></div>
         <div class="row g-4 mb-5" >
@@ -459,24 +674,43 @@
                     <div class="swiper-slide">
                         <div class="custom-testimonial-item img-border-radius rounded p-4">
                             <div class="rounded">
-                                <img src="${mountain.mountainImage}" class="img-fluid rounded mountainImage" style="width: 250px; height: 150px;" alt="">
+                                <img src="${mountain.mountainImage}" class="img-fluid rounded mountainImage" style="width: 250px; height: 250px;" alt="">
                             </div>
+                            
                             <div class="ms-3 d-block" style="flex-grow: 1;">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h4 class="text-dark mb-0 mountainName">${mountain.mountainName}</h4>
-                                    <i class="fas fa-external-link-alt"></i>
+                                    <h4 class="mountainName">${mountain.mountainName}</h4>
+                                    
+                                    <div class="d-flex pe-5"> 
+                                     <i class="fas fa-star text-primary" style="margin-right: -4px; margin-top:20px; margin-left:-182px;"></i>
+                                     <i class="fas fa-star text-primary" style="margin-right: -4px; margin-top:20px;"> </i>
+                                     <i class="fas fa-star text-primary" style="margin-right: -4px; margin-top:20px;"></i>
+                                     <i class="fas fa-star text-primary" style="margin-right: 1px; margin-top:20px;"></i>
+                                     <i class="fas fa-star" style="margin-right: 0px; margin-top:2px; margin-top:20px;"></i>
+                                 </div> 
+                                    <!-- <i class="fas fa-external-link-alt"></i> -->
                                 </div>
-                                <p class="m-0 pb-3" style="font-size: 0.75em;">${mountain.mountainLocation}</p>
-                                <p class="m-0 pb-3">${mountain.mountainAltitude}m</p>
+                                
+                                  
+                                
+                                <p class="Location">${mountain.mountainLocation}</p>
+                                
+                                <%-- <p class="m-0 pb-3">${mountain.mountainAltitude}m</p> --%>
                                 <p class="m-0 pb-3">
-                                    <i class="${mountain.isLiked == 1 ? 'fas' : 'far'} fa-heart custom like-button post-${mountain.mountainNo}" style="cursor: pointer;">${mountain.likeCount}</i>
+                                    <i class="${mountain.isLiked == 1 ? 'fas' : 'far'} fa-heart custom like-button post-${mountain.mountainNo}" style="cursor: pointer; margin-left:5px;">${mountain.likeCount}</i>
                                     <input type="hidden" id="mountainNo" value="${mountain.mountainNo}"/>
                                     <input type="hidden" id="mountainIndex" value="${index.index}"/>
                                 </p>
-                                <p class="m-0 pb-3">${mountain.mountainViewCount}</p>
-                                <div class="d-flex pe-5">
-                                    <i class="fas fa-star text-primary"></i> <i class="fas fa-star text-primary"></i> <i class="fas fa-star text-primary"></i> <i class="fas fa-star text-primary"></i> <i class="fas fa-star"></i>
-                                </div>
+                                
+                                <p class="Altitude"><a>🏔️</a>${mountain.mountainAltitude}m</p>
+                                <p class="count">👀${mountain.mountainViewCount}</p>
+                                <!-- <div class="d-flex pe-5">
+                                    <i class="fas fa-star text-primary"></i>
+                                     <i class="fas fa-star text-primary"></i>
+                                      <i class="fas fa-star text-primary"></i>
+                                       <i class="fas fa-star text-primary"></i>
+                                        <i class="fas fa-star"></i>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -491,13 +725,16 @@
         </div>
 	</div></div>
 
-			<div class="container-fluid testimonial section-container">
+<!-- ////////////////// 모임 모집 목록 /////////////////////// -->
+
+			<div class="container-fluid testimonial section-container" style="margin-top:-85px;">
 	<div class="container-fluid py-5 meetingPostr">
     		<div class="container py-5">
     			<div class="table-header text-center">
-            			<h4 class="text-primary">모임 모집  목록</h4>
+            			<h4 class="popular">현재 모임 소식📣</h4>
+            			<a class="info2" style="margin-left:-1175px; margin-top:83px;">함께 등산하는 산타 모임. 같이 갈까요?</a>
             			
-            			<div class="moreMeetingPost">
+            			<div class="moreMeetingPost" style="margin-top:80px">
             			더보기
             			<i class="fas fa-chevron-right"></i>
             			</div>
@@ -505,15 +742,15 @@
     			<div class="row g-4 ms-1 mb-5">
     				
        				
-		    		<div class="table-responsive">
-		    			<table class="table">
+		    		<div class="table-responsive" style="margin-top:40px;">
+		    			<table class="table" >
 		    				<thead>
 		    					<tr>
-		    						<th scope="col">순번</th>
-		    						<th scope="col">작성자</th>
-		    						<th scope="col">제목</th>
-		    						<th scope="col">모집상태</th>
-		    						<th scope="col">작성일자</th>
+		    						<th scope="col" class="no" >No.</th>
+		    						<th scope="col" class="author">작성자</th>
+		    						<th scope="col" class="title">제목</th>
+		    						<th scope="col" class="status">모집상태</th>
+		    						<th scope="col" class="date">작성일자</th>
 		    					</tr>
 		    				</thead>
 		    				<tbody>
@@ -521,21 +758,22 @@
     <c:if test="${status.index < 10}">
         <tr>
             <td>
-                <p class="mb-4 mt-4">${post.postNo}</p>
+                <p class="mb-4 mt-4" style="margin-left: 3.5rem; ">${post.postNo}</p>
             </td>
+            
             <td>
-                <p class="mb-4 mt-4 postNickName"> <a href="#">${post.nickName}</a>
+                <p class="mb-4 mt-4 postNickName" style="margin-left: 3.5rem; marginright: 3.5rem; "> <a href="#">${post.nickName}</a>
                 	<input type="hidden" name="userNo" value="${post.userNo}"/>
                 </p>
                 
             </td>
             <td>
-                <p class="mb-4 mt-4">
+                <p class="mb-4 mt-4" style="margin-left: 3.5rem; marginright: 3.5rem; ">
                     <a href="/meeting/getMeetingPost?postNo=${post.postNo}">${post.title}</a>
                 </p>
             </td>
             <td>
-                <p class="mb-4 mt-4 link">
+                <p class="mb-4 mt-4 link" style="margin-left: 0rem;">
                     <c:choose>
                         <c:when test="${post.recruitmentStatus == 0}">
                             모집중
@@ -550,7 +788,7 @@
                 </p>
             </td>
             <td>
-                <p class="mb-4 mt-4">${post.postDate}</p>
+                <p class="mb-4 mt-4" >${post.postDate}</p>
             </td>
         </tr>
     </c:if>
@@ -565,12 +803,14 @@
 	    </div> <!-- container-fluid py-5 -->
 	</div>
 
-	   <div class="container-fluid py-5 certificationPost section-container">
+	   <div class="container-fluid py-5 certificationPost section-container"  style="margin-top:-85px;">
     <div class="container py-5">
     	<div class="row g-4 mb-5">
     		<div class="table-header text-center">
-            	<h4 class="text-primary">인증 게시글 목록</h4>
-            	<div class="moreCertificationPost">
+            	<!-- <h4 class="text-primary">인증 게시글 목록</h4> -->
+            	<h4 class="popular">현재 인증 소식📣</h4>
+            			<a class="info2" style="margin-left:-1175px; margin-top:83px;">등산 완료 자랑하기. 구경하러 갈까요?</a>
+            	<div class="moreCertificationPost" style="margin-top:80px">
             			더보기
             			<i class="fas fa-chevron-right"></i>
             		</div>
