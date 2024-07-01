@@ -103,6 +103,7 @@ public class Main {
 			search.setUserNo(-1);
 			user = new User();
 			user.setHikingDifficulty(-1);
+			user.setUserNo(-1);
 		}
 		search.setPageSize(pageSize);
 		search.setPageUnit(pageUnit);

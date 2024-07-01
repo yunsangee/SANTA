@@ -189,14 +189,14 @@
             border-radius: 50%;
             margin-right: 5px; /* Reduced margin */
         }
-        .dropdown-menu .dropdown-header .info {
+        .dropdown-menu .dropdown-header .userInfo {
             flex: 1;
         }
-        .dropdown-menu .dropdown-header .info .name {
+        .dropdown-menu .dropdown-header .userInfo .name {
             font-weight: bold;
             font-size: 0.7em; /* Reduced font size */
         }
-        .dropdown-menu .dropdown-header .info .email {
+        .dropdown-menu .dropdown-header .userInfo .email {
             font-size: 0.7em; /* Reduced font size */
             color: #6c757d;
         }
@@ -295,7 +295,7 @@
                             <div class="dropdown-menu dropdown-menu-left profile" aria-labelledby="navbarDropdown">
                                  <div class="dropdown-header">
                                     <img src="${sessionScope.user.profileImage}" alt="User Image"/>
-                                    <div class="info">
+                                    <div class="userInfo">
                                         <div class="name">${sessionScope.user.nickName}</div>
                                         <div class="email">${sessionScope.user.userId}</div>
                                     </div>
