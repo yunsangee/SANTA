@@ -414,6 +414,10 @@ public class CertificationPostController {
     	List<User> followerList = userEtcService.getFollowerList(userNo);
         model.addAttribute("followerList", followerList);
         System.out.println("팔로워리스트보기:" + followerList);
+        
+        
+        
+        
     return "forward:/certificationPost/listFollower.jsp";
 }
 
@@ -465,9 +469,20 @@ public class CertificationPostController {
         int postType = 0;
         List<String> certificationPostImages = new ArrayList<>();
         for (CertificationPost certificationPost : myCertificationPost) {
-            String fileName = certificationPost.getPostNo() + "_" + postType + "_1"; // 첫 번째 사진 파일명
+            // 첫 번째 사진 파일명
+            String fileName = certificationPost.getPostNo() + "_" + postType + "_1";
             String imageURL = objectStorageService.getImageURL(fileName);
             certificationPostImages.add(imageURL);
+
+            // 프로필 이미지 URL 설정
+            if (certificationPost.getProfileImage() != null && !certificationPost.getProfileImage().contains("ncloudstorage")) {
+                certificationPost.setProfileImage(objectStorageService.getImageURL(certificationPost.getProfileImage()));
+            }
+
+            // 배지 이미지 URL 설정
+            if (certificationPost.getBadgeImage() != null && !certificationPost.getBadgeImage().contains("ncloudstorage")) {
+                certificationPost.setBadgeImage(objectStorageService.getImageURL(certificationPost.getBadgeImage()));
+            }
         }
 
         model.addAttribute("certificationPostImages", certificationPostImages);
@@ -475,6 +490,7 @@ public class CertificationPostController {
 
         return "forward:/certificationPost/getProfile.jsp";
     }
+
 
         
     }
