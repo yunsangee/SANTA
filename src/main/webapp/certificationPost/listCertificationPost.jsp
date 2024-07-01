@@ -99,7 +99,9 @@
     font-weight: bold;
     max-width: 280px; /* 최대 너비 설정 */
 }
-
+.nickname {
+    font-size: 16px; /* Adjust the font size as needed */
+}
 .post-author {
     font-size: 14px; /* 닉네임 글자 크기 */
     max-width: 280px; /* 최대 너비 설정 */
@@ -111,13 +113,13 @@
     width: 40px; /* Adjusted width to match text size */
     height: 40px; /* Adjusted height to match text size */
     border-radius: 50%; /* Keep the image circular */
-    margin-right: 5px; /* Adjust spacing between the image and the text */
+    margin-right: 10px; /* Adjust spacing between the image and the text */
 }
 
 .certification-post .details .post-author .badge-img {
     width: 14px; /* Adjusted width to match text size */
     height: 14px; /* Adjusted height to match text size */
-    margin-left: 5px; /* Adjust spacing between the text and the badge image */
+    margin-left: 10px; /* Adjust spacing between the text and the badge image */
 }
 
 
@@ -252,6 +254,7 @@
     }
 }
 
+
 </style>
 
  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -346,12 +349,17 @@ $(document).ready(function() {
                 '<div class="details">' +
                     '<div class="post-header">' +
                         '<div class="post-title-author">' +
-                            '<h4 class="post-title"> ' + shortTitle + '</h4>' +
+                        
+                          
+                            
                             '<h4 class="post-author" style="margin-top: 10px;">' +
+                            
                                 '<img class="profile-image" src="' + post.profileImage + '" alt="Profile Image"/> ' +
                                 post.nickName +
                                 '<img src="' + post.badgeImage + '" class="badge-img">' +
                             '</h4>' +
+                              '<h4 class="post-title"> ' + shortTitle + '</h4>' +
+                            
                         '</div>' +
                         '<div class="post-likes">' +
                             '<p><i class="fas fa-heart"></i>  ' + post.certificationPostLikeCount + '</p>' +
@@ -428,6 +436,7 @@ $(document).ready(function() {
                                     <div class="post-title-author">
                                         <h4 class="post-title"> 
                                             <i class="fas fa-heading"></i> 
+                                            
                                             <c:choose>
                                                 <c:when test="${fn:length(certificationPost.title) > 8}">
                                                     ${fn:substring(certificationPost.title, 0, 8)}...

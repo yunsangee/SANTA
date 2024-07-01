@@ -70,8 +70,8 @@
         flex-grow: 1;
     }
     .profile-details .badge-img {
-    width: 30px; /* 이미지 크기를 닉네임 크기와 유사하게 조정 */
-    height: 30px;
+    width: 20px; /* 이미지 크기를 닉네임 크기와 유사하게 조정 */
+    height: 20px;
     margin-left: 10px; /* 닉네임과의 간격 조정 */
     vertical-align: middle; /* 닉네임과 수직으로 맞춤 */
 }
