@@ -130,16 +130,18 @@
                                 <c:when test="${not empty followerList}">
                                     <c:forEach var="follower" items="${followerList}">
                                         <tr>
-                                            <td style="vertical-align: middle; padding-right: 10px;"> <i class="fas fa-user profile-icon"></i>
-                                   
+                                            <td style="vertical-align: middle; padding-right: 10px;"> 
+                                               <!--  <i class="fas fa-user profile-icon"></i>-->
+                                    <img src="${follower.profileImage}" alt="Profile Image" class="profile-img">
                                             <!--     <img src="${sessionScope.user.profileImage}" alt="Profile Image" class="profile-img"> -->
                                             </td>
                                             <td style="vertical-align: middle; padding-right: 10px;">
                                                 <p class="mb-0 clickable" data-userno="${follower.userNo}">${follower.nickName}</p>
                                             </td>
-                                            <td style="vertical-align: middle; padding-right: 10px;"><i class="fas fa-flag badge-icon"></i>
+                                            <td style="vertical-align: middle; padding-right: 10px;">
+                                          <!--     <i class="fas fa-flag badge-icon"></i>-->
                                             
-                                              <!--    <img src="${user.badgeImage}" class="badge-img"> -->
+                                               <img src="${follower.badgeImage}" class="badge-img"> 
                                                 <!--<img src="${follower.badgeImage}" alt="Badge Image" class="badge-img">-->
                                             </td>
                                         </tr>
