@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import site.dearmysanta.domain.common.Page;
 import site.dearmysanta.domain.meeting.MeetingParticipation;
 import site.dearmysanta.domain.meeting.MeetingPost;
+import site.dearmysanta.domain.meeting.MeetingPostComment;
 import site.dearmysanta.domain.meeting.MeetingPostSearch;
 import site.dearmysanta.domain.user.User;
 import site.dearmysanta.service.chatting.ChattingService;
@@ -84,8 +85,14 @@ public class MeetingController {
 		MeetingPost meetingPost = (MeetingPost)map.get("meetingPost");
 		System.out.println("meetingPost==="+meetingPost);
 		
+		String badgeName = "badge" + meetingPost.getParticipationGrade() + ".png";
+		String badgeImage = objectStorageService.getImageURL(badgeName);
+				
+		
 		List<String> meetingPostImages = new ArrayList<>();
 		int imageCount = meetingPost.getMeetingPostImageCount();
+		
+		System.out.println("여기서 imageCount 몇찍히나 확인??(debug) : "+imageCount);
 		
 //		System.out.println("imageCount==="+imageCount);
 		
@@ -95,19 +102,47 @@ public class MeetingController {
             meetingPostImages.add(imageURL);
         }
 		
-		System.out.println("사진사진사진"+meetingPostImages);			
+		System.out.println("사진사진사진"+meetingPostImages);		
+		
+		
+		List<MeetingParticipation> meetingParticipations = (List<MeetingParticipation>) map.get("meetingParticipations");
+		
+		for (MeetingParticipation participation : meetingParticipations) {
+			
+            participation.setProfileImage(objectStorageService.getImageURL(participation.getProfileImage()));
+        }
+		
+		List<MeetingPostComment> meetingPostComments = (List<MeetingPostComment>) map.get("meetingPostComments");
+		
+		for (MeetingPostComment comment : meetingPostComments) {
+			
+            comment.setProfileImage(objectStorageService.getImageURL(comment.getProfileImage()));
+        }
 		
 		model.addAttribute("meetingPost", meetingPost);
-		model.addAttribute("meetingParticipations", map.get("meetingParticipations"));
-		model.addAttribute("meetingPostComments", map.get("meetingPostComments"));
+		model.addAttribute("meetingParticipations", meetingParticipations);
+		model.addAttribute("meetingPostComments", meetingPostComments);
 		model.addAttribute("meetingPostImages", meetingPostImages);
 		model.addAttribute("isMember", map.get("isMember"));
+		model.addAttribute("badgeImage", badgeImage);
 		
 		return "forward:/meeting/getMeetingPost.jsp";
 	}
 	
 	@GetMapping(value = "addMeetingPost")
-	public String addMeetingPost() throws Exception {
+	public String addMeetingPost(Model model) throws Exception {
+		
+		List<String> badgeImages = new ArrayList<>();
+		
+		for (int i=1; i<8; i++) {
+			
+			String badgeName = "badge" + i + ".png";
+			String imageURL = objectStorageService.getImageURL(badgeName);
+			
+			badgeImages.add(imageURL);
+		}
+		
+		model.addAttribute("badgeImages", badgeImages);
 		
 		return "forward:/meeting/addMeetingPost.jsp";
 	}
@@ -140,8 +175,6 @@ public class MeetingController {
 		
 		mountainService.addMountainStatistics(appointedHikingMountain, 1);
 		
-		chattingService.createChattingRoom(postNo);
-		
 		if (meetingPost.getMeetingPostImage() != null) {
 	        List<MultipartFile> images = meetingPost.getMeetingPostImage().stream()
 	            .filter(image -> !image.isEmpty())
@@ -161,6 +194,8 @@ public class MeetingController {
                 
             }
 		}
+		
+		chattingService.createChattingRoom(postNo);
 		
 		return "redirect:/meeting/getMeetingPost?postNo=" + postNo;
 	}
@@ -190,7 +225,7 @@ public class MeetingController {
         model.addAttribute("formattedRecruitmentDeadline", formattedRecruitmentDeadline);
         model.addAttribute("formattedAppointedHikingDate", formattedAppointedHikingDate);
         model.addAttribute("meetingPostImages", meetingPostImages);
-		model.addAttribute(meetingPost);
+		model.addAttribute("meetingPost", meetingPost);
 		
 		return "forward:/meeting/updateMeetingPost.jsp";
 	}

@@ -75,10 +75,35 @@
 		    })
 		    
     	});
+    	
+    	$(document).ready(function() {
+    	    $('#badgeDropdown').on('change', function() {
+    	        var selectedOption = $(this).find('option:selected');
+    	        var imgUrl = selectedOption.data('img-url');
+    	        if (imgUrl) {
+    	            $(this).css({
+    	                'background-image': 'url(' + imgUrl + ')',
+    	                'background-repeat': 'no-repeat',
+    	                'background-position': 'right center',
+    	                'background-size': '20px 20px'
+    	            });
+    	        } else {
+    	            $(this).css('background-image', 'none');
+    	        }
+    	    });
+
+    	    // Trigger change to show the first selected image
+    	    $('#badgeDropdown').trigger('change');
+    	});
     
     </script>
     
     <style>
+    
+	    #badgeDropdown {
+		    width: 100%;
+		    padding: 10px;
+		}
     
     	.title {
     		background-color: #eeeeee !important;
@@ -123,14 +148,14 @@
                         </div>
 	    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 가능 등급</div>
 	    				<div class="col-md-2 border align-items-center text-center py-2">
-	    					<select class="form-control" name="participationGrade">
-						        <option value="0">1번등급이미지</option>
-						        <option value="1">2번등급이미지</option>
-						        <option value="2">3번등급이미지</option>
-						        <option value="3">4번등급이미지</option>
-						        <option value="4">5번등급이미지</option>
-						        <option value="5">6번등급이미지</option>
-						        <option value="6">7번등급이미지</option>
+	    					<select class="form-control" name="participationGrade" id="badgeDropdown">
+	    					
+	    						<c:forEach var="url" items="${badgeImages}" varStatus="status">
+							        <option value="${status.index + 1}" data-img-url="${url}">
+										${status.index + 1}번 이미지
+									</option>
+						        </c:forEach>
+						        
 						    </select>
 	    				</div>
 	    				
