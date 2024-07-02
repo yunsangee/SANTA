@@ -36,7 +36,9 @@ $(function() {
     	yearRange: "1900:" + new Date().getFullYear()
     });
     
-    $("input[name='userName']").on("blur", function() {
+   /////////////////////이름 형식 
+    
+    $("input[name='userName']").on("input", function() {
     	var userName = $(this).val();
     	console.log('userName');
 
@@ -65,9 +67,16 @@ $(function() {
     });
 
 //////////////////////////////// 이메일 중복 체크 ////////////////////
-    $("input[name='userId']").on("blur", function() {
-        var email = $(this).val();
-        if (email) {
+function validateEmail(email) {
+        // Regular expression for validating email format
+      	var emailRegex = /^[^\s@]+@[^\s@]+\.(com|net|co\.kr)$/;
+        return emailRegex.test(email);
+    }
+
+$("input[name='userId']").on("input", function() {
+    var email = $(this).val();
+    if (email) {
+        if (validateEmail(email)) {
             $.ajax({
                 url: '/user/rest/checkDuplicationId',
                 type: 'GET',
@@ -88,11 +97,18 @@ $(function() {
                     $(".email-verify-btn").prop("disabled", true);
                 }
             });
+        } else {
+            $("#emailMessage").text("이메일 형식이 올바르지 않습니다.").css("color", "red");
+            $(".email-verify-btn").prop("disabled", true);
         }
-    });
+    } else {
+        $("#emailMessage").text("");
+        $(".email-verify-btn").prop("disabled", true);
+    }
+});
     
 //////////////////////////////// 닉네임 중복 체크 ////////////////////
-       $("input[name='nickName']").on("blur", function() {
+       $("input[name='nickName']").on("input", function() {
                 var nick = $(this).val();
                 if (nick.length > 10) {
                     $("#nickMessage").text("10글자 미만의 닉네임을 작성해주세요.").css("color", "red");
@@ -174,10 +190,27 @@ $(function() {
     });
 
 ////////////////////////////////휴대폰 인증 요청 ////////////////////
+
+   function validatePhoneNumber(phoneNumber) {
+        var phoneRegex = /^010/; // 정규 표현식을 사용하여 010으로 시작하는지 확인
+        return phoneRegex.test(phoneNumber);
+    }
+
+    $("input[name='phoneNumber']").on("input", function() {
+        var phoneNumber = $(this).val();
+        if (validatePhoneNumber(phoneNumber)) {
+            $("#phoneMessage").text("").removeClass("error-message").addClass("valid-message");
+        } else {
+            $("#phoneMessage").text("010으로 시작하는 휴대폰번호를 입력해주세요.").removeClass("valid-message").addClass("error-message");
+        }
+    });
+
     $(".phone-verify-btn").click(function() {
         var phoneNumber = $("input[name='phoneNumber']").val();
         var userName = $("input[name='userName']").val();
         if (phoneNumber && userName) {
+        	 
+        	
             $.ajax({
                 url: '/message/send-one',
                 type: 'POST',
@@ -244,13 +277,12 @@ function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, en
 
 //////////////////////////////// 비밀번호 길이 및 성별 확인 ////////////////////
  $(function() { 
-    // 비밀번호 입력 칸에서 포커스 아웃될 때
   
-    $("input[name='userPassword']").on("blur", function() {
+    $("input[name='userPassword']").on("input", function() {
         var password = $(this).val();
 		console.log(password.length);
-        if (password.length < 10) {
-            $("#passwordLengthMessage").text("비밀번호를 10자 이상 입력해주세요.").css("color", "red").show();
+        if (password.length < 7) {
+            $("#passwordLengthMessage").text("비밀번호를 7자 이상 입력해주세요.").css("color", "red").show();
         }else if(password.length > 15){
         	$("#passwordLengthMessage").text("비밀번호를 15자 이하 입력해주세요.").css("color", "red").show();	
         } else {
@@ -271,7 +303,7 @@ function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, en
     });
 
 //////////////////////////////// 비밀번호 확인 ////////////////////
-    $("input[name='checkPassword']").on("blur", function() {
+    $("input[name='checkPassword']").on("input", function() {
         var password = $("input[name='userPassword']").val();
         var confirmPassword = $(this).val();
 
@@ -655,7 +687,7 @@ label {
     <div class="email-section">
         <label>이메일</label>
         <div class="email-input">
-            <input type="text" name="userId" placeholder="이메일" required>
+            <input type="email" name="userId" placeholder="이메일" required>
             <div id="emailMessage" class="error-message"></div>
         </div>
         <button type="button" class="email-verify-btn">이메일 인증하기</button>
@@ -665,9 +697,9 @@ label {
     <div class="password-section">
         <label>비밀번호</label> 
         <p class="description">
-			영문, 숫자, 특수문자를 포함하여 10자~15자 사이의 비밀번호를 입력해주세요.</p>
+			영문, 숫자, 특수문자를 포함하여 7자~15자 사이의 비밀번호를 입력해주세요.</p>
         <input type="password" name="userPassword" placeholder="비밀번호 입력" autocomplete="new-password" required>
-         <div id="passwordLengthMessage"></div> 
+         <div id="passwordLengthMessage" class="error-message"></div> 
     </div>
     <div class="password-section">
         <label>비밀번호 확인</label>
@@ -692,9 +724,11 @@ label {
     <div class="phone-section">
         <label>휴대폰 번호</label>
         <div class="phone-input">
-            <input type="text" name="phoneNumber" placeholder="휴대폰번호" pattern="01[0-9]{8,9}" required>
+            <input type="text" name="phoneNumber" placeholder="휴대폰번호" pattern="01[0-9]{8,9}" required> 
+            <div id="phoneMessage" class="error-message"></div>
         </div>
         <button type="button" class="phone-verify-btn">휴대폰 번호 인증하기</button>
+       
         <input type="hidden" id="isPhoneVerified" value="false">
     </div>
     

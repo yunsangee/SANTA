@@ -119,21 +119,22 @@
     </where>
 </select> -->
 	
-	<select id="getQnAList" parameterType="site.dearmysanta.domain.common.Search"	resultMap="QnaResultMap">
-	SELECT q.*, u.nickname 
-	FROM QNA q 
-	JOIN Users u ON q.user_no = u.user_no
-	<where>
-	    <choose>
-	        <when test="searchCondition == 0 and searchKeyword != null and searchKeyword != ''">
-	            AND qna_title LIKE '%' || #{searchKeyword} || '%'
-	        </when>
-	        <when test="searchCondition == 1 and searchKeyword != null and searchKeyword != ''">
-	            AND u.nickname LIKE '%' || #{searchKeyword} || '%'
-	        </when>
-	    </choose>
-	</where>
-	</select>
+<select id="getQnAList" parameterType="site.dearmysanta.domain.common.Search" resultMap="QnaResultMap">
+    SELECT q.*, u.nickname 
+    FROM QNA q 
+    JOIN Users u ON q.user_no = u.user_no
+    <where>
+        <choose>
+            <when test="searchCondition == 0 and searchKeyword != null and searchKeyword != ''">
+                AND qna_title LIKE '%' || #{searchKeyword} || '%'
+            </when>
+            <when test="searchCondition == 1 and searchKeyword != null and searchKeyword != ''">
+                AND u.nickname LIKE '%' || #{searchKeyword} || '%'
+            </when>
+        </choose>
+    </where>
+    ORDER BY q.qna_date DESC
+</select>
 	
 <select id="getQnATotalCount" parameterType="site.dearmysanta.domain.common.Search" resultType="int">
     SELECT COUNT(*) FROM QNA
