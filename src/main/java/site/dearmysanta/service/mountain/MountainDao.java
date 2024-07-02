@@ -1,5 +1,6 @@
 package site.dearmysanta.service.mountain;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -39,6 +40,8 @@ public interface MountainDao {
 	public int isMountain(String mountainName);
 	
 	public List<Mountain> getCustomMountainList(List<String> mountainNames, User user);
+	
+	public void getMountainReason(String mountainName) throws IOException;
 	
 	
 	

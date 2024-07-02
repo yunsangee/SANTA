@@ -208,6 +208,7 @@ public class MountainRestController {
 		int isMountain = mountainService.isMountain(mountainName);
 		MountainSearch mountainSearch = new MountainSearch();
 		User user = (User)session.getAttribute("user");
+
 		mountainSearch.setSearchKeyword(mountainName);
 		
 		if(user == null) {
@@ -238,7 +239,7 @@ public class MountainRestController {
 		}
 		
 		
-		if(user != null) {
+		if(user.getUserNo() != -1) {
 			if(isMountain == 1) {
 				mountainSearch.setSearchCondition(0);
 				mountainSearch.setUserNo(user.getUserNo());
