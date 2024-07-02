@@ -214,7 +214,7 @@
             cursor: pointer;
             box-sizing: border-box;
             color: black;
-            width: 200px;
+            width: 250px;
             margin-right: 10px;
         }
 
@@ -226,11 +226,41 @@
             margin-bottom: 20px;
             flex-grow: 1;
         }
+        
+        .searchBox {
+	flex: 1; 
+	padding: 10px; 
+	border: none; 
+	outline: none; 
+	border: 1px solid #ccc; 
+	border-radius: 35px; 
+	padding: 10px;
+	margin-left:20px;
+}
+
+.search {
+	background: none; 
+	border: none; 
+	cursor: pointer;
+	margin-left: -50px;
+}
+
+		.search i {
+            font-size: 18px;
+        }
+
+        .search:hover {
+           /*  background-color: #006400; */
+        }
 
         .tabs-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+        
+        .border{
+        	border:#90EE90;
         }
     </style>
 
@@ -241,7 +271,7 @@
         <c:import url="../common/top.jsp"/>
     </header>
    
-    <main>
+    <main style="margin-top:30px;">
         <div class="container-fluid py-5">
             <div class="container py-5">
                 <div class="tabs-container">
@@ -252,8 +282,10 @@
                             <select name="searchCondition" class="dropdown-custom">
                                 <option value="0" ${search.searchCondition == 0 ? 'selected' : ''}>산 이름</option>
                             </select>
-                            <input type="text" name="searchKeyword" class="form-control search-input" placeholder="Search by keyword" value="${search.searchKeyword}">
-                            <button type="button" id="search">검색</button>
+                            <input type="text" name="searchKeyword" class="form-control search-input" placeholder="검색어를 입력해주세요!" value="${search.searchKeyword}">
+                             <button class="search" >
+                				<i class="fas fa-search text-primary" id="search"></i>
+           					 </button>
                             <input type="hidden" id="currentPage" name="currentPage" value="${currentPage}">
                     </div>
                 </div>
@@ -299,9 +331,9 @@
                     <input type="hidden" id="crpNo" name="crpNo" value="${correctionPost.postNo}"/>
                     <input type="hidden" id="mountainNo" name="mountainNo" value="${correctionPost.mountainNo}"/>
                     <c:if test="${correctionPost.status == 0}">
-                   	 	<button id="update" class="update btn border border-secondary rounded-pill px-2 text-primary" type="button">수정</button>
+                   	 	<button id="update" class="update btn border border-secondary px-2 text-primary" type="button">수정</button>
                    	 </c:if>
-                    <button id="delete" class="delete btn border border-secondary rounded-pill px-2 text-primary" type="button">삭제</button>
+                    <button id="delete" class="delete btn border border-secondary  px-2 text-primary" type="button">삭제</button>
                 </form>
             </td>
         </tr>

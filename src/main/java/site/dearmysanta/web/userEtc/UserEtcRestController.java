@@ -54,35 +54,24 @@ public class UserEtcRestController {
 	
 	
 	@GetMapping(value="rest/getFollowerList")
-	public List<User> getFollowerList(@RequestParam int userNo) {
-	    List<User> follower = userEtcService.getFollowerList(userNo);
-	    
-	    for (User user : follower) {
-	        if (user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")) {
-	            user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
-	        }
-	        if (user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
-	            user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
-	        }
-	    }
-	    
-	    return follower;
-	}
-
+	public List<User> getFollowerList(@RequestParam int userNo){
+		return userEtcService.getFollowerList(userNo);
+	}//o
+	
 	
 	@GetMapping(value="rest/getFollowingList")
 	public List<User> getFollowingList(@RequestParam int userNo) {
 	    List<User> following = userEtcService.getFollowingList(userNo);
 	    
 	    for (User user : following) {
-	        if (user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")) {
-	            user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
-	        }
-	        if (user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
-	            user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
-	        }
+	  	  if(user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")&& !user.getProfileImage().contains("kakaocdn")) {
+		    	user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+		    }
+		
+		if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
+			user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
 	    }
-	    
+	    }
 	    return following;
 	}
 

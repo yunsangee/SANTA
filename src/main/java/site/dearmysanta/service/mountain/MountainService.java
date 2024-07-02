@@ -26,6 +26,8 @@ public interface MountainService {
 	
 	public Mountain getMountain(int userNo,int mountainNo);
 	
+	public void getMountainReason(String mountainName) throws IOException;
+	
 	public int checkMountainExist(int mountainNo);
 	public int isMountain(String mountainName);
 	
