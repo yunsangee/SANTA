@@ -560,6 +560,46 @@
 	        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 	        border-radius: 8px;
 	    }
+	    
+	    @media (min-width: 1400px) {
+		    .post-image {
+		        width: 600px;
+		        height: 600px;
+		    }
+		}
+		
+		/* Large devices (desktops, ≥1200px) */
+		@media (min-width: 1200px) and (max-width: 1399.98px) {
+		    .post-image {
+		        width: 500px;
+		        height: 500px;
+		    }
+		}
+		
+		/* Medium devices (tablets, ≥992px) */
+		@media (min-width: 992px) and (max-width: 1199.98px) {
+		    .post-image {
+		        width: 400px;
+		        height: 400px;
+		    }
+		}
+		
+		/* Small devices (landscape phones, ≥768px) */
+		@media (min-width: 768px) and (max-width: 991.98px) {
+		    .post-image {
+		        width: 300px;
+		        height: 300px;
+		    }
+		}
+		
+		/* Extra small devices (portrait phones, <576px) */
+		@media (max-width: 575.98px) {
+		    .post-image {
+		        width: 100%;
+		        height: auto;
+		    }
+		}
+
 	    .image-gallery {
 	        display: flex;
 	        flex-wrap: wrap;
@@ -688,7 +728,7 @@
     				
     				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">최대 인원</div>
     				<div class="col-md-2 border align-items-center text-center py-3">${meetingPost.maximumPersonnel}</div>
-    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 가능 성별</div>
+    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 희망 성별</div>
     				<div class="col-md-2 border align-items-center text-center py-3">
     					<c:choose>
 					        <c:when test="${meetingPost.participationGender == 0}">
@@ -703,7 +743,7 @@
 					    </c:choose>
     				
 					</div>
-    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 가능 연령대</div>
+    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 희망 연령대</div>
     				<div class="col-md-2 border align-items-center text-center py-3">${meetingPost.participationAge}</div>
     				
     				<div class="col-md-2 border bg-light align-items-center title contents d-flex justify-content-center">내용</div>

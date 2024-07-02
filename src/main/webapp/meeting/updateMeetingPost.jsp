@@ -81,6 +81,15 @@
     
     <style>
     
+    	.title {
+    		background-color: #eeeeee !important;
+    	}
+    	
+    	.row .contents {
+    		padding-top: 30px !important;
+    		padding-bottom: 30px !important;
+    	}
+    
     	#badgeDropdownUpdate.selected {
 	        color: transparent; /* 텍스트를 투명하게 */
 	    }
@@ -88,6 +97,54 @@
 	    #badgeDropdownUpdate option {
 	        color: #747d88; /* 옵션 텍스트 기본 색상 */
 	    }
+	    
+	    .post-image {
+	        width: 600px; /* 고정된 가로 크기 */
+	        height: 600px; /* 고정된 세로 크기 */
+	        object-fit: cover; /* 이미지의 비율을 유지하면서 자르기 */
+	        margin: 10px;
+	        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+	        border-radius: 8px;
+	    }
+	    
+	    @media (min-width: 1400px) {
+		    .post-image {
+		        width: 600px;
+		        height: 600px;
+		    }
+		}
+		
+		/* Large devices (desktops, ≥1200px) */
+		@media (min-width: 1200px) and (max-width: 1399.98px) {
+		    .post-image {
+		        width: 500px;
+		        height: 500px;
+		    }
+		}
+		
+		/* Medium devices (tablets, ≥992px) */
+		@media (min-width: 992px) and (max-width: 1199.98px) {
+		    .post-image {
+		        width: 400px;
+		        height: 400px;
+		    }
+		}
+		
+		/* Small devices (landscape phones, ≥768px) */
+		@media (min-width: 768px) and (max-width: 991.98px) {
+		    .post-image {
+		        width: 300px;
+		        height: 300px;
+		    }
+		}
+		
+		/* Extra small devices (portrait phones, <576px) */
+		@media (max-width: 575.98px) {
+		    .post-image {
+		        width: 100%;
+		        height: auto;
+		    }
+		}
     
     </style>
     
@@ -121,7 +178,7 @@
 							    <select class="form-control" name="participationGrade" id="badgeDropdownUpdate">
 							        <c:forEach var="url" items="${badgeImages}" varStatus="status">
 							            <option value="${status.index + 1}" data-img-url="${url}" ${meetingPost.participationGrade == status.index + 1 ? 'selected' : ''}>
-							                ${status.index + 1}번 이미지
+							                ${badgeDescriptions[status.index]} 등급
 							            </option>
 							        </c:forEach>
 							    </select>
@@ -180,20 +237,22 @@
 	    				<div class="col-md-2 border bg-light d-flex align-items-center justify-content-center title" id="contents">
 						    내용
 						</div>
-						<div class="col-md-10 border py-2">
-							<c:forEach var="image" items="${meetingPostImages}">
-							
-						        <div class="position-relative d-inline-block image-div">
-						            <img src="${image}" alt="Image" class="img-fluid" />
-						            <button class="btn p-0 delete-image-button position-absolute top-0 end-0" style="line-height: 0;">
-						                <i class="bi bi-x" style="font-size: 32px; color: red;"></i>
-						            </button>
-						            <input type="hidden" id="updateImageURL" name="updateImageURL" value="${image}"/>
-						        </div>
-						        
-						    </c:forEach>
-						
-						    <textarea class="form-control mb-2" name="contents" rows="10" placeholder="내용을 입력하세요." style="height: 200px;" required>${meetingPost.contents}</textarea>
+						<div class="col-md-10 border py-2 ">
+							<p>
+								<c:forEach var="image" items="${meetingPostImages}">
+							        <div class="position-relative d-inline-block image-div">
+							            <img src="${image}" alt="Image" class="post-image" />
+							            <button class="btn pt-3 pe-3 ps-0 pb-0 delete-image-button position-absolute top-0 end-0" style="line-height: 0;">
+							                <i class="bi bi-x" style="font-size: 44px; color: red;"></i>
+							            </button>
+							            <input type="hidden" id="updateImageURL" name="updateImageURL" value="${image}"/>
+							        </div>
+							        <br/>
+							    </c:forEach>
+						    </p>
+							<p>
+						    	<textarea class="form-control mb-2" name="contents" rows="10" placeholder="내용을 입력하세요." style="height: 200px;" required>${meetingPost.contents}</textarea>
+						    </p>
 						    <input type="file" id="meetingPostImage" name="meetingPostImage" multiple/><br/>
 						</div>
 						

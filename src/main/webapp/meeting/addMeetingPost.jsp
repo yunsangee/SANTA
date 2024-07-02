@@ -156,7 +156,7 @@
 	    					
 	    						<c:forEach var="url" items="${badgeImages}" varStatus="status">
 							        <option value="${status.index + 1}" data-img-url="${url}">
-										${status.index + 1 }번 이미지
+										${badgeDescriptions[status.index]} 등급
 									</option>
 						        </c:forEach>
 						        

@@ -2,6 +2,7 @@ package site.dearmysanta.web.meeting;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -132,6 +133,8 @@ public class MeetingController {
 	@GetMapping(value = "addMeetingPost")
 	public String addMeetingPost(Model model) throws Exception {
 		
+		List<String> badgeDescriptions = new ArrayList<>(Arrays.asList("货较", "寸辟", "采", "唱公", "剑", "魂", "标惯"));
+		
 		List<String> badgeImages = new ArrayList<>();
 		
 		for (int i=1; i<8; i++) {
@@ -142,6 +145,7 @@ public class MeetingController {
 			badgeImages.add(imageURL);
 		}
 		
+		model.addAttribute("badgeDescriptions", badgeDescriptions);
 		model.addAttribute("badgeImages", badgeImages);
 		
 		return "forward:/meeting/addMeetingPost.jsp";
@@ -222,6 +226,9 @@ public class MeetingController {
         String formattedRecruitmentDeadline = formatterUntilDay.format(meetingPost.getRecruitmentDeadline());
         String formattedAppointedHikingDate = formatterUntilDay.format(meetingPost.getAppointedHikingDate());
         
+        
+        List<String> badgeDescriptions = new ArrayList<>(Arrays.asList("货较", "寸辟", "采", "唱公", "剑", "魂", "标惯"));
+        
         List<String> badgeImages = new ArrayList<>();
 		
 		for (int i=1; i<8; i++) {
@@ -232,6 +239,7 @@ public class MeetingController {
 			badgeImages.add(imageURL);
 		}
 		
+		model.addAttribute("badgeDescriptions", badgeDescriptions);
 		model.addAttribute("badgeImages", badgeImages);
         model.addAttribute("formattedRecruitmentDeadline", formattedRecruitmentDeadline);
         model.addAttribute("formattedAppointedHikingDate", formattedAppointedHikingDate);
