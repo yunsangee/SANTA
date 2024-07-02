@@ -481,6 +481,8 @@
         	users u ON c.user_no = u.user_no
     	WHERE 
         	c.post_no = #{postNo} AND c.post_type = 1
+        ORDER BY
+        	c.comment_no DESC
 	</select>
 	
 	<select id="getMeetingParticipation" parameterType="int" resultMap="meetingParticipationSelectMap">

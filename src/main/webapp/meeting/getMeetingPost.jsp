@@ -28,6 +28,10 @@
     
 	    $(function() {
 	    	
+            var postContents = $('#postContents').text();
+            $('#postContents').html(postContents.replace(/\n/g, '<br/>'));
+	        
+	    	
 	    	$('#deletePostButton').on('click', function() {
 	    		
 	    		var postNo = "${meetingPost.postNo}";
@@ -457,15 +461,15 @@
 			                        '</div>' +
 			                        (userNo == response.userNo ? '<button class="btn p-0 delete-comment-button" data-comment-no="' + response.meetingPostCommentNo + '" style="line-height: 0;"><i class="bi bi-x" style="font-size: 24px; color: red;"></i></button>' : '') +
 			                        '</div>' +
-			                        '<div class="d-flex align-items-center flex-grow-1" style="border-right: 1px solid #ddd; padding: 10px;">' +
+			                        '<div class="d-flex align-items-center custom-flex-grow" style="padding: 10px;">' +
 			                        '<p class="mb-0">' + response.meetingPostCommentContents + '</p>' +
 			                        '</div>' +
 			                        '<div class="d-flex align-items-center" style="min-width: 150px; padding: 10px;">' +
-			                        '<p class="mb-0">' + formattedDate + '</p>' +
+			                        '<p class="mb-0 comment-creation-date">' + formattedDate + '</p>' +
 			                        '</div>' +
 			                        '</div></td></tr>';
 
-	    	                    $('.comment-table tbody').append(newCommentHtml);
+	    	                    $('.comment-table tbody').prepend(newCommentHtml);
 	    	                    $('.comment-box').val(''); // 댓글 입력 창 비우기
 	    	                } else {
 	    	                	
@@ -527,8 +531,8 @@
     	}
     	
     	.row .contents {
-    		padding-top: 70px !important;
-    		padding-bottom: 70px !important;
+    		padding-top: 30px !important;
+    		padding-bottom: 30px !important;
     	}
     	
     	#postStatus {
@@ -549,13 +553,53 @@
 		}
 		
 		.post-image {
-	        width: 200px; /* 고정된 가로 크기 */
-	        height: 200px; /* 고정된 세로 크기 */
+	        width: 600px; /* 고정된 가로 크기 */
+	        height: 600px; /* 고정된 세로 크기 */
 	        object-fit: cover; /* 이미지의 비율을 유지하면서 자르기 */
 	        margin: 10px;
 	        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 	        border-radius: 8px;
 	    }
+	    
+	    @media (min-width: 1400px) {
+		    .post-image {
+		        width: 600px;
+		        height: 600px;
+		    }
+		}
+		
+		/* Large devices (desktops, ≥1200px) */
+		@media (min-width: 1200px) and (max-width: 1399.98px) {
+		    .post-image {
+		        width: 500px;
+		        height: 500px;
+		    }
+		}
+		
+		/* Medium devices (tablets, ≥992px) */
+		@media (min-width: 992px) and (max-width: 1199.98px) {
+		    .post-image {
+		        width: 400px;
+		        height: 400px;
+		    }
+		}
+		
+		/* Small devices (landscape phones, ≥768px) */
+		@media (min-width: 768px) and (max-width: 991.98px) {
+		    .post-image {
+		        width: 300px;
+		        height: 300px;
+		    }
+		}
+		
+		/* Extra small devices (portrait phones, <576px) */
+		@media (max-width: 575.98px) {
+		    .post-image {
+		        width: 100%;
+		        height: auto;
+		    }
+		}
+
 	    .image-gallery {
 	        display: flex;
 	        flex-wrap: wrap;
@@ -569,6 +613,29 @@
 	    .image-gallery img:hover {
 	        transform: scale(1.05);
 	    }
+	    
+	    .comment-creation-date {
+	    	font-size: 0.9rem !important;
+	    	color: #A9B3BD !important;
+	    	padding-left: 20px;
+	    }
+	    
+	    .custom-flex-grow {
+		    flex-grow: 1;
+		    flex-basis: 0;
+		    max-width: 90%;
+		}
+		
+		.no-hover {
+	        cursor: default;
+	    }
+	    
+	    .no-hover:hover,
+		.no-hover:focus,
+		.no-hover:active {
+			background-color: #81c408 !important;
+    		border-color: #81c408 !important;
+		}
 	    
     </style>
     
@@ -661,22 +728,41 @@
     				
     				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">최대 인원</div>
     				<div class="col-md-2 border align-items-center text-center py-3">${meetingPost.maximumPersonnel}</div>
-    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 가능 성별</div>
-    				<div class="col-md-2 border align-items-center text-center py-3">${meetingPost.participationGender}</div>
-    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 가능 연령대</div>
+    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 희망 성별</div>
+    				<div class="col-md-2 border align-items-center text-center py-3">
+    					<c:choose>
+					        <c:when test="${meetingPost.participationGender == 0}">
+					            여자
+					        </c:when>
+					        <c:when test="${meetingPost.participationGender == 1}">
+					            남자
+					        </c:when>
+					        <c:when test="${meetingPost.participationGender == 2}">
+					            상관없음
+					        </c:when>
+					    </c:choose>
+    				
+					</div>
+    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 희망 연령대</div>
     				<div class="col-md-2 border align-items-center text-center py-3">${meetingPost.participationAge}</div>
     				
     				<div class="col-md-2 border bg-light align-items-center title contents d-flex justify-content-center">내용</div>
     				<div class="col-md-10 border align-items-center text-start contents">
-    					<c:forEach var="image" items="${meetingPostImages}">
-					        <img src="${image}" alt="Image" class="post-image"/>
-					    </c:forEach>
-    					${meetingPost.contents}
+    					<p>
+	    					<c:forEach var="image" items="${meetingPostImages}">
+						        <img src="${image}" alt="Image" class="post-image"/>
+						        <br/>
+						    </c:forEach>
+					    </p>
+					    
+					    <p id="postContents">
+    						${meetingPost.contents}
+    					</p>
     				</div>
     			
     			</div>
     			
-    			<div class="row g-4 mb-4 d-flex">
+    			<div class="row g-4 mt-2 mb-4 d-flex">
     			    			
 	
     				<div class="d-flex justify-content-end" id="postStatus">
@@ -746,7 +832,7 @@
     				
     			</div>
     			
-				<button class="btn btn-primary py-2 px-4 text-white">모임원들</button>
+				<div class="no-hover btn btn-primary py-2 px-4 text-white">모임원들</div>
 				        
     			<div class="row g-4 mb-5">
     				<div class="table-responsive participation-table">
@@ -813,7 +899,8 @@
     			</div>
     			
     			<div class="row mb-4">
-	                <div class="col-md-12 mt-5">
+    				<h3><i class="fas fa-comments"></i> 댓글 작성</h3>
+	                <div class="col-md-12 mt-2">
 	                    <textarea class="form-control comment-box" rows="5" placeholder="주제와 무관한 댓글, 타인의 권리를 침해하거나 명예를 훼손하는 게시물은 별도의 통보 없이 제재를 받을 수 있습니다."></textarea>
 	                </div>
 	                <div class="col-md-12 d-flex justify-content-end mt-3">
@@ -822,7 +909,7 @@
 	            </div>
     				
     			
-    			<button class="btn btn-primary py-2 px-4 text-white">댓글 (${meetingPost.meetingPostCommentCount})</button>
+    			<div class="btn btn-primary py-2 px-4 text-white no-hover">댓글 (${meetingPost.meetingPostCommentCount})</div>
     			
     			<div class="row g-4 mb-5">
     				<div class="table-responsive comment-table">
@@ -847,11 +934,11 @@
 				                                        <button class='btn p-0 delete-comment-button' data-comment-no="${comment.meetingPostCommentNo}" style="line-height: 0;"><i class='bi bi-x' style='font-size: 24px; color: red;'></i></button>
 				                                    </c:if>
 				                                </div>
-				                                <div class="d-flex align-items-center flex-grow-1" style="border-right: 1px solid #ddd; padding: 10px;">
+				                                <div class="d-flex align-items-center custom-flex-grow" style="padding: 10px;">
 				                                    <p class="mb-0">${comment.meetingPostCommentContents}</p>
 				                                </div>
 				                                <div class="d-flex align-items-center" style="min-width: 150px; padding: 10px;">
-				                                    <p class="mb-0"><fmt:formatDate value="${comment.meetingPostCommentCreationDate}" pattern="yyyy-MM-dd HH:mm" /></p>
+				                                    <p class="mb-0 comment-creation-date"><fmt:formatDate value="${comment.meetingPostCommentCreationDate}" pattern="yyyy-MM-dd HH:mm" /></p>
 				                                </div>
 				                            </div>
 				                        </td>

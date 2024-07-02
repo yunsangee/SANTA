@@ -52,12 +52,99 @@
 		    });
     		
     	})
+    	
+    	$(document).ready(function() {
+    		
+	        $('#badgeDropdownUpdate').on('change', function() {
+	        	
+	            var selectedOption = $(this).find('option:selected');
+	            var imgUrl = selectedOption.data('img-url');
+	            if (imgUrl) {
+	                $(this).css({
+	                    'background-image': 'url(' + imgUrl + ')',
+	                    'background-repeat': 'no-repeat',
+	                    'background-position': 'center center',
+	                    'background-size': '20px 20px'
+	                }).addClass('selected'); // 선택된 클래스 추가
+	            } else {
+	                $(this).css('background-image', 'none').removeClass('selected'); // 선택된 클래스 제거
+	            }
+	        });
+	
+	        // Trigger change to show the first selected image
+	        $('#badgeDropdownUpdate').trigger('change');
+	    });
     
 	    
     
     </script>
     
     <style>
+    
+    	.title {
+    		background-color: #eeeeee !important;
+    	}
+    	
+    	.row .contents {
+    		padding-top: 30px !important;
+    		padding-bottom: 30px !important;
+    	}
+    
+    	#badgeDropdownUpdate.selected {
+	        color: transparent; /* 텍스트를 투명하게 */
+	    }
+	    /* 선택된 옵션 텍스트가 드롭다운 열렸을 때 보이도록 하기 */
+	    #badgeDropdownUpdate option {
+	        color: #747d88; /* 옵션 텍스트 기본 색상 */
+	    }
+	    
+	    .post-image {
+	        width: 600px; /* 고정된 가로 크기 */
+	        height: 600px; /* 고정된 세로 크기 */
+	        object-fit: cover; /* 이미지의 비율을 유지하면서 자르기 */
+	        margin: 10px;
+	        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+	        border-radius: 8px;
+	    }
+	    
+	    @media (min-width: 1400px) {
+		    .post-image {
+		        width: 600px;
+		        height: 600px;
+		    }
+		}
+		
+		/* Large devices (desktops, ≥1200px) */
+		@media (min-width: 1200px) and (max-width: 1399.98px) {
+		    .post-image {
+		        width: 500px;
+		        height: 500px;
+		    }
+		}
+		
+		/* Medium devices (tablets, ≥992px) */
+		@media (min-width: 992px) and (max-width: 1199.98px) {
+		    .post-image {
+		        width: 400px;
+		        height: 400px;
+		    }
+		}
+		
+		/* Small devices (landscape phones, ≥768px) */
+		@media (min-width: 768px) and (max-width: 991.98px) {
+		    .post-image {
+		        width: 300px;
+		        height: 300px;
+		    }
+		}
+		
+		/* Extra small devices (portrait phones, <576px) */
+		@media (max-width: 575.98px) {
+		    .post-image {
+		        width: 100%;
+		        height: auto;
+		    }
+		}
     
     </style>
     
@@ -86,17 +173,16 @@
                             <input type="text" class="form-control" name="title" placeholder="제목을 입력하세요" value="${meetingPost.title}" required>
                         </div>
 	    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 가능 등급</div>
-	    				<div class="col-md-2 border align-items-center text-center py-2">
-						    <select class="form-control" name="participationGrade">
-						        <option value="0" ${meetingPost.participationGrade == 0 ? 'selected' : ''}>1번등급이미지</option>
-						        <option value="1" ${meetingPost.participationGrade == 1 ? 'selected' : ''}>2번등급이미지</option>
-						        <option value="2" ${meetingPost.participationGrade == 2 ? 'selected' : ''}>3번등급이미지</option>
-						        <option value="3" ${meetingPost.participationGrade == 3 ? 'selected' : ''}>4번등급이미지</option>
-						        <option value="4" ${meetingPost.participationGrade == 4 ? 'selected' : ''}>5번등급이미지</option>
-						        <option value="5" ${meetingPost.participationGrade == 5 ? 'selected' : ''}>6번등급이미지</option>
-						        <option value="6" ${meetingPost.participationGrade == 6 ? 'selected' : ''}>7번등급이미지</option>
-						    </select>
-						</div>
+	    				
+		    				<div class="col-md-2 border align-items-center text-center py-2">
+							    <select class="form-control" name="participationGrade" id="badgeDropdownUpdate">
+							        <c:forEach var="url" items="${badgeImages}" varStatus="status">
+							            <option value="${status.index + 1}" data-img-url="${url}" ${meetingPost.participationGrade == status.index + 1 ? 'selected' : ''}>
+							                ${badgeDescriptions[status.index]} 등급
+							            </option>
+							        </c:forEach>
+							    </select>
+							</div>
 	    				
 	    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">모임명</div>
 	    				<div class="col-md-5 border align-items-center text-start py-2">
@@ -151,20 +237,22 @@
 	    				<div class="col-md-2 border bg-light d-flex align-items-center justify-content-center title" id="contents">
 						    내용
 						</div>
-						<div class="col-md-10 border py-2">
-							<c:forEach var="image" items="${meetingPostImages}">
-							
-						        <div class="position-relative d-inline-block image-div">
-						            <img src="${image}" alt="Image" class="img-fluid" />
-						            <button class="btn p-0 delete-image-button position-absolute top-0 end-0" style="line-height: 0;">
-						                <i class="bi bi-x" style="font-size: 32px; color: red;"></i>
-						            </button>
-						            <input type="hidden" id="updateImageURL" name="updateImageURL" value="${image}"/>
-						        </div>
-						        
-						    </c:forEach>
-						
-						    <textarea class="form-control mb-2" name="contents" rows="10" placeholder="내용을 입력하세요." style="height: 200px;" required>${meetingPost.contents}</textarea>
+						<div class="col-md-10 border py-2 ">
+							<p>
+								<c:forEach var="image" items="${meetingPostImages}">
+							        <div class="position-relative d-inline-block image-div">
+							            <img src="${image}" alt="Image" class="post-image" />
+							            <button class="btn pt-3 pe-3 ps-0 pb-0 delete-image-button position-absolute top-0 end-0" style="line-height: 0;">
+							                <i class="bi bi-x" style="font-size: 44px; color: red;"></i>
+							            </button>
+							            <input type="hidden" id="updateImageURL" name="updateImageURL" value="${image}"/>
+							        </div>
+							        <br/>
+							    </c:forEach>
+						    </p>
+							<p>
+						    	<textarea class="form-control mb-2" name="contents" rows="10" placeholder="내용을 입력하세요." style="height: 200px;" required>${meetingPost.contents}</textarea>
+						    </p>
 						    <input type="file" id="meetingPostImage" name="meetingPostImage" multiple/><br/>
 						</div>
 						
