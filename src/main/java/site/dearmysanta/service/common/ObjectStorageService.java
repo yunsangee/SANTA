@@ -175,6 +175,9 @@ public class ObjectStorageService {
     
     public int updateObjectStorageImage(List<String> fileNameList) throws Exception {
     	
+    	if(fileNameList.size() == 0) {
+    		return 1;
+    	}
     	String fullFileName = fileNameList.get(0);
     	String fileName = fullFileName.substring(0, fullFileName.length()-1);
     	
