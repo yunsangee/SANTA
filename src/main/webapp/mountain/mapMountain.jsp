@@ -86,7 +86,7 @@
 			
 			); // request current position information
 		} else {
-			alert("Geolocation is not supported by this browser.");
+			//alert("Geolocation is not supported by this browser.");
 		}
 	}
 
@@ -121,16 +121,16 @@
 	function showError(error) {
 		switch (error.code) {
 		case error.PERMISSION_DENIED:
-			alert("User denied the request for Geolocation.");
+			//alert("User denied the request for Geolocation.");
 			break;
 		case error.POSITION_UNAVAILABLE:
-			alert("Location information is unavailable.");
+			//alert("Location information is unavailable.");
 			break;
 		case error.TIMEOUT:
-			alert("The request to get user location timed out.");
+			//alert("The request to get user location timed out.");
 			break;
 		case error.UNKNOWN_ERROR:
-			alert("An unknown error occurred.");
+			//alert("An unknown error occurred.");
 			break;
 		}
 	} // show error when cannot get position information
@@ -255,12 +255,13 @@
 				    console.log(weatherList);
 				    let weather;
 				    
-				    if(weatherList.length > 1){
+				    if(weatherList.length >= 1){
 				    	weather = weatherList[index];
 				    }else{
-				    	weather = weatherList[0];
+				    	weather = weatherList;
 				    }
 				    console.log(weather);
+				    console.log(weather.skyCondition);
 				    let weatherIcon = getWeatherIcon(weather.skyCondition);
 				    let sunriseIcon = '<i class="bi bi-sunrise icon" style="width:20px;height:20px;"></i>';
 	                let sunsetIcon ='<i class="bi bi-sunset icon" style="width:20px;height:20px;"></i>';
@@ -356,7 +357,7 @@
 	                        $('.like-button').off('click').on('click', function() {
 	                            const userNo = "${sessionScope.user != null ? sessionScope.user.userNo : 'null'}";
 	                            if (userNo === 'null') {
-	                                alert("로그인 후 이용 가능합니다.");
+	                                //alert("로그인 후 이용 가능합니다.");
 	                                return;
 	                            }
 
@@ -478,7 +479,7 @@
 									query : address
 								}, function(status, response) {
 									if (status !== naver.maps.Service.Status.OK) {
-										return alert('Something wrong!');
+										//return alert('Something wrong!');
 									}
 									console.log('geocode response:' + response);
 									console.log(response);
@@ -507,7 +508,7 @@
 						error : function(xhr, status, error) {
 							console.error('Error occurred while searching for the place:',
 									error);
-							alert('Error occurred while searching for the place.');
+							//alert('Error occurred while searching for the place.');
 						}
 					});
 				}
@@ -663,7 +664,7 @@
             justify-content: center;
             align-items: center;
             margin: 10px auto;
-            width: 300px;
+            width: 500px;
             padding: 10px;
             border-radius: 25px;
             background-color: #f1f1f1;
@@ -671,32 +672,26 @@
         }
 
         #address {
-            width: 100%;
             padding: 10px;
             border: none;
-            border-radius: 25px 0 0 25px;
+            border-radius: 35px;
             outline: none;
             font-size: 16px;
         }
 
         .search {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 0 25px 25px 0;
-            background-color: white; 
-            color: white;
-            cursor: pointer;
-            outline: none;
-            height:43px;
-        }
+	background: none; 
+	border: none; 
+	cursor: pointer;
+	margin-left: -35px;
+}
 
         .search i {
             font-size: 18px;
-            color:#90EE90;
         }
 
         .search:hover {
-            background-color: #006400;
+          
         }
 
 </style>
@@ -706,7 +701,7 @@
 <body>
 
 	<div id="searchContainer">
-        <input type="text" id="address" placeholder="검색어를 입력해보세요!" style="width: 300px;">
+        <input type="text" id="address" placeholder="검색어를 입력해보세요!" style="width: 480px;">
         <button class="search" >
                 <i class="fas fa-search text-primary" id="search"></i>
         </button>

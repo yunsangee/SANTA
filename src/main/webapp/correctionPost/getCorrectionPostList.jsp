@@ -89,6 +89,7 @@
 		
 		
 		$(".delete").on('click',function(){
+			
 				const data  = {
 					postNo : parseInt(($(this).parent()).find("input:hidden[id='crpNo']").val()),
 					userNo : parseInt(($(this).parent()).find("input:hidden[id='userNo']").val())
@@ -104,38 +105,123 @@
 					//dataType: "json",
 					data: JSON.stringify(data),
 					success: function(response) {
-	                    alert('Mountain updated successfully');
+	                    //alert('Mountain updated successfully');
 	                    //console.log(response);
 	                    $("#"+data.postNo).remove();
 	                    
 	                },
 	                error: function(jqXHR, textStatus, errorThrown) {
 	                    console.error('Error:', textStatus, errorThrown);
-	                    alert('Failed to update mountain');
+	                    //alert('Failed to update mountain');
 	                }
 						
 				});
 		});
 		
-		$(".update").on('click',function(e){
-			
-			let mountainNo = parseInt(($(this).parent()).find("input:hidden[id='mountainNo']").val());
-			let crpNo = parseInt(($(this).parent()).find("input:hidden[id='crpNo']").val());
-			console.log(mountainNo);
-			
-			let updateWindow = window.open("../mountain/updateMountain?mountainNo="+mountainNo+"&crpNo="+crpNo, 'updateMountainPopup', 'width=600,height=400');
-		
-			let checkPopupClosed = setInterval(function() {
-		            if (updateWindow.closed) {
-		                clearInterval(checkPopupClosed);
-		                location.reload();
-		            }
-		        }, 500);
-		
-		});
+		$(".update").on('click',function(event){
+					//event.preventDefault();
+					let mountainNo = $(this).closest("form").find("#mountainNo").val();
+					let crpNo = $(this).closest("form").find("#crpNo").val();
+					let user = {
+			                profileImage: "${user.profileImage}",  // Replace with actual user profile image path
+			                nickName: "${user.badgeImage}",             // Replace with actual user nickname
+			                badgeImage: "${user.nickName}",      // Replace with actual user badge image path
+			                userNo:"${user.userNo}"
+			            };
+					
+					
+		            $.ajax({
+		                url: '/mountain/rest/getMountain',
+		                method: 'GET',
+		                data: { userNo: user.userNo, mountainNo: mountainNo },
+		                success: function(response) {
+							let mountain = response.mountain;
+							let user = response.user;
+
+		                    var content = '<button class="close-button" onclick="closeDialog()">&times;</button>' +
+		                    '<h2></h2>' +
+		                    '<div class="profile-header">' +
+		                    '<img src="' + user.profileImage + '" alt="Profile Image">' +
+		                    '<p>' + user.nickName + '<img src="' + user.badgeImage + '" style="width:24px; height:24px;"></p>' +
+		                    '</div>' +
+		                    '<div class="line"></div>' +
+		                    '<div class="form-group">' +
+		                    '<label for="title">산 명칭<span>*</span></label>' +
+		                    '<input type="text" id="title" name="title" value="' + mountain.mountainName + '" placeholder="산 명칭을 입력하세요" required>' +
+		                    '</div>' +
+		                    '<div class="form-group">' +
+		                    '<label for="mountainLocation">산 위치</label>' +
+		                    '<input type="text" id="mountainLocation" name="mountainLocation" value="' + mountain.mountainLocation + '"><br><br>' +
+		                    '</div>' +
+		                    '<div class="form-group">' +
+		                    '<label for="mountainAltitude">산 높이</label>' +
+		                    '<input type="text" id="mountainAltitude" name="mountainAltitude" value="' + mountain.mountainAltitude + '"><br><br>' +
+		                    '</div>' +
+		                    '<div class="form-group">' +
+		                    '<label for="mountainDescription">100대 산 선정사유 및 등산 코스</label>' +
+		                    '<textarea id="mountainDescription" name="mountainDescription" rows="10" placeholder="내용을 입력하세요" required>' + mountain.mountainDescription + '</textarea>' +
+		                    '</div>' +
+		                    '<div class="form-group">' +
+		                    '<button type="submit" id="inputButton">작성 완료하기</button>' +
+		                    '<tr>'+
+		                    '<input type="hidden" id="userNo" name="userNo" value="' + user.userNo + '" />' +
+		                    '<input type="hidden" id="mountainNo" name="mountainNo" value="' + mountain.mountainNo + '" />' +
+		                    '<input type="hidden" id="crpNo" name="crpNo" value="' + crpNo + '" />';
+		                    '</tr>'+
+		                    '</div>' +
+		                    
+		                    $('.dialog-content').html(content);
+		                    $('.dialog-overlay.details').addClass('active');
+		                    dialogVisible = true;
+		                   
+		                },
+		                error: function() {
+		                }
+		            });
+		        });
 	});
 
-
+	$(document).ready(function(){
+		$("#dialog").on('submit', function(){
+			const data = {
+					mountainNo:$(this).closest("form").find("#mountainNo").val(),
+	                mountainName:$(this).closest("form").find("#title").val(),
+	                mountainLocation: $(this).closest("form").find('#mountainLocation').val(),
+	                mountainDescription: $(this).closest("form").find('#mountainDescription').val(),
+	                mountainAltitude: parseFloat($(this).closest("form").find('#mountainAltitude').val()),
+	            };
+			
+				console.log("data:");
+				console.log(data);
+				
+				
+				let crpNo = $(this).closest("form").find('#crpNo').val();
+				
+				alert('crpNo:' + crpNo);
+	            $.ajax({
+	                url: "/mountain/rest/updateMountain?crpNo=" + crpNo,
+	                method: "POST",
+	                contentType: "application/json",
+	                dataType: "json",
+	                data: JSON.stringify(data),
+	                success: function(response) {
+	                    //alert('Mountain updated successfully');
+	                    console.log(response);
+	                    closeDialog();
+	                    window.location.reload();
+	                },
+	                error: function(jqXHR, textStatus, errorThrown) {
+	                    console.error('Error:', textStatus, errorThrown);
+	                    //alert('Failed to update mountain');
+	                }
+	            });
+		});
+	});
+	
+	function closeDialog() {
+        $('.dialog-overlay').removeClass('active');
+        dialogVisible = false;
+    }
 </script>
  <style>
         .tabs {
@@ -262,6 +348,136 @@
         .border{
         	border:#90EE90;
         }
+         .dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding-top:20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.dialog-overlay.active {
+    display: flex;
+}
+.dialog-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      margin-top:45px;
+      width: 35%;
+      height: 80%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+        /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+        
+       .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #555;
+            background: none;
+            border: none;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-header img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .profile-header p {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 5px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 13.5px;
+            text-align: left; /* 왼쪽 정렬 추가 */
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border: 1px solid #81C408;
+            outline: none;
+            box-shadow: 0 0 5px rgba(129, 196, 8, 0.5);
+        }
+
+        .form-group select {
+            height: 40px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .form-group button:hover {
+            background-color: #218838;
+        }
+        
+        
+        .dialog-content h2 {
+           font-size:20px;
+        }
+        
+        .line {
+          border-bottom: 1px solid #ccc;
+          margin-bottom:15px;
+          margin-top:-15px;
+      }
+      
+      .td{
+      	align-items:center;
+      
+      }
     </style>
 
 
@@ -350,6 +566,15 @@
             </div>
         </div>
     </main>
+    
+    <form id="dialog">	
+    <div class="dialog-overlay details">
+    <div class="dialog-content details">
+
+    </div>
+  </div>
+  </form>
+  
     
     <footer></footer>
 

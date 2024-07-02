@@ -832,7 +832,7 @@ public class UserController {
 		    
 		    model.addAttribute("user", user);
 
-		    return "forward:/user/getUser.jsp";
+		    return "forward:/user/addQnA.jsp";
 		}
 		
 		
@@ -862,7 +862,7 @@ public class UserController {
 		    
 		    System.out.println("addQnA : " + qna);
 
-		    return "forward:/user/getQnA.jsp";
+		    return "redirect:/user/getQnAList";
 		}
 
 		
@@ -882,12 +882,6 @@ public class UserController {
 		    User sessionUser = (User) session.getAttribute("user");
 		    
 		    System.out.println("user : " + sessionUser);
-		    
-		    if (sessionUser == null) {
-		        // 로그인한 사용자 정보가 없는 경우 오류 처리
-		        model.addAttribute("error", "로그인 정보를 찾을 수 없습니다.");
-		        return "redirect:/login"; // 로그인 페이지로 리다이렉트 또는 다른 처리
-		    }
 
 		    QNA qna = userService.getQnA(postNo, userNo);
 
@@ -899,9 +893,15 @@ public class UserController {
 
 		    model.addAttribute("qna", qna);
 		    
-		    if (sessionUser.getRole() == 1) {
-		        model.addAttribute("admin", 1);
-		    }
+		    if (sessionUser != null) {
+	            model.addAttribute("isAdmin", sessionUser.getRole() == 1);
+	            model.addAttribute("sessionUserNo", sessionUser.getUserNo());
+	            model.addAttribute("user", sessionUser);
+	        } else {
+	            model.addAttribute("isAdmin", false);
+	            model.addAttribute("sessionUserNo", -1);
+	            model.addAttribute("user", null);
+	        }
 		    
 		    model.addAttribute("user", sessionUser);
 
@@ -972,10 +972,13 @@ public class UserController {
 		 public String getQnAList(@ModelAttribute Search search, Model model, HttpSession session) throws Exception {
 	        System.out.println("getQnAList : GET");
 	        System.out.println("Search:" + search);
+	        
+	        
+	        
 	        // 세션에서 사용자 정보 가져오기
 	        User user = (User) session.getAttribute("user");
 	        
-	        if (user.getRole()==1) {
+	        if (user != null && user.getRole()==1) {
 		    	
 		    	model.addAttribute("admin", 1);
 		    	

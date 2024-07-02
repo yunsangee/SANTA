@@ -42,13 +42,13 @@
         
         $('.meetingPost').on('click', function(event){
         	event.preventDefault();
-        	alert('meetingPost link');
+        	//alert('meetingPost link');
         	window.location.href = '/meeting/getMeetingPostList?meetingPostListSearchCondition=5&searchKeyword=${mountain.mountainName}';
         });
         
         $('.certificationPost').on('click',function(event){
         	event.preventDefault();
-        	alert('certificationPost link');
+        	//alert('certificationPost link');
         	window.location.href = '/certificationPost/listCertificationPost?searchCondition=2&searchKeyword=${mountain.mountainName}';
         });
         
@@ -72,7 +72,11 @@
  */
 
  $('.bi-info-circle').click(function() {
-     $('.dialog-overlay.details').addClass('active');
+	 let user = "${sessionScope.user != null ? sessionScope.user : 'null'}";
+	 
+	 if(user != 'null'){
+     	$('.dialog-overlay.details').addClass('active');
+	 }
    });
 
    // 다이얼로그를 닫는 로직
@@ -149,21 +153,22 @@
 				};
 
 				
-			 	alert('/correctionPost/rest/addCorrectionPost');
+			 	//alert('/correctionPost/rest/addCorrectionPost');
 				let url = '/correctionPost/rest/addCorrectionPost';
 				$.ajax({
 		            url: url,
 		            method: "GET",
 		            data: data, // data 객체를 쿼리 파라미터로 전송
 		            success: function(response) {
-		                alert('Mountain updated successfully');
+		                //alert('Mountain updated successfully');
 		                console.log(response);
-		                window.close();
+		                closeDialog();
+		                
 		            },
 		            error: function(jqXHR, textStatus, errorThrown) {
 		                console.error('Error:', textStatus, errorThrown);
-		                alert('Error:', textStatus, errorThrown);    
-		                alert('Failed to update mountain');
+		                //alert('Error:', textStatus, errorThrown);    
+		                //alert('Failed to update mountain');
 		            }
 		        });
 			 	
@@ -229,6 +234,7 @@
         .swiper-button-prev {
             top: 50%; /* nav 버튼 위치 조정 */
             transform: translateY(-50%);
+            color:#81C408;
         }
         
         .mountain-image-container{
@@ -425,6 +431,42 @@
           margin-bottom:15px;
           margin-top:-15px;
       }
+      
+      .card-body{
+      	font-size:0.75em
+      
+      }
+      
+      .card-title{
+      	display: flex;
+      	align-items: center;
+      }
+      
+      .card-title .bi{
+      	margin-left:auto;
+      	margin-right:3px;
+      }
+      
+      .image-container {
+    position: relative;
+    width: 600px;
+    height: 407px;
+    overflow: hidden;
+    border-radius: 15px;
+  }
+
+  .image-container img {
+    width: 90%;
+    height: 100%;
+    object-fit: cover;
+    clip-path: inset(1px 0px 40px 0px round 10px); /* clip-path와 border-radius 적용 */
+  }
+      
+   	.subtitle{
+   		font-size:13px;
+   		color:black;
+   	}
+      
         
         
         
@@ -439,31 +481,45 @@
 	<main>
 	
 		
-		<div class="container-fluid py-5">
-			<div class="container py-5">
+		<div class="container-fluid" style="padding-top:70px; padding-buttom:0px; margin-buttom:0px;">
+			<div class="container pt-5">
 				
-				<div class="card mb-3" style="width:auto; height:300px;">
+				<div class="card mb-3" style="width:auto; height:370px;">
 					<div class="row g-0">
    						<div class="col-md-6">
-     							<img src="${mountain.mountainImage}" class="img-fluid rounded-start" style="height:325px; width:600px;clip-path: inset(0px 0px 30px 0px);" alt="Mountain Image">
+     							<div class="image-container">
+  <img src="${mountain.mountainImage}" alt="Mountain Image">
+</div>
    						</div>
    						<div class="col-md-6">
      							<div class="card-body">
-       							<h5 class="card-title">${mountain.mountainName}</h5>
-      								<div class="etc">
+       							<div class="card-title"> <h5>${mountain.mountainName} </h5>
         									<i class="bi bi-info-circle"></i>
         									<i class="${mountain.isLiked == 1 ? 'fas' : 'far'} fa-heart popular like-button" style="cursor: pointer;">${mountain.likeCount}</i>
       								</div>
+      								
       								<input type="hidden" id="mountainNo" value="${mountain.mountainNo}"/>
-      								<p class="card-text">위치: ${mountain.mountainLocation}</p>
-						        <p class="card-text">높이: ${mountain.mountainAltitude}m</p>
-						        <p class="card-text">좋아요: ${mountain.likeCount}</p>
+      								<p class="card-text">${mountain.mountainLocation}</p>
+      							<c:if test="${not empty reason}">
+    <p class="card-text subtitle">100대 명산 선정 사유👉</p>
+    <p class="card-text">${reason}</p>
+</c:if>
+
+<!-- 빈 값이 아닌 경우 courseInfo를 표시 -->
+<c:if test="${not empty courseInfo}">
+	<p class="card-text subtitle">코스정보🚩</p>
+	<c:forEach var="course" items="${courseInfo}">
+    	<p class="card-text">${course}</p>
+    </c:forEach>
+</c:if>
+						        <p class="card-text"><span class="subtitle">높이</span> 🏔: ${mountain.mountainAltitude}m</p>
+						        <p class="card-text"><span class="subtitle">조회수</span> 👀: ${mountain.mountainViewCount}</p>
 				      		</div>
 				    	</div>
 				    </div>
 				</div>
  					
- 				<h4>${mountain.mountainName} 날씨</h4>
+ 				<h4 style="padding:15px;">${mountain.mountainName} 날씨</h4>
   				
   				
   				<div class="row g-4 mb-4">
@@ -511,7 +567,7 @@
 
        
         
-        <div class="today-mountain-stats">
+        <div class="today-mountain-stats" style="margin-top:0px;">
     <h4>산타 통계</h4>
     <div class="stat-item">
         <i class="fas fa-users text-primary"></i>

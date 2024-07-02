@@ -73,7 +73,7 @@
 <select id="getCorrectionPostTotalCount" parameterType="site.dearmysanta.domain.common.Search" resultType="int">
         SELECT COUNT(*) 
         FROM correction_post crp,   MOUNTAIN m
-        WHERE crp.crp_status = 0 AND crp.MOUNTAIN_NO = m.MOUNTAIN_NO 
+        WHERE crp.MOUNTAIN_NO = m.MOUNTAIN_NO 
         <choose>
             <when test="searchCondition == 0 and searchKeyword != null and searchKeyword != ''">
                 AND m.MOUNTAIN_NAME LIKE '%' || #{searchKeyword} || '%'

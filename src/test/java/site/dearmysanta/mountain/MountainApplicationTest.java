@@ -593,7 +593,7 @@ public class MountainApplicationTest {
 	
 	@Test
 	public void getMountainReason() throws IOException {
-		mountainService.getMountainReason("관악산");
+		mountainService.getMountainReason("가리산");
 	}
 	
 }

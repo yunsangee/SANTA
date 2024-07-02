@@ -7,218 +7,240 @@
     <c:import url="../common/header.jsp"/>
     <title>Profile</title>
     <style>
-    html, body {
-        height: 100%;
-        margin: 0;
-        font-family: Arial, sans-serif;
-    }
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
 
-    .wrapper {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
-    header, footer {
-        flex-shrink: 0;
-    }
+header, footer {
+    flex-shrink: 0;
+}
 
-      .main-container {
-            min-height: 80vh; /* 화면 높이의 80%를 최소 높이로 설정 */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+.main-container {
+    min-height: 80vh; /* 화면 높이의 80%를 최소 높이로 설정 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
-    main {
-        flex-grow: 1;
-        margin-top: 160px;
-        padding: 0 20px;
-        max-width: 1200px;
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 30px;
-    }
+main {
+    flex-grow: 1;
+    margin-top: 160px;
+    padding: 0 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
+}
 
-    footer {
-        background-color: #f1f1f1;
-        padding: 10px 0;
-        text-align: center;
-        margin-top: 50px;
-    }
+footer {
+    background-color: #f1f1f1;
+    padding: 10px 0;
+    text-align: center;
+    margin-top: 50px;
+}
 
-    .profile-container {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-        padding: 20px;
-        border-bottom: 1px solid #ccc;
-        font-size: 1em;
-        background-color: #f9f9f9;
-        border-radius: 10px;
-    }
+.profile-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+    font-size: 1em;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
 
-    .profile-image {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        margin-right: 20px;
-        border: 2px solid #ddd;
-    }
+.profile-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+    border: 2px solid #ddd;
+}
 
-    .profile-details {
-        flex-grow: 1;
-    }
-    .profile-details .badge-img {
+.profile-details {
+    flex-grow: 1;
+}
+
+.profile-details .badge-img {
     width: 20px; /* 이미지 크기를 닉네임 크기와 유사하게 조정 */
     height: 20px;
     margin-left: 10px; /* 닉네임과의 간격 조정 */
     vertical-align: middle; /* 닉네임과 수직으로 맞춤 */
 }
-    
 
-    .profile-details p {
-        margin: 5px 0;
-    }
+.profile-details p {
+    margin: 5px 0;
+}
 
-    .follow-info {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-top: 10px;
-    }
+.follow-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+}
 
-    .follow-button {
-        margin-left: 20px;
-        font-size: 0.9em;
-        cursor: pointer;
-        background-color: #ffcc00;
-        color: black;
-        border: 2px solid #ffcc00;
-        padding: 10px 20px;
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        transition: background-color 0.3s, color 0.3s, border 0.3s;
-    }
+.follow-button {
+    margin-left: 20px;
+    font-size: 0.8em; /* 버튼 폰트 크기 조정 */
+    cursor: pointer;
+    background-color: #ffcc00;
+    color: black;
+    border: none; /* 테두리 제거 */
+    padding: 5px 15px; /* 버튼의 패딩을 조정하여 크기를 변경 */
+    border-radius: 50px; /* 버튼을 둥글게 만듦 */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 버튼에 그림자 추가 */
+    position: relative;
+    overflow: hidden;
+}
 
-    .follow-button.following {
-        background-color: white;
-        color: #ffcc00;
-        border: 2px solid #ffcc00;
-    }
+.follow-button.following {
+    background-color: white;
+    color: #ffcc00;
+    border: none;
+}
 
-    .follow-button .bi {
-        font-size: 1.2em;
-    }
+.follow-button .bi {
+    font-size: 1.2em;
+}
 
-    .tab-menu {
-        display: flex;
-        justify-content: space-around;
-        margin: 20px 0;
-        border-bottom: 2px solid #ccc;
-    }
+.plus-animation {
+    position: absolute;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #000000;
+    opacity: 0;
+    animation: plusMove 0.7s forwards;
+}
 
-    .tab-menu a {
-        text-decoration: none;
-        color: black;
-        font-weight: bold;
-        padding: 10px;
-        transition: color 0.3s, border-bottom 0.3s;
-    }
-
-    .tab-menu a.active {
-        border-bottom: 3px solid  #81c408;
-        color: #81c408;
-    }
-
-    .posts-container-wrapper {
-        position: relative;
-    }
-
-    .posts-container {
-        display: flex;
-        overflow-x: auto;
-        white-space: nowrap;
-        gap: 20px;
-        padding: 10px 0;
-        scrollbar-width: none;
-    }
-
-    .post-preview {
-        flex: 0 0 auto;
-        width: 250px;
-        height: 250px;
-        border: 1px solid #ccc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        font-size: 1em;
-        background-color: #fff;
-        border-radius: 10px;
-        overflow: hidden;
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .post-preview img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s;
-    }
-
-    .post-preview:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .post-preview:hover img {
-        transform: scale(1.1);
-    }
-
-    .posts-container::-webkit-scrollbar {
-        display: none;
-    }
-
-    .scroll-overlay {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 50px;
-        background: rgba(255, 255, 255, 0.7);
-        z-index: 1;
-        cursor: pointer;
-        transition: background 0.3s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-    }
-
-    .posts-container-wrapper:hover .scroll-overlay {
+@keyframes plusMove {
+    0% {
         opacity: 1;
+        transform: translateY(0);
     }
+    100% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+}
 
-    .scroll-overlay.left {
-        left: 0;
-    }
+.tab-menu {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    border-bottom: 2px solid #ccc;
+}
 
-    .scroll-overlay.right {
-        right: 0;
-    }
+.tab-menu a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    padding: 10px;
+    transition: color 0.3s, border-bottom 0.3s;
+}
 
-    .scroll-arrow {
-        font-size: 2em;
-        color: #888;
-        transition: color 0.3s;
-    }
+.tab-menu a.active {
+    border-bottom: 3px solid #81c408;
+    color: #81c408;
+}
 
-    .scroll-overlay:hover .scroll-arrow {
-        color: #555;
-    }
-    
+.posts-container-wrapper {
+    position: relative;
+}
+
+.posts-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    gap: 20px;
+    padding: 10px 0;
+    scrollbar-width: none;
+}
+
+.post-preview {
+    flex: 0 0 auto;
+    width: 250px; /* 또는 원하는 너비 */
+    height: 250px; /* 또는 원하는 높이 */
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 1em;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.post-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.post-preview:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.post-preview:hover img {
+    transform: scale(1.1);
+}
+
+.posts-container::-webkit-scrollbar {
+    display: none;
+}
+
+.scroll-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 1;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+}
+
+.posts-container-wrapper:hover .scroll-overlay {
+    opacity: 1;
+}
+
+.scroll-overlay.left {
+    left: 0;
+}
+
+.scroll-overlay.right {
+    right: 0;
+}
+
+.scroll-arrow {
+    font-size: 2em;
+    color: #888;
+    transition: color 0.3s;
+}
+
+.scroll-overlay:hover .scroll-arrow {
+    color: #555;
+}
+
 .no-posts-message {
     display: flex;
     justify-content: center;
@@ -247,24 +269,49 @@ $(document).ready(function() {
     // 팔로우 버튼 텍스트 설정
     updateFollowButtonText(isFollowing);
 
-    // 팔로우 버튼 클릭 이벤트 핸들러
-    $('.follow-button').click(function() {
-        var url = isFollowing ? '/userEtc/rest/deleteFollow' : '/userEtc/rest/addFollow';
-        $.ajax({
-            url: url,
-            method: 'GET',
-            data: { followerUserNo: followerUserNo, followingUserNo: userNo },
-            success: function(response) {
-                console.log("Follow/unfollow success:", response);
-                isFollowing = !isFollowing;
-                updateFollowButtonText(isFollowing);
-                updateFollowerCount(response);
-            },
-            error: function(xhr, status, error) {
-                console.error("팔로우 중 에러 발생:", xhr, status, error);
+// 팔로우 버튼 클릭 이벤트 핸들러
+$('.follow-button').click(function() {
+    var url = isFollowing ? '/userEtc/rest/deleteFollow' : '/userEtc/rest/addFollow';
+    var button = $(this); // 클릭된 버튼을 참조
+    $.ajax({
+        url: url,
+        method: 'GET',
+        data: { followerUserNo: followerUserNo, followingUserNo: userNo },
+        success: function(response) {
+            console.log("Follow/unfollow success:", response);
+            if (!isFollowing) { // 팔로우할 때만 애니메이션 표시
+                showMultiplePlusAnimations(button);
             }
-        });
+            isFollowing = !isFollowing;
+            updateFollowButtonText(isFollowing);
+            updateFollowerCount(response);
+        },
+        error: function(xhr, status, error) {
+            console.error("팔로우 중 에러 발생:", xhr, status, error);
+        }
     });
+});
+
+// 여러 개의 플러스 애니메이션을 표시하는 함수
+function showMultiplePlusAnimations(button) {
+    for (var i = 0; i < 5; i++) {
+        (function(i) {
+            setTimeout(function() {
+                var plusElement = $('<div class="plus-animation">+</div>');
+                $('body').append(plusElement); // body에 추가하여 버튼 밖으로 나오게 함
+                var offset = button.offset();
+                plusElement.css({
+                    top: offset.top + (Math.random() * 20 - 10) + 'px', // 무작위로 위치 조정
+                    left: offset.left + (Math.random() * 40 - 20) + 'px' // 무작위로 위치 조정
+                });
+                setTimeout(function() {
+                    plusElement.remove();
+                }, 700); // 애니메이션 지속 시간과 동일하게 설정
+            }, i * 100); // 각 플러스 애니메이션을 약간의 지연 시간으로 생성
+        })(i);
+    }
+}
+
 
     // 팔로우 버튼 텍스트 및 스타일 업데이트 함수
     function updateFollowButtonText(isFollowing) {
@@ -372,7 +419,6 @@ $(document).ready(function() {
         });
     }
 
-
     // 마우스 오버 시 스크롤 이동
     var scrollAmount = 10; // 스크롤 이동량 설정 (값을 조정하여 속도 변경 가능)
     var scrollInterval;
@@ -408,7 +454,9 @@ $(document).ready(function() {
         clearInterval(scrollInterval); // 마우스가 떠나면 스크롤 정지
         $(this).find('.scroll-overlay').css('opacity', '0'); // 양쪽 오버레이 숨김
     });
+
 });
+
 </script>
 </head>
 <body>

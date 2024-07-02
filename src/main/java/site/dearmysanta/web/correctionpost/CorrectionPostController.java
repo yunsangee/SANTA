@@ -64,6 +64,7 @@ public class CorrectionPostController {
 		    model.addAttribute("totalCount", totalCount);
 		    model.addAttribute("currentPageCount", currentPageCount);
 
+		    SantaLogger.makeLog("info", "totalPages::" + totalPages + " "+ correctionPostService.getCorrectionPostTotalCount(search) +" " + pageSize);
 		return "forward:/correctionPost/getCorrectionPostList.jsp";
 	}
 	

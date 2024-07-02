@@ -3,14 +3,9 @@
 <!DOCTYPE html>
 <html>
 
-<!--  ////////////////////////////////////////////// head ///////////////////////////////////////////////// -->
-
 <head>
     <meta charset="UTF-8">
     <title>QNA 등록</title>
-    
-<!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->    
-    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,12 +18,27 @@
         }
 
         .container {
+            position: relative;
             background-color: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             width: 500px;
             max-width: 100%;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        .close-button:hover {
+            color: #dc3545;
         }
 
         h2 {
@@ -65,15 +75,26 @@
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
+            font-size: 13.5px;
         }
 
-        .form-group input, .form-group select, .form-group textarea {
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
             width: 100%;
             padding: 10px;
             box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border: 1px solid #81C408;
+            outline: none;
+            box-shadow: 0 0 5px rgba(129, 196, 8, 0.5);
         }
 
         .form-group select {
@@ -98,24 +119,16 @@
         .form-group button:hover {
             background-color: #218838;
         }
-
-        .form-group .cancel-button {
-            background-color: #dc3545;
-            margin-top: 10px;
-        }
-
-        .form-group .cancel-button:hover {
-            background-color: #c82333;
-        }
-
-    </style>    
-    
+    </style>
 </head>
 
-<!--  ////////////////////////////////////////////// body ///////////////////////////////////////////////// -->    
+<!--  ////////////////////////////////////////////// body ///////////////////////////////////////////////// -->
 
 <body>
     <div class="container">
+    
+        <button class="close-button" onclick="history.back()">&times;</button>
+        
         <h2>QNA 작성</h2>
         <div class="profile-header">
             <img src="${user.profileImage}" alt="Profile Image">
@@ -130,7 +143,6 @@
                 <label for="contents">내용</label>
                 <textarea id="contents" name="contents" rows="10" placeholder="내용을 입력하세요" required></textarea>
             </div>
-            
             <div class="form-group">
                 <label for="qnaPostCategory">카테고리</label>
                 <select id="qnaPostCategory" name="qnaPostCategory" required>
@@ -143,15 +155,13 @@
                     <option value="5">산 검색</option>
                 </select>
             </div>
-            
             <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
-  		  <input type="hidden" id="userId" name="userId" value="${user.userId}">
-            
+            <input type="hidden" id="userId" name="userId" value="${user.userId}">
             <div class="form-group">
-                <button type="submit">작성</button>
-                <button type="button" class="cancel-button" onclick="history.back()">취소</button>
+                <button type="submit">작성 완료하기</button>
             </div>
         </form>
     </div>
 </body>
+
 </html>

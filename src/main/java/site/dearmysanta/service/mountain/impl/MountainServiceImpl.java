@@ -411,13 +411,13 @@ public class MountainServiceImpl implements MountainService {
 	}// name, address, altitude, latitude, longitude
 	
 	
-	public void getMountainReason(String mountainName) throws IOException {
+	public String getMountainReason(String mountainName) throws IOException {
 
 		StringBuilder urlBuilder = new StringBuilder(
 				"http://openapi.forest.go.kr/openapi/service/trailInfoService/getforeststoryservice"); /* URL */
 		urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=O5Qg2/rYlZbWpeUQO4gLBZewc6BzDHr12/dzYa2yu1lPC1ivHOukhxs6DrSjz9Esti9V5GcOfiX7NQSjJFLvJA=="); /* Service Key */
 		urlBuilder
-				.append("&" + URLEncoder.encode("mntnNm", "UTF-8") + "=" + URLEncoder.encode("지리산", "UTF-8")); /* 산명 */
+				.append("&" + URLEncoder.encode("mntnNm", "UTF-8") + "=" + URLEncoder.encode(mountainName, "UTF-8")); /* 산명 */
 		urlBuilder.append(
 				"&" + URLEncoder.encode("mntnHght", "UTF-8") + "=" + URLEncoder.encode("", "UTF-8")); /* 산정보 높이 */
 		urlBuilder
@@ -447,12 +447,17 @@ public class MountainServiceImpl implements MountainService {
 		StringBuilder sb = new StringBuilder();
 		String line;
 		while ((line = rd.readLine()) != null) {
-			sb.append(line);
+			if(line.contains("선정")) {
+				sb.append(line.split("선정")[0].split("<hndfmsmtnslctnrson>")[1] + "선정 되었다.");
+				sb.append("코스정보:" + line.split("<crcmrsghtnginfoetcdscrt>")[1].split("</crcmrsghtnginfoetcdscrt>")[0]);
+			}
 		}
 		
 		rd.close();
 		conn.disconnect();
 		System.out.println(sb.toString());
+		
+		return sb.toString();
 
 	}
 	
@@ -472,10 +477,19 @@ public class MountainServiceImpl implements MountainService {
 		mountainDao.addMountain(mountain);
 	}
 	
-	public Mountain getMountain(int userNo, int mountainNo) {
+	public Mountain getMountain(int userNo, int mountainNo) throws IOException {
 		
 		Mountain mountain = mountainDao.getMountain(mountainNo);
 		mountain.setLikeCount(mountainDao.getTotalMountainLikeCount(mountain.getMountainNo()));
+		
+		
+		if(mountain.getMountainDescription() == null ||mountain.getMountainDescription().equals(" ") ) {
+			
+			mountain.setMountainDescription(this.getMountainReason(mountain.getMountainName()));
+			
+			this.updateMountain(mountain);
+			
+		}// 정보가 없으면 api를 통해 가져오고 있으면 DB에서 가져오고 
 		
 		if(userNo != -1) {
 			SantaLogger.makeLog("info", "mountainNo & userNo" + mountain.getMountainNo()+ " "+userNo);
@@ -547,6 +561,9 @@ public class MountainServiceImpl implements MountainService {
 			SantaLogger.makeLog("info", "mountainNo & userNo" + mountain.getMountainNo()+ " "+userNo);
 			mountain.setIsLiked(mountainDao.isLiked(mountain.getMountainNo(), userNo));
 		}
+		
+		
+		
 		}
 		
 		return list;

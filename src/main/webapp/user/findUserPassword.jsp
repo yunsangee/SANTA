@@ -27,7 +27,7 @@
             text-align: center;
             justify-content: center;
             align-items: center;
-            margin-top:265px;
+            margin-top:240px;
         }
 
         .container h2 {
@@ -39,6 +39,12 @@
 
         .container p {
             color: #999999;
+            font-size: 13px;
+            margin-bottom:-4px;
+        }
+        
+        .container span {
+        	color: #81C408;
             font-size: 13px;
             margin-bottom: 30px;
         }
@@ -53,7 +59,7 @@
             width: 30%;
             padding: 10px;
             margin-bottom: 10px;
-            margin-top: 30px;
+            margin-top: 40px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
@@ -175,7 +181,7 @@
 
         footer {
             width: 100%;
-            margin-bottom:-249px;
+            margin-bottom:-230px;
            /*  text-align: center; */
            /*  padding: 10px; */
            /*  background-color: #f1f1f1; */
@@ -190,7 +196,7 @@
     <script>
         $(document).ready(function() {
             $(".send").click(function() {
-                sendVerificationCode();
+                checkUserIdAndSendCode();
             });
 
             // 인증번호 버튼 클릭 시 인증번호 입력란 추가
@@ -198,9 +204,9 @@
                 var userId = $("#userId").val();
                 var phoneNumber = $("#phoneNumber").val();
                 if (userId && phoneNumber) {
-                    sendVerificationCode();
+                    checkUserIdAndSendCode();
                 } else {
-                    alert("이름과 휴대폰 번호를 모두 입력해주세요.");
+                    alert("이메일과 휴대폰 번호를 모두 입력해주세요.");
                 }
             });
             
@@ -226,7 +232,7 @@
             });
         });
 
-        function sendVerificationCode() {
+        function checkUserIdAndSendCode() {
             const userId = $("#userId").val();
             const phoneNumber = $("#phoneNumber").val();
 
@@ -242,38 +248,44 @@
                 success: function(response) {
                     if (!response.userExists) {
                         alert("회원정보가 일치하지 않습니다. 다시 확인해주세요.");
+                    } else if (response.isKakaoUser) {
+                        alert("카카오 로그인 산타님은 비밀번호를 변경하실 수 없습니다.");
                     } else {
-                        $.ajax({
-                            url: "/message/send-one",
-                            type: "POST",
-                            contentType: "application/json",
-                            data: JSON.stringify({
-                                userId: userId,
-                                phoneNumber: phoneNumber
-                            }),
-                            success: function(response) {
-                                if (response) {
-                                    alert("인증번호가 전송되었습니다.");
-                                    $(".form-group").append(
-                                        '<div id="verificationSection">' +
-                                        '<label for="verifyCode"></label>' +
-                                        '<input type="text" class="code" id="verifyCode" name="verifyCode" placeholder="인증번호" required>' +
-                                        '<button type="button" class="verify-check-btn">확인</button>' +
-                                        '<span id="verificationResult" class="error-message"></span>' +
-                                        '</div>'
-                                    );    
-                                } else {
-                                    alert("인증번호 전송에 실패했습니다. 다시 시도해주세요.");
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                alert('인증번호 전송에 실패했습니다. 다시 시도해주세요.');
-                            }
-                        });
+                        sendVerificationCode(userId, phoneNumber);
                     }
                 },
                 error: function(xhr, status, error) {
                     alert('회원정보가 일치하지 않습니다. 다시 시도해주세요.');
+                }
+            });
+        }
+
+        function sendVerificationCode(userId, phoneNumber) {
+            $.ajax({
+                url: "/message/send-one",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    userId: userId,
+                    phoneNumber: phoneNumber
+                }),
+                success: function(response) {
+                    if (response) {
+                        alert("인증번호가 전송되었습니다.");
+                        $(".form-group").append(
+                            '<div id="verificationSection">' +
+                            '<label for="verifyCode"></label>' +
+                            '<input type="text" class="code" id="verifyCode" name="verifyCode" placeholder="인증번호" required>' +
+                            '<button type="button" class="verify-check-btn">확인</button>' +
+                            '<span id="verificationResult" class="error-message"></span>' +
+                            '</div>'
+                        );    
+                    } else {
+                        alert("인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('인증번호 전송에 실패했습니다. 다시 시도해주세요.');
                 }
             });
         }
@@ -314,10 +326,11 @@
 <main class="container">
     <h2>비밀번호 찾기</h2>
     <p>회원정보에 등록한 휴대폰 번호와 입력한 휴대폰 번호가 동일해야 인증번호를 받을 수 있습니다.</p>
+    <span>카카오 로그인 산타님은 비밀번호 찾기가 불가능 합니다!</span>
     <form id="findUserPasswordForm" action="/user/findUserPassword" method="post">
         <div>
             <label for="email"></label>
-            <input type="text" class="email" id="userId" name="userId" placeholder="email" required>
+            <input type="text" class="email" id="userId" name="userId" placeholder="이메일" required>
         </div>
         
         <div class="form-group">
