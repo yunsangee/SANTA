@@ -58,6 +58,11 @@
         .table td {
             /*background-color: #B2E457;*/
         }
+        
+        .row {
+        	width: 70%;
+        	margin: 0 auto;
+        }
     </style>
 
 </head>
@@ -65,29 +70,42 @@
 	<header><c:import url="../common/top.jsp"/></header>
     <main>
     	
-    	<div class="container-fluid page-header py-5">
-    		<h1 class="text-center text-white display-6">Chatting Room List</h1>
-    	</div>
-    	
     	<div class="container-fluid py-5">
     		<div class="container py-5">
-	    		<div class="table-responsive">
-	    			<table class="table">
-	    				<thead>
+    			<div class="row g-4 mb-2">
+		    		<div class="table-responsive">
+		    			<table class="table">
+		    				<thead>
+		    					<tr>
+		    						<th scope="col">순번</th>
+		    						<th scope="col">모임 명</th>
+		    						<th scope="col">마지막 메시지</th>
+		    						
+		    						
+		    						
+		    					</tr>
+		    				</thead>
+		    				<tbody>
 
-	    				</thead>
-	    					<tr>
-	    						<td></td>
-	    						<td></td>
-	    					</tr>
-	    				<c:forEach var="chattingRoom" items="${chattingRooms}">
-                            <tr id="chattingRoom-${chattingRoom.postNo}">		<!-- 아래 userNo, nickname 지워야함. 로컬에서만 지금처럼 쓰는거임 -->
-                                <td class="col-md-3"><a href="/chatting/getChattingRoom?roomNo=${chattingRoom.postNo}&roomName=${chattingRoom.meetingName}">${chattingRoom.meetingName}</a></td>
-                                <!-- <input type="hidden" id="roomNo" value="${chattingRoom.postNo }"/> -->
-                                <td class="col-md-9 last-message">Loading...</td>
-                            </tr>
-                        </c:forEach>
-	    			</table>
+		    				<c:forEach var="chattingRoom" items="${chattingRooms}" varStatus="status">
+	                            <tr id="chattingRoom-${chattingRoom.postNo}">		<!-- 아래 userNo, nickname 지워야함. 로컬에서만 지금처럼 쓰는거임 -->
+	                            	<td>
+				                    	<p class="mb-2 mt-2">${status.index+1}</p>
+				                    </td>
+	                                <td>
+	                                	<p class="mb-2 mt-2">
+	                                		<a href="/chatting/getChattingRoom?roomNo=${chattingRoom.postNo}&roomName=${chattingRoom.meetingName}">${chattingRoom.meetingName}</a>
+	                                	</p>
+	                                </td>
+	                                <!-- <input type="hidden" id="roomNo" value="${chattingRoom.postNo }"/> -->
+	                                <td class="mb-2 mt-2 last-message">
+	                                	No messages yet.
+	                                </td>
+	                            </tr>
+	                        </c:forEach>
+	                        </tbody>
+		    			</table>
+		    		</div>
 	    		</div>
     		</div>
     	</div>

@@ -99,29 +99,45 @@
 		    opacity: 0.5;
 		}
 		
+		.form-control:read-only {
+			background-color: #fff;
+		}
+		
+		.custom-select-wrapper {
+            position: relative;
+        }
+		
+		.fa-chevron-down {
+            position: absolute;
+            top: 50%;
+            right: 10px; /* 아이콘 위치 조정 */
+            transform: translateY(-50%);
+            pointer-events: none; /* 클릭 이벤트가 아이콘을 통해 전파되지 않도록 설정 */
+
+        }
+		
     </style>
     
 </head>
 <body>
 	<header><c:import url="../common/top.jsp"/></header>
 	<main>
-	
-		<div class="container-fluid page-header py-5">
-    		<h1 class="text-center text-white display-6">Meeting Post List</h1>
-    	</div>
     	
     	<div class="container-fluid py-5">
     		<div class="container py-5">
-	    		<form id="searchForm" class="col-md-12">
+	    		<form id="searchForm" class="col-md-12 mt-5">
 	    		
 	    			<div class="row g-4 mb-5 align-items-center">
-	    			
+
 	    				<div class="col-md-2 offset-md-1">
-	    					<select class="form-control border-2 border-secondary rounded-pill py-2" id="searchCondition" name="searchCondition">
-	    						<option value="0" ${ !empty meetingPostSearch.searchCondition && meetingPostSearch.searchCondition==0 ? "selected" : "" }>제목</option>
-	                           	<option value="1" ${ !empty meetingPostSearch.searchCondition && meetingPostSearch.searchCondition==1 ? "selected" : "" }>내용</option>
-	                           	<option value="2" ${ !empty meetingPostSearch.searchCondition && meetingPostSearch.searchCondition==2 ? "selected" : "" }>닉네임</option>
-	    					</select>
+	    					<div class="custom-select-wrapper">
+		    					<select class="form-control border-2 border-secondary rounded-pill py-2" id="searchCondition" name="searchCondition">
+		    						<option value="0" ${ !empty meetingPostSearch.searchCondition && meetingPostSearch.searchCondition==0 ? "selected" : "" }>제목</option>
+		                           	<option value="1" ${ !empty meetingPostSearch.searchCondition && meetingPostSearch.searchCondition==1 ? "selected" : "" }>내용</option>
+		                           	<option value="2" ${ !empty meetingPostSearch.searchCondition && meetingPostSearch.searchCondition==2 ? "selected" : "" }>닉네임</option>
+		    					</select>
+		    					<i class="fa fa-chevron-down"></i>
+		    				</div>
 	    				</div>
 	    				
 	    				<div class="col-md-5">
@@ -135,14 +151,20 @@
 	    				</div>
 	    				
 	    				<div class="col-md-2">
-	    					<select class="form-control border-2 border-secondary rounded-pill py-2" id="meetingPostListSearchCondition" name="meetingPostListSearchCondition">
-	    						<option value="0" ${ !empty meetingPostSearch.meetingPostListSearchCondition && meetingPostSearch.meetingPostListSearchCondition==0 ? "selected" : "" }>전체 게시글</option>
-	                           	<option value="1" ${ !empty meetingPostSearch.meetingPostListSearchCondition && meetingPostSearch.meetingPostListSearchCondition==1 ? "selected" : "" }>내가 쓴 게시글</option>
-	                           	<option value="2" ${ !empty meetingPostSearch.meetingPostListSearchCondition && meetingPostSearch.meetingPostListSearchCondition==2 ? "selected" : "" }>모임 신청한 게시글</option>
-	                           	<option value="3" ${ !empty meetingPostSearch.meetingPostListSearchCondition && meetingPostSearch.meetingPostListSearchCondition==3 ? "selected" : "" }>모임 등록된 게시글</option>
-	                           	<option value="4" ${ !empty meetingPostSearch.meetingPostListSearchCondition && meetingPostSearch.meetingPostListSearchCondition==4 ? "selected" : "" }>좋아요 한 게시글</option>
-	    					</select>
+	    					<div class="custom-select-wrapper">
+		    					<select class="form-control border-2 border-secondary rounded-pill py-2" id="meetingPostListSearchCondition" name="meetingPostListSearchCondition">
+		    						<option value="0" ${ !empty meetingPostSearch.meetingPostListSearchCondition && meetingPostSearch.meetingPostListSearchCondition==0 ? "selected" : "" }>전체 게시글</option>
+		                           	<option value="1" ${ !empty meetingPostSearch.meetingPostListSearchCondition && meetingPostSearch.meetingPostListSearchCondition==1 ? "selected" : "" }>내가 쓴 게시글</option>
+		                           	<option value="2" ${ !empty meetingPostSearch.meetingPostListSearchCondition && meetingPostSearch.meetingPostListSearchCondition==2 ? "selected" : "" }>모임 신청한 게시글</option>
+		                           	<option value="3" ${ !empty meetingPostSearch.meetingPostListSearchCondition && meetingPostSearch.meetingPostListSearchCondition==3 ? "selected" : "" }>모임 등록된 게시글</option>
+		                           	<option value="4" ${ !empty meetingPostSearch.meetingPostListSearchCondition && meetingPostSearch.meetingPostListSearchCondition==4 ? "selected" : "" }>좋아요 한 게시글</option>
+		    					</select>
+		    					<i class="fa fa-chevron-down"></i>
+		    				</div>
+	    					
 	    				</div>
+	    				
+	    				
 	
 						<input type="hidden" id="currentPage" name="currentPage" value=""/>
 	    			</div>
