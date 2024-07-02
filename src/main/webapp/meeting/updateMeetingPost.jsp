@@ -52,12 +52,42 @@
 		    });
     		
     	})
+    	
+    	$(document).ready(function() {
+    		
+	        $('#badgeDropdownUpdate').on('change', function() {
+	        	
+	            var selectedOption = $(this).find('option:selected');
+	            var imgUrl = selectedOption.data('img-url');
+	            if (imgUrl) {
+	                $(this).css({
+	                    'background-image': 'url(' + imgUrl + ')',
+	                    'background-repeat': 'no-repeat',
+	                    'background-position': 'center center',
+	                    'background-size': '20px 20px'
+	                }).addClass('selected'); // 선택된 클래스 추가
+	            } else {
+	                $(this).css('background-image', 'none').removeClass('selected'); // 선택된 클래스 제거
+	            }
+	        });
+	
+	        // Trigger change to show the first selected image
+	        $('#badgeDropdownUpdate').trigger('change');
+	    });
     
 	    
     
     </script>
     
     <style>
+    
+    	#badgeDropdownUpdate.selected {
+	        color: transparent; /* 텍스트를 투명하게 */
+	    }
+	    /* 선택된 옵션 텍스트가 드롭다운 열렸을 때 보이도록 하기 */
+	    #badgeDropdownUpdate option {
+	        color: #747d88; /* 옵션 텍스트 기본 색상 */
+	    }
     
     </style>
     
@@ -86,17 +116,16 @@
                             <input type="text" class="form-control" name="title" placeholder="제목을 입력하세요" value="${meetingPost.title}" required>
                         </div>
 	    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 가능 등급</div>
-	    				<div class="col-md-2 border align-items-center text-center py-2">
-						    <select class="form-control" name="participationGrade">
-						        <option value="0" ${meetingPost.participationGrade == 0 ? 'selected' : ''}>1번등급이미지</option>
-						        <option value="1" ${meetingPost.participationGrade == 1 ? 'selected' : ''}>2번등급이미지</option>
-						        <option value="2" ${meetingPost.participationGrade == 2 ? 'selected' : ''}>3번등급이미지</option>
-						        <option value="3" ${meetingPost.participationGrade == 3 ? 'selected' : ''}>4번등급이미지</option>
-						        <option value="4" ${meetingPost.participationGrade == 4 ? 'selected' : ''}>5번등급이미지</option>
-						        <option value="5" ${meetingPost.participationGrade == 5 ? 'selected' : ''}>6번등급이미지</option>
-						        <option value="6" ${meetingPost.participationGrade == 6 ? 'selected' : ''}>7번등급이미지</option>
-						    </select>
-						</div>
+	    				
+		    				<div class="col-md-2 border align-items-center text-center py-2">
+							    <select class="form-control" name="participationGrade" id="badgeDropdownUpdate">
+							        <c:forEach var="url" items="${badgeImages}" varStatus="status">
+							            <option value="${status.index + 1}" data-img-url="${url}" ${meetingPost.participationGrade == status.index + 1 ? 'selected' : ''}>
+							                ${status.index + 1}번 이미지
+							            </option>
+							        </c:forEach>
+							    </select>
+							</div>
 	    				
 	    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">모임명</div>
 	    				<div class="col-md-5 border align-items-center text-start py-2">

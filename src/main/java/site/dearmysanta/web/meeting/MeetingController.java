@@ -222,6 +222,17 @@ public class MeetingController {
         String formattedRecruitmentDeadline = formatterUntilDay.format(meetingPost.getRecruitmentDeadline());
         String formattedAppointedHikingDate = formatterUntilDay.format(meetingPost.getAppointedHikingDate());
         
+        List<String> badgeImages = new ArrayList<>();
+		
+		for (int i=1; i<8; i++) {
+			
+			String badgeName = "badge" + i + ".png";
+			String imageURL = objectStorageService.getImageURL(badgeName);
+			
+			badgeImages.add(imageURL);
+		}
+		
+		model.addAttribute("badgeImages", badgeImages);
         model.addAttribute("formattedRecruitmentDeadline", formattedRecruitmentDeadline);
         model.addAttribute("formattedAppointedHikingDate", formattedAppointedHikingDate);
         model.addAttribute("meetingPostImages", meetingPostImages);

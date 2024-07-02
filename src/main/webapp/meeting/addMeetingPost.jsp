@@ -77,20 +77,20 @@
     	});
     	
     	$(document).ready(function() {
-    	    $('#badgeDropdown').on('change', function() {
-    	        var selectedOption = $(this).find('option:selected');
-    	        var imgUrl = selectedOption.data('img-url');
-    	        if (imgUrl) {
-    	            $(this).css({
-    	                'background-image': 'url(' + imgUrl + ')',
-    	                'background-repeat': 'no-repeat',
-    	                'background-position': 'right center',
-    	                'background-size': '20px 20px'
-    	            });
-    	        } else {
-    	            $(this).css('background-image', 'none');
-    	        }
-    	    });
+    		$('#badgeDropdown').on('change', function() {
+                var selectedOption = $(this).find('option:selected');
+                var imgUrl = selectedOption.data('img-url');
+                if (imgUrl) {
+                    $(this).css({
+                        'background-image': 'url(' + imgUrl + ')',
+                        'background-repeat': 'no-repeat',
+                        'background-position': 'center center',
+                        'background-size': '20px 20px'
+                    }).addClass('selected'); // 선택된 클래스 추가
+                } else {
+                    $(this).css('background-image', 'none').removeClass('selected'); // 선택된 클래스 제거
+                }
+            });
 
     	    // Trigger change to show the first selected image
     	    $('#badgeDropdown').trigger('change');
@@ -100,10 +100,14 @@
     
     <style>
     
-	    #badgeDropdown {
-		    width: 100%;
-		    padding: 10px;
-		}
+	    /* 선택된 옵션 텍스트 숨기기 */
+	    #badgeDropdown.selected {
+	        color: transparent; /* 텍스트를 투명하게 */
+	    }
+	    /* 선택된 옵션 텍스트가 드롭다운 열렸을 때 보이도록 하기 */
+	    #badgeDropdown option {
+	        color: #747d88; /* 옵션 텍스트 기본 색상 */
+	    }
     
     	.title {
     		background-color: #eeeeee !important;
@@ -147,12 +151,12 @@
                             <input type="text" class="form-control" name="title" placeholder="제목을 입력하세요" required>
                         </div>
 	    				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 가능 등급</div>
-	    				<div class="col-md-2 border align-items-center text-center py-2">
+	    				<div class="col-md-2 border py-2">
 	    					<select class="form-control" name="participationGrade" id="badgeDropdown">
 	    					
 	    						<c:forEach var="url" items="${badgeImages}" varStatus="status">
 							        <option value="${status.index + 1}" data-img-url="${url}">
-										${status.index + 1}번 이미지
+										${status.index + 1 }번 이미지
 									</option>
 						        </c:forEach>
 						        
