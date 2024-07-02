@@ -223,6 +223,7 @@
         .swiper-button-prev {
             top: 50%;
             transform: translateY(-50%);
+            color:#81C408;
         }
         
         .swiper-button-next-cp,
@@ -347,6 +348,7 @@
     border-radius: 10px;
     overflow: hidden;
     width: 200px;
+    height:450px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     transition: transform 0.2s;
     cursor: pointer;
@@ -533,6 +535,12 @@
         overflow: hidden; /* 넘치는 텍스트를 숨김 */
         text-overflow: ellipsis; /* 넘치는 텍스트에 말줄임표 추가 */
     }
+    
+  /*   .meetingPostData{
+    	display:flex;
+    		justify-content: center; 
+		align-items: center;
+    } */
     </style>
 </head>
 
@@ -705,83 +713,7 @@
         </div>
 	</div></div>
 
-<!-- ////////////////// 모임 모집 목록 /////////////////////// -->
 
-			<div class="container-fluid testimonial section-container" style="margin-top:-85px;">
-	<div class="container-fluid py-5 meetingPostr">
-    		<div class="container py-5">
-    			<div class="table-header text-center">
-            			<h4 class="popular">현재 모임 소식📣</h4>
-            			<a class="info2" style="margin-left:-1175px; margin-top:83px;">함께 등산하는 산타 모임. 같이 갈까요?</a>
-            			
-            			<div class="moreMeetingPost" style="margin-top:80px">
-            			더보기
-            			<i class="fas fa-chevron-right"></i>
-            			</div>
-       				</div>
-    			<div class="row g-4 ms-1 mb-5">
-    				
-       				
-		    		<div class="table-responsive" style="margin-top:40px;">
-		    			<table class="table" >
-		    				<thead>
-		    					<tr>
-		    						<th scope="col" class="no" >No.</th>
-		    						<th scope="col" class="author">작성자</th>
-		    						<th scope="col" class="title">제목</th>
-		    						<th scope="col" class="status">모집상태</th>
-		    						<th scope="col" class="date">작성일자</th>
-		    					</tr>
-		    				</thead>
-		    				<tbody>
-		    					<c:forEach var="post" items="${meetingPostList}" varStatus="status">
-    <c:if test="${status.index < 10}">
-        <tr>
-            <td>
-                <p class="mb-4 mt-4" style="margin-left: 3.5rem; ">${post.postNo}</p>
-            </td>
-            
-            <td>
-                <p class="mb-4 mt-4 postNickName" style="margin-left: 3.5rem; marginright: 3.5rem; "> <a href="#">${post.nickName}</a>
-                	<input type="hidden" name="userNo" value="${post.userNo}"/>
-                </p>
-                
-            </td>
-            <td>
-                <p class="mb-4 mt-4" style="margin-left: 3.5rem; marginright: 3.5rem; ">
-                    <a href="/meeting/getMeetingPost?postNo=${post.postNo}">${post.title}</a>
-                </p>
-            </td>
-            <td>
-                <p class="mb-4 mt-4 link" style="margin-left: 0rem;">
-                    <c:choose>
-                        <c:when test="${post.recruitmentStatus == 0}">
-                            모집중
-                        </c:when>
-                        <c:when test="${post.recruitmentStatus == 1}">
-                            모집종료
-                        </c:when>
-                        <c:when test="${post.recruitmentStatus == 2}">
-                            모임종료
-                        </c:when>
-                    </c:choose>
-                </p>
-            </td>
-            <td>
-                <p class="mb-4 mt-4" >${post.postDate}</p>
-            </td>
-        </tr>
-    </c:if>
-</c:forEach>
-
-		    				</tbody>
-		    			</table>
-		    		</div> <!-- table-responsive -->
-		    	
-		    	</div> <!-- row g-4 mb-5 -->
-	    	</div> <!-- container py-5 -->
-	    </div> <!-- container-fluid py-5 -->
-	</div>
 
 	   <div class="container-fluid py-5 certificationPost section-container"  style="margin-top:-85px;">
     <div class="container py-5">
@@ -803,7 +735,7 @@
                                 <div class="fruite-img">
                                     <img src="${certificationPostImages[status.index]}" alt="Certification Post Image">
                                 </div>
-                                <div class="details">
+                                <div class="details" style="padding-top:15px;">
 									<%-- <h4 class='certificationPostNo'>${certificationPost.postNo}</h4>  --%>
 									<input type="hidden" class="certificationPostNo" value="${certificationPost.postNo}"/>
                                     <h4>${certificationPost.title}</h4>
@@ -838,6 +770,88 @@
         </div>
     </div>
 	</nav>
+	
+	<!-- ////////////////// 모임 모집 목록 /////////////////////// -->
+
+			<div class="container-fluid testimonial section-container" style="margin-top:-85px;">
+	<div class="container-fluid py-5 meetingPostr">
+    		<div class="container py-5">
+    			<div class="table-header text-center">
+            			<h4 class="popular">현재 모임 소식📣</h4>
+            			<a class="info2" style="margin-left:-1175px; margin-top:83px;">함께 등산하는 산타 모임. 같이 갈까요?</a>
+            			
+            			<div class="moreMeetingPost" style="margin-top:80px">
+            			더보기
+            			<i class="fas fa-chevron-right"></i>
+            			</div>
+       				</div>
+    			<div class="row g-4 mb-2">
+    				
+		    		<div class="table-responsive">
+		    			<table class="table">
+		    				<thead>
+		    					<tr>
+		    						<th scope="col">순번</th>
+		    						<th scope="col">작성자</th>
+		    						<th scope="col">제목</th>
+		    						<th scope="col">등산 예정 산</th>
+		    						<th scope="col">모집상태</th>
+		    						<th scope="col">작성일자</th>
+		    					</tr>
+		    				</thead>
+		    				<tbody>
+		    				
+		    				<c:set var="itemsPerPage" value="${resultPage.pageSize}"/>
+							<c:set var="currentPage" value="${resultPage.currentPage}"/>
+		    				
+		    					<c:forEach var="post" items="${meetingPostList}" varStatus="status">
+					                <tr class="meetingPostData">
+					                    <td>
+					                    	<p class="mb-4 mt-4">${status.index + 1 + (currentPage - 1) * itemsPerPage}</p>
+					                    </td>
+					                    <td>
+					                    	<p class="mb-4 mt-4">
+					                    		<a href="/certificationPost/getProfile?userNo=${post.userNo}">${post.nickName}</a>
+					                    	</p>
+					                    </td>
+					                    <td>
+					                    	<p class="mb-4 mt-4">
+					                    		<a href="/meeting/getMeetingPost?postNo=${post.postNo}">${post.title}</a>
+					                    	</p>
+					                    </td>
+					                    <td>
+					                    	<p class="mb-4 mt-4">
+					                    		<span class="mb-4 mt-4">${post.appointedHikingMountain}</span>
+					                    	</p>
+					                    </td>
+					                    <td>
+					                    	<p class="mb-4 mt-4">
+					                    		<c:choose>
+							                        <c:when test="${post.recruitmentStatus == 0}">
+							                            모집중
+							                        </c:when>
+							                        <c:when test="${post.recruitmentStatus == 1}">
+							                            모집종료
+							                        </c:when>
+							                        <c:when test="${post.recruitmentStatus == 2}">
+							                            모임종료
+							                        </c:when>
+							                    </c:choose>
+					                    	</p>
+					                    </td>
+					                    <td>
+					                    	<p class="mb-4 mt-4">${post.postDate}</p>
+					                    </td>
+					                </tr>
+					            </c:forEach>
+		    				</tbody>
+		    			</table>
+		    		</div> <!-- table-responsive -->
+		    		</div>
+		    		</div>
+		    		</div>
+		    		
+		    	</div> <!-- row g-4 mb-5 -->
 	</main>
 	<div class="fixed-buttons">
         <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>

@@ -234,6 +234,7 @@
         .swiper-button-prev {
             top: 50%; /* nav 버튼 위치 조정 */
             transform: translateY(-50%);
+            color:#81C408;
         }
         
         .mountain-image-container{

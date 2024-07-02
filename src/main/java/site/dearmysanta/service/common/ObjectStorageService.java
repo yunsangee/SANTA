@@ -88,7 +88,7 @@ public class ObjectStorageService {
         S3Object s3Object = amazonS3.getObject(bucketName, fileName);
         InputStream inputStream = s3Object.getObjectContent();
 
-        File file = new File("/tmp/" + fileName);  // 임시 디렉토리에 저장
+        File file = new File(fileName);  // 임시 디렉토리에 저장
         FileOutputStream outputStream = new FileOutputStream(file);
 
         byte[] buffer = new byte[1024];
@@ -199,6 +199,9 @@ public class ObjectStorageService {
     			index ++;
     		}
     	}
+    	
+    	
+    	//1    [2,3,4] 
     	
     	for(int j = index; j < 6; j++ ) {
     		this.deleteObjectFromStorage(fileName+j);
