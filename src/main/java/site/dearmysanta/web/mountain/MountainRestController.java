@@ -1,5 +1,6 @@
 package site.dearmysanta.web.mountain;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,8 +34,10 @@ import site.dearmysanta.domain.mountain.Mountain;
 import site.dearmysanta.domain.mountain.MountainSearch;
 import site.dearmysanta.domain.mountain.Weather;
 import site.dearmysanta.domain.user.User;
+import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.correctionpost.CorrectionPostService;
 import site.dearmysanta.service.mountain.MountainService;
+import site.dearmysanta.service.user.impl.UserServiceImpl;
 import site.dearmysanta.service.weather.WeatherService;
 
 @RestController
@@ -53,6 +56,12 @@ public class MountainRestController {
 	
 	@Autowired
 	WeatherService weatherService;
+	
+	@Autowired
+	UserServiceImpl userService;
+	
+	@Autowired
+	ObjectStorageService objectStorageService;
 	
 	@Autowired
 	CorrectionPostService correctionPostService;
@@ -163,7 +172,7 @@ public class MountainRestController {
 	}//o
 	
 	@PostMapping("rest/updateMountain")
-	public Mountain updateMountain(@RequestParam int crpNo, @RequestBody Mountain mountain, HttpSession session) {
+	public Mountain updateMountain(@RequestParam int crpNo, @RequestBody Mountain mountain, HttpSession session) throws IOException {
 		SantaLogger.makeLog("info", mountain.toString() + " :: " + crpNo + "/" );
 		mountainService.updateMountain(mountain);
 		
@@ -182,6 +191,29 @@ public class MountainRestController {
 			mountain =  mountainService.getMountain(user.getUserNo(),mountain.getMountainNo());
 		}
 		return mountain;
+	}//o
+	
+	@GetMapping("rest/getMountain")
+	public Map getMountain(@RequestParam int userNo, @RequestParam int mountainNo, HttpSession session) throws Exception {
+		
+		Map map = new HashMap();
+		map.put("mountain",mountainService.getMountain(-1, mountainNo));
+		
+		User user = userService.getUser(userNo);
+				
+				 if(user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")&& !user.getProfileImage().contains("kakaocdn")) {
+				    	user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+				    }
+				    
+//				    String profileImage = objectStorageService.getImageURL(user.getUserId());
+//					
+//					user.setProfileImage(profileImage);
+					
+					if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
+						user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+				    }
+		map.put("user", user);
+		return map;
 	}//o
 	
 	

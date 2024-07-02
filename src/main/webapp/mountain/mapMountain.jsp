@@ -255,12 +255,13 @@
 				    console.log(weatherList);
 				    let weather;
 				    
-				    if(weatherList.length > 1){
+				    if(weatherList.length >= 1){
 				    	weather = weatherList[index];
 				    }else{
-				    	weather = weatherList[0];
+				    	weather = weatherList;
 				    }
 				    console.log(weather);
+				    console.log(weather.skyCondition);
 				    let weatherIcon = getWeatherIcon(weather.skyCondition);
 				    let sunriseIcon = '<i class="bi bi-sunrise icon" style="width:20px;height:20px;"></i>';
 	                let sunsetIcon ='<i class="bi bi-sunset icon" style="width:20px;height:20px;"></i>';
@@ -663,7 +664,7 @@
             justify-content: center;
             align-items: center;
             margin: 10px auto;
-            width: 300px;
+            width: 500px;
             padding: 10px;
             border-radius: 25px;
             background-color: #f1f1f1;
@@ -671,32 +672,26 @@
         }
 
         #address {
-            width: 100%;
             padding: 10px;
             border: none;
-            border-radius: 25px 0 0 25px;
+            border-radius: 35px;
             outline: none;
             font-size: 16px;
         }
 
         .search {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 0 25px 25px 0;
-            background-color: white; 
-            color: white;
-            cursor: pointer;
-            outline: none;
-            height:43px;
-        }
+	background: none; 
+	border: none; 
+	cursor: pointer;
+	margin-left: -35px;
+}
 
         .search i {
             font-size: 18px;
-            color:#90EE90;
         }
 
         .search:hover {
-            background-color: #006400;
+          
         }
 
 </style>
@@ -706,7 +701,7 @@
 <body>
 
 	<div id="searchContainer">
-        <input type="text" id="address" placeholder="검색어를 입력해보세요!" style="width: 300px;">
+        <input type="text" id="address" placeholder="검색어를 입력해보세요!" style="width: 480px;">
         <button class="search" >
                 <i class="fas fa-search text-primary" id="search"></i>
         </button>

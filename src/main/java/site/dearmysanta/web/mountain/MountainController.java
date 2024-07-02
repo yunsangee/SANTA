@@ -1,5 +1,6 @@
 package site.dearmysanta.web.mountain;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -82,13 +83,30 @@ public class MountainController {
 			SantaLogger.makeLog("info", "user null");
 			
 			mountain =  mountainService.getMountain(-1,mountainNo);
+			
+			SantaLogger.makeLog("info", "mountain: " + mountain);
 		}else {
 		
 			SantaLogger.makeLog("info", "user null");
 		
 			mountain =  mountainService.getMountain(user.getUserNo(),mountainNo);
+			
+		    SantaLogger.makeLog("info", "mountain: " + mountain);
 		}
+		
 		session.setAttribute("mountain", mountain);
+		if(mountain.getMountainDescription().contains("선정")) {
+			model.addAttribute("reason",mountain.getMountainDescription().split("코스정보:")[0]);
+			
+			String mountainDescription = (mountain.getMountainDescription().split("코스정보:")[1]);
+			
+			if(mountainDescription.contains("&lt;BR&gt;")) {
+				model.addAttribute("courseInfo",mountainDescription.split("&lt;BR&gt;"));
+			}else {
+				model.addAttribute("courseInfo",mountainDescription.split("&lt;br&gt;"));
+			}
+			
+		}
 		model.addAttribute("weatherList", weatherService.getWeatherList(lat, lon));
 		
 		model.addAttribute("meetingCount", meetingService.getMountainTotalCount(mountain.getMountainName()));
@@ -100,7 +118,7 @@ public class MountainController {
 	}//o
 	
 	@GetMapping(value="updateMountain")
-	public String updateMountain(@RequestParam int crpNo, @RequestParam int mountainNo, Model model, HttpSession session) {
+	public String updateMountain(@RequestParam int crpNo, @RequestParam int mountainNo, Model model, HttpSession session) throws IOException {
 		
 		//
 		// need to get mountain info

@@ -201,6 +201,65 @@
 	padding: 10px;
 	margin-left:20px;
 }
+
+.search {
+	background: none; 
+	border: none; 
+	cursor: pointer;
+	margin-left: -40px;
+}
+
+.search-container {
+	positon:relative;
+	width:80%;
+	display: flex; 
+	justify-content: center; 
+	align-items: center;
+	margin-left:165px;
+	margin-top: 10px; 
+	margin-bottom: 100px;
+}
+
+.btn-search{
+			display: flex;
+            align-items: center;
+            justify-content: center; 
+}
+
+
+.top {
+	width:1280px;
+	height:350px;
+	margin-top:-150px;
+	margin-left:300px;
+	background-color : #81C408;
+}
+
+.search-top:hover {
+         
+        }
+        
+.hiking {
+	width:10%;
+	margin-left:480px;
+	margin-top:-110px;
+}
+
+.search-top {
+	font-size:30px;
+	font-weight: bold;
+	color : white;
+	padding-top:30px;
+	margin-left:95px;
+	margin-top:200px;
+	margin-bottom:10px;
+}
+
+.container .pt-0{
+
+
+}
+
     </style>
 </head>
 <body>
@@ -213,18 +272,28 @@
 	<main>
 
 		<div class="container-fluid testimonial py-5" style="margin-top:20px;">
-				<div class="container py-3">
-					<div class="search-container" style="display: flex; justify-content: center; align-items: center; margin-top: 30px; margin-bottom: 10px;">
-                            <input id="searchBox" type="text" placeholder="검색" style="flex: 1; padding: 10px; border: none; outline: none; border-radius: 35px; border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
-                            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" style="background: none; border: none; cursor: pointer; margin-left: 10px;">
-                                <i class="fas fa-search text-primary" id="search"></i>
-                            </button>
-                            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white" style="background: none; border: none; cursor: pointer; margin-left: 1px;">
-                                <i class="fas fa-map text-primary" id="mapSearch"></i>
-                            </button>
-                       </div>
-				
-				</div>
+		
+				<div class="top">
+    
+            <div class="search-top">
+				<a class="search-top">산 한번</a>
+				<br>
+				<a class="search-top">검색 해볼까?</a>
+			</div>
+			
+			<img class="hiking" src="/image/hiking.png">
+
+        <div class="search-container">
+            <input class="searchBox" id="searchBox" type="text" placeholder="어느 산으로 가볼까요?" >
+            <button class="search" >
+                <i class="fas fa-search text-primary" id="search"></i>
+            </button>
+            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white" style="background: none; border: none; cursor: pointer; margin-left: 15px;">
+                <i class="fas fa-map text-primary" id="mapSearch"></i>
+            </button>
+        </div>   
+       </div>
+
 				
 				<div class="container py-1">
        				 <hr class="styled-line">

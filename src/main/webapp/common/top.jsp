@@ -277,6 +277,7 @@
                         <a href="#" id="meetingPost" class="nav-item nav-link meeting">모임게시판</a>
                         <a href="#" id="chatting" class="nav-item nav-link chatting">모임 채팅</a>
                         <a href="#" id="hikingGuide" class="nav-item nav-link hikingGuide">등산안내</a>
+                        <a href="#" id="qna" class="nav-item nav-link qna">Q&A</a>
                         
                     </c:if>
                     <c:if test="${not empty sessionScope.user and sessionScope.user.role == 1 }">
@@ -284,6 +285,7 @@
                         <a href="#" id="getUserList" class="nav-item nav-link usergetUserList">회원목록조회</a>
                         <a href="#" id="statistics" class="nav-item nav-link mountaingetStatistics">통계</a>
                         <a href="#" id="correctionPost" class="nav-item nav-link correctionPostgetCorrectionPostList">정정제보</a>
+                        <a href="#" id="qna" class="nav-item nav-link qna">Q&A</a>
                     </c:if>
                 </div>
                 <div class="d-flex m-3 me-0" >
@@ -308,7 +310,7 @@
                                 <a class="dropdown-item" id="myMountainLike" href="#"><i class="fas fa-heart"></i> 내가 좋아요 한 산 보기 <i class="fas fa-chevron-right"></i></a>
                                 <a class="dropdown-item" id="mySchedule" href="#"><i class="fas fa-calendar-alt"></i> 내 일정 보기 <i class="fas fa-chevron-right"></i></a>
                                 <a class="dropdown-item" id="myHikingRecord" href="#"><i class="fas fa-hiking"></i> 등산 기록 보기 <i class="fas fa-chevron-right"></i></a>
-                                <a class="dropdown-item" id="qna" href="#"><i class="fas fa-question-circle"></i> Q&A <i class="fas fa-chevron-right"></i></a>
+                                <!-- <a class="dropdown-item" id="qna" href="#"><i class="fas fa-question-circle"></i> Q&A <i class="fas fa-chevron-right"></i></a> -->
                                 <!-- <a class="dropdown-item" id="logout" href="#"><i class="fas fa-sign-out-alt"></i> 로그아웃 <i class="fas fa-chevron-right"></i></a> -->
                                 
                             </div>
@@ -359,7 +361,7 @@
     </div>
 </div>
                     	
-                    	<div class="dropdown" style="margin-left:30px;">
+                    	<%-- <div class="dropdown" style="margin-left:30px;">
                             <a class="dropdown-toggle" href="#" id="alarmDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell"></i>
                             </a>
@@ -374,7 +376,7 @@
                                     
                                 </c:forEach>
                             </div>
-                        </div>
+                        </div> --%>
                         
                     <a href="#" class="my-auto nav-link" id='logout'><i id="loginButton" class="fas fa-sign-in-alt fa-1x"> 로그아웃</i></a>
                         
