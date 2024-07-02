@@ -98,6 +98,18 @@ public class ObjectStorageService {
         }
         outputStream.close();
         inputStream.close();
+        
+        if (file != null && file.exists()) {
+            try {
+                Files.delete(file.toPath());
+            } catch (IOException e) {
+                // 로그를 남기거나 적절한 예외 처리를 합니다.
+                e.printStackTrace();
+                // 또는 로그를 남길 수도 있습니다.
+                System.err.println("Failed to delete temporary file: " + file.getAbsolutePath());
+            }
+        }
+
 
         return convertFileToMultipartFile(file);
     }
