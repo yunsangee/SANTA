@@ -190,6 +190,17 @@
             display: flex;
             align-items: center;
         }
+        
+       .searchBox {
+	flex: 1; 
+	padding: 10px; 
+	border: none; 
+	outline: none; 
+	border: 1px solid #ccc; 
+	border-radius: 35px; 
+	padding: 10px;
+	margin-left:20px;
+}
     </style>
 </head>
 <body>
@@ -204,7 +215,7 @@
 		<div class="container-fluid testimonial py-5" style="margin-top:20px;">
 				<div class="container py-3">
 					<div class="search-container" style="display: flex; justify-content: center; align-items: center; margin-top: 30px; margin-bottom: 10px;">
-                            <input id="searchBox" type="text" placeholder="검색" style="flex: 1; padding: 10px; border: none; outline: none; border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                            <input id="searchBox" type="text" placeholder="검색" style="flex: 1; padding: 10px; border: none; outline: none; border-radius: 35px; border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
                             <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" style="background: none; border: none; cursor: pointer; margin-left: 10px;">
                                 <i class="fas fa-search text-primary" id="search"></i>
                             </button>

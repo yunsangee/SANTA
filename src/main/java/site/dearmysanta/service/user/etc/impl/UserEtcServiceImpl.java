@@ -50,19 +50,19 @@ import site.dearmysanta.service.user.impl.UserServiceImpl;
 		
 		int sumVal = userEtcDao.getCertificationCount(userNo) + userEtcDao.getMeetingCount(userNo);
 		
-		if(sumVal == 200) {
+		if(sumVal == 2) {
 			userSerivceImpl.updateBadgeImage("badge2.png", userNo);
-		}else if(sumVal==300) {
+		}else if(sumVal==5) {
 			userSerivceImpl.updateBadgeImage("badge3.png", userNo);
-		}else if(sumVal==400) {
+		}else if(sumVal==10) {
 			userSerivceImpl.updateBadgeImage("badge4.png", userNo);
-		}else if(sumVal==500) {
+		}else if(sumVal==30) {
 			userSerivceImpl.updateBadgeImage("badge5.png", userNo);
 		}
-		else if(sumVal==600) {
+		else if(sumVal==50) {
 			userSerivceImpl.updateBadgeImage("badge6.png", userNo);
 		}
-		else if(sumVal==700) {
+		else if(sumVal==100) {
 			userSerivceImpl.updateBadgeImage("badge7.png", userNo);
 		}
 		
@@ -76,19 +76,19 @@ import site.dearmysanta.service.user.impl.UserServiceImpl;
 
 		int sumVal = userEtcDao.getCertificationCount(userNo) + userEtcDao.getMeetingCount(userNo);
 		
-		if(sumVal == 200) {
+		if(sumVal == 2) {
 			userSerivceImpl.updateBadgeImage("badge2.png", userNo);
-		}else if(sumVal==300) {
+		}else if(sumVal==5) {
 			userSerivceImpl.updateBadgeImage("badge3.png", userNo);
-		}else if(sumVal==400) {
+		}else if(sumVal==10) {
 			userSerivceImpl.updateBadgeImage("badge4.png", userNo);
-		}else if(sumVal==500) {
+		}else if(sumVal==30) {
 			userSerivceImpl.updateBadgeImage("badge5.png", userNo);
 		}
-		else if(sumVal==600) {
+		else if(sumVal==50) {
 			userSerivceImpl.updateBadgeImage("badge6.png", userNo);
 		}
-		else if(sumVal==700) {
+		else if(sumVal==100) {
 			userSerivceImpl.updateBadgeImage("badge7.png", userNo);
 		}
 		

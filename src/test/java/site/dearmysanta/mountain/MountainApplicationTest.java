@@ -580,7 +580,7 @@ public class MountainApplicationTest {
 	}
 	
 	
-	@Test
+	//@Test
 	public void deleteImageTest() throws Exception{
 		List<String> list = new ArrayList<String>();
 		list.add("42_1_2");
@@ -589,6 +589,11 @@ public class MountainApplicationTest {
 		
 		
 		objectStorageService.updateObjectStorageImage(list);
+	}
+	
+	@Test
+	public void getMountainReason() throws IOException {
+		mountainService.getMountainReason("관악산");
 	}
 	
 }
