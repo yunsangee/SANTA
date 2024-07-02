@@ -445,6 +445,15 @@ public class CertificationPostController {
     @RequestMapping(value="listFollowing")
     public String listFollowing(@RequestParam int userNo, Model model) throws Exception {
     	List<User> followingList = userEtcService.getFollowingList(userNo);
+    	  for (User user : followingList) {
+          	  if(user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")&& !user.getProfileImage().contains("kakaocdn")) {
+    		    	user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+    		    }
+    		
+    		if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
+    			user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+    	    }
+            }
         model.addAttribute("followingList", followingList);
         System.out.println("팔로잉리스트보기:" + followingList);
     return "forward:/certificationPost/listFollowing.jsp";
