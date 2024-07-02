@@ -408,7 +408,7 @@ $(document).ready(function() {
     <main>
         <div class="container-fluid py-5">
             <div class="container py-5">
-                <div class="position-relative mx-auto mb-5" style="max-width: 600px;">
+                <div class="position-relative mx-auto mb-5"  style="max-width: 500px; text-align: center;">
                     <form id="searchForm" class="d-flex align-items-center">
                         <select id="searchCondition" name="searchCondition" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 150px; height: 45px;">
                             <option value="0" ${ !empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>글제목</option>

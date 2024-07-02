@@ -71,7 +71,6 @@ public class UserEtcRestController {
 	            user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
 	        }
 	    }
-	    
 	    return following;
 	}
 
