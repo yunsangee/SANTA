@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <c:import url="../common/header.jsp"/>
@@ -193,31 +194,38 @@
 
             // 해시태그 추가 버튼 기능
             var hashtagCount = 0;
-            $('#addHashtag').click(function() {
-                var hashtagInput = $('#certificationPostHashtagContents');
-                var hashtagValue = hashtagInput.val().trim();
 
-                if (hashtagValue === "") {
-                    alert("해시태그를 입력해주세요.");
-                } else if (hashtagValue.indexOf('#') !== -1) {
-                    alert("# 문자는 해시태그에 사용할 수 없습니다.");
-                    hashtagInput.val(hashtagValue.replace('#', '')); // # 문자를 제거
-                } else if (hashtagValue.length > 10) {
-                    alert("해시태그는 최대 10글자까지 입력 가능합니다.");
-                } else {
-                    if (hashtagCount < 5) {
-                        $('#additionalHashtags').append('<div class="hashtag-input-group"><input type="text" class="form-control" name="certificationPostHashtagContents" maxlength="10" value="' + hashtagValue + '" readonly><button type="button" class="remove-hashtag"><i class="fa fa-trash"></i></button></div>');
-                        hashtagInput.val('');
-                        hashtagCount++;
-                        if (hashtagCount === 5) {
-                            $('#hashtagInputContainer').hide(); // 입력 필드 숨김
-                        }
-                    } else {
-                        alert("최대 5개의 해시태그만 가능합니다.");
-                    }
+    $('#addHashtag').click(function() {
+        var hashtagInput = $('#certificationPostHashtagContents');
+        var hashtagValue = hashtagInput.val().trim();
+
+        if (hashtagValue === "") {
+            showHashtagAlert("해시태그를 입력해주세요.");
+        } else if (hashtagValue.indexOf('#') !== -1) {
+            showHashtagAlert("# 문자는 해시태그에 사용할 수 없습니다.");
+            hashtagInput.val(hashtagValue.replace('#', '')); // # 문자를 제거
+        } else if (hashtagValue.length > 10) {
+            showHashtagAlert("해시태그는 최대 10글자까지 입력 가능합니다.");
+        } else {
+            if (hashtagCount < 5) {
+                $('#additionalHashtags').append('<div class="hashtag-input-group"><input type="text" class="form-control" name="certificationPostHashtagContents" maxlength="10" value="' + hashtagValue + '" readonly><button type="button" class="remove-hashtag"><i class="fa fa-trash"></i></button></div>');
+                hashtagInput.val('');
+                hashtagCount++;
+                if (hashtagCount === 5) {
+                    $('#hashtagInputContainer').hide(); // 입력 필드 숨김
                 }
-            });
+            } else {
+                showHashtagAlert("최대 5개의 해시태그만 가능합니다.");
+            }
+        }
+    });
 
+    function showHashtagAlert(message) {
+        $('#hashtagAlert').html('<div class="alert-message">' + message + '</div>');
+        $('#hashtagAlert .alert-message').css('color', 'red');
+        $('.alert-message').fadeIn(500).delay(2000).fadeOut(500); // 0.5동안나타나기/ 2초동안유지/2초지나서 0.5초 동안사라짐
+    }
+    
             // 엔터키 눌렀을 때 해시태그 추가
             $('#certificationPostHashtagContents').keypress(function(e) {
                 if (e.which == 13) {
@@ -340,6 +348,7 @@
                     </div>
                     <div class="form-group">
                         <label for="certificationPostHashtagContents">해시태그<sup>*</sup> <small>(최대 5개)</small></label>
+                        <div id="hashtagAlert" class="text-danger"></div>
                         <div class="hashtag-input-group" id="hashtagInputContainer">
                             <input type="text" class="form-control" id="certificationPostHashtagContents" maxlength="10">
                             <button type="button" id="addHashtag" class="add-hashtag-btn">+</button>

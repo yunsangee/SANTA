@@ -133,7 +133,7 @@ public class CertificationPostController {
                 MultipartFile image = images.get(i); // 리스트 인덱스는 0부터 시작하므로 i 사용
                 String fileName = postNo + "_" + postType + "_" + (i + 1);
 
-                System.out.println(fileName);
+                //System.out.println(fileName);
 
                 objectStorageService.uploadFile(image, fileName);
 
@@ -167,12 +167,12 @@ public class CertificationPostController {
               model.addAttribute("user", user);
           }
 
-    	System.out.println("postNo: " + postNo);
+    	//System.out.println("postNo: " + postNo);
 
         CertificationPost certificationPost = certificationPostService.getCertificationPost(postNo);
         List<String> hashtagList = certificationPostService.getHashtag(postNo);
 
-        System.out.println("hashtagList: " + hashtagList);
+        //System.out.println("hashtagList: " + hashtagList);
 
 
         String[] totalTimeParts = certificationPost.getCertificationPostTotalTime().split(" ");
@@ -402,9 +402,9 @@ public class CertificationPostController {
         model.addAttribute("hashtagList", map.get("hashtagList"));
         model.addAttribute("certificationPostImages", certificationPostImages);
 
-		System.out.println("������������"+certificationPostImages);
+		//System.out.println("������������"+certificationPostImages);
 				
-        System.out.println("이거맞지" + certificationPostCommentList);
+       // System.out.println("이거맞지" + certificationPostCommentList);
 
         return "forward:/certificationPost/getCertificationPost.jsp";
     }
@@ -435,7 +435,7 @@ public class CertificationPostController {
         }
         
         model.addAttribute("followerList", followerList);
-        System.out.println("팔로워리스트보기:" + followerList);
+       // System.out.println("팔로워리스트보기:" + followerList);
         
         return "forward:/certificationPost/listFollower.jsp";
     }
@@ -455,7 +455,7 @@ public class CertificationPostController {
     	    }
             }
         model.addAttribute("followingList", followingList);
-        System.out.println("팔로잉리스트보기:" + followingList);
+      //  System.out.println("팔로잉리스트보기:" + followingList);
     return "forward:/certificationPost/listFollowing.jsp";
 }
     
@@ -515,7 +515,7 @@ public class CertificationPostController {
         
         }
         model.addAttribute("certificationPostImages", certificationPostImages);
-        System.out.println("이미지" + certificationPostImages);
+       // System.out.println("이미지" + certificationPostImages);
 
         return "forward:/certificationPost/getProfile.jsp";
     }

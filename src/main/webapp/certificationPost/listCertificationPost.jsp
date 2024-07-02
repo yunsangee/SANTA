@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html class="fontawesome-i2svg-active fontawesome-i2svg-complete">
 <head>
+  <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png">
     <c:import url="../common/header.jsp"/>
     <meta charset="UTF-8">
     <title>Certification Post List</title>
@@ -153,7 +154,11 @@
     gap: 20px;
     justify-content: center;
 }
-
+.form-control:disabled,.form-control:read-only {
+    background-color: #fff;
+    opacity: 1;
+    
+}
 .btn-cp {
     border: 2px solid orange;
     background-color: white;
@@ -441,12 +446,15 @@ $(document).ready(function() {
             <div class="container py-5">
                 <div class="position-relative mx-auto mb-5"  style="max-width: 500px; text-align: center;">
                     <form id="searchForm" class="d-flex align-items-center">
-                        <select id="searchCondition" name="searchCondition" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 150px; height: 45px;">
-                            <option value="0" ${ !empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>글제목</option>
-                            <option value="1" ${ !empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>닉네임</option>
-                            <option value="2" ${ !empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>산이름</option>
-                        </select> 
-                        
+                      <div class="select-wrapper" style="position: relative; display: inline-block;">
+						    <select id="searchCondition" name="searchCondition" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 150px; height: 45px; appearance: none; padding-right: 30px;">
+						        <option value="0" ${ !empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>글제목</option>
+						        <option value="1" ${ !empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>닉네임</option>
+						        <option value="2" ${ !empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>산이름</option>
+						    </select>
+						    <i class="fa fa-chevron-down" style="position: absolute; right: 25px; top: 50%; transform: translateY(-50%); pointer-events: none;"></i>
+						</div>
+
                         <input type="text" id="searchInput" name="searchKeyword" value='${ !empty search.searchCondition? search.searchKeyword:""  }' placeholder="" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 300px; height: 45px;">
                         <button type="submit" class="btn btn-primary border-2 border-secondary rounded-pill text-white search-button" style="height: 45px;">
 					    <i class="fas fa-search"></i>
