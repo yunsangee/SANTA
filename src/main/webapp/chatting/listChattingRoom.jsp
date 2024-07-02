@@ -46,9 +46,6 @@
 	</script>
 
 	<style>
-    	.page-header {
-        	margin-top:30px !important;
-        }
         
         .table>:not(caption)>*>* {
             padding: .9rem .5rem;

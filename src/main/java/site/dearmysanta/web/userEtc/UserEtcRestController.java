@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import site.dearmysanta.common.SantaLogger;
 import site.dearmysanta.domain.alarmMessage.AlarmMessage;
 import site.dearmysanta.domain.user.User;
+import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.user.UserService;
 import site.dearmysanta.service.user.etc.UserEtcService;
 
@@ -34,6 +35,8 @@ public class UserEtcRestController {
 		SantaLogger.makeLog("info", this.getClass().toString());
 	}
 	
+	@Autowired
+	private ObjectStorageService objectStorageService;
 	
 	@GetMapping(value="rest/addFollow")
 	public int addFollow(@RequestParam int followerUserNo, int followingUserNo ) {
@@ -55,10 +58,23 @@ public class UserEtcRestController {
 		return userEtcService.getFollowerList(userNo);
 	}//o
 	
+	
 	@GetMapping(value="rest/getFollowingList")
-	public List<User> getFollowingList(@RequestParam int userNo){
-		return userEtcService.getFollowingList(userNo);
-	}//o
+	public List<User> getFollowingList(@RequestParam int userNo) {
+	    List<User> following = userEtcService.getFollowingList(userNo);
+	    
+	    for (User user : following) {
+	  	  if(user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")&& !user.getProfileImage().contains("kakaocdn")) {
+		    	user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+		    }
+		
+		if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
+			user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+	    }
+	    }
+	    return following;
+	}
+
 	
 	
 	@PostMapping(value="rest/addAlarmMessage")

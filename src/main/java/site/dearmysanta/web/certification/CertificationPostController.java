@@ -323,29 +323,39 @@ public class CertificationPostController {
 
     @GetMapping(value = "listCertificationPost")
     public String listCertificationPost(@ModelAttribute Search search, Model model) throws Exception {
-	
-
-    	System.out.println("search" +search ) ;
+        System.out.println("search" + search);
         // CertificationPost 목록 및 관련 데이터 가져오기
         Map<String, Object> result = certificationPostService.getCertificationPostList(search);
         List<CertificationPost> certificationPostList = (List<CertificationPost>) result.get("list");
-        System.out.println(" certificationPostList  " + certificationPostList );
+        System.out.println("certificationPostList  " + certificationPostList);
+
         // CertificationPost 이미지 URL 가져오기
         List<String> certificationPostImages = new ArrayList<>();
         for (CertificationPost certificationPost : certificationPostList) {
             String fileName = certificationPost.getPostNo() + "_0_1"; // 첫 번째 사진 파일명
             String imageURL = objectStorageService.getImageURL(fileName);
             certificationPostImages.add(imageURL);
+
+            // 프로필 이미지 URL 설정
+            if (certificationPost.getProfileImage() != null && !certificationPost.getProfileImage().contains("ncloudstorage")&& !certificationPost.getProfileImage().contains("kakaocdn")) {
+                certificationPost.setProfileImage(objectStorageService.getImageURL(certificationPost.getProfileImage()));
+            }
+
+            // 배지 이미지 URL 설정
+            if (certificationPost.getBadgeImage() != null && !certificationPost.getBadgeImage().contains("ncloudstorage") && !certificationPost.getBadgeImage().contains("kakaocdn")) {
+                certificationPost.setBadgeImage(objectStorageService.getImageURL(certificationPost.getBadgeImage()));
+            }
         }
 
         // 모델에 데이터 추가
         model.addAttribute("certificationPost", certificationPostList); // CertificationPost 목록
         model.addAttribute("hashtagList", result.get("hashtagList")); // 해시태그 목록
         model.addAttribute("certificationPostImages", certificationPostImages); // CertificationPost 이미지 URL 목록
-        model.addAttribute("search", search); 
+        model.addAttribute("search", search);
 
         return "forward:/certificationPost/listCertificationPost.jsp"; // JSP 페이지로 포워딩
     }
+
 
 
 	
@@ -377,15 +387,15 @@ public class CertificationPostController {
         }
  
      
-        if(certificationPost.getProfileImage() != null && !certificationPost.getProfileImage().contains("ncloudstorage")) {
-        	certificationPost.setProfileImage(objectStorageService.getImageURL(certificationPost.getProfileImage()));
-	    }
-	    
-	    if(certificationPost.getBadgeImage() != null && !certificationPost.getBadgeImage().contains("ncloudstorage")) {
-	    	certificationPost.setBadgeImage(objectStorageService.getImageURL(certificationPost.getBadgeImage()));
-	    }
-     //
+        if (certificationPost.getProfileImage() != null && !certificationPost.getProfileImage().contains("ncloudstorage")&& !certificationPost.getProfileImage().contains("kakaocdn")) {
+            certificationPost.setProfileImage(objectStorageService.getImageURL(certificationPost.getProfileImage()));
+        }
 
+        // 배지 이미지 URL 설정
+        if (certificationPost.getBadgeImage() != null && !certificationPost.getBadgeImage().contains("ncloudstorage") && !certificationPost.getBadgeImage().contains("kakaocdn")) {
+            certificationPost.setBadgeImage(objectStorageService.getImageURL(certificationPost.getBadgeImage()));
+        }
+    
         System.out.println("댓글" + postNo + userNo + certificationPostCommentList);
         model.addAttribute("certificationPost", map.get("certificationPost"));
         model.addAttribute("certificationPostCommentList", certificationPostCommentList);
@@ -411,20 +421,39 @@ public class CertificationPostController {
     //팔로워리스트 
     @RequestMapping(value="listFollower")
     public String listFollower(@RequestParam int userNo, Model model) throws Exception {
-    	List<User> followerList = userEtcService.getFollowerList(userNo);
+        List<User> followerList = userEtcService.getFollowerList(userNo);
+        
+        // 이미지 URL 설정
+        for (User user : followerList) {
+      	  if(user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")&& !user.getProfileImage().contains("kakaocdn")) {
+		    	user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+		    }
+		
+		if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
+			user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+	    }
+        }
+        
         model.addAttribute("followerList", followerList);
         System.out.println("팔로워리스트보기:" + followerList);
         
-        
-        
-        
-    return "forward:/certificationPost/listFollower.jsp";
-}
+        return "forward:/certificationPost/listFollower.jsp";
+    }
+
 
     //팔로잉리스트
     @RequestMapping(value="listFollowing")
     public String listFollowing(@RequestParam int userNo, Model model) throws Exception {
     	List<User> followingList = userEtcService.getFollowingList(userNo);
+    	  for (User user : followingList) {
+          	  if(user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")&& !user.getProfileImage().contains("kakaocdn")) {
+    		    	user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+    		    }
+    		
+    		if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
+    			user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+    	    }
+            }
         model.addAttribute("followingList", followingList);
         System.out.println("팔로잉리스트보기:" + followingList);
     return "forward:/certificationPost/listFollowing.jsp";
@@ -444,13 +473,14 @@ public class CertificationPostController {
 
         User user = userService.getUser(userNo);
         System.out.println("User Info: " + user);
-        if (user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")) {
-            user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
-        }
-        if (user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
-            user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
-        }
-        
+  	  if(user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")&& !user.getProfileImage().contains("kakaocdn")) {
+	    	user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+	    }
+	
+	if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
+		user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+  }
+	
         
         model.addAttribute("infouser", user);
 

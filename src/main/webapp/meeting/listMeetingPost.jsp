@@ -25,73 +25,26 @@
     
 	    $(function() {
 	
-	        $('.postListSearch').change(function() {
-	            fncGetList(1); // 카테고리 변경 시 1페이지로 설정
+	    	$('#meetingPostListSearchCondition').change(function() {
+	    		
+	            $('#searchCondition').val(0);
+	            $('#searchKeyword').val('');
+	            fncGetList(1);
 	        });
 	        
 	        $('#searchButton').click(function() {
+	        	
                 fncGetList(1); // 아이콘 클릭 시 fncGetList(1) 호출
             });
 	        
 	        $('#searchKeyword').keydown(function(event) {
+	        	
 	            if (event.key === "Enter") {
 	                event.preventDefault();
 	                $('#searchButton').click(); // 엔터 키를 누르면 searchButton 클릭
 	            }
 	        });
 	        
-	        $('#titleOption').click(function() {
-	        	event.preventDefault();
-                $('#searchCondition').val(0);
-                $('#dropdownMenuButton').text('제목');
-            });
-
-            $('#contentOption').click(function() {
-            	event.preventDefault();
-                $('#searchCondition').val(1);
-                $('#dropdownMenuButton').text('내용');
-            });
-
-            $('#nicknameOption').click(function() {
-            	event.preventDefault();
-                $('#searchCondition').val(2);
-                $('#dropdownMenuButton').text('닉네임');
-            });
-            
-            $('#allPostsOption').click(function() {
-                $('#meetingPostListSearchCondition').val(0);
-                $('#searchCondition').val(0);
-                $('#searchKeyword').val('');
-                fncGetList(1);
-            });
-
-            $('#myPostsOption').click(function() {
-                $('#meetingPostListSearchCondition').val(1);
-                $('#searchCondition').val(0);
-                $('#searchKeyword').val('');
-                fncGetList(1);
-            });
-
-            $('#appliedPostsOption').click(function() {
-                $('#meetingPostListSearchCondition').val(2);
-                $('#searchCondition').val(0);
-                $('#searchKeyword').val('');
-                fncGetList(1);
-            });
-
-            $('#registeredPostsOption').click(function() {
-                $('#meetingPostListSearchCondition').val(3);
-                $('#searchCondition').val(0);
-                $('#searchKeyword').val('');
-                fncGetList(1);
-            });
-
-            $('#likedPostsOption').click(function() {
-                $('#meetingPostListSearchCondition').val(4);
-                $('#searchCondition').val(0);
-                $('#searchKeyword').val('');
-                fncGetList(1);
-            });
             
             $('#writePostButton').click(function() {
             	self.location = "/meeting/addMeetingPost";
@@ -159,81 +112,44 @@
     	
     	<div class="container-fluid py-5">
     		<div class="container py-5">
-    			<div class="row g-4 mb-2">
-    			
-	    			<form id="searchForm">
+	    		<form id="searchForm" class="col-md-12">
+	    		
+	    			<div class="row g-4 mb-5 align-items-center">
 	    			
-	    				<div class="input-group w-100 mx-auto d-flex mb-4">
-	    				
-	    					<div class="nav-item dropdown">
-	                            <a href="#" id="dropdownMenuButton" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-	                            	<c:choose>
-							            <c:when test="${meetingPostSearch.searchCondition == 0}">
-							                제목
-							            </c:when>
-							            <c:when test="${meetingPostSearch.searchCondition == 1}">
-							                내용
-							            </c:when>
-							            <c:when test="${meetingPostSearch.searchCondition == 2}">
-							                닉네임
-							            </c:when>
-							        </c:choose>
-	                            </a>
-	                            <div class="dropdown-menu m-0 bg-secondary rounded-0">
-	                                <a href="#" class="dropdown-item searchCondition" data-condition="0" id="titleOption">제목</a>
-	                                <a href="#" class="dropdown-item searchCondition" data-condition="1" id="contentOption">내용</a>
-	                                <a href="#" class="dropdown-item searchCondition" data-condition="2" id="nicknameOption">닉네임</a>
-	                            </div>
-	                        </div>
-	                        
-	                        <input type="hidden" id="searchCondition" name="searchCondition" value="${! empty meetingPostSearch.searchCondition ? meetingPostSearch.searchCondition : 0}">
-		                    
-	    					<input type="text" class="form-control p-3" placeholder="검색어 입력" id="searchKeyword" name="searchKeyword"
-	    					 aria-describedby="searchButton" value="${! empty meetingPostSearch.searchKeyword ? meetingPostSearch.searchKeyword : '' }">
-	    					 
-	    					<span id="searchButton" class="input-group-text p-3">
-	    						<i class="fa fa-search"></i>
-	    					</span>
-	    					
-	    					<!-- pagenation -->
-							<input type="hidden" id="currentPage" name="currentPage" value=""/>
-	    					
-	    					<div class="nav-item dropdown">
-	                            <a href="#" id="dropdownMenuButton2" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-	                            	<c:choose>
-							            <c:when test="${meetingPostSearch.meetingPostListSearchCondition == 0}">
-							                전체 게시글
-							            </c:when>
-							            <c:when test="${meetingPostSearch.meetingPostListSearchCondition == 1}">
-							                내가 쓴 게시글
-							            </c:when>
-							            <c:when test="${meetingPostSearch.meetingPostListSearchCondition == 2}">
-							                모임 신청한 게시글
-							            </c:when>
-							            <c:when test="${meetingPostSearch.meetingPostListSearchCondition == 3}">
-							                모임 등록된 게시글
-							            </c:when>
-							            <c:when test="${meetingPostSearch.meetingPostListSearchCondition == 4}">
-							                좋아요 한 게시글
-							            </c:when>
-							        </c:choose>
-	                            </a>
-	                            <div class="dropdown-menu m-0 bg-secondary rounded-0">
-	                                <a href="#" class="dropdown-item listSearchCondition" data-list-condition="0" id="allPostsOption">전체 게시글</a>
-	                                <a href="#" class="dropdown-item listSearchCondition" data-list-condition="1" id="myPostsOption">내가 쓴 게시글</a>
-	                                <a href="#" class="dropdown-item listSearchCondition" data-list-condition="2" id="appliedPostsOption">모임 신청한 게시글</a>
-	                                <a href="#" class="dropdown-item listSearchCondition" data-list-condition="3" id="registeredPostsOption">모임 등록된 게시글</a>
-	                                <a href="#" class="dropdown-item listSearchCondition" data-list-condition="4" id="likedPostsOption">좋아요 한 게시글</a>
-	                            </div>
-	                        </div>
-	                        
-	                        <input type="hidden" id="meetingPostListSearchCondition" name="meetingPostListSearchCondition" value="${! empty meetingPostSearch.meetingPostListSearchCondition ? meetingPostSearch.meetingPostListSearchCondition : 0}">
-	                        
+	    				<div class="col-md-2 offset-md-1">
+	    					<select class="form-control border-2 border-secondary rounded-pill py-2" id="searchCondition" name="searchCondition">
+	    						<option value="0" ${ !empty meetingPostSearch.searchCondition && meetingPostSearch.searchCondition==0 ? "selected" : "" }>제목</option>
+	                           	<option value="1" ${ !empty meetingPostSearch.searchCondition && meetingPostSearch.searchCondition==1 ? "selected" : "" }>내용</option>
+	                           	<option value="2" ${ !empty meetingPostSearch.searchCondition && meetingPostSearch.searchCondition==2 ? "selected" : "" }>닉네임</option>
+	    					</select>
 	    				</div>
 	    				
-	    			</form>
+	    				<div class="col-md-5">
+	    					<input type="text" id="searchKeyword" name="searchKeyword" value="${! empty meetingPostSearch.searchKeyword ? meetingPostSearch.searchKeyword : '' }" placeholder="검색어 입력" class="form-control border-2 border-secondary rounded-pill py-2">
+	    				</div>
+	    				
+	    				<div class="col-md-1">
+	    					<button id="searchButton" class="btn btn-primary border-2 border-secondary rounded-pill text-white" style="height: 45px;">
+						    	<i class="fas fa-search"></i>
+							</button>
+	    				</div>
+	    				
+	    				<div class="col-md-2">
+	    					<select class="form-control border-2 border-secondary rounded-pill py-2" id="meetingPostListSearchCondition" name="meetingPostListSearchCondition">
+	    						<option value="0" ${ !empty meetingPostSearch.meetingPostListSearchCondition && meetingPostSearch.meetingPostListSearchCondition==0 ? "selected" : "" }>전체 게시글</option>
+	                           	<option value="1" ${ !empty meetingPostSearch.meetingPostListSearchCondition && meetingPostSearch.meetingPostListSearchCondition==1 ? "selected" : "" }>내가 쓴 게시글</option>
+	                           	<option value="2" ${ !empty meetingPostSearch.meetingPostListSearchCondition && meetingPostSearch.meetingPostListSearchCondition==2 ? "selected" : "" }>모임 신청한 게시글</option>
+	                           	<option value="3" ${ !empty meetingPostSearch.meetingPostListSearchCondition && meetingPostSearch.meetingPostListSearchCondition==3 ? "selected" : "" }>모임 등록된 게시글</option>
+	                           	<option value="4" ${ !empty meetingPostSearch.meetingPostListSearchCondition && meetingPostSearch.meetingPostListSearchCondition==4 ? "selected" : "" }>좋아요 한 게시글</option>
+	    					</select>
+	    				</div>
+	
+						<input type="hidden" id="currentPage" name="currentPage" value=""/>
+	    			</div>
 	    			
-	    			
+	    		</form>
+	    		
+	    		<div class="row g-4 mb-2">
     				
 		    		<div class="table-responsive">
 		    			<table class="table">
@@ -242,6 +158,7 @@
 		    						<th scope="col">순번</th>
 		    						<th scope="col">작성자</th>
 		    						<th scope="col">제목</th>
+		    						<th scope="col">등산 예정 산</th>
 		    						<th scope="col">모집상태</th>
 		    						<th scope="col">작성일자</th>
 		    					</tr>
@@ -264,6 +181,11 @@
 					                    <td>
 					                    	<p class="mb-4 mt-4">
 					                    		<a href="/meeting/getMeetingPost?postNo=${post.postNo}">${post.title}</a>
+					                    	</p>
+					                    </td>
+					                    <td>
+					                    	<p class="mb-4 mt-4">
+					                    		<p class="mb-4 mt-4">${post.appointedHikingMountain}</p>
 					                    	</p>
 					                    </td>
 					                    <td>

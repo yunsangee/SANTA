@@ -64,13 +64,12 @@ public class CertificationPostRestController {
     
 
     @PostMapping(value = "rest/listCertificationPost")
-    public Map<String, Object> listCertificationPost(
-        @RequestBody Search search) throws Exception {
-    	System.out.println("search" +search ) ;
+    public Map<String, Object> listCertificationPost(@RequestBody Search search) throws Exception {
+        System.out.println("search" + search);
         if (search == null) {
             search = new Search(); // 기본 검색 조건 설정 또는 처리
         }
-        
+
         if (search.getSearchKeyword() == null) {
             search.setSearchKeyword(""); // 검색어가 null인 경우 빈 문자열로 설정
         }
@@ -80,7 +79,7 @@ public class CertificationPostRestController {
         int pageSize = search.getPageSize();
         search.setCurrentPage(currentPage);
         search.setPageSize(pageSize);
-        
+
         Map<String, Object> result = certificationPostService.getCertificationPostList(search);
         List<CertificationPost> certificationPostList = (List<CertificationPost>) result.get("list");
         List<String> certificationPostImages = new ArrayList<>();
@@ -88,13 +87,25 @@ public class CertificationPostRestController {
             String fileName = certificationPost.getPostNo() + "_0_1"; // 첫 번째 사진 파일명
             String imageURL = objectStorageService.getImageURL(fileName);
             certificationPostImages.add(imageURL);
+
+            // 프로필 이미지 URL 설정
+            if (certificationPost.getProfileImage() != null && !certificationPost.getProfileImage().contains("ncloudstorage")) {
+                certificationPost.setProfileImage(objectStorageService.getImageURL(certificationPost.getProfileImage()));
+            }
+
+            // 배지 이미지 URL 설정
+            if (certificationPost.getBadgeImage() != null && !certificationPost.getBadgeImage().contains("ncloudstorage")) {
+                certificationPost.setBadgeImage(objectStorageService.getImageURL(certificationPost.getBadgeImage()));
+            }
         }
-        System.out.println("rest certificationPostList  " + certificationPostList );
+        System.out.println("rest certificationPostList  " + certificationPostList);
+
         // 클라이언트로 전송할 결과에 이미지 URL 추가
         result.put("certificationPostImages", certificationPostImages);
 
         return result;
     }
+
 
     @GetMapping(value="rest/updateCertificationPostDeleteFlag")
     public void updateCertificationPostDeleteFlag(@RequestParam int postNo, @RequestParam int userNo) throws Exception {

@@ -51,7 +51,7 @@ public class CorrectionPostController {
 		
 			SantaLogger.makeLog("info", "correctionPostList:" + list);
 			int totalCount = list.size(); // 총 사용자 수
-		    int totalPages = (int) Math.ceil((double) correctionPostService.getCorrectionPostTotalCount(search) / pageSize); // 총 페이지 수 계산
+		    int totalPages = (int) Math.ceil((double) correctionPostService.getCorrectionPostTotalCount(search) / pageSize) + 1; // 총 페이지 수 계산
 		    int currentPage = search.getCurrentPage();
 		   
 

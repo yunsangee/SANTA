@@ -24,7 +24,9 @@ public interface MountainService {
 	
 	public Mountain getMountain(String mountainName) throws Exception;
 	
-	public Mountain getMountain(int userNo,int mountainNo);
+	public Mountain getMountain(int userNo,int mountainNo) throws IOException;
+	
+	public String getMountainReason(String mountainName) throws IOException;
 	
 	public int checkMountainExist(int mountainNo);
 	public int isMountain(String mountainName);
@@ -33,7 +35,7 @@ public interface MountainService {
 	
 	public List<Mountain> getMountainListByAddress(String address) throws IOException;// include wish list
 	
-	public List<Mountain> getMountainListByName(int userNo, String mountainName); 
+	public List<Mountain> getMountainListByName(int userNo, String mountainName) ; 
 	
 	public void updateMountain(Mountain mountain);   //이거할 때, correction_post status update
 	

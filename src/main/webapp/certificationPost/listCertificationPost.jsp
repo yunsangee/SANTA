@@ -8,7 +8,7 @@
     <c:import url="../common/header.jsp"/>
     <meta charset="UTF-8">
     <title>Certification Post List</title>
-    
+     <link rel="stylesheet" href="path/to/your/css/file.css">
 <style>
 .btn-with-tooltip {
     position: relative;
@@ -47,7 +47,6 @@
     visibility: visible;
     opacity: 1;
 }
-
 
 .certification-post {
     display: flex;
@@ -99,21 +98,45 @@
     font-size: 18px;
     font-weight: bold;
     max-width: 280px; /* 최대 너비 설정 */
+     margin-top: 30px; 
+}
+.nickname {
+    font-size: 16px; /* Adjust the font size as needed */
+}
+.post-author {
+    font-size: 14px; /* 닉네임 글자 크기 */
+    max-width: 280px; /* 최대 너비 설정 */
+    display: flex;
+    align-items: center; /* 이미지와 텍스트를 수직으로 정렬 */
+  
 }
 
-.post-author {
-    font-size: 14px;
-    max-width: 280px; /* 최대 너비 설정 */
+.certification-post .details .post-author .profile-image {
+    width: 40px; /* Adjusted width to match text size */
+    height: 40px; /* Adjusted height to match text size */
+    border-radius: 50%; /* Keep the image circular */
+    margin-right: 10px; /* Adjust spacing between the image and the text */
 }
+
+.certification-post .details .post-author .badge-img {
+    width: 14px; /* Adjusted width to match text size */
+    height: 14px; /* Adjusted height to match text size */
+    margin-left: 10px; /* Adjust spacing between the text and the badge image */
+}
+
 
 .post-likes p {
-    font-size: 14px;
+    font-size: 15px;
     color: #ffb524; /* 좋아요수 색상 변경 */
     text-align: right;
     white-space: nowrap; /* 텍스트 줄바꿈 방지 */
     overflow: hidden; /* 넘치는 텍스트 숨김 */
     text-overflow: ellipsis; /* 넘치는 텍스트 생략(...) 처리 */
     max-width: 100px; /* 최대 너비 설정 */
+
+}
+.certification-post .post-likes {
+    margin-top: -70px !important; /* 좀 더 큰 값으로 조정 */
 }
 
 .certification-post p {
@@ -130,7 +153,6 @@
     gap: 20px;
     justify-content: center;
 }
-
 
 .btn-cp {
     border: 2px solid orange;
@@ -201,7 +223,10 @@
 }
 
 .post-title-author h4 {
-    margin-bottom: 10px; /* 간격 추가 */
+    margin-bottom: 20px; /* 간격 추가 */
+}
+.certification-post .post-author {
+    margin-top: -15px !important;
 }
 
 .fixed-buttons {
@@ -237,6 +262,7 @@
         right: 30px; /* 모바일 화면에서는 위치 조정 */
     }
 }
+
 
 </style>
 
@@ -332,8 +358,17 @@ $(document).ready(function() {
                 '<div class="details">' +
                     '<div class="post-header">' +
                         '<div class="post-title-author">' +
-                        '<h4 class="post-title"> ' + shortTitle + '</h4>' +
-                        '<h4 class="post-author" style="margin-top: 10px;"><i class="fas fa-user"></i> 작성자 : ' + post.nickName + '</h4>' +
+                        
+                          
+                            
+                            '<h4 class="post-author" style="margin-top: 10px;">' +
+                            
+                                '<img class="profile-image" src="' + post.profileImage + '" alt="Profile Image"/> ' +
+                                post.nickName +
+                                '<img src="' + post.badgeImage + '" class="badge-img">' +
+                            '</h4>' +
+                              '<h4 class="post-title"> ' + shortTitle + '</h4>' +
+                            
                         '</div>' +
                         '<div class="post-likes">' +
                             '<p><i class="fas fa-heart"></i>  ' + post.certificationPostLikeCount + '</p>' +
@@ -346,6 +381,7 @@ $(document).ready(function() {
                     '<p class="post-date"><i class="far fa-calendar-alt"></i> 등산 일자 : ' + post.certificationPostHikingDate + '</p>' +
                 '</div>';
             postContainer.appendChild(postElement);
+
         });
     }
 
@@ -365,23 +401,53 @@ $(document).ready(function() {
         var userNo = ${user.userNo}
         window.location.href = "/certificationPost/addCertificationPost?userNo=" + userNo;
     });
+    
+    $('#searchCondition').change(function() {
+        updateSearchInputPlaceholder();
+    });
+
+    // 페이지 로딩시 한 번 placeholder를 설정합니다.
+    updateSearchInputPlaceholder();
+
+    function updateSearchInputPlaceholder() {
+        var selectedOption = $('#searchCondition').val();
+        var placeholderText = '';
+
+        switch (selectedOption) {
+            case '0':
+                placeholderText = ' 글 제목을 입력하세요!';
+                break;
+            case '1':
+                placeholderText = ' 닉네임을 입력하세요!';
+                break;
+            case '2':
+                placeholderText = ' 산 이름을 입력하세요!';
+                break;
+            default:
+                placeholderText = ' 글 제목을 입력하세요!'; // 기본값을 '글 제목을 입력하세요!'로 설정
+                break;
+        }
+
+        $('#searchInput').attr('placeholder', placeholderText);
+    }
 });
 </script>
+
 </head>
 <body>
     <header><c:import url="../common/top.jsp"/></header>
     <main>
         <div class="container-fluid py-5">
             <div class="container py-5">
-                <div class="position-relative mx-auto mb-5" style="max-width: 600px;">
+                <div class="position-relative mx-auto mb-5"  style="max-width: 500px; text-align: center;">
                     <form id="searchForm" class="d-flex align-items-center">
                         <select id="searchCondition" name="searchCondition" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 150px; height: 45px;">
                             <option value="0" ${ !empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>글제목</option>
                             <option value="1" ${ !empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>닉네임</option>
-                            <option value="2" ${ !empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>산명칭</option>
+                            <option value="2" ${ !empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>산이름</option>
                         </select> 
                         
-                        <input type="text" id="searchInput" name="searchKeyword" value='${ !empty search.searchCondition? search.searchKeyword:""  }' placeholder="Search" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 300px; height: 45px;">
+                        <input type="text" id="searchInput" name="searchKeyword" value='${ !empty search.searchCondition? search.searchKeyword:""  }' placeholder="" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 300px; height: 45px;">
                         <button type="submit" class="btn btn-primary border-2 border-secondary rounded-pill text-white search-button" style="height: 45px;">
 					    <i class="fas fa-search"></i>
 					</button>
@@ -409,6 +475,7 @@ $(document).ready(function() {
                                     <div class="post-title-author">
                                         <h4 class="post-title"> 
                                             <i class="fas fa-heading"></i> 
+                                            
                                             <c:choose>
                                                 <c:when test="${fn:length(certificationPost.title) > 8}">
                                                     ${fn:substring(certificationPost.title, 0, 8)}...
@@ -419,16 +486,9 @@ $(document).ready(function() {
                                             </c:choose>
                                         </h4>
                                         <h4 class="post-author" style="margin-top: 10px;">
-                                            <i class="fas fa-user"></i> 
-                                            작성자: 
-                                            <c:choose>
-                                                <c:when test="${fn:length(certificationPost.nickName) > 5}">
-                                                    ${fn:substring(certificationPost.nickName, 0, 5)}...
-                                                </c:when>
-                                                <c:otherwise>
-                                                    ${certificationPost.nickName}
-                                                </c:otherwise>
-                                            </c:choose>
+                                            <img class="profile-image" src="${certificationPost.profileImage}" alt="Profile Image"/>
+                                            <span class="nickname">${certificationPost.nickName}</span>
+                                            <img src="${certificationPost.badgeImage}" class="badge-img">
                                         </h4>
                                     </div>
                                     <div class="post-likes">
@@ -458,13 +518,13 @@ $(document).ready(function() {
         </div>
     </main>
     <div class="fixed-buttons">
-    <div class="btn-with-tooltip">
-        <div class="tooltip">인증하러가기!<div class="tooltip-arrow"></div></div>
-        <button class="btn-cp btn-certify-hiking"><i class="fa fa-mountain"></i></button>
+        <div class="btn-with-tooltip">
+            <div class="tooltip">인증하러가기!<div class="tooltip-arrow"></div></div>
+            <button class="btn-cp btn-certify-hiking"><i class="fa fa-mountain"></i></button>
+        </div>
+        <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
     </div>
-    <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
-</div>
 
-<footer><c:import url="../common/footer.jsp"/></footer>
+    <footer><c:import url="../common/footer.jsp"/></footer>
 </body>
 </html>
