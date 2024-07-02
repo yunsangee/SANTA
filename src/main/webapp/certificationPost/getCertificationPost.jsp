@@ -252,8 +252,8 @@
         }
 
         .badge-img {
-            width: 24px; /* 배지 크기를 닉네임과 비슷하게 맞춤 */
-            height: 24px; /* 배지 크기를 닉네임과 비슷하게 맞춤 */
+            width: 20px; /* 배지 크기를 닉네임과 비슷하게 맞춤 */
+            height: 20px; /* 배지 크기를 닉네임과 비슷하게 맞춤 */
             vertical-align: middle; /* 배지를 텍스트 중간에 정렬 */
             margin-left: 5px; /* 배지와 닉네임 사이에 간격 추가 */
         }

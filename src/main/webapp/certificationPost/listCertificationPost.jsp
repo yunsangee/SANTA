@@ -8,7 +8,7 @@
     <c:import url="../common/header.jsp"/>
     <meta charset="UTF-8">
     <title>Certification Post List</title>
-    
+     <link rel="stylesheet" href="path/to/your/css/file.css">
 <style>
 .btn-with-tooltip {
     position: relative;
@@ -47,7 +47,6 @@
     visibility: visible;
     opacity: 1;
 }
-
 
 .certification-post {
     display: flex;
@@ -100,45 +99,43 @@
     font-weight: bold;
     max-width: 280px; /* 최대 너비 설정 */
 }
-
+.nickname {
+    font-size: 16px; /* Adjust the font size as needed */
+}
 .post-author {
-    font-size: 14px;
+    font-size: 14px; /* 닉네임 글자 크기 */
     max-width: 280px; /* 최대 너비 설정 */
     display: flex;
     align-items: center; /* 이미지와 텍스트를 수직으로 정렬 */
+  
 }
 
-
-
-
-.profile-image {
-    width: 10px; /* 프로필 이미지 크기 */
-    height: 10px; /* 프로필 이미지 크기 */
-    border-radius: 50%;
-    margin-right: 2px; /* 이미지와 텍스트 간격 */
+.certification-post .details .post-author .profile-image {
+    width: 40px; /* Adjusted width to match text size */
+    height: 40px; /* Adjusted height to match text size */
+    border-radius: 50%; /* Keep the image circular */
+    margin-right: 10px; /* Adjust spacing between the image and the text */
 }
 
-.nickname {
-    font-size: 12px; /* 닉네임 글자 크기 */
-    margin-right: 2px; /* 닉네임과 배지 이미지 간격 */
+.certification-post .details .post-author .badge-img {
+    width: 14px; /* Adjusted width to match text size */
+    height: 14px; /* Adjusted height to match text size */
+    margin-left: 10px; /* Adjust spacing between the text and the badge image */
 }
-
-.badge-img {
-    width: 10px; /* 배지 이미지 크기 */
-    height: 10px; /* 배지 이미지 크기 */
-    margin-left: 2px; /* 텍스트와 배지 이미지 간격 */
-}
-
 
 
 .post-likes p {
-    font-size: 14px;
+    font-size: 15px;
     color: #ffb524; /* 좋아요수 색상 변경 */
     text-align: right;
     white-space: nowrap; /* 텍스트 줄바꿈 방지 */
     overflow: hidden; /* 넘치는 텍스트 숨김 */
     text-overflow: ellipsis; /* 넘치는 텍스트 생략(...) 처리 */
     max-width: 100px; /* 최대 너비 설정 */
+
+}
+.certification-post .post-likes {
+    margin-top: -70px !important; /* 좀 더 큰 값으로 조정 */
 }
 
 .certification-post p {
@@ -155,7 +152,6 @@
     gap: 20px;
     justify-content: center;
 }
-
 
 .btn-cp {
     border: 2px solid orange;
@@ -226,7 +222,10 @@
 }
 
 .post-title-author h4 {
-    margin-bottom: 10px; /* 간격 추가 */
+    margin-bottom: 20px; /* 간격 추가 */
+}
+.certification-post .post-author {
+    margin-top: -15px !important;
 }
 
 .fixed-buttons {
@@ -262,6 +261,7 @@
         right: 30px; /* 모바일 화면에서는 위치 조정 */
     }
 }
+
 
 </style>
 
@@ -357,12 +357,17 @@ $(document).ready(function() {
                 '<div class="details">' +
                     '<div class="post-header">' +
                         '<div class="post-title-author">' +
-                            '<h4 class="post-title"> ' + shortTitle + '</h4>' +
+                        
+                          
+                            
                             '<h4 class="post-author" style="margin-top: 10px;">' +
+                            
                                 '<img class="profile-image" src="' + post.profileImage + '" alt="Profile Image"/> ' +
                                 post.nickName +
                                 '<img src="' + post.badgeImage + '" class="badge-img">' +
                             '</h4>' +
+                              '<h4 class="post-title"> ' + shortTitle + '</h4>' +
+                            
                         '</div>' +
                         '<div class="post-likes">' +
                             '<p><i class="fas fa-heart"></i>  ' + post.certificationPostLikeCount + '</p>' +
@@ -403,7 +408,7 @@ $(document).ready(function() {
     <main>
         <div class="container-fluid py-5">
             <div class="container py-5">
-                <div class="position-relative mx-auto mb-5" style="max-width: 600px;">
+                <div class="position-relative mx-auto mb-5"  style="max-width: 500px; text-align: center;">
                     <form id="searchForm" class="d-flex align-items-center">
                         <select id="searchCondition" name="searchCondition" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 150px; height: 45px;">
                             <option value="0" ${ !empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>글제목</option>
@@ -439,6 +444,7 @@ $(document).ready(function() {
                                     <div class="post-title-author">
                                         <h4 class="post-title"> 
                                             <i class="fas fa-heading"></i> 
+                                            
                                             <c:choose>
                                                 <c:when test="${fn:length(certificationPost.title) > 8}">
                                                     ${fn:substring(certificationPost.title, 0, 8)}...
@@ -448,12 +454,11 @@ $(document).ready(function() {
                                                 </c:otherwise>
                                             </c:choose>
                                         </h4>
-                                      <h4 class="post-author" style="margin-top: 10px;">
-    <img class="profile-image" src="${certificationPost.profileImage}" alt="Profile Image"/>
-    <span class="nickname">${certificationPost.nickName}</span>
-    <img src="${certificationPost.badgeImage}" class="badge-img">
-</h4>
-
+                                        <h4 class="post-author" style="margin-top: 10px;">
+                                            <img class="profile-image" src="${certificationPost.profileImage}" alt="Profile Image"/>
+                                            <span class="nickname">${certificationPost.nickName}</span>
+                                            <img src="${certificationPost.badgeImage}" class="badge-img">
+                                        </h4>
                                     </div>
                                     <div class="post-likes">
                                         <p><i class="fas fa-heart"></i> 좋아요수 : ${certificationPost.certificationPostLikeCount}</p>
@@ -482,13 +487,13 @@ $(document).ready(function() {
         </div>
     </main>
     <div class="fixed-buttons">
-    <div class="btn-with-tooltip">
-        <div class="tooltip">인증하러가기!<div class="tooltip-arrow"></div></div>
-        <button class="btn-cp btn-certify-hiking"><i class="fa fa-mountain"></i></button>
+        <div class="btn-with-tooltip">
+            <div class="tooltip">인증하러가기!<div class="tooltip-arrow"></div></div>
+            <button class="btn-cp btn-certify-hiking"><i class="fa fa-mountain"></i></button>
+        </div>
+        <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
     </div>
-    <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
-</div>
 
-<footer><c:import url="../common/footer.jsp"/></footer>
+    <footer><c:import url="../common/footer.jsp"/></footer>
 </body>
 </html>

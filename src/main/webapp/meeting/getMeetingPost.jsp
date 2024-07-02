@@ -46,7 +46,7 @@
 	            var $this = $(this);  // 현재 클릭된 요소를 $this 변수에 저장
 	            var postNo = $this.data('post-no');  // 데이터 속성을 사용하여 postNo를 가져옴
 	            var userNo = $this.data('user-no');  // 데이터 속성을 사용하여 userNo를 가져옴
-	            var currentStatus = $this.hasClass('text-secondary') ? 0 : 1; // 현재 상태에 따라 값 설정
+	            var currentStatus = $this.hasClass('text-danger') ? 1 : 0; // 현재 상태에 따라 값 설정
 
 	            $.ajax({
 	            	
@@ -72,11 +72,11 @@
 
 	                        if (currentStatus === 0) {
 	                        	
-	                            $this.removeClass('text-secondary').addClass('text-danger');
+	                            $this.removeClass('far').addClass('fa text-danger');
 	                            $likeCount.text(currentCount + 1);
 	                        } else {
 	                        	
-	                            $this.removeClass('text-danger').addClass('text-secondary');
+	                            $this.removeClass('fa text-danger').addClass('far');
 	                            $likeCount.text(currentCount - 1);
 	                        }
 	                    } else {
@@ -453,7 +453,7 @@
 			                        '<div class="d-flex align-items-center justify-content-between" style="min-width: 200px; border-right: 1px solid #ddd; padding: 10px;">' +
 			                        '<div class="d-flex align-items-center">' +
 			                        '<img src="' + response.profileImage + '" alt="Image" class="me-2" style="width: 40px; height: 40px; border-radius: 50%;">' +
-			                        '<p class="mb-0">' + response.nickname + '</p>' +
+			                        '<p class="mb-0"><a href="/certificationPost/getProfile?userNo=' + response.userNo + '">' + response.nickname + '</a></p>' +
 			                        '</div>' +
 			                        (userNo == response.userNo ? '<button class="btn p-0 delete-comment-button" data-comment-no="' + response.meetingPostCommentNo + '" style="line-height: 0;"><i class="bi bi-x" style="font-size: 24px; color: red;"></i></button>' : '') +
 			                        '</div>' +
@@ -543,12 +543,33 @@
 		    width: 20px;
 		    height: auto;
 		}
-    	
-    	
-        
-    }
-    	
-    
+		
+		.fa-heart {
+			cursor: pointer;
+		}
+		
+		.post-image {
+	        width: 200px; /* 고정된 가로 크기 */
+	        height: 200px; /* 고정된 세로 크기 */
+	        object-fit: cover; /* 이미지의 비율을 유지하면서 자르기 */
+	        margin: 10px;
+	        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+	        border-radius: 8px;
+	    }
+	    .image-gallery {
+	        display: flex;
+	        flex-wrap: wrap;
+	        gap: 10px;
+	    }
+	    .image-gallery img {
+	        flex: 1 1 calc(50% - 10px);
+	        cursor: pointer;
+	        transition: transform 0.2s ease-in-out;
+	    }
+	    .image-gallery img:hover {
+	        transform: scale(1.05);
+	    }
+	    
     </style>
     
 </head>
@@ -565,7 +586,7 @@
     			<div class="row g-4 mb-4 d-flex align-items-center">
     			
     				<div class="col-md-3 d-flex align-items-center">
-	    				<i class="fa fa-heart fa-3x like-button ${meetingPost.meetingPostLikeStatus == 0 ? 'text-secondary' : 'text-danger'}" data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}"></i>
+	    				<i class="fa-heart fa-3x me-2 like-button ${meetingPost.meetingPostLikeStatus == 0 ? 'far' : 'fa text-danger'}" data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}"></i>
 	    				<p class="mb-0 ml-2 fa-2x">${meetingPost.meetingPostLikeCount}</p>
     				</div>
     				
@@ -648,7 +669,7 @@
     				<div class="col-md-2 border bg-light align-items-center title contents d-flex justify-content-center">내용</div>
     				<div class="col-md-10 border align-items-center text-start contents">
     					<c:forEach var="image" items="${meetingPostImages}">
-					        <img src="${image}" alt="Image" />
+					        <img src="${image}" alt="Image" class="post-image"/>
 					    </c:forEach>
     					${meetingPost.contents}
     				</div>
@@ -743,7 +764,7 @@
 					                                <div class="d-flex justify-content-between align-items-center w-100">
 					                                    <div class="d-flex align-items-center">
 					                                        <img src="${participation.profileImage}" alt="Image" class="me-2" style="width: 40px; height: 40px; border-radius: 50%;">
-					                                        <p class="mb-0">${participation.nickname}</p>
+					                                        <p class="mb-0"><a href="/certificationPost/getProfile?userNo=${participation.userNo}">${participation.nickname}</a></p>
 					                                    </div>
 					                                    <div class="d-flex align-items-center">
 					                                        <c:if test="${participation.userNo != sessionScope.user.userNo}">
@@ -775,7 +796,7 @@
 					                                    <div class="d-flex justify-content-between align-items-center w-100">
 					                                        <div class="d-flex align-items-center">
 					                                            <img src="${participation.profileImage}" alt="Image" class="me-2" style="width: 40px; height: 40px; border-radius: 50%;">
-					                                            <p class="mb-0">${participation.nickname}</p>
+					                                            <p class="mb-0"><a href="/certificationPost/getProfile?userNo=${participation.userNo}">${participation.nickname}</a></p>
 					                                        </div>
 					                                    </div>
 					                                </td>
@@ -818,7 +839,9 @@
 				                                <div class="d-flex align-items-center justify-content-between" style="min-width: 200px; border-right: 1px solid #ddd; padding: 10px;">
 				                                    <div class="d-flex align-items-center">
 				                                        <img src="${comment.profileImage}" alt="Image" class="me-2" style="width: 40px; height: 40px; border-radius: 50%;">
-				                                        <p class="mb-0">${comment.nickname}</p>
+				                                        <p class="mb-0">
+				                                        	<a href="/certificationPost/getProfile?userNo=${comment.userNo}">${comment.nickname}</a>
+				                                        </p>
 				                                    </div>
 				                                    <c:if test="${sessionScope.user.userNo == comment.userNo}">
 				                                        <button class='btn p-0 delete-comment-button' data-comment-no="${comment.meetingPostCommentNo}" style="line-height: 0;"><i class='bi bi-x' style='font-size: 24px; color: red;'></i></button>
