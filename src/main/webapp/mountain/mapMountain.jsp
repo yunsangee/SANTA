@@ -86,7 +86,7 @@
 			
 			); // request current position information
 		} else {
-			alert("Geolocation is not supported by this browser.");
+			//alert("Geolocation is not supported by this browser.");
 		}
 	}
 
@@ -121,16 +121,16 @@
 	function showError(error) {
 		switch (error.code) {
 		case error.PERMISSION_DENIED:
-			alert("User denied the request for Geolocation.");
+			//alert("User denied the request for Geolocation.");
 			break;
 		case error.POSITION_UNAVAILABLE:
-			alert("Location information is unavailable.");
+			//alert("Location information is unavailable.");
 			break;
 		case error.TIMEOUT:
-			alert("The request to get user location timed out.");
+			//alert("The request to get user location timed out.");
 			break;
 		case error.UNKNOWN_ERROR:
-			alert("An unknown error occurred.");
+			//alert("An unknown error occurred.");
 			break;
 		}
 	} // show error when cannot get position information
@@ -357,7 +357,7 @@
 	                        $('.like-button').off('click').on('click', function() {
 	                            const userNo = "${sessionScope.user != null ? sessionScope.user.userNo : 'null'}";
 	                            if (userNo === 'null') {
-	                                alert("로그인 후 이용 가능합니다.");
+	                                //alert("로그인 후 이용 가능합니다.");
 	                                return;
 	                            }
 
@@ -479,7 +479,7 @@
 									query : address
 								}, function(status, response) {
 									if (status !== naver.maps.Service.Status.OK) {
-										return alert('Something wrong!');
+										//return alert('Something wrong!');
 									}
 									console.log('geocode response:' + response);
 									console.log(response);
@@ -508,7 +508,7 @@
 						error : function(xhr, status, error) {
 							console.error('Error occurred while searching for the place:',
 									error);
-							alert('Error occurred while searching for the place.');
+							//alert('Error occurred while searching for the place.');
 						}
 					});
 				}

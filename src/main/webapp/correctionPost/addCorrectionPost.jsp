@@ -27,14 +27,14 @@
 		            method: "GET",
 		            data: data, // data 객체를 쿼리 파라미터로 전송
 		            success: function(response) {
-		                alert('Mountain updated successfully');
+		                //alert('Mountain updated successfully');
 		                console.log(response);
 		                window.close();
 		            },
 		            error: function(jqXHR, textStatus, errorThrown) {
 		                console.error('Error:', textStatus, errorThrown);
-		                alert('Error:', textStatus, errorThrown);    
-		                alert('Failed to update mountain');
+		                //alert('Error:', textStatus, errorThrown);    
+		                //alert('Failed to update mountain');
 		            }
 		        });
 			 	
