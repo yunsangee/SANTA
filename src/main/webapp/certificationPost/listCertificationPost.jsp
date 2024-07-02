@@ -98,6 +98,7 @@
     font-size: 18px;
     font-weight: bold;
     max-width: 280px; /* 최대 너비 설정 */
+     margin-top: 30px; 
 }
 .nickname {
     font-size: 16px; /* Adjust the font size as needed */
@@ -400,8 +401,38 @@ $(document).ready(function() {
         var userNo = ${user.userNo}
         window.location.href = "/certificationPost/addCertificationPost?userNo=" + userNo;
     });
+    
+    $('#searchCondition').change(function() {
+        updateSearchInputPlaceholder();
+    });
+
+    // 페이지 로딩시 한 번 placeholder를 설정합니다.
+    updateSearchInputPlaceholder();
+
+    function updateSearchInputPlaceholder() {
+        var selectedOption = $('#searchCondition').val();
+        var placeholderText = '';
+
+        switch (selectedOption) {
+            case '0':
+                placeholderText = ' 글 제목을 입력하세요!';
+                break;
+            case '1':
+                placeholderText = ' 닉네임을 입력하세요!';
+                break;
+            case '2':
+                placeholderText = ' 산 이름을 입력하세요!';
+                break;
+            default:
+                placeholderText = ' 글 제목을 입력하세요!'; // 기본값을 '글 제목을 입력하세요!'로 설정
+                break;
+        }
+
+        $('#searchInput').attr('placeholder', placeholderText);
+    }
 });
 </script>
+
 </head>
 <body>
     <header><c:import url="../common/top.jsp"/></header>
@@ -413,10 +444,10 @@ $(document).ready(function() {
                         <select id="searchCondition" name="searchCondition" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 150px; height: 45px;">
                             <option value="0" ${ !empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>글제목</option>
                             <option value="1" ${ !empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>닉네임</option>
-                            <option value="2" ${ !empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>산명칭</option>
+                            <option value="2" ${ !empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>산이름</option>
                         </select> 
                         
-                        <input type="text" id="searchInput" name="searchKeyword" value='${ !empty search.searchCondition? search.searchKeyword:""  }' placeholder="Search" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 300px; height: 45px;">
+                        <input type="text" id="searchInput" name="searchKeyword" value='${ !empty search.searchCondition? search.searchKeyword:""  }' placeholder="" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 300px; height: 45px;">
                         <button type="submit" class="btn btn-primary border-2 border-secondary rounded-pill text-white search-button" style="height: 45px;">
 					    <i class="fas fa-search"></i>
 					</button>

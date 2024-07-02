@@ -64,12 +64,13 @@ public class UserEtcRestController {
 	    List<User> following = userEtcService.getFollowingList(userNo);
 	    
 	    for (User user : following) {
-	        if (user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")) {
-	            user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
-	        }
-	        if (user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage")) {
-	            user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
-	        }
+	  	  if(user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")&& !user.getProfileImage().contains("kakaocdn")) {
+		    	user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+		    }
+		
+		if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
+			user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+	    }
 	    }
 	    return following;
 	}

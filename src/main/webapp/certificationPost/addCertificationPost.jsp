@@ -305,7 +305,7 @@
                     </div>
                     <div class="form-group">
                         <label for="certificationPostMountainName">산 이름<sup>*</sup></label>
-                        <input type="text" class="form-control" id="certificationPostMountainName" name="certificationPostMountainName" maxlength="20" required>
+                        <input type="text" class="form-control" id="certificationPostMountainName" name="certificationPostMountainName" maxlength="8" required>
                     </div>
                     <div class="form-group">
                         <label for="certificationPostHikingTrail">등산 경로<sup>*</sup></label>
