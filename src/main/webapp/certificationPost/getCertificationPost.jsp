@@ -12,275 +12,295 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
-    <style>
-        main {
-            padding: 20px;
-            padding-top: 80px;
-        }
+   <style>
+    main {
+        padding: 20px;
+        padding-top: 80px;
+    }
 
-        header {
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
+    header {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    }
 
-        .main-image {
-            width: 100%;
-            height: 500px;
-            object-fit: contain;
-            margin-bottom: 20px;
-        }
+    .main-image {
+        width: 100%;
+        height: 500px;
+        object-fit: contain;
+        margin-bottom: 20px;
+    }
 
-        .thumbnail-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+    .thumbnail-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
 
-        .thumbnail {
-            cursor: pointer;
-            width: 100px;
-            height: auto;
-            border: 2px solid transparent;
-            transition: border-color 0.3s;
-        }
+    .thumbnail {
+        cursor: pointer;
+        width: 100px;
+        height: auto;
+        border: 2px solid transparent;
+        transition: border-color 0.3s;
+    }
 
-        .thumbnail.active {
-            border-color: #007bff;
-        }
+    .thumbnail.active {
+        border-color: #81c408;
+    }
 
-        .details-container {
-            margin-top: 20px;
-            position: relative;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
+    .details-container {
+        margin-top: 20px;
+        position: relative;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+      
+         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); 
+    }
 
-        .details-container p {
-            margin-bottom: 10px;
-        }
+    .details-container p {
+        margin-bottom: 10px;
+    }
 
-        .btn-icon {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 22px;
-            color: #81c408;
-            transition: color 0.3s;
-        }
+    .btn-icon {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 22px;
+        color: #81c408;
+        transition: color 0.3s;
+         margin-left: -10px;
+    }
 
-        .btn-icon:hover {
-            color: #ffb524;
-        }
+    .btn-icon:hover {
+        color: #ffb524;
+    }
 
-        .comments-section {
-            margin-top: 40px;
-        }
+    .comments-section {
+        margin-top: 40px;
+    }
 
-        .comment-item {
-            position: relative;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
+    .comment-item {
+        position: relative;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
 
-        .comment-item .btn-danger {
-            background: none;
-            border: none;
-            color: #ff5c5c;
-            cursor: pointer;
-        }
+    .comment-item .btn-danger {
+        background: none;
+        border: none;
+        color: #ff5c5c;
+        cursor: pointer;
+    }
 
-        .comment-item .btn-danger:hover {
-            color: #ff0000;
-        }
+    .comment-item .btn-danger:hover {
+        color: #ff0000;
+    }
 
-        .comment-item p {
-            margin: 0;
-        }
+    .comment-item p {
+        margin: 0;
+    }
 
-        .comment-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 15px;
-        }
+    .comment-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 15px;
+    }
 
-        .details-header {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            position: relative;
-            margin-bottom: 10px;
-            gap: 10px;
-        }
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    margin-bottom: 10px;
+    gap: 10px;
+}
 
-        .details-header .like-container {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+.details-header .left-section {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 이미지, 닉네임, 배지 이미지 사이의 간격 */
+}
 
-        .details-header p, .details-header .btn, .details-header i {
-            margin-left: 0;
-            margin-top: 0;
-        }
+.details-header .right-section {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 작성 일자, 좋아요 버튼 사이의 간격 */
+     padding-top: 5px;
+    
+}
 
-        .details-container h4.fw-bold {
-            font-size: 24px;
-            color: #2c3e50;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #81C408;
-            padding-bottom: 10px;
-        }
+.profile-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    vertical-align: middle;
+       margin-left: 10px;
+    
+}
 
-        .hashtags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-            margin-top: 20px;
-        }
+.author-link {
+    display: flex;
+    align-items: center;
+}
 
-        .hashtag {
-            display: flex;
-            align-items: center;
-            padding: 5px 10px;
-            background-color: #f1f1f1;
-            border-radius: 5px;
-        }
+.author-link img {
+    margin-right: 10px;
+}
 
-        .post-content-wrapper {
-            margin-top: 10px; /* 줄이기 위해 감소 */
-            margin-bottom: 20px; /* 줄이기 위해 감소 */
-            padding: 10px; /* 줄이기 위해 감소 */
-            background: #f9f9f9;
-            border-radius: 10px;
-            overflow: hidden; /* 스크롤을 숨기기 위해 변경 */
-            word-wrap: break-word; /* 긴 문자열을 줄 바꿈 */
-            white-space: pre-wrap; /* 연속된 공백도 줄 바꿈 */
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start; /* 위쪽으로 내용을 정렬 */
-        }
+.badge-img {
+    width: 20px; /* 배지 크기를 닉네임과 비슷하게 맞춤 */
+    height: 20px; /* 배지 크기를 닉네임과 비슷하게 맞춤 */
+    vertical-align: middle; /* 배지를 텍스트 중간에 정렬 */
+    margin-left: 10px; /* 배지와 닉네임 사이에 간격 추가 */
+}
 
-        .post-content {
-            margin: 0;
-            padding: 0;
-        }
 
-        .like-button {
-            font-size: 24px;
-            cursor: pointer;
-        }
+    .details-container h4.fw-bold {
+        font-size: 24px;
+        color: #2c3e50;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #81C408;
+        padding-bottom: 10px;
+    }
 
-        .text-yellow {
-            color: #ffb524;
-        }
+    .hashtags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
 
-        .text-yellow-outline {
-            color: #ffb524;
-            -webkit-text-stroke: 2px #ffb524;
-            color: transparent;
-        }
+    .hashtag {
+        display: flex;
+        align-items: center;
+        padding: 5px 10px;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+    }
 
-        .comment-form {
-            display: flex;
-            align-items: center;
-        }
+    .post-content-wrapper {
+        margin-top: 10px; /* 줄이기 위해 감소 */
+        margin-bottom: 20px; /* 줄이기 위해 감소 */
+        padding: 10px; /* 줄이기 위해 감소 */
+        background: #f9f9f9;
+        border-radius: 10px;
+        overflow: hidden; /* 스크롤을 숨기기 위해 변경 */
+        word-wrap: break-word; /* 긴 문자열을 줄 바꿈 */
+        white-space: pre-wrap; /* 연속된 공백도 줄 바꿈 */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; /* 위쪽으로 내용을 정렬 */
+    }
 
-        .comment-form textarea {
-            flex-grow: 1;
-            margin-right: 10px;
-        }
+    .post-content {
+        margin: 0;
+        padding: 0;
+    }
 
-        .comment-form button {
-            background-color: #81C408;
-            border: none;
-            color: white;
-            padding: 10px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .like-button {
+        font-size: 24px;
+        cursor: pointer;
+    }
+    
+    .like-container {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* 아이콘과 좋아요 수 사이의 간격 */
+}
 
-        .comment-form button:hover {
-            background-color: #ffb524;
-        }
+.like-count {
+    margin-left: 5px; /* 아이콘과 좋아요 수 사이의 간격을 위한 여백 */
+}
+    
 
-        .comment-form i {
-            font-size: 16px;
-        }
+    .text-yellow {
+        color: #ffb524;
+    }
 
-        .inline-info {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 10px;
-        }
+    .text-yellow-outline {
+        color: #ffb524;
+        -webkit-text-stroke: 2px #ffb524;
+        color: transparent;
+    }
 
-        .inline-info span {
-            display: flex;
-            align-items: center;
-            margin-right: 20px;
-        }
+    .comment-form {
+        display: flex;
+        align-items: center;
+    }
 
-        .profile-image {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            vertical-align: middle;
-        }
+    .comment-form textarea {
+        flex-grow: 1;
+        margin-right: 10px;
+    }
 
-        .author-link {
-            display: flex;
-            align-items: center;
-        }
+    .comment-form button {
+        background-color: #81C408;
+        border: none;
+        color: white;
+        padding: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-        .author-link img {
-            margin-right: 10px;
-        }
+    .comment-form button:hover {
+        background-color: #ffb524;
+    }
 
-        .badge-img {
-            width: 20px; /* 배지 크기를 닉네임과 비슷하게 맞춤 */
-            height: 20px; /* 배지 크기를 닉네임과 비슷하게 맞춤 */
-            vertical-align: middle; /* 배지를 텍스트 중간에 정렬 */
-            margin-left: 5px; /* 배지와 닉네임 사이에 간격 추가 */
-        }
+    .comment-form i {
+        font-size: 16px;
+    }
 
-        .info-block {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
+    .inline-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 10px;
+    }
 
-        .info-block .inline-info span {
-            display: block;
-            margin-bottom: 5px;
-        }
+    .inline-info span {
+        display: flex;
+        align-items: center;
+        margin-right: 20px;
+    }
 
-        .info-block .inline-info span i {
-            color: #81C408;
-        }
+    .info-block {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
 
-        .details-container .post-content {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #333;
-            margin-top: 20px;
-        }
-    </style>
+    .info-block .inline-info span {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .info-block .inline-info span i {
+        color: #81C408;
+    }
+
+    .details-container .post-content {
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+        margin-top: 20px;
+    }
+</style>
+
     <script>
     $(document).ready(function() {
         var postNo = ${certificationPost.postNo};
@@ -366,7 +386,7 @@
                                 '<div class="comment-meta">' +
                                     '<p><a href="getProfile?userNo=' + comment.userNo + '" class="author-link"><i class="fas fa-user"></i> 닉네임 : ' + comment.nickname + authorLabel + '</a></p>' +
                                     '<span>' +
-                                        '<span style="font-size: smaller;"><i class="fas fa-clock"></i> 작성 날짜 : ' + formattedDate + '</span>' +
+                                        '<span style="font-size: smaller;"><i class="fas fa-clock"></i> 작성 일자 : ' + formattedDate + '</span>' +
                                         deleteButton +
                                     '</span>' +
                                 '</div>' +
@@ -477,7 +497,9 @@
     <div class="container py-5">
         <div class="row justify-content-center g-4 mb-5 main-container">
             <div class="col-lg-8 col-xl-9">
-                <img id="mainImage" src="${certificationPostImages[0]}" class="main-image" alt="Main Image">
+                <div class="main-image-container">
+                    <img id="mainImage" src="${certificationPostImages[0]}" class="main-image" alt="Main Image">
+                </div>
                 <div class="thumbnail-container">
                     <c:forEach var="image" items="${certificationPostImages}" varStatus="status">
                         <img src="${image}" class="thumbnail ${status.index == 0 ? 'active' : ''}" data-index="${status.index}" alt="Thumbnail">
@@ -485,31 +507,38 @@
                 </div>
                 <div class="details-container">
                     <div class="details-header">
-                        <a href="getProfile?userNo=${certificationPost.userNo}" class="author-link">
-                            <img class="profile-image" src="${certificationPost.profileImage}" alt="Profile Image"/> ${certificationPost.nickName} <img src="${certificationPost.badgeImage}" class="badge-img">
-                        </a>
-                        <p><i class="fas fa-calendar-alt"></i> 작성 일자: ${certificationPost.postDate}</p>
-                        <div class="like-container">
-                            <i class="fa fa-heart like-button ${certificationPost.certificationPostLikeStatus == 0 ? 'text-yellow-outline' : 'text-yellow'}"></i>
-                            <p class="mb-0 ml-2">${certificationPost.certificationPostLikeCount}</p>
+                        <!-- 왼쪽 섹션 -->
+                        <div class="left-section">
+                            <a href="getProfile?userNo=${certificationPost.userNo}" class="author-link">
+                                <img class="profile-image" src="${certificationPost.profileImage}" alt="Profile Image"/> ${certificationPost.nickName} <img src="${certificationPost.badgeImage}" class="badge-img">
+                            </a>
                         </div>
-                      <c:if test="${user != null && user.userNo == certificationPost.userNo}">
-    <form action="/certificationPost/updateCertificationPost" method="get" style="display: inline;">
-        <input type="hidden" name="postNo" value="${certificationPost.postNo}"/>
-        <button type="submit" class="btn-icon"><i class="fas fa-pencil-alt"></i></button>
-    </form>
-    <button class="btn-icon btntrash"><i class="fas fa-trash-alt"></i></button>
-</c:if>
-
+                        <!-- 오른쪽 섹션 -->
+                        <div class="right-section">
+                            <p><i class="fas fa-calendar-alt"style="padding-top: 15px;"></i> 작성 일자 : ${certificationPost.postDate}</p>
+                            <div class="like-container">
+                                <i class="fa fa-heart like-button ${certificationPost.certificationPostLikeStatus == 0 ? 'text-yellow-outline' : 'text-yellow'}"></i>
+                                <p class="mb-0 ml-2">${certificationPost.certificationPostLikeCount}</p>
+                            </div>
+                            
+                            <c:if test="${user != null && user.userNo == certificationPost.userNo}">
+                                <form action="/certificationPost/updateCertificationPost" method="get" style="display: inline;">
+                                    <input type="hidden" name="postNo" value="${certificationPost.postNo}"/>
+                                    <button type="submit" class="btn-icon"><i class="fas fa-pencil-alt"></i></button>
+                                </form>
+                                <button class="btn-icon btntrash"><i class="fas fa-trash-alt"></i></button>
+                            </c:if>
+                        </div>
                     </div>
 
-                    <div class="hashtags mb-3">
+                  
+                    <div class="post-content-wrapper">
+                        <h4 class="fw-bold mb-3">${certificationPost.title}</h4>
+                          <div class="hashtags mb-3">
                         <c:forEach var="hashtag" items="${hashtagList}">
                             <span class="hashtag"><i class="fas fa-hashtag"></i> ${hashtag.certificationPostHashtagContents}</span>
                         </c:forEach>
                     </div>
-                    <div class="post-content-wrapper">
-                        <h4 class="fw-bold mb-3">${certificationPost.title}</h4>
                         <p class="post-content"><i class="fas fa-lightbulb"></i><strong> 이렇게 다녀왔어요!</strong></p>
                         <p class="post-content">${certificationPost.contents}</p>
                     </div>
@@ -561,6 +590,7 @@
         </div>
     </div>
 </main>
+
 <footer>
     <c:import url="../common/footer.jsp"/>
 </footer>
