@@ -11,9 +11,9 @@
 <head>
     <meta charset="UTF-8">
     <title>아이디를 잃어버리셨나요?!</title>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+<!--     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.min.js"></script> -->
     
  <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->   
     
@@ -32,7 +32,7 @@
             text-align: center;
             justify-content: center;
             align-items: center;
-            margin-top:265px;
+            margin-top:240px;
         }
 
         .container h2 {
@@ -180,7 +180,7 @@
         
         footer {
         	width: 100%;
-        	 margin-bottom:-249px;
+        	 margin-bottom:-230px;
         }
     </style>
     	

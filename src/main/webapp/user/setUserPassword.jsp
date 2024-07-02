@@ -8,11 +8,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>비밀번호 변경</title>
+    <title>비밀번호 재설정</title>
 
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+<!--     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script> -->
 
 <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
 
@@ -20,7 +20,6 @@
         body {
             display: flex;
             flex-direction: column;
-          /*   justify-content: space-between; */
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
@@ -31,46 +30,42 @@
         }
 
         main {
-        	flex: 1;
+            flex: 1;
             margin-top: 280px; /* Adjust this value as needed to avoid overlap */
-         /*    margin-bottom: 215px; */
             padding: 20px;
             text-align: center;
             justify-content: center;
             align-items: center;
-            /* width: 90%;
-            max-width: 500px; */
         }
 
         .container h2 {
             color: #333;
             margin-top: 5px;
             margin-bottom: 30px;
-           /*  text-align: center; */
         }
 
         .container p {
             color: #999999;
             font-size: 13px;
             margin-bottom: 30px;
-            /* text-align: center; */
         }
 
-        .passwordNew  {
-            width: 30%; 
+       .passwordNew  {
+            width: 100%; 
            /*  width: 21.8% */;
             padding: 10px;
-            margin-bottom: 10px;
-            margin-top: 30px;
+            margin-bottom: -20px;
+           /*  margin-top: 30px; */
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
             align-items: center;
+            margin-top:-70px;
             /* margin-right: 77px; */
         }
         
         .checkPassword {
-            width: 30%; 
+            width: 100%; 
            /*  width: 21.8% */;
             padding: 10px;
             margin-bottom: 10px;
@@ -78,6 +73,7 @@
             border-radius: 5px;
             box-sizing: border-box;
             align-items: center;
+            margin-top:-70px;
             /* margin-right: 77px; */
         }
 
@@ -99,7 +95,6 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            /* margin-left:-70px; */
         }
 
         .submit:hover {
@@ -107,16 +102,39 @@
         }
 
         @media (max-width: 768px) {
-            .passwordNew,
-            .checkPassword,
-            .submit {
+            .passwordNew, .checkPassword, .submit {
                 width: 100%;
             }
         }
 
         footer {
             width: 100%;
-              margin-bottom:-249px;
+            margin-bottom: -249px;
+        }
+
+        .form-group {
+            position: relative;
+            width: 30%;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .form-group span {
+            display: block;
+            font-size: 13px;
+            margin-top: -1px;
+            margin-bottom: 10px;
+            color: red;
+            text-align: left; /* Add this line to align text to the left */
+            width: 100%;
+        }
+
+        #passwordLengthMessage {
+            color: red;
+        }
+
+        #passwordMatchMessage {
+            color: green;
         }
     </style>
 
@@ -124,7 +142,61 @@
 
 <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
+        $(function() {
+            $("input[name='passwordNew']").on("input", function() {
+                var password = $(this).val();
+                console.log(password.length);
+                if (password.length < 7) {
+                    $("#passwordLengthMessage").text("비밀번호를 7자 이상 입력해주세요.").show();
+                    $("#passwordMatchMessage").text("").hide();
+                } else if (password.length > 15) {
+                    $("#passwordLengthMessage").text("비밀번호를 15자 이하 입력해주세요.").show();
+                    $("#passwordMatchMessage").text("").hide();
+                } else {
+                    var hasLetter = /[a-zA-Z]/.test(password);
+                    var hasNumber = /[0-9]/.test(password);
+                    var hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+                    if (!hasLetter || !hasNumber || !hasSpecialChar) {
+                        $("#passwordLengthMessage").text("비밀번호에는 영문, 숫자, 특수문자가 포함되어야 합니다.").show();
+                        $("#passwordMatchMessage").text("").hide();
+                    } else {
+                        $("#passwordLengthMessage").text("").hide();
+                        checkPasswordMatch();
+                    }
+                }
+            });
+
+            $("input[name='checkPassword']").on("input", function() {
+                checkPasswordMatch();
+            });
+
+            function checkPasswordMatch() {
+                var password = $("input[name='passwordNew']").val();
+                var confirmPassword = $("input[name='checkPassword']").val();
+
+                if (password.length >= 7 && password.length <= 15) {
+                    var hasLetter = /[a-zA-Z]/.test(password);
+                    var hasNumber = /[0-9]/.test(password);
+                    var hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+                    if (hasLetter && hasNumber && hasSpecialChar) {
+                        if (password !== confirmPassword) {
+                            $("#passwordMatchMessage").text("비밀번호가 일치하지 않습니다. 다시 입력해주세요.").css("color", "red").show();
+                        } else {
+                            $("#passwordMatchMessage").text("비밀번호가 일치합니다.").css("color", "green").show();
+                        }
+                    } else {
+                        $("#passwordMatchMessage").text("").hide();
+                    }
+                } else {
+                    $("#passwordMatchMessage").text("").hide();
+                }
+            }
+        });
+
         function submitForm(event) {
             event.preventDefault();
 
@@ -144,8 +216,8 @@
             }
             
             if(userPassword == "kakao"){
-            	alert("소셜 로그인 회원은 비밀번호를 변경하실 수 없습니다.");
-            	return;
+                alert("카카오 로그인 산타님은 비밀번호를 변경하실 수 없습니다.");
+                return;
             }
 
             fetch('rest/setUserPassword', {
@@ -177,31 +249,28 @@
     </script>
 </head>
 
-<!--  ////////////////////////////////////////////// body ///////////////////////////////////////////////// -->
-
 <body>
-
-<!--  ////////////////////////////////////////////// header ///////////////////////////////////////////////// -->
 
 <header>
     <c:import url="../common/top.jsp"/>
 </header>
 
-<!--  ////////////////////////////////////////////// main ///////////////////////////////////////////////// -->
-
 <main class="container">
     <h2>비밀번호 재설정</h2>
-    <p>비밀번호는 영문 대/소문자, 숫자, 특수문자 사용이 가능하며, 10자 이상 입력하셔야 변경 가능합니다.</p>
+    <p>비밀번호는 영문, 숫자, 특수문자를 포함하여 7자~15자 사이의 비밀번호를 입력하셔야 변경 가능합니다.</p>
     <form onsubmit="submitForm(event)">
         
         <div class="form-group">
             <label for="passwordNew"></label>
             <input type="password" class="passwordNew" id="passwordNew" name="passwordNew" placeholder="비밀번호 입력" required>
+            
         </div>
        
         <div class="form-group">
             <label for="checkPassword"></label>
             <input type="password" class="checkPassword" id="checkPassword" name="checkPassword" placeholder="비밀번호 확인" required>
+            <span id="passwordLengthMessage"></span>
+            <span id="passwordMatchMessage"></span>
         </div>
         
         <input type="hidden" id="userPassword" name="userPassword" value="<c:out value='${sessionScope.userPassword}'/>">
@@ -210,8 +279,6 @@
         <button type="submit" class="submit">비밀번호 변경</button>
     </form>
 </main>
-
-<!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// -->
 
 <footer>
     <c:import url="../common/footer.jsp"/>

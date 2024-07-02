@@ -99,11 +99,13 @@ public class UserRestController {
 
         String userPassword = userService.findUserPassword(user.getUserId(), user.getPhoneNumber());
         
+        
         if (userPassword == null) {
             response.put("userExists", false);
         } else {
             response.put("userExists", true);
             response.put("userId", userPassword);
+            response.put("isKakaoUser", "kakao".equals(user.getUserPassword()));
         }
 
         return response;
@@ -192,15 +194,20 @@ public class UserRestController {
     }
 	
 	//
+	//
+	//
+	
+	
+	
+	//
 	// delete QNA
 	//
 	
-	@GetMapping(value="rest/deleteQnA")
-	public void deleteQnA(@RequestParam int postNo, int userNo) throws Exception {
-		
-		userService.deleteQnA(postNo, userNo);
+	@GetMapping(value = "rest/deleteQnA")
+	public ResponseEntity<Void> deleteQnA(@RequestParam int postNo, @RequestParam int userNo) throws Exception {
+	    userService.deleteQnA(postNo, userNo);
+	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
-	
 	//
 	// delete Schedule
 	//
@@ -327,11 +334,17 @@ public class UserRestController {
 	   //
 
 	    @GetMapping("rest/getQnAList")
-	    public @ResponseBody Map<String, Object> getQnAList(@ModelAttribute Search search, HttpSession session) throws Exception {
+	    public @ResponseBody Map<String, Object> getQnAList(@ModelAttribute Search search, HttpSession session, Model model) throws Exception {
 	        System.out.println("getQnAList : GET");
 
 	        // 세션에서 사용자 정보 가져오기
 	        User user = (User) session.getAttribute("user");
+	        
+	        	if (user != null && user.getRole()==1) {
+		    	
+		    	model.addAttribute("admin", 1);
+		    	
+		    }
 
 	        // 현재 페이지와 시작 인덱스 계산
 	        int currentPage = (search.getCurrentPage() == 0) ? 1 : search.getCurrentPage();
@@ -556,5 +569,73 @@ public class UserRestController {
 		    }
 		    
 		}
-}
+	    
+	    ////////////////////
+	    
+	    @GetMapping("/rest/getQnA")
+	    public Map<String, Object> getQnA(@RequestParam(required = false) Integer postNo, @RequestParam(required = false) Integer userNo, HttpSession session) throws Exception {
+	        // 세션에서 로그인한 사용자 정보 가져오기
+	        User sessionUser = (User) session.getAttribute("user");
+
+	        QNA qna = userService.getQnA(postNo, userNo);
+
+	        if (qna == null) {
+	            return null; // QnA 정보가 없는 경우 null 반환
+	        }
+
+	        // 글 작성자의 사용자 정보 가져오기
+	        User qnaUser = userService.getUser(userNo);
+
+	        // 글 작성자의 프로필 이미지와 배지 이미지 URL 설정
+	        if (qnaUser.getProfileImage() != null && !qnaUser.getProfileImage().contains("ncloudstorage") && !qnaUser.getProfileImage().contains("kakaocdn")) {
+	            qnaUser.setProfileImage(objectStorageService.getImageURL(qnaUser.getProfileImage()));
+	        }
+
+	        if (qnaUser.getBadgeImage() != null && !qnaUser.getBadgeImage().contains("ncloudstorage") && !qnaUser.getBadgeImage().contains("kakaocdn")) {
+	            qnaUser.setBadgeImage(objectStorageService.getImageURL(qnaUser.getBadgeImage()));
+	        }
+
+	        // 응답 데이터 준비
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("qna", qna);
+	        response.put("qnaUser", qnaUser);
+	        response.put("isAdmin", sessionUser != null && sessionUser.getRole() == 1);
+
+	        return response;
+	    }
+
+
+	    ///////////////////////////////////////////////////////////
+	    
+	    @PostMapping("/rest/addAdminAnswer")
+	    public ResponseEntity<Void> addAdminAnswer(@RequestBody QNA qna, HttpSession session) throws Exception {
+	        System.out.println("addAdminAnswer : restPOST");
+	        System.out.println("postNo : " + qna.getPostNo());
+	        System.out.println("userNo : " + qna.getUserNo());
+
+	        // 세션에서 로그인한 관리자 정보 가져오기
+	        User admin = (User) session.getAttribute("user");
+	        System.out.println("admin login : " + admin);
+
+	        // 세션에 로그인한 관리자 정보가 있는지 확인
+	        if (admin == null || admin.getRole() == 0) {
+	            // 관리자가 아닌 경우 에러 처리
+	            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+	        }
+
+	        // QNA 정보 조회
+	        QNA dbqna = userService.getQnA(qna.getPostNo(), qna.getUserNo());
+
+	        // 관리자 답변 추가
+	        dbqna.setAdminAnswer(qna.getAdminAnswer());
+
+	        // QNA 업데이트
+	        userService.addAdminAnswer(dbqna);
+
+	        System.out.println("addAdminAnswer : " + dbqna);
+
+	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	    }
+
+	}
 

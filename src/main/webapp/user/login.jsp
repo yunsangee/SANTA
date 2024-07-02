@@ -13,9 +13,9 @@
 <title>로그인</title>
 <c:import url="../common/header.jsp"/>
 
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+<!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
-  <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+  <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script> -->
 
 
 <style>
@@ -44,11 +44,12 @@ form {
 }
 
 h2 {
-    margin-bottom: 20px;
+   /*  margin-bottom: 10px; */
+   margin-top:10px;
 }
 
 input[type="email"] {
-    width: 300px; /* 원하는 크기로 조절합니다. */
+    width: 370px; /* 원하는 크기로 조절합니다. */
     padding: 15px; /* 입력 필드 내부 여백(padding)을 추가합니다. */
     font-size: 16px; /* 폰트 크기를 조정합니다. */
     background-color: #ffffff; /* 배경색 추가 */
@@ -60,7 +61,7 @@ input[type="email"] {
 }
 
 input[type="password"] {
-    width: 300px; /* 원하는 크기로 조절합니다. */
+    width: 370px; /* 원하는 크기로 조절합니다. */
     padding: 15px; /* 입력 필드 내부 여백(padding)을 추가합니다. */
     font-size: 16px; /* 폰트 크기를 조정합니다. */
     background-color: #ffffff; /* 배경색 추가 */
@@ -79,10 +80,10 @@ input[type="password"]:focus {
 }
 
 .button {
-    width: 340px;
+    width: 370px;
     padding: 15px;
     font-size: 16px;
-    margin-top: 10px;
+    margin-top: 30px;
     background-color: #81C408;
     color: white;
     border: none;
@@ -96,9 +97,9 @@ input[type="password"]:focus {
 
 .links {
     margin-top: 15px;
-    margin-bottom: 10px; /* 아래쪽 마진 추가 */
+    margin-bottom: 20px; /* 아래쪽 마진 추가 */
     display: flex;
-    font-size: 13px;
+    font-size: 12px;
     justify-content: center; /* 가운데 정렬 */
     width: 100%;
 }
@@ -234,7 +235,7 @@ input[type="password"]:focus {
         &nbsp&nbsp<a href="/user/addUser.jsp">회원가입</a>
     </div>
     <div class="sns-login">
-        <p>SNS계정으로 간편 로그인/회원가입</p>
+        <p> SNS계정으로 간편 로그인/회원가입 </p>
     </div>
     <div class="sns-login">
         <img src="/image/kakao_login_medium_wide.png" alt="Kakao Login" class="sns-icon" onclick="logoutAndRedirect()">
