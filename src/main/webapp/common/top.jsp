@@ -173,7 +173,7 @@
         }
         
         .dropdown-menu {
-            width: 200px; /* Reduced size */
+            width: 230px; /* Reduced size */
             left: -150px !important; /* Adjust the value based on your layout */
         }
         .dropdown-menu .dropdown-header {
