@@ -7,7 +7,6 @@
 <head>
 <meta charset="UTF-8">
 
-    <title>Fruitables - Free Bootstrap 5 eCommerce Website Template</title>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script>
     	$(document).ready(function(){

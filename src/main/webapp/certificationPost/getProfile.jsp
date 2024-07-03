@@ -6,7 +6,7 @@
 <head>
   <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png">
     <c:import url="../common/header.jsp"/>
-    <title>Profile</title>
+    <title>인증 프로필 보기</title>
     <style>
 html, body {
     height: 100%;

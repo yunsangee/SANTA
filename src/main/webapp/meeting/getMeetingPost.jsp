@@ -20,6 +20,7 @@
 <head>
 	<meta charset="UTF-8">
     <title>모임 게시글 상세조회</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <c:import url="../common/header.jsp"/>
     
     <script type = "text/javascript">

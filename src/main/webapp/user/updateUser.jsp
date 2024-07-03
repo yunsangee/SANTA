@@ -8,6 +8,7 @@
 	  
     <meta charset="UTF-8">
     <title>${user.nickName}님 정보입니다.</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
 <!--     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script> -->

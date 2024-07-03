@@ -8,6 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <title>산타가 궁금해요!</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
    <!--  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 
 <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->

@@ -5,7 +5,8 @@
 <html class="fontawesome-i2svg-active fontawesome-i2svg-complete">
 <head>
     <meta charset="UTF-8"/>
-    <title>Fruitables - Free Bootstrap 5 eCommerce Website Template</title>
+    <title>산타</title>
+	<link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <c:import url="../common/header.jsp"/>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 

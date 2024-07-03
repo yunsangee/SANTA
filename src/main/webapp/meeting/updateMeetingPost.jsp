@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>모임 게시글 작성</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <c:import url="../common/header.jsp"/>
     
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">

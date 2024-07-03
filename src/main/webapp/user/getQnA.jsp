@@ -8,6 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <title>QNA 상세정보</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
 
     <script>
         function closeDialog() {
