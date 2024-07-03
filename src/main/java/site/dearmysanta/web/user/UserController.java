@@ -73,7 +73,12 @@ public class UserController {
 		//
 	
 		@PostMapping(value="addUser" )
-		public String addUser(@ModelAttribute User user, Model model ) throws Exception {
+		public String addUser(@ModelAttribute User user, @RequestParam(required=false) int socialLogin, Model model ) throws Exception {
+			
+			if(socialLogin == 1) {
+				userService.addUser(user);
+				return "redirect:/user/login.jsp";
+			}
 
 			System.out.println("addUser : POST");
 			
@@ -145,6 +150,11 @@ public class UserController {
 		    
 		    if (users == null || users.isEmpty()) {
 		    	model.addAttribute("loginError", "아이디 혹은 비밀번호가 잘못되었습니다. 다시 입력해주세요.");
+		    	return "forward:/user/login.jsp";
+		    }
+		    
+		    if(users != null || user.getUserPassword().equals("kakao")) {
+		    	model.addAttribute("loginError", "카카오 로그인을 이용해주세요.");
 		    	return "forward:/user/login.jsp";
 		    }
 		    
@@ -270,6 +280,11 @@ public class UserController {
 		    System.out.println("findUserPassword : POST");
 		    System.out.println("id :" + user.getUserId());
 		    System.out.println("phoneNumber : " + user.getPhoneNumber());
+		    
+		    if(((User)userService.getUserByUserId(user.getUserId())).getUserPassword().equals("kakao")) {
+		    	model.addAttribute("errorMessage", "소셜 로그인 계정은 비밀번호 찾기가 불가능 합니다.");
+		        return "redirect:/user/findUserPassword.jsp";
+		    }
 
 		    String userPassword = userService.findUserPassword(user.getUserId(), user.getPhoneNumber());
 

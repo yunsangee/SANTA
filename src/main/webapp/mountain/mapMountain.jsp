@@ -356,7 +356,7 @@
 	                        infoWindow.open(map, mountainMarker);
 	                    } 
 	                    setTimeout(function() { // Ensure the DOM is updated before attaching the handler
-	                        $('.like-button').off('click').on('click', function() {
+	                        $('.like-button').off('click', '.like-button').on('click', '.like-button', function() {
 	                            const userNo = "${sessionScope.user != null ? sessionScope.user.userNo : 'null'}";
 	                            if (userNo === 'null') {
 	                                //alert("로그인 후 이용 가능합니다.");
@@ -382,7 +382,6 @@
 	                                dataType: "json",
 	                                data: JSON.stringify(mountainLike),
 	                                success: function(response) {
-	                                	console.log(response);
 	                                    clickedElement.toggleClass('fas far');
 	                                    clickedElement.siblings('.like-count').text(response);
 	                                },
@@ -391,7 +390,7 @@
 	                                }
 	                            });
 	                        });
-	                    }, 200); 
+	                    }, 1000); 
 	                    
 	                }); 
 	                 
