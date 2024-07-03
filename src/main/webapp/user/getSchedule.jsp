@@ -236,15 +236,15 @@
             })
             .then(data => {
                 if (data.error) {
-                    alert('업데이트 실패: ' + data.message);
+                    //alert('업데이트 실패: ' + data.message);
                 } else {
-                    alert('일정이 업데이트되었습니다.');
+                    //alert('일정이 업데이트되었습니다.');
                     window.location.href = "/user/getScheduleList";  // 조회 화면으로 리디렉션
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
-                alert('업데이트 중 오류가 발생했습니다.');
+                //alert('업데이트 중 오류가 발생했습니다.');
             });
         }
 
@@ -253,7 +253,7 @@
             var userNo = document.getElementById('userNo').value || '';
 
             if (!postNo || !userNo) {
-                alert('삭제할 일정을 찾을 수 없습니다.');
+              //  alert('삭제할 일정을 찾을 수 없습니다.');
                 return;
             }
 
@@ -277,15 +277,15 @@
             })
             .then(data => {
                 if (data.error) {
-                    alert('삭제 실패: ' + data.message);
+                   // alert('삭제 실패: ' + data.message);
                 } else {
-                    alert('일정이 삭제되었습니다.');
+                   // alert('일정이 삭제되었습니다.');
                     window.location.href = "/user/getScheduleList";  // 조회 화면으로 리디렉션
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
-                alert('삭제 중 오류가 발생했습니다.');
+              //  alert('삭제 중 오류가 발생했습니다.');
             });
         }
 
