@@ -229,10 +229,10 @@
 
 
 .top {
-	width:1280px;
+	width:1400px;
 	height:350px;
 	margin-top:-150px;
-	margin-left:60px;
+	margin-left:auto;
 	background-color : #81C408;
 }
 
