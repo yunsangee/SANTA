@@ -3,15 +3,6 @@
 
 <%@ page import="site.dearmysanta.domain.user.User" %>
 
-<%
-    // 세션에 user 객체가 없으면 생성하여 설정합니다.
-    if (session.getAttribute("user") == null) {
-        User user = new User();
-        user.setUserNo(1);  // userNo 값을 임의로 설정합니다.
-        user.setNickName("재호짱");
-        session.setAttribute("user", user);
-    }
-%>
 
 <!DOCTYPE html>
 <html>
