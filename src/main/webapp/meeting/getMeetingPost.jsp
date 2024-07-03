@@ -780,10 +780,7 @@
     					<%-- 게시글 작성자가 아닌 경우 --%>
 					    <c:if test="${sessionScope.user.userNo != meetingPost.userNo}">
 					    	
-					    	<!-- sessionScope.user.userNo 값 출력 -->
-						    <c:out value="${sessionScope.user.userNo}" />
-						    <!-- meetingPost.userNo 값 출력 -->
-						    <c:out value="${meetingPost.userNo}" />
+					    	
 					    
 					        <c:choose>
 					            <c:when test="${meetingPost.recruitmentStatus != 2}">
