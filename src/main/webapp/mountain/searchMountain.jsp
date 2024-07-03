@@ -231,7 +231,7 @@
 	width:1280px;
 	height:350px;
 	margin-top:-150px;
-	margin-left:300px;
+	margin-left:60px;
 	background-color : #81C408;
 }
 
