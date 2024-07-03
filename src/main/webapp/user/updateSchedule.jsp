@@ -4,7 +4,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>업데이트 스케줄</title>
+    <title>스케줄 변경</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <style>
         .form-group {
             margin-bottom: 15px;

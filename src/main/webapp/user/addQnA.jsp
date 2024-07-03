@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>QNA 등록</title>
+    <c:import url="../common/header.jsp"/>
     <style>
         body {
             font-family: Arial, sans-serif;

@@ -4,7 +4,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>일정 등록</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <style>
 /*          body {
             font-family: Arial, sans-serif;

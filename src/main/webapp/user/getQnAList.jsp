@@ -8,6 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <title>산타가 궁금해요!</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
    <!--  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 
 <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
@@ -482,7 +483,7 @@
                     dialogVisible = true;
                 },
                 error: function() {
-                    alert('QnA 정보를 불러오는데 실패했습니다.');
+                    //alert('QnA 정보를 불러오는데 실패했습니다.');
                 }
             });
         });
@@ -526,11 +527,11 @@
                 contentType: 'application/json',
                 data: JSON.stringify({ postNo: postNo, userNo: userNo, adminAnswer: adminAnswer }),
                 success: function(response) {
-                    alert('답변이 저장되었습니다.');
+                   // alert('답변이 저장되었습니다.');
                     location.reload(); // 저장 후 페이지 새로고침
                 },
                 error: function() {
-                    alert('답변 저장에 실패했습니다.');
+                   // alert('답변 저장에 실패했습니다.');
                 }
             });
         }
@@ -546,13 +547,13 @@
                     method: 'GET',
                     data: { postNo: postNo, userNo: userNo },
                     success: function(response) {
-                        alert('삭제되었습니다.');
+                        //alert('삭제되었습니다.');
                         $('.dialog-overlay.details').removeClass('active');
                         dialogVisible = false;
                         location.reload(); // 페이지 새로고침
                     },
                     error: function() {
-                        alert('삭제 실패.');
+                       // alert('삭제 실패.');
                     }
                 });
             }
@@ -584,11 +585,11 @@
                 method: 'POST', // POST 메소드 사용
                 data: formData, // 직렬화된 폼 데이터 전송
                 success: function(response) {
-                    alert('작성 완료되었습니다.'); // 성공 메시지
+                    //alert('작성 완료되었습니다.'); // 성공 메시지
                     location.reload(); // 페이지 새로고침
                 },
                 error: function() {
-                    alert('작성에 실패했습니다.'); // 실패 메시지
+                    //alert('작성에 실패했습니다.'); // 실패 메시지
                 }
             });
         });

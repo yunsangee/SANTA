@@ -6,7 +6,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>산 상세조회</title>
+<link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
 <c:import url="../common/header.jsp"/>
  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>

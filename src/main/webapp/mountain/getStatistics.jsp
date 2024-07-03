@@ -5,7 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>통계</title>
+<link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
 <c:import url="../common/header.jsp"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>

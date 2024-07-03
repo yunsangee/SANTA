@@ -5,7 +5,8 @@
 <html class="fontawesome-i2svg-active fontawesome-i2svg-complete">
 <head>
     <c:import url="../common/header.jsp"/>
-    <title>User List</title>
+    <title>회원 목록 조회</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <style>
         .tab-menu {
             display: flex;

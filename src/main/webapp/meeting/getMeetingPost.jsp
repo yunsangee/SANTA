@@ -20,6 +20,7 @@
 <head>
 	<meta charset="UTF-8">
     <title>모임 게시글 상세조회</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <c:import url="../common/header.jsp"/>
     
     <script type = "text/javascript">
@@ -779,10 +780,7 @@
     					<%-- 게시글 작성자가 아닌 경우 --%>
 					    <c:if test="${sessionScope.user.userNo != meetingPost.userNo}">
 					    	
-					    	<!-- sessionScope.user.userNo 값 출력 -->
-						    <c:out value="${sessionScope.user.userNo}" />
-						    <!-- meetingPost.userNo 값 출력 -->
-						    <c:out value="${meetingPost.userNo}" />
+					    	
 					    
 					        <c:choose>
 					            <c:when test="${meetingPost.recruitmentStatus != 2}">

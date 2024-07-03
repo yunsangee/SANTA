@@ -4,6 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>주소 검색</title>
+<link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
 <script language="javascript">
 function init(){
     var url = location.href;

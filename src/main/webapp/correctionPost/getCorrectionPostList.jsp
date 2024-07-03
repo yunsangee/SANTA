@@ -8,7 +8,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>정정 제보 목록</title>
+<link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> itle>
 
 <c:import url="../common/header.jsp"/>
 <script>

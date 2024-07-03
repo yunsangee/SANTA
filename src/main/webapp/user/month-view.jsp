@@ -5,6 +5,9 @@
 <html>
 <head>
 <meta charset='utf-8' />
+<title>내 일정 보기</title>
+<link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
+
 <script src='../fullcalendar/dist/index.global.js'></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">

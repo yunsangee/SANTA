@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang='utf-8'>
   <head>
+  	<title>일정</title>
+	<link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <meta charset='utf-8' />
    <script src='../fullcalendar/dist/index.global.js'></script>
     <script>
     	document.addEventListener('DOMContentLoaded', function() {
         	var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                // Tool Bar 목록 document : https://fullcalendar.io/docs/toolbar
+                // Tool Bar ëª©ë¡ document : https://fullcalendar.io/docs/toolbar
                 headerToolbar: {
                     left: 'prevYear,prev,next,nextYear today',
                     center: 'title',
@@ -88,7 +90,7 @@
                     });
                 },
                 dayMaxEvents: true, // allow "more" link when too many events
-                // 이벤트 객체 필드 document : https://fullcalendar.io/docs/event-object
+                // ì´ë²¤í¸ ê°ì²´ íë document : https://fullcalendar.io/docs/event-object
                 events: [
                     {
                     title: 'All Day Event',

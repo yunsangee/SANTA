@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>QNA 답변</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <style>
         body {
             font-family: Arial, sans-serif;
