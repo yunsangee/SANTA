@@ -133,10 +133,6 @@
 	<header><c:import url="../common/top.jsp"/></header>
 	
 	<main>
-		
-		<div class="container-fluid page-header py-5">
-    		<h1 class="text-center text-white display-6">add Meeting Post</h1>
-    	</div>
 	
 		<form enctype="multipart/form-data">
 			<div class="container-fluid py-5">

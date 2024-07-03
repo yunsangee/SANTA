@@ -105,14 +105,14 @@
 					//dataType: "json",
 					data: JSON.stringify(data),
 					success: function(response) {
-	                    alert('Mountain updated successfully');
+	                    //alert('Mountain updated successfully');
 	                    //console.log(response);
 	                    $("#"+data.postNo).remove();
 	                    
 	                },
 	                error: function(jqXHR, textStatus, errorThrown) {
 	                    console.error('Error:', textStatus, errorThrown);
-	                    alert('Failed to update mountain');
+	                    //alert('Failed to update mountain');
 	                }
 						
 				});
@@ -205,14 +205,14 @@
 	                dataType: "json",
 	                data: JSON.stringify(data),
 	                success: function(response) {
-	                    alert('Mountain updated successfully');
+	                    //alert('Mountain updated successfully');
 	                    console.log(response);
 	                    closeDialog();
 	                    window.location.reload();
 	                },
 	                error: function(jqXHR, textStatus, errorThrown) {
 	                    console.error('Error:', textStatus, errorThrown);
-	                    alert('Failed to update mountain');
+	                    //alert('Failed to update mountain');
 	                }
 	            });
 		});
@@ -472,6 +472,11 @@
           border-bottom: 1px solid #ccc;
           margin-bottom:15px;
           margin-top:-15px;
+      }
+      
+      .td{
+      	align-items:center;
+      
       }
     </style>
 

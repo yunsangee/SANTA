@@ -51,7 +51,7 @@ public class CorrectionPostController {
 		
 			SantaLogger.makeLog("info", "correctionPostList:" + list);
 			int totalCount = list.size(); // 총 사용자 수
-		    int totalPages = (int) Math.ceil((double) correctionPostService.getCorrectionPostTotalCount(search) / pageSize) + 1; // 총 페이지 수 계산
+		    int totalPages = (int) Math.ceil((double) correctionPostService.getCorrectionPostTotalCount(search) / pageSize); // 총 페이지 수 계산
 		    int currentPage = search.getCurrentPage();
 		   
 
@@ -64,6 +64,7 @@ public class CorrectionPostController {
 		    model.addAttribute("totalCount", totalCount);
 		    model.addAttribute("currentPageCount", currentPageCount);
 
+		    SantaLogger.makeLog("info", "totalPages::" + totalPages + " "+ correctionPostService.getCorrectionPostTotalCount(search) +" " + pageSize);
 		return "forward:/correctionPost/getCorrectionPostList.jsp";
 	}
 	
