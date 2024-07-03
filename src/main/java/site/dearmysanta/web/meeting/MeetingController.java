@@ -76,7 +76,7 @@ public class MeetingController {
 		    userNo = user.getUserNo();
 		} else {
 		    userNo = 1;
-		    System.out.println("session¿¡¼­ °ª ¸ø¹Þ¾Æ¿Í¼­ ÀÓÀÇ·Î userNo 1 ¹ÚÈû");
+		    System.out.println("sessionï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Þ¾Æ¿Í¼ï¿½ ï¿½ï¿½ï¿½Ç·ï¿½ userNo 1 ï¿½ï¿½ï¿½ï¿½");
 		}
 		
 		int postType = 1;
@@ -93,7 +93,7 @@ public class MeetingController {
 		List<String> meetingPostImages = new ArrayList<>();
 		int imageCount = meetingPost.getMeetingPostImageCount();
 		
-		System.out.println("¿©±â¼­ imageCount ¸îÂïÈ÷³ª È®ÀÎ??(debug) : "+imageCount);
+		System.out.println("ï¿½ï¿½ï¿½â¼­ imageCount ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½??(debug) : "+imageCount);
 		
 //		System.out.println("imageCount==="+imageCount);
 		
@@ -103,7 +103,7 @@ public class MeetingController {
             meetingPostImages.add(imageURL);
         }
 		
-		System.out.println("»çÁø»çÁø»çÁø"+meetingPostImages);		
+		System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"+meetingPostImages);		
 		
 		
 		List<MeetingParticipation> meetingParticipations = (List<MeetingParticipation>) map.get("meetingParticipations");
@@ -133,7 +133,7 @@ public class MeetingController {
 	@GetMapping(value = "addMeetingPost")
 	public String addMeetingPost(Model model) throws Exception {
 		
-		List<String> badgeDescriptions = new ArrayList<>(Arrays.asList("»õ½Ï", "´ç±Ù", "²É", "³ª¹«", "½£", "»ê", "±ê¹ß"));
+		List<String> badgeDescriptions = new ArrayList<>(Arrays.asList("ìƒˆì‹¹", "í’€", "ê½ƒ", "ë‚˜ë¬´", "ìˆ²", "ì‚°", "ê¹ƒë°œ"));
 		
 		List<String> badgeImages = new ArrayList<>();
 		
@@ -159,17 +159,17 @@ public class MeetingController {
 		int userNo;
 		if (user != null) {
 		    userNo = user.getUserNo();
-		    System.out.println("session¿¡¼­ userNo Àß ¹Þ¾Æ¿È" + userNo);
+		    System.out.println("sessionï¿½ï¿½ï¿½ï¿½ userNo ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½" + userNo);
 		} else {
 		    userNo = 1;
-		    System.out.println("session¿¡¼­ °ª ¸ø¹Þ¾Æ¿Í¼­ ÀÓÀÇ·Î userNo 1 ¹ÚÈû");
+		    System.out.println("sessionï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Þ¾Æ¿Í¼ï¿½ ï¿½ï¿½ï¿½Ç·ï¿½ userNo 1 ï¿½ï¿½ï¿½ï¿½");
 		}
 		
 
 		
 		meetingPost.setUserNo(userNo);
 		
-		System.out.println("Post/addMeetingPost/meetingPost °ª È®ÀÎ"+meetingPost);
+		System.out.println("Post/addMeetingPost/meetingPost ï¿½ï¿½ È®ï¿½ï¿½"+meetingPost);
 		
 		
 		int postNo = meetingService.addMeetingPost(meetingPost);
@@ -227,7 +227,7 @@ public class MeetingController {
         String formattedAppointedHikingDate = formatterUntilDay.format(meetingPost.getAppointedHikingDate());
         
         
-        List<String> badgeDescriptions = new ArrayList<>(Arrays.asList("»õ½Ï", "´ç±Ù", "²É", "³ª¹«", "½£", "»ê", "±ê¹ß"));
+        List<String> badgeDescriptions = new ArrayList<>(Arrays.asList("ï¿½ï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½", "ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½", "ï¿½ï¿½", "ï¿½ï¿½", "ï¿½ï¿½ï¿½"));
         
         List<String> badgeImages = new ArrayList<>();
 		
@@ -252,8 +252,8 @@ public class MeetingController {
 	@PostMapping(value = "updateMeetingPost")
 	public String updateMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost, @RequestParam("updateImageURL") List<String> updateImageURL) throws Exception {
 		
-		System.out.println("meetingPostImage ¹¹ÂïÈ÷³ª È®ÀÎ"+meetingPost);
-		System.out.println("updateImageUrl È®ÀÎ==="+updateImageURL);
+		System.out.println("meetingPostImage ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½"+meetingPost);
+		System.out.println("updateImageUrl È®ï¿½ï¿½==="+updateImageURL);
 		
 		int postNo = meetingPost.getPostNo();
 		int postType = 1;
@@ -274,7 +274,7 @@ public class MeetingController {
 		}
 		
 		
-		System.out.println("Á¤·Ä½ÃÅ³ ÀÌ¹ÌÁöÀÌ¸§µé : "+fileNames);
+		System.out.println("ï¿½ï¿½ï¿½Ä½ï¿½Å³ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½ï¿½ï¿½ : "+fileNames);
 		
 		int appendImageStartIndex = objectStorageService.updateObjectStorageImage(fileNames);
 		
@@ -325,7 +325,7 @@ public class MeetingController {
 		    userNo = user.getUserNo();
 		} else {
 		    userNo = 1;
-		    System.out.println("session¿¡¼­ °ª ¸ø¹Þ¾Æ¿Í¼­ ÀÓÀÇ·Î userNo 1 ¹ÚÈû");
+		    System.out.println("sessionï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Þ¾Æ¿Í¼ï¿½ ï¿½ï¿½ï¿½Ç·ï¿½ userNo 1 ï¿½ï¿½ï¿½ï¿½");
 		}
 		
 		meetingPostSearch.setUserNo(userNo);

@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <title>모임 게시글 목록</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <style>
         /* 스타일링을 여기에 추가하세요 */
         .pagination a {

@@ -11,6 +11,7 @@
 <head>
 <meta charset="UTF-8">
 <title>${user.nickName}님 정보입니다.</title>
+<link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
 
 <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
 

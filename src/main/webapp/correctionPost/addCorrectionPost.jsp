@@ -4,7 +4,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>정정제보 하기</title>
+<link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

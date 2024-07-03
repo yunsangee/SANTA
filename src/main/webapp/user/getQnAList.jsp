@@ -8,6 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <title>산타가 궁금해요!</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
    <!--  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 
 <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
@@ -585,10 +586,13 @@
                 data: formData, // 직렬화된 폼 데이터 전송
                 success: function(response) {
                     //alert('작성 완료되었습니다.'); // 성공 메시지
+                    closeDialog();
                     location.reload(); // 페이지 새로고침
                 },
                 error: function() {
                     //alert('작성에 실패했습니다.'); // 실패 메시지
+                	 closeDialog();
+                     location.reload();
                 }
             });
         });

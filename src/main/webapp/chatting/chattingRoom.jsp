@@ -17,7 +17,8 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-    <title>Chatting Room</title>
+    <title>채팅방</title>
+	<link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <c:import url="../common/header.jsp"/>
     
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>

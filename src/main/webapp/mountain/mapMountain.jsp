@@ -5,6 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<title>지도</title>
+<link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
 <c:import url="../common/header.jsp"/>
 
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=xpk093fqk1&submodules=geocoder"></script>
