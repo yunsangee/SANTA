@@ -266,6 +266,16 @@
     <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
 
     <script>
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function example() {
+        console.log('Start');
+        await sleep(2000); // 1초 대기
+        console.log('1 second later');
+    }
+
     	let profileImage = '';
         $(document).ready(function() {
             $(".submit").click(function() { 
@@ -318,6 +328,7 @@
                          console.log('Profile value is not set');
                      }
                  }, 1000); // 3000 밀리초 = 3초
+                 example();
             });
 
             // 주소 클릭 시 도로명 주소 창 열기
