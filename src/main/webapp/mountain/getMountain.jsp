@@ -42,13 +42,13 @@
         
         $('.meetingPost').on('click', function(event){
         	event.preventDefault();
-        	alert('meetingPost link');
+        	//alert('meetingPost link');
         	window.location.href = '/meeting/getMeetingPostList?meetingPostListSearchCondition=5&searchKeyword=${mountain.mountainName}';
         });
         
         $('.certificationPost').on('click',function(event){
         	event.preventDefault();
-        	alert('certificationPost link');
+        	//alert('certificationPost link');
         	window.location.href = '/certificationPost/listCertificationPost?searchCondition=2&searchKeyword=${mountain.mountainName}';
         });
         
@@ -153,22 +153,22 @@
 				};
 
 				
-			 	alert('/correctionPost/rest/addCorrectionPost');
+			 	//alert('/correctionPost/rest/addCorrectionPost');
 				let url = '/correctionPost/rest/addCorrectionPost';
 				$.ajax({
 		            url: url,
 		            method: "GET",
 		            data: data, // data 객체를 쿼리 파라미터로 전송
 		            success: function(response) {
-		                alert('Mountain updated successfully');
+		                //alert('Mountain updated successfully');
 		                console.log(response);
 		                closeDialog();
 		                
 		            },
 		            error: function(jqXHR, textStatus, errorThrown) {
 		                console.error('Error:', textStatus, errorThrown);
-		                alert('Error:', textStatus, errorThrown);    
-		                alert('Failed to update mountain');
+		                //alert('Error:', textStatus, errorThrown);    
+		                //alert('Failed to update mountain');
 		            }
 		        });
 			 	
@@ -234,6 +234,7 @@
         .swiper-button-prev {
             top: 50%; /* nav 버튼 위치 조정 */
             transform: translateY(-50%);
+            color:#81C408;
         }
         
         .mountain-image-container{

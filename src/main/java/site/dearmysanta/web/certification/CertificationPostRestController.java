@@ -65,7 +65,7 @@ public class CertificationPostRestController {
 
     @PostMapping(value = "rest/listCertificationPost")
     public Map<String, Object> listCertificationPost(@RequestBody Search search) throws Exception {
-        System.out.println("search" + search);
+        //System.out.println("search" + search);
         if (search == null) {
             search = new Search(); // 기본 검색 조건 설정 또는 처리
         }
@@ -98,7 +98,7 @@ public class CertificationPostRestController {
                 certificationPost.setBadgeImage(objectStorageService.getImageURL(certificationPost.getBadgeImage()));
             }
         }
-        System.out.println("rest certificationPostList  " + certificationPostList);
+        //System.out.println("rest certificationPostList  " + certificationPostList);
 
         // 클라이언트로 전송할 결과에 이미지 URL 추가
         result.put("certificationPostImages", certificationPostImages);
@@ -117,7 +117,7 @@ public class CertificationPostRestController {
     public Map<String, Object> listMyCertificationPost(@RequestParam int userNo) throws Exception {
         List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
         
-        System.out.println("내 인증 게시물: " + myCertificationPost);
+        //System.out.println("내 인증 게시물: " + myCertificationPost);
         
         int postType = 0;
         List<String> certificationPostImages = new ArrayList<>();
@@ -131,7 +131,7 @@ public class CertificationPostRestController {
         response.put("certificationPostList", myCertificationPost);
         response.put("certificationPostImages", certificationPostImages);
         
-        System.out.println("이미지: " + certificationPostImages);
+        //System.out.println("이미지: " + certificationPostImages);
         
         return response;
     }
@@ -155,18 +155,18 @@ public class CertificationPostRestController {
             user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
         }
         
-        System.out.println("User Info: " + user);
+       // System.out.println("User Info: " + user);
         result.put("infouser", user);
 
         int followerCount = userEtcService.getFollowerCount(userNo);
-        System.out.println("Follower Count: " + followerCount);
+       // System.out.println("Follower Count: " + followerCount);
         result.put("followerCount", followerCount);
 
         List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
         result.put("myCertificationPost", myCertificationPost);
 
         List<CertificationPost> getCertificationPostLikeList = certificationPostService.getCertificationPostLikeList(userNo);
-        System.out.println("getCertificationPostLikeList: " + getCertificationPostLikeList);
+       // System.out.println("getCertificationPostLikeList: " + getCertificationPostLikeList);
         result.put("getCertificationPostLikeList", getCertificationPostLikeList);
 
         // isFollowing 값을 가져와서 model에 추가
@@ -181,7 +181,7 @@ public class CertificationPostRestController {
     @PostMapping(value = "rest/getCertificationPostLikeList")
     public Map<String, Object> getCertificationPostLikeList(@RequestParam int userNo) throws Exception {
         List<CertificationPost> getCertificationPostLikeList = certificationPostService.getCertificationPostLikeList(userNo);
-        System.out.println("좋아요한 게시물: " + getCertificationPostLikeList);
+       // System.out.println("좋아요한 게시물: " + getCertificationPostLikeList);
 
         int postType = 0;
         List<String> certificationPostImages = new ArrayList<>();
@@ -195,7 +195,7 @@ public class CertificationPostRestController {
         response.put("certificationPostList", getCertificationPostLikeList);
         response.put("certificationPostImages", certificationPostImages);
 
-        System.out.println("이미지" + certificationPostImages);
+       // System.out.println("이미지" + certificationPostImages);
 
         return response;
     }
@@ -243,7 +243,7 @@ public class CertificationPostRestController {
 
         List<String> certificationPostImages = new ArrayList<>();
         int imageCount = certificationPost.getCertificationPostImageCount();
-        System.out.println("imageCount===" + imageCount);
+        //System.out.println("imageCount===" + imageCount);
         for (int i = 0; i < imageCount; i++) {
             String fileName = postNo + "_" + postType + "_" + (i + 1);
             String imageURL = objectStorageService.getImageURL(fileName);
@@ -255,7 +255,7 @@ public class CertificationPostRestController {
         model.addAttribute("hashtagList", map.get("hashtagList"));
         model.addAttribute("certificationPostImages", certificationPostImages);
 
-        System.out.println("이거맞지" + certificationPostComment);
+        //System.out.println("이거맞지" + certificationPostComment);
 
         return "forward:/certificationPost/getCertificationPost.jsp";
     }

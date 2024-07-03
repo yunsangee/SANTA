@@ -26,7 +26,7 @@
 				
 				let crpNo = ${crpNo};
 				
-				alert('crpNo:' + crpNo);
+				//alert('crpNo:' + crpNo);
 	            $.ajax({
 	                url: "/mountain/rest/updateMountain?crpNo=" + crpNo,
 	                method: "POST",
@@ -34,13 +34,13 @@
 	                dataType: "json",
 	                data: JSON.stringify(data),
 	                success: function(response) {
-	                    alert('Mountain updated successfully');
+	                    //alert('Mountain updated successfully');
 	                    console.log(response);
 	                    window.close();
 	                },
 	                error: function(jqXHR, textStatus, errorThrown) {
 	                    console.error('Error:', textStatus, errorThrown);
-	                    alert('Failed to update mountain');
+	                    //alert('Failed to update mountain');
 	                }
 	            });
 		});

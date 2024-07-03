@@ -533,6 +533,7 @@
     	.row .contents {
     		padding-top: 30px !important;
     		padding-bottom: 30px !important;
+    		position: relative;
     	}
     	
     	#postStatus {
@@ -636,28 +637,29 @@
 			background-color: #81c408 !important;
     		border-color: #81c408 !important;
 		}
-	    
+		
+		.fixed-top-right {
+		    position: absolute;
+		    top: 10px;
+		    right: 10px;
+            padding: 10px;
+            z-index: 1000; /* 다른 요소들 위에 표시되도록 함 */
+		}
+
     </style>
     
 </head>
 <body>
 	<header><c:import url="../common/top.jsp"/></header>
 	<main>
-		
-		<div class="container-fluid page-header py-5">
-    		<h1 class="text-center text-white display-6">Meeting Post Detail</h1>
-    	</div>
     	
     	<div class="container-fluid py-5">
-    		<div class="container py-5">
-    			<div class="row g-4 mb-4 d-flex align-items-center">
+    		<div class="container py-5 ">
+    			<div class="row g-4 mb-4 mt-5 d-flex align-items-center">
     			
-    				<div class="col-md-3 d-flex align-items-center">
-	    				<i class="fa-heart fa-3x me-2 like-button ${meetingPost.meetingPostLikeStatus == 0 ? 'far' : 'fa text-danger'}" data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}"></i>
-	    				<p class="mb-0 ml-2 fa-2x">${meetingPost.meetingPostLikeCount}</p>
-    				</div>
     				
-    				<div class="col-md-9 d-flex justify-content-end">
+    				
+    				<div class="col-md-12 d-flex justify-content-end">
     				
     					<c:choose>
 						    <c:when test="${sessionScope.user.userNo == meetingPost.userNo}">
@@ -746,8 +748,15 @@
     				<div class="col-md-2 border bg-light align-items-center text-center justify-content-center py-3 title">참여 희망 연령대</div>
     				<div class="col-md-2 border align-items-center text-center py-3">${meetingPost.participationAge}</div>
     				
-    				<div class="col-md-2 border bg-light align-items-center title contents d-flex justify-content-center">내용</div>
+    				<div class="col-md-2 border bg-light align-items-center title d-flex justify-content-center">내용</div>
     				<div class="col-md-10 border align-items-center text-start contents">
+    				
+
+    					<div class="d-flex fixed-top-right">
+		    				<i class="fa-heart fa-3x me-2 like-button ${meetingPost.meetingPostLikeStatus == 0 ? 'far' : 'fa text-danger'}" data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}"></i>
+		    				<p class="mb-0 ml-2 fa-2x">${meetingPost.meetingPostLikeCount}</p>
+	    				</div>
+    					
     					<p>
 	    					<c:forEach var="image" items="${meetingPostImages}">
 						        <img src="${image}" alt="Image" class="post-image"/>
@@ -803,10 +812,6 @@
 					
 					    <%-- 게시글 작성자인 경우 --%>
 					    <c:if test="${sessionScope.user.userNo == meetingPost.userNo}">
-					    	<!-- sessionScope.user.userNo 값 출력 -->
-						    <c:out value="${sessionScope.user.userNo}" />
-						    <!-- meetingPost.userNo 값 출력 -->
-						    <c:out value="${meetingPost.userNo}" />
 					    
 					        <c:choose>
 					            <c:when test="${meetingPost.recruitmentStatus == 0}">

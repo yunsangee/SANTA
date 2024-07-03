@@ -88,7 +88,7 @@ public class ObjectStorageService {
         S3Object s3Object = amazonS3.getObject(bucketName, fileName);
         InputStream inputStream = s3Object.getObjectContent();
 
-        File file = new File("/tmp/" + fileName);  // 임시 디렉토리에 저장
+        File file = new File(fileName);  // 임시 디렉토리에 저장
         FileOutputStream outputStream = new FileOutputStream(file);
 
         byte[] buffer = new byte[1024];
@@ -98,6 +98,18 @@ public class ObjectStorageService {
         }
         outputStream.close();
         inputStream.close();
+        
+        if (file != null && file.exists()) {
+            try {
+                Files.delete(file.toPath());
+            } catch (IOException e) {
+                // 로그를 남기거나 적절한 예외 처리를 합니다.
+                e.printStackTrace();
+                // 또는 로그를 남길 수도 있습니다.
+                System.err.println("Failed to delete temporary file: " + file.getAbsolutePath());
+            }
+        }
+
 
         return convertFileToMultipartFile(file);
     }
@@ -175,6 +187,9 @@ public class ObjectStorageService {
     
     public int updateObjectStorageImage(List<String> fileNameList) throws Exception {
     	
+    	if(fileNameList.size() == 0) {
+    		return 1;
+    	}
     	String fullFileName = fileNameList.get(0);
     	String fileName = fullFileName.substring(0, fullFileName.length()-1);
     	
@@ -199,6 +214,9 @@ public class ObjectStorageService {
     			index ++;
     		}
     	}
+    	
+    	
+    	//1    [2,3,4] 
     	
     	for(int j = index; j < 6; j++ ) {
     		this.deleteObjectFromStorage(fileName+j);
