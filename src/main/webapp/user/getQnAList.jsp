@@ -8,6 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <title>산타가 궁금해요!</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
    <!--  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 
 <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
@@ -42,6 +43,15 @@
             display: flex;
             justify-content: center;
             margin-top:60px;
+            position: fixed;
+		    top: 640px; /* 하단에서 20px 위 */
+		    left: 50%;
+		    transform: translateX(-50%);
+		    background-color: white; /* 필요시 배경색 추가 */
+		    padding: 10px; /* 필요시 패딩 추가 */
+		   /*  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1); /* 필요시 그림자 효과 추가 */ */
+		    /* border-radius: 5px; /* 필요시 모서리 둥글게 */ */
+		    z-index: 1000; /* 다른 요소 위에 위치하도록 z-index 추가 */
         }
         
         .pagination a {
@@ -79,6 +89,12 @@
         .search-input {
             width: 200px;
             margin-right: 10px;
+        }
+        
+        .search-input:focus, .dropdown-custom:focus {
+        	    border: 1px solid #81C408; /* 클릭 시 테두리 두께와 색상 설정 */
+			    outline: none; /* 기본 포커스 효과 제거 */
+			    box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); /* 선택적으로 포커스 시 그림자 효과 추가 */
         }
 
         .search-container {
@@ -458,6 +474,7 @@
                         '</div>' +
                         '<div class="line"></div>' +
                         '<div class="qna-details">' +
+                        '<strong> ❓' + qna.title + '</strong>' +
                         '<p>' + qna.contents + '</p>' +
                         '</div>' +
                         '<div class="qna-answer">' +
@@ -482,7 +499,7 @@
                     dialogVisible = true;
                 },
                 error: function() {
-                    alert('QnA 정보를 불러오는데 실패했습니다.');
+                    //alert('QnA 정보를 불러오는데 실패했습니다.');
                 }
             });
         });
@@ -526,11 +543,11 @@
                 contentType: 'application/json',
                 data: JSON.stringify({ postNo: postNo, userNo: userNo, adminAnswer: adminAnswer }),
                 success: function(response) {
-                    alert('답변이 저장되었습니다.');
+                   // alert('답변이 저장되었습니다.');
                     location.reload(); // 저장 후 페이지 새로고침
                 },
                 error: function() {
-                    alert('답변 저장에 실패했습니다.');
+                   // alert('답변 저장에 실패했습니다.');
                 }
             });
         }
@@ -546,13 +563,13 @@
                     method: 'GET',
                     data: { postNo: postNo, userNo: userNo },
                     success: function(response) {
-                        alert('삭제되었습니다.');
+                        //alert('삭제되었습니다.');
                         $('.dialog-overlay.details').removeClass('active');
                         dialogVisible = false;
                         location.reload(); // 페이지 새로고침
                     },
                     error: function() {
-                        alert('삭제 실패.');
+                       // alert('삭제 실패.');
                     }
                 });
             }
@@ -564,35 +581,47 @@
             dialogVisible = false;
         });
 
-        // 제목 길이 검사
-        $('#title').on('input', function() {
-            var titleLength = $(this).val().length;
-            if (titleLength > 34) {
-                $('#title-warning').show();
-            } else {
-                $('#title-warning').hide();
-            }
-        });
+	     // 제목 길이 검사
+	        $('#title').on('input', function() {
+	            var titleLength = $(this).val().length;
+	            if (titleLength > 34) {
+	                $('#title-warning').show();
+	                $('#submit-button').prop('disabled', true);
+	            } else {
+	                $('#title-warning').hide();
+	                $('#submit-button').prop('disabled', false);
+	            }
+	        });
 
-        // QnA 작성 폼 제출
-        $('#qnaForm').submit(function(event) {
-            event.preventDefault(); // 기본 폼 제출 동작 방지
-            var formData = $(this).serialize(); // 폼 데이터 직렬화
+	     // QnA 작성 폼 제출
+	        $('#qnaForm').submit(function(event) {
+	            event.preventDefault(); // 기본 폼 제출 동작 방지
+	            var formData = {
+	                title: $('#title').val(),
+	                contents: $('#contents').val(),
+	                qnaPostCategory: $('#qnaPostCategory').val(),
+	                userNo: $('#userNo').val(),
+	                userId: $('#userId').val()
+	            };
 
-            $.ajax({
-                url: '/user/addQnA', // 서버 엔드포인트
-                method: 'POST', // POST 메소드 사용
-                data: formData, // 직렬화된 폼 데이터 전송
-                success: function(response) {
-                    alert('작성 완료되었습니다.'); // 성공 메시지
-                    location.reload(); // 페이지 새로고침
-                },
-                error: function() {
-                    alert('작성에 실패했습니다.'); // 실패 메시지
-                }
-            });
-        });
-    });
+	            $.ajax({
+	                url: '/user/rest/addQnA', // 서버 엔드포인트
+	                method: 'POST', // POST 메소드 사용
+	                contentType: 'application/json',
+	                data: JSON.stringify(formData), // JSON 데이터로 전송
+	                success: function(response) {
+	                    //alert('작성 완료되었습니다.'); // 성공 메시지
+	                    closeDialog();
+	                    location.reload(); // 페이지 새로고침
+	                },
+	                error: function() {
+	                    //alert('작성에 실패했습니다.'); // 실패 메시지
+	                    closeDialog();
+	                    location.reload();
+	                }
+	            });
+	        });
+	    });
 
     function closeDialog() {
         $('.dialog-overlay').removeClass('active');
@@ -631,8 +660,8 @@
                 <form id="searchForm" action="/user/getQnAList" method="get" style="display: flex; align-items: center;">
                 
                     <select name="searchCondition" class="dropdown-custom">
-                        <option value="0">Title</option>
-                        <option value="1">NickName</option>
+                        <option value="0">제목</option>
+                        <option value="1">닉네임</option>
                     </select>
                     <input type="text" class="search-input" name="searchKeyword" placeholder="Search" value="${search != null && search.searchKeyword != null ? search.searchKeyword : '' }">
                     <input type="hidden" id="currentPage" name="currentPage" value="1"/>
@@ -644,12 +673,12 @@
                     <thead>
                         <tr>
                             <th scope="col">No.</th>
-                            <th scope="col">Category</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Nick Name</th>
-                            <th scope="col">Post Date</th>
+                            <th scope="col">카테고리</th>
+                            <th scope="col">제목</th>
+                            <th scope="col">닉네임</th>
+                            <th scope="col">작성일자</th>
                             	 <c:if test="${admin != null}">
-                           			 <th scope="col">Answer State</th>
+                           			 <th scope="col">답변상태</th>
                            		 </c:if>
                         </tr>
                     </thead>
@@ -661,7 +690,7 @@
                                     qna.qnaPostCategory == 1 ? '일정' : 
                                     qna.qnaPostCategory == 2 ? '인증' : 
                                     qna.qnaPostCategory == 3 ? '모임' : 
-                                    qna.qnaPostCategory == 4 ? '등산기록' : 
+                                    qna.qnaPostCategory == 4 ? '등산안내' : 
                                     qna.qnaPostCategory == 5 ? '산 검색' : ''}</td>
                                  <td><a class="text" data-postno="${qna.postNo}" data-userno="${qna.userNo}">${qna.title}</a></td>
                                 <td>${qna.nickName}</td>
@@ -680,29 +709,31 @@
              <button class="btn-write" >작성하기</button> 
              	</c:if>
              	
-			<div class="pagination">
-			    <c:if test="${currentPage > 1}">
-			        <a href="javascript:void(0);" data-page="${currentPage - 1}" class="btn-custom">&lt;</a>
-			    </c:if>
-			
-			    <c:choose>
-			        <c:when test="${totalPages <= 5}">
-			            <c:forEach var="i" begin="1" end="${totalPages}">
-			                <a href="javascript:void(0);" data-page="${i}" class="btn-custom ${i == currentPage ? 'active' : ''}">${i}</a>
-			            </c:forEach>
-			        </c:when>
-			        <c:otherwise>
-			            <c:forEach begin="0" end="4" varStatus="status">
-			                <c:set var="pageNum" value="${currentPage <= 3 ? status.index + 1 : currentPage >= totalPages - 2 ? totalPages - 4 + status.index : currentPage - 2 + status.index}"/>
-			                <a href="javascript:void(0);" data-page="${pageNum}" class="btn-custom ${pageNum == currentPage ? 'active' : ''}">${pageNum}</a>
-			            </c:forEach>
-			        </c:otherwise>
-			    </c:choose>
-			
-			    <c:if test="${currentPage < totalPages}">
-			        <a href="javascript:void(0);" data-page="${currentPage + 1}" class="btn-custom">&gt;</a>
-			    </c:if>
-			</div>
+		<div class="pagination">
+		    <c:if test="${currentPage > 1}">
+		        <a href="javascript:void(0);" data-page="${currentPage - 1}" class="btn-custom">&lt;</a>
+		    </c:if>
+		
+		    <c:choose>
+		        <c:when test="${totalPages <= 3}">
+		            <c:forEach var="i" begin="1" end="${totalPages}">
+		                <a href="javascript:void(0);" data-page="${i}" class="btn-custom ${i == currentPage ? 'active' : ''}">${i}</a>
+		            </c:forEach>
+		        </c:when>
+		        <c:otherwise>
+		            <c:set var="startPage" value="${currentPage <= 2 ? 1 : (currentPage >= totalPages - 1 ? totalPages - 2 : currentPage - 1)}"/>
+		            <c:set var="endPage" value="${currentPage <= 2 ? 3 : (currentPage >= totalPages - 1 ? totalPages : currentPage + 1)}"/>
+		            <c:forEach var="i" begin="${startPage}" end="${endPage}">
+		                <a href="javascript:void(0);" data-page="${i}" class="btn-custom ${i == currentPage ? 'active' : ''}">${i}</a>
+		            </c:forEach>
+		        </c:otherwise>
+		    </c:choose>
+		
+		    <c:if test="${currentPage < totalPages}">
+		        <a href="javascript:void(0);" data-page="${currentPage + 1}" class="btn-custom">&gt;</a>
+		    </c:if>
+		</div>
+
 
           	 
         </div>
@@ -724,33 +755,33 @@
 			<div class="line"></div>
 		
             <form id="qnaForm" action="/user/addQnA" method="post">
-                <div class="form-group" style="text-align: left;">
-                    <label for="title">제목<span>*</span></label>
-                    <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
-                    <span id="title-warning" style="color: red; display: none; font-size:13px; text-align: left;">35자 미만의 제목을 입력해주세요.</span>
-                </div>
-                <div class="form-group">
-                    <label for="contents">내용<span>*</span></label>
-                    <textarea id="contents" name="contents" rows="10" placeholder="내용을 입력하세요" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="qnaPostCategory">카테고리<span>*</span></label>
-                    <select id="qnaPostCategory" name="qnaPostCategory" required>
-                        <option value="" disabled selected>질문 카테고리를 선택하세요</option>
-                        <option value="0">계정</option>
-                        <option value="1">일정</option>
-                        <option value="2">인증</option>
-                        <option value="3">모임</option>
-                        <option value="4">등산기록</option>
-                        <option value="5">산 검색</option>
-                    </select>
-                </div>
-                <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
-                <input type="hidden" id="userId" name="userId" value="${user.userId}">
-                <div class="form-group">
-                    <button type="submit">작성 완료하기</button>
-                </div>
-            </form>
+			    <div class="form-group" style="text-align: left;">
+			        <label for="title">제목<span>*</span></label>
+			        <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
+			        <span id="title-warning" style="color: red; display: none; font-size:13px; text-align: left;">35자 미만의 제목을 입력해주세요.</span>
+			    </div>
+			    <div class="form-group">
+			        <label for="contents">내용<span>*</span></label>
+			        <textarea id="contents" name="contents" rows="10" placeholder="내용을 입력하세요" required></textarea>
+			    </div>
+			    <div class="form-group">
+			        <label for="qnaPostCategory">카테고리<span>*</span></label>
+			        <select id="qnaPostCategory" name="qnaPostCategory" required>
+			            <option value="" disabled selected>질문 카테고리를 선택하세요</option>
+			            <option value="0">계정</option>
+			            <option value="1">일정</option>
+			            <option value="2">인증</option>
+			            <option value="3">모임</option>
+			            <option value="4">등산기록</option>
+			            <option value="5">산 검색</option>
+			        </select>
+			    </div>
+			    <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
+			    <input type="hidden" id="userId" name="userId" value="${user.userId}">
+			    <div class="form-group">
+			        <button type="submit" id="submit-button">작성 완료하기</button>
+			    </div>
+			</form>
         </div>
     </div>
 

@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png">
     <c:import url="../common/header.jsp"/>
     <meta charset="UTF-8">
-    <title>Certification Post List</title>
+    <title>인증 게시글 목록 조회</title>
      <link rel="stylesheet" href="path/to/your/css/file.css">
 <style>
 .btn-with-tooltip {

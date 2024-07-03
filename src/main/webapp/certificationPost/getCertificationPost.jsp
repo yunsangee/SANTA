@@ -8,7 +8,7 @@
 <head>
   <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png">
     <c:import url="../common/header.jsp"/>
-    <title>Certification Post Detail Page</title>
+    <title>인증 게시글 상세보기</title>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">

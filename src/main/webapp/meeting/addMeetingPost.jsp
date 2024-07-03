@@ -3,23 +3,13 @@
 
 <%@ page import="site.dearmysanta.domain.user.User" %>
 
-<%
-    // 세션에 user 객체가 없으면 생성하여 설정합니다.
-    if (session.getAttribute("user") == null) {
-        User user = new User();
-        user.setUserNo(1);  // userNo 값을 임의로 설정합니다.
-        user.setNickName("재호짱");
-        session.setAttribute("user", user);
-    } else {
-    	System.out.println("있는데 ??????/"+session.getAttribute("user"));
-    }
-%>
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>모임 게시글 작성</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <c:import url="../common/header.jsp"/>
     
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
@@ -73,6 +63,30 @@
 		    $("button:contains('등록')").on('click', function() {
 		    	fncAddMeetingPost();
 		    })
+		    
+		    $("button:contains('사진')").on('click', function() {
+	            $('#meetingPostImage').click();
+	            
+
+	        });
+		    
+		    $('#meetingPostImage').on('change', function() {
+	            var files = $(this)[0].files;
+	            var fileCount = files.length;
+
+	            if (fileCount > 0) {
+	                $('#fileCount').text(fileCount + '개 파일 선택됨').show();
+	            } else {
+	                $('#fileCount').hide();
+	            }
+
+	            for (var i = 0; i < files.length; i++) {
+	                console.log(files[i].name);
+	            }
+
+	            // 파일 업로드 함수를 호출할 수 있습니다.
+	            uploadImage();
+	        });
 		    
     	});
     	
@@ -137,7 +151,7 @@
 		<form enctype="multipart/form-data">
 			<div class="container-fluid py-5">
 	    		<div class="container py-5">
-	    			<div class="row mb-5">
+	    			<div class="row mb-5 mt-5">
 	    			
 	    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">작성자</div>
     					<div class="col-md-9 border align-items-center text-start py-3">${sessionScope.user.nickName}</div>
@@ -213,8 +227,10 @@
 						    내용
 						</div>
 						<div class="col-md-10 border py-2">
+						
 						    <textarea class="form-control mb-2" name="contents" rows="10" placeholder="내용을 입력하세요." style="height: 200px;" required></textarea>
-						    <input type="file" id="meetingPostImage" name="meetingPostImage" multiple/><br/>
+						    <button type="button" class="btn btn-primary border-0 rounded text-white">사진 선택</button>
+						    <input type="file" id="meetingPostImage" name="meetingPostImage" style="display: none;" multiple/><br/>
 						</div>
 						
 	    			</div>

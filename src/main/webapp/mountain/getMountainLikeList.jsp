@@ -10,7 +10,8 @@
 
 <head>
 <meta charset="UTF-8">
-<title>산 조아요</title>
+<title>산 좋아요</title>
+<link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png">
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<c:import url="../common/header.jsp"/>
     <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->

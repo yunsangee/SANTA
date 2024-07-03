@@ -5,21 +5,13 @@
 
 <%@ page import="site.dearmysanta.domain.user.User" %>
 
-<!-- 임의로 session에 user 객체를 설정 -->
-<%
-    // 세션에 user 객체가 없으면 생성하여 설정합니다.
-    if (session.getAttribute("user") == null) {
-        User user = new User();
-        user.setUserNo(1);  // userNo 값을 임의로 설정합니다.
-        session.setAttribute("user", user);
-    }
-%>
 
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
     <title>모임 게시글 상세조회</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <c:import url="../common/header.jsp"/>
     
     <script type = "text/javascript">
@@ -764,7 +756,7 @@
 						    </c:forEach>
 					    </p>
 					    
-					    <p id="postContents">
+					    <p id="postContents" class="mt-1">
     						${meetingPost.contents}
     					</p>
     				</div>
@@ -779,10 +771,7 @@
     					<%-- 게시글 작성자가 아닌 경우 --%>
 					    <c:if test="${sessionScope.user.userNo != meetingPost.userNo}">
 					    	
-					    	<!-- sessionScope.user.userNo 값 출력 -->
-						    <c:out value="${sessionScope.user.userNo}" />
-						    <!-- meetingPost.userNo 값 출력 -->
-						    <c:out value="${meetingPost.userNo}" />
+					    	
 					    
 					        <c:choose>
 					            <c:when test="${meetingPost.recruitmentStatus != 2}">

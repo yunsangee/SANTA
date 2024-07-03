@@ -5,7 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Search Keywords</title>
+    <title>산 검색</title>
+	<link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <c:import url="../common/header.jsp"/>
     <script>
@@ -228,10 +229,11 @@
 
 
 .top {
-	width:1280px;
+	width:1400px;
 	height:350px;
 	margin-top:-150px;
-	margin-left:300px;
+	margin-left:auto;
+	margin-right:auto;
 	background-color : #81C408;
 }
 

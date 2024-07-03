@@ -3,21 +3,13 @@
 
 <%@ page import="site.dearmysanta.domain.user.User" %>
 
-<%
-    // 세션에 user 객체가 없으면 생성하여 설정합니다.
-    if (session.getAttribute("user") == null) {
-        User user = new User();
-        user.setUserNo(1);  // userNo 값을 임의로 설정합니다.
-        user.setNickName("재호짱");
-        session.setAttribute("user", user);
-    }
-%>
 
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
-    <title>Chatting Room</title>
+    <title>채팅방</title>
+	<link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <c:import url="../common/header.jsp"/>
     
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
@@ -30,25 +22,27 @@
     	    transports: ['websocket']
     	});
         
-        var userNo = "${sessionScope.user.userNo}";
+    	var userNo = "${sessionScope.user.userNo}";
         var userNickname = "${sessionScope.user.nickName}";
         var roomNo = "${roomNo}";
 
-        var initialSpaces = "                           ";
+        // var initialSpaces = "                           ";
         
         console.log("roomNo:", roomNo);
         console.log("userNo:", userNo);
         console.log("userNickname:", userNickname);
         
          // 공백 15개
-        $("#messageInput").val(initialSpaces);
-         
+        // $("#messageInput").val(initialSpaces);
+        
+		/*
         $("#messageInput").on('input', function() {
             var currentVal = $(this).val();
             if (!currentVal.startsWith(initialSpaces)) {
                 $(this).val(initialSpaces + currentVal.trimStart());
             }
         });
+		*/
 
 
         function sendMessage() {
@@ -63,7 +57,8 @@
             console.log("Message:", message);
             
             socket.emit('chatMessage', { roomNo: roomNo, message: message });
-            $("#messageInput").val(initialSpaces);
+            // $("#messageInput").val(initialSpaces);
+            $("#messageInput").val("");
         }
 
         function deleteMessage(messageId) {
@@ -112,6 +107,8 @@
             }
 
             $(chatBox).append(messageElement);
+            var offset = 100; // 조정하고 싶은 픽셀 값
+            $('html, body').scrollTop($(document).height() - $(window).height() - offset);
         }
         
         // Enter 키 눌러 전송
@@ -210,7 +207,7 @@
                     
                         <div class="col-md-10">
                             <div class="position-relative mx-auto">
-                                <button type="button" class="btn btn-primary border-0 py-3 px-5 position-absolute rounded-pill text-white" style="top: 0; left: 0;">사진</button>
+                                <!-- <button type="button" class="btn btn-primary border-0 py-3 px-5 position-absolute rounded-pill text-white" style="top: 0; left: 0;">사진</button> -->
                                 <input class="form-control border w-100 py-3 px-4 rounded-pill" type="text" id="messageInput">
                                 <input type="file" id="imageInput" style="display: none;">
                             </div>

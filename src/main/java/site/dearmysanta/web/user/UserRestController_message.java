@@ -52,7 +52,7 @@ public class UserRestController_message {
 			mmsUserName = userService.getUserName(userId.trim(),messageInfo.getPhoneNumber().trim());
 		}else if (userName != null){
 			SantaLogger.makeLog("info", "mms get by name");
-			mmsUserName = userService.getUserNameByName(userName.trim(),messageInfo.getPhoneNumber().trim());
+			mmsUserName = messageInfo.getUserName();
 		}else {
 			return false;
 		}

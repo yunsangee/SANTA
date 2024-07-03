@@ -5,6 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<title>지도</title>
+<link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
 <c:import url="../common/header.jsp"/>
 
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=xpk093fqk1&submodules=geocoder"></script>
@@ -354,7 +356,7 @@
 	                        infoWindow.open(map, mountainMarker);
 	                    } 
 	                    setTimeout(function() { // Ensure the DOM is updated before attaching the handler
-	                        $('.like-button').off('click').on('click', function() {
+	                        $('.like-button').off('click', '.like-button').on('click', '.like-button', function() {
 	                            const userNo = "${sessionScope.user != null ? sessionScope.user.userNo : 'null'}";
 	                            if (userNo === 'null') {
 	                                //alert("로그인 후 이용 가능합니다.");
@@ -380,7 +382,6 @@
 	                                dataType: "json",
 	                                data: JSON.stringify(mountainLike),
 	                                success: function(response) {
-	                                	console.log(response);
 	                                    clickedElement.toggleClass('fas far');
 	                                    clickedElement.siblings('.like-count').text(response);
 	                                },
@@ -389,7 +390,7 @@
 	                                }
 	                            });
 	                        });
-	                    }, 200); 
+	                    }, 1000); 
 	                    
 	                }); 
 	                 

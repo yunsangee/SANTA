@@ -1,175 +1,162 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html class="fontawesome-i2svg-active fontawesome-i2svg-complete">
-
-<!--  ////////////////////////////////////////////// head ///////////////////////////////////////////////// -->
-
 <head>
-   
-    <title>User List</title>
- <!--    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+    <c:import url="../common/header.jsp"/>
+    <title>회원 목록 조회</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
+    <style>
+        .tab-menu {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            border-bottom: 2px solid #ccc;
+        }
 
-<!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
+        .tab-menu a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            padding: 10px;
+            transition: color 0.3s, border-bottom 0.3s;
+        }
 
-<style>
-    .tabs {
-        display: flex;
-        border-bottom: 2px solid #eee;
-        align-items: center;
-        margin-bottom: -15px; /* 탭 아래 선이 목록 맨 위 선과 겹치도록 */
-    }
+        .tab-menu a.active {
+            border-bottom: 3px solid #81c408;
+            color: #81c408;
+        }
 
-    .tab {
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        text-align: center;
-        color: #81C408;
-        border-bottom: 2px solid transparent;
-        margin-right: 10px;
-    }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
 
-    .tab.active {
-        border-bottom: 2px solid #FFA500;
-        color: #FFA500;
-    }
+        .pagination a {
+            margin: 0 5px;
+            padding: 10px;
+            border: 1px solid #81C408;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #81C408;
+        }
 
-    .tab:hover {
-        color: #DEFBA7;
-    }
+        .pagination a:hover {
+            background-color: #DEFBA7;
+        }
 
-    .pagination {
-        justify-content: center;
-        margin-top: 20px;
-    }
+        .pagination .active {
+            background-color: #81C408;
+            color: white;
+        }
 
-    .pagination a {
-        margin: 0 5px;
-        padding: 10px;
-        border: 1px solid #81C408;
-        border-radius: 5px;
-        text-decoration: none;
-        color: #81C408;
-        width: 30px;
-        height: 30px;
-        align-items: center;
-        justify-content: center;
-        /* display: flex; */
-    }
+        .dropdown-custom {
+            padding: 7px;
+            font-size: 13px;
+            background-color: white;
+            border: 1px solid #D4D4D4;
+            border-radius: 5px;
+            cursor: pointer;
+            box-sizing: border-box;
+            color: black;
+            width: auto;
+            margin-left: 10px;
+        }
 
-    .pagination a:hover {
-        background-color: #DEFBA7;
-    }
+        .search-input {
+            padding: 7px;
+            font-size: 13px;
+            background-color: white;
+            border: 1px solid #D4D4D4;
+            border-radius: 5px;
+            cursor: pointer;
+            box-sizing: border-box;
+            color: black;
+            width: auto;
+            margin-right: 10px;
+            width: 200px;
+        }
 
-    .pagination .active {
-        background-color: #81C408;
-        color: white;
-    }
+        .search-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
 
-    .dropdown-custom {
-        padding: 7px;
-        font-size: 13px;
-        background-color: white;
-        border: 1px solid #D4D4D4;
-        border-radius: 5px;
-        cursor: pointer;
-        box-sizing: border-box;
-        color: black;
-        width: auto;
-        margin-left: 10px;
-    } 
+        .tabs-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .search-input {
-        padding: 7px;
-        font-size: 13px;
-        background-color: white;
-        border: 1px solid #D4D4D4;
-        border-radius: 5px;
-        cursor: pointer;
-        box-sizing: border-box;
-        color: black;
-        width: auto;
-        margin-right: 10px;
-        width: 200px;
-    }
+        .table-responsive {
+            margin-bottom: 60px; /* Ensure there's space for the fixed pagination */
+        }
 
-    .search-container {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 20px;
-        flex-grow: 1;
-    }
+     footer {
+   /*  background-color: #f1f1f1; */
+    padding: 10px 0;
+    text-align: left;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    margin-bottom:-200px;
+}
 
-    .tabs-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+        
+        .tab-menu, .search-container, .table-responsive {
+        	margin-top:20px;
+        }
+    </style>
 
-</style>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // AJAX로 검색 요청을 처리
 
- <c:import url="../common/header.jsp"/>
+            // Enter key를 눌렀을 때 검색 요청을 처리
+            $('.search-input').keypress(function(event) {
+                if (event.which == 13) { // Enter key code
+                    $('#curretPage').val(1);
+                    $(this).closest('form').submit();
 
-<!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
+                    event.preventDefault(); // 기본 Enter key 동작 방지
+                }
+            });
 
-<script>
-    $(document).ready(function() {
-        // AJAX로 검색 요청을 처리
-
-        // Enter key를 눌렀을 때 검색 요청을 처리
-        $('.search-input').keypress(function(event) {
-            if (event.which == 13) { // Enter key code
-            	$('#curretPage').val(1);
-                $(this).closest('form').submit();
-            	
-                event.preventDefault(); // 기본 Enter key 동작 방지
-            }
+            // 페이지 이동을 처리
+            $(document).on('click', '.pagination a', function(event) {
+                event.preventDefault(); // 링크 기본 동작 방지
+                var page = $(this).attr('data-page');
+                $('#currentPage').val(page);
+                $('#searchForm').submit();
+            });
         });
-
-        // 페이지 이동을 처리
-        $(document).on('click', '.pagination a', function(event) {
-            event.preventDefault(); // 링크 기본 동작 방지
-            var page = $(this).attr('data-page');
-            $('#currentPage').val(page);
-            $('#searchForm').submit();
-        });
-
-    });
-</script>
-
+    </script>
 </head>
-
-<!--  ////////////////////////////////////////////// body ///////////////////////////////////////////////// -->
-
 <body>
-
-<!--  ////////////////////////////////////////////// header ///////////////////////////////////////////////// -->
-
     <header>
         <c:import url="../common/top.jsp"/>
     </header>
-   
-<!--  ////////////////////////////////////////////// main ///////////////////////////////////////////////// -->
-   
+
     <main>
         <div class="container-fluid py-5">
             <div class="container py-5">
                 <div class="tabs-container">
-                    <div class="tabs">
+                    <div class="tab-menu">
                         <c:choose>
                             <c:when test="${sessionScope.whichUserList == 0}">
-                                <div class="tab active" onclick="window.location.href='/user/getUserList'">회원목록</div>
-                                <div class="tab" onclick="window.location.href='/user/withdrawUserList'">탈퇴회원 목록</div>
+                                <a href="/user/getUserList" class="active">회원목록</a>
+                                <a href="/user/withdrawUserList">탈퇴회원 목록</a>
                             </c:when>
                             <c:otherwise>
-                                <div class="tab" onclick="window.location.href='/user/getUserList'">회원목록</div>
-                                <div class="tab active" onclick="window.location.href='/user/withdrawUserList'">탈퇴회원 목록</div>
+                                <a href="/user/getUserList">회원목록</a>
+                                <a href="/user/withdrawUserList" class="active">탈퇴회원 목록</a>
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -260,20 +247,38 @@
                     </table>
                 </div>
                 <c:if test="${totalCount > search.pageSize}">
-                    <div class="pagination">
-                        <c:forEach begin="1" end="${totalPages}" var="page">
-                            <a href="javascript:void(0);" data-page="${page}" class="btn-custom ${page == currentPage ? 'active' : ''}">${page}</a>
-                        </c:forEach>
+                    <div class="pagination-container">
+                        <div class="pagination">
+                            <c:if test="${currentPage > 1}">
+                                <a href="javascript:void(0);" data-page="${currentPage - 1}" class="btn-custom">&lt;</a>
+                            </c:if>
+
+                            <c:choose>
+                                <c:when test="${totalPages <= 5}">
+                                    <c:forEach var="i" begin="1" end="${totalPages}">
+                                        <a href="javascript:void(0);" data-page="${i}" class="btn-custom ${i == currentPage ? 'active' : ''}">${i}</a>
+                                    </c:forEach>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach begin="0" end="4" varStatus="status">
+                                        <c:set var="pageNum" value="${currentPage <= 3 ? status.index + 1 : currentPage >= totalPages - 2 ? totalPages - 4 + status.index : currentPage - 2 + status.index}"/>
+                                        <a href="javascript:void(0);" data-page="${pageNum}" class="btn-custom ${pageNum == currentPage ? 'active' : ''}">${pageNum}</a>
+                                    </c:forEach>
+                                </c:otherwise>
+                            </c:choose>
+
+                            <c:if test="${currentPage < totalPages}">
+                                <a href="javascript:void(0);" data-page="${currentPage + 1}" class="btn-custom">&gt;</a>
+                            </c:if>
+                        </div>
                     </div>
                 </c:if>
             </div>
         </div>
     </main>
-
-<!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// -->
     
     <footer>
-    	<c:import url="../common/footer.jsp"/>
+        <c:import url="../common/footer.jsp"/>
     </footer>
 </body>
 </html>
