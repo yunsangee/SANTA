@@ -75,8 +75,7 @@ public class MeetingController {
 		if (user != null) {
 		    userNo = user.getUserNo();
 		} else {
-		    userNo = 1;
-		    System.out.println("session���� �� ���޾ƿͼ� ���Ƿ� userNo 1 ����");
+			return "redirect:/user/login";
 		}
 		
 		int postType = 1;
@@ -93,7 +92,7 @@ public class MeetingController {
 		List<String> meetingPostImages = new ArrayList<>();
 		int imageCount = meetingPost.getMeetingPostImageCount();
 		
-		System.out.println("���⼭ imageCount �������� Ȯ��??(debug) : "+imageCount);
+		System.out.println("占쏙옙占썩서 imageCount 占쏙옙占쏙옙占쏙옙占쏙옙 확占쏙옙??(debug) : "+imageCount);
 		
 //		System.out.println("imageCount==="+imageCount);
 		
@@ -103,7 +102,7 @@ public class MeetingController {
             meetingPostImages.add(imageURL);
         }
 		
-		System.out.println("������������"+meetingPostImages);		
+		System.out.println("占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙"+meetingPostImages);		
 		
 		
 		List<MeetingParticipation> meetingParticipations = (List<MeetingParticipation>) map.get("meetingParticipations");
@@ -131,7 +130,15 @@ public class MeetingController {
 	}
 	
 	@GetMapping(value = "addMeetingPost")
-	public String addMeetingPost(Model model) throws Exception {
+	public String addMeetingPost(Model model, HttpSession session) throws Exception {
+		
+		User user = (User) session.getAttribute("user");
+
+		int userNo;
+		
+		if (user == null) {
+			return "redirect:/user/login";
+		} 
 		
 		List<String> badgeDescriptions = new ArrayList<>(Arrays.asList("새싹", "풀", "꽃", "나무", "숲", "산", "깃발"));
 		
@@ -156,20 +163,11 @@ public class MeetingController {
 		
 		User user = (User) session.getAttribute("user");
 
-		int userNo;
-		if (user != null) {
-		    userNo = user.getUserNo();
-		    System.out.println("session���� userNo �� �޾ƿ�" + userNo);
-		} else {
-		    userNo = 1;
-		    System.out.println("session���� �� ���޾ƿͼ� ���Ƿ� userNo 1 ����");
-		}
-		
-
+		int userNo = user.getUserNo();
 		
 		meetingPost.setUserNo(userNo);
 		
-		System.out.println("Post/addMeetingPost/meetingPost �� Ȯ��"+meetingPost);
+		System.out.println("Post/addMeetingPost/meetingPost 占쏙옙 확占쏙옙"+meetingPost);
 		
 		
 		int postNo = meetingService.addMeetingPost(meetingPost);
@@ -227,7 +225,7 @@ public class MeetingController {
         String formattedAppointedHikingDate = formatterUntilDay.format(meetingPost.getAppointedHikingDate());
         
         
-        List<String> badgeDescriptions = new ArrayList<>(Arrays.asList("����", "���", "��", "����", "��", "��", "���"));
+        List<String> badgeDescriptions = new ArrayList<>(Arrays.asList("새싹", "풀", "꽃", "나무", "숲", "산", "깃발"));
         
         List<String> badgeImages = new ArrayList<>();
 		
@@ -252,8 +250,8 @@ public class MeetingController {
 	@PostMapping(value = "updateMeetingPost")
 	public String updateMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost, @RequestParam("updateImageURL") List<String> updateImageURL) throws Exception {
 		
-		System.out.println("meetingPostImage �������� Ȯ��"+meetingPost);
-		System.out.println("updateImageUrl Ȯ��==="+updateImageURL);
+		System.out.println("meetingPostImage 占쏙옙占쏙옙占쏙옙占쏙옙 확占쏙옙"+meetingPost);
+		System.out.println("updateImageUrl 확占쏙옙==="+updateImageURL);
 		
 		int postNo = meetingPost.getPostNo();
 		int postType = 1;
@@ -274,7 +272,7 @@ public class MeetingController {
 		}
 		
 		
-		System.out.println("���Ľ�ų �̹����̸��� : "+fileNames);
+		System.out.println("占쏙옙占식쏙옙킬 占싱뱄옙占쏙옙占싱몌옙占쏙옙 : "+fileNames);
 		
 		int appendImageStartIndex = objectStorageService.updateObjectStorageImage(fileNames);
 		
@@ -323,19 +321,24 @@ public class MeetingController {
 		
 		if (user != null) {
 		    userNo = user.getUserNo();
+		    meetingPostSearch.setUserNo(userNo);
 		} else {
-		    userNo = 1;
-		    System.out.println("session���� �� ���޾ƿͼ� ���Ƿ� userNo 1 ����");
+			if (meetingPostSearch.getMeetingPostListSearchCondition() != 0) {
+				return "redirect:/user/login";
+			} else {
+				
+			}
+				
 		}
 		
-		meetingPostSearch.setUserNo(userNo);
+
 		
 		if(meetingPostSearch.getCurrentPage() ==0 ){
 			meetingPostSearch.setCurrentPage(1);
 		}
 		meetingPostSearch.setPageSize(pageSize);
 		
-		meetingPostSearch.setUserNo(userNo);
+
 		
 		System.out.println("Before calling meetingService.getMeetingPostList");
 	    System.out.println("meetingPostSearch: " + meetingPostSearch);
