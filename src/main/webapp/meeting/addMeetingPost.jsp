@@ -65,28 +65,17 @@
 		    })
 		    
 		    $("button:contains('사진')").on('click', function() {
-	            $('#meetingPostImage').click();
-	            
+		        $('#meetingPostImage').click();
+		    });
 
-	        });
-		    
 		    $('#meetingPostImage').on('change', function() {
-	            var files = $(this)[0].files;
-	            var fileCount = files.length;
-
-	            if (fileCount > 0) {
-	                $('#fileCount').text(fileCount + '개 파일 선택됨').show();
-	            } else {
-	                $('#fileCount').hide();
-	            }
-
-	            for (var i = 0; i < files.length; i++) {
-	                console.log(files[i].name);
-	            }
-
-	            // 파일 업로드 함수를 호출할 수 있습니다.
-	            uploadImage();
-	        });
+		        let fileCount = this.files.length;
+		        if (fileCount > 0) {
+		            $('#fileCount').text(fileCount + '개 파일 선택됨');
+		        } else {
+		            $('#fileCount').text('');
+		        }
+		    });
 		    
     	});
     	
@@ -231,6 +220,7 @@
 						    <textarea class="form-control mb-2" name="contents" rows="10" placeholder="내용을 입력하세요." style="height: 200px;" required></textarea>
 						    <button type="button" class="btn btn-primary border-0 rounded text-white">사진 선택</button>
 						    <input type="file" id="meetingPostImage" name="meetingPostImage" style="display: none;" multiple/><br/>
+						    <p id="fileCount" style="display: inline-block; margin-left: 10px;"></p>
 						</div>
 						
 	    			</div>
