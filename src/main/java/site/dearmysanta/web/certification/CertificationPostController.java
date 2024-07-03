@@ -137,16 +137,18 @@ public class CertificationPostController {
 
                 objectStorageService.uploadFile(image, fileName);
 
-                int userNo = certificationPost.getUserNo();
+               
+            
+            }
+        }
+        	int userNo = certificationPost.getUserNo();
                 userEtcService.updateCertificationCount(userNo, 0);
-             
+                 
                 int cnt = userEtcService.getCertificationCount(userNo);
                 		User user2 = (User)session.getAttribute("user");
                 		user2.setCertificationCount(cnt);
                 		session.setAttribute("user", user2);
-            }
-        }
-
+                
         // 해시태그 저장
         for (String hashtagContent : certificationPostHashtagContents) {
             if (!hashtagContent.isEmpty()) {
