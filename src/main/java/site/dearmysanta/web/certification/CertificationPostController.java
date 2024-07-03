@@ -133,20 +133,22 @@ public class CertificationPostController {
                 MultipartFile image = images.get(i); // 리스트 인덱스는 0부터 시작하므로 i 사용
                 String fileName = postNo + "_" + postType + "_" + (i + 1);
 
-                System.out.println(fileName);
+                //System.out.println(fileName);
 
                 objectStorageService.uploadFile(image, fileName);
 
-                int userNo = certificationPost.getUserNo();
+               
+            
+            }
+        }
+        	int userNo = certificationPost.getUserNo();
                 userEtcService.updateCertificationCount(userNo, 0);
-             
+                 
                 int cnt = userEtcService.getCertificationCount(userNo);
                 		User user2 = (User)session.getAttribute("user");
                 		user2.setCertificationCount(cnt);
                 		session.setAttribute("user", user2);
-            }
-        }
-
+                
         // 해시태그 저장
         for (String hashtagContent : certificationPostHashtagContents) {
             if (!hashtagContent.isEmpty()) {
@@ -167,12 +169,12 @@ public class CertificationPostController {
               model.addAttribute("user", user);
           }
 
-    	System.out.println("postNo: " + postNo);
+    	//System.out.println("postNo: " + postNo);
 
         CertificationPost certificationPost = certificationPostService.getCertificationPost(postNo);
         List<String> hashtagList = certificationPostService.getHashtag(postNo);
 
-        System.out.println("hashtagList: " + hashtagList);
+        //System.out.println("hashtagList: " + hashtagList);
 
 
         String[] totalTimeParts = certificationPost.getCertificationPostTotalTime().split(" ");
@@ -235,8 +237,8 @@ public class CertificationPostController {
         certificationPost.setCertificationPostAscentTime(ascentTime);
         certificationPost.setCertificationPostDescentTime(descentTime);
 
-        System.out.println("여기다" + certificationPost);
-        System.out.println("updateImageUrl 확인===" + updateImageURL);
+        //System.out.println("여기다" + certificationPost);
+        //System.out.println("updateImageUrl 확인===" + updateImageURL);
 
         User user = (User) session.getAttribute("user");
         if (user != null) {
@@ -278,7 +280,7 @@ public class CertificationPostController {
         for (String imageURL : updateImageURL) {
             int lastIndex = imageURL.lastIndexOf("/");
             String fileName = imageURL.substring(lastIndex + 1);
-            System.out.println("파일이름" + fileName);
+            //System.out.println("파일이름" + fileName);
             fileNames.add(fileName);
         }
 
@@ -296,13 +298,13 @@ public class CertificationPostController {
                 .collect(Collectors.toList());
 
             int imageCount = images.size();
-            System.out.println("imageCount : " + imageCount);
+            //System.out.println("imageCount : " + imageCount);
 
             for (int i = 0; i < imageCount; i++) {
                 MultipartFile image = images.get(i);
                 String fileName = postNo + "_" + postType + "_" + (appendImageStartIndex);
                 list.add(fileName);
-                System.out.println("fileName : " + fileName);
+               // System.out.println("fileName : " + fileName);
                 objectStorageService.uploadFile(image, fileName);
                 appendImageStartIndex += 1;
             }
@@ -327,7 +329,7 @@ public class CertificationPostController {
         // CertificationPost 목록 및 관련 데이터 가져오기
         Map<String, Object> result = certificationPostService.getCertificationPostList(search);
         List<CertificationPost> certificationPostList = (List<CertificationPost>) result.get("list");
-        System.out.println("certificationPostList  " + certificationPostList);
+        //System.out.println("certificationPostList  " + certificationPostList);
 
         // CertificationPost 이미지 URL 가져오기
         List<String> certificationPostImages = new ArrayList<>();
@@ -379,7 +381,7 @@ public class CertificationPostController {
 
         List<String> certificationPostImages = new ArrayList<>();
         int imageCount = certificationPost.getCertificationPostImageCount();
-        System.out.println("imageCount===" + imageCount);
+       // System.out.println("imageCount===" + imageCount);
         for (int i = 0; i < imageCount; i++) {
             String fileName = postNo + "_" + postType + "_" + (i + 1);
             String imageURL = objectStorageService.getImageURL(fileName);
@@ -396,15 +398,15 @@ public class CertificationPostController {
             certificationPost.setBadgeImage(objectStorageService.getImageURL(certificationPost.getBadgeImage()));
         }
     
-        System.out.println("댓글" + postNo + userNo + certificationPostCommentList);
+        //System.out.println("댓글" + postNo + userNo + certificationPostCommentList);
         model.addAttribute("certificationPost", map.get("certificationPost"));
         model.addAttribute("certificationPostCommentList", certificationPostCommentList);
         model.addAttribute("hashtagList", map.get("hashtagList"));
         model.addAttribute("certificationPostImages", certificationPostImages);
 
-		System.out.println("������������"+certificationPostImages);
+		//System.out.println("������������"+certificationPostImages);
 				
-        System.out.println("이거맞지" + certificationPostCommentList);
+       // System.out.println("이거맞지" + certificationPostCommentList);
 
         return "forward:/certificationPost/getCertificationPost.jsp";
     }
@@ -414,7 +416,7 @@ public class CertificationPostController {
     public String listMyCertificationPost(@RequestParam int userNo, Model model) throws Exception {
         List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
         model.addAttribute("myCertificationPost", myCertificationPost);
-        System.out.println("오잉:" + myCertificationPost);
+       // System.out.println("오잉:" + myCertificationPost);
         return "forward:/certificationPost/listMyCertificationPost.jsp";
     }
     
@@ -435,7 +437,7 @@ public class CertificationPostController {
         }
         
         model.addAttribute("followerList", followerList);
-        System.out.println("팔로워리스트보기:" + followerList);
+       // System.out.println("팔로워리스트보기:" + followerList);
         
         return "forward:/certificationPost/listFollower.jsp";
     }
@@ -455,7 +457,7 @@ public class CertificationPostController {
     	    }
             }
         model.addAttribute("followingList", followingList);
-        System.out.println("팔로잉리스트보기:" + followingList);
+      //  System.out.println("팔로잉리스트보기:" + followingList);
     return "forward:/certificationPost/listFollowing.jsp";
 }
     
@@ -472,7 +474,7 @@ public class CertificationPostController {
         int followerNo = sessionUser.getUserNo(); // 로그인된 사용자의 번호
 
         User user = userService.getUser(userNo);
-        System.out.println("User Info: " + user);
+       // System.out.println("User Info: " + user);
   	  if(user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")&& !user.getProfileImage().contains("kakaocdn")) {
 	    	user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
 	    }
@@ -480,28 +482,27 @@ public class CertificationPostController {
 	if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
 		user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
   }
-	
-        
+  
         model.addAttribute("infouser", user);
 
         int followerCount = userEtcService.getFollowerCount(userNo);
-        System.out.println("Follower Count: " + followerCount);
+        //System.out.println("Follower Count: " + followerCount);
         model.addAttribute("followerCount", followerCount);
 
         int followingCount = userEtcService.getFollowingCount(userNo);
-        System.out.println("Following Count: " + followingCount);
+       // System.out.println("Following Count: " + followingCount);
         model.addAttribute("followingCount", followingCount);
 
         int isFollowing = userEtcService.isFollowing(followerNo, userNo);
         model.addAttribute("isFollowing", isFollowing);
-        System.out.println("Is Following: " + isFollowing);
+       // System.out.println("Is Following: " + isFollowing);
 
         List<CertificationPost> myCertificationPost = certificationPostService.getMyCertificationPostList(userNo);
         model.addAttribute("myCertificationPost", myCertificationPost);
-        System.out.println("myCertificationPost: " + myCertificationPost);
+       // System.out.println("myCertificationPost: " + myCertificationPost);
 
         List<CertificationPost> myLikeCertificationPost = certificationPostService.getCertificationPostLikeList(userNo);
-        System.out.println("myLikeCertificationPost: " + myLikeCertificationPost);
+       // System.out.println("myLikeCertificationPost: " + myLikeCertificationPost);
         model.addAttribute("myLikeCertificationPost", myLikeCertificationPost);
 
         int postType = 0;
@@ -515,7 +516,7 @@ public class CertificationPostController {
         
         }
         model.addAttribute("certificationPostImages", certificationPostImages);
-        System.out.println("이미지" + certificationPostImages);
+       // System.out.println("이미지" + certificationPostImages);
 
         return "forward:/certificationPost/getProfile.jsp";
     }

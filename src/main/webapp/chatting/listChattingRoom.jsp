@@ -19,14 +19,36 @@
 			    transports: ['websocket']
 			});
 			
+			
+			// var socket = io("http://192.168.0.52:3002");
+			
+			/*
+			function formatDate(dateString) {
+	            var date = new Date(dateString);
+	            var year = date.getFullYear();
+	            var month = ('0' + (date.getMonth() + 1)).slice(-2);
+	            var day = ('0' + date.getDate()).slice(-2);
+	            var hours = ('0' + date.getHours()).slice(-2);
+	            var minutes = ('0' + date.getMinutes()).slice(-2);
+	            var seconds = ('0' + date.getSeconds()).slice(-2);
+	            return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
+	        }
+			*/
+			
 			socket.on('lastMessage', function(data) {
+				
                 var roomElement = $('#chattingRoom-' +data.roomNo);
                 if (roomElement.length) {
+                    var messageContent = "";
+                    var messageTime = "";
+                    
                     if (data.lastMessage) {
-                        roomElement.find('.last-message').text(data.lastMessage.contents);
-                    } else {
-                        roomElement.find('.last-message').text("No messages yet.");
+                        messageContent = data.lastMessage.contents;
+                        messageTime = new Date(data.lastMessage.createdAt).toLocaleString();
                     }
+                    
+                    roomElement.find('.last-message p').html(messageContent);
+                    roomElement.find('.last-message-time p').html(messageTime);
                 }
             });
 
@@ -77,30 +99,33 @@
 		    			<table class="table">
 		    				<thead>
 		    					<tr>
-		    						<th scope="col">순번</th>
 		    						<th scope="col">모임 명</th>
 		    						<th scope="col">마지막 메시지</th>
-		    						
-		    						
-		    						
+		    						<th scope="col">마지막 채팅 시각</th>
 		    					</tr>
 		    				</thead>
 		    				<tbody>
 
 		    				<c:forEach var="chattingRoom" items="${chattingRooms}" varStatus="status">
 	                            <tr id="chattingRoom-${chattingRoom.postNo}">		<!-- 아래 userNo, nickname 지워야함. 로컬에서만 지금처럼 쓰는거임 -->
-	                            	<td>
-				                    	<p class="mb-2 mt-2">${status.index+1}</p>
-				                    </td>
+	                            	
 	                                <td>
 	                                	<p class="mb-2 mt-2">
 	                                		<a href="/chatting/getChattingRoom?roomNo=${chattingRoom.postNo}&roomName=${chattingRoom.meetingName}">${chattingRoom.meetingName}</a>
 	                                	</p>
 	                                </td>
 	                                <!-- <input type="hidden" id="roomNo" value="${chattingRoom.postNo }"/> -->
-	                                <td class="mb-2 mt-2 last-message">
-	                                	No messages yet.
+	                                <td class="last-message">
+	                                	<p class="mb-2 mt-2">
+	                                		
+	                                	</p>
 	                                </td>
+	                                
+	                                <td class="last-message-time">
+				                    	<p class="mb-2 mt-2">
+				                    		
+				                    	</p>
+				                    </td>
 	                            </tr>
 	                        </c:forEach>
 	                        </tbody>

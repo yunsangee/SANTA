@@ -5,11 +5,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+	  
     <meta charset="UTF-8">
     <title>${user.nickName}님 정보입니다.</title>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+<!--     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script> -->
 
     <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
     <style>
@@ -260,7 +261,7 @@
 
         
     </style>
-
+		 <c:import url="../common/header.jsp"/>
     <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
 
     <script>
@@ -324,7 +325,7 @@
             });
 
             // 닉네임 중복 체크
-            $("input[name='nickName']").on("blur", function() {
+            $("input[name='nickName']").on("input", function() {
                 var nick = $(this).val();
                 if (nick.length >= 10) {
                     $("#nickMessage").text("10글자 미만의 닉네임을 작성해주세요.").css("color", "red");
@@ -381,7 +382,7 @@
         }
     </script>
 
-    <c:import url="../common/header.jsp"/>
+ 
 </head>
 
 <!--  ////////////////////////////////////////////// body ///////////////////////////////////////////////// -->
