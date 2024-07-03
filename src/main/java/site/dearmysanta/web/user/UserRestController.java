@@ -754,6 +754,40 @@ public class UserRestController {
 	        return ResponseEntity.ok(dbSchedule);
 	    }
 	    
+	    ////////////////////////////////////////////////////////////////
+	    
+	    @PostMapping(value = "rest/addQnA")
+	    public ResponseEntity<?> addQnA(@RequestBody QNA qna, HttpSession session) {
+	        System.out.println("addQnA : POST");
+
+	        // 세션에서 현재 로그인한 사용자 정보 가져오기
+	        User sessionUser = (User) session.getAttribute("user");
+
+	        if (sessionUser == null) {
+	            // 로그인하지 않은 경우 에러 응답 반환
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+	        }
+
+	        // QNA 객체에 사용자 정보 설정
+	        qna.setUserNo(sessionUser.getUserNo());
+	        qna.setNickName(sessionUser.getNickName());
+	        qna.setProfileImage(sessionUser.getProfileImage());
+
+	        try {
+	            // QNA 추가
+	            userService.addQnA(qna);
+
+	            session.setAttribute("qna", qna);
+
+	            System.out.println("addQnA : " + qna);
+
+	            return ResponseEntity.ok("QnA가 성공적으로 추가되었습니다.");
+	        } catch (Exception e) {
+	            // 예외 발생 시 에러 응답 반환
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("QnA 추가에 실패했습니다.");
+	        }
+	    }
+	    
 	    //////////////////////////////
 	    
 	    @PostMapping(value = "rest/changePhoneNumber")
