@@ -30,25 +30,27 @@
     	    transports: ['websocket']
     	});
         
-        var userNo = "${sessionScope.user.userNo}";
+    	var userNo = "${sessionScope.user.userNo}";
         var userNickname = "${sessionScope.user.nickName}";
         var roomNo = "${roomNo}";
 
-        var initialSpaces = "                           ";
+        // var initialSpaces = "                           ";
         
         console.log("roomNo:", roomNo);
         console.log("userNo:", userNo);
         console.log("userNickname:", userNickname);
         
          // 공백 15개
-        $("#messageInput").val(initialSpaces);
-         
+        // $("#messageInput").val(initialSpaces);
+        
+		/*
         $("#messageInput").on('input', function() {
             var currentVal = $(this).val();
             if (!currentVal.startsWith(initialSpaces)) {
                 $(this).val(initialSpaces + currentVal.trimStart());
             }
         });
+		*/
 
 
         function sendMessage() {
@@ -63,7 +65,8 @@
             console.log("Message:", message);
             
             socket.emit('chatMessage', { roomNo: roomNo, message: message });
-            $("#messageInput").val(initialSpaces);
+            // $("#messageInput").val(initialSpaces);
+            $("#messageInput").val("");
         }
 
         function deleteMessage(messageId) {
@@ -112,6 +115,8 @@
             }
 
             $(chatBox).append(messageElement);
+            var offset = 100; // 조정하고 싶은 픽셀 값
+            $('html, body').scrollTop($(document).height() - $(window).height() - offset);
         }
         
         // Enter 키 눌러 전송
@@ -210,7 +215,7 @@
                     
                         <div class="col-md-10">
                             <div class="position-relative mx-auto">
-                                <button type="button" class="btn btn-primary border-0 py-3 px-5 position-absolute rounded-pill text-white" style="top: 0; left: 0;">사진</button>
+                                <!-- <button type="button" class="btn btn-primary border-0 py-3 px-5 position-absolute rounded-pill text-white" style="top: 0; left: 0;">사진</button> -->
                                 <input class="form-control border w-100 py-3 px-4 rounded-pill" type="text" id="messageInput">
                                 <input type="file" id="imageInput" style="display: none;">
                             </div>

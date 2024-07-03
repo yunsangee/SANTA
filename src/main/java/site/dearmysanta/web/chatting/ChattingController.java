@@ -30,18 +30,18 @@ public class ChattingController {
     }
 	
 	@GetMapping(value = "getChattingRoomList") //requestparam userNo 지우고, session 주석풀면됨.
-    public String getChatRoomList(HttpSession session, Model model) throws Exception {
+    public String getChatRoomList(@RequestParam int userNo, HttpSession session, Model model) throws Exception {
 		
-		User user = (User) session.getAttribute("user");
-
-		int userNo;
-		
-		if (user != null) {
-		    userNo = user.getUserNo();
-		} else {
-		    userNo = 1;
-		    System.out.println("session에서 값 못받아와서 임의로 userNo 1 박힘");
-		}
+//		User user = (User) session.getAttribute("user");
+//
+//		int userNo;
+//		
+//		if (user != null) {
+//		    userNo = user.getUserNo();
+//		} else {
+//		    userNo = 1;
+//		    System.out.println("session에서 값 못받아와서 임의로 userNo 1 박힘");
+//		}
 		
         List<MeetingPost> chattingRooms = meetingService.getChattingRoomList(userNo);
         System.out.println("채팅방리스트 ======= "+chattingRooms);
@@ -53,10 +53,12 @@ public class ChattingController {
     }
 	
 	@GetMapping(value = "getChattingRoom") // userNo, nickname은 지우고 session 주석풀면됨
-    public String getChatRoom(@RequestParam int roomNo, @RequestParam String roomName, Model model) throws Exception {
+    public String getChatRoom(@RequestParam int userNo, @RequestParam String nickname, @RequestParam int roomNo, @RequestParam String roomName, Model model) throws Exception {
 		
-        model.addAttribute("roomNo", roomNo);
+		model.addAttribute("roomNo", roomNo);
         model.addAttribute("roomName", roomName);
+        model.addAttribute("userNo", userNo);
+		model.addAttribute("nickname", nickname);
         
         return "forward:/chatting/chattingRoom.jsp";
     }
