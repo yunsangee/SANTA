@@ -75,6 +75,7 @@ public class UserController {
 		@PostMapping(value="addUser" )
 		public String addUser(@ModelAttribute User user, @RequestParam(required=false) int socialLogin, Model model ) throws Exception {
 			
+			System.out.println("is social?" + socialLogin);
 			if(socialLogin == 1) {
 				userService.addUser(user);
 				return "redirect:/user/login.jsp";
@@ -153,13 +154,14 @@ public class UserController {
 		    	return "forward:/user/login.jsp";
 		    }
 		    
-		    if(users != null || user.getUserPassword().equals("kakao")) {
-		    	model.addAttribute("loginError", "카카오 로그인을 이용해주세요.");
-		    	return "forward:/user/login.jsp";
-		    }
 		    
 		    User dbUser = users.get(0);
 		        System.out.println("확인 : " + dbUser);
+		        
+		    if(dbUser.getUserPassword().equals("kakao")) {
+			    	model.addAttribute("loginError", "카카오 로그인을 이용해주세요.");
+			    	return "forward:/user/login.jsp";
+			    }
 		    
 		    // 사용자가 존재하는지 확인
 		    if (dbUser == null || !dbUser.getUserPassword().equals(user.getUserPassword())) {
