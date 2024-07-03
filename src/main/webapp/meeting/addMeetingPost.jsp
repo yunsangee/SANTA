@@ -67,6 +67,24 @@
 		    $("button:contains('사진')").on('click', function() {
 	            $('#meetingPostImage').click();
 	            
+
+	        });
+		    
+		    $('#meetingPostImage').on('change', function() {
+	            var files = $(this)[0].files;
+	            var fileCount = files.length;
+
+	            if (fileCount > 0) {
+	                $('#fileCount').text(fileCount + '개 파일 선택됨').show();
+	            } else {
+	                $('#fileCount').hide();
+	            }
+
+	            for (var i = 0; i < files.length; i++) {
+	                console.log(files[i].name);
+	            }
+
+	            // 파일 업로드 함수를 호출할 수 있습니다.
 	            uploadImage();
 	        });
 		    
@@ -133,7 +151,7 @@
 		<form enctype="multipart/form-data">
 			<div class="container-fluid py-5">
 	    		<div class="container py-5">
-	    			<div class="row mb-5">
+	    			<div class="row mb-5 mt-5">
 	    			
 	    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">작성자</div>
     					<div class="col-md-9 border align-items-center text-start py-3">${sessionScope.user.nickName}</div>

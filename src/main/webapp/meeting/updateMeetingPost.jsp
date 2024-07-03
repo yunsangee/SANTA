@@ -158,7 +158,7 @@
     	<form enctype="multipart/form-data">
 			<div class="container-fluid py-5">
 	    		<div class="container py-5">
-	    			<div class="row mb-5">
+	    			<div class="row mb-5 mt-5">
 	    			
 	    				<input type="hidden" id="postNo" name="postNo" value="${meetingPost.postNo}">
 	    			
