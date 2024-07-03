@@ -325,7 +325,7 @@
             });
 
             // 닉네임 중복 체크
-            $("input[name='nickName']").on("blur", function() {
+            $("input[name='nickName']").on("input", function() {
                 var nick = $(this).val();
                 if (nick.length >= 10) {
                     $("#nickMessage").text("10글자 미만의 닉네임을 작성해주세요.").css("color", "red");
