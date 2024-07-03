@@ -43,6 +43,15 @@
             display: flex;
             justify-content: center;
             margin-top:60px;
+            position: fixed;
+		    top: 640px; /* 하단에서 20px 위 */
+		    left: 50%;
+		    transform: translateX(-50%);
+		    background-color: white; /* 필요시 배경색 추가 */
+		    padding: 10px; /* 필요시 패딩 추가 */
+		   /*  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1); /* 필요시 그림자 효과 추가 */ */
+		    /* border-radius: 5px; /* 필요시 모서리 둥글게 */ */
+		    z-index: 1000; /* 다른 요소 위에 위치하도록 z-index 추가 */
         }
         
         .pagination a {
