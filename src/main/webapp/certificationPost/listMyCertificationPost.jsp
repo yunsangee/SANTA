@@ -144,10 +144,10 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">No.</th>
-                                <th scope="col">산명칭</th>
-                                <th scope="col">글제목</th>
-                                <th scope="col">작성일자</th>
+                                <th scope="col">순번</th>
+                                <th scope="col">산 명칭</th>
+                                <th scope="col">글 제목</th>
+                                <th scope="col">작성 일자</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>

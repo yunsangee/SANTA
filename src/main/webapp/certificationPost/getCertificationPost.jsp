@@ -622,7 +622,7 @@
                     <hr>
                     <div class="info-block">
                         <div class="inline-info mb-3">
-                            <span><i class="fas fa-mountain"></i> 산 이름 : &ensp; ${certificationPost.certificationPostMountainName}</span>
+                            <span><i class="fas fa-mountain"></i> 산 명칭 : &ensp; ${certificationPost.certificationPostMountainName}</span>
                             <span><i class="fas fa-route"></i> 등산 경로 : &ensp; ${certificationPost.certificationPostHikingTrail}</span>
                         </div>
                         <div class="inline-info mb-3">

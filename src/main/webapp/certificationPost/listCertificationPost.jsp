@@ -379,7 +379,7 @@ $(document).ready(function() {
                             '<p><i class="fas fa-heart"></i>  ' + post.certificationPostLikeCount + '</p>' +
                         '</div>' +
                     '</div>' +
-                    '<p class="post-mountain"><i class="fas fa-mountain"></i>  산 이름 : ' + post.certificationPostMountainName + '</p>' +
+                    '<p class="post-mountain"><i class="fas fa-mountain"></i>  산 명칭 : ' + post.certificationPostMountainName + '</p>' +
                     '<p class="post-difficulty"><i class="fas fa-chart-line"></i> 등산 난이도 : ' + 
                         (post.certificationPostHikingDifficulty == 0 ? '어려움' : post.certificationPostHikingDifficulty == 1 ? '중간' : '쉬움') +
                     '</p>' +
@@ -420,16 +420,16 @@ $(document).ready(function() {
 
         switch (selectedOption) {
             case '0':
-                placeholderText = ' 글 제목을 입력하세요!';
+                placeholderText = ' 제목을 입력하세요!';
                 break;
             case '1':
                 placeholderText = ' 닉네임을 입력하세요!';
                 break;
             case '2':
-                placeholderText = ' 산 이름을 입력하세요!';
+                placeholderText = ' 산 명칭을 입력하세요!';
                 break;
             default:
-                placeholderText = ' 글 제목을 입력하세요!'; // 기본값을 '글 제목을 입력하세요!'로 설정
+                placeholderText = ' 제목을 입력하세요!';
                 break;
         }
 
@@ -448,9 +448,9 @@ $(document).ready(function() {
                     <form id="searchForm" class="d-flex align-items-center">
                       <div class="select-wrapper" style="position: relative; display: inline-block;">
 						    <select id="searchCondition" name="searchCondition" class="form-control border-2 border-secondary rounded-pill me-2" style="width: 150px; height: 45px; appearance: none; padding-right: 30px;">
-						        <option value="0" ${ !empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>글제목</option>
+						        <option value="0" ${ !empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>제목</option>
 						        <option value="1" ${ !empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>닉네임</option>
-						        <option value="2" ${ !empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>산이름</option>
+						        <option value="2" ${ !empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>산명칭</option>
 						    </select>
 						    <i class="fa fa-chevron-down" style="position: absolute; right: 25px; top: 50%; transform: translateY(-50%); pointer-events: none;"></i>
 						</div>
@@ -503,7 +503,7 @@ $(document).ready(function() {
                                         <p><i class="fas fa-heart"></i> 좋아요수 : ${certificationPost.certificationPostLikeCount}</p>
                                     </div>
                                 </div>
-                                <p class="post-mountain"><i class="fas fa-mountain"></i> 산 이름 : ${certificationPost.certificationPostMountainName}</p>
+                                <p class="post-mountain"><i class="fas fa-mountain"></i> 산 명칭 : ${certificationPost.certificationPostMountainName}</p>
                                 <p class="post-difficulty"><i class="fas fa-chart-line"></i> 등산 난이도 : 
                                     <c:choose>
                                         <c:when test="${certificationPost.certificationPostHikingDifficulty == 0}">

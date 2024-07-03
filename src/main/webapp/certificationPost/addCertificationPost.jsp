@@ -312,7 +312,7 @@
                         <div class="char-counter"><span id="charCount">0</span>/1000</div>
                     </div>
                     <div class="form-group">
-                        <label for="certificationPostMountainName">산 이름<sup>*</sup></label>
+                        <label for="certificationPostMountainName">산 명칭<sup>*</sup></label>
                         <input type="text" class="form-control" id="certificationPostMountainName" name="certificationPostMountainName" maxlength="8" required>
                     </div>
                     <div class="form-group">
