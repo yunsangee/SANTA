@@ -272,7 +272,7 @@
 
     async function example() {
         console.log('Start');
-        await sleep(2000); // 1초 대기
+        await sleep(1000); // 1초 대기
         console.log('1 second later');
     }
 
@@ -328,7 +328,7 @@
                          console.log('Profile value is not set');
                      }
                  }, 1000); // 3000 밀리초 = 3초
-                 example();
+                 //example();
             });
 
             // 주소 클릭 시 도로명 주소 창 열기
