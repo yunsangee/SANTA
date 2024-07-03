@@ -1,35 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Schedule Detail</title>
+    <title>스케줄 상세</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f5f5f5;
-            margin: 0;
-        }
-
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            width: 500px;
-            max-width: 100%;
-        }
-
-        h2 {
-            margin-top: 0;
-            font-size: 24px;
-            color: #333;
-            text-align: center;
+        .schedule {
+            margin-top: 30px;
         }
 
         .form-group {
@@ -51,12 +29,53 @@
             font-size: 14px;
         }
 
-        .form-group select {
-            height: 40px;
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border: 1px solid #81C408;
+            outline: none;
+            box-shadow: 0 0 5px rgba(129, 196, 8, 0.5);
         }
 
-        .form-group textarea {
-            resize: vertical;
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .button-group .button, .hard, .soso, .easy {
+            flex: 1;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            margin-right: 5px;
+        }
+
+        .button-group .button:last-child {
+            margin-right: 0;
+        }
+
+        .button-group .button.active {
+            background-color: #218838;
+        }
+
+        .button-group .hard.active {
+            background-color: #851600;
+        }
+
+        .button-group .soso.active {
+            background-color: #8F4F00;
+        }
+
+        .button-group .easy.active {
+            background-color: #003EB3;
+        }
+
+        .hidden-radio {
+            display: none;
         }
 
         .form-group button {
@@ -82,30 +101,229 @@
         .form-group .cancel-button:hover {
             background-color: #c82333;
         }
-        
-         .list-button {
+
+        .readonly {
+            background-color: #e9ecef;
+            pointer-events: none;
+        }
+
+        .edit-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #007bff;
+            border: none;
+            background: none;
+            margin-right: 15px;
+            font-size: 20px;
+            margin-top: 35px;
+        }
+
+        .edit-button:hover {
+            color: #0056b3;
+        }
+
+        .check-button {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #28a745;
+            border: none;
+            background: none;
+            margin-right: 15px;
+            font-size: 20px;
+            margin-top: 35px;
+        }
+
+        .check-button:hover {
+            color: #218838;
+        }
+
+        .list-button {
             display: block;
             width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
             text-align: center;
-            text-decoration: none;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
             border-radius: 5px;
-            margin-top: 20px;
             font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: 10px;
         }
 
         .list-button:hover {
-            background-color: #218838;
+            background-color: #0056b3;
         }
-        
+
+        .delete-button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background-color: #dc3545; /* 빨강색 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333; /* 진한 빨강색 */
+        }
     </style>
+    <script>
+        function toggleButton(target) {
+            const group = target.parentElement;
+            const buttons = group.querySelectorAll('.button, .hard, .soso, .easy');
+            const input = document.getElementById(target.getAttribute('data-target'));
+
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            target.classList.add('active');
+            input.checked = true;
+        }
+
+        function switchToEditMode() {
+            document.querySelectorAll('.readonly').forEach(function(element) {
+                element.classList.remove('readonly');
+                element.removeAttribute('readonly');
+                element.style.backgroundColor = '#fff';
+            });
+
+            document.getElementById('editIcon').style.display = 'none';
+            document.getElementById('checkIcon').style.display = 'inline-block';
+        }
+
+        function updateSchedule() {
+            var updatedSchedule = {
+                postNo: document.getElementById('postNo').value || '',
+                userNo: document.getElementById('userNo').value || '',
+                title: document.getElementById('title').value || '',
+                mountainName: document.getElementById('mountainName').value || '',
+                hikingTotalTime: document.getElementById('hikingTotalTime').value || '',
+                hikingAscentTime: document.getElementById('hikingAscentTime').value || '',
+                hikingDescentTime: document.getElementById('hikingDescentTime').value || '',
+                hikingDifficulty: document.querySelector('input[name="hikingDifficulty"]:checked') ? document.querySelector('input[name="hikingDifficulty"]:checked').value : '',
+                transportation: document.querySelector('input[name="transportation"]:checked') ? document.querySelector('input[name="transportation"]:checked').value : '',
+                contents: document.getElementById('contents').value || ''
+            };
+
+            fetch('/user/rest/updateSchedule', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedSchedule)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    alert('업데이트 실패: ' + data.message);
+                } else {
+                    alert('일정이 업데이트되었습니다.');
+                    window.location.href = "/user/getScheduleList";  // 조회 화면으로 리디렉션
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('업데이트 중 오류가 발생했습니다.');
+            });
+        }
+
+        function deleteSchedule() {
+            var postNo = document.getElementById('postNo').value || '';
+            var userNo = document.getElementById('userNo').value || '';
+
+            if (!postNo || !userNo) {
+                alert('삭제할 일정을 찾을 수 없습니다.');
+                return;
+            }
+
+            if (!confirm('정말로 삭제하시겠습니까?')) {
+                return;
+            }
+
+            fetch(`/user/rest/deleteSchedule`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ postNo: postNo, userNo: userNo })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // 응답 본문이 비어 있을 수 있으므로 조건 추가
+                return response.text().then(text => text ? JSON.parse(text) : {});
+            })
+            .then(data => {
+                if (data.error) {
+                    alert('삭제 실패: ' + data.message);
+                } else {
+                    alert('일정이 삭제되었습니다.');
+                    window.location.href = "/user/getScheduleList";  // 조회 화면으로 리디렉션
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('삭제 중 오류가 발생했습니다.');
+            });
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var difficulty = '${schedule.hikingDifficulty}';
+            var transportation = '${schedule.transportation}';
+
+            if (difficulty === '0') {
+                document.querySelector('.hard[data-target="difficultyHard"]').classList.add('active');
+                document.getElementById('difficultyHard').checked = true;
+            } else if (difficulty === '1') {
+                document.querySelector('.soso[data-target="difficultyNormal"]').classList.add('active');
+                document.getElementById('difficultyNormal').checked = true;
+            } else if (difficulty === '2') {
+                document.querySelector('.easy[data-target="difficultyEasy"]').classList.add('active');
+                document.getElementById('difficultyEasy').checked = true;
+            }
+
+            var transportButtons = {
+                '0': 'transportationWalk',
+                '1': 'transportationBike',
+                '2': 'transportationBus',
+                '3': 'transportationCar',
+                '4': 'transportationSubway',
+                '5': 'transportationTrain'
+            };
+
+            if (transportation in transportButtons) {
+                document.querySelector('.button[data-target="' + transportButtons[transportation] + '"]').classList.add('active');
+                document.getElementById(transportButtons[transportation]).checked = true;
+            }
+        });
+    </script>
 </head>
 <body>
-    <div class="container" style="margin-top: 150px;">
-        <h2></h2>
-        <form action="/user/updateSchedule" method="post">
+    <div class="container">
+        <form id="scheduleForm" class="schedule" method="post">
             <div class="form-group">
                 <label for="title">일정명</label>
                 <input type="text" id="title" name="title" value="${schedule.title}" readonly class="readonly">
@@ -127,38 +345,17 @@
                 <input type="text" id="hikingDescentTime" name="hikingDescentTime" value="${schedule.hikingDescentTime}" readonly class="readonly">
             </div>
             <div class="form-group">
-                <label for="hikingDifficulty">등산 난이도</label>
-                <input type="text" id="hikingDifficulty" name="hikingDifficulty" value="<c:choose>
-                	<c:when test='${schedule.hikingDifficulty == 0}'>어려움</c:when>
-                	<c:when test='${schedule.hikingDifficulty == 1}'>보통</c:when>
-                	<c:when test='${schedule.hikingDifficulty == 2}'>쉬움</c:when>
-                	</c:choose>" readonly class="readonly">
-            </div>
-            <div class="form-group">
-                <label for="transportation">교통수단</label>
-                <input type="text" id="transportation" name="transportation" value="<c:choose>
-                <c:when test='${schedule.transportation == 0}'>도보</c:when>
-                <c:when test='${schedule.transportation == 1}'>자전거</c:when>
-                <c:when test='${schedule.transportation == 2}'>버스</c:when>
-                <c:when test='${schedule.transportation == 3}'>자동차</c:when>
-                <c:when test='${schedule.transportation == 4}'>지하철</c:when>
-                <c:when test='${schedule.transportation == 5}'>기차</c:when>
-                </c:choose>" readonly class="readonly">
-            </div>
-            
-             <div class="form-group">
                 <label for="contents">내용</label>
-                <textarea id="contents" name="contents" rows="10"  value="${schedule.contents}" placeholder="내용을 입력하세요" required>${schedule.contents}</textarea>
+                <textarea id="contents" name="contents" rows="10" placeholder="내용을 입력하세요" readonly class="readonly">${schedule.contents}</textarea>
             </div>
             
-            <input type="hidden" id="userNo" name="userNo" value="${schedule.userNo}">
             <input type="hidden" id="postNo" name="postNo" value="${schedule.postNo}">
+            <input type="hidden" id="userNo" name="userNo" value="${schedule.userNo}">
             
-            <div class="form-group">
-                <button type="button" onclick="location.href='/user/updateSchedule?postNo=${schedule.postNo}&userNo=${schedule.userNo}'">수정하기</button>
-               <!--  <button type="button" class="cancel-button" onclick="history.back()">뒤로</button> -->
-                <a href="/user/getScheduleList" class="list-button" onclick="window.close()">목록으로</a>
-            </div>
+            <button type="button" id="editIcon" class="edit-button" onclick="switchToEditMode()">✏️</button>
+            <button type="button" id="checkIcon" class="check-button" onclick="updateSchedule()">✔️</button>
+            
+            <button type="button" class="delete-button" onclick="deleteSchedule()">삭제하기</button>
         </form>
     </div>
 </body>

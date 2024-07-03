@@ -4,34 +4,31 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Schedule Form</title>
+    <title></title>
     <style>
-        body {
+/*          body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             background-color: #f5f5f5;
             margin: 0;
-        }
+        }  */
 
-        .container {
+/*         .container {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            width: 500px;
-            max-width: 100%;
-        }
+            width: 100%;
+            max-width: 480px;
+            margin: 20px auto; /* Center the container in the sidebar */
+        } 
 
-        h2 {
+/*         h2 {
             margin-top: 0;
             font-size: 24px;
             color: #333;
             text-align: center;
         }
-
+ */
         .form-group {
             margin-bottom: 15px;
         }
@@ -50,6 +47,12 @@
             border-radius: 5px;
             font-size: 14px;
         }
+        
+          .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border: 1px solid #81C408; /* 클릭 시 테두리 두께와 색상 설정 */
+            outline: none; /* 기본 포커스 효과 제거 */
+            box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); /* 선택적으로 포커스 시 그림자 효과 추가 */	
+          }
 
         .form-group select {
             height: 40px;
@@ -74,7 +77,7 @@
             margin-bottom: 15px;
         }
 
-        .button-group .button {
+        .button-group .button, .hard, .soso, .easy {
             flex: 1;
             padding: 10px;
             background-color: #28a745;
@@ -94,6 +97,18 @@
         .button-group .button.active {
             background-color: #218838;
         }
+        
+        .button-group .hard.active {
+            background-color: #851600;
+        }
+        
+         .button-group .soso.active {
+            background-color: #8F4F00;
+        }
+        
+          .button-group .easy.active {
+            background-color: #003EB3;
+        }
 
         .hidden-radio {
             display: none;
@@ -109,6 +124,40 @@
             font-size: 16px;
             cursor: pointer;
         }
+        
+         .hard {
+            width: 100%;
+            padding: 10px;
+            background-color: #CB3025;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+              
+        .soso {
+            width: 100%;
+            padding: 10px;
+            background-color: #FF780A;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+         .easy {
+            width: 100%;
+            padding: 10px;
+            background-color: #57A5FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
 
         .form-group button:hover {
             background-color: #218838;
@@ -124,25 +173,28 @@
         }
 
     </style>
-    <script>
-        function toggleButton(target) {
-            const group = target.parentElement;
-            const buttons = group.querySelectorAll('.button');
-            const input = document.getElementById(target.getAttribute('data-target'));
+<script>
+    function toggleButton(target) {
+        const group = target.parentElement;
+        const buttons = group.querySelectorAll('.button, .hard, .soso, .easy'); // 모든 버튼 선택
+        const input = document.getElementById(target.getAttribute('data-target'));
 
-            if (target.classList.contains('active')) {
-                target.classList.remove('active');
-                input.checked = false;
-            } else {
-                buttons.forEach(button => {
-                    button.classList.remove('active');
-                    document.getElementById(button.getAttribute('data-target')).checked = false;
-                });
-                target.classList.add('active');
-                input.checked = true;
-            }
+        if (target.classList.contains('active')) {
+            target.classList.remove('active');
+            input.checked = false;
+        } else {
+            buttons.forEach(button => {
+                button.classList.remove('active');
+                document.getElementById(button.getAttribute('data-target')).checked = false;
+            });
+            target.classList.add('active');
+            input.checked = true;
         }
-    </script>
+    }
+</script>
+
+
+
     
     <script>
         // 일정 등록 버튼 클릭 시 팝업 창 닫기
@@ -160,8 +212,8 @@
     </script>
 </head>
 <body>
-    <div class="container" style="margin-top:150px;">
-        <h2></h2>
+    <div class="container">
+        <!-- <h2></h2> -->
         <form action="/user/addSchedule" method="post">
             <div class="form-group">
                 <label for="title">일정명</label>
@@ -178,18 +230,17 @@
             <div class="form-group inline-group">
             	<label for="hikingTotalTime">상행시간</label>
                 <input type="text" id="hikingAscentTime" name="hikingAscentTime" placeholder="상행시간" >
-
             </div>
             <div class="form-group inline-group">
-            	<label for="mountainName">하행시간</label>
+            	<label for="hikingTotalTime">하행시간</label>
                 <input type="text" id="hikingDescentTime" name="hikingDescentTime" placeholder="하행시간" >
             </div>
-            <div class="form-group">
+        <!--     <div class="form-group">
                 <label>등산 난이도</label>
                 <div class="button-group">
-                    <div class="button" data-target="difficultyHard" onclick="toggleButton(this)">어려움</div>
-                    <div class="button" data-target="difficultyNormal" onclick="toggleButton(this)">보통</div>
-                    <div class="button" data-target="difficultyEasy" onclick="toggleButton(this)">쉬움</div>
+                    <div class="hard" data-target="difficultyHard" onclick="toggleButton(this)">어려움</div>
+                    <div class="soso" data-target="difficultyNormal" onclick="toggleButton(this)">보통</div>
+                    <div class="easy" data-target="difficultyEasy" onclick="toggleButton(this)">쉬움</div>
                 </div>
                 <input type="radio" id="difficultyHard" name="hikingDifficulty" value="0" class="hidden-radio" >
                 <input type="radio" id="difficultyNormal" name="hikingDifficulty" value="1" class="hidden-radio" >
@@ -211,14 +262,14 @@
                 <input type="radio" id="transportationCar" name="Transportation" value="3" class="hidden-radio" >
                 <input type="radio" id="transportationSubway" name="Transportation" value="4" class="hidden-radio" >
                 <input type="radio" id="transportationTrain" name="Transportation" value="5" class="hidden-radio" >
-            </div>
+            </div> -->
             <div class="form-group">
                 <label for="contents">내용</label>
                 <textarea id="contents" name="contents" rows="10" placeholder="내용을 입력하세요" ></textarea>
             </div>
             <div class="form-group">
                 <button type="submit">일정 등록하기</button>
-                <button type="button" class="cancel-button" onclick=cancelForm()>취소</button>
+               <!--  <button type="button" class="cancel-button" onclick=cancelForm()>취소</button> -->
             </div>
             <c:set var="clickedDate" value="${param.date}" />
             <input type="hidden" name="stringDate" value="${clickedDate}">

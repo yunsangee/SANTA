@@ -1,37 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Update Schedule</title>
+    <title>업데이트 스케줄</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f5f5f5;
-            margin: 0;
-        }
-
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            width: 500px;
-            max-width: 100%;
-        }
-
-        h2 {
-            margin-top: 0;
-            font-size: 24px;
-            color: #333;
-            text-align: center;
-        }
-
         .form-group {
             margin-bottom: 15px;
         }
@@ -49,6 +23,12 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 14px;
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border: 1px solid #81C408; 
+            outline: none; 
+            box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); 
         }
 
         .form-group select {
@@ -74,7 +54,7 @@
             margin-bottom: 15px;
         }
 
-        .button-group .button {
+        .button-group .button, .hard, .soso, .easy {
             flex: 1;
             padding: 10px;
             background-color: #28a745;
@@ -94,6 +74,18 @@
         .button-group .button.active {
             background-color: #218838;
         }
+        
+        .button-group .hard.active {
+            background-color: #851600;
+        }
+        
+         .button-group .soso.active {
+            background-color: #8F4F00;
+        }
+        
+          .button-group .easy.active {
+            background-color: #003EB3;
+        }
 
         .hidden-radio {
             display: none;
@@ -109,6 +101,40 @@
             font-size: 16px;
             cursor: pointer;
         }
+        
+         .hard {
+            width: 100%;
+            padding: 10px;
+            background-color: #CB3025;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+              
+        .soso {
+            width: 100%;
+            padding: 10px;
+            background-color: #FF780A;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+         .easy {
+            width: 100%;
+            padding: 10px;
+            background-color: #57A5FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
 
         .form-group button:hover {
             background-color: #218838;
@@ -124,110 +150,119 @@
         }
 
     </style>
-    <script>
-        function toggleButton(target) {
-            const group = target.parentElement;
-            const buttons = group.querySelectorAll('.button');
-            const input = document.getElementById(target.getAttribute('data-target'));
+<script>
+    function toggleButton(target) {
+        const group = target.parentElement;
+        const buttons = group.querySelectorAll('.button, .hard, .soso, .easy'); // 모든 버튼 선택
+        const input = document.getElementById(target.getAttribute('data-target'));
 
-            if (target.classList.contains('active')) {
-                target.classList.remove('active');
-                input.checked = false;
-            } else {
-                buttons.forEach(button => {
-                    button.classList.remove('active');
-                    document.getElementById(button.getAttribute('data-target')).checked = false;
-                });
-                target.classList.add('active');
-                input.checked = true;
-            }
+        if (target.classList.contains('active')) {
+            target.classList.remove('active');
+            input.checked = false;
+        } else {
+            buttons.forEach(button => {
+                button.classList.remove('active');
+                document.getElementById(button.getAttribute('data-target')).checked = false;
+            });
+            target.classList.add('active');
+            input.checked = true;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // 기존 데이터로 버튼 상태 설정
+        var difficulty = '${schedule.hikingDifficulty}';
+        var transportation = '${schedule.transportation}';
+
+        if (difficulty === '0') {
+            document.querySelector('.hard[data-target="difficultyHard"]').classList.add('active');
+            document.getElementById('difficultyHard').checked = true;
+        } else if (difficulty === '1') {
+            document.querySelector('.soso[data-target="difficultyNormal"]').classList.add('active');
+            document.getElementById('difficultyNormal').checked = true;
+        } else if (difficulty === '2') {
+            document.querySelector('.easy[data-target="difficultyEasy"]').classList.add('active');
+            document.getElementById('difficultyEasy').checked = true;
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            const difficultyValue = "${schedule.hikingDifficulty}";
-            const transportationValue = "${schedule.transportation}";
+        var transportButtons = {
+            '0': 'transportationWalk',
+            '1': 'transportationBike',
+            '2': 'transportationBus',
+            '3': 'transportationCar',
+            '4': 'transportationSubway',
+            '5': 'transportationTrain'
+        };
 
-            if (difficultyValue !== '') {
-                const difficultyButton = document.querySelector(`.button[data-target="difficulty${difficultyValue}"]`);
-                if (difficultyButton) {
-                    difficultyButton.classList.add('active');
-                    document.getElementById(difficultyButton.getAttribute('data-target')).checked = true;
-                }
-            }
-
-            if (transportationValue !== '') {
-                const transportationButton = document.querySelector(`.button[data-target="transportation${transportationValue}"]`);
-                if (transportationButton) {
-                    transportationButton.classList.add('active');
-                    document.getElementById(transportationButton.getAttribute('data-target')).checked = true;
-                }
-            }
-        });
-    </script>
+        if (transportation in transportButtons) {
+            document.querySelector('.button[data-target="' + transportButtons[transportation] + '"]').classList.add('active');
+            document.getElementById(transportButtons[transportation]).checked = true;
+        }
+    });
+</script>
+    
 </head>
 <body>
     <div class="container">
-        <h2>Update Schedule</h2>
+        <!-- <h2></h2> -->
         <form action="/user/updateSchedule" method="post">
             <div class="form-group">
                 <label for="title">일정명</label>
-                <input type="text" id="title" name="title" value="${schedule.title}" required>
+                <input type="text" id="title" name="title" placeholder="일정명을 입력하세요" value="${schedule.title}" required>
             </div>
             <div class="form-group">
                 <label for="mountainName">산 명칭</label>
-                <input type="text" id="mountainName" name="mountainName" value="${schedule.mountainName}" required>
+                <input type="text" id="mountainName" name="mountainName" placeholder="산 명칭" value="${schedule.mountainName}" required>
             </div>
             <div class="form-group inline-group">
             	<label for="hikingTotalTime">총 소요시간</label>
-                <input type="text" id="hikingTotalTime" name="hikingTotalTime" placeholder="총 소요시간" >
+                <input type="text" id="hikingTotalTime" name="hikingTotalTime" placeholder="총 소요시간" value="${schedule.hikingTotalTime}">
             </div>
             <div class="form-group inline-group">
-            	<label for="hikingTotalTime">상행시간</label>
-                <input type="text" id="hikingAscentTime" name="hikingAscentTime" placeholder="상행시간" >
-
+            	<label for="hikingAscentTime">상행시간</label>
+                <input type="text" id="hikingAscentTime" name="hikingAscentTime" placeholder="상행시간" value="${schedule.hikingAscentTime}">
             </div>
             <div class="form-group inline-group">
-            	<label for="mountainName">하행시간</label>
-                <input type="text" id="hikingDescentTime" name="hikingDescentTime" placeholder="하행시간" >
+            	<label for="hikingDescentTime">하행시간</label>
+                <input type="text" id="hikingDescentTime" name="hikingDescentTime" placeholder="하행시간" value="${schedule.hikingDescentTime}">
             </div>
             <div class="form-group">
                 <label>등산 난이도</label>
                 <div class="button-group">
-                    <div class="button" data-target="difficulty0" onclick="toggleButton(this)">어려움</div>
-                    <div class="button" data-target="difficulty1" onclick="toggleButton(this)">보통</div>
-                    <div class="button" data-target="difficulty2" onclick="toggleButton(this)">쉬움</div>
+                    <div class="hard" data-target="difficultyHard" onclick="toggleButton(this)">어려움</div>
+                    <div class="soso" data-target="difficultyNormal" onclick="toggleButton(this)">보통</div>
+                    <div class="easy" data-target="difficultyEasy" onclick="toggleButton(this)">쉬움</div>
                 </div>
-                <input type="radio" id="difficulty0" name="hikingDifficulty" value="0" class="hidden-radio" ${schedule.hikingDifficulty == 0 ? 'checked' : ''} >
-                <input type="radio" id="difficulty1" name="hikingDifficulty" value="1" class="hidden-radio" ${schedule.hikingDifficulty == 1 ? 'checked' : ''} >
-                <input type="radio" id="difficulty2" name="hikingDifficulty" value="2" class="hidden-radio" ${schedule.hikingDifficulty == 2 ? 'checked' : ''} >
+                <input type="radio" id="difficultyHard" name="hikingDifficulty" value="0" class="hidden-radio">
+                <input type="radio" id="difficultyNormal" name="hikingDifficulty" value="1" class="hidden-radio">
+                <input type="radio" id="difficultyEasy" name="hikingDifficulty" value="2" class="hidden-radio">
             </div>
             <div class="form-group">
                 <label>교통수단</label>
                 <div class="button-group">
-                    <div class="button" data-target="transportation0" onclick="toggleButton(this)">도보</div>
-                    <div class="button" data-target="transportation1" onclick="toggleButton(this)">자전거</div>
-                    <div class="button" data-target="transportation2" onclick="toggleButton(this)">버스</div>
-                    <div class="button" data-target="transportation3" onclick="toggleButton(this)">자동차</div>
-                    <div class="button" data-target="transportation4" onclick="toggleButton(this)">지하철</div>
-                    <div class="button" data-target="transportation5" onclick="toggleButton(this)">기차</div>
+                    <div class="button" data-target="transportationWalk" onclick="toggleButton(this)">도보</div>
+                    <div class="button" data-target="transportationBike" onclick="toggleButton(this)">자전거</div>
+                    <div class="button" data-target="transportationBus" onclick="toggleButton(this)">버스</div>
+                    <div class="button" data-target="transportationCar" onclick="toggleButton(this)">자동차</div>
+                    <div class="button" data-target="transportationSubway" onclick="toggleButton(this)">지하철</div>
+                    <div class="button" data-target="transportationTrain" onclick="toggleButton(this)">기차</div>
                 </div>
-                <input type="radio" id="transportation0" name="transportation" value="0" class="hidden-radio" ${schedule.transportation == 0 ? 'checked' : ''} >
-                <input type="radio" id="transportation1" name="transportation" value="1" class="hidden-radio" ${schedule.transportation == 1 ? 'checked' : ''} >
-                <input type="radio" id="transportation2" name="transportation" value="2" class="hidden-radio" ${schedule.transportation == 2 ? 'checked' : ''} >
-                <input type="radio" id="transportation3" name="transportation" value="3" class="hidden-radio" ${schedule.transportation == 3 ? 'checked' : ''} >
-                <input type="radio" id="transportation4" name="transportation" value="4" class="hidden-radio" ${schedule.transportation == 4 ? 'checked' : ''} >
-                <input type="radio" id="transportation5" name="transportation" value="5" class="hidden-radio" ${schedule.transportation == 5 ? 'checked' : ''} >
+                <input type="radio" id="transportationWalk" name="transportation" value="0" class="hidden-radio">
+                <input type="radio" id="transportationBike" name="transportation" value="1" class="hidden-radio">
+                <input type="radio" id="transportationBus" name="transportation" value="2" class="hidden-radio">
+                <input type="radio" id="transportationCar" name="transportation" value="3" class="hidden-radio">
+                <input type="radio" id="transportationSubway" name="transportation" value="4" class="hidden-radio">
+                <input type="radio" id="transportationTrain" name="transportation" value="5" class="hidden-radio">
             </div>
             <div class="form-group">
                 <label for="contents">내용</label>
-                <textarea id="contents" name="contents" rows="10" placeholder="내용을 입력하세요" >${schedule.contents}</textarea>
+                <textarea id="contents" name="contents" rows="10" placeholder="내용을 입력하세요">${schedule.contents}</textarea>
             </div>
             <div class="form-group">
-                <button type="submit">일정 수정하기</button>
-                <button type="button" class="cancel-button" onclick="history.back()">취소</button>
+                <button type="submit">일정 업데이트하기</button>
             </div>
-        	<input type="hidden" id="userNo" name="userNo" value="${schedule.userNo}">
-            <input type="hidden" id="postNo" name="postNo" value="${schedule.postNo}">
+            <c:set var="clickedDate" value="${param.date}" />
+            <input type="hidden" name="stringDate" value="${clickedDate}">
         </form>
     </div>
 </body>

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -212,11 +213,18 @@ public class UserRestController {
 	// delete Schedule
 	//
 	
-	@GetMapping(value="rest/deleteSchedule")
-	public void deleteSchedule(@RequestParam int postNo, int userNo) throws Exception {
-		
-		userService.deleteSchedule(postNo, userNo);
-	}
+	@PostMapping("rest/deleteSchedule")
+    public ResponseEntity<Void> deleteSchedule(@RequestBody Map<String, Integer> payload) throws Exception {
+        int postNo = payload.get("postNo");
+        int userNo = payload.get("userNo");
+
+        // Schedule 삭제 로직 실행
+        userService.deleteSchedule(postNo, userNo);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+	
+	
 	
 	//
 	// UserList
@@ -536,43 +544,43 @@ public class UserRestController {
 	    }
 	    
 	    
-	    @GetMapping(value = "rest/getSchedule")
-		public boolean getSchedule(@RequestParam(required = false) Integer postNo, @RequestParam(required = false) Integer userNo, HttpSession session, Model model) throws Exception {
-		    
-			System.out.println("getSchedule : GET");
-
-		    // 세션에서 로그인한 사용자 정보 가져오기
-		    User user = (User) session.getAttribute("user");
-
-		    Schedule schedule = userService.getSchedule(postNo, userNo);
-
-//		    if (user == null) {
-//		        // 로그인한 사용자 정보가 없는 경우 오류 처리
-//		        model.addAttribute("error", "로그인 정보를 찾을 수 없습니다.");
-//		        return "redirect:/login"; // 로그인 페이지로 리다이렉트 또는 다른 처리
+//	    @GetMapping(value = "rest/getSchedule")
+//		public boolean getSchedule(@RequestParam(required = false) Integer postNo, @RequestParam(required = false) Integer userNo, HttpSession session, Model model) throws Exception {
+//		    
+//			System.out.println("getSchedule : GET");
+//
+//		    // 세션에서 로그인한 사용자 정보 가져오기
+//		    User user = (User) session.getAttribute("user");
+//
+//		    Schedule schedule = userService.getSchedule(postNo, userNo);
+//
+////		    if (user == null) {
+////		        // 로그인한 사용자 정보가 없는 경우 오류 처리
+////		        model.addAttribute("error", "로그인 정보를 찾을 수 없습니다.");
+////		        return "redirect:/login"; // 로그인 페이지로 리다이렉트 또는 다른 처리
+////		    }
+//
+//		    if (schedule == null) {
+//		        // Schedule 정보가 없는 경우 오류 처리
+//		        model.addAttribute("error", "Schedule 정보를 찾을 수 없습니다.");
+//		        return false;
 //		    }
-
-		    if (schedule == null) {
-		        // Schedule 정보가 없는 경우 오류 처리
-		        model.addAttribute("error", "Schedule 정보를 찾을 수 없습니다.");
-		        return false;
-		    }
-
-		    if (userNo != null && schedule.getUserNo() == userNo) {
-		        // 사용자 번호로 조회하는 경우
-		    	session.setAttribute("schedule", schedule);
-		        return true;
-		    } else {
-		        // 잘못된 요청 처리
-		        model.addAttribute("error", "올바른 요청이 아닙니다.");
-		        return false;
-		    }
-		    
-		}
+//
+//		    if (userNo != null && schedule.getUserNo() == userNo) {
+//		        // 사용자 번호로 조회하는 경우
+//		    	session.setAttribute("schedule", schedule);
+//		        return true;
+//		    } else {
+//		        // 잘못된 요청 처리
+//		        model.addAttribute("error", "올바른 요청이 아닙니다.");
+//		        return false;
+//		    }
+//		    
+//		}
 	    
 	    ////////////////////
 	    
-	    @GetMapping("/rest/getQnA")
+	    @GetMapping("rest/getQnA")
 	    public Map<String, Object> getQnA(@RequestParam(required = false) Integer postNo, @RequestParam(required = false) Integer userNo, HttpSession session) throws Exception {
 	        // 세션에서 로그인한 사용자 정보 가져오기
 	        User sessionUser = (User) session.getAttribute("user");
@@ -607,7 +615,7 @@ public class UserRestController {
 
 	    ///////////////////////////////////////////////////////////
 	    
-	    @PostMapping("/rest/addAdminAnswer")
+	    @PostMapping("rest/addAdminAnswer")
 	    public ResponseEntity<Void> addAdminAnswer(@RequestBody QNA qna, HttpSession session) throws Exception {
 	        System.out.println("addAdminAnswer : restPOST");
 	        System.out.println("postNo : " + qna.getPostNo());
@@ -636,6 +644,140 @@ public class UserRestController {
 
 	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	    }
+	    
+	    ////////////////////////////////////////////////////////////////////////////////////////////////
+	    
+	    @PostMapping(value = "rest/addSchedule")
+	    public ResponseEntity<?> addSchedule(@RequestBody Schedule schedule, HttpSession session) throws Exception {
+	        System.out.println("addSchedule : POST");
+	        schedule.setScheduleDate(schedule.getStringDate());
+	        
+	        User sessionUser = (User) session.getAttribute("user");
 
+	        if (sessionUser == null) {
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+	        }
+
+	        schedule.setUserNo(sessionUser.getUserNo());
+	        userService.addSchedule(schedule);
+	        Search search = new Search();
+	        List<Schedule> scheduleList = userService.getScheduleList(sessionUser.getUserNo(), search);
+	        
+	        return ResponseEntity.ok(scheduleList);
+	    }
+	    
+	    @GetMapping(value = "rest/addSchedule")
+	    public ModelAndView addScheduleView(@RequestParam String date) {
+	        ModelAndView mav = new ModelAndView("forward:/user/addSchedule.jsp");
+	        mav.addObject("clickedDate", date);
+	        return mav;
+	    }
+
+	    @GetMapping(value = "rest/getSchedule")
+	    public ModelAndView getSchedule(@RequestParam Integer postNo, @RequestParam Integer userNo, HttpSession session) throws Exception {
+	        System.out.println("getSchedule : GET");
+
+	        User user = (User) session.getAttribute("user");
+	        Schedule schedule = userService.getSchedule(postNo, userNo);
+
+	        ModelAndView mav = new ModelAndView("forward:/user/getSchedule.jsp");
+
+	        if (user == null) {
+	            mav.addObject("error", "로그인 정보를 찾을 수 없습니다.");
+	            return mav;
+	        }
+
+	        if (schedule == null) {
+	            mav.addObject("error", "Schedule 정보를 찾을 수 없습니다.");
+	            return mav;
+	        }
+
+	        if (userNo != null && schedule.getUserNo() == userNo) {
+	            mav.addObject("schedule", schedule);
+	            return mav;
+	        } else {
+	            mav.addObject("error", "올바른 요청이 아닙니다.");
+	            return mav;
+	        }
+	    }
+	    
+	    ///////////////////////////
+	    
+	    @GetMapping("rest/updateSchedule")
+	    public Schedule getSchedule(@RequestParam int postNo, @RequestParam int userNo) throws Exception {
+	        System.out.println("updateSchedule : GET");
+
+	        // Business Logic
+	        Schedule schedule = userService.getSchedule(postNo, userNo);
+
+	        return schedule;
+	    }
+
+	    @PostMapping("rest/updateSchedule")
+	    public ResponseEntity<?> updateSchedule(@RequestBody Schedule schedule, HttpSession session) throws Exception {
+	        System.out.println("updateSchedule : POST");
+
+	        System.out.println("postNo : " + schedule.getPostNo());
+	        System.out.println("userNo : " + schedule.getUserNo());
+
+	        // 세션에서 로그인한 사용자 정보 가져오기
+	        User sessionUser = (User) session.getAttribute("user");
+
+	        System.out.println("sessionUser : " + sessionUser);
+
+	        if (sessionUser == null) {
+	            // 로그인하지 않은 경우 401 Unauthorized 상태 반환
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+	        }
+
+	        // Schedule 정보 조회
+	        Schedule dbSchedule = userService.getSchedule(schedule.getPostNo(), schedule.getUserNo());
+
+	        // SCHEDULE 객체에 사용자 정보 설정
+	        schedule.setUserNo(sessionUser.getUserNo());
+
+	        // 업데이트
+	        dbSchedule.setTitle(schedule.getTitle());
+	        dbSchedule.setMountainName(schedule.getMountainName());
+	        dbSchedule.setHikingTotalTime(schedule.getHikingTotalTime());
+	        dbSchedule.setHikingAscentTime(schedule.getHikingAscentTime());
+	        dbSchedule.setHikingDescentTime(schedule.getHikingDescentTime());
+	        dbSchedule.setHikingDifficulty(schedule.getHikingDifficulty());
+	        dbSchedule.setTransportation(schedule.getTransportation());
+	        dbSchedule.setContents(schedule.getContents());
+
+	        // Schedule 업데이트
+	        userService.updateSchedule(dbSchedule);
+
+	        System.out.println("updateSchedule : " + dbSchedule);
+
+	        return ResponseEntity.ok(dbSchedule);
+	    }
+	    
+	    //////////////////////////////
+	    
+	    @PostMapping(value = "rest/changePhoneNumber")
+	    public ResponseEntity<Map<String, String>> changePhoneNumber(@RequestBody Map<String, String> payload, HttpSession session) throws Exception {
+	        Map<String, String> response = new HashMap<>();
+
+	        String phoneNumber = payload.get("phoneNumber");
+
+	        User sessionUser = (User) session.getAttribute("user");
+
+	        if (sessionUser == null) {
+	            response.put("status", "error");
+	            response.put("message", "세션이 만료되었습니다. 다시 로그인 해주세요.");
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+	        }
+
+	        sessionUser.setPhoneNumber(phoneNumber);
+	        userService.updateUser(sessionUser);
+	        session.setAttribute("user", sessionUser);
+	        response.put("status", "success");
+	        response.put("message", "휴대폰 번호가 성공적으로 변경되었습니다.");
+	        return ResponseEntity.ok(response);
+	    }
 	}
+
+
 
