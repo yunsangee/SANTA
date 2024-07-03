@@ -416,7 +416,7 @@
 <!--  ////////////////////////////////////////////// main ///////////////////////////////////////////////// -->
 
 <main class="container">
-    <form action="/user/updateUser" method="post" >
+    <form action="/user/addUser?socialLogin=1" method="post" >
      <%--    <div class="profile-header">
             <div class="profile-container">
                 <img src="${sessionScope.user.profileImage}" class="profile">

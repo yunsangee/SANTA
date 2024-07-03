@@ -78,8 +78,7 @@ public class OAuthController {
             	if (checkUser.getUserPassword().equals( "kakao")) {
             		
             		session.setAttribute("user", checkUser);
-            		
-            		return new ModelAndView("forward:/common/main.jsp");
+
             		
             	} else {
             		
@@ -88,8 +87,12 @@ public class OAuthController {
             	}
             	
             }  else if(existingUsers.size() == 0) {
-            		userService.addUser(user);
-            	    session.setAttribute("user", user);
+            		
+            	    ModelAndView modelAndView = new ModelAndView();
+            	    modelAndView.addObject("user", user);
+            	    
+            	    return new ModelAndView("forward:/user/addInfo.jsp");
+            	    
             }         
         
         } catch (Exception e) {
