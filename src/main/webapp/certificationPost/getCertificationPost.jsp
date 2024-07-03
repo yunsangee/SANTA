@@ -6,11 +6,14 @@
 <!DOCTYPE html>
 <html class="fontawesome-i2svg-active fontawesome-i2svg-complete">
 <head>
+  <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png">
     <c:import url="../common/header.jsp"/>
     <title>Certification Post Detail Page</title>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+ <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 
    <style>
     main {
@@ -300,8 +303,21 @@
         margin-top: 20px;
     }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-    <script>
+<script>
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function example() {
+        console.log('Start');
+        await sleep(2000); // 1초 대기
+        console.log('1 second later');
+    }
+
+    example();
+
     $(document).ready(function() {
         var postNo = ${certificationPost.postNo};
         var userNo = ${user.userNo};
@@ -397,10 +413,8 @@
 
                     // 댓글 삭제 버튼 클릭 이벤트 바인딩
                     $('.btn-danger[data-comment-id]').on('click', function() {
-                        if (confirm('정말로 삭제하시겠습니까?')) {
-                            var commentId = $(this).data('comment-id');
-                            deleteComment(commentId);
-                        }
+                        var commentId = $(this).data('comment-id');
+                        deleteComment(commentId);
                     });
                 },
                 error: function(xhr, status, error) {
@@ -439,46 +453,107 @@
                     }
                 });
             } else {
-                alert('댓글을 입력해주세요.');
+                Swal.fire({
+                    title: '댓글을 입력해주세요.',
+                    icon: 'warning',
+                    confirmButtonColor: '#81C408',
+                });
             }
         }
 
         // 댓글 삭제
         function deleteComment(certificationPostCommentNo) {
-            $.ajax({
-                url: 'rest/deleteCertificationPostComment',
-                type: 'DELETE',
-                data: { certificationPostCommentNo: certificationPostCommentNo, userNo: userNo },
-                success: function(response) {
-                    loadComments();
-                },
-                error: function(xhr, status, error) {
-                    console.error('댓글 삭제 오류:', xhr, status, error);
+            Swal.fire({
+                title: '댓글을 삭제하시겠습니까?',
+                text: "이 작업은 되돌릴 수 없습니다.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#81C408',
+                cancelButtonColor: '#45595b',
+                confirmButtonText: '확인',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'rest/deleteCertificationPostComment',
+                        type: 'DELETE',
+                        data: { certificationPostCommentNo: certificationPostCommentNo, userNo: userNo },
+                        success: function(response) {
+                            Swal.fire({
+                                title: '댓글 삭제 성공!',
+                                text: '댓글이 성공적으로 삭제되었습니다.',
+                                icon: 'success',
+                                confirmButtonColor: '#81C408',
+                                customClass: {
+                                    popup: 'custom-swal-popup'
+                                }
+                            });
+                            loadComments();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('댓글 삭제 오류:', xhr, status, error);
+                            Swal.fire(
+                                '댓글 삭제에 실패했습니다.',
+                                '',
+                                'error'
+                            );
+                        }
+                    });
                 }
-            });
+            })
         }
+
+        // 댓글 삭제 버튼 클릭 이벤트 바인딩
+        $('.btn-danger[data-comment-id]').on('click', function() {
+            var commentId = $(this).data('comment-id');
+            deleteComment(commentId);
+        });
 
         // 초기 댓글 로드
         loadComments();
 
         // 게시글 삭제 버튼 클릭 시
-  $('.btn-icon.btntrash').on('click', function() {
-    if (confirm('정말로 삭제하시겠습니까?')) {
-        $.ajax({
-            url: 'rest/updateCertificationPostDeleteFlag',
-            type: 'GET',
-            data: { postNo: postNo, userNo: userNo },
-            success: function(response) {
-                alert('게시글이 삭제되었습니다.');
-                window.location.href = 'listCertificationPost'; // 게시글 목록 페이지로 리디렉션
-            },
-            error: function(xhr, status, error) {
-                console.error('게시글 삭제 오류:', xhr, status, error);
-            }
+        $('.btn-icon.btntrash').on('click', function() {
+            Swal.fire({
+                title: '게시글을 삭제하시겠습니까?',
+                text: "이 작업은 되돌릴 수 없습니다.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#81C408',
+                cancelButtonColor: '#45595b',
+                confirmButtonText: '확인',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'rest/updateCertificationPostDeleteFlag',
+                        type: 'GET',
+                        data: { postNo: postNo, userNo: userNo },
+                        success: function(response) {
+                            Swal.fire({
+                                title: '게시글 삭제 성공!',
+                                text: '게시글이 성공적으로 삭제되었습니다.',
+                                icon: 'success',
+                                confirmButtonColor: '#81C408',
+                                customClass: {
+                                    popup: 'custom-swal-popup'
+                                }
+                            }).then(() => {
+                                window.location.href = 'listCertificationPost'; // 게시글 목록 페이지로 리디렉션
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('게시글 삭제 오류:', xhr, status, error);
+                            Swal.fire(
+                                '게시글 삭제에 실패했습니다.',
+                                '',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            })
         });
-    }
-});
-
 
         // 작성자 클릭 이벤트 설정
         $('.details-container').on('click', 'p.author-link', function() {
@@ -486,7 +561,8 @@
             window.location.href = 'getProfile?userNo=' + authorUserNo;
         });
     });
-    </script>
+</script>
+
 
 </head>
 <body>
@@ -546,7 +622,7 @@
                     <hr>
                     <div class="info-block">
                         <div class="inline-info mb-3">
-                            <span><i class="fas fa-mountain"></i> 산 이름 : &ensp; ${certificationPost.certificationPostMountainName}</span>
+                            <span><i class="fas fa-mountain"></i> 산 명칭 : &ensp; ${certificationPost.certificationPostMountainName}</span>
                             <span><i class="fas fa-route"></i> 등산 경로 : &ensp; ${certificationPost.certificationPostHikingTrail}</span>
                         </div>
                         <div class="inline-info mb-3">

@@ -3,11 +3,12 @@
 <!DOCTYPE html>
 <html class="fontawesome-i2svg-active fontawesome-i2svg-complete">
 <head>
+  <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png">
     <c:import url="../common/header.jsp"/>
     <title>내가 작성한 게시글 목록조회</title>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
         $(document).ready(function() {
             var userNo = "${sessionScope.user.userNo}";
@@ -17,25 +18,48 @@
                 window.location.href = "/certificationPost/getCertificationPost?postNo=" + postNo;
             });
 
-            // 삭제 버튼 클릭 이벤트 핸들러
             $(".delete-btn").click(function(event) {
                 event.stopPropagation();
                 var postNo = $(this).data("postno");
-                if(confirm("정말로 삭제하시겠습니까?")) {
-                    $.ajax({
-                        url: 'rest/updateCertificationPostDeleteFlag',
-                        type: 'GET',
-                        data: { postNo: postNo, userNo: userNo },
-                        success: function(response) {
-                            alert('게시글이 삭제되었습니다.');
-                            window.location.reload();
-                        },
-                        error: function(xhr, status, error) {
-                            alert('게시글 삭제에 실패했습니다.');
-                        }
-                    });
-                }
+                Swal.fire({
+                    title: '정말로 삭제하시겠습니까?',
+                    text: "이 작업은 되돌릴 수 없습니다.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#81C408',
+                    cancelButtonColor: '#45595b',
+                    confirmButtonText: '삭제',
+                    cancelButtonText: '취소'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'rest/updateCertificationPostDeleteFlag',
+                            type: 'GET',
+                            data: { postNo: postNo, userNo: userNo },
+                            success: function(response) {
+                                Swal.fire({
+                                    title: '삭제되었습니다!',
+                                    text: '게시글이 성공적으로 삭제되었습니다.',
+                                    icon: 'success',
+                                    confirmButtonColor: '#81C408'
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire({
+                                    title: '삭제 실패',
+                                    text: '게시글 삭제에 실패했습니다.',
+                                    icon: 'error',
+                                    confirmButtonColor: '#d33'
+                                });
+                            }
+                        });
+                    }
+                });
             });
+
+            // 수정 버튼 
 
             // 수정 버튼 클릭 이벤트 핸들러
             $(".edit-btn").click(function(event) {
@@ -120,10 +144,10 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">No.</th>
-                                <th scope="col">산명칭</th>
-                                <th scope="col">글제목</th>
-                                <th scope="col">작성일자</th>
+                                <th scope="col">순번</th>
+                                <th scope="col">산 명칭</th>
+                                <th scope="col">글 제목</th>
+                                <th scope="col">작성 일자</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>

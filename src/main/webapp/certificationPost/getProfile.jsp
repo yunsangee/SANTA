@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html class="fontawesome-i2svg-active fontawesome-i2svg-complete">
 <head>
+  <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png">
     <c:import url="../common/header.jsp"/>
     <title>Profile</title>
     <style>
@@ -41,10 +42,8 @@ main {
 }
 
 footer {
-    background-color: #f1f1f1;
     padding: 10px 0;
-    text-align: center;
-    margin-top: 50px;
+    margin-top: 70px;
 }
 
 .profile-container {
@@ -306,7 +305,7 @@ function showMultiplePlusAnimations(button) {
                 });
                 setTimeout(function() {
                     plusElement.remove();
-                }, 700); // 애니메이션 지속 시간과 동일하게 설정
+                },800); // 애니메이션 지속 시간과 동일하게 설정
             }, i * 100); // 각 플러스 애니메이션을 약간의 지연 시간으로 생성
         })(i);
     }
@@ -468,9 +467,9 @@ function showMultiplePlusAnimations(button) {
             <div class="profile-container">
                  <img class="profile-image" src="${infouser.profileImage}" alt="Profile Image"/> <!-- 프로필사진 -->
                 <div class="profile-details">
-                    <p><strong>닉네임:</strong> ${infouser.nickName} <img src="${infouser.badgeImage}" class="badge-img">
+                    <p><strong>닉네임 :</strong> ${infouser.nickName} <img src="${infouser.badgeImage}" class="badge-img">
                       </p><!-- 뱃지이미지 들어가야함 -->
-                    <p><strong>한줄소개:</strong>${infouser.introduceContent}</p>      
+                    <p><strong>한줄소개 : </strong>${infouser.introduceContent}</p>      
                     <div class="follow-info">
                         <p id="followingCount" class="${sessionScope.user.userNo != infouser.userNo ? 'disabled' : ''}"><i class="fas fa-user"></i>&ensp;<strong>팔로잉 :</strong> ${followingCount}</p>
                         <span class="separator">•</span>

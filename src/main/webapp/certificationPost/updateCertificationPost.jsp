@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <c:import url="../common/header.jsp"/>
@@ -185,6 +186,12 @@
         .custom-file-input {
             display: none;
         }
+
+        .alert-message {
+            display: none;
+            color: red;
+            margin-top: 5px;
+        }
     </style>
     <script>
     $(document).ready(function() {
@@ -202,30 +209,35 @@
 
         // 초기 로드 시 해시태그 개수 체크
         checkHashtagCount();
-
         $('#addHashtag').click(function() {
             var hashtagInput = $('#certificationPostHashtagContents');
             var hashtagValue = hashtagInput.val().trim();
 
             if (hashtagValue === "") {
-                alert("해시태그를 입력해주세요.");
+                showHashtagAlert("해시태그를 입력해주세요.");
             } else if (hashtagValue.indexOf('#') !== -1) {
-                alert("# 문자는 해시태그에 사용할 수 없습니다.");
+                showHashtagAlert("# 문자는 해시태그에 사용할 수 없습니다.");
                 hashtagInput.val(hashtagValue.replace('#', '')); // # 문자를 제거
             } else if (hashtagValue.length > 10) {
-                alert("해시태그는 최대 10글자까지 입력 가능합니다.");
+                showHashtagAlert("해시태그는 최대 10글자까지 입력 가능합니다.");
             } else {
-                if (hashtagCount < MAX_HASHTAGS) {
-                    $('#additionalHashtags').append('<div class="hashtag-input-group"><input type="text" class="form-control" name="newHashtags" maxlength="10" value="' + hashtagValue + '" readonly><button type="button" class="remove-hashtag"><i class="fa fa-trash"></i></button></div>');
+                if (hashtagCount < 5) {
+                    $('#additionalHashtags').append('<div class="hashtag-input-group"><input type="text" class="form-control" name="certificationPostHashtagContents" maxlength="10" value="' + hashtagValue + '" readonly><button type="button" class="remove-hashtag"><i class="fa fa-trash"></i></button></div>');
                     hashtagInput.val('');
                     hashtagCount++;
                     checkHashtagCount(); // 해시태그 개수 체크
                 } else {
-                    alert("최대 " + MAX_HASHTAGS + "개의 해시태그만 가능합니다.");
+                    showHashtagAlert("최대 5개의 해시태그만 가능합니다.");
                 }
             }
         });
 
+        function showHashtagAlert(message) {
+            $('#hashtagAlert').html('<div class="alert-message">' + message + '</div>');
+            $('#hashtagAlert .alert-message').css('color', 'red');
+            $('.alert-message').fadeIn(500).delay(2000).fadeOut(500); // 0.5초동안 나타나기 / 2초동안 유지 / 0.5초 동안 사라짐
+        }
+        
         // 엔터키 눌렀을 때 해시태그 추가
         $('#certificationPostHashtagContents').keypress(function(e) {
             if (e.which == 13) {
@@ -380,7 +392,7 @@
                     <div class="char-counter"><span id="charCount">0</span>/1000</div>
                 </div>
                 <div class="form-group">
-                    <label for="certificationPostMountainName">산 이름<sup>*</sup></label>
+                    <label for="certificationPostMountainName">산 명칭<sup>*</sup></label>
                     <input type="text" class="form-control" id="certificationPostMountainName" name="certificationPostMountainName" maxlength="20" value="${certificationPost.certificationPostMountainName}" required>
                 </div>
                 <div class="form-group">
@@ -416,10 +428,12 @@
                 </div>
                 <div class="form-group">
                     <label for="certificationPostHashtagContents">해시태그<sup>*</sup> <small>(최대 5개)</small></label>
+                          <div id="hashtagAlert"></div> <!-- 알림 메시지 표시 영역 추가 -->
                     <div class="hashtag-input-group" id="hashtagInputContainer">
                         <input type="text" class="form-control" id="certificationPostHashtagContents" maxlength="10">
                         <button type="button" id="addHashtag" class="add-hashtag-btn">+</button>
                     </div>
+              
                     <div id="additionalHashtags"></div>
                     <c:forEach var="hashtag" items="${hashtagList}">
                         <div class="hashtag-input-group">
@@ -427,6 +441,7 @@
                             <input type="hidden" name="existingHashtagNos" value="${hashtag.hashtagNo}">
                             <button type="button" class="remove-hashtag delete-existing-hashtag"><i class="fa fa-trash"></i></button>
                         </div>
+                        
                     </c:forEach>
                 </div>
                 <div class="form-group">

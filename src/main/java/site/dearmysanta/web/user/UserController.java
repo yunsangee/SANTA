@@ -367,12 +367,12 @@ public class UserController {
 		    System.out.println("getUser : GET");
 
 		    User sessionUser = (User) session.getAttribute("user");
-		    
-		    System.out.println("user : " +sessionUser);    
-		    
+
+		    System.out.println("user : " + sessionUser);    
+
 		    User user = null;
 
-		    if (userNo!=null) {
+		    if (userNo != null) {
 		        // 요청 매개변수로 받은 userNo가 있는 경우
 		        user = userService.getUser(userNo);
 		        System.out.println("getUser: userNo from request parameter = " + userNo);
@@ -386,23 +386,17 @@ public class UserController {
 		        model.addAttribute("error", "사용자를 찾을 수 없습니다.");
 		        return "redirect:/user/login.jsp";
 		    }
-		    
-		    if (sessionUser.getRole()==1) {
-		    	
-		    	model.addAttribute("admin", 1);
-		    	
+
+		    if (sessionUser.getRole() == 1) {
+		        model.addAttribute("admin", 1);
 		    }
-		    
-		    if(user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage")&& !user.getProfileImage().contains("kakaocdn")) {
-		    	user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
+
+		    if (user.getProfileImage() != null && !user.getProfileImage().contains("ncloudstorage") && !user.getProfileImage().contains("kakaocdn")) {
+		        user.setProfileImage(objectStorageService.getImageURL(user.getProfileImage()));
 		    }
-		    
-//		    String profileImage = objectStorageService.getImageURL(user.getUserId());
-//			
-//			user.setProfileImage(profileImage);
-			
-			if(user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
-				user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
+
+		    if (user.getBadgeImage() != null && !user.getBadgeImage().contains("ncloudstorage") && !user.getBadgeImage().contains("kakaocdn")) {
+		        user.setBadgeImage(objectStorageService.getImageURL(user.getBadgeImage()));
 		    }
 
 		    // 사용자 정보 모델에 추가
@@ -410,6 +404,7 @@ public class UserController {
 
 		    return "forward:/user/getUser.jsp";
 		}
+
 
 		
 		//
@@ -511,6 +506,8 @@ public class UserController {
 		    dbUser.setHikingLevel(user.getHikingLevel());
 		    dbUser.setIntroduceContent(user.getIntroduceContent());
 		    dbUser.setProfileImage(user.getUserId());
+		    dbUser.setAddress(user.getAddress());
+		    dbUser.setDetailAddress(user.getDetailAddress());
 		    // 필요한 다른 필드도 업데이트
 		    
 //		    if (user.getImage() != null) {
@@ -1032,6 +1029,12 @@ public class UserController {
 //			return "redirect:/user/getQnA.jsp";
 //		}
 		
+		   @GetMapping(value = "addSchedule")
+		    public String addScheduleView(@RequestParam String date, Model model) {
+		        model.addAttribute("clickedDate", date);
+		        return "forward:/user/addSchedule.jsp";
+		    }
+		
 		@PostMapping(value = "addSchedule")
 		public String addSchedule(@ModelAttribute Schedule schedule, Model model, HttpSession session) throws Exception {
 		    
@@ -1062,42 +1065,29 @@ public class UserController {
 		    // 모델에 스케줄 목록 추가
 		    model.addAttribute("scheduleList", scheduleJson);
 
-		    return "forward:/user/scheduleSuccess.jsp";
+		    return "forward:/user/month-view.jsp";
 		}
 		
-		@GetMapping(value = "getSchedule")
-		public String getSchedule(@RequestParam(required = false) Integer postNo, @RequestParam(required = false) Integer userNo, HttpSession session, Model model) throws Exception {
-		    
-			System.out.println("getSchedule : GET");
+		 @GetMapping(value = "getSchedule")
+		    public String getSchedule(@RequestParam(required = false) Integer postNo, @RequestParam(required = false) Integer userNo, HttpSession session, Model model) throws Exception {
+		        System.out.println("getSchedule : GET");
 
-		    // 세션에서 로그인한 사용자 정보 가져오기
-		    User user = (User) session.getAttribute("user");
+		        User user = (User) session.getAttribute("user");
+		        Schedule schedule = userService.getSchedule(postNo, userNo);
 
-		    Schedule schedule = userService.getSchedule(postNo, userNo);
+		        if (schedule == null) {
+		            model.addAttribute("error", "Schedule 정보를 찾을 수 없습니다.");
+		            return "redirect:/user/addSchedule.jsp";
+		        }
 
-//		    if (user == null) {
-//		        // 로그인한 사용자 정보가 없는 경우 오류 처리
-//		        model.addAttribute("error", "로그인 정보를 찾을 수 없습니다.");
-//		        return "redirect:/login"; // 로그인 페이지로 리다이렉트 또는 다른 처리
-//		    }
-
-		    if (schedule == null) {
-		        // Schedule 정보가 없는 경우 오류 처리
-		        model.addAttribute("error", "Schedule 정보를 찾을 수 없습니다.");
-		        return "redirect:/user/addSchedule.jsp";
+		        if (userNo != null && schedule.getUserNo() == userNo) {
+		            model.addAttribute("schedule", schedule);
+		            return "redirect:/user/updateSchedule.jsp";
+		        } else {
+		            model.addAttribute("error", "올바른 요청이 아닙니다.");
+		            return "redirect:/user/addSchedule.jsp";
+		        }
 		    }
-
-		    if (userNo != null && schedule.getUserNo() == userNo) {
-		        // 사용자 번호로 조회하는 경우
-		        model.addAttribute("schedule", schedule);
-		        return "forward:/user/getSchedule.jsp";
-		    } else {
-		        // 잘못된 요청 처리
-		        model.addAttribute("error", "올바른 요청이 아닙니다.");
-		        return "redirect:/user/addSchedule.jsp";
-		    }
-		    
-		}
 		
 		@GetMapping(value="updateSchedule")
 		public String updateSchedule(@RequestParam int postNo, @RequestParam int userNo, Model model) throws Exception {
@@ -1158,7 +1148,7 @@ public class UserController {
 		    //return "forward:/user/getSchedule.jsp";
 		    
 		    //"redirect:/user/getSchedule?userNo=" + dbUser.getUserNo();
-		    return "forward:/user/scheduleSuccess.jsp";
+		    return "forward:/user/month-view.jsp";
 
 		}
 		
