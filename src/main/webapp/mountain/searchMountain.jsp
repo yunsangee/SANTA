@@ -233,6 +233,7 @@
 	height:350px;
 	margin-top:-150px;
 	margin-left:auto;
+	margin-right:auto;
 	background-color : #81C408;
 }
 
