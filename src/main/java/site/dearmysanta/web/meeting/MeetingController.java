@@ -179,6 +179,9 @@ public class MeetingController {
 		System.out.println("Post/addMeetingPost/meetingPost 占쏙옙 확占쏙옙"+meetingPost);
 		System.out.println("Post/addMeetingPost/meetingPost " + user);
 		
+		System.out.println("recruitmentDeadline: " + meetingPost.getRecruitmentDeadline());
+	    System.out.println("appointedHikingDate: " + meetingPost.getAppointedHikingDate());
+		
 		
 		int postNo = meetingService.addMeetingPost(meetingPost);
 		System.out.println("Post/addMeetingPost/meetingPost " + postNo);
