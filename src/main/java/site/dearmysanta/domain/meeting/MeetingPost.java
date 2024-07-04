@@ -26,12 +26,12 @@ public class MeetingPost extends Post{
 	private List<MultipartFile> meetingPostImage; // the post images
 	private int meetingPostImageCount; // the post images count
 	private String meetingName; // name of meeting
-	@DateTimeFormat(pattern = "yyyy-mm-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date recruitmentDeadline; // date for the recruitment deadline
     private String appointedDeparture; // expected departure location
     private String appointedDetailDeparture; // expected departure detail location
     private String appointedHikingMountain; // expected hiking mountain
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date appointedHikingDate; // expected hiking date
     private String participationAge; // Preferred age range of participants
     private int maximumPersonnel; // maximum number of participants
