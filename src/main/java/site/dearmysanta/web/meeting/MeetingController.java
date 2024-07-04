@@ -31,6 +31,7 @@ import site.dearmysanta.service.chatting.ChattingService;
 import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.meeting.MeetingService;
 import site.dearmysanta.service.mountain.MountainService;
+import site.dearmysanta.service.user.UserService;
 import site.dearmysanta.service.user.etc.UserEtcService;
 
 @Controller
@@ -64,6 +65,9 @@ public class MeetingController {
 	
 	@Autowired
 	private UserEtcService userEtcService;
+	
+	@Autowired
+	private UserService userService;
 	
 	public MeetingController() {
 		System.out.println(this.getClass());
@@ -205,6 +209,8 @@ public class MeetingController {
 		
 		userEtcService.updateMeetingCount(user.getUserNo(), 0);
 		
+		session.setAttribute("user", userService.getUser(userNo));
+		
 		chattingService.createChattingRoom(postNo);
 		
 		return "redirect:/meeting/getMeetingPost?postNo=" + postNo;
@@ -315,6 +321,8 @@ public class MeetingController {
 		
 		meetingService.updateMeetingPostDeletedStatus(postNo);
 		userEtcService.updateMeetingCount(user.getUserNo(), 1);
+		
+		session.setAttribute("user", userService.getUser(user.getUserNo()));
 		
 		return "redirect:/meeting/getMeetingPostList";
 	}
