@@ -274,6 +274,9 @@ public class MeetingController {
 		System.out.println("meetingPostImage 占쏙옙占쏙옙占쏙옙占쏙옙 확占쏙옙"+meetingPost);
 		System.out.println("updateImageUrl 확占쏙옙==="+updateImageURL);
 		
+		System.out.println("recruitmentDeadline: " + meetingPost.getRecruitmentDeadline());
+	    System.out.println("appointedHikingDate: " + meetingPost.getAppointedHikingDate());
+		
 		int postNo = meetingPost.getPostNo();
 		int postType = 1;
 		
