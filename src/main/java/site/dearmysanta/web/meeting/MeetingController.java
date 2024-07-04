@@ -211,7 +211,9 @@ public class MeetingController {
 		
 		userEtcService.updateMeetingCount(user.getUserNo(), 0);
 		
-		session.setAttribute("user", userService.getUser(userNo));
+		user.setMeetingCount(user.getMeetingCount()+1);
+		
+		session.setAttribute("user", user );
 		
 		chattingService.createChattingRoom(postNo);
 		
@@ -323,8 +325,9 @@ public class MeetingController {
 		
 		meetingService.updateMeetingPostDeletedStatus(postNo);
 		userEtcService.updateMeetingCount(user.getUserNo(), 1);
+		user.setMeetingCount(user.getMeetingCount()-1);
 		
-		session.setAttribute("user", userService.getUser(user.getUserNo()));
+		session.setAttribute("user", user);
 		
 		return "redirect:/meeting/getMeetingPostList";
 	}
