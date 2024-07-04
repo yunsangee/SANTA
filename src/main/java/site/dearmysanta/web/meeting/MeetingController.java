@@ -181,6 +181,8 @@ public class MeetingController {
 		
 		
 		int postNo = meetingService.addMeetingPost(meetingPost);
+		System.out.println("Post/addMeetingPost/meetingPost " + postNo);
+		
 		int postType = 1;
 		String appointedHikingMountain = meetingPost.getAppointedHikingMountain();
 		
