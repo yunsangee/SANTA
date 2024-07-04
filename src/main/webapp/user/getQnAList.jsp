@@ -43,7 +43,7 @@
             display: flex;
             justify-content: center;
             margin-top:60px;
-            position: fixed;
+            position: absolute;
 		    top: 640px; /* 하단에서 20px 위 */
 		    left: 50%;
 		    transform: translateX(-50%);
@@ -332,6 +332,12 @@
             font-size: 15px;
             color: #333;
             margin-bottom:30px;
+            margin-left:20px;
+            margin-top:17px;
+        }
+        
+        .qna-details strong {
+        	font-size : 16px;
         }
 
         .qna-answer {
@@ -468,18 +474,26 @@
                     var qna = response.qna;
                     var qnaUser = response.qnaUser;
 
-                    var content = '<div class="profile-header">' +
-                        '<img src="' + qnaUser.profileImage + '" alt="Profile Image">' +
-                        '<p>' + qnaUser.nickName + '<img src="' + qnaUser.badgeImage + '" style="width:24px;height:24px;"></p>' +
-                        '</div>' +
-                        '<div class="line"></div>' +
-                        '<div class="qna-details">' +
-                        '<strong> ❓' + qna.title + '</strong>' +
-                        '<p>' + qna.contents + '</p>' +
-                        '</div>' +
-                        '<div class="qna-answer">' +
-                        (qna.answerState == 0 ? '<p class="admin-answer" contenteditable="false">관리자의 답변이 등록되지 않았습니다. 조금만 기다려주세요.</p>' : '<p class="admin-answer" contenteditable="false">' + qna.adminAnswer + '</p>') +
-                        '</div>';
+                    var content = '<div class="profile-header" style="position: relative;">' +
+                    '<img src="' + qnaUser.profileImage + '" alt="Profile Image" class="profile-link" style="cursor: pointer;">' +
+                    '<p class="profile-link" style="cursor: pointer;">' + qnaUser.nickName + '</p>' +
+                    '<img src="' + qnaUser.badgeImage + '" style="width:24px;height:24px;">' +
+                    '</div>' +
+                    '<div class="line"></div>' +
+                    '<div class="qna-details">' +
+                    '<strong> ❓' + qna.title + '</strong>' +
+                    '<p>' + qna.contents + '</p>' +
+                    '</div>' +
+                    '<div class="qna-answer">' +
+                    (qna.answerState == 0 ? '<p class="admin-answer" contenteditable="false">관리자의 답변이 등록되지 않았습니다. 조금만 기다려주세요.</p>' : '<p class="admin-answer" contenteditable="false">' + qna.adminAnswer + '</p>') +
+                    '</div>';
+
+                $('body').on('click', '.profile-link', function() {
+                    window.location.href = '/certificationPost/getProfile?userNo=' + qnaUser.userNo;
+                });
+
+
+
 
                     // 작성자인 경우 삭제 버튼 추가
                     if (isAdmin === 'true' || sessionUserNo == qnaUser.userNo) {
