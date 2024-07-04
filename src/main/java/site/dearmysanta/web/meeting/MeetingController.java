@@ -173,6 +173,7 @@ public class MeetingController {
 		meetingPost.setUserNo(userNo);
 		
 		System.out.println("Post/addMeetingPost/meetingPost 占쏙옙 확占쏙옙"+meetingPost);
+		System.out.println("Post/addMeetingPost/meetingPost " + user);
 		
 		
 		int postNo = meetingService.addMeetingPost(meetingPost);
