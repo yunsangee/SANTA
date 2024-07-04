@@ -756,7 +756,7 @@
 						    </c:forEach>
 					    </p>
 					    
-					    <p id="postContents">
+					    <p id="postContents" class="pt-5">
     						${meetingPost.contents}
     					</p>
     				</div>

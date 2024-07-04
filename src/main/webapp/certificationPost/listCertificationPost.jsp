@@ -276,7 +276,7 @@
 <script>
 $(document).ready(function() {
     let page = 0;
-    const size = 10;
+    const size = 12;
 
     function loadMorePosts() {
         console.log('Loading more posts. Page:', page);

@@ -120,10 +120,18 @@
         .form-group button:hover {
             background-color: #218838;
         }
+
+        .d-flex {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .d-flex .form-control {
+            flex-grow: 1;
+        }
     </style>
 </head>
-
-<!--  ////////////////////////////////////////////// body ///////////////////////////////////////////////// -->
 
 <body>
     <div class="container">
@@ -155,6 +163,27 @@
                     <option value="4">등산기록</option>
                     <option value="5">산 검색</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="totalTimeHours">총 소요시간<sup>*</sup></label>
+                <div class="d-flex">
+                    <input type="number" class="form-control" id="totalTimeHours" name="totalTimeHours" min="0" max="23" placeholder="시간" required>
+                    <input type="number" class="form-control" id="totalTimeMinutes" name="totalTimeMinutes" min="0" max="59" placeholder="분" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="ascentTimeHours">상행 시간<sup>*</sup></label>
+                <div class="d-flex">
+                    <input type="number" class="form-control" id="ascentTimeHours" name="ascentTimeHours" min="0" max="23" placeholder="시간" required>
+                    <input type="number" class="form-control" id="ascentTimeMinutes" name="ascentTimeMinutes" min="0" max="59" placeholder="분" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="descentTimeHours">하행 시간<sup>*</sup></label>
+                <div class="d-flex">
+                    <input type="number" class="form-control" id="descentTimeHours" name="descentTimeHours" min="0" max="23" placeholder="시간" required>
+                    <input type="number" class="form-control" id="descentTimeMinutes" name="descentTimeMinutes" min="0" max="59" placeholder="분" required>
+                </div>
             </div>
             <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
             <input type="hidden" id="userId" name="userId" value="${user.userId}">

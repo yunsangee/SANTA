@@ -65,10 +65,17 @@
 		    })
 		    
 		    $("button:contains('사진')").on('click', function() {
-	            $('#meetingPostImage').click();
-	            
-	            uploadImage();
-	        });
+		        $('#meetingPostImage').click();
+		    });
+
+		    $('#meetingPostImage').on('change', function() {
+		        let fileCount = this.files.length;
+		        if (fileCount > 0) {
+		            $('#fileCount').text(fileCount + '개 파일 선택됨');
+		        } else {
+		            $('#fileCount').text('');
+		        }
+		    });
 		    
     	});
     	
@@ -133,7 +140,7 @@
 		<form enctype="multipart/form-data">
 			<div class="container-fluid py-5">
 	    		<div class="container py-5">
-	    			<div class="row mb-5">
+	    			<div class="row mb-5 mt-5">
 	    			
 	    				<div class="col-md-3 border bg-light align-items-center text-center justify-content-center py-3 title">작성자</div>
     					<div class="col-md-9 border align-items-center text-start py-3">${sessionScope.user.nickName}</div>
@@ -213,6 +220,7 @@
 						    <textarea class="form-control mb-2" name="contents" rows="10" placeholder="내용을 입력하세요." style="height: 200px;" required></textarea>
 						    <button type="button" class="btn btn-primary border-0 rounded text-white">사진 선택</button>
 						    <input type="file" id="meetingPostImage" name="meetingPostImage" style="display: none;" multiple/><br/>
+						    <p id="fileCount" style="display: inline-block; margin-left: 10px;"></p>
 						</div>
 						
 	    			</div>
