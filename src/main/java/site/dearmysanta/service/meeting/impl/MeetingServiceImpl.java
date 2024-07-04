@@ -95,11 +95,11 @@ public class MeetingServiceImpl implements MeetingService {
 	        appendImageCount = images.size();
 		}
 
+		if(updateImageURL != null) {
+			System.out.println("ï¿½ï¿½ï¿½Îµï¿½î°¥ imageCount : "+ (updateImageURL.size() + appendImageCount));
 		
-		System.out.println("»õ·Îµé¾î°¥ imageCount : "+ (updateImageURL.size() + appendImageCount));
-		
-		meetingPost.setMeetingPostImageCount(updateImageURL.size() + appendImageCount);
-        
+			meetingPost.setMeetingPostImageCount(updateImageURL.size() + appendImageCount);
+		}
 		meetingDAO.updateMeetingPost(meetingPost);
 	}
 	
@@ -112,7 +112,7 @@ public class MeetingServiceImpl implements MeetingService {
 		
 		int isMember = 0;
 		
-		//db¿¡¼­ meetingPost(°Ô½Ã±Û¸¸) °¡Á®¿È.
+		//dbï¿½ï¿½ï¿½ï¿½ meetingPost(ï¿½Ô½Ã±Û¸ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
 		MeetingPost meetingPost = meetingDAO.getMeetingPost(postNo);
 		System.out.println(meetingPost);
 		
@@ -132,12 +132,12 @@ public class MeetingServiceImpl implements MeetingService {
 		meetingPost.setMeetingPostLikeCount(likeCount);
 		meetingPost.setMeetingPostCommentCount(commentCount);
 		
-		// À§¿¡±îÁö °Ô½Ã±Û
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô½Ã±ï¿½
 		
-		// ÀÚ mapper¿¡¼­ ¸ðÀÓ¿ø¸®½ºÆ®, ´ñ±Û¸®½ºÆ® ¾î¶»°Ô °¡Á®¿À³ª È®ÀÎÇÏÀÚ
-		// ¸ðÀÓ¿ø¸®½ºÆ®´Â À¯ÀúÅ×ÀÌºí¿¡¼­ ÇÁ·ÎÇÊÀÌ¹ÌÁö, ´Ð³×ÀÓ °¡Á®¿À³×
-		// ´ñ±Û¸®½ºÆ®µµ ¸¶Âù°¡Áö·Î À¯ÀúÅ×ÀÌºí¿¡¼­ ÇÁ·ÎÇÊÀÌ¹ÌÁö, ´Ð³×ÀÓÀÌ³×?
-		// °á·Ð : getÀº °Çµé ÇÊ¿ä ¾øÀ» °Í °°°í, add¸¦ ¾î¶²½ÄÀ¸·Î ÇÏ´ÂÁö º¸ÀÚ.
+		// ï¿½ï¿½ mapperï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½ï¿½Æ®, ï¿½ï¿½Û¸ï¿½ï¿½ï¿½Æ® ï¿½î¶»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		// ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½ï¿½, ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		// ï¿½ï¿½Û¸ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½ï¿½, ï¿½Ð³ï¿½ï¿½ï¿½ï¿½Ì³ï¿½?
+		// ï¿½ï¿½ï¿½ : getï¿½ï¿½ ï¿½Çµï¿½ ï¿½Ê¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, addï¿½ï¿½ ï¿½î¶²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 		
 		List<MeetingParticipation> meetingParticipations = meetingDAO.getMeetingParticipationList(postNo);
 		List<MeetingPostComment> meetingPostComments = meetingDAO.getMeetingPostCommentList(postNo);

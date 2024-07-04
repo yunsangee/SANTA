@@ -269,7 +269,7 @@ public class MeetingController {
 	}
 	
 	@PostMapping(value = "updateMeetingPost")
-	public String updateMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost, @RequestParam("updateImageURL") List<String> updateImageURL) throws Exception {
+	public String updateMeetingPost(@ModelAttribute("meetingPost") MeetingPost meetingPost, @RequestParam(value = "updateImageURL",required=false) List<String> updateImageURL) throws Exception {
 		
 		System.out.println("meetingPostImage 占쏙옙占쏙옙占쏙옙占쏙옙 확占쏙옙"+meetingPost);
 		System.out.println("updateImageUrl 확占쏙옙==="+updateImageURL);
@@ -283,6 +283,7 @@ public class MeetingController {
 		meetingService.updateMeetingPost(meetingPost, updateImageURL);
 		
 		
+		if(updateImageURL != null) {
 		List<String> fileNames = new ArrayList<>();
 		
 		for (String imageURL : updateImageURL) {
@@ -319,6 +320,7 @@ public class MeetingController {
                 
                 appendImageStartIndex += 1;
             }
+		}
 		}
 		
 		return "redirect:/meeting/getMeetingPost?postNo=" + meetingPost.getPostNo();
