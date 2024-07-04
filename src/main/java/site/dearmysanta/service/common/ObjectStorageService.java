@@ -124,7 +124,7 @@ public class ObjectStorageService {
 
     private MultipartFile convertFileToMultipartFile(File file) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(file);
-        return new MockMultipartFile(file.getName()+".jpeg", file.getName()+".jpeg", "application/octet-stream", fileInputStream);
+        return new MockMultipartFile(file.getName()+".jpg", file.getName()+".jpg", "application/octet-stream", fileInputStream);
     }
     
     public void uploadListData(List<List<Double>> dataList, String fileName) throws IOException {

@@ -288,6 +288,7 @@
 		)
 		WHERE ROW_SEQ BETWEEN ((#{currentPage} - 1) * #{pageSize} + 1) AND
 		#{currentPage} * #{pageSize}
+		ORDER BY like_date
 	</select>
 	
 	<select id="getTotalMountainLikeListCount" parameterType="int" resultType="int">
@@ -425,7 +426,7 @@
 <!-- 	ORDER BY SUM(SEARCH_COUNT + POST_COUNT) DESC, MOUNTAIN_NAME
  -->	
 	<select id="getStatisticsMountainNameList" parameterType="map" resultType="String">
-    SELECT mountain_name, ROWNUM
+    SELECT mountain_name
     FROM (
         SELECT 
             MOUNTAIN_NAME,

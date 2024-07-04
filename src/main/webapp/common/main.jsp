@@ -462,7 +462,7 @@
 }
 
 .top {
-	width:100%;
+	width:110%;
 	background-color : #81C408;
 }
 

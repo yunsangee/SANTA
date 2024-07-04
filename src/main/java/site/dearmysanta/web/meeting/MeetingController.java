@@ -31,6 +31,7 @@ import site.dearmysanta.service.chatting.ChattingService;
 import site.dearmysanta.service.common.ObjectStorageService;
 import site.dearmysanta.service.meeting.MeetingService;
 import site.dearmysanta.service.mountain.MountainService;
+import site.dearmysanta.service.user.etc.UserEtcService;
 
 @Controller
 @RequestMapping("/meeting/*")
@@ -60,6 +61,9 @@ public class MeetingController {
 	@Autowired
 	@Qualifier("meetingService")
 	private MeetingService meetingService;
+	
+	@Autowired
+	private UserEtcService userEtcService;
 	
 	public MeetingController() {
 		System.out.println(this.getClass());
@@ -151,6 +155,7 @@ public class MeetingController {
 			
 			badgeImages.add(imageURL);
 		}
+	
 		
 		model.addAttribute("badgeDescriptions", badgeDescriptions);
 		model.addAttribute("badgeImages", badgeImages);
@@ -196,6 +201,8 @@ public class MeetingController {
                 
             }
 		}
+		
+		userEtcService.updateMeetingCount(user.getUserNo(), 0);
 		
 		chattingService.createChattingRoom(postNo);
 		
@@ -301,9 +308,12 @@ public class MeetingController {
 	}
 	
 	@GetMapping(value = "deleteMeetingPost")
-	public String deleteMeetingPost(@RequestParam int postNo, Model model) throws Exception {
+	public String deleteMeetingPost(@RequestParam int postNo, HttpSession session, Model model) throws Exception {
+		
+		User user = (User)session.getAttribute("user");
 		
 		meetingService.updateMeetingPostDeletedStatus(postNo);
+		userEtcService.updateMeetingCount(user.getUserNo(), 1);
 		
 		return "redirect:/meeting/getMeetingPostList";
 	}

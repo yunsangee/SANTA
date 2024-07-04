@@ -736,7 +736,15 @@ public class MountainServiceImpl implements MountainService {
 	}
 	
 	public List<String> getStatisticsMountainNameList(int which){
-		return mountainDao.getStatisticsMountainNameList(which);}
+		
+		List<String> list = mountainDao.getStatisticsMountainNameList(which);
+		
+		if(list.size() > 20) {
+			return list.subList(0, 20);
+		}else {
+			return list;
+		}
+	}
 	
 
 }
