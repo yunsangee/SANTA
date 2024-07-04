@@ -73,10 +73,10 @@ public class UserController {
 		//
 	
 		@PostMapping(value="addUser" )
-		public String addUser(@ModelAttribute User user, @RequestParam(required=false) int socialLogin, Model model ) throws Exception {
+		public String addUser(@ModelAttribute User user, @RequestParam(required=false) Integer socialLogin, Model model ) throws Exception {
 			
 			System.out.println("is social?" + socialLogin);
-			if(socialLogin == 1) {
+			if(socialLogin.equals(1)) {
 				userService.addUser(user);
 				return "redirect:/user/login.jsp";
 			}
@@ -282,10 +282,14 @@ public class UserController {
 		    System.out.println("findUserPassword : POST");
 		    System.out.println("id :" + user.getUserId());
 		    System.out.println("phoneNumber : " + user.getPhoneNumber());
+		   
 		    
-		    if(((User)userService.getUserByUserId(user.getUserId())).getUserPassword().equals("kakao")) {
+		    if(((User)userService.getUserByUserId(user.getUserId()).get(0)).getUserPassword().trim().equals("kakao")) {
+		    	
+		    	System.out.println("password : " + ((User)userService.getUserByUserId(user.getUserId()).get(0)).getUserPassword().trim().equals("kakao"));
+		    	
 		    	model.addAttribute("errorMessage", "소셜 로그인 계정은 비밀번호 찾기가 불가능 합니다.");
-		        return "redirect:/user/findUserPassword.jsp";
+		        return "forward:/user/findUserPassword.jsp";
 		    }
 
 		    String userPassword = userService.findUserPassword(user.getUserId(), user.getPhoneNumber());

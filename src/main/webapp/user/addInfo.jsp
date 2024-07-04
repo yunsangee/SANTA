@@ -286,7 +286,8 @@
     <script>
     	let profileImage = '';
         $(document).ready(function() {
-            $(".submit").click(function() { 
+            $(".submit").click(function(e) { 
+            	e.preventDefault();
                 if ($("#profile").val() != "") {
                     $("form").attr("enctype", "multipart/form-data").submit();
                 } else {
@@ -500,12 +501,16 @@
         </div> --%>
         
         <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
+         <input type="hidden" id="userName" name="userName" value="${user.userName}">
+         <input type="hidden" id="userPassword" name="userPassword" value="${user.userPassword}">
+         <input type="hidden" id="birthDate" name="birthDate" value="${user.birthDate}">
+         <input type="hidden" id="profileImage" name="profileImage" value="${user.profileImage}">
         <input type="hidden" id="userId" name="userId" value="${user.userId}">
         
         <!-- <br> -->
             
         <div class="link-section">
-            <a href="/common/main.jsp" class="a submit">정보 등록하기</a>
+            <a href="#" class="a submit">정보 등록하기</a>
         </div>    
 
 	<div class="back-section">

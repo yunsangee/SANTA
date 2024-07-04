@@ -189,7 +189,10 @@
 <!--  ////////////////////////////////////////////// script  ///////////////////////////////////////////////// -->    
     
     <script>
+    	
+    
         $(document).ready(function() {
+        	
             $(".send").unbind("click").click(function() {
                 sendVerificationCode();
             });

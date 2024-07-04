@@ -57,7 +57,7 @@ public class OAuthController {
         	user = oauthService.CreateKakaoUser(access_token);
            System.out.println(user);
            
-           session.setAttribute("user", user);
+           //session.setAttribute("user", user);
         	
         	String userId = user.getUserId();
         	System.out.println(userId);
@@ -79,7 +79,46 @@ public class OAuthController {
             		
             		session.setAttribute("user", checkUser);
 
-            		
+            		 String encodingUserNo = URLEncoder.encode(""+checkUser.getUserNo(), "UTF-8");
+            		    String encodingNickName = URLEncoder.encode(""+checkUser.getNickName(), "UTF-8");
+            		    String encodingProfile = URLEncoder.encode(checkUser.getProfileImage(), "UTF-8");
+            		    String encodingUserId =  URLEncoder.encode(checkUser.getUserId(), "UTF-8");
+            	        
+            		    Cookie cookie = new Cookie("userNo", encodingUserNo);
+            		    cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+            		    cookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+            		    cookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+            		    cookie.setSecure(false); // 
+            		    response.addCookie(cookie);
+            		    
+            		    // 쿠키 설정
+            		    Cookie nickNameCookie = new Cookie("nickName", encodingNickName);
+            		    nickNameCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+            		    nickNameCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+            		    nickNameCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+            		    nickNameCookie.setSecure(false); // 
+            		    response.addCookie(nickNameCookie);
+            		    
+            		 // 쿠키 설정
+            		    Cookie profileCookie = new Cookie("profile", encodingProfile);
+            		    profileCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+            		    profileCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+            		    profileCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+            		    profileCookie.setSecure(false); // 
+            		    response.addCookie(profileCookie);
+            		    
+            		    Cookie idCookie = new Cookie("userId", encodingUserId);
+            		    idCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
+            		    idCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
+            		    idCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
+            		    idCookie.setSecure(false); // 
+            		    response.addCookie(idCookie);
+            		    
+            		    System.out.println("쿠키확인 닉네임 : " + nickNameCookie);
+            		    
+            		    System.out.println("쿠키확인 userNo : " + cookie);
+            		    
+            		    System.out.println("쿠키 프로필 사진 : " + profileCookie);
             	} else {
             		
             	System.out.println("existing2:");
@@ -102,46 +141,7 @@ public class OAuthController {
             return new ModelAndView("redirect:/user/errorPage.jsp");
         }
        
-        String encodingUserNo = URLEncoder.encode(""+user.getUserNo(), "UTF-8");
-	    String encodingNickName = URLEncoder.encode(""+user.getNickName(), "UTF-8");
-	    String encodingProfile = URLEncoder.encode(user.getProfileImage(), "UTF-8");
-	    String encodingUserId =  URLEncoder.encode(user.getUserId(), "UTF-8");
-        
-	    Cookie cookie = new Cookie("userNo", encodingUserNo);
-	    cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
-	    cookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
-	    cookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
-	    cookie.setSecure(false); // 
-	    response.addCookie(cookie);
-	    
-	    // 쿠키 설정
-	    Cookie nickNameCookie = new Cookie("nickName", encodingNickName);
-	    nickNameCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
-	    nickNameCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
-	    nickNameCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
-	    nickNameCookie.setSecure(false); // 
-	    response.addCookie(nickNameCookie);
-	    
-	 // 쿠키 설정
-	    Cookie profileCookie = new Cookie("profile", encodingProfile);
-	    profileCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
-	    profileCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
-	    profileCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
-	    profileCookie.setSecure(false); // 
-	    response.addCookie(profileCookie);
-	    
-	    Cookie idCookie = new Cookie("userId", encodingUserId);
-	    idCookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효기간 7일로 설정
-	    idCookie.setPath("/"); // 애플리케이션의 모든 경로에 대해 유효
-	    idCookie.setHttpOnly(false); // 클라이언트 측에서도 접근 가능하도록 설정 (보안 필요 시 true)
-	    idCookie.setSecure(false); // 
-	    response.addCookie(idCookie);
-	    
-	    System.out.println("쿠키확인 닉네임 : " + nickNameCookie);
-	    
-	    System.out.println("쿠키확인 userNo : " + cookie);
-	    
-	    System.out.println("쿠키 프로필 사진 : " + profileCookie);
+       
         
         
         return new ModelAndView("forward:/common/main.jsp");

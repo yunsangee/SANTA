@@ -196,6 +196,15 @@
 
     <script>
         $(document).ready(function() {
+        	
+        	<c:if test="${not empty errorMessage}">
+            	alert("${errorMessage}");
+        	</c:if>
+        	
+        	<c:if test="${empty errorMessage}">
+            	alert("?");
+        	</c:if>
+        	
             $(".send").click(function() {
                 checkUserIdAndSendCode();
             });
