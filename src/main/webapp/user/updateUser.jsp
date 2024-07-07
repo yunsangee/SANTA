@@ -380,7 +380,18 @@
             }
         }
         
-
+        .phone-verify-btn {   
+          width: 80%;
+	    padding: 15px;
+	    font-size: 16px;
+	    margin-top: 10px;
+	    background-color: white;
+	    color: #81C408;
+	    border: 1px solid #81C408;
+	    border-radius: 5px;
+	    cursor: pointer;
+	    box-sizing: border-box;
+	}
         
     </style>
     <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
@@ -511,18 +522,89 @@
               });
            
             
+////////////////////////////////휴대폰 인증 요청 ////////////////////
 
-            // 전화번호 칸 클릭시 전화번호 변경 팝업 창 열기
-            $(".phone-link").click(function(event) {
-                window.open("/user/changePhone.jsp", "전화번호 변경", "width=500,height=420,scrollbars=yes,resizable=yes");
-            });
-        });
+              function validatePhoneNumber(phoneNumber) {
+                  var phoneRegex = /^010/; // 정규 표현식을 사용하여 010으로 시작하는지 확인
+                  return phoneRegex.test(phoneNumber);
+              }
+
+              $("input[name='phoneNumber']").on("input", function() {
+                  var phoneNumber = $(this).val();
+                  
+                  if (validatePhoneNumber(phoneNumber)) {
+                      $("#phoneMessage").text("").removeClass("error-message").addClass("valid-message");
+                  } else {
+                      $("#phoneMessage").text("010으로 시작하는 휴대폰번호를 입력해주세요.").removeClass("valid-message").addClass("error-message");
+                  }
+              });
+
+              $(".phone-verify-btn").click(function() {
+                  var phoneNumber = $("input[name='phoneNumber']").val();
+                 var userId = $("input[name='userId']").val(); // Assuming userName is available as an input field
+
+                  if (phoneNumber && userId) {
+                      $.ajax({
+                          url: '/message/send-one',
+                          type: 'POST',
+                          contentType: 'application/json',
+                          data: JSON.stringify({ phoneNumber: phoneNumber, userId: userId }),
+                          success: function(response) {
+                              //showSuccessAlert("휴대폰 인증번호가 전송되었습니다.");
+                              if ($("#phoneVerificationSection").length === 0) {
+                                  $(".phone-section").append(
+                                      '<div id="phoneVerificationSection">' +
+                                      '<label></label>' +
+                                      '<input type="text" id="phoneVerificationCode" name="phoneVerificationCode" placeholder="휴대폰 인증번호를 입력하세요" required>' +
+                                      '<button type="button" class="phone-verify-check-btn">인증번호 확인</button>' +
+                                      '</div>'
+                                  );
+                              }
+                          },
+                          error: function(xhr, status, error) {
+                            //  showErrorAlert("휴대폰 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+                          }
+                      });
+                  } else {
+                      //showErrorAlert("이름과 휴대폰 번호를 입력해주세요.");
+                  }
+              });
+
+              /////////////////////////////////////////phone 인증 확인 ////////////////////
+              $(document).on("click", ".phone-verify-check-btn", function() {
+                  var phoneNumber = $("input[name='phoneNumber']").val();
+                  var validationNumber = $("#phoneVerificationCode").val();
+                  if (validationNumber) {
+                      $.ajax({
+                          url: '/message/check-one',
+                          type: 'GET',
+                          data: { phoneNumber: phoneNumber, validationNumber: validationNumber },
+                          success: function(response) {
+                              if (response != -1) {
+                                 // showSuccessAlert("휴대폰 인증이 완료되었습니다.");
+                                  $("#isPhoneVerified").val("true");
+                              } else {
+                                 // showErrorAlert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                              }
+                          },
+                          error: function(xhr, status, error) {
+                              //showErrorAlert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                          }
+                      });
+                  } else {
+                      //showErrorAlert("인증번호를 입력해주세요.");
+                  }
+              });
+              ///////////////////////////////////////////
+
+          
 
         // 도로명 주소 콜백 함수
         function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, engAddr, jibunAddr, zipNo, admCd, rnMgtSn, bdMgtSn, detBdNmList, bdNm, bdKdcd, siNm, sggNm, emdNm, liNm, rn, udrtYn, buldMnnm, buldSlno, mtYn, lnbrMnnm, lnbrSlno, emdNo) {
             $("input[name='address']").val(roadAddrPart1);
             $("input[name='detailAddress']").val(addrDetail);
         }
+    });
 
         // 팝업 창이 닫힐 때 부모 창을 새로고침
         function closePopupAndReload() {
@@ -612,15 +694,15 @@
                     }),
                     success: function(response) {
                         if (response.status === "equals") {
-                            alert(response.message);
+                            //alert(response.message);
                             window.opener.location.reload(); // 부모 창 새로고침
                             window.close(); // 팝업 창 닫기
                         } else {
-                            alert(response.message);
+                            //alert(response.message);
                         }
                     },
                     error: function(xhr, status, error) {
-                        alert("오류가 발생했습니다. 다시 시도해주세요.");
+                        //alert("오류가 발생했습니다. 다시 시도해주세요.");
                     }
                 });
             });
@@ -661,9 +743,22 @@
             <input type="text" class="update" name="nickName" value="${user.nickName}" required>
             <div id="nickMessage" class="error-message"></div>
             <p>${user.birthDate}</p> <!-- Birth Date는 수정 불가 -->
-            <div class="phone-container">
+            
+            
+           <%--  <div class="phone-container">
                 <input type="text" class="phone-link" name="phoneNumber" value="${user.phoneNumber}" readonly>
-            </div>
+            </div> --%>
+            
+            <div class="phone-section">
+        <label></label>
+        <div class="phone-input">
+             <input type="text" class="phone-link" name="phoneNumber" value="${user.phoneNumber}" >
+           <div id="phoneMessage" class="error-message"></div>
+        </div>
+        <button type="button" class="phone-verify-btn">휴대폰 번호 인증하기</button>
+        </div>
+            
+            
             <input type="text" class="update" name="address" value="${user.address}" readonly>
             <input type="text" class="update" name="detailAddress" value="${user.detailAddress}" placeholder="상세 주소">
             <p> 
@@ -766,8 +861,8 @@
             <div id="passwordMessage" class="error-message"></div>
         </div>
       
-        <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
-        <input type="hidden" id="userId" name="userId" value="${user.userId}">
+       <%--  <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
+        <input type="hidden" id="userId" name="userId" value="${user.userId}"> --%>
         
         <button type="submit" class="submit-password">비밀번호 변경하기</button>
         

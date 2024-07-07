@@ -136,8 +136,8 @@
             $("input[name='userPassword']").on("blur", function() {
                 var password = $(this).val();
 
-                if (password.length < 7) {
-                    $("#passwordLengthMessage").text("비밀번호를 7자 이상 입력해주세요.").css("color", "red").show();
+                if (password.length < 10) {
+                    $("#passwordLengthMessage").text("비밀번호를 10자 이상 입력해주세요.").css("color", "red").show();
                 } else {
                     $("#passwordLengthMessage").text("").hide();
                 }
