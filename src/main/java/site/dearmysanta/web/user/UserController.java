@@ -1311,8 +1311,8 @@ public class UserController {
 	            return "redirect:/user/changePassword.jsp";
 	        }
 
-	        if (userPassword.length() < 10) {
-	            model.addAttribute("error", "비밀번호를 10자 이상 입력해주세요.");
+	        if (userPassword.length() < 7) {
+	            model.addAttribute("error", "비밀번호를 7자 이상 입력해주세요.");
 	            return "redirect:/user/changePassword.jsp";
 	        }
 

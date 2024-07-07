@@ -194,7 +194,7 @@ $("input[name='userId']").on("input", function() {
         if (code) {
             $.ajax({
                 url: '/user/rest/verify',
-                type: 'POST',
+                type: 'GET',
                 data: { email: email, code: code },
                 success: function(response) {
                     //alert(response);
@@ -379,9 +379,9 @@ function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, en
         } else if (!isPhoneVerified) {
             e.preventDefault();
             showErrorAlert("휴대폰 인증을 완료해주세요.");
-        } else if (password.length < 10) {
+        } else if (password.length < 7) {
             e.preventDefault();
-            showErrorAlert("비밀번호는 10자 이상이어야 합니다.");
+            showErrorAlert("비밀번호는 7자 이상이어야 합니다.");
         } else if (password.length > 15){
         	e.preventDefault();
         	showErrorAlert("비밀번호는 15자 이하이어야 합니다.");

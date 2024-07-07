@@ -442,9 +442,9 @@ public class UserRestController {
 
 	        Map<String, String> response = new HashMap<>();
 	        try {
-	        	if (userPassword.length() < 10) {
+	        	if (userPassword.length() < 7) {
 	                response.put("status", "shortpassword");
-	                response.put("message", "비밀번호를 10자 이상 입력해주세요.");
+	                response.put("message", "비밀번호를 7자 이상 입력해주세요.");
 	            } else if (!userPassword.equals(checkPassword)) {
 	                response.put("status", "notequals");
 	                response.put("message", "비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
@@ -490,9 +490,9 @@ public class UserRestController {
 	        }
 
 	        if ("checkPasswordMatch".equals(action)) {
-	            if (userPassword.length() < 10) {
+	            if (userPassword.length() < 7) {
 	                response.put("status", "shortpassword");
-	                response.put("message", "비밀번호를 10자 이상 입력해주세요.");
+	                response.put("message", "비밀번호를 7자 이상 입력해주세요.");
 	            } else if (!userPassword.equals(checkPassword)) {
 	                response.put("status", "notequals");
 	                response.put("message", "비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
@@ -507,9 +507,9 @@ public class UserRestController {
 	            if (!sessionUser.getUserPassword().equals(currentPassword)) {
 	                response.put("status", "incorrectcurrent");
 	                response.put("message", "현재 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
-	            } else if (userPassword.length() < 10) {
+	            } else if (userPassword.length() < 7) {
 	                response.put("status", "shortpassword");
-	                response.put("message", "비밀번호를 10자 이상 입력해주세요.");
+	                response.put("message", "비밀번호를 7자 이상 입력해주세요.");
 	            } else if (!userPassword.equals(checkPassword)) {
 	                response.put("status", "notequals");
 	                response.put("message", "비밀번호가 일치하지 않습니다. 다시 입력해주세요.");

@@ -9,9 +9,10 @@
     <meta charset="UTF-8">
     <title>${user.nickName}님 정보입니다.</title>
     <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
-<!--     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script> -->
+    <c:import url="../common/header.jsp"/>
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+<!--    <script src="https://code.jquery.com/jquery-3.7.1.js"></script> -->
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script> 
 
     <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
     <style>
@@ -262,7 +263,6 @@
 
         
     </style>
-		 <c:import url="../common/header.jsp"/>
     <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
 
     <script>
@@ -370,9 +370,25 @@
             });
 
             // 사용자 ID 클릭 시 비밀번호 변경 팝업 창 열기
-            $(".text-link").click(function(event) {
+      		$(".text-link").click(function(event) {
                 event.preventDefault(); // 기본 동작 막기
                 window.open($(this).attr("href"), "비밀번호 변경", "width=500,height=420,scrollbars=yes,resizable=yes");
+            }); 
+            $("#dialog").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 640,
+                height: 480,
+                close: function() {
+                    $("#dialog-content").attr("src", "about:blank");
+                }
+            });
+
+            // Open dialog on button click
+            $(".change-password").click(function(event) {
+            	event.preventDefault();
+                $("#dialog-content").attr("src", "changePassword.jsp");
+                $("#dialog").dialog("open");
             });
 
             // 전화번호 칸 클릭시 전화번호 변경 팝업 창 열기
@@ -420,7 +436,7 @@
             </div>
             <div class="profile-info">
                 <p><img src="${user.badgeImage}" class="badgeImage"> 인증 ${user.certificationCount}회, 모임 ${user.meetingCount}회</p>
-                <a href="/user/changePassword.jsp" class="text-link">${user.userId}✏️</a> 
+                <a href="#" class="text-link change-password">${user.userId}✏️</a> 
                 <!--  <button type="button" ><input type="file" id="profile" name="image" value=""></button> -->
             </div>
         </div>
@@ -502,6 +518,8 @@
 
     </form>
 </main>
+
+
 
 <!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// --> 
 
