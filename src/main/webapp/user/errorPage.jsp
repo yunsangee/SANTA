@@ -13,7 +13,7 @@
 <body>
     <script>
         $(document).ready(function() {
-            alert("${errorMessage}");
+            //alert("${errorMessage}");
             window.location.href = "/common/main.jsp";
         });
     </script>

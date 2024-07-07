@@ -19,6 +19,26 @@
 
  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script> 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function showSuccessAlert(message) {
+            Swal.fire({
+                icon: 'success',
+                text: message,
+                confirmButtonText: 'OK'
+            });
+        }
+
+        function showErrorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                text: message,
+                confirmButtonText: 'Retry'
+            });
+        }
+    </script>
 
 <!--  ////////////////////////////////////////////// script  ///////////////////////////////////////////////// -->
 
@@ -147,7 +167,7 @@ $("input[name='userId']").on("input", function() {
                 type: 'GET',
                 data: { email: email },
                 success: function(response) {
-                    alert("인증번호가 전송되었습니다. 이메일을 확인해주세요.");
+                	showSuccessAlert("인증번호가 전송되었습니다. 이메일을 확인해주세요.");
                     if ($("#emailVerificationSection").length === 0) {
                         $(".email-section").append(
                             '<div id="emailVerificationSection">' +
@@ -159,11 +179,11 @@ $("input[name='userId']").on("input", function() {
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert("이메일 전송에 실패했습니다. 다시 시도해주세요.");
+                	showErrorAlert("이메일 전송에 실패했습니다. 다시 시도해주세요.");
                 }
             });
         } else {
-            alert("이메일을 입력해주세요.");
+        	showErrorAlert("이메일을 입력해주세요.");
         }
     });
 
@@ -177,17 +197,17 @@ $("input[name='userId']").on("input", function() {
                 type: 'POST',
                 data: { email: email, code: code },
                 success: function(response) {
-                    alert(response);
+                    //alert(response);
                     if (response === "인증되었습니다.") {
                         $("#isEmailVerified").val("true");
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                	showErrorAlert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
                 }
             });
         } else {
-            alert("인증번호를 입력해주세요.");
+        	showErrorAlert("인증번호를 입력해주세요.");
         }
     });
 
@@ -219,7 +239,7 @@ $("input[name='userId']").on("input", function() {
                 contentType: 'application/json',
                 data: JSON.stringify({ phoneNumber: phoneNumber, userName: userName }),
                 success: function(response) {
-                    alert("휴대폰 인증번호가 전송되었습니다.");
+                	showSuccessAlert("휴대폰 인증번호가 전송되었습니다.");
                     if ($("#phoneVerificationSection").length === 0) {
                         $(".phone-section").append(
                             '<div id="phoneVerificationSection">' +
@@ -231,11 +251,11 @@ $("input[name='userId']").on("input", function() {
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert("휴대폰 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+                	showErrorAlert("휴대폰 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
                 }
             });
         } else {
-            alert("이름과 휴대폰 번호를 입력해주세요.");
+        	showErrorAlert("이름과 휴대폰 번호를 입력해주세요.");
         }
     });
 
@@ -250,18 +270,18 @@ $("input[name='userId']").on("input", function() {
                 data: { phoneNumber: phoneNumber, validationNumber: validationNumber },
                 success: function(response) {
                     if (response != -1) {
-                        alert("휴대폰 인증이 완료되었습니다.");
+                    	showSuccessAlert("휴대폰 인증이 완료되었습니다.");
                         $("#isPhoneVerified").val("true");
                     } else {
-                        alert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                    	showErrorAlert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                	showErrorAlert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
                 }
             });
         } else {
-            alert("인증번호를 입력해주세요.");
+        	showErrorAlert("인증번호를 입력해주세요.");
         }
     });
 
@@ -352,31 +372,31 @@ function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, en
 
         if (!isValid) {
             e.preventDefault();
-            alert("모든 필드를 올바르게 입력해주세요.");
+            showErrorAlert("모든 필드를 올바르게 입력해주세요.");
         } else if (!isEmailVerified) {
             e.preventDefault();
-            alert("이메일 인증을 완료해주세요.");
+            showErrorAlert("이메일 인증을 완료해주세요.");
         } else if (!isPhoneVerified) {
             e.preventDefault();
-            alert("휴대폰 인증을 완료해주세요.");
+            showErrorAlert("휴대폰 인증을 완료해주세요.");
         } else if (password.length < 10) {
             e.preventDefault();
-            alert("비밀번호는 10자 이상이어야 합니다.");
+            showErrorAlert("비밀번호는 10자 이상이어야 합니다.");
         } else if (password.length > 15){
         	e.preventDefault();
-            alert("비밀번호는 15자 이하이어야 합니다.");
+        	showErrorAlert("비밀번호는 15자 이하이어야 합니다.");
         }else if(passwordFormat == false){
         	e.preventDefault();
-            alert("비밀번호에는 영문, 숫자, 특수문자가 포함되어야 합니다.");
+        	showErrorAlert("비밀번호에는 영문, 숫자, 특수문자가 포함되어야 합니다.");
         }
         else if (!isGenderSelected) {
             e.preventDefault();
-            alert("성별을 선택해주세요.");
+            showErrorAlert("성별을 선택해주세요.");
         } else if(!duplicateNickname){
         	e.preventDefault();
-            alert("중복된 닉네임입니다.");
+        	showErrorAlert("중복된 닉네임입니다.");
         }else {
-            alert("산타 가입을 환영합니다.");
+        	showSuccessAlert("산타 가입을 환영합니다.");
         }
     });
  });

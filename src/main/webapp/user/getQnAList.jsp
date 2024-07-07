@@ -419,6 +419,27 @@
     	<c:import url="../common/header.jsp"/>
     	
   <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function showSuccessAlert(message) {
+            Swal.fire({
+                icon: 'success',
+                text: message,
+                confirmButtonText: 'OK'
+            });
+        }
+
+        function showErrorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                text: message,
+                confirmButtonText: 'Retry'
+            });
+        }
+    </script>
+  
     
 <!-- 로그인 상태 확인 변수 추가 -->
 <c:set var="isLoggedIn" value="${not empty user}"/>
@@ -451,7 +472,7 @@
 
         $('.btn-write').click(function() {
             if ('${isLoggedIn}' !== 'true') {
-                alert('로그인 후 작성 가능합니다.');
+            	showErrorAlert('로그인 후 작성 가능합니다.');
                 return;
             }
             if (!dialogVisible) {
@@ -557,11 +578,11 @@
                 contentType: 'application/json',
                 data: JSON.stringify({ postNo: postNo, userNo: userNo, adminAnswer: adminAnswer }),
                 success: function(response) {
-                   // alert('답변이 저장되었습니다.');
+                	showSuccessAlert('답변이 저장되었습니다.');
                     location.reload(); // 저장 후 페이지 새로고침
                 },
                 error: function() {
-                   // alert('답변 저장에 실패했습니다.');
+                	showErrorAlert('답변 저장에 실패했습니다.');
                 }
             });
         }
@@ -577,13 +598,13 @@
                     method: 'GET',
                     data: { postNo: postNo, userNo: userNo },
                     success: function(response) {
-                        //alert('삭제되었습니다.');
+                    	showSuccessAlert('삭제되었습니다.');
                         $('.dialog-overlay.details').removeClass('active');
                         dialogVisible = false;
                         location.reload(); // 페이지 새로고침
                     },
                     error: function() {
-                       // alert('삭제 실패.');
+                    	showErrorAlert('삭제에 실패했습니다. 다시 시도해주세요.');
                     }
                 });
             }
@@ -624,12 +645,12 @@
 	                contentType: 'application/json',
 	                data: JSON.stringify(formData), // JSON 데이터로 전송
 	                success: function(response) {
-	                    //alert('작성 완료되었습니다.'); // 성공 메시지
+	                	showSuccessAlert('작성 완료되었습니다.'); // 성공 메시지
 	                    closeDialog();
 	                    location.reload(); // 페이지 새로고침
 	                },
 	                error: function() {
-	                    //alert('작성에 실패했습니다.'); // 실패 메시지
+	                	showErrorAlert('작성에 실패했습니다.'); // 실패 메시지
 	                    closeDialog();
 	                    location.reload();
 	                }

@@ -187,6 +187,27 @@
     	
     	<c:import url="../common/header.jsp"/>
 <!--  ////////////////////////////////////////////// script  ///////////////////////////////////////////////// -->    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function showSuccessAlert(message) {
+            Swal.fire({
+                icon: 'success',
+                text: message,
+                confirmButtonText: 'OK'
+            });
+        }
+
+        function showErrorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                text: message,
+                confirmButtonText: 'Retry'
+            });
+        }
+    </script>
+
     
     <script>
     	
@@ -204,7 +225,7 @@
                 if (userName && phoneNumber) {
                     sendVerificationCode();
                 } else {
-                    alert("이름과 휴대폰 번호를 모두 입력해주세요.");
+                	showErrorAlert("이름과 휴대폰 번호를 모두 입력해주세요.");
                 }
             });
 
@@ -222,10 +243,10 @@
 
                 if (!userName || !phoneNumber) {
                     e.preventDefault();
-                    alert("이름과 휴대폰 번호를 모두 입력해주세요.");
+                    showErrorAlert("이름과 휴대폰 번호를 모두 입력해주세요.");
                 } else if (!isPhoneVerified) {
                     e.preventDefault();
-                    alert("휴대폰 인증을 완료해주세요.");
+                    showErrorAlert("휴대폰 인증을 완료해주세요.");
                 }
             });
         });
@@ -245,7 +266,7 @@
                 }),
                 success: function(response) {
                     if (!response.userExists) {
-                        alert("회원정보가 일치하지 않습니다. 다시 확인해주세요.");
+                    	showErrorAlert("회원정보가 일치하지 않습니다. 다시 확인해주세요.");
                     } else {
                         $.ajax({
                             url: "/message/send-one",
@@ -257,7 +278,7 @@
                             }),
                             success: function(response) {
                                 if (response) {
-                                    alert("인증번호가 전송되었습니다.");
+                                	showSuccessAlert("인증번호가 전송되었습니다.");
                                     
                                     // 인증번호가 전송된 후 인증번호 입력란을 추가
                                     $(".form-group").after(
@@ -269,17 +290,17 @@
                                         '</div>'
                                     );
                                 } else {
-                                    alert("인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+                                	showErrorAlert("인증번호 전송에 실패했습니다. 다시 시도해주세요.");
                                 }
                             },
                             error: function(xhr, status, error) {
-                                alert('인증번호 전송에 실패했습니다. 다시 시도해주세요.');
+                            	showErrorAlert('인증번호 전송에 실패했습니다. 다시 시도해주세요.');
                             }
                         });
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert('회원정보가 일치하지 않습니다. 다시 시도해주세요.');
+                	showErrorAlert('회원정보가 일치하지 않습니다. 다시 시도해주세요.');
                 }
             });
         }
@@ -291,14 +312,14 @@
                 data: { phoneNumber: phoneNumber, validationNumber: verifyCode },
                 success: function(response) {
                     if (response != -1) {
-                        alert("휴대폰 인증이 완료되었습니다.");
+                    	showSuccessAlert("휴대폰 인증이 완료되었습니다.");
                         $("#isPhoneVerified").val("true");
                     } else {
-                        alert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                    	showErrorAlert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                	showErrorAlert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
                 }
             });
         }

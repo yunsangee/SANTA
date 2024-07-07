@@ -141,6 +141,27 @@
     <c:import url="../common/header.jsp"/>
 
 <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function showSuccessAlert(message) {
+            Swal.fire({
+                icon: 'success',
+                text: message,
+                confirmButtonText: 'OK'
+            });
+        }
+
+        function showErrorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                text: message,
+                confirmButtonText: 'Retry'
+            });
+        }
+    </script>
+
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
@@ -206,17 +227,17 @@
             const userId = document.getElementById("userId").value;
 
             if (passwordNew !== checkPassword) {
-                alert("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+            	showErrorAlert("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
                 return;
             }
 
             if (passwordNew === userPassword) {
-                alert("기존 비밀번호와 같은 비밀번호입니다.");
+            	showErrorAlert("기존 비밀번호와 같은 비밀번호입니다.");
                 return;
             }
             
             if(userPassword == "kakao"){
-                alert("카카오 로그인 산타님은 비밀번호를 변경하실 수 없습니다.");
+            	showErrorAlert("카카오 로그인 산타님은 비밀번호를 변경하실 수 없습니다.");
                 return;
             }
 
@@ -239,11 +260,11 @@
                 return response.text();
             })
             .then(data => {
-                alert("비밀번호가 변경되었습니다.");
+            	showSuccessAlert("비밀번호가 변경되었습니다.");
                 window.location.href = "/user/login.jsp"; // 비밀번호 변경 후 로그인 페이지로 리디렉션
             })
             .catch(error => {
-                alert(error.message);
+            	showErrorAlert(error.message);
             });
         }
     </script>

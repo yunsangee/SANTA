@@ -183,6 +183,27 @@
             background-color: #c82333; /* 진한 빨강색 */
         }
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function showSuccessAlert(message) {
+            Swal.fire({
+                icon: 'success',
+                text: message,
+                confirmButtonText: 'OK'
+            });
+        }
+
+        function showErrorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                text: message,
+                confirmButtonText: 'Retry'
+            });
+        }
+    </script>
+    
     <script>
         function toggleButton(target) {
             const group = target.parentElement;
@@ -239,13 +260,13 @@
                 if (data.error) {
                     //alert('업데이트 실패: ' + data.message);
                 } else {
-                    //alert('일정이 업데이트되었습니다.');
+                	showSuccessAlert('일정이 업데이트되었습니다.');
                     window.location.href = "/user/getScheduleList";  // 조회 화면으로 리디렉션
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
-                //alert('업데이트 중 오류가 발생했습니다.');
+                showErrorAlert('업데이트 중 오류가 발생했습니다.');
             });
         }
 
@@ -254,7 +275,7 @@
             var userNo = document.getElementById('userNo').value || '';
 
             if (!postNo || !userNo) {
-              //  alert('삭제할 일정을 찾을 수 없습니다.');
+            	showErrorAlert('삭제할 일정을 찾을 수 없습니다.');
                 return;
             }
 
@@ -280,13 +301,13 @@
                 if (data.error) {
                    // alert('삭제 실패: ' + data.message);
                 } else {
-                   // alert('일정이 삭제되었습니다.');
+                	showSuccessAlert('일정이 삭제되었습니다.');
                     window.location.href = "/user/getScheduleList";  // 조회 화면으로 리디렉션
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
-              //  alert('삭제 중 오류가 발생했습니다.');
+                showErrorAlert('삭제 중 오류가 발생했습니다.');
             });
         }
 

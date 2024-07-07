@@ -151,6 +151,27 @@
     </style>
   
     <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// --> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function showSuccessAlert(message) {
+            Swal.fire({
+                icon: 'success',
+                text: message,
+                confirmButtonText: 'OK'
+            });
+        }
+
+        function showErrorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                text: message,
+                confirmButtonText: 'Retry'
+            });
+        }
+    </script>
+    
  
     <script>
     function toggleWithdrawContent() {
@@ -173,13 +194,13 @@
         var checkboxes = document.querySelectorAll('input[type="checkbox"]');
         for (var i = 0; i < checkboxes.length; i++) {
             if (!checkboxes[i].checked) {
-                alert("모든 확인 사항에 동의해주세요.");
+            	showErrorAlert("모든 확인 사항에 동의해주세요.");
                 checkboxes[i].focus();
                 return false;
             }
         }
         if (withdrawReason.value == "4" && withdrawContent.value.trim() === "") {
-            alert("기타 사유를 적어주세요.");
+        	showErrorAlert("기타 사유를 적어주세요.");
             withdrawContent.focus();
             return false;
         }
@@ -189,7 +210,7 @@
     function handleSubmit(event) {
         event.preventDefault(); // 기본 폼 제출 방지
         if (validateForm()) {
-            alert("탈퇴 완료되었습니다.");
+        	showSuccessAlert("탈퇴 완료되었습니다.");
             event.target.submit(); // 폼 제출
         }
     }
