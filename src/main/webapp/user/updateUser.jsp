@@ -123,7 +123,7 @@
             text-align: left; /* 글씨 왼쪽 정렬 */
         }
 
-        button, a.button {
+        .submit-button{
             width: 400px;
             padding: 15px;
             font-size: 16px;
@@ -134,7 +134,7 @@
             border-radius: 5px;
             cursor: pointer;
             box-sizing: border-box;
-        }
+        } 
 
         .a {   
             background-color: white;
@@ -162,19 +162,19 @@
             text-decoration: underline;
         }
 
-        .container {
+       /*  .container {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
-            width: 400px; /* 고정된 너비 설정 */
+            width: 400px; 
             justify-content: center;
-            align-items: center; /* 가운데 정렬 */
-        }
+            align-items: center; 
+        }  */
 
         .detail-section {
             display: flex; 
-            flex-direction: column; /* 세로 정렬을 위해 추가 */
-            align-items: center; /* 가운데 정렬 */
+            flex-direction: column; 
+            align-items: center;
             margin-bottom: 20px;
             justify-content: center;
         }
@@ -260,6 +260,126 @@
         	width:24px;
         	height:24px;
         }
+        
+         .dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding-top:20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.dialog-overlay.active {
+    display: flex;
+}
+.dialog-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      margin-top:45px;
+      width: 35%;
+      height: 80%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+        /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+        
+       .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #555;
+            background: none;
+            border: none;
+        }
+         .container h2 {
+            color: #333;
+            margin-top: 5px;
+            margin-bottom: 40px;
+            font-size: 30px;
+        }
+
+        .container p {
+            color: #999999;
+            font-size: 13px;
+            margin-bottom: 30px;
+        }
+
+        .container label {
+            display: block;
+            font-weight: bold;
+            align-items: center;
+        }
+
+        .password {
+            width: 50%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            align-items: center;
+        }
+        
+        .password:focus {
+            border: 1px solid #81C408;
+            outline: none;
+            box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); 
+        }
+         .submit-password {
+            width: 50%;
+            padding: 15px;
+            font-size: 16px;
+            background-color: #81C408;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-password:hover {
+            background-color: #578906;
+        }
+
+        .container .link {
+            display: inline-block;
+            font-size: 12px;
+            text-align: center;
+            margin-top: 10px;
+            color: #333;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .container .link:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: red;
+            text-align: left;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .password, .email, .code, .phone, .submit {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+        
 
         
     </style>
@@ -370,26 +490,27 @@
             });
 
             // 사용자 ID 클릭 시 비밀번호 변경 팝업 창 열기
-      		$(".text-link").click(function(event) {
+      		/* $(".text-link").click(function(event) {
                 event.preventDefault(); // 기본 동작 막기
                 window.open($(this).attr("href"), "비밀번호 변경", "width=500,height=420,scrollbars=yes,resizable=yes");
-            }); 
-            $("#dialog").dialog({
-                autoOpen: false,
-                modal: true,
-                width: 640,
-                height: 480,
-                close: function() {
-                    $("#dialog-content").attr("src", "about:blank");
-                }
-            });
+            });  */
+            
+            $('.text-link').click(function() {
+           	 let user = "${sessionScope.user != null ? sessionScope.user : 'null'}";
+           	 
+           	 if(user != 'null'){
+                	$('.dialog-overlay.details').addClass('active');
+           	 }
+              });
 
-            // Open dialog on button click
-            $(".change-password").click(function(event) {
-            	event.preventDefault();
-                $("#dialog-content").attr("src", "changePassword.jsp");
-                $("#dialog").dialog("open");
-            });
+              // 다이얼로그를 닫는 로직
+              $('.dialog-overlay.details, .close-dialog').click(function(event) {
+                if ($(event.target).is('.dialog-overlay.details') || $(event.target).is('.close-dialog')) {
+                  $('.dialog-overlay.details').removeClass('active');
+                }
+              });
+           
+            
 
             // 전화번호 칸 클릭시 전화번호 변경 팝업 창 열기
             $(".phone-link").click(function(event) {
@@ -408,8 +529,103 @@
             window.opener.location.reload();
             window.close();
         }
+        
+        
     </script>
+    
+    
+    <script>
+        $(document).ready(function() {
+            $("input[name='currentPassword']").on("input", function() {
+                var currentPassword = $(this).val();
 
+                $.ajax({
+                    url: '/user/rest/changePassword',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ currentPassword: currentPassword, action: 'checkCurrentPassword' }),
+                    success: function(response) {
+                        if (response.status === "incorrect") {
+                            $("#currentPasswordMessage").text(response.message).css("color", "red").show();
+                        } else if (response.status === "correct") {
+                            $("#currentPasswordMessage").text(response.message).css("color", "green").show();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $("#currentPasswordMessage").text("오류가 발생했습니다. 다시 시도해주세요.").css("color", "red").show();
+                    }
+                });
+            });
+
+            $("input[name='userPassword']").on("input", function() {
+                var password = $(this).val();
+
+                if (password.length < 7) {
+                    $("#passwordLengthMessage").text("비밀번호를 7자 이상 입력해주세요.").css("color", "red").show();
+                } else {
+                    $("#passwordLengthMessage").text("").hide();
+                }
+            });
+
+            $("input[name='checkPassword']").on("input", function() {
+                var password = $("input[name='userPassword']").val();
+                var confirmPassword = $(this).val();
+
+                $.ajax({
+                    url: '/user/rest/changePassword',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        userPassword: password,
+                        checkPassword: confirmPassword,
+                        action: 'checkPasswordMatch'
+                    }),
+                    success: function(response) {
+                        if (response.status === "equals") {
+                            $("#passwordMessage").text(response.message).css("color", "green").show();
+                        } else if (response.status === "notequals") {
+                            $("#passwordMessage").text(response.message).css("color", "red").show();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $("#passwordMessage").text("오류가 발생했습니다. 다시 시도해주세요.").css("color", "red").show();
+                    }
+                });
+            });
+
+            $("#changePasswordForm").on("submit", function(e) {
+                e.preventDefault();
+                var currentPassword = $("input[name='currentPassword']").val();
+                var userPassword = $("input[name='userPassword']").val();
+                var checkPassword = $("input[name='checkPassword']").val();
+                var userNo = $("#userNo").val();
+
+                $.ajax({
+                    url: '/user/rest/changePassword',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        currentPassword: currentPassword,
+                        userPassword: userPassword,
+                        checkPassword: checkPassword,
+                        action: 'changePassword'
+                    }),
+                    success: function(response) {
+                        if (response.status === "equals") {
+                            alert(response.message);
+                            window.opener.location.reload(); // 부모 창 새로고침
+                            window.close(); // 팝업 창 닫기
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert("오류가 발생했습니다. 다시 시도해주세요.");
+                    }
+                });
+            });
+        });
+    </script>
  
 </head>
 
@@ -436,7 +652,7 @@
             </div>
             <div class="profile-info">
                 <p><img src="${user.badgeImage}" class="badgeImage"> 인증 ${user.certificationCount}회, 모임 ${user.meetingCount}회</p>
-                <a href="#" class="text-link change-password">${user.userId}✏️</a> 
+                <a href="#" class="text-link change-password" onclick="openModal()">${user.userId}✏️</a> 
                 <!--  <button type="button" ><input type="file" id="profile" name="image" value=""></button> -->
             </div>
         </div>
@@ -509,7 +725,7 @@
         <!-- <br> -->
             
         <div class="link-section">
-            <button type="button" class="a submit">수정 완료하기</button>
+            <button type="button" class="a submit submit-button">수정 완료하기</button>
         </div>    
 
 	<div class="back-section">
@@ -520,6 +736,44 @@
 </main>
 
 
+<div class="dialog-overlay details">
+    <div class="dialog-content details">
+
+            <button class="close-button" onclick="closeDialog()">&times;</button>
+            
+	</div>
+</div>
+
+<div class="dialog-overlay details">
+    <div class="dialog-content details">
+
+            <button class="close-button" onclick="closeDialog()">&times;</button>
+            <h2>비밀번호 변경</h2>
+    <form id="changePasswordForm" action="/user/changePassword" method="post">
+        <div class="password-section">
+            <label></label>
+            <input type="password" class="password" name="currentPassword" placeholder="현재 비밀번호" required>
+            <div id="currentPasswordMessage" class="error-message"></div>
+        </div>
+        <div class="password-section">
+            <label></label>
+            <input type="password" class="password" name="userPassword" placeholder="비밀번호 입력" autocomplete="new-password" required>
+            <div id="passwordLengthMessage" class="error-message"></div>
+        </div>
+        <div class="password-section">
+            <label></label>
+            <input type="password" class="password" name="checkPassword" placeholder="비밀번호 확인" autocomplete="new-password" required>
+            <div id="passwordMessage" class="error-message"></div>
+        </div>
+      
+        <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
+        <input type="hidden" id="userId" name="userId" value="${user.userId}">
+        
+        <button type="submit" class="submit-password">비밀번호 변경하기</button>
+        
+    </form>
+	</div>
+</div>
 
 <!--  ////////////////////////////////////////////// footer ///////////////////////////////////////////////// --> 
 

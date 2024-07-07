@@ -160,6 +160,99 @@
     	});
     </script>
     
+    <script>
+        $(document).ready(function() {
+            $("input[name='currentPassword']").on("blur", function() {
+                var currentPassword = $(this).val();
+
+                $.ajax({
+                    url: '/user/rest/changePassword',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ currentPassword: currentPassword, action: 'checkCurrentPassword' }),
+                    success: function(response) {
+                        if (response.status === "incorrect") {
+                            $("#currentPasswordMessage").text(response.message).css("color", "red").show();
+                        } else if (response.status === "correct") {
+                            $("#currentPasswordMessage").text(response.message).css("color", "green").show();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $("#currentPasswordMessage").text("오류가 발생했습니다. 다시 시도해주세요.").css("color", "red").show();
+                    }
+                });
+            });
+
+            $("input[name='userPassword']").on("blur", function() {
+                var password = $(this).val();
+
+                if (password.length < 7) {
+                    $("#passwordLengthMessage").text("비밀번호를 7자 이상 입력해주세요.").css("color", "red").show();
+                } else {
+                    $("#passwordLengthMessage").text("").hide();
+                }
+            });
+
+            $("input[name='checkPassword']").on("blur", function() {
+                var password = $("input[name='userPassword']").val();
+                var confirmPassword = $(this).val();
+
+                $.ajax({
+                    url: '/user/rest/changePassword',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        userPassword: password,
+                        checkPassword: confirmPassword,
+                        action: 'checkPasswordMatch'
+                    }),
+                    success: function(response) {
+                        if (response.status === "equals") {
+                            $("#passwordMessage").text(response.message).css("color", "green").show();
+                        } else if (response.status === "notequals") {
+                            $("#passwordMessage").text(response.message).css("color", "red").show();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $("#passwordMessage").text("오류가 발생했습니다. 다시 시도해주세요.").css("color", "red").show();
+                    }
+                });
+            });
+
+            $("#changePasswordForm").on("submit", function(e) {
+                e.preventDefault();
+                var currentPassword = $("input[name='currentPassword']").val();
+                var userPassword = $("input[name='userPassword']").val();
+                var checkPassword = $("input[name='checkPassword']").val();
+                var userNo = $("#userNo").val();
+
+                $.ajax({
+                    url: '/user/rest/changePassword',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        currentPassword: currentPassword,
+                        userPassword: userPassword,
+                        checkPassword: checkPassword,
+                        action: 'changePassword'
+                    }),
+                    success: function(response) {
+                        if (response.status === "equals") {
+                            alert(response.message);
+                            window.opener.location.reload(); // 부모 창 새로고침
+                            window.close(); // 팝업 창 닫기
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert("오류가 발생했습니다. 다시 시도해주세요.");
+                    }
+                });
+            });
+        });
+    </script>
+    
     <style>
     	 .user-icon, .user-image {
             width: 24px; /* Set the desired width */
