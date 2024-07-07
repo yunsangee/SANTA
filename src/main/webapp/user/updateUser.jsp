@@ -395,26 +395,41 @@
         
     </style>
     <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+        function showSuccessAlert(message) {
+            Swal.fire({
+                icon: 'success',
+                text: message,
+                confirmButtonText: 'OK'
+            });
+        }
+
+        function showErrorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                text: message,
+                confirmButtonText: 'Retry'
+            });
+        }
+    </script>
+    <script>
+    function closeDialog() {
+        $('.dialog-overlay').removeClass('active');
+        dialogVisible = false;
     }
 
-    async function example() {
-        console.log('Start');
-        await sleep(1000); // 1초 대기
-        console.log('1 second later');
-    }
 
     	let profileImage = '';
         $(document).ready(function() {
-            $(".submit").click(function() { 
+            $(".submit-button").click(function() { 
                 if ($("#profile").val() != "") {
-                    $("form").attr("enctype", "multipart/form-data").submit();
+                    $("#mainForm").attr("enctype", "multipart/form-data").submit();
                 } else {
                     $("#profile").remove();
-                    $("form").submit();
+                    $("#mainForm").submit();
                 }
             });
             
@@ -496,7 +511,7 @@
                     });
                 } else {
                     $("#nickMessage").text("");
-                    $(".submit").prop("disabled", false);
+                    $(".submit-button").prop("disabled", false);
                 }
             });
 
@@ -550,7 +565,7 @@
                           contentType: 'application/json',
                           data: JSON.stringify({ phoneNumber: phoneNumber, userId: userId }),
                           success: function(response) {
-                              //showSuccessAlert("휴대폰 인증번호가 전송되었습니다.");
+                              showSuccessAlert("휴대폰 인증번호가 전송되었습니다.");
                               if ($("#phoneVerificationSection").length === 0) {
                                   $(".phone-section").append(
                                       '<div id="phoneVerificationSection">' +
@@ -562,11 +577,11 @@
                               }
                           },
                           error: function(xhr, status, error) {
-                            //  showErrorAlert("휴대폰 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+                            showErrorAlert("휴대폰 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
                           }
                       });
                   } else {
-                      //showErrorAlert("이름과 휴대폰 번호를 입력해주세요.");
+                      showErrorAlert("이름과 휴대폰 번호를 입력해주세요.");
                   }
               });
 
@@ -581,18 +596,18 @@
                           data: { phoneNumber: phoneNumber, validationNumber: validationNumber },
                           success: function(response) {
                               if (response != -1) {
-                                 // showSuccessAlert("휴대폰 인증이 완료되었습니다.");
+                                 showSuccessAlert("휴대폰 인증이 완료되었습니다.");
                                   $("#isPhoneVerified").val("true");
                               } else {
-                                 // showErrorAlert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                                 showErrorAlert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
                               }
                           },
                           error: function(xhr, status, error) {
-                              //showErrorAlert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
+                              showErrorAlert("인증번호 확인에 실패했습니다. 다시 시도해주세요.");
                           }
                       });
                   } else {
-                      //showErrorAlert("인증번호를 입력해주세요.");
+                      showErrorAlert("인증번호를 입력해주세요.");
                   }
               });
               ///////////////////////////////////////////
@@ -606,11 +621,6 @@
         }
     });
 
-        // 팝업 창이 닫힐 때 부모 창을 새로고침
-        function closePopupAndReload() {
-            window.opener.location.reload();
-            window.close();
-        }
         
         
     </script>
@@ -675,7 +685,7 @@
                 });
             });
 
-            $("#changePasswordForm").on("submit", function(e) {
+            $(".submit-password").on("click", function(e) {
                 e.preventDefault();
                 var currentPassword = $("input[name='currentPassword']").val();
                 var userPassword = $("input[name='userPassword']").val();
@@ -694,15 +704,16 @@
                     }),
                     success: function(response) {
                         if (response.status === "equals") {
-                            //alert(response.message);
-                            window.opener.location.reload(); // 부모 창 새로고침
-                            window.close(); // 팝업 창 닫기
+                            showSuccessAlert(response.message);
+                            
+                            closeDialog();
+                            
                         } else {
-                            //alert(response.message);
+                            showErrorAlert(response.message);
                         }
                     },
                     error: function(xhr, status, error) {
-                        //alert("오류가 발생했습니다. 다시 시도해주세요.");
+                    	showErrorAlert("오류가 발생했습니다. 다시 시도해주세요.");
                     }
                 });
             });
@@ -724,7 +735,7 @@
 <!--  ////////////////////////////////////////////// main ///////////////////////////////////////////////// -->
 
 <main class="container">
-    <form action="/user/updateUser" method="post" >
+    <form id="mainForm" action="/user/updateUser" method="post" >
         <div class="profile-header">
             <div class="profile-container">
                 <img src="${sessionScope.user.profileImage}" class="profile">
@@ -734,7 +745,7 @@
             </div>
             <div class="profile-info">
                 <p><img src="${user.badgeImage}" class="badgeImage"> 인증 ${user.certificationCount}회, 모임 ${user.meetingCount}회</p>
-                <a href="#" class="text-link change-password" onclick="openModal()">${user.userId}✏️</a> 
+                <a href="#" class="text-link change-password" >${user.userId}✏️</a> 
                 <!--  <button type="button" ><input type="file" id="profile" name="image" value=""></button> -->
             </div>
         </div>
@@ -820,7 +831,7 @@
         <!-- <br> -->
             
         <div class="link-section">
-            <button type="button" class="a submit submit-button">수정 완료하기</button>
+            <button type="button" class="a submit-button">수정 완료하기</button>
         </div>    
 
 	<div class="back-section">
@@ -831,13 +842,7 @@
 </main>
 
 
-<div class="dialog-overlay details">
-    <div class="dialog-content details">
 
-            <button class="close-button" onclick="closeDialog()">&times;</button>
-            
-	</div>
-</div>
 
 <div class="dialog-overlay details">
     <div class="dialog-content details">
@@ -864,7 +869,7 @@
        <%--  <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
         <input type="hidden" id="userId" name="userId" value="${user.userId}"> --%>
         
-        <button type="submit" class="submit-password">비밀번호 변경하기</button>
+        <button type="button" class="submit-password">비밀번호 변경하기</button>
         
     </form>
 	</div>
