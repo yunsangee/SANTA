@@ -13,6 +13,9 @@
 
 <c:import url="../common/header.jsp"/>
 <script>
+function removeHtmlTags(str) {
+    return str.replace(/<br\s*\/?>|<p\s*\/?>|<\/p>/gi, '');
+}
 	$(document).ready(function(){
 		$("button:contains('update')").on('click',function(){
 			
@@ -139,7 +142,7 @@
 							let mountain = response.mountain;
 							let user = response.user;
 
-		                    var content = '<button class="close-button" onclick="closeDialog()">&times;</button>' +
+		                    var content = '<button type="button" class="close-button" onclick="closeDialog()">&times;</button>' +
 		                    '<h2></h2>' +
 		                    '<div class="profile-header">' +
 		                    '<img src="' + user.profileImage + '" alt="Profile Image">' +
@@ -152,15 +155,15 @@
 		                    '</div>' +
 		                    '<div class="form-group">' +
 		                    '<label for="mountainLocation">산 위치</label>' +
-		                    '<input type="text" id="mountainLocation" name="mountainLocation" value="' + mountain.mountainLocation + '"><br><br>' +
+		                    '<input type="text" id="mountainLocation" name="mountainLocation" value="' + mountain.mountainLocation + '"><br>' +
 		                    '</div>' +
 		                    '<div class="form-group">' +
 		                    '<label for="mountainAltitude">산 높이</label>' +
-		                    '<input type="text" id="mountainAltitude" name="mountainAltitude" value="' + mountain.mountainAltitude + '"><br><br>' +
+		                    '<input type="text" id="mountainAltitude" name="mountainAltitude" value="' + mountain.mountainAltitude + '"><br>'+
 		                    '</div>' +
 		                    '<div class="form-group">' +
 		                    '<label for="mountainDescription">100대 산 선정사유 및 등산 코스</label>' +
-		                    '<textarea id="mountainDescription" name="mountainDescription" rows="10" placeholder="내용을 입력하세요" required>' + mountain.mountainDescription + '</textarea>' +
+		                    '<textarea id="mountainDescription" name="mountainDescription" rows="7" placeholder="내용을 입력하세요" required>' +  removeHtmlTags(mountain.mountainDescription) + '</textarea>' +
 		                    '</div>' +
 		                    '<div class="form-group">' +
 		                    '<button type="submit" id="inputButton">작성 완료하기</button>' +
@@ -198,7 +201,7 @@
 				
 				let crpNo = $(this).closest("form").find('#crpNo').val();
 				
-				alert('crpNo:' + crpNo);
+				//alert('crpNo:' + crpNo);
 	            $.ajax({
 	                url: "/mountain/rest/updateMountain?crpNo=" + crpNo,
 	                method: "POST",
@@ -370,9 +373,9 @@
       background: #fff;
       padding: 20px;
       border-radius: 5px;
-      margin-top:45px;
+      margin-top:85px;
       width: 35%;
-      height: 80%;
+      height: 85%;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -416,7 +419,7 @@
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 0px;
             font-weight: bold;
             font-size: 13.5px;
             text-align: left; /* 왼쪽 정렬 추가 */
