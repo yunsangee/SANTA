@@ -31,7 +31,7 @@ public class UserRestController_mail {
         }
     }
 
-    @PostMapping("rest/verify")
+    @GetMapping("rest/verify")
     public String verifyCode(@RequestParam("email") String email, @RequestParam("code") int code) {
         boolean isVerified = mailService.checkAuth(email, code);
         if (isVerified) {

@@ -91,8 +91,20 @@
             margin-bottom: 5px; /* 입력 필드 간 간격 */
             box-sizing: border-box; /* 박스 크기를 포함하도록 설정 */
         }
+        
+        #phoneVerificationCode {
+            width: 290px; /* 원하는 크기로 조절합니다. */
+            padding: 10px; /* 입력 필드 내부 여백(padding)을 추가합니다. */
+            font-size: 16px; /* 폰트 크기를 조정합니다. */
+            background-color: #ffffff; /* 배경색 추가 */
+            color: black;
+            border: 1px solid #ccc; /* 테두리 추가 */
+            border-radius: 5px;
+            margin-bottom: 5px; /* 입력 필드 간 간격 */
+            box-sizing: border-box; /* 박스 크기를 포함하도록 설정 */
+        }  
 
-        .update:focus, .detail-section textarea:focus,  .detail-section select:focus, .phone-link:focus {
+        .update:focus, .detail-section textarea:focus,  .detail-section select:focus, .phone-link:focus, #phoneVerificationCode:focus {
             border: 1px solid #81C408; /* 클릭 시 테두리 두께와 색상 설정 */
             outline: none; /* 기본 포커스 효과 제거 */
             box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); /* 선택적으로 포커스 시 그림자 효과 추가 */	
@@ -284,7 +296,7 @@
       border-radius: 5px;
       margin-top:45px;
       width: 35%;
-      height: 80%;
+      height: 50%;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -307,6 +319,8 @@
             margin-top: 5px;
             margin-bottom: 40px;
             font-size: 30px;
+            text-align:center;
+             align-items: center;
         }
 
         .container p {
@@ -322,12 +336,15 @@
         }
 
         .password {
-            width: 50%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            align-items: center;
+             width: 100%; /* 원하는 크기로 조절합니다. */
+		    padding: 10px; /* 입력 필드 내부 여백(padding)을 추가합니다. */
+		    font-size: 16px; /* 폰트 크기를 조정합니다. */
+		    background-color: #ffffff; /* 배경색 추가 */
+		    color: black;
+		    border: 1px solid #ccc; /* 테두리 추가 */
+		    border-radius: 5px;
+		    margin-bottom: 3px; /* 입력 필드 간 간격 */
+		    box-sizing: border-box; /* 박스 크기를 포함하도록 설정 */
         }
         
         .password:focus {
@@ -336,7 +353,7 @@
             box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); 
         }
          .submit-password {
-            width: 50%;
+            width: 100%;
             padding: 15px;
             font-size: 16px;
             background-color: #81C408;
@@ -381,7 +398,7 @@
         }
         
         .phone-verify-btn {   
-          width: 80%;
+          width: 100%;
 	    padding: 15px;
 	    font-size: 16px;
 	    margin-top: 10px;
@@ -392,6 +409,35 @@
 	    cursor: pointer;
 	    box-sizing: border-box;
 	}
+	
+	phone-verify-btn:disabled {
+    background-color: #f5f5f5;
+    color: #cccccc;
+    border: 1px solid #cccccc;
+    cursor: not-allowed;
+}
+
+.phone-verify-btn:hover {
+    background-color: #DEFBA7; 
+}
+
+.phone-verify-check-btn {
+    width: auto;
+    padding: 10px;
+    font-size: 14px;
+    background-color: white;
+    color: #81C408;
+    border: 1px solid #81C408;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
+    margin-left: 0px;
+    margin-top:-3px;
+}
+
+.phone-verify-check-btn:hover {
+    background-color: #DEFBA7; 
+}
         
     </style>
     <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
@@ -848,7 +894,7 @@
     <div class="dialog-content details">
 
             <button class="close-button" onclick="closeDialog()">&times;</button>
-            <h2>비밀번호 변경</h2>
+            <h2 style="text-align:center">비밀번호 변경</h2>
     <form id="changePasswordForm" action="/user/changePassword" method="post">
         <div class="password-section">
             <label></label>
