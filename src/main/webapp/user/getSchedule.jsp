@@ -192,6 +192,10 @@
                 icon: 'success',
                 text: message,
                 confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "/user/getScheduleList"; // 조회 화면으로 리디렉션
+                }
             });
         }
 
@@ -261,7 +265,8 @@
                     //alert('업데이트 실패: ' + data.message);
                 } else {
                 	showSuccessAlert('일정이 업데이트되었습니다.');
-                    window.location.href = "/user/getScheduleList";  // 조회 화면으로 리디렉션
+
+                   // window.location.href = "/user/getScheduleList";  // 조회 화면으로 리디렉션
                 }
             })
             .catch((error) => {
@@ -279,9 +284,6 @@
                 return;
             }
 
-            if (!confirm('정말로 삭제하시겠습니까?')) {
-                return;
-            }
 
             fetch(`/user/rest/deleteSchedule`, {
                 method: 'POST',
@@ -302,7 +304,7 @@
                    // alert('삭제 실패: ' + data.message);
                 } else {
                 	showSuccessAlert('일정이 삭제되었습니다.');
-                    window.location.href = "/user/getScheduleList";  // 조회 화면으로 리디렉션
+                    //window.location.href = "/user/getScheduleList";  // 조회 화면으로 리디렉션
                 }
             })
             .catch((error) => {
