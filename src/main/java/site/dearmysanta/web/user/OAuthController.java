@@ -128,9 +128,11 @@ public class OAuthController {
             }  else if(existingUsers.size() == 0) {
             		
             	    ModelAndView modelAndView = new ModelAndView();
+            	    System.out.println("user?? " + user);
             	    modelAndView.addObject("user", user);
+            	   modelAndView.setViewName("forward:/user/addInfo.jsp");
             	    
-            	    return new ModelAndView("forward:/user/addInfo.jsp");
+            	    return modelAndView;
             	    
             }         
         
