@@ -524,9 +524,9 @@
             });
 
             // 주소 클릭 시 도로명 주소 창 열기
-            $("input[name='address']").click(function() {
+         /*    $("input[name='address']").click(function() {
                 window.open("/user/address.jsp", "pop", "width=570,height=420, scrollbars=yes, resizable=yes"); 
-            });
+            }); */
 
             // 닉네임 중복 체크
             $("input[name='nickName']").on("input", function() {
@@ -658,14 +658,26 @@
               });
               ///////////////////////////////////////////
 
+////////////////////////////////주소 ////////////////////
+              $("input[name='address']").click(function() {
+                  window.open("/user/address.jsp", "pop", "width=570,height=420, scrollbars=yes, resizable=yes"); 
+              });
+          });
+
+          function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, engAddr, jibunAddr, zipNo, admCd, rnMgtSn, bdMgtSn, detBdNmList, bdNm, bdKdcd, siNm, sggNm, emdNm, liNm, rn, udrtYn, buldMnnm, buldSlno, mtYn, lnbrMnnm, lnbrSlno, emdNo) {
+              $("input[name='address']").val(roadAddrPart1);
+              $("input[name='detailAddress']").val(addrDetail);
+          }
+
+              
           
 
         // 도로명 주소 콜백 함수
-        function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, engAddr, jibunAddr, zipNo, admCd, rnMgtSn, bdMgtSn, detBdNmList, bdNm, bdKdcd, siNm, sggNm, emdNm, liNm, rn, udrtYn, buldMnnm, buldSlno, mtYn, lnbrMnnm, lnbrSlno, emdNo) {
+/*         function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, engAddr, jibunAddr, zipNo, admCd, rnMgtSn, bdMgtSn, detBdNmList, bdNm, bdKdcd, siNm, sggNm, emdNm, liNm, rn, udrtYn, buldMnnm, buldSlno, mtYn, lnbrMnnm, lnbrSlno, emdNo) {
             $("input[name='address']").val(roadAddrPart1);
             $("input[name='detailAddress']").val(addrDetail);
         }
-    });
+    }); */
 
         
         
