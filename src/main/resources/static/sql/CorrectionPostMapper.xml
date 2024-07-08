@@ -57,7 +57,7 @@
             m.mountain_longitude,
             u.USER_NO,
             u.nickname,
-            ROW_NUMBER() OVER (ORDER BY crp.crp_no) AS ROW_SEQ
+            ROW_NUMBER() OVER (ORDER BY crp.crp_date DESC) AS ROW_SEQ
         FROM 
             USERS u, 
             CORRECTION_POST crp, 
@@ -70,7 +70,6 @@
                 AND m.MOUNTAIN_NAME LIKE '%' || #{searchKeyword} || '%'
             </when>
         </choose>
-       	ORDER BY CRP_DATE DESC
     )
     WHERE ROW_SEQ BETWEEN ((#{currentPage} - 1) * #{pageSize} + 1) AND #{currentPage} * #{pageSize}
 </select>
