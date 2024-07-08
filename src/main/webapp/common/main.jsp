@@ -194,355 +194,398 @@
         });
     </script>
     
-    <style>
-        .testimonial-item {
-        	width:100%;
-            position: relative;
-        }
-
-         .swiper-container {
-            position: relative;
-        }
-        
-        .swiper2-container {
-            margin:0px;
-            position: relative;
-        }
-        .swiper-pagination {
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-            text-align: center;
-        }
-        .swiper-pagination-cp {
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-            text-align: center;
-        }
-        .swiper-button-next,
-        .swiper-button-prev {
-            top: 50%;
-            transform: translateY(-50%);
-            color:#81C408;
-        }
-        
-        .swiper-button-next-cp,
-        .swiper-button-prev-cp {
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        
-        .fas.fa-heart {
-    color: red; 
-
-}
-
-.far.fa-heart {
-    color: gray; 
-}
-
-        .popular-testimonial-item{
-        	text-align: left;
-            padding: 10px;
-            margin:5px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            min-width: 150px;
-            height:300px;
-            flex: 1;
-           display:flex; 
-            position:relative;
-        }
-        
-
-        
-        .custom-testimonial-item{
-        	text-align: left;
-            padding: 10px;
-            margin:5px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            min-width: 150px;
-            height:300px;
-            
-            flex: 1;
-            display:flex;
-            position:relative;
-        }
-        
-        
-        .table-responsive{
-        	text-align: left;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            min-width: 150px;
-            flex: 1;
-            display:flex;
-            position:relative;
-        
-        }
-        
-        .swiper-container {
-    border: 1px solid #ddd; 
-    border-radius: 5px;
-    margin: 15px;
-    width: 100%; /* 전체 너비로 설정 */
-    overflow: hidden; /* 내용이 넘치는 경우를 대비하여 오버플로우를 숨김 */
-    height: 340px; 
+   <style>
+    .testimonial-item {
+        width: 100%;
+        position: relative;
     }
+
+    .swiper-container,
     .swiper2-container {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin: 15px;
-    width: 100%; /* 전체 너비로 설정 */
-    height: 500px;
-
-    overflow: hidden; /* 내용이 넘치는 경우를 대비하여 오버플로우를 숨김 */
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin: 15px;
+        width: 100%;
+        overflow: hidden;
     }
 
-
-.fixed-buttons {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-.btn-cp {
-    border: 2px solid orange;
-    background-color: white;
-    color: limegreen;
-    width: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    transition: transform 0.2s;
-}
-.btn-cp:hover {
-    transform: scale(1.1);
-}
-.btn-cp .fa {
-    font-size: 0.75em;
-}
-
-.certification-post img {
-    width: 100%;
-    height: 200px;
-}
-.certification-post .details {
-}
-
-.certification-post-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-.certification-post {
-	margin-buttom:5px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    overflow: hidden;
-    width: 200px;
-    height:450px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
-    cursor: pointer;
-}
-
-.table-header{
-	display: flex; 
-	justify-content: space-between; 
-	align-items: center;
-}
-
-.container-fluid .meetingPost{
-	padding: 0 !important;
-
-}
-
-.section-container {
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-left:12px;
-    padding-right:12px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-
-.py-5 {
-    padding-top: 20px !important;
-    padding-bottom: 20px !important;
-}
-
-.first-container{
-	margin-top:90px;
-
-}
-
-.info {
-	margin-top:40px;
-	color : #8B8A7E;
-	font-size: 14px;
-	font-weight: 550;
-	margin-left:5px;
-}
-
-.info2 {
-	margin-top:40px;
-	color : #8B8A7E;
-	font-size: 14px;
-	font-weight: 550;
-	margin-left:5px;
-}
-
-.info2:hover {
-	 color: #8B8A7E;
-}
-
-.text-primary {
-	margin-bottom:-2px;
-	margin-left:5px;
-	/* margin-top:30px; */
-}
-
-.popular {
-	margin-bottom:0px;
-	margin-left:5px;
-	margin-top:30px;
-}
-
-.searchBox {
-	flex: 1; 
-	padding: 10px; 
-	border: none; 
-	outline: none; 
-	border: 1px solid #ccc; 
-	border-radius: 35px; 
-	padding: 10px;
-	margin-left:20px;
-}
-
-.search {
-	background: none; 
-	border: none; 
-	cursor: pointer;
-	margin-left: -40px;
-}
-
-.search-container {
-	positon:relative;
-	width:80%;
-	display: flex; 
-	justify-content: center; 
-	align-items: center;
-	margin-left:165px;
-	margin-top: 10px; 
-	margin-bottom: 100px;
-}
-
-/* .line {
-    border-bottom: 1px solid #ccc;
-    margin: 20px 0;
-} */
-
-.search-top {
-	font-size:30px;
-	font-weight: bold;
-	color : white;
-	margin-left:95px;
-	margin-top:120px;
-	margin-bottom:10px;
-}
-
-.top {
-	width:110%;
-	background-color : #81C408;
-}
-
-.search-top:hover {
-            color: #81C408; /* 마우스를 올렸을 때 색상을 동일하게 유지 */
-        }
-        
-.hiking {
-	width:10%;
-	margin-left:480px;
-	margin-top:-170px;
-}
-
-.mountainName {
-	margin-top:35px;
-}
-
-.Location {
-	font-size:12px;
-	margin-top:-2px;
-	position: fixed;
-	margin-right: 18px;
-}
-
-.Altitude {
-	margin-top:-17px;
-	margin-bottom:1px;
-	margin-left:3px;
-}
-
-.count {
-	margin-top:0px;
-	font-size:17px;
-	margin-left:3px;
-}
-
-.popular-testimonial-item:hover {
-  	border: 1px solid #81C408; /* 클릭 시 테두리 두께와 색상 설정 */
-    outline: none; /* 기본 포커스 효과 제거 */
-    box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); /* 선택적으로 포커스 시 그림자 효과 추가 */
-    cursor: pointer;
-}
-
-.custom-testimonial-item:hover {
-	border: 1px solid #81C408; /* 클릭 시 테두리 두께와 색상 설정 */
-    outline: none; /* 기본 포커스 효과 제거 */
-    box-shadow: 0 0 5px rgba(129, 196, 8, 0.5); /* 선택적으로 포커스 시 그림자 효과 추가 */
-    cursor: pointer;
-}
-
-     .no {
-        padding: 1rem 3.5rem !important; /* 상하 1rem, 좌우 3.5rem */
+    .swiper-container {
+        height: 340px;
     }
-    .author {
-        padding: 1rem 3.5rem !important; /* 상하 1rem, 좌우 3.5rem */
+
+    .swiper2-container {
+        height: 500px;
     }
+
+    .swiper-pagination,
+    .swiper-pagination-cp {
+        position: absolute;
+        bottom: 10px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+        top: 50%;
+        transform: translateY(-50%);
+        color: #81C408;
+    }
+
+    .swiper-button-next-cp,
+    .swiper-button-prev-cp {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .fas.fa-heart {
+        color: red;
+    }
+
+    .far.fa-heart {
+        color: gray;
+    }
+
+    .popular-testimonial-item,
+    .custom-testimonial-item {
+        text-align: left;
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        min-width: 150px;
+        height: 300px;
+        flex: 1;
+        display: flex;
+        position: relative;
+    }
+
+    .table-responsive {
+        text-align: left;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        min-width: 150px;
+        flex: 1;
+        display: flex;
+        position: relative;
+    }
+
+    .fixed-buttons {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn-cp {
+        border: 2px solid orange;
+        background-color: white;
+        color: limegreen;
+        width: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s;
+    }
+
+    .btn-cp:hover {
+        transform: scale(1.1);
+    }
+
+    .btn-cp .fa {
+        font-size: 0.75em;
+    }
+
+    .certification-post img {
+        width: 100%;
+        height: 200px;
+    }
+
+    .certification-post .details {}
+
+    .certification-post-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .certification-post {
+        margin-bottom: 5px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        overflow: hidden;
+        width: 200px;
+        height: 450px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+        cursor: pointer;
+    }
+
+    .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .container-fluid .meetingPost {
+        padding: 0 !important;
+    }
+
+    .section-container {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        padding-left: 12px;
+        padding-right: 12px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .py-5 {
+        padding-top: 20px !important;
+        padding-bottom: 20px !important;
+    }
+
+    .first-container {
+        margin-top: 90px;
+    }
+
+    .info {
+        margin-top: 40px;
+        color: #8B8A7E;
+        font-size: 14px;
+        font-weight: 550;
+        margin-left: 5px;
+    }
+
+    .info2 {
+        margin-top: 40px;
+        color: #8B8A7E;
+        font-size: 14px;
+        font-weight: 550;
+        margin-left: 5px;
+    }
+
+    .info2:hover {
+        color: #8B8A7E;
+    }
+
+    .text-primary {
+        margin-bottom: -2px;
+        margin-left: 5px;
+    }
+
+    .popular {
+        margin-bottom: 0px;
+        margin-left: 5px;
+        margin-top: 30px;
+    }
+
+    .searchBox {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        outline: none;
+        border: 1px solid #ccc;
+        border-radius: 35px;
+        padding: 10px;
+        margin-left: 20px;
+    }
+
+    .search {
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-left: -40px;
+    }
+
+    .search-container {
+        position: relative;
+        width: 80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 165px;
+        margin-top: 10px;
+        margin-bottom: 100px;
+    }
+
+    .search-top {
+        font-size: 30px;
+        font-weight: bold;
+        color: white;
+        margin-left: 95px;
+        margin-top: 120px;
+        margin-bottom: 10px;
+    }
+
+    .top {
+        width: 110%;
+        background-color: #81C408;
+    }
+
+    .search-top:hover {
+        color: #81C408;
+    }
+
+    .hiking {
+        width: 10%;
+        margin-left: 480px;
+        margin-top: -170px;
+    }
+
+    .mountainName {
+        margin-top: 35px;
+    }
+
+    .Location {
+        font-size: 12px;
+        margin-top: -2px;
+        position: fixed;
+        margin-right: 18px;
+    }
+
+    .Altitude {
+        margin-top: -17px;
+        margin-bottom: 1px;
+        margin-left: 3px;
+    }
+
+    .count {
+        margin-top: 0px;
+        font-size: 17px;
+        margin-left: 3px;
+    }
+
+    .popular-testimonial-item:hover,
+    .custom-testimonial-item:hover {
+        border: 1px solid #81C408;
+        outline: none;
+        box-shadow: 0 0 5px rgba(129, 196, 8, 0.5);
+        cursor: pointer;
+    }
+
+    .no,
+    .author,
     .title {
-        padding: 1rem 3.5rem 1rem 6.5rem !important; /* 상하 1rem, 좌 3.5rem, 우 6.5rem */
+        padding: 1rem 3.5rem !important;
     }
-    .status {
-        padding: 1rem  !important; /* 상하 1rem, 좌우 3.5rem */
-        text-align: left; /* 텍스트를 왼쪽 정렬 */
+
+    .title {
+        padding-left: 6.5rem !important;
     }
+
+    .status,
     .date {
         padding: 1rem !important;
-        margin-left: 0rem; /* 좌측 간격을 줄임 */
-    } 
-    
-   .table p {
-        white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 설정 */
-        overflow: hidden; /* 넘치는 텍스트를 숨김 */
-        text-overflow: ellipsis; /* 넘치는 텍스트에 말줄임표 추가 */
     }
-    
-  /*   .meetingPostData{
-    	display:flex;
-    		justify-content: center; 
-		align-items: center;
-    } */
-    </style>
+
+    .date {
+        margin-left: 0rem;
+    }
+
+    .table p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (max-width: 768px) {
+        .search-container {
+            width: 100%;
+            margin-left: 0;
+            margin-bottom: 20px;
+        }
+
+        .searchBox {
+            margin-left: 0;
+        }
+
+        .search-top {
+            font-size: 24px;
+            margin-left: 0;
+            text-align: center;
+        }
+
+        .hiking {
+            width: 20%;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .testimonial-header,
+        .section-container {
+            text-align: center;
+        }
+
+        .table-header {
+            flex-direction: column;
+        }
+
+        .info,
+        .info2 {
+            margin-left: 0;
+        }
+
+        .popular-testimonial-item,
+        .custom-testimonial-item {
+            flex-direction: column;
+            align-items: center;
+            height: auto;
+        }
+
+        .swiper-container,
+        .swiper2-container {
+            height: auto;
+        }
+
+        .certification-post {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .container-fluid .meetingPost {
+            padding: 10px !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .search-top {
+            font-size: 18px;
+            margin-top: 60px;
+        }
+
+        .first-container {
+            margin-top: 60px;
+        }
+
+        .search-container {
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .searchBox {
+            width: 90%;
+        }
+
+        .search {
+            margin-left: 0;
+            margin-top: 10px;
+        }
+
+        .hiking {
+            width: 30%;
+        }
+    }
+</style>
+
 </head>
 
 <body>
@@ -666,12 +709,12 @@
                                 <img src="${mountain.mountainImage}" class="img-fluid rounded mountainImage" style="width: 250px; height: 250px;" alt="">
                             </div>
                             
-                            <div class="ms-3 d-block" style="flex-grow: 1;">
+                            <div class="ms-3 d-block" >
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h4 class="mountainName">${mountain.mountainName}</h4>
                                     
                                     <div class="d-flex pe-5"> 
-                                     <i class="fas fa-star text-primary" style="margin-right: -4px; margin-top:20px; margin-left:-182px;"></i>
+                                      <i class="fas fa-star text-primary" style="margin-right: -4px; margin-top:20px; margin-left:10px;"></i>
                                      <i class="fas fa-star text-primary" style="margin-right: -4px; margin-top:20px;"> </i>
                                      <i class="fas fa-star text-primary" style="margin-right: -4px; margin-top:20px;"></i>
                                      <i class="fas fa-star text-primary" style="margin-right: 1px; margin-top:20px;"></i>

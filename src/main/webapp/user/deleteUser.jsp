@@ -160,6 +160,10 @@
                 icon: 'success',
                 text: message,
                 confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $("form").submit();
+                }
             });
         }
 
@@ -211,7 +215,6 @@
         event.preventDefault(); // 기본 폼 제출 방지
         if (validateForm()) {
         	showSuccessAlert("탈퇴 완료되었습니다.");
-            event.target.submit(); // 폼 제출
         }
     }
     </script>

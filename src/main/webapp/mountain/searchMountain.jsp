@@ -169,9 +169,9 @@
 		});
     });
     </script>
-     <style>
+   <style>
         .styled-line {
-            border-top: 2px solid #77C043; /* Add to cart 버튼과 동일한 색상 */
+            border-top: 2px solid #77C043; 
         }
         
         .title-style{
@@ -184,7 +184,7 @@
         }
         
         .btn-keyword {
-        margin-right: 15px; /* 각 버튼 간격 추가 */
+        margin-right: 15px; 
     	}
     	
     	 .header {
@@ -211,58 +211,103 @@
 }
 
 .search-container {
-	positon:relative;
-	width:80%;
+	position: relative;
+	width: 80%;
 	display: flex; 
 	justify-content: center; 
 	align-items: center;
-	margin-left:165px;
+	margin-left: 165px;
 	margin-top: 10px; 
 	margin-bottom: 100px;
+	flex-direction: row; /* 가로로 한 줄로 배치되도록 설정 */
 }
 
-.btn-search{
-			display: flex;
-            align-items: center;
-            justify-content: center; 
+.btn-search {
+	display: flex;
+	align-items: center;
+	justify-content: center; 
 }
-
 
 .top {
-	width:1400px;
-	height:350px;
-	margin-top:-150px;
-	margin-left:auto;
-	margin-right:auto;
-	background-color : #81C408;
-}
-
-.search-top:hover {
-         
-        }
-        
-.hiking {
-	width:10%;
-	margin-left:480px;
-	margin-top:-110px;
+	width: 100%;
+	max-width: 1400px;
+	height: 350px;
+	margin: -150px auto 0;
+	background-color: #81C408;
 }
 
 .search-top {
-	font-size:30px;
+	font-size: 30px;
 	font-weight: bold;
-	color : white;
-	padding-top:30px;
-	margin-left:95px;
-	margin-top:200px;
-	margin-bottom:10px;
+	color: white;
+	padding-top: 30px;
+	margin-left: 95px;
+	margin-top: 200px;
+	margin-bottom: 10px;
 }
 
-.container .pt-0{
+.hiking {
+	width: 10%;
+	margin-left: 480px;
+	margin-top: -110px;
+}
+@media (max-width: 768px) {
+	.search-container {
+		width: 100%;
+		margin-left: 0;
+		margin-bottom: 50px;
+	}
 
+	.top {
+		height: auto;
+		padding-bottom: 50px;
+	}
 
+	.search-top {
+		font-size: 24px;
+		margin-left: 20px;
+		margin-top: 100px;
+	}
+
+	.hiking {
+		width: 20%;
+		margin-left: 40%;
+		margin-top: -80px;
+	}
+
+	.search-container {
+		flex-direction: column; /* 작은 화면에서는 세로로 배치 */
+	}
 }
 
-    </style>
+@media (max-width: 576px) {
+	.searchBox {
+		width: 100%;
+		margin-left: 0;
+	}
+
+	.search-container {
+		flex-direction: column; /* 작은 화면에서는 세로로 배치 */
+		align-items: stretch;
+	}
+
+	.search {
+		margin-left: 0;
+		margin-top: 10px;
+	}
+
+	.btn-search {
+		margin-top: 10px;
+	}
+
+	.hiking {
+		width: 30%;
+		margin-left: 35%;
+		margin-top: -60px;
+	}
+}
+</style>
+
 </head>
 <body>
 
