@@ -145,13 +145,14 @@
 			<div class="search-container">
 				<form id="searchForm" action="/mountain/getMountainLikeList" method="get" style="display: flex; align-items: center;">
 					<select name="searchCondition" class="dropdown-custom">
-                        <option value="0" ${search.searchCondition != null && search.searchCondition == 0 ? 'selected' : '' }>Mt.Name </option>
-                        <option value="1"${search.searchCondition != null && search.searchCondition == 1 ? 'selected' : '' }>Location</option>
+                        <option value="0" ${search.searchCondition != null && search.searchCondition == 0 ? 'selected' : '' }>산 명칭</option>
+                        <option value="1"${search.searchCondition != null && search.searchCondition == 1 ? 'selected' : '' }>지역</option>
                     </select>
                     <!--  산 조아요 목록 rest 만들어야겠넹 -->
 						
 			<input type="text" name="searchKeyword" class="form-control search-input" placeholder="Search by keyword" value="${search.searchKeyword != null ? search.searchKeyword : '' }">
-            <input type="hidden" id="currentPage" name="currentPage" value="1">     
+            <input type="hidden" id="currentPage" name="currentPage" value="1">   
+            <input type="hidden" id="userNo" name="userNo" value="${user.userNo}"/> 
                  </form>
              </div>   
              
@@ -160,10 +161,10 @@
             		<thead>
             			<tr>
             				<th scope="col">No.</th>
-            				<th scope="col">Mountain Name</th>
-            				<th scope="col">Location</th>
-            				<th scope="col">Like</th>
-            				<th scope="col">Like Date</th>
+            				<th scope="col">산 명칭</th>
+            				<th scope="col">지역</th>
+            				<th scope="col">좋아요 수</th>
+            				<th scope="col">좋아요 한 일시</th>
             			</tr>
             		</thead>
             		

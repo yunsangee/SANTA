@@ -288,7 +288,7 @@
 		)
 		WHERE ROW_SEQ BETWEEN ((#{currentPage} - 1) * #{pageSize} + 1) AND
 		#{currentPage} * #{pageSize}
-		ORDER BY like_date
+		ORDER BY like_date DESC
 	</select>
 	
 	<select id="getTotalMountainLikeListCount" parameterType="int" resultType="int">
