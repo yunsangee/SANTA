@@ -159,6 +159,14 @@
 		        height: auto;
 		    }
 		}
+		
+		#fileCount {
+    		display: inline-block;
+    		margin-left: 10px;
+    		margin-top: 0;
+    		margin-bottom: 0;
+    		padding-top: 5px;
+    	}
     
     </style>
     
@@ -264,8 +272,8 @@
 						    	<textarea class="form-control mb-2" name="contents" rows="10" placeholder="내용을 입력하세요." style="height: 200px;" required>${meetingPost.contents}</textarea>
 						    </p>
 						    <button type="button" class="btn btn-primary border-0 rounded text-white">사진 선택</button>
-						    <input type="file" id="meetingPostImage" name="meetingPostImage" style="display: none;" multiple/><br/>
-						    <p id="fileCount" style="display: inline-block; margin-left: 10px;"></p>
+						    <input type="file" id="meetingPostImage" name="meetingPostImage" style="display: none;" multiple/>
+						    <p id="fileCount"></p>
 						</div>
 						
 	    			</div>

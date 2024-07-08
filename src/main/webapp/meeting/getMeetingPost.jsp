@@ -787,6 +787,11 @@
 					                        <button class="btn btn-primary border-0 rounded text-white px-4 py-3 delete-participation-button"
 					                        data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}">신청 취소하기</button>
 					                    </c:when>
+					                    <c:when test="${isMember == 2}">
+							                <%-- 게시글 작성자가 아니고 isMember가 2인 경우 --%>
+							                <button class="btn btn-primary border-0 rounded text-white px-4 py-3 withdraw-button" 
+							                data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}">모임 탈퇴하기</button>
+							            </c:when>
 					                </c:choose>
 					                
 					            </c:when>
