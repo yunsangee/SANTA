@@ -41,59 +41,53 @@ public class MailServiceImpl implements MailService{
 		
 	}
 	
-	public void mailSend(String receiverEmail) {
-	    makeRandomNumber(receiverEmail);
-	    System.out.println("confirm : ");
-	    String setFrom = "ljh71506@gmail.com";
-	    String title = "산타 회원가입 인증번호 입니다.";
-	    String content = "<!DOCTYPE html>" +
-	            "<html>" +
-	            "<head>" +
-	            "<meta charset='UTF-8'>" +
-	            "<title>이메일 인증번호</title>" +
-	            "<style>" +
-	            "body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }" +
-	            ".container { width: 80%; max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }" +
-	            ".header { text-align: center; padding-bottom: 20px; }" +
-	            ".header img { width: 100%; max-width: 100%; height: auto; border-radius: 10px; }" +
-	            ".content { font-size: 16px; line-height: 1.6; color: #333333; }" +
-	            ".content p { margin: 0 0 10px; }" +
-	            ".footer { text-align: center; font-size: 12px; color: #999999; margin-top: 20px; }" +
-	            "</style>" +
-	            "</head>" +
-	            "<body>" +
-	            "<div class='container'>" +
-	            "<div class='header'>" +
-				/* "<img src='https://source.unsplash.com/featured/?hiking' alt='hiking'>" + */
-	            "</div>" +
-	            "<div class='content'>" +
-	            "<p>안녕하세요 산타님!</p>" +
-	            "<p>SANTA에 오신 것을 환영합니다. <strong>SANTA</strong>. 산타에 가입하기 위해 이메일 인증을 진행합니다,  아래에 전송된 인증번호를 회원가입 페이지에 입력해주시기 바랍니다.</p>" +
-	            "<p><strong>인증번호: " + map.get(receiverEmail) + "</strong></p>" +
-	            "<p>해당 이메일로 회원가입을 희망하지 않는다면, 다른 이메일을 입력하여 주세요.</p>" +
-	            "</div>" +
-	            "<div class='footer'>" +
-	            "<p>&copy; 2024 SANTA. All rights reserved.</p>" +
-	            "</div>" +
-	            "</div>" +
-	            "</body>" +
-	            "</html>";
+		public void mailSend(String receiverEmail) {
+		    makeRandomNumber(receiverEmail);
+		    String setFrom = "ljh71506@gmail.com";
+		    String title = "SANTA 회원 가입 인증 이메일입니다.";
+		    String content = 
+		    		 "<div style='border-top: 2px solid #81C408; padding-top: 20px; font-family: Arial, sans-serif;'>" +
+		    			        "<h2 style='color: black; text-align: left; font-weight: normal; font-size:14px; margin-bottom: 20px;'>Bitcamp:SANTA</h2>" +
+		    			        "<div style='margin-bottom: -10px;'>" +
+		    			        "<span style='color: #81C408; font-size: 40px;'>메일인증</span>" +
+		    			        "<span style='color: black; font-size: 40px;'> 안내입니다.</span>" +
+		    			        "</div>" +
+		    			        "<br>" +
+		    			        "<p style='text-align: left; color: black; font-size: 16px; margin-bottom:-5px;'>안녕하세요. SANTA에 오신 것을 환영합니다.</p>" +
+		    			        "<p style='text-align: left; color: black; font-size: 16px; margin-bottom:-5px;'>아래 <span style='color: #81C408;'>인증코드</span>를 입력하시고 회원가입을 완료해 주세요.</p>" +
+		    			        "<p style='text-align: left; color: black; font-size: 16px;'>감사합니다.</p>" +
+		    			        "<h1 style='text-align: left; color: #81C408; font-size: 30px;'>" + map.get(receiverEmail) + "</h1>" +
+		    			        "<hr style='border: 0; height: 1px; background: #ccc; margin: 20px 0;'>" +
+		    			        "<p style='text-align: left; color: black; font-size: 16px;'>회원가입을 중단하고 SANTA를 구경하고 싶으시다면 아래 버튼을 눌러주세요.</p>" +
+		    			        "<div style='text-align: left;'>" +
+		    			        "<a href='https://www.dearmysanta.site' style='display: inline-block; padding: 10px 20px; margin: 20px 0; font-size: 16px; color: white; background-color: #81C408; text-decoration: none; border-radius: 5px;'>SANTA 구경하기</a>" +
+		    			        "</div>" +
+		    			        "<div class='footer' style='text-align: left; margin-top: 20px;'>" +
+		    			        "<p>&copy; 2024 SANTA. All rights reserved.</p>" +
+		    			        "</div>" +
+		    			        "</div>";
 
-	    MimeMessage message = mailSender.createMimeMessage();
 
-	    try {
-	        MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
-	        helper.setFrom(setFrom);
-	        helper.setTo(receiverEmail);
-	        helper.setSubject(title);
-	        helper.setText(content, true);
+		    MimeMessage message = mailSender.createMimeMessage();
+		    try {
+		        MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+		        helper.setFrom(setFrom);
+		        helper.setTo(receiverEmail);
+		        helper.setSubject(title);
+		        helper.setText(content, true);
 
-	        mailSender.send(message);
+		        mailSender.send(message);
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	}
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		}
+
+
+
+
+
+
 
 	public boolean checkAuth(String receiverEmail, int authCode) {
 		

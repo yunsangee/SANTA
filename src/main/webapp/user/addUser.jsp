@@ -50,6 +50,8 @@ let duplicateNickname = false;
 
 let passwordFormat = false;
 
+let checkEmail=false;
+
 $(function() {
     $("#birthDate").datepicker({
         changeMonth: true,
@@ -199,6 +201,7 @@ $("input[name='userId']").on("input", function() {
                 success: function(response) {
                     //alert(response);
                     if (response === "인증되었습니다.") {
+                    	showSuccessAlert("인증되었습니다.");
                         $("#isEmailVerified").val("true");
                     }
                 },
