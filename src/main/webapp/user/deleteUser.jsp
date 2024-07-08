@@ -213,9 +213,9 @@
 
     function handleSubmit(event) {
         event.preventDefault(); // 기본 폼 제출 방지
-        if (validateForm()) {
-        	showSuccessAlert("탈퇴 완료되었습니다.");
-        }
+        
+        showSuccessAlert("탈퇴 완료되었습니다.");
+        
     }
     </script>
     
