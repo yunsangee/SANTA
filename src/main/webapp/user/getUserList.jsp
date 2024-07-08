@@ -163,9 +163,9 @@
                     <div class="search-container">
                         <form id="searchForm" action="${sessionScope.whichUserList == 0 ? '/user/getUserList' : '/user/withdrawUserList'}" method="get" style="display: flex; align-items: center;">
                             <select name="searchCondition" class="dropdown-custom">
-                                <option value="0" ${search.searchCondition == 0 ? 'selected' : ''}>User ID</option>
-                                <option value="1" ${search.searchCondition == 1 ? 'selected' : ''}>Nickname</option>
-                                <option value="2" ${search.searchCondition == 2 ? 'selected' : ''}>Name</option>
+                                <option value="0" ${search.searchCondition == 0 ? 'selected' : ''}>아이디</option>
+                                <option value="1" ${search.searchCondition == 1 ? 'selected' : ''}>닉네임</option>
+                                <option value="2" ${search.searchCondition == 2 ? 'selected' : ''}>이름</option>
                             </select>
                             <input type="text" name="searchKeyword" class="form-control search-input" placeholder="Search by keyword" value="${search.searchKeyword}">
                             <input type="hidden" id="currentPage" name="currentPage" value="${currentPage}">
@@ -177,11 +177,11 @@
                         <thead>
                             <tr>
                                 <th scope="col">No.</th>
-                                <th scope="col">User Name</th>
-                                <th scope="col">User ID</th>
-                                <th scope="col">Nick Name</th>
-                                <th scope="col">Creation Date</th>
-                                <th scope="col">Withdraw Date</th>
+                                <th scope="col">이름</th>
+                                <th scope="col">아이디</th>
+                                <th scope="col">닉네임</th>
+                                <th scope="col">가입 일자</th>
+                                <th scope="col">탈퇴 일자</th>
                             </tr>
                         </thead>
                         <tbody id="userTable">

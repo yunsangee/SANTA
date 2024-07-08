@@ -18,6 +18,8 @@
 			<result property="postDate" column="crp_date" />
 			<result property="mountainNo" column="mountain_no" />
 			<result property="mountainName" column="mountain_name" />
+			<result property="mountainLatitude" column="mountain_latitude" />
+			<result property="mountainLongitude" column="mountain_longitude" />
 			<result property="status" column="crp_status" />
 		</resultMap>
 
@@ -51,6 +53,8 @@
             crp.crp_status, 
             m.MOUNTAIN_NO, 
             m.MOUNTAIN_NAME, 
+            m.mountain_latitude,
+            m.mountain_longitude,
             u.USER_NO,
             u.nickname,
             ROW_NUMBER() OVER (ORDER BY crp.crp_no) AS ROW_SEQ
