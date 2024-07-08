@@ -514,11 +514,11 @@ function removeHtmlTags(str) {
                         <thead>
                             <tr>
                                 <th scope="col">No.</th>
-                                <th scope="col">Mountain Name.</th>
-                                <th scope="col">User NickName.</th>
-                                <th scope="col">Contents</th>
-                                <th scope="col">Claim Date</th>
-                               	<th scope="col">Is Checked</th>
+                                <th scope="col">산 명칭</th>
+                                <th scope="col">닉네임</th>
+                                <th scope="col">내용</th>
+                                <th scope="col">작성 일자</th>
+                               	<th scope="col">수정여부</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -531,7 +531,7 @@ function removeHtmlTags(str) {
             </th>
             <td>
                 <p class="mb-0 mt-4">
-                    <a href="/mountain/getMountain?mountainNo=${correctionPost.mountainNo}" style="text-decoration: none; color: inherit;">${correctionPost.mountainName}</a>
+                    <a href="/mountain/getMountain?mountainNo=${correctionPost.mountainNo}&lat=${correctionPost.mountainLatitude}&lon=${correctionPost.mountainLongitude}" style="text-decoration: none; color: inherit;">${correctionPost.mountainName}</a>
                 </p>
             </td>
             <td>
