@@ -154,7 +154,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
+     <script>
         function showSuccessAlert(message) {
             Swal.fire({
                 icon: 'success',
@@ -162,7 +162,7 @@
                 confirmButtonText: 'OK'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $("form").submit();
+                    document.getElementById("withdrawForm").submit();
                 }
             });
         }
@@ -174,49 +174,48 @@
                 confirmButtonText: 'Retry'
             });
         }
-    </script>
-    
- 
-    <script>
-    function toggleWithdrawContent() {
-        var withdrawReason = document.getElementById("withdrawReason");
-        var withdrawContentDiv = document.getElementById("withdrawContentDiv");
-        var withdrawContent = document.getElementById("withdrawContent");
-        if (withdrawReason.value == "4") {
-            withdrawContentDiv.style.display = "block";
-            withdrawContent.required = true;
-        } else {
-            withdrawContentDiv.style.display = "none";
-            withdrawContent.required = false;
-            withdrawContent.value = ""; // reset the value
-        }
-    }
 
-    function validateForm() {
-        var withdrawReason = document.getElementById("withdrawReason");
-        var withdrawContent = document.getElementById("withdrawContent");
-        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        for (var i = 0; i < checkboxes.length; i++) {
-            if (!checkboxes[i].checked) {
-            	showErrorAlert("모든 확인 사항에 동의해주세요.");
-                checkboxes[i].focus();
-                return false;
+        function toggleWithdrawContent() {
+            var withdrawReason = document.getElementById("withdrawReason");
+            var withdrawContentDiv = document.getElementById("withdrawContentDiv");
+            var withdrawContent = document.getElementById("withdrawContent");
+            if (withdrawReason.value == "4") {
+                withdrawContentDiv.style.display = "block";
+                withdrawContent.required = true;
+            } else {
+                withdrawContentDiv.style.display = "none";
+                withdrawContent.required = false;
+                withdrawContent.value = ""; // reset the value
             }
         }
-        if (withdrawReason.value == "4" && withdrawContent.value.trim() === "") {
-        	showErrorAlert("기타 사유를 적어주세요.");
-            withdrawContent.focus();
-            return false;
-        }
-        return true;
-    }
 
-    function handleSubmit() {
-        event.preventDefault(); // 기본 폼 제출 방지
-        
-        showSuccessAlert("탈퇴 완료되었습니다.");
-        
-    }
+        function validateForm() {
+            var withdrawReason = document.getElementById("withdrawReason");
+            var withdrawContent = document.getElementById("withdrawContent");
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (!checkboxes[i].checked) {
+                    showErrorAlert("모든 확인 사항에 동의해주세요.");
+                    checkboxes[i].focus();
+                    return false;
+                }
+            }
+            if (withdrawReason.value == "4" && withdrawContent.value.trim() === "") {
+                showErrorAlert("기타 사유를 적어주세요.");
+                withdrawContent.focus();
+                return false;
+            }
+            return true;
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault(); // 기본 폼 제출 방지
+            let isTrue = validateForm();
+
+            if (isTrue) {
+                showSuccessAlert("탈퇴 완료되었습니다.");
+            }
+        }
     </script>
     
     <c:import url="../common/header.jsp"/>   
@@ -243,7 +242,7 @@
         <li>탈퇴시 <span>7일간 재가입 불가능</span> 합니다.</li>
     </ul>
 
-    <form action="/user/deleteUser" method="post">
+    <form id="withdrawForm" action="/user/deleteUser" method="post" >
         <div class="Reason-section">
             <label for="withdrawReason"></label>
             <select id="withdrawReason" name="withdrawReason" onchange="toggleWithdrawContent()" required>
@@ -273,7 +272,7 @@
         </div>
         
         <div class="link-section">
-            <button type="submit" class="a" onClick="handleSubmit()">탈퇴하기</button>
+            <button type="submit" class="a" onClick="handleSubmit(event)">탈퇴하기</button>
        </div>
        <!-- <div class="link-section">
             <button type="button" class="cancel" onclick="history.back()">취소</button>
