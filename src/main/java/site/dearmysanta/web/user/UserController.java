@@ -76,7 +76,7 @@ public class UserController {
 		public String addUser(@ModelAttribute User user, @RequestParam(required=false) Integer socialLogin, Model model ) throws Exception {
 			
 			System.out.println("is social?" + socialLogin);
-			if(socialLogin.equals(1)) {
+			if(socialLogin != null & socialLogin.equals(1)) {
 				userService.addUser(user);
 				return "redirect:/user/login.jsp";
 			}
