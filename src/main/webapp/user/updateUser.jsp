@@ -296,7 +296,7 @@
       border-radius: 5px;
       margin-top:45px;
       width: 35%;
-      height: 50%;
+      height: 60%;
       display: flex;
       flex-direction: column;
       position: relative;

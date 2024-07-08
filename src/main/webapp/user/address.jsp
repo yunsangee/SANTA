@@ -8,7 +8,7 @@
 <script language="javascript">
 function init(){
     var url = location.href;
-    var confmKey = "devU01TX0FVVEgyMDI0MDQwODE3Mzk1ODExNDY3MzQ=";//승인키
+    var confmKey = "devU01TX0FVVEgyMDI0MDcwODEwMDYzMDExNDg5ODQ=";//승인키
     var resultType = "4"; // 도로명주소 검색결과 화면 출력유형
     var inputYn = "<%=request.getParameter("inputYn")%>";
     if (inputYn != "Y") {
