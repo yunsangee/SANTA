@@ -514,8 +514,8 @@ function removeHtmlTags(str) {
                         <thead>
                             <tr>
                                 <th scope="col">No.</th>
-                                <th scope="col">산 명칭.</th>
-                                <th scope="col">닉네임.</th>
+                                <th scope="col">산 명칭</th>
+                                <th scope="col">닉네임</th>
                                 <th scope="col">내용</th>
                                 <th scope="col">작성 일자</th>
                                	<th scope="col">수정여부</th>

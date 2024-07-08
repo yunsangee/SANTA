@@ -70,6 +70,7 @@
                 AND m.MOUNTAIN_NAME LIKE '%' || #{searchKeyword} || '%'
             </when>
         </choose>
+       	ORDER BY CRP_DATE DESC
     )
     WHERE ROW_SEQ BETWEEN ((#{currentPage} - 1) * #{pageSize} + 1) AND #{currentPage} * #{pageSize}
 </select>
