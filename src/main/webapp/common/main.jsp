@@ -740,10 +740,10 @@
 									<%-- <h4 class='certificationPostNo'>${certificationPost.postNo}</h4>  --%>
 									<input type="hidden" class="certificationPostNo" value="${certificationPost.postNo}"/>
                                     <h4>${certificationPost.title}</h4>
-                                    <p>산명칭 : ${certificationPost.certificationPostMountainName}</p>
-                                    <p>Hiking Date: ${certificationPost.certificationPostHikingDate}</p>
-                                    <p>좋아요수: ${certificationPost.certificationPostLikeCount}</p>
-                                    <p>등산난이도 :
+                                    <p>산 명칭 : ${certificationPost.certificationPostMountainName}</p>
+                                    <p>등산 일자 : ${certificationPost.certificationPostHikingDate}</p>
+                                    <p>좋아요 수 : ${certificationPost.certificationPostLikeCount}</p>
+                                    <p>등산 난이도 :
                                         <c:choose>
                                             <c:when test="${certificationPost.certificationPostHikingDifficulty == 0}">
                                                 어려움
@@ -854,9 +854,9 @@
 		    		
 		    	</div> <!-- row g-4 mb-5 -->
 	</main>
-	<div class="fixed-buttons">
+	<!-- <div class="fixed-buttons">
         <button class="btn-cp top-button"><i class="fa fa-arrow-up"></i></button>
-    </div>
+    </div> -->
     <footer><c:import url="../common/footer.jsp"/></footer>
 </body>
 </html>

@@ -121,7 +121,7 @@
 		        });
 		        $('#myMeetingPost').on('click', function(event) {
 		        	event.preventDefault();
-		            window.location.href = '/meeting/getMeetingPostList?userNo=${sessionScope.user.userNo}';
+		            window.location.href = '/meeting/getMeetingPostList?userNo=${sessionScope.user.userNo}&meetingPostListSearchCondition=1';
 		        });
 		        $('#myCertificationPost').on('click', function(event) {
 		        	event.preventDefault();
