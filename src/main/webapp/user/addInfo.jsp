@@ -14,40 +14,43 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
     <!-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script> -->
     <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+     <script>
+        function showSuccessAlert(message) {
+            Swal.fire({
+                icon: 'success',
+                text: message,
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                   $("form").submit();
+                }
+            });
+        }
+
+        function showErrorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                text: message,
+                confirmButtonText: 'Retry'
+            });
+        }
+    </script>
 
     <!--  ////////////////////////////////////////////// style ///////////////////////////////////////////////// -->
     <style>
         main {
-            height: 100%; 
-            margin: 0;
+            /* height: 80%; 
+            margin: 0; */
             display: flex;
             flex-direction: column; 
             justify-content: center;
             align-items: center;
             background-color: white; 
-            margin-top:120px;
+            margin-top:150px;
         }
 
-        .profile-header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-            margin-bottom: 25px;
-        }
-
-        .profile-container {
-            position: relative;
-        }
-
-        .profile {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background-color: #ccc;
-            margin-right: 20px;
-            margin-left: -40px;
-        }
 
         .pencil {
             position: absolute;
@@ -62,25 +65,7 @@
             margin-left: -40px;
         }
 
-        .profile-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .profile-info p {
-            margin: 5px 0;
-            color: black;
-            font-weight: bold;
-        }
-
-        .profile-info a {
-            margin: 5px 0;
-            color: black;
-            font-weight: bold;
-            font-size:15px;
-        }
-
+       
         .update, .phone-link, .detail-section p, .detail-section textarea, .detail-section select {
             width: 400px; /* 원하는 크기로 조절합니다. */
             padding: 10px; /* 입력 필드 내부 여백(padding)을 추가합니다. */
@@ -111,20 +96,7 @@
             text-align: left; /* 글씨 왼쪽 정렬 */
         }
 
-        .gender {
-            width: 400px; /* 원하는 크기로 조절합니다. */
-            padding: 10px; /* 입력 필드 내부 여백(padding)을 추가합니다. */
-            font-size: 16px; /* 폰트 크기를 조정합니다. */
-            background-color: #f0f0f0; /* 연한 회색 배경색 추가 */
-            color: black;
-            border: 1px solid #ccc; /* 테두리 추가 */
-            border-radius: 5px;
-            margin-bottom: 5px; /* 입력 필드 간 간격 */
-            box-sizing: border-box; /* 박스 크기를 포함하도록 설정 */
-            text-align: left; /* 글씨 왼쪽 정렬 */
-        }
-
-        button, a.button, .link-section a {
+          .link-section a {
             width: 400px;
             padding: 15px;
             font-size: 16px;
@@ -163,13 +135,14 @@
             text-decoration: underline;
         }
 
-        .container {
+        .container2 {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
             width: 400px; /* 고정된 너비 설정 */
             justify-content: center;
             align-items: center; /* 가운데 정렬 */
+            margin-left:800px;   
         }
 
         .detail-section {
@@ -268,9 +241,16 @@
 }
      
      h6 {
-     	margin-bottom:30px;
+     font-size:25px;
+     	/* margin-bottom:30px; */
      	 align-items: center;
      }   
+     
+     h3 {
+     	font-size:15px;
+     	margin-bottom:30px;
+     	 align-items: center;
+     }
      
       .survey-section {
             display: flex;
@@ -286,15 +266,7 @@
     <script>
     	let profileImage = '';
         $(document).ready(function() {
-            $(".submit").click(function(e) { 
-            	e.preventDefault();
-                if ($("#profile").val() != "") {
-                    $("form").attr("enctype", "multipart/form-data").submit();
-                } else {
-                    $("#profile").remove();
-                    $("form").submit();
-                }
-            });
+          
             
             $('.pencil').on("click", function(){
             	 console.log("click");
@@ -377,11 +349,6 @@
                 }
             });
 
-            // 사용자 ID 클릭 시 비밀번호 변경 팝업 창 열기
-            $(".text-link").click(function(event) {
-                event.preventDefault(); // 기본 동작 막기
-                window.open($(this).attr("href"), "비밀번호 변경", "width=500,height=420,scrollbars=yes,resizable=yes");
-            });
 
             // 전화번호 칸 클릭시 전화번호 변경 팝업 창 열기
             $(".phone-link").click(function(event) {
@@ -400,7 +367,19 @@
             window.opener.location.reload();
             window.close();
         }
+        
     </script>
+    
+    <script>
+    $(document).ready(function() {
+        $(".submit").click(function(e) {
+            e.preventDefault();
+
+            	showSuccessAlert("산타 가입을 환영합니다.");
+               
+        });
+    });
+</script>
 
 </head>
 
@@ -416,45 +395,21 @@
 
 <!--  ////////////////////////////////////////////// main ///////////////////////////////////////////////// -->
 
-<main class="container">
+<main class="container2">
     <form action="/user/addUser?socialLogin=1" method="post" >
-     <%--    <div class="profile-header">
-            <div class="profile-container">
-                <img src="${sessionScope.user.profileImage}" class="profile">
-                <a class="pencil">📷 </a>
-                <input type="file" id="profile" class="file-input"/>
-                <!-- ✏️ -->
-            </div>
-            <div class="profile-info">
-                <p><img src="${user.badgeImage}" class="badgeImage"> 인증 ${user.certificationCount}회, 모임 ${user.meetingCount}회</p>
-                <a href="/user/changePassword.jsp" class="text-link">${user.userId}✏️</a> 
-                <!--  <button type="button" ><input type="file" id="profile" name="image" value=""></button> -->
-            </div>
-        </div> --%>
-		
-		<h6>산타에 가입해 주셔서 감사합니다. <br> 더욱 편리한 사용을 위해 추가 정보를 입력해주세요.</h6>
+
+		<h6>산타에 가입해 주셔서 감사합니다. </h6> <h3>더욱 편리한 사용을 위해 추가 정보를 입력해주세요.</h3>
 		
         <div class="detail-section">
-            <input type="text" class="update" name="nickName" value="${user.nickName}" required>
-            <div id="nickMessage" class="error-message"></div>
-            <p>${user.birthDate}</p> <!-- Birth Date는 수정 불가 -->
-            <div class="phone-container">
-                <input type="text" class="phone-link" name="phoneNumber" value="${user.phoneNumber}" readonly>
-            </div>
-            <input type="text" class="update" name="address" value="${user.address}" readonly>
-            <input type="text" class="update" name="detailAddress" value="${user.detailAddress}" placeholder="상세 주소">
-            <p> 
-                <c:choose>
-                    <c:when test="${user.gender == 0}">
-                        여자
-                    </c:when>
-                    <c:when test="${user.gender == 1}">
-                        남자
-                    </c:when>
-                </c:choose>
-            </p> <!-- Gender는 수정 불가 -->
-            <%-- <textarea class="update" name="introduceContent" placeholder="자기소개">${user.introduceContent}</textarea>
-             --%>
+          <!--   <input type="text" class="update" name="nickName"  placeholder="닉네임을 입력해주세요." required>
+            <div id="nickMessage" class="error-message"></div> -->
+           <%--  <p>${user.birthDate}</p> --%> <!-- Birth Date는 수정 불가 -->
+          <%--   <div class="phone-container">
+                <input type="text" class="phone-link" name="phoneNumber" value="${user.phoneNumber}" >
+            </div> --%>
+            <input type="text" class="update" name="address" value="${user.address}"  placeholder="주소를 입력해주세요." required >
+            <input type="text" class="update" name="detailAddress" value="${user.detailAddress}" placeholder="상세 주소를 입력해주세요." required>
+           
             <div class="line"></div>
             
             <div class="survey-section">
@@ -496,17 +451,15 @@
             </c:if>     		
         </div>
         
-<%--         <div class="creation-section">
-            <a>${user.creationDate}</a>
-        </div> --%>
         
-        <input type="hidden" id="userNo" name="userNo" value="${user.userNo}">
+      <%--   <input type="hidden" id="userNo" name="userNo" value="${user.userNo}"> --%>
          <input type="hidden" id="userName" name="userName" value="${user.userName}">
          <input type="hidden" id="userPassword" name="userPassword" value="${user.userPassword}">
          <input type="hidden" id="birthDate" name="birthDate" value="${user.birthDate}">
          <input type="hidden" id="profileImage" name="profileImage" value="${user.profileImage}">
         <input type="hidden" id="userId" name="userId" value="${user.userId}">
-        
+           <input type="hidden" id="phoneNumber" name="phoneNumber" value="${user.phoneNumber}">
+         <input type="hidden" id="nickName" name="nickName" value="${user.nickName}">
         <!-- <br> -->
             
         <div class="link-section">

@@ -17,8 +17,8 @@
 
 <style>
 main {
-    height: 100%; 
-    margin: 0;
+  /*   height: 100%; 
+    margin: 0; */
     display: flex;
     flex-direction: column; 
     justify-content: center;
@@ -77,7 +77,7 @@ form {
     box-sizing: border-box; /* 박스 크기를 포함하도록 설정 */
 }
 
-button, a.button {
+ .button, a.button {
     width: 400px;
     padding: 15px;
     font-size: 16px;
@@ -124,11 +124,12 @@ button, a.button {
     text-decoration: underline;
 }
 
-.container {
+.container2 {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
     width: 320px; /* 고정된 너비 설정 */
+    margin-left:800px;   
 }
 
 .detail-section {
@@ -157,6 +158,19 @@ button, a.button {
     width: 24px;
     height: 24px;
 }
+
+   .submit-button{
+            width: 400px;
+            padding: 15px;
+            font-size: 16px;
+            margin-top: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            border-radius: 5px;
+            cursor: pointer;
+            box-sizing: border-box;
+        } 
 </style>
 
 <c:import url="../common/header.jsp"/>
@@ -174,7 +188,7 @@ button, a.button {
 
 <!--  ////////////////////////////////////////////// main ///////////////////////////////////////////////// -->
 
-<main class="container">
+<main class="container2">
     <div class="profile-header">
         <div class="profile-image">
             <!-- 프로필 이미지가 들어갈 자리 -->
@@ -297,7 +311,7 @@ button, a.button {
         <div class="link-section">
             <form action="/user/updateUser" method="get">
                 <input type="hidden" name="userNo" value="${user.userNo}">
-                <button type="submit" class="a">회원정보 수정하기</button>
+                <button type="submit" class="a submit-button">회원정보 수정하기</button>
             </form>
             <a href="/user/deleteUser?userNo=${user.userNo}" class="text-link">탈퇴하기</a>
         </div>
