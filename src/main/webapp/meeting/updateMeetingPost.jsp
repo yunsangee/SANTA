@@ -159,6 +159,14 @@
 		        height: auto;
 		    }
 		}
+		
+		#fileCount {
+    		display: inline-block;
+    		margin-left: 10px;
+    		margin-top: 0;
+    		margin-bottom: 0;
+    		padding-top: 5px;
+    	}
     
     </style>
     
@@ -265,7 +273,7 @@
 						    </p>
 						    <button type="button" class="btn btn-primary border-0 rounded text-white">사진 선택</button>
 						    <input type="file" id="meetingPostImage" name="meetingPostImage" style="display: none;" multiple/>
-						    <p id="fileCount" style="display: inline-block; margin-left: 10px;"></p>
+						    <p id="fileCount"></p>
 						</div>
 						
 	    			</div>
