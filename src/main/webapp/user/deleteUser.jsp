@@ -211,7 +211,7 @@
         return true;
     }
 
-    function handleSubmit(event) {
+    function handleSubmit() {
         event.preventDefault(); // 기본 폼 제출 방지
         
         showSuccessAlert("탈퇴 완료되었습니다.");
@@ -243,7 +243,7 @@
         <li>탈퇴시 <span>7일간 재가입 불가능</span> 합니다.</li>
     </ul>
 
-    <form action="/user/deleteUser" method="post" onsubmit="handleSubmit(event)">
+    <form action="/user/deleteUser" method="post">
         <div class="Reason-section">
             <label for="withdrawReason"></label>
             <select id="withdrawReason" name="withdrawReason" onchange="toggleWithdrawContent()" required>
@@ -273,7 +273,7 @@
         </div>
         
         <div class="link-section">
-            <button type="submit" class="a">탈퇴하기</button>
+            <button type="submit" class="a" onClick="handleSubmit()">탈퇴하기</button>
        </div>
        <!-- <div class="link-section">
             <button type="button" class="cancel" onclick="history.back()">취소</button>
