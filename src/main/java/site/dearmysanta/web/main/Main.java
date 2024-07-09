@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -80,8 +81,8 @@ public class Main {
 //		
 //		return "forward:/mountain/getMountain.jsp";
 //	}//o
-	@GetMapping("/")
-	public String mainTemp(Model model, HttpSession session) throws Exception {
+	@RequestMapping("/")
+	public String main(Model model, HttpSession session) throws Exception {
 		
 		session.setAttribute("javaServerIp", javaServerIp);
 		session.setAttribute("reactServerIp", reactServerIp);

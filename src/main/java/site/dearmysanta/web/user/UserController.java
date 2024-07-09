@@ -230,7 +230,7 @@ public class UserController {
 		    
 		    System.out.println("쿠키 프로필 사진 : " + profileCookie);
 		    
-		    return "redirect:/";
+		    return "forward:/";
 		}
 
 		
