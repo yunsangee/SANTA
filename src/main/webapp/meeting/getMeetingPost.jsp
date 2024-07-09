@@ -13,8 +13,27 @@
     <title>모임 게시글 상세조회</title>
     <link rel="icon" type="image/png" sizes="16x16" href="../img/santa.png"> 
     <c:import url="../common/header.jsp"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     
     <script type = "text/javascript">
+    function showSuccessAlert(message) {
+        Swal.fire({
+            icon: 'success',
+            text: message,
+            confirmButtonText: 'OK'
+        });
+    }
+
+    function showErrorAlert(message) {
+        Swal.fire({
+            icon: 'error',
+            text: message,
+            confirmButtonText: 'Retry'
+        });
+    }
     	
     	var userNo = "${sessionScope.user.userNo}";
     
@@ -26,8 +45,19 @@
 	    	
 	    	$('#deletePostButton').on('click', function() {
 	    		
-	    		var postNo = "${meetingPost.postNo}";
-                self.location = "/meeting/deleteMeetingPost?postNo="+postNo;
+	    		
+	    		Swal.fire({
+	                text: '정말 삭제하시겠습니까?',
+	                showCancelButton: true,
+	                confirmButtonText: 'OK',
+	                cancelButtonText: 'No'
+	            }).then((result) => {
+	                if (result.isConfirmed) {
+	    		
+	    				var postNo = "${meetingPost.postNo}";
+                		self.location = "/meeting/deleteMeetingPost?postNo="+postNo;
+	                }
+	            });
             });
 	    	
 			$('#updatePostButton').on('click', function() {
@@ -254,6 +284,14 @@
 				var $this = $(this);
 			    var postNo = $this.data('post-no');
 			    var userNo = $this.data('user-no');
+			    
+			    Swal.fire({
+	                text: '정말 탈퇴하시겠습니까?',
+	                showCancelButton: true,
+	                confirmButtonText: 'OK',
+	                cancelButtonText: 'No'
+	            }).then((result) => {
+	                if (result.isConfirmed) {
 
 			    $.ajax({
 			    	
@@ -273,11 +311,12 @@
 			            if (xhr.status === 200) {
 			            	
 			                console.log('Participation deleted successfully');
+			                showSuccessAlert("탈퇴 완료되었습니다.");
 
 			                // 버튼을 "신청하기" 버튼으로 변경
 			                $this.replaceWith('<button class="btn btn-primary border-0 rounded text-white px-4 py-3 add-participation-button" data-post-no="' + postNo + '" data-user-no="' + userNo + '">신청하기</button>');
 			            } else {
-			            	
+			            	showErrorAlert("잠시 후에 다시 시도해주세요.");
 			                console.log('Failed to delete participation');
 			            }
 			        },
@@ -286,6 +325,7 @@
 			            console.error('AJAX Error:', status, error);
 			        }
 			    });
+	            }
 	        });
 	    	
 	    	$(document).on('click', '.update-participation-button', function() {
@@ -482,33 +522,45 @@
 	            var commentNo = $this.data('comment-no');
 
 	            console.log('Comment No:', commentNo);
-
-	            $.ajax({
+	            
+	            Swal.fire({
+	                text: '정말 삭제하시겠습니까?',
+	                showCancelButton: true,
+	                confirmButtonText: 'OK',
+	                cancelButtonText: 'No'
+	            }).then((result) => {
+	                if (result.isConfirmed) {
+	                   
+	            	$.ajax({
 	            	
-	                url: '/meeting/rest/deleteMeetingPostComment',
-	                type: 'GET',
-	                dataType: 'text',
-	                data: {
+	                	url: '/meeting/rest/deleteMeetingPostComment',
+	                	type: 'GET',
+	                	dataType: 'text',
+	                	data: {
 	                	
-	                    meetingPostCommentNo: commentNo
-	                },
-	                success: function(response, textStatus, xhr) {
+	                    	meetingPostCommentNo: commentNo
+	                	},
+	                	success: function(response, textStatus, xhr) {
 	                	
-	                    console.log('Response:', response);
-	                    console.log('Status:', xhr.status);
+	                    	console.log('Response:', response);
+	                    	console.log('Status:', xhr.status);
 
-	                    if (xhr.status === 200) {
+	                    	if (xhr.status === 200) {
 	                    	
-	                        console.log('Comment deleted successfully');
-	                        $this.closest('tr').remove(); // 댓글 행을 삭제하여 UI 업데이트
-	                    } else {
+	                        	console.log('Comment deleted successfully');
+	                        	showSuccessAlert("삭제 완료되었습니다.")
+	                        	$this.closest('tr').remove(); // 댓글 행을 삭제하여 UI 업데이트
+	                    	} else {
 	                    	
-	                        console.log('Failed to delete comment');
-	                    }
-	                },
-	                error: function(xhr, status, error) {
+	                        	console.log('Failed to delete comment');
+	                        	showErrorAlert("잠시 후에 다시 시도해주세요.");
+	                    	}
+	                	},
+	                	error: function(xhr, status, error) {
 	                	
-	                    console.error('AJAX Error:', status, error);
+	                    	console.error('AJAX Error:', status, error);
+	               	 	}
+	            	});
 	                }
 	            });
 	        });

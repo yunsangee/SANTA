@@ -13,6 +13,27 @@
     <c:import url="../common/header.jsp"/>
     
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    	<script>
+        	function showSuccessAlert(message) {
+            	Swal.fire({
+                	icon: 'success',
+                	text: message,
+                	confirmButtonText: 'OK'
+            	});
+       		}
+
+        	function showErrorAlert(message) {
+            	Swal.fire({
+               		icon: 'error',
+                	text: message,
+                	confirmButtonText: 'Retry'
+            	});
+        	}
+    </script>
+    
     
     <script type="text/javascript">
     $(function() {
@@ -84,7 +105,18 @@
                     
                     var deleteButton = $("<button class='btn'><i class='bi bi-x' style='font-size: 24px; color: red;'></i></button>")
                         .on("click", function() {
-                            deleteMessage(message._id);
+                        	Swal.fire({
+            	                text: '정말 삭제하시겠습니까?',
+            	                showCancelButton: true,
+            	                confirmButtonText: 'OK',
+            	                cancelButtonText: 'No'
+            	            }).then((result) => {
+            	            	if (result.isConfirmed) {
+                            		deleteMessage(message._id);
+            	            	}else{
+            	            		showErrorAlert("잠시 후에 다시 시도해주세요.");
+            	            	}
+            	            });
                         });
                     
                     messageElement.append(deleteButton);
