@@ -259,6 +259,7 @@
 	}
 
 	.top {
+		padding-top:90px;
 		height: auto;
 		padding-bottom: 50px;
 	}
@@ -278,6 +279,12 @@
 }
 
 @media (max-width: 576px) {
+
+	.top {
+		padding-top:90px;
+		height: auto;
+		padding-bottom: 50px;
+	}
 	.searchBox {
 		width: 100%;
 		margin-left: 0;
