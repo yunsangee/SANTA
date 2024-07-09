@@ -327,6 +327,7 @@
 			    });
 	            }
 	        });
+			});
 	    	
 	    	$(document).on('click', '.update-participation-button', function() {
 	    		
