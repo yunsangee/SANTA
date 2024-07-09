@@ -154,12 +154,24 @@ input[type="password"]:focus {
 </style>
 
 <!--  ////////////////////////////////////////////// script ///////////////////////////////////////////////// -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+        function showErrorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                text: message,
+                confirmButtonText: 'Retry'
+            });
+        }
+</script>
 
 <script>
     $(document).ready(function() {
         // 탈퇴한 회원 경고 메시지 표시
         <c:if test="${not empty withdrawError}">
-            alert("${withdrawError}");
+        	showErrorAlert("${withdrawError}");
         </c:if>
         
         $('#userPassword').keypress(function(event){
