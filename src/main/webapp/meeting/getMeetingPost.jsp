@@ -774,33 +774,39 @@
 					    	
 					    
 					        <c:choose>
-					            <c:when test="${meetingPost.recruitmentStatus != 2}">
-					            
-					                <c:choose>
-					                    <c:when test="${isMember == 0}">
-					                        <%-- 게시글 작성자가 아니고 모임 끝 상태가 아니며 isMember가 0인 경우 --%>
-					                        <button class="btn btn-primary border-0 rounded text-white px-4 py-3 add-participation-button" 
-					                        data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}">신청하기</button>
-					                    </c:when>
-					                    <c:when test="${isMember == 1}">
-					                        <%-- 게시글 작성자가 아니고 모임 끝 상태가 아니며 isMember가 1인 경우 --%>
-					                        <button class="btn btn-primary border-0 rounded text-white px-4 py-3 delete-participation-button"
-					                        data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}">신청 취소하기</button>
-					                    </c:when>
-					                    <c:when test="${isMember == 2}">
-							                <%-- 게시글 작성자가 아니고 isMember가 2인 경우 --%>
-							                <button class="btn btn-primary border-0 rounded text-white px-4 py-3 withdraw-button" 
-							                data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}">모임 탈퇴하기</button>
+							    <c:when test="${isMember == 2}">
+							        <%-- isMember가 2인 경우 (모집 상태와 상관없이) --%>
+							        <button class="btn btn-primary border-0 rounded text-white px-4 py-3 withdraw-button" 
+							        data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}">모임 탈퇴하기</button>
+							    </c:when>
+							    <c:otherwise>
+							        <c:choose>
+							            <c:when test="${meetingPost.recruitmentStatus == 0}">
+							                <c:choose>
+							                    <c:when test="${isMember == 0}">
+							                        <%-- 모집 상태가 0이고 isMember가 0인 경우 --%>
+							                        <button class="btn btn-primary border-0 rounded text-white px-4 py-3 add-participation-button" 
+							                        data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}">신청하기</button>
+							                    </c:when>
+							                    <c:when test="${isMember == 1}">
+							                        <%-- 모집 상태가 0이고 isMember가 1인 경우 --%>
+							                        <button class="btn btn-primary border-0 rounded text-white px-4 py-3 delete-participation-button"
+							                        data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}">신청 취소하기</button>
+							                    </c:when>
+							                </c:choose>
 							            </c:when>
-					                </c:choose>
-					                
-					            </c:when>
-					            <c:when test="${isMember == 2}">
-					                <%-- 게시글 작성자가 아니고 isMember가 2인 경우 --%>
-					                <button class="btn btn-primary border-0 rounded text-white px-4 py-3 withdraw-button" 
-					                data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}">모임 탈퇴하기</button>
-					            </c:when>
-					        </c:choose>
+							            <c:when test="${meetingPost.recruitmentStatus == 1}">
+							                <c:choose>
+							                    <c:when test="${isMember == 1}">
+							                        <%-- 모집 상태가 1이고 isMember가 1인 경우 --%>
+							                        <button class="btn btn-primary border-0 rounded text-white px-4 py-3 delete-participation-button"
+							                        data-post-no="${meetingPost.postNo}" data-user-no="${sessionScope.user.userNo}">신청 취소하기</button>
+							                    </c:when>
+							                </c:choose>
+							            </c:when>
+							        </c:choose>
+							    </c:otherwise>
+							</c:choose>
 					        
 					    </c:if>
 					
