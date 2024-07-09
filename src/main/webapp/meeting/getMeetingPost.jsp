@@ -167,6 +167,15 @@
 	    	$(document).on('click', '.update-recruitment-status-end', function() {
 	    	    var $this = $(this);  // 현재 클릭된 요소를 $this 변수에 저장
 	    	    var postNo = $this.data('post-no');  // 데이터 속성을 사용하여 postNo를 가져옴
+	    	    
+	    	    
+	    	    Swal.fire({
+	                text: '정말 종료하시겠습니까?',
+	                showCancelButton: true,
+	                confirmButtonText: 'OK',
+	                cancelButtonText: 'No'
+	            }).then((result) => {
+	            	if (result.isConfirmed) {
 
 	    	    $.ajax({
 	    	        url: '/meeting/rest/updateMeetingPostRecruitmentStatusToEnd',
@@ -197,6 +206,8 @@
 	    	            console.error('AJAX Error:', status, error);
 	    	        }
 	    	    });
+	            	}
+	            });
 	    	});
 	    	
 	    	$(document).on('click', '.add-participation-button', function() {
