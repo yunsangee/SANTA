@@ -275,9 +275,6 @@
 		margin-top: -80px;
 	}
 
-	.search-container {
-		flex-direction: column; /* 작은 화면에서는 세로로 배치 */
-	}
 }
 
 @media (max-width: 576px) {
@@ -287,13 +284,7 @@
 	}
 
 	.search-container {
-		flex-direction: column; /* 작은 화면에서는 세로로 배치 */
 		align-items: stretch;
-	}
-
-	.search {
-		margin-left: 0;
-		margin-top: 10px;
 	}
 
 	.btn-search {

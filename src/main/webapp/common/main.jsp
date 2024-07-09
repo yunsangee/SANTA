@@ -496,6 +496,10 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+     .mountainName {
+    		white-space: nowrap;
+   			 flex: 1;
+		}
 
     @media (max-width: 768px) {
         .search-container {
@@ -554,6 +558,11 @@
         .container-fluid .meetingPost {
             padding: 10px !important;
         }
+        .mountainName {
+    		white-space: nowrap;
+   			flex: 1;
+		}
+        
     }
 
     @media (max-width: 480px) {
@@ -583,6 +592,11 @@
         .hiking {
             width: 30%;
         }
+        .mountainName {
+    		white-space: nowrap;
+    		flex: 1;
+		}
+
     }
 </style>
 
