@@ -102,6 +102,7 @@
 	        </when>
 	    </choose>
 	</where>
+	ORDER BY CREATION_DATE DESC;
 	</select>
 	
 	<select id="withdrawUserList" parameterType="site.dearmysanta.domain.common.Search"	resultMap="userSelectMap">
