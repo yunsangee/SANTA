@@ -32,6 +32,7 @@
             display: flex;
             justify-content: center;
             margin-top: 20px;
+            margin-buttom:100px;
         }
 
         .pagination a {
@@ -105,7 +106,7 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    margin-bottom:-200px;
+    margin-bottom:-350px;
 }
 
         
